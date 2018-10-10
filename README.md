@@ -1,6 +1,8 @@
 # MadSand
 ### Survival roguelike with RPG elements
-To run the game without launcher, pass "fromUpdater" argument to jar.<br>
+### <a href="https://github.com/Hitonoriol/MadSand/releases/download/launcher-r14/MadSandLauncher.jar">Download Launcher</a>
+
+
 ### Dependencies
 <pre>
 libgdx
