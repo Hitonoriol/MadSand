@@ -5,13 +5,18 @@ import java.util.HashMap;
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 
 public class Map {
-	final Tile nullTile = new Tile(0);
-	final Object nullObject = new Object(0);
 	private int xsz, ysz;
+
+	static final Tile nullTile = new Tile(0);
+	static final Object nullObject = new Object(0);
+	static final Loot nullLoot = new Loot("n");
+
 	HashMap<Pair, Tile> mapTiles;
 	HashMap<Pair, Object> mapObjects;
+	HashMap<Pair, Loot> mapLoot;
 	HashMap<Pair, Npc> mapNpcs;
 	HashMap<Pair, Player> mapPlayers;
+
 	Pair coords = new Pair(0, 0);
 
 	public Map(int xsz, int ysz) {
@@ -31,6 +36,7 @@ public class Map {
 	void purge() {
 		mapTiles = new HashMap<Pair, Tile>();
 		mapObjects = new HashMap<Pair, Object>();
+		mapLoot = new HashMap<Pair, Loot>();
 		mapNpcs = new HashMap<Pair, Npc>();
 		mapPlayers = new HashMap<Pair, Player>();
 	}
@@ -125,6 +131,22 @@ public class Map {
 		}
 	}
 
+	void randPlaceObject(int id) {
+		int x = Utils.random.nextInt(this.xsz);
+		int y = Utils.random.nextInt(this.ysz);
+		addObject(x, y, id);
+	}
+
+	void randPlaceObject(int[] id) {
+		randPlaceObject(id[Utils.random.nextInt(id.length)]);
+	}
+
+	void randPlaceTile(int id) {
+		int x = Utils.random.nextInt(this.xsz);
+		int y = Utils.random.nextInt(this.ysz);
+		addTile(x, y, id);
+	}
+
 	Object getObject(int x, int y, Direction dir) {
 		if (correctCoords(coords.set(x, y))) {
 			coords.addDirection(dir);
@@ -132,4 +154,14 @@ public class Map {
 		} else
 			return nullObject;
 	}
+
+	Loot getLoot(int x, int y) {
+		try {
+			return mapLoot.get(coords.set(x, y));
+		} catch (Exception e) {
+			return nullLoot;
+		}
+	}
+	
+	
 }

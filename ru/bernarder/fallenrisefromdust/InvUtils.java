@@ -125,7 +125,7 @@ public class InvUtils {
 	}
 
 	public static boolean putItem(int id, int quantity, boolean silent) {
-		SysMethods.out("ITEM PUT " + quantity + " " + MadSand.inv[getFreeCell(id)][1]);
+		Utils.out("ITEM PUT " + quantity + " " + MadSand.inv[getFreeCell(id)][1]);
 		boolean r = false;
 		if (getFreeCell(id) != -1) {
 			MadSand.inv[getFreeCell(id)][0] = id;

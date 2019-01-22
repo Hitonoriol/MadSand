@@ -321,23 +321,23 @@ public class MobLayer {
 		int rdmg = Integer.parseInt(gdmg) - PlayerStats.def[new Random().nextInt(3)];
 		int eacc = Integer.parseInt(getMobStat(x, y, 7));
 		if (getMobStat(x, y, 8).equals("0")) {
-			if (WorldGen.random.nextInt(eacc) != 0) {
+			if (Utils.random.nextInt(eacc) != 0) {
 				MadSand.print(ename + " hits you on " + rdmg + " hitpoints");
 				PlayerStats.blood -= rdmg;
 			} else {
 				MadSand.print(ename + " misses you");
 			}
 		}
-		if (WorldGen.random
+		if (Utils.random
 				.nextInt(PlayerStats.accur + WeaponWorker.getWAccBonus(WeaponWorker.getWid(PlayerStats.hand))) != 0) {
 			int critical = 0;
-			if (WorldGen.random.nextInt(PlayerStats.accur * 2) == 0) {
+			if (Utils.random.nextInt(PlayerStats.accur * 2) == 0) {
 				critical = PlayerStats.atk + WeaponWorker.getWeaponAtk(WeaponWorker.getWid(PlayerStats.hand));
 				MadSand.print("You made a critical hit!");
 			}
 			finat = critical + PlayerStats.atk + WeaponWorker.getWeaponAtk(WeaponWorker.getWid(PlayerStats.hand));
 			if (MadSand.roguelike)
-				SysMethods.makeTurn();
+				Utils.makeTurn();
 			MadSand.print("You hit " + ename + " on " + finat + " hitpoints");
 			setMobStat(x, y, MadSand.curxwpos, MadSand.curywpos, 0,
 					(Integer.parseInt(getMobStat(x, y, 0)) - finat) + "");
@@ -355,12 +355,12 @@ public class MobLayer {
 
 	public static boolean isQuestMob(int mobId) {
 		if (mobStats[mobId][11] != "-1") {
-			SysMethods.out("Mob id " + mobId + " is a quest mob");
+			Utils.out("Mob id " + mobId + " is a quest mob");
 			return true;
 		
 		}
 		else {
-			SysMethods.out("Mob id " + mobId + " is NOT a quest mob");
+			Utils.out("Mob id " + mobId + " is NOT a quest mob");
 			return false;
 		}
 	}

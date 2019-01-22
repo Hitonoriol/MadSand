@@ -144,13 +144,14 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static int cx = 0;
 	public static int cy = 0;
 
+	static int INVENTORYSIZE = 30;
 	public static int turn = 0;
 	static int rendered = 2;
 	float percent = 0.0F;
 	public static String look = "down";
 	public static String name = "";
-	public static int[][] inv = new int[30][4];
-	public static int[][] trade = new int[30][4];
+	public static int[][] inv = new int[INVENTORYSIZE][4];
+	public static int[][] trade = new int[INVENTORYSIZE][4];
 
 	public static float[][] rawWorld;
 	InventoryNames objn;
@@ -178,7 +179,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 	static Vector2[] rcoords;
 
 	WorldGen Wgen = new WorldGen();
-	static SysMethods sm = new SysMethods();
+	static Utils sm = new Utils();
 	GameSaver gs;
 
 	static int countRcells() {
@@ -220,9 +221,9 @@ public class MadSand extends com.badlogic.gdx.Game {
 	}
 
 	public void create() {
-		SysMethods.out("Starting initialization!");
+		Utils.out("Starting initialization!");
 		setRenderRadius();
-		SysMethods.out("Render area: " + rcoords.length);
+		Utils.out("Render area: " + rcoords.length);
 		try {
 			Resource.eps = new PrintStream(Resource.file);
 			PrintStream ge = new PrintStream(new File("MadSandCritical.log"));
@@ -282,8 +283,8 @@ public class MadSand extends com.badlogic.gdx.Game {
 			state = "GAME";
 			Gui.initmenu();
 		}
-		SysMethods.ppos.x = (x * 33);
-		SysMethods.ppos.y = (y * 33);
+		Utils.ppos.x = (x * 33);
+		Utils.ppos.y = (y * 33);
 		Gui.equip = new Image[5];
 		Gui.equip[0] = new Image(new TextureRegionDrawable(new TextureRegion(sm.placeholder)));
 		Gui.equip[1] = new Image(new TextureRegionDrawable(new TextureRegion(sm.placeholder)));
@@ -293,7 +294,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 		Gui.initmenu();
 		Gui.font.getData().markupEnabled = true;
 		Gui.font1.getData().markupEnabled = true;
-		SysMethods.out("End of initialization!");
+		Utils.out("End of initialization!");
 	}
 
 	public static void setName(String arg) {
@@ -307,7 +308,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 	}
 
 	static void setUpScene() {
-		SysMethods.out("Setting starting scene up!");
+		Utils.out("Setting starting scene up!");
 		MobLayer.placeMobForce(50, 50, "5", 0);
 		ObjLayer.AddObj(50, 49, 6);
 	}
@@ -351,10 +352,10 @@ public class MadSand extends com.badlogic.gdx.Game {
 			int i = 0;
 			while (i < rcoords.length) {
 				sm.batch.draw(sm.tile[WorldGen.rend(y + (int) rcoords[i].y, x + (int) rcoords[i].x)],
-						SysMethods.ppos.x + rcoords[i].x * 33, SysMethods.ppos.y + rcoords[i].y * 33);
+						Utils.ppos.x + rcoords[i].x * 33, Utils.ppos.y + rcoords[i].y * 33);
 				i++;
 			}
-			if (ObjLayer.isCollisionMask(x, y)) {
+			if (Player.isCollisionMask(x, y)) {
 				drawPlayer();
 			}
 			i = 0;
@@ -371,42 +372,42 @@ public class MadSand extends com.badlogic.gdx.Game {
 					trdy = MAPSIZE + BORDER;
 
 				if ((ObjLayer.rend(trdx, trdy) != 0) && (ObjLayer.rend(trdx, trdy) != 666)) {
-					sm.batch.draw(sm.objects[ObjLayer.rend(trdx, trdy)], SysMethods.ppos.x + (int) rcoords[i].x * 33,
-							SysMethods.ppos.y + (int) rcoords[i].y * 33);
+					sm.batch.draw(sm.objects[ObjLayer.rend(trdx, trdy)], Utils.ppos.x + (int) rcoords[i].x * 33,
+							Utils.ppos.y + (int) rcoords[i].y * 33);
 				}
-				if (LootLayer.standingOnLoot(trdx, trdy)) {
-					sm.batch.draw(sm.objects[7], SysMethods.ppos.x + (int) rcoords[i].x * 33,
-							SysMethods.ppos.y + (int) rcoords[i].y * 33);
+				if (Player.standingOnLoot(trdx, trdy)) {
+					sm.batch.draw(sm.objects[7], Utils.ppos.x + (int) rcoords[i].x * 33,
+							Utils.ppos.y + (int) rcoords[i].y * 33);
 				}
 				if (MobLayer.getMobId(trdx, trdy) != 0) {
-					sm.batch.draw(sm.npc[MobLayer.getMobId(trdx, trdy)], SysMethods.ppos.x + (int) rcoords[i].x * 33,
-							SysMethods.ppos.y + (int) rcoords[i].y * 33);
+					sm.batch.draw(sm.npc[MobLayer.getMobId(trdx, trdy)], Utils.ppos.x + (int) rcoords[i].x * 33,
+							Utils.ppos.y + (int) rcoords[i].y * 33);
 				}
 				if (!PlayerLayer.playerLayer[trdx][trdy][1].equals("") && multiplayer) {
 					if (new Integer(PlayerLayer.playerLayer[trdx][trdy][0]).intValue() == 1) {
-						sm.batch.draw(sm.utex, SysMethods.ppos.x + (int) rcoords[i].x * 33,
-								SysMethods.ppos.y + (int) rcoords[i].y * 33);
+						sm.batch.draw(sm.utex, Utils.ppos.x + (int) rcoords[i].x * 33,
+								Utils.ppos.y + (int) rcoords[i].y * 33);
 					} else if (new Integer(PlayerLayer.playerLayer[trdx][trdy][0]).intValue() == 3) {
-						sm.batch.draw(sm.dtex, SysMethods.ppos.x + (int) rcoords[i].x * 33,
-								SysMethods.ppos.y + (int) rcoords[i].y * 33);
+						sm.batch.draw(sm.dtex, Utils.ppos.x + (int) rcoords[i].x * 33,
+								Utils.ppos.y + (int) rcoords[i].y * 33);
 					} else if (new Integer(PlayerLayer.playerLayer[trdx][trdy][0]).intValue() == 0) {
-						sm.batch.draw(sm.ltex, SysMethods.ppos.x + (int) rcoords[i].x * 33,
-								SysMethods.ppos.y + (int) rcoords[i].y * 33);
+						sm.batch.draw(sm.ltex, Utils.ppos.x + (int) rcoords[i].x * 33,
+								Utils.ppos.y + (int) rcoords[i].y * 33);
 					} else
-						sm.batch.draw(sm.rtex, SysMethods.ppos.x + (int) rcoords[i].x * 33,
-								SysMethods.ppos.y + (int) rcoords[i].y * 33);
+						sm.batch.draw(sm.rtex, Utils.ppos.x + (int) rcoords[i].x * 33,
+								Utils.ppos.y + (int) rcoords[i].y * 33);
 					Gui.font1.draw(sm.batch, PlayerLayer.playerLayer[trdx][trdy][1],
-							SysMethods.ppos.x + (int) rcoords[i].x * 33, SysMethods.ppos.y + (int) rcoords[i].y * 33);
+							Utils.ppos.x + (int) rcoords[i].x * 33, Utils.ppos.y + (int) rcoords[i].y * 33);
 					Gui.font1.draw(sm.batch,
 							PlayerLayer.playerLayer[trdx][trdy][2] + "/" + PlayerLayer.playerLayer[trdx][trdy][3],
-							SysMethods.ppos.x + (int) rcoords[i].x * 33,
-							SysMethods.ppos.y + (int) rcoords[i].y * 33 - 15);
+							Utils.ppos.x + (int) rcoords[i].x * 33,
+							Utils.ppos.y + (int) rcoords[i].y * 33 - 15);
 					rendered = 0;
 				}
 
 				i++;
 			}
-			if (!ObjLayer.isCollisionMask(x, y)) {
+			if (!Player.isCollisionMask(x, y)) {
 				drawPlayer();
 			}
 			i = 0;
@@ -420,7 +421,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 			sm.batch.begin();
 		} catch (Exception e) {
 			e.printStackTrace(Resource.eps);
-			SysMethods.out("Render error. See errorlog.");
+			Utils.out("Render error. See errorlog.");
 		}
 	}
 
@@ -428,16 +429,16 @@ public class MadSand extends com.badlogic.gdx.Game {
 		int i = 0;
 		while (i < rcoords.length) {
 			sm.batch.draw(sm.tile[WorldGen.rend(y + (int) rcoords[i].y, x + (int) rcoords[i].x)],
-					SysMethods.ppos.x + rcoords[i].x * 33, SysMethods.ppos.y + rcoords[i].y * 33);
+					Utils.ppos.x + rcoords[i].x * 33, Utils.ppos.y + rcoords[i].y * 33);
 			i++;
 		}
-		sm.batch.draw(sm.Splayer, SysMethods.ppos.x, SysMethods.ppos.y + stepy);
+		sm.batch.draw(sm.Splayer, Utils.ppos.x, Utils.ppos.y + stepy);
 		i = 0;
 	}
 
 	public static void teleport(int x, int y) {
-		SysMethods.ppos.x = (x * 33);
-		SysMethods.ppos.y = (y * 33);
+		Utils.ppos.x = (x * 33);
+		Utils.ppos.y = (y * 33);
 		MadSand.x = x;
 		MadSand.y = y;
 	}
@@ -512,24 +513,24 @@ public class MadSand extends com.badlogic.gdx.Game {
 		if (stepping) {
 			this.elapsedTime += Gdx.graphics.getDeltaTime();
 			if (look.equals("right")) {
-				sm.batch.draw((TextureRegion) SysMethods.ranim.getKeyFrame(this.elapsedTime, true),
-						SysMethods.ppos.x - stepx, SysMethods.ppos.y);
-				updateCamToxy(SysMethods.ppos.x - stepx, SysMethods.ppos.y);
+				sm.batch.draw((TextureRegion) Utils.ranim.getKeyFrame(this.elapsedTime, true),
+						Utils.ppos.x - stepx, Utils.ppos.y);
+				updateCamToxy(Utils.ppos.x - stepx, Utils.ppos.y);
 			}
 			if (look.equals("left")) {
-				sm.batch.draw((TextureRegion) SysMethods.lanim.getKeyFrame(this.elapsedTime, true),
-						SysMethods.ppos.x + stepx, SysMethods.ppos.y);
-				updateCamToxy(SysMethods.ppos.x + stepx, SysMethods.ppos.y);
+				sm.batch.draw((TextureRegion) Utils.lanim.getKeyFrame(this.elapsedTime, true),
+						Utils.ppos.x + stepx, Utils.ppos.y);
+				updateCamToxy(Utils.ppos.x + stepx, Utils.ppos.y);
 			}
 			if (look.equals("up")) {
-				sm.batch.draw((TextureRegion) SysMethods.uanim.getKeyFrame(this.elapsedTime, true), SysMethods.ppos.x,
-						SysMethods.ppos.y - stepy);
-				updateCamToxy(SysMethods.ppos.x, SysMethods.ppos.y - stepy);
+				sm.batch.draw((TextureRegion) Utils.uanim.getKeyFrame(this.elapsedTime, true), Utils.ppos.x,
+						Utils.ppos.y - stepy);
+				updateCamToxy(Utils.ppos.x, Utils.ppos.y - stepy);
 			}
 			if (look.equals("down")) {
-				sm.batch.draw((TextureRegion) SysMethods.danim.getKeyFrame(this.elapsedTime, true), SysMethods.ppos.x,
-						SysMethods.ppos.y + stepy);
-				updateCamToxy(SysMethods.ppos.x, SysMethods.ppos.y + stepy);
+				sm.batch.draw((TextureRegion) Utils.danim.getKeyFrame(this.elapsedTime, true), Utils.ppos.x,
+						Utils.ppos.y + stepy);
+				updateCamToxy(Utils.ppos.x, Utils.ppos.y + stepy);
 			}
 
 			stepx -= movespeed;
@@ -540,8 +541,8 @@ public class MadSand extends com.badlogic.gdx.Game {
 				stepy = 33;
 			}
 		} else {
-			sm.batch.draw(sm.Splayer, SysMethods.ppos.x, SysMethods.ppos.y);
-			updateCamToxy(SysMethods.ppos.x, SysMethods.ppos.y);
+			sm.batch.draw(sm.Splayer, Utils.ppos.x, Utils.ppos.y);
+			updateCamToxy(Utils.ppos.x, Utils.ppos.y);
 		}
 	}
 
@@ -622,7 +623,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 			StatsChecker.checkStats();
 			sm.checkFocus();
 			if (Gui.overlay.getKeyboardFocus() != Gui.msgf && !charcrt) {
-				SysMethods.updMouseCoords();
+				Utils.updMouseCoords();
 				sm.mouseMovement();
 				sm.KeyCheck();
 				LootLayer.lootCollision();
@@ -654,14 +655,14 @@ public class MadSand extends com.badlogic.gdx.Game {
 			int i = 0;
 			while (i < 30) {
 				if (inv[i][0] != 0)
-					this.invbatch.draw(SysMethods.item[inv[i][0]], InvUtils.getItemCellCoord(i).x,
+					this.invbatch.draw(Utils.item[inv[i][0]], InvUtils.getItemCellCoord(i).x,
 							InvUtils.getItemCellCoord(i).y);
 				if (inv[i][0] != 0)
 					Gui.font.draw(this.invbatch, " " + inv[i][1], InvUtils.getItemCellCoord(i).x,
 							InvUtils.getItemCellCoord(i).y + Gui.font.getLineHeight());
 				i++;
 			}
-			this.invbatch.draw(SysMethods.cursor, cx, cy);
+			this.invbatch.draw(Utils.cursor, cx, cy);
 			sm.InvKeyCheck();
 			sm.inInvKeyCheck();
 			sm.checkInvKeys();
@@ -685,14 +686,14 @@ public class MadSand extends com.badlogic.gdx.Game {
 			int i = 0;
 			while (i < 30) {
 				if (trade[i][0] != 0)
-					this.invbatch.draw(SysMethods.item[trade[i][0]], InvUtils.getItemCellCoord(i).x,
+					this.invbatch.draw(Utils.item[trade[i][0]], InvUtils.getItemCellCoord(i).x,
 							InvUtils.getItemCellCoord(i).y);
 				if (trade[i][0] != 0)
 					Gui.font.draw(this.invbatch, " " + trade[i][1], InvUtils.getItemCellCoord(i).x,
 							InvUtils.getItemCellCoord(i).y + Gui.font.getLineHeight());
 				i++;
 			}
-			this.invbatch.draw(SysMethods.cursor, cx, cy);
+			this.invbatch.draw(Utils.cursor, cx, cy);
 			sm.tradeCheckKeys();
 			sm.checkInvKeys();
 			this.invbatch.end();
@@ -709,9 +710,9 @@ public class MadSand extends com.badlogic.gdx.Game {
 			Gui.stage.draw();
 		} else if (state.equals("LAUNCHER")) {
 			if (this.started) {
-				SysMethods.out("Everything's loaded! I'm in launcher state!");
+				Utils.out("Everything's loaded! I'm in launcher state!");
 				this.started = false;
-				updateCamToxy(SysMethods.ppos.x, SysMethods.ppos.y);
+				updateCamToxy(Utils.ppos.x, Utils.ppos.y);
 			}
 			camera.viewportWidth = (Gdx.graphics.getWidth() / ZOOM);
 			camera.viewportHeight = (Gdx.graphics.getHeight() / ZOOM);
@@ -728,7 +729,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 			sm.batch.begin();
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);
-			updateCamToxy(SysMethods.ppos.x, SysMethods.ppos.y);
+			updateCamToxy(Utils.ppos.x, Utils.ppos.y);
 			drawWorld();
 			Gui.worldg.draw();
 			sm.batch.end();
@@ -809,8 +810,8 @@ public class MadSand extends com.badlogic.gdx.Game {
 		GameSaver.loadInv(in.readUTF());
 		x = in.readInt();
 		y = in.readInt();
-		SysMethods.ppos.x = (x * 33);
-		SysMethods.ppos.y = (y * 33);
+		Utils.ppos.x = (x * 33);
+		Utils.ppos.y = (y * 33);
 		out.writeUTF("gethp");
 		out.flush();
 		PlayerStats.blood = in.readInt();

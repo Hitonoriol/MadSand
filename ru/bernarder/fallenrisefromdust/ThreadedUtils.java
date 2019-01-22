@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.Base64;
 
 public class ThreadedUtils {
 	public static boolean mapstop = false;
@@ -18,7 +17,7 @@ public class ThreadedUtils {
 				try {
 					Thread.sleep(5000);
 					if (MadSand.state.equals("GAME")) {
-						SysMethods.makeTurn();
+						Utils.makeTurn();
 					}
 				} catch (Exception e) {
 					e.printStackTrace(Resource.eps);
@@ -127,13 +126,10 @@ public class ThreadedUtils {
 						MadSand.curywpos = MadSand.tempwy;
 						MadSand.encounter = true;
 						MadSand.print("You came to a strange place...");
-						BuildScript.execute(new String(Base64.getDecoder()
-								.decode((GameSaver.getExternal("MadSand_Saves/scripts/encounter.msl"))
-										.getBytes("UTF-8")),
-								"UTF-8"));
+						BuildScript.execute((GameSaver.getExternal("MadSand_Saves/scripts/encounter.msl")));
 					} catch (Exception e) {
 						e.printStackTrace(Resource.eps);
-						SysMethods.out("Error on random encounter start: " + e.getMessage());
+						Utils.out("Error on random encounter start: " + e.getMessage());
 					}
 				} else
 					WorldGen.world = WorldGen.Generate(false);
@@ -172,25 +168,25 @@ public class ThreadedUtils {
 							MobLayer.mobLayer, CropLayer.cropLayer);
 				MadSand.encounter = false;
 
-				if ((SysMethods.gotodir == "left") && (MadSand.curxwpos > 0)) {
+				if ((Utils.gotodir == "left") && (MadSand.curxwpos > 0)) {
 					MadSand.curxwpos -= 1;
 					MadSand.x = MadSand.MAPSIZE - 2;
-					SysMethods.updCoords();
+					Utils.updCoords();
 				}
-				if ((SysMethods.gotodir == "right") && (MadSand.curxwpos < 9)) {
+				if ((Utils.gotodir == "right") && (MadSand.curxwpos < 9)) {
 					MadSand.curxwpos += 1;
 					MadSand.x = 0;
-					SysMethods.updCoords();
+					Utils.updCoords();
 				}
-				if ((SysMethods.gotodir == "down") && (MadSand.curywpos > 0)) {
+				if ((Utils.gotodir == "down") && (MadSand.curywpos > 0)) {
 					MadSand.curywpos -= 1;
 					MadSand.y = MadSand.MAPSIZE - 2;
-					SysMethods.updCoords();
+					Utils.updCoords();
 				}
-				if ((SysMethods.gotodir == "up") && (MadSand.curywpos < 9)) {
+				if ((Utils.gotodir == "up") && (MadSand.curywpos < 9)) {
 					MadSand.curywpos += 1;
 					MadSand.y = 0;
-					SysMethods.updCoords();
+					Utils.updCoords();
 				}
 				WorldGen.makeEmpty();
 				if (GameSaver.verifyNextSector(MadSand.curxwpos, MadSand.curywpos)) {
@@ -202,25 +198,25 @@ public class ThreadedUtils {
 				}
 
 			} else {
-				if ((SysMethods.gotodir == "left") && (MadSand.curxwpos > 0)) {
+				if ((Utils.gotodir == "left") && (MadSand.curxwpos > 0)) {
 					MadSand.curxwpos -= 1;
 					MadSand.x = 98;
-					SysMethods.updCoords();
+					Utils.updCoords();
 				}
-				if ((SysMethods.gotodir == "right") && (MadSand.curxwpos < 9)) {
+				if ((Utils.gotodir == "right") && (MadSand.curxwpos < 9)) {
 					MadSand.curxwpos += 1;
 					MadSand.x = 0;
-					SysMethods.updCoords();
+					Utils.updCoords();
 				}
-				if ((SysMethods.gotodir == "down") && (MadSand.curywpos > 0)) {
+				if ((Utils.gotodir == "down") && (MadSand.curywpos > 0)) {
 					MadSand.curywpos -= 1;
 					MadSand.y = 98;
-					SysMethods.updCoords();
+					Utils.updCoords();
 				}
-				if ((SysMethods.gotodir == "up") && (MadSand.curywpos < 9)) {
+				if ((Utils.gotodir == "up") && (MadSand.curywpos < 9)) {
 					MadSand.curywpos += 1;
 					MadSand.y = 0;
-					SysMethods.updCoords();
+					Utils.updCoords();
 				}
 				try {
 					MadSand.out.writeUTF("changewxy");

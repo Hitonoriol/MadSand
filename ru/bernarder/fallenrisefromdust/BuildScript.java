@@ -24,7 +24,7 @@ public class BuildScript {
 	}
 
 	public static void execute(String query) {
-		SysMethods.out(query);
+		Utils.out(query);
 		query.replaceAll("\n", "");
 		String[] gl = query.split(";");
 
@@ -38,7 +38,7 @@ public class BuildScript {
 					ObjLayer.AddObjForce(Integer.parseInt(opline[2]), Integer.parseInt(opline[3]),
 							Integer.parseInt(opline[1]));
 				if (opline[0].equalsIgnoreCase("pt"))
-					SysMethods.putTile(Integer.parseInt(opline[1]), Integer.parseInt(opline[2]),
+					Utils.putTile(Integer.parseInt(opline[1]), Integer.parseInt(opline[2]),
 							Integer.parseInt(opline[3]), MadSand.curlayer);
 				if (opline[0].equalsIgnoreCase("pl"))
 					LootLayer.putLootQuery(Integer.parseInt(opline[1]), Integer.parseInt(opline[2]), opline[3]);

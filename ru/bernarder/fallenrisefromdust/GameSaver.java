@@ -236,7 +236,7 @@ public class GameSaver {
 			MadSand.curywpos = Integer.parseInt(ph[1]);
 			MadSand.x = Integer.parseInt(hpbb[0]);
 			MadSand.y = Integer.parseInt(hpbb[1]);
-			SysMethods.updCoords();
+			Utils.updCoords();
 		}
 	}
 
@@ -337,14 +337,14 @@ public class GameSaver {
 			ii = 0;
 			i++;
 		}
-		SysMethods.out("Loaded all layers (" + xx + " layer cells). Loading worldprop.dat...");
+		Utils.out("Loaded all layers (" + xx + " layer cells). Loading worldprop.dat...");
 		String h = (MadSand.SAVEDIR + "worlds/" + MadSand.WORLDNAME + "/worldprop.dat");
-		SysMethods.out(h);
+		Utils.out(h);
 		String propq = (getExternal(h));
 		MadSand.worldtime = Integer.parseInt(propq.split("@")[0]);
 		i = 1;
 		while (i <= MadSand.QUESTS) {
-			SysMethods.out("Loading quest " + i);
+			Utils.out("Loading quest " + i);
 			MadSand.quests[i - 1][0] = Integer.parseInt(propq.split("@")[i].split("\\|")[0]);
 			MadSand.quests[i - 1][1] = Integer.parseInt(propq.split("@")[i].split("\\|")[1]);
 			i++;

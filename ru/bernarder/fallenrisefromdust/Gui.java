@@ -619,11 +619,11 @@ public class Gui {
 					Gdx.input.setInputProcessor(Gui.overlay);
 					MadSand.x = new Random().nextInt(MadSand.MAPSIZE);
 					MadSand.y = new Random().nextInt(MadSand.MAPSIZE);
-					SysMethods.ppos.x = (MadSand.x * 33);
-					SysMethods.ppos.y = (MadSand.y * 33);
+					Utils.ppos.x = (MadSand.x * 33);
+					Utils.ppos.y = (MadSand.y * 33);
 					Gui.exitButton.setVisible(false);
 					Gui.craftButton.setVisible(false);
-					SysMethods.invent = false;
+					Utils.invent = false;
 					dialog.remove();
 				}
 
@@ -721,7 +721,7 @@ public class Gui {
 					MadSand.sm.turn(MadSand.look);
 					MadSand.sm.isInFront();
 				}
-				ObjLayer.interact(MadSand.x, MadSand.y, MadSand.look);
+				Player.interact(MadSand.x, MadSand.y, MadSand.look);
 			}
 
 		});
@@ -739,7 +739,7 @@ public class Gui {
 				values.PlayerStats.hand = 0;
 				MadSand.print("You freed your hands.");
 				Gui.equip[4].setDrawable(new com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable(
-						new com.badlogic.gdx.graphics.g2d.Sprite(SysMethods.cursor)));
+						new com.badlogic.gdx.graphics.g2d.Sprite(Utils.cursor)));
 			}
 
 		});
@@ -926,10 +926,10 @@ public class Gui {
 			public void clicked(InputEvent event, float x, float y) {
 				if (!MadSand.dontlisten) {
 					if ((MadSand.state == "BUY") && (!MadSand.contextopened)) {
-						SysMethods.buyAction();
+						Utils.buyAction();
 					}
 					if ((MadSand.state == "INVENTORY") && (!MadSand.contextopened)) {
-						SysMethods.inventoryAction();
+						Utils.inventoryAction();
 					}
 
 				}
@@ -962,7 +962,7 @@ public class Gui {
 			Gui.craftbtn[ssa].addListener(new ChangeListener() {
 				public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 					CraftUtils.craftItem(MadSand.craftableid[ssa]);
-					SysMethods.out("Craft request for " + MadSand.craftableid[ssa]);
+					Utils.out("Craft request for " + MadSand.craftableid[ssa]);
 				}
 			});
 			cg++;
@@ -1053,7 +1053,7 @@ public class Gui {
 						}
 					}
 				}
-				SysMethods.updCoords();
+				Utils.updCoords();
 			}
 		});
 		settingsButton.addListener(new ChangeListener() {
@@ -1063,7 +1063,7 @@ public class Gui {
 		});
 		exitButton.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				SysMethods.out("Bye!");
+				Utils.out("Bye!");
 				System.exit(0);
 			}
 		});

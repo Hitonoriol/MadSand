@@ -3,18 +3,16 @@ package ru.bernarder.fallenrisefromdust;
 import ru.bernarder.fallenrisefromdust.strings.InventoryNames;
 
 public class LootLayer {
-	static InventoryNames names;
 	public static String[][][] lootLayer = new String[MadSand.MAPSIZE + MadSand.BORDER][MadSand.MAPSIZE
 			+ MadSand.BORDER][MadSand.OBJLEVELS];
 
 	public static void init() {
-		names = new InventoryNames();
 		int i = 0;
 		int ii = 0;
 		while (i < MadSand.MAPSIZE + MadSand.BORDER) {
 			while (ii < MadSand.MAPSIZE + MadSand.BORDER) {
 				lootLayer[i][ii][0] = "n";
-				lootLayer[i][ii][0] = "n";
+				lootLayer[i][ii][1] = "n";
 				ii++;
 			}
 			i++;
@@ -23,7 +21,7 @@ public class LootLayer {
 	}
 
 	static void lootCollision() {
-		if (standingOnLoot(MadSand.x, MadSand.y)) {
+		if (Player.standingOnLoot(MadSand.x, MadSand.y)) {
 			addLootToInv(MadSand.x, MadSand.y);
 			removeLoot(MadSand.x, MadSand.y);
 			MadSand.print("You picked some things up");
@@ -59,7 +57,7 @@ public class LootLayer {
 	public static int addLootToInv(int x, int y) {
 		int i = 1;
 		String temp = lootLayer[x][y][MadSand.curlayer];
-		SysMethods.out("Loot Cell contents: " + temp);
+		Utils.out("Loot Cell contents: " + temp);
 		try {
 			String[] block = temp.split(":");
 			String[] attr = new String[0];
@@ -181,14 +179,5 @@ public class LootLayer {
 		if (x < MadSand.MAPSIZE && y < MadSand.MAPSIZE && x >= 0 && y >= 0)
 			t = lootLayer[x][y][MadSand.curlayer];
 		return t;
-	}
-
-	static boolean standingOnLoot(int x, int y) {
-		String ass = getCell(x, y);
-		int n = ass.length();
-		if (n == "n".length()) {
-			return false;
-		}
-		return true;
 	}
 }

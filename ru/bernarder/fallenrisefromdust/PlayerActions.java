@@ -10,7 +10,7 @@ public class PlayerActions {
 			case 14:
 				values.PlayerStats.helmet = id;
 				values.PlayerStats.def[0] = 2;
-				Gui.equip[0].setDrawable(new SpriteDrawable(new Sprite(SysMethods.item[id])));
+				Gui.equip[0].setDrawable(new SpriteDrawable(new Sprite(Utils.item[id])));
 				break;
 			default:
 				values.PlayerStats.helmet = 0;
@@ -26,35 +26,35 @@ public class PlayerActions {
 
 	static void woodcutUp() {
 		values.PlayerStats.woodcutterskill[1]++;
-		SysMethods.out("Woodcutting skill exp++ ( LVL: " + values.PlayerStats.woodcutterskill[0] + " | "
+		Utils.out("Woodcutting skill exp++ ( LVL: " + values.PlayerStats.woodcutterskill[0] + " | "
 				+ values.PlayerStats.woodcutterskill[1] + "/" + values.PlayerStats.woodcutterskill[2] + ")");
 		checkSkills();
 	}
 
 	static void survivalUp() {
 		values.PlayerStats.survivalskill[1]++;
-		SysMethods.out("Survival skill exp++ ( LVL: " + values.PlayerStats.survivalskill[0] + " | "
+		Utils.out("Survival skill exp++ ( LVL: " + values.PlayerStats.survivalskill[0] + " | "
 				+ values.PlayerStats.survivalskill[1] + "/" + values.PlayerStats.survivalskill[2] + ")");
 		checkSkills();
 	}
 
 	static void minerUp() {
 		values.PlayerStats.miningskill[1]++;
-		SysMethods.out("Mining skill exp++ ( LVL: " + values.PlayerStats.miningskill[0] + " | "
+		Utils.out("Mining skill exp++ ( LVL: " + values.PlayerStats.miningskill[0] + " | "
 				+ values.PlayerStats.miningskill[1] + "/" + values.PlayerStats.miningskill[2] + ")");
 		checkSkills();
 	}
 
 	static void harvestUp() {
 		values.PlayerStats.harvestskill[1]++;
-		SysMethods.out("Harvest skill exp++ ( LVL: " + values.PlayerStats.harvestskill[0] + " | "
+		Utils.out("Harvest skill exp++ ( LVL: " + values.PlayerStats.harvestskill[0] + " | "
 				+ values.PlayerStats.harvestskill[1] + "/" + values.PlayerStats.harvestskill[2] + ")");
 		checkSkills();
 	}
 
 	static void craftingup() {
 		values.PlayerStats.craftingskill[1]++;
-		SysMethods.out("Crafting skill exp++ ( LVL: " + values.PlayerStats.craftingskill[0] + " | "
+		Utils.out("Crafting skill exp++ ( LVL: " + values.PlayerStats.craftingskill[0] + " | "
 				+ values.PlayerStats.craftingskill[1] + "/" + values.PlayerStats.craftingskill[2] + ")");
 		checkSkills();
 	}
@@ -100,22 +100,22 @@ public class PlayerActions {
 			case 16:
 				values.PlayerStats.cplate = id;
 				values.PlayerStats.def[1] = 1;
-				Gui.equip[1].setDrawable(new SpriteDrawable(new Sprite(SysMethods.item[id])));
+				Gui.equip[1].setDrawable(new SpriteDrawable(new Sprite(Utils.item[id])));
 				break;
 			case 17:
 				values.PlayerStats.cplate = id;
 				values.PlayerStats.def[1] = 3;
-				Gui.equip[1].setDrawable(new SpriteDrawable(new Sprite(SysMethods.item[id])));
+				Gui.equip[1].setDrawable(new SpriteDrawable(new Sprite(Utils.item[id])));
 				break;
 			case 18:
 				values.PlayerStats.cplate = id;
 				values.PlayerStats.def[1] = 5;
-				Gui.equip[1].setDrawable(new SpriteDrawable(new Sprite(SysMethods.item[id])));
+				Gui.equip[1].setDrawable(new SpriteDrawable(new Sprite(Utils.item[id])));
 				break;
 			case 19:
 				values.PlayerStats.cplate = id;
 				values.PlayerStats.def[1] = 8;
-				Gui.equip[1].setDrawable(new SpriteDrawable(new Sprite(SysMethods.item[id])));
+				Gui.equip[1].setDrawable(new SpriteDrawable(new Sprite(Utils.item[id])));
 				break;
 			default:
 				values.PlayerStats.cplate = 0;
@@ -135,7 +135,7 @@ public class PlayerActions {
 			case 15:
 				values.PlayerStats.shield = id;
 				values.PlayerStats.def[2] = 3;
-				Gui.equip[2].setDrawable(new SpriteDrawable(new Sprite(SysMethods.item[id])));
+				Gui.equip[2].setDrawable(new SpriteDrawable(new Sprite(Utils.item[id])));
 				break;
 			default:
 				values.PlayerStats.shield = 0;

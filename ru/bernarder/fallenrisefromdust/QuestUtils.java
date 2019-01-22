@@ -17,18 +17,18 @@ public class QuestUtils {
 	static int qu;
 
 	public static void init() {
-		qu = SysMethods.countKeys(SysMethods.RES, "quest");
-		SysMethods.out(qu + " quests loaded");
+		qu = Utils.countKeys(Utils.RES, "quest");
+		Utils.out(qu + " quests loaded");
 		questList = new String[qu][10];
 		int i = 0;
 		while (i < qu) {
 			questList[i][0] = "n";
-			questList[i][1] = SysMethods.getKey(SysMethods.RES, "quest", i + "", "starttext");
-			questList[i][2] = SysMethods.getKey(SysMethods.RES, "quest", i + "", "completedtext");
-			questList[i][3] = SysMethods.getKey(SysMethods.RES, "quest", i + "", "afterstarttext");
-			questList[i][4] = SysMethods.getKey(SysMethods.RES, "quest", i + "", "requirement");
-			questList[i][6] = SysMethods.getKey(SysMethods.RES, "quest", i + "", "repeatable");
-			questList[i][9] = SysMethods.getKey(SysMethods.RES, "quest", i + "", "forquest");
+			questList[i][1] = Utils.getKey(Utils.RES, "quest", i + "", "starttext");
+			questList[i][2] = Utils.getKey(Utils.RES, "quest", i + "", "completedtext");
+			questList[i][3] = Utils.getKey(Utils.RES, "quest", i + "", "afterstarttext");
+			questList[i][4] = Utils.getKey(Utils.RES, "quest", i + "", "requirement");
+			questList[i][6] = Utils.getKey(Utils.RES, "quest", i + "", "repeatable");
+			questList[i][9] = Utils.getKey(Utils.RES, "quest", i + "", "forquest");
 			i++;
 		}
 	}
