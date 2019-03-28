@@ -1,3 +1,9 @@
 
 MadSand_Saves/lastname.dat
 MadSand_Saves/lastpass.dat
+bin
+.settings
+.classpath
+.project
+build.gradle
+.metadata
