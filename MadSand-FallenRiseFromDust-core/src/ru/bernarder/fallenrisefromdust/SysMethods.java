@@ -199,12 +199,12 @@ public class SysMethods {
 		while (counter < MadSand.LASTOBJID) {
 			this.objects[counter] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "obj/" + counter + ".png"));
 			Objects.name.put(counter, getKey(RES, "object", "" + counter, "name"));
-			ObjLayer.ObjToug[counter] = Integer.parseInt(getKey(RES, "object", "" + counter, "tough"));
+			Objects.hp.put(counter, Integer.parseInt(getKey(RES, "object", "" + counter, "tough")));
 			ObjLayer.altitems[counter][0] = getKey(RES, "object", "" + counter, "altitem");
 			ObjLayer.altitems[counter][1] = getKey(RES, "object", "" + counter, "hand");
 			ObjLayer.altitems[counter][2] = getKey(RES, "object", "" + counter, "skillbonus");
-			ObjLayer.vRendMasks[counter] = Integer.parseInt(getKey(RES, "object", "" + counter, "vmask"));
-			ObjLayer.hRendMasks[counter] = Integer.parseInt(getKey(RES, "object", "" + counter, "hmask"));
+			Objects.vRendMasks.put(counter, Integer.parseInt(getKey(RES, "object", "" + counter, "vmask")));
+			Objects.hRendMasks.put(counter, Integer.parseInt(getKey(RES, "object", "" + counter, "hmask")));
 			counter++;
 		}
 		counter = 0;

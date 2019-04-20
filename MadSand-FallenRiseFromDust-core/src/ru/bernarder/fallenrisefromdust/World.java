@@ -30,6 +30,27 @@ public class World {
 			return false;
 	}
 
+	Map getLoc(Pair wc, int layer, int id) {
+		MapID loc = new MapID(wc, layer, id);
+		if (locExists(loc)) {
+			return WorldLoc.get(loc);
+		} else
+			return null;
+	}
+
+	Map getLoc(int x, int y, int layer) {
+		return getLoc(new Pair(x, y), layer, 0);
+	}
+
+	Map putLoc(Pair wc, int layer, int id, Map loc) {
+		WorldLoc.put(new MapID(wc, layer, id), loc);
+		return loc;
+	}
+
+	Map putLoc(int x, int y, int layer, Map loc) {
+		return putLoc(new Pair(x, y), layer, 0, loc);
+	}
+
 	boolean createBasicLoc(Pair wc) {
 		if (!this.createLoc(new MapID(wc, 0, 0), new Map(xsz, ysz)))
 			return false;
@@ -140,6 +161,7 @@ public class World {
 		while (it < MadSand.MAPSIZE) {
 			while (iit < MadSand.MAPSIZE) {
 				if (grid.get(iit, it) == 0.0f) {
+					
 					ObjLayer.AddObjForce(iit, it, 0, 1);
 					putMapTile(it, iit, 1, 5);
 				}

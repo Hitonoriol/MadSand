@@ -131,7 +131,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static int SEED = 100;
 	static int SPEED = 100;
 	static float ZOOM = 1.5F;
-	static final String FONT_CHARS = "Ð™Ð¦Ð£ÐšÐ•Ð�Ð“Ð¨Ð©Ð—Ð¥ÐªÐ¤Ð«Ð’Ð�ÐŸÐ ÐžÐ›Ð”Ð–Ð­Ð¯Ð§Ð¡ÐœÐ˜Ð¢Ð¬Ð‘Ð®Ð�Ð¹Ñ†ÑƒÐºÐµÐ½Ð³ÑˆÑ‰Ð·Ñ…ÑŠÑ„Ñ‹Ð²Ð°Ð¿Ñ€Ð¾Ð»Ð´Ð¶Ñ�Ñ�Ñ‡Ñ�Ð¼Ð¸Ñ‚ÑŒÐ±ÑŽÑ‘abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"'<>";
+	static final String FONT_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"'<>";
 	static final String FONT_PATH = "fonts/8bitoperator.ttf";
 
 	boolean started = true;

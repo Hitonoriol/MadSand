@@ -9,13 +9,14 @@ public class Object {
 	public Object(int id) {
 		this.id = id;
 		this.name = Objects.name.get(id);
+		this.hp = Objects.hp.get(id);
 	}
 
 	void destroy() {
 		this.id = 0;
 	}
 
-	boolean verify() {
+	private boolean verify() {
 		if (this.hp > 0)
 			return true;
 		else {
@@ -24,9 +25,9 @@ public class Object {
 		}
 	}
 
-	int takeDamage() {
+	Object takeDamage() {
 		this.hp--;
 		this.verify();
-		return this.hp;
+		return this;
 	}
 }

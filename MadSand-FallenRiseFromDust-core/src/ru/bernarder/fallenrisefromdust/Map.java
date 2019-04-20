@@ -3,6 +3,7 @@ package ru.bernarder.fallenrisefromdust;
 import java.util.HashMap;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
+import ru.bernarder.fallenrisefromdust.strings.Objects;
 
 public class Map {
 	private int xsz, ysz;
@@ -39,6 +40,10 @@ public class Map {
 		mapLoot = new HashMap<Pair, Loot>();
 		mapNpcs = new HashMap<Pair, Npc>();
 		mapPlayers = new HashMap<Pair, Player>();
+	}
+
+	void putTileInDir(int x, int y, Direction dir, int id) {
+		this.addTile(x, y, dir, id);
 	}
 
 	Map fillTile(int id) {
@@ -107,12 +112,39 @@ public class Map {
 		return getTile(coords.x, coords.y);
 	}
 
+	void addRendMasks(int x, int y, int id) {
+		int i = Objects.vRendMasks.get(id);
+		if (y + 1 < MadSand.MAPSIZE - 1) {
+			while (i > 0) {
+				if (y + i < ysz) {
+					addObject(x, y + i, 666);
+				}
+				i--;
+			}
+		}
+		i = Objects.hRendMasks.get(id);
+		if (x + 1 < MadSand.MAPSIZE - 1) {
+			while (i > 0) {
+				if (x + i < xsz) {
+					addObject(x + i, y, 666);
+				}
+				i--;
+			}
+		}
+	}
+
 	boolean addObject(int x, int y, int id) {
 		if (correctCoords(coords.set(x, y))) {
 			mapObjects.put(coords, new Object(id));
+			addRendMasks(x, y, id);
 			return true;
 		} else
 			return false;
+	}
+
+	void dmgObjInDir(int x, int y, Direction direction) {
+		coords.set(x, y).addDirection(direction);
+		mapObjects.put(coords, getObject(coords.x, coords.y).takeDamage());
 	}
 
 	boolean addObject(int x, int y, Direction dir, int id) {
@@ -162,6 +194,5 @@ public class Map {
 			return nullLoot;
 		}
 	}
-	
-	
+
 }
