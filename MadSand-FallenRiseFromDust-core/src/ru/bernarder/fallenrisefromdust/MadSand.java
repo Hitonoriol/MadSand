@@ -21,9 +21,7 @@ import ru.bernarder.fallenrisefromdust.strings.InventoryNames;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Random;
@@ -220,6 +218,8 @@ public class MadSand extends com.badlogic.gdx.Game {
 		rcoords = getAllRcells(rcoords);
 	}
 
+	public static World world;
+
 	public void create() {
 		Utils.out("Starting initialization!");
 		setRenderRadius();
@@ -231,15 +231,11 @@ public class MadSand extends com.badlogic.gdx.Game {
 		} catch (Exception e) {
 			e.printStackTrace(Resource.eps);
 		}
-		ObjLayer.init();
 		createDirs();
 		sm.Initf();
-
+		world = new World(MadSand.MAPSIZE);
 		if (!roguelike)
 			new ThreadedUtils().worldtimer.start();
-		PlayerLayer.init();
-		makeEmpty();
-		makeEmptyA();
 		MobLayer.initLayer();
 		this.objn = new InventoryNames();
 		Gui.createBasicSkin();
@@ -310,16 +306,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 	static void setUpScene() {
 		Utils.out("Setting starting scene up!");
 		MobLayer.placeMobForce(50, 50, "5", 0);
-		ObjLayer.AddObj(50, 49, 6);
-	}
-
-	public static void goOnline() {
-		multiplayer = true;
-		try {
-			logOnCycle();
-		} catch (Exception e) {
-			e.printStackTrace(Resource.eps);
-		}
+		world.getCurLoc().addObject(50, 49, 6);
 	}
 
 	public void updateCamToxy(float f, float y2) {
@@ -370,9 +357,9 @@ public class MadSand extends com.badlogic.gdx.Game {
 					trdx = MAPSIZE + BORDER;
 				if (trdy >= MAPSIZE + BORDER)
 					trdy = MAPSIZE + BORDER;
-
-				if ((ObjLayer.rend(trdx, trdy) != 0) && (ObjLayer.rend(trdx, trdy) != 666)) {
-					sm.batch.draw(sm.objects[ObjLayer.rend(trdx, trdy)], Utils.ppos.x + (int) rcoords[i].x * 33,
+				int objid = world.getCurLoc().getObject(trdx, trdy).id;
+				if ((objid != 0) && (objid != 666)) {
+					sm.batch.draw(sm.objects[objid], Utils.ppos.x + (int) rcoords[i].x * 33,
 							Utils.ppos.y + (int) rcoords[i].y * 33);
 				}
 				if (Player.standingOnLoot(trdx, trdy)) {
@@ -382,27 +369,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 				if (MobLayer.getMobId(trdx, trdy) != 0) {
 					sm.batch.draw(sm.npc[MobLayer.getMobId(trdx, trdy)], Utils.ppos.x + (int) rcoords[i].x * 33,
 							Utils.ppos.y + (int) rcoords[i].y * 33);
-				}
-				if (!PlayerLayer.playerLayer[trdx][trdy][1].equals("") && multiplayer) {
-					if (new Integer(PlayerLayer.playerLayer[trdx][trdy][0]).intValue() == 1) {
-						sm.batch.draw(sm.utex, Utils.ppos.x + (int) rcoords[i].x * 33,
-								Utils.ppos.y + (int) rcoords[i].y * 33);
-					} else if (new Integer(PlayerLayer.playerLayer[trdx][trdy][0]).intValue() == 3) {
-						sm.batch.draw(sm.dtex, Utils.ppos.x + (int) rcoords[i].x * 33,
-								Utils.ppos.y + (int) rcoords[i].y * 33);
-					} else if (new Integer(PlayerLayer.playerLayer[trdx][trdy][0]).intValue() == 0) {
-						sm.batch.draw(sm.ltex, Utils.ppos.x + (int) rcoords[i].x * 33,
-								Utils.ppos.y + (int) rcoords[i].y * 33);
-					} else
-						sm.batch.draw(sm.rtex, Utils.ppos.x + (int) rcoords[i].x * 33,
-								Utils.ppos.y + (int) rcoords[i].y * 33);
-					Gui.font1.draw(sm.batch, PlayerLayer.playerLayer[trdx][trdy][1],
-							Utils.ppos.x + (int) rcoords[i].x * 33, Utils.ppos.y + (int) rcoords[i].y * 33);
-					Gui.font1.draw(sm.batch,
-							PlayerLayer.playerLayer[trdx][trdy][2] + "/" + PlayerLayer.playerLayer[trdx][trdy][3],
-							Utils.ppos.x + (int) rcoords[i].x * 33,
-							Utils.ppos.y + (int) rcoords[i].y * 33 - 15);
-					rendered = 0;
 				}
 
 				i++;
@@ -513,13 +479,13 @@ public class MadSand extends com.badlogic.gdx.Game {
 		if (stepping) {
 			this.elapsedTime += Gdx.graphics.getDeltaTime();
 			if (look.equals("right")) {
-				sm.batch.draw((TextureRegion) Utils.ranim.getKeyFrame(this.elapsedTime, true),
-						Utils.ppos.x - stepx, Utils.ppos.y);
+				sm.batch.draw((TextureRegion) Utils.ranim.getKeyFrame(this.elapsedTime, true), Utils.ppos.x - stepx,
+						Utils.ppos.y);
 				updateCamToxy(Utils.ppos.x - stepx, Utils.ppos.y);
 			}
 			if (look.equals("left")) {
-				sm.batch.draw((TextureRegion) Utils.lanim.getKeyFrame(this.elapsedTime, true),
-						Utils.ppos.x + stepx, Utils.ppos.y);
+				sm.batch.draw((TextureRegion) Utils.lanim.getKeyFrame(this.elapsedTime, true), Utils.ppos.x + stepx,
+						Utils.ppos.y);
 				updateCamToxy(Utils.ppos.x + stepx, Utils.ppos.y);
 			}
 			if (look.equals("up")) {
@@ -556,49 +522,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 		}
 		if (!new File("MadSand_Saves/scripts").exists()) {
 			new File("MadSand_Saves/scripts").mkdirs();
-		}
-	}
-
-	static void makeEmpty() {
-		int i = 0;
-		int ii = 0;
-		while (i < MadSand.MAPSIZE + MadSand.BORDER) {
-			while (ii < MadSand.MAPSIZE + MadSand.BORDER) {
-				PlayerLayer.playerLayer1[i][ii][0] = "0";
-				PlayerLayer.playerLayer1[i][ii][1] = "";
-				ii++;
-			}
-			i++;
-			ii = 0;
-		}
-	}
-
-	static boolean isEmpty() {
-		int i = 0;
-		int ii = 0;
-		while (i < MadSand.MAPSIZE + MadSand.BORDER) {
-			while (ii < MadSand.MAPSIZE + MadSand.BORDER) {
-				if (!PlayerLayer.playerLayer1[i][ii][1].equals(""))
-					return false;
-				ii++;
-			}
-			i++;
-			ii = 0;
-		}
-		return true;
-	}
-
-	public static void makeEmptyA() {
-		int i = 0;
-		int ii = 0;
-		while (i < MadSand.MAPSIZE + MadSand.BORDER) {
-			while (ii < MadSand.MAPSIZE + MadSand.BORDER) {
-				PlayerLayer.playerLayer[i][ii][0] = "0";
-				PlayerLayer.playerLayer[i][ii][1] = "";
-				ii++;
-			}
-			i++;
-			ii = 0;
 		}
 	}
 
@@ -793,148 +716,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 
 	public static void setWorldName(String arg) {
 		WORLDNAME = arg;
-	}
-
-	static void logOnCycle() throws Exception {
-		state = "GAME";
-		ipAddress = InetAddress.getByName(ip);
-		socket = new Socket(ipAddress, port);
-		sin = socket.getInputStream();
-		sout = socket.getOutputStream();
-		in = new DataInputStream(sin);
-		out = new DataOutputStream(sout);
-		out.writeUTF("login");
-		out.flush();
-		out.writeUTF(name);
-		out.flush();
-		GameSaver.loadInv(in.readUTF());
-		x = in.readInt();
-		y = in.readInt();
-		Utils.ppos.x = (x * 33);
-		Utils.ppos.y = (y * 33);
-		out.writeUTF("gethp");
-		out.flush();
-		PlayerStats.blood = in.readInt();
-		PlayerStats.maxblood = in.readInt();
-
-		new ThreadedUtils().mapGet.start();
-	}
-
-	public static void getKicked() {
-		try {
-			out.writeUTF("getkicked");
-			out.flush();
-			int resp = in.readInt();
-			if ((resp == 1) || (resp == 2))
-				state = "KICK";
-		} catch (IOException e) {
-			e.printStackTrace(Resource.eps);
-		}
-	}
-
-	public static void KsendSector(boolean force) {
-		try {
-			String qr = "";
-			if (!force) {
-				qr = GameSaver.saveMapSec(WorldGen.world, ObjLayer.ObjLayer, LootLayer.lootLayer, 5, 5, MobLayer.mobLayer,
-						CropLayer.cropLayer);
-			} else {
-				WorldGen.Generate(true);
-				qr = GameSaver.getExternal("MadSand_Saves/" + WORLDNAME);
-			}
-			ThreadedUtils.mapstop = true;
-			out.writeUTF("sendmap");
-			out.flush();
-			out.writeInt(qr.length());
-			byte[] b = qr.getBytes(java.nio.charset.Charset.forName("UTF-8"));
-			out.write(b);
-			ThreadedUtils.mapstop = false;
-		} catch (Exception e) {
-			e.printStackTrace(Resource.eps);
-		}
-	}
-
-	public static void sendCell(int x, int y) {
-
-	}
-
-	public static void sendhp() {
-		if (multiplayer) {
-			try {
-				out.writeUTF("sendhp");
-				out.writeInt(PlayerStats.blood);
-				out.writeInt(PlayerStats.maxblood);
-				out.flush();
-			} catch (IOException e) {
-				e.printStackTrace(Resource.eps);
-			}
-		}
-	}
-
-	public static void sendpos() throws Exception {
-		out.writeUTF("sendxy");
-		out.writeUTF(x + "");
-		out.writeUTF(y + "");
-		out.writeUTF(curxwpos + "");
-		out.writeUTF(curywpos + "");
-		if (look == "left") {
-			numlook = 0;
-		} else if (look == "up") {
-			numlook = 1;
-		} else if (look == "right") {
-			numlook = 2;
-		} else
-			numlook = 3;
-		out.writeUTF(numlook + "");
-		out.flush();
-	}
-
-	public static void KsyncInv() {
-		if (multiplayer) {
-			try {
-				out.writeUTF("saveinv");
-				out.flush();
-				out.writeUTF(GameSaver.saveInv());
-				out.flush();
-			} catch (IOException e) {
-				e.printStackTrace(Resource.eps);
-			}
-		}
-	}
-
-	public static void saveToExternal(String name, String text) throws java.io.FileNotFoundException {
-		File file = new File(name);
-		PrintWriter pw = new PrintWriter(file);
-		pw.print(text);
-		pw.close();
-	}
-
-	static void gmp() {
-		try {
-			out.writeUTF("getmap");
-			out.flush();
-			int l = in.readInt();
-			byte[] b = new byte[l];
-			in.readFully(b);
-			String map = new String(b, "UTF-8");
-			GameSaver.loadMapSec(map, curxwpos, curywpos);
-		} catch (Exception e) {
-			e.printStackTrace(Resource.eps);
-		}
-	}
-
-	static void updChat() {
-		try {
-			int vc = 0;
-			out.writeUTF("getmsg");
-			out.flush();
-			while (vc < 15) {
-				Gui.chat[vc].setText(in.readUTF());
-				vc++;
-			}
-		} catch (Exception e) {
-			e.printStackTrace(Resource.eps);
-		}
 	}
 
 	public void resume() {

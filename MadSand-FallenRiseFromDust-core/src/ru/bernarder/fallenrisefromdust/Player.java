@@ -5,10 +5,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import ru.bernarder.fallenrisefromdust.enums.*;
 import values.PlayerStats;
 
-public class Player
-{
-	int hp,mhp,exp,nexp,lvl;
-	float speed, splim;	//moves/actions per world tick
+public class Player {
+	int hp, mhp, exp, nexp, lvl;
+	float speed, splim; // moves/actions per world tick
 	String name;
 	boolean isMain;
 	Faction faction;
@@ -18,7 +17,7 @@ public class Player
 		this.name = name;
 	}
 
-	public static boolean interact(final int x, final int y, final String direction) {
+	public static boolean interact(final int x, final int y, final Direction direction) {
 		try {
 			boolean ret = false;
 			if ((Player.isCollision(x, y, direction, 1)) || (MobLayer.isMobCollision(MadSand.look))) {
@@ -50,7 +49,7 @@ public class Player
 						}
 					});
 				}
-				if (ObjLayer.getBlock(x, y, direction, MadSand.curlayer) == 6) {
+				if (MadSand.world.getCurLoc().getObject(x, y, direction).id == 6) {
 					if (PlayerStats.rest[0] == -1)
 						PlayerStats.exp += 50;
 					PlayerStats.rest[0] = x;
@@ -82,30 +81,36 @@ public class Player
 				if (!ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][0].equals("-1")) {
 					PlayerStats.exp += 3;
 					if (!ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][2].equals("-1")) {
-						if (ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][2].equals("mining")) {
+						if (ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][2]
+								.equals("mining")) {
 							PlayerActions.minerUp();
 						}
 						if (ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][2].equals("wood")) {
 							PlayerActions.woodcutUp();
 						}
-						if (ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][2].equals("crafting")) {
+						if (ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][2]
+								.equals("crafting")) {
 							PlayerActions.craftingup();
 						}
-						if (ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][2].equals("survival")) {
+						if (ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][2]
+								.equals("survival")) {
 							PlayerActions.survivalUp();
 						}
-						if (ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][2].equals("harvest")) {
+						if (ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][2]
+								.equals("harvest")) {
 							PlayerActions.harvestUp();
 						}
 					}
-	
+
 					if (ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][1].equals("-1")) {
 						ObjLayer.dmgObj(x, y, direction);
-						if (ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][0].indexOf(",") == -1) {
+						if (ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][0]
+								.indexOf(",") == -1) {
 							Player.skillBonusItems(x, y, direction, -1);
 						} else {
 							ObjLayer.dmgObj(x, y, direction);
-							String b[] = ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][0].split(",");
+							String b[] = ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][0]
+									.split(",");
 							int i = 0;
 							while (i < b.length) {
 								Player.skillBonusItems(x, y, direction, Integer.parseInt(b[i]));
@@ -115,19 +120,21 @@ public class Player
 					} else {
 						if (PlayerStats.hand == Integer
 								.parseInt(ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][1])) {
-							if (ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][0].indexOf(",") == -1) {
+							if (ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][0]
+									.indexOf(",") == -1) {
 								Player.skillBonusItems(x, y, direction, -1);
 								ObjLayer.dmgObj(x, y, direction);
 							} else {
 								ObjLayer.dmgObj(x, y, direction);
-								String b[] = ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][0].split(",");
+								String b[] = ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][0]
+										.split(",");
 								int i = 0;
 								while (i < b.length) {
 									Player.skillBonusItems(x, y, direction, Integer.parseInt(b[i]));
 									i++;
-	
+
 								}
-	
+
 							}
 						}
 					}
@@ -188,26 +195,33 @@ public class Player
 	static void skillBonusItems(int x, int y, String direction, int id) {
 		if (id == -1) {
 			if (ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][2].equals("mining")) {
-				InvUtils.putItem(Integer.parseInt(ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][0]),
+				InvUtils.putItem(
+						Integer.parseInt(ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][0]),
 						PlayerStats.miningskill[0], false);
 			} else if (ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][2].equals("wood")) {
 				int bonus = PlayerStats.woodcutterskill[0];
 				if (PlayerStats.hand == 3)
 					bonus *= 2;
-				InvUtils.putItem(Integer.parseInt(ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][0]), bonus,
-						false);
-	
+				InvUtils.putItem(
+						Integer.parseInt(ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][0]),
+						bonus, false);
+
 			} else if (ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][2].equals("crafting")) {
-				InvUtils.putItem(Integer.parseInt(ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][0]),
+				InvUtils.putItem(
+						Integer.parseInt(ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][0]),
 						PlayerStats.craftingskill[0], false);
 			} else if (ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][2].equals("survival")) {
-				InvUtils.putItem(Integer.parseInt(ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][0]),
+				InvUtils.putItem(
+						Integer.parseInt(ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][0]),
 						PlayerStats.survivalskill[0], false);
 			} else if (ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][2].equals("harvest")) {
-				InvUtils.putItem(Integer.parseInt(ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][0]),
+				InvUtils.putItem(
+						Integer.parseInt(ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][0]),
 						PlayerStats.harvestskill[0], false);
 			} else
-				InvUtils.putItem(Integer.parseInt(ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][0]), 1, false);
+				InvUtils.putItem(
+						Integer.parseInt(ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][0]), 1,
+						false);
 		} else {
 			if (ObjLayer.altitems[ObjLayer.getBlock(x, y, direction, MadSand.curlayer)][2].equals("mining")) {
 				InvUtils.putItem(id, PlayerStats.miningskill[0], false);

@@ -8,13 +8,21 @@ import com.github.czyzby.noise4j.map.generator.noise.NoiseGenerator;
 import com.github.czyzby.noise4j.map.generator.room.dungeon.DungeonGenerator;
 import com.github.czyzby.noise4j.map.generator.util.Generators;
 
+/*	Old worldgen
+	public static int[] ores = { 22, 23 };
+	public static int[][][] world = new int[MadSand.MAPSIZE + MadSand.BORDER][MadSand.MAPSIZE
+			+ MadSand.BORDER][MadSand.OBJLEVELS];
+	public static Random random = new Random();
+	static int biome;
+ */
+
 public class World {
 	private int xsz, ysz;
 	HashMap<MapID, Map> WorldLoc;
 
-	public World(int xsz, int ysz) {
-		this.xsz = xsz;
-		this.ysz = ysz;
+	public World(int sz) {
+		this.xsz = sz;
+		this.ysz = sz;
 		createBasicLoc(new Pair(5, 5));
 	}
 
@@ -40,6 +48,14 @@ public class World {
 
 	Map getLoc(int x, int y, int layer) {
 		return getLoc(new Pair(x, y), layer, 0);
+	}
+
+	Map getCurLoc() {
+		return getLoc(MadSand.curxwpos, MadSand.curywpos, MadSand.curlayer);
+	}
+
+	Map getCurLoc(int layer) {
+		return getLoc(MadSand.curxwpos, MadSand.curywpos, layer);
 	}
 
 	Map putLoc(Pair wc, int layer, int id, Map loc) {
@@ -89,23 +105,6 @@ public class World {
 		}
 	}
 
-	private void putMapTile(int wx, int wy, int x, int y, int layer, int locid, int id) {
-		WorldLoc.get(new MapID(new Pair(wx, wy), layer, locid)).mapTiles.put(new Pair(x, y), new Tile(id));
-	}
-
-	Tile getMapTile(int x, int y, int layer) {
-		return WorldLoc.get(new MapID(new Pair(MadSand.curxwpos, MadSand.curywpos), layer, 0)).mapTiles
-				.get(new Pair(x, y));
-	}
-
-	private void putMapTile(int x, int y, int id) {
-		putMapTile(MadSand.curxwpos, MadSand.curywpos, x, y, MadSand.curlayer, 0, id);
-	}
-
-	private void putMapTile(int x, int y, int layer, int id) {
-		putMapTile(MadSand.curxwpos, MadSand.curywpos, x, y, layer, 0, id);
-	}
-
 	public void genTerrain() {
 		Utils.out("Generating terrain!");
 		final Grid grid = new Grid(MadSand.MAPSIZE + MadSand.BORDER);
@@ -132,12 +131,12 @@ public class World {
 			while (ii < MadSand.MAPSIZE + MadSand.BORDER) {
 				if (biome == 0) {
 					if (grid.get(ii, i) >= 0.1f && grid.get(ii, i) <= 0.27f) {
-						putMapTile(ii, i, 8);
+						getCurLoc().addTile(ii, i, 8);
 					}
 				}
 				if (biome == 3) {
 					if (grid.get(ii, i) >= 0.1f && grid.get(ii, i) <= 0.27f) {
-						putMapTile(ii, i, 22);
+						getCurLoc().addTile(ii, i, 22);
 					}
 				}
 				ii++;
@@ -161,15 +160,14 @@ public class World {
 		while (it < MadSand.MAPSIZE) {
 			while (iit < MadSand.MAPSIZE) {
 				if (grid.get(iit, it) == 0.0f) {
-					
-					ObjLayer.AddObjForce(iit, it, 0, 1);
-					putMapTile(it, iit, 1, 5);
+					getCurLoc(1).addObject(iit, it, 0);
+					getCurLoc(1).addTile(it, iit, 5);
 				}
 				if (grid.get(iit, it) == 1.0f)
-					ObjLayer.AddObjForce(iit, it, 13, 1);
+					getCurLoc(1).addObject(iit, it, 13);
 				if (grid.get(iit, it) == 0.5f) {
-					ObjLayer.AddObjForce(iit, it, 0, 1);
-					putMapTile(it, iit, 1, 5);
+					getCurLoc(1).addObject(iit, it, 0);
+					getCurLoc(1).addTile(it, iit, 5);
 				}
 
 				iit++;
@@ -251,6 +249,26 @@ public class World {
 		}
 
 	}
+	
+	//Lazyass area
+	
+	void putMapTile(int x, int y, int id) {
+		getCurLoc().addTile(x, y, id);
+	}
+
+	void putMapTile(int x, int y, int layer, int id) {
+		getCurLoc(layer).addTile(x, y, id);
+	}
+
+	void addObj(int x, int y, int id) {
+		getCurLoc().addObject(x, y, id);
+	}
+
+	void addObj(int x, int y, int layer, int id) {
+		getCurLoc(layer).addObject(x, y, id);
+	}
+	
+	//end of lazyass area
 
 	public void makeEmpty() {
 		Utils.out("makeEmpty start!");
@@ -260,7 +278,7 @@ public class World {
 		while (i < MadSand.MAPSIZE + MadSand.BORDER) {
 			while (ii < MadSand.MAPSIZE + MadSand.BORDER) {
 				putMapTile(ii, i, 1, 5);
-				ObjLayer.AddObj(ii, i, 13, MadSand.curxwpos, MadSand.curywpos, 1);
+				addObj(ii, i, 1, 13);
 				ObjLayer.delObjectL(i, ii, 0);
 				putMapTile(ii, i, 0);
 				LootLayer.lootLayer[i][ii][0] = "n";

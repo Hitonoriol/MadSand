@@ -12,11 +12,10 @@ public class Map {
 	static final Object nullObject = new Object(0);
 	static final Loot nullLoot = new Loot("n");
 
-	HashMap<Pair, Tile> mapTiles;
-	HashMap<Pair, Object> mapObjects;
-	HashMap<Pair, Loot> mapLoot;
-	HashMap<Pair, Npc> mapNpcs;
-	HashMap<Pair, Player> mapPlayers;
+	private HashMap<Pair, Tile> mapTiles;
+	private HashMap<Pair, Object> mapObjects;
+	private HashMap<Pair, Loot> mapLoot;
+	private HashMap<Pair, Npc> mapNpcs;
 
 	Pair coords = new Pair(0, 0);
 
@@ -39,7 +38,6 @@ public class Map {
 		mapObjects = new HashMap<Pair, Object>();
 		mapLoot = new HashMap<Pair, Loot>();
 		mapNpcs = new HashMap<Pair, Npc>();
-		mapPlayers = new HashMap<Pair, Player>();
 	}
 
 	void putTileInDir(int x, int y, Direction dir, int id) {
