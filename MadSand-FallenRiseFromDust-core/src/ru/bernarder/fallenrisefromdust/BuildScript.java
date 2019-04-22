@@ -5,9 +5,9 @@ public class BuildScript {
 		int ii = 0;
 		while (ii < len) {
 			if (head == 0) {
-				ObjLayer.AddObjForce(x + ii * dir, y, id);
+				MadSand.world.getCurLoc().addObject(x + ii * dir, y, id);
 			} else
-				ObjLayer.AddObjForce(x, y + ii * dir, id);
+				MadSand.world.getCurLoc().addObject(x, y + ii * dir, id);
 			ii++;
 		}
 	}
@@ -16,9 +16,9 @@ public class BuildScript {
 		int ii = 0;
 		while (ii < len) {
 			if (head == 0) {
-				WorldGen.world[(x + ii * dir)][y][0] = id;
+				MadSand.world.getCurLoc().addTile(x + ii * dir, y, id);
 			} else
-				WorldGen.world[x][(y + ii * dir)][0] = id;
+				MadSand.world.getCurLoc().addTile(x, y + ii * dir, id);
 			ii++;
 		}
 	}
@@ -35,17 +35,15 @@ public class BuildScript {
 			while (i < iter) {
 				String[] opline = gl[i].split(" ");
 				if (opline[0].equalsIgnoreCase("pb"))
-					ObjLayer.AddObjForce(Integer.parseInt(opline[2]), Integer.parseInt(opline[3]),
+					MadSand.world.getCurLoc().addObject(Integer.parseInt(opline[2]), Integer.parseInt(opline[3]),
 							Integer.parseInt(opline[1]));
 				if (opline[0].equalsIgnoreCase("pt"))
-					Utils.putTile(Integer.parseInt(opline[1]), Integer.parseInt(opline[2]),
-							Integer.parseInt(opline[3]), MadSand.curlayer);
+					Utils.putTile(Integer.parseInt(opline[1]), Integer.parseInt(opline[2]), Integer.parseInt(opline[3]),
+							MadSand.curlayer);
 				if (opline[0].equalsIgnoreCase("pl"))
 					LootLayer.putLootQuery(Integer.parseInt(opline[1]), Integer.parseInt(opline[2]), opline[3]);
-				if (opline[0].equalsIgnoreCase("pm"))
-					MobLayer.placeMob(Integer.parseInt(opline[1]), Integer.parseInt(opline[2]), opline[3]);
 				if (opline[0].equalsIgnoreCase("clear"))
-					WorldGen.makeEmpty();
+					MadSand.world.makeEmpty();
 				if (opline[0].equalsIgnoreCase("bsquare")) {
 					int ii = 0;
 					int h = Integer.parseInt(opline[4]);
@@ -60,7 +58,7 @@ public class BuildScript {
 				}
 				if (opline[0].equals("randomloot")) {
 					LootLayer.putLoot(Integer.parseInt(opline[1]), Integer.parseInt(opline[2]),
-							WorldGen.rand(1, MadSand.LASTITEMID), WorldGen.rand(1, 50));
+							World.rand(1, MadSand.LASTITEMID), World.rand(1, 50));
 				}
 				if (opline[0].equalsIgnoreCase("tsquare")) {
 					int ii = 0;

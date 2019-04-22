@@ -141,19 +141,6 @@ public class LootLayer {
 		return 0;
 	}
 
-	public static void tInvToLoot(int x, int y) {
-		int i = 0;
-		String fq = "";
-		while (i < 30) {
-			if (MadSand.trade[i][0] == 0)
-				MadSand.trade[i][1] = 0;
-			if ((MadSand.trade[i][0] > 0) && (MadSand.trade[i][1] > 0))
-				fq = fq + ":" + MadSand.trade[i][0] + "/" + MadSand.trade[i][1];
-			i++;
-		}
-		MobLayer.mobLayer[x][y][3][MadSand.curlayer] = fq;
-	}
-
 	public static boolean ifExist(String sequence) {
 		int i = 1;
 

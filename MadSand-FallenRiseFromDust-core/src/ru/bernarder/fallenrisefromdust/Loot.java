@@ -1,9 +1,10 @@
 package ru.bernarder.fallenrisefromdust;
 
 public class Loot {
-	String content;
+	int id, quantity;
 
-	public Loot(String content) {
-		this.content = content;
+	public Loot(int id, int quantity) {	// LootNode(Vector of Loot objs) <-- Loot
+		this.id = id;					// + add constructor from string loot node(for craft recipes)
+		this.quantity = quantity;
 	}
 }

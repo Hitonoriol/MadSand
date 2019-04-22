@@ -24,7 +24,7 @@ public class CropLayer {
 			cropLayer[(x + 1)][y][0] = id;
 			cropLayer[(x + 1)][y][1] = MadSand.worldtime;
 		}
-		
+
 	}
 
 	public static void updCrops() {
@@ -34,15 +34,19 @@ public class CropLayer {
 			while (ii < MadSand.MAPSIZE + MadSand.BORDER) {
 				if ((cropLayer[i][ii][0] >= 40)) {
 					if (MadSand.worldtime - cropLayer[i][ii][1] < 10
-							&& ObjLayer.ObjLayer[i][ii][0][MadSand.curlayer] != Integer
+							&& MadSand.world.getCurLoc().getObject(i, ii).id != Integer
 									.parseInt(stages[cropLayer[i][ii][0]].split(",")[0])) {
-						ObjLayer.AddObjForce(i, ii, Integer.parseInt(stages[cropLayer[i][ii][0]].split(",")[0]));
+						MadSand.world.getCurLoc().addObject(i, ii,
+								Integer.parseInt(stages[cropLayer[i][ii][0]].split(",")[0]));
 					} else if (MadSand.worldtime - cropLayer[i][ii][1] == 10) {
-						ObjLayer.AddObjForce(i, ii, Integer.parseInt(stages[cropLayer[i][ii][0]].split(",")[1]));
+						MadSand.world.getCurLoc().addObject(i, ii,
+								Integer.parseInt(stages[cropLayer[i][ii][0]].split(",")[1]));
 					} else if (MadSand.worldtime - cropLayer[i][ii][1] == 15) {
-						ObjLayer.AddObjForce(i, ii, Integer.parseInt(stages[cropLayer[i][ii][0]].split(",")[2]));
+						MadSand.world.getCurLoc().addObject(i, ii,
+								Integer.parseInt(stages[cropLayer[i][ii][0]].split(",")[2]));
 					} else if (MadSand.worldtime - cropLayer[i][ii][1] == 25) {
-						ObjLayer.AddObjForce(i, ii, Integer.parseInt(stages[cropLayer[i][ii][0]].split(",")[3]));
+						MadSand.world.getCurLoc().addObject(i, ii,
+								Integer.parseInt(stages[cropLayer[i][ii][0]].split(",")[3]));
 					} else
 						cropLayer[i][ii][0] = 0;
 				}

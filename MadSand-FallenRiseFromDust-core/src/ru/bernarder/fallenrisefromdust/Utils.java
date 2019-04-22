@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
+import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.strings.InventoryNames;
 import ru.bernarder.fallenrisefromdust.strings.Objects;
 import ru.bernarder.fallenrisefromdust.strings.Tiles;
@@ -32,8 +33,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
-
-import values.PlayerStats;
 
 public class Utils {
 	public static boolean tester = true;
@@ -159,8 +158,6 @@ public class Utils {
 		out(MadSand.CROPS + " crops");
 		MadSand.LASTOBJID = countKeys(RES, "object");
 		out(MadSand.LASTOBJID + " objects");
-		ObjLayer.vRendMasks = new int[MadSand.LASTOBJID];
-		ObjLayer.hRendMasks = new int[MadSand.LASTOBJID];
 		CropLayer.stages = new String[MadSand.LASTOBJID];
 		MadSand.LASTTILEID = countKeys(RES, "tile");
 		MadSand.NPCSPRITES = countKeys(RES, "npc");
@@ -663,19 +660,19 @@ public class Utils {
 		}
 	}
 
-	public void turn(String dir) {
-		MadSand.look = dir;
+	public void turn(Direction dir) {
+		MadSand.player.look = dir;
 		if (!MadSand.stepping) {
-			if (dir == "up") {
+			if (dir == Direction.UP) {
 				this.Splayer = new Sprite(this.utex);
 			}
-			if (dir == "down") {
+			if (dir == Direction.DOWN) {
 				this.Splayer = new Sprite(this.dtex);
 			}
-			if (dir == "left") {
+			if (dir == Direction.LEFT) {
 				this.Splayer = new Sprite(this.ltex);
 			}
-			if (dir == "right") {
+			if (dir == Direction.RIGHT) {
 				this.Splayer = new Sprite(this.rtex);
 			}
 		}
@@ -816,7 +813,7 @@ public class Utils {
 	public static void out(String arg) {
 		if (tester) {
 			Calendar cal = Calendar.getInstance();
-	        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 			System.out.print("[" + sdf.format(cal.getTime()) + "] " + arg + "\n");
 		}
 	}

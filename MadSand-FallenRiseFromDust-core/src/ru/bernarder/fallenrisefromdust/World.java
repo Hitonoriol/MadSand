@@ -178,7 +178,7 @@ public class World {
 		Utils.out("Done dungeon generating!");
 	}
 
-	public static void genOreFields() {
+	void genOreFields() {
 		Utils.out("Generating orefields...");
 		int a = Utils.random.nextInt(MadSand.OREFIELDS);
 		while (a > 0) {
@@ -195,7 +195,7 @@ public class World {
 					int kk = 0;
 					while (kk < w) {
 						while (k < h) {
-							ObjLayer.AddObjForce(x + kk, y + k, id);
+							addObj(x + kk, y + k, 1, id);
 							k++;
 						}
 						k = 0;
@@ -249,9 +249,9 @@ public class World {
 		}
 
 	}
-	
-	//Lazyass area
-	
+
+	// Lazyass area
+
 	void putMapTile(int x, int y, int id) {
 		getCurLoc().addTile(x, y, id);
 	}
@@ -267,10 +267,10 @@ public class World {
 	void addObj(int x, int y, int layer, int id) {
 		getCurLoc(layer).addObject(x, y, id);
 	}
-	
-	//end of lazyass area
 
-	public void makeEmpty() {
+	// end of lazyass area
+
+	public void makeEmpty() {	//Should be in map alongside with purge()
 		Utils.out("makeEmpty start!");
 		biome = 0;
 		int i = 0;
@@ -279,14 +279,10 @@ public class World {
 			while (ii < MadSand.MAPSIZE + MadSand.BORDER) {
 				putMapTile(ii, i, 1, 5);
 				addObj(ii, i, 1, 13);
-				ObjLayer.delObjectL(i, ii, 0);
+				addObj(i, ii, 0);
 				putMapTile(ii, i, 0);
 				LootLayer.lootLayer[i][ii][0] = "n";
 				LootLayer.lootLayer[i][ii][1] = "n";
-				MobLayer.delMob(i, ii, 0);
-				MobLayer.mobLayer[i][ii][11][0] = "-1";
-				MobLayer.mobLayer[i][ii][11][0] = "-1";
-				MobLayer.delMob(i, ii, 1);
 				ii++;
 			}
 			i++;
@@ -295,43 +291,43 @@ public class World {
 		Utils.out("End of makeEmpty!");
 	}
 
-	public static void genObjByTemplate() {
+	void genObjByTemplate() {
 		Utils.out("Generating biome objects!");
 		int iii = 0;
 		if (biome == 0) {
 			iii = 0;
 			while (iii < MadSand.TREESDENSITY) {
-				ObjLayer.randPlaceObject(new int[] { 2, 30, 35, 36 }, MadSand.MAPSIZE);
+				getCurLoc().randPlaceObject(new int[] { 2, 30, 35, 36 });
 				iii++;
 			}
 			iii = 0;
 			while (iii < MadSand.BOULDERDENSITY) {
-				ObjLayer.randPlaceObject(new int[] { 1, 27, 28 }, MadSand.MAPSIZE);
+				getCurLoc().randPlaceObject(new int[] { 1, 27, 28 });
 				iii++;
 			}
 			iii = 0;
 			while (iii < MadSand.BUSHDENSITY) {
-				ObjLayer.randPlaceObject(new int[] { 37, 4 }, MadSand.MAPSIZE);
+				getCurLoc().randPlaceObject(new int[] { 37, 4 });
 				iii++;
 			}
 		}
 		if (biome == 2) {
 			iii = 0;
 			while (iii < MadSand.TREESDENSITY) {
-				ObjLayer.randPlaceObject(new int[] { 32, 38, 33 }, MadSand.MAPSIZE);
+				getCurLoc().randPlaceObject(new int[] { 32, 38, 33 });
 				iii++;
 			}
 		}
 		if (biome == 3) {
 			iii = 0;
 			while (iii < MadSand.TREESDENSITY) {
-				ObjLayer.randPlaceObject(new int[] { 34, 33 }, MadSand.MAPSIZE);
+				getCurLoc().randPlaceObject(new int[] { 34, 33 });
 				iii++;
 			}
 			if (biome == 2) {
 				iii = 0;
 				while (iii < MadSand.BUSHDENSITY) {
-					ObjLayer.randPlaceObject(new int[] { 39 }, MadSand.MAPSIZE);
+					getCurLoc().randPlaceObject(new int[] { 39 });
 					iii++;
 				}
 			}
@@ -339,8 +335,8 @@ public class World {
 		if (biome == 1) {
 			iii = 0;
 			while (iii < 35) {
-				ObjLayer.randPlaceObject(10, MadSand.MAPSIZE);
-				ObjLayer.randPlaceObject(24, MadSand.MAPSIZE);
+				getCurLoc().randPlaceObject(10);
+				getCurLoc().randPlaceObject(24);
 				iii++;
 			}
 		}
@@ -349,7 +345,7 @@ public class World {
 
 	public int rend(int w, int h) {
 		if (w >= 0 && h >= 0 && w < MadSand.MAPSIZE && h < MadSand.MAPSIZE) {
-			int tile = getMapTile(w, h, MadSand.curlayer).id;
+			int tile = getCurLoc().getTile(w, h).id;
 			if (tile >= 0 && tile <= MadSand.LASTTILEID)
 				return tile;
 			else

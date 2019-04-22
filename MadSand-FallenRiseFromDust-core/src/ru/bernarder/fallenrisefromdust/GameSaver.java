@@ -72,8 +72,7 @@ public class GameSaver {
 		String curf = "MadSand_Saves/worlds/" + filename + "/" + "sector-" + MadSand.curxwpos + "-" + MadSand.curywpos
 				+ ".mws";
 		saveChar();
-		saveMap(curf, WorldGen.world, ObjLayer.ObjLayer, LootLayer.lootLayer, MadSand.curxwpos, MadSand.curywpos, MobLayer.mobLayer,
-				CropLayer.cropLayer);
+		// saveMap();
 		saveChar();
 	}
 
@@ -93,7 +92,7 @@ public class GameSaver {
 		File file = new File("MadSand_Saves/worlds/" + filename + "/" + "sector-" + MadSand.curxwpos + "-"
 				+ MadSand.curywpos + ".mws");
 		if (file.exists()) {
-			WorldGen.makeEmpty();
+			MadSand.world.makeEmpty();
 			loadMap("MadSand_Saves/worlds/" + filename + "/" + "sector-" + MadSand.curxwpos + "-" + MadSand.curywpos
 					+ ".mws");
 			loadChar(1);
@@ -240,116 +239,17 @@ public class GameSaver {
 		}
 	}
 
-	public static void saveMap(String filename, int[][][] world, int[][][][] objLayer, String[][][] lootLayer, int x,
-			int y, String[][][][] moblayer, int[][][] croplayer) {
-		if (!new File("MadSand_Saves/worlds/" + MadSand.WORLDNAME).exists()) {
-			new File("MadSand_Saves/worlds/" + MadSand.WORLDNAME).mkdirs();
-		}
-		String query = new String();
-
-		int mapsize = MadSand.MAPSIZE;
-
-		int i = 0;
-		int ii = 0;
-		String tll = "";
-		while (i < mapsize) {
-			while (ii < mapsize) {
-				tll = lootLayer[i][ii][0];
-				if (objLayer[i][ii][0][0] == -1) {
-					objLayer[i][ii][0][0] = 666;
-				}
-				query =
-
-						query + world[i][ii][0] + "|" + objLayer[i][ii][0][0] + "|" + objLayer[i][ii][1][0] + "|" + tll
-								+ "|" + moblayer[i][ii][5][0] + "|" + moblayer[i][ii][0][0] + "|" + world[i][ii][1]
-								+ "|" + objLayer[i][ii][0][1] + "|" + objLayer[i][ii][1][1] + "|" + lootLayer[i][ii][1]
-								+ "|" + moblayer[i][ii][5][1] + "|" + moblayer[i][ii][0][1] + "|" + croplayer[i][ii][0]
-								+ "|" + croplayer[i][ii][1] + "@";
-				if (moblayer[i][ii][5][0] != "0") {
-					System.out.println(moblayer[i][ii][5][0]);
-				}
-				ii++;
-			}
-
-			ii = 0;
-			i++;
-		}
-
-		saveToExternal(filename, query);
-		String propquery = MadSand.worldtime + "@";
-		i = 0;
-		while (i < MadSand.QUESTS) {
-			propquery += MadSand.quests[i][0] + "|" + MadSand.quests[i][1] + "@";
-			i++;
-		}
-		propquery += ":" + MadSand.name;
-		saveToExternal(MadSand.SAVEDIR + "worlds/" + MadSand.WORLDNAME + "/worldprop.dat", (propquery));
-
+	public static void saveMap(Map map) {
+		// TODO
 	}
 
-	public static String saveMapSec(int[][][] world, int[][][][] objLayer, String[][][] lootLayer, int x, int y,
-			String[][][][] moblayer, int[][][] croplayer) {
-		// TODO
+	public static String saveMapSec() {
+		// TODO ((i dont even remember what this one was supposed to do))
 		return "";
 	}
 
 	public static void loadMap(String filename) {
-		String query = "";
-		int mapsize = MadSand.MAPSIZE;
-		query = (getExternal(filename));
-		String[] raw = query.split("@");
-		String tmp = "";
-
-		int i = 0;
-		int ii = 0;
-		String tmll = "";
-		int xx = 0;
-		MobLayer.mobcount = 0;
-		while (i < mapsize) {
-			while (ii < mapsize) {
-				tmp = raw[xx];
-				String[] inception = tmp.split("|");
-				try {
-					WorldGen.world[i][ii][0] = Integer.parseInt(inception[0]);
-					WorldGen.world[i][ii][1] = Integer.parseInt(inception[6]);
-					ObjLayer.ObjLayer[i][ii][0][0] = Integer.parseInt(inception[1]);
-					ObjLayer.ObjLayer[i][ii][1][0] = Integer.parseInt(inception[2]);
-					ObjLayer.ObjLayer[i][ii][0][1] = Integer.parseInt(inception[7]);
-					ObjLayer.ObjLayer[i][ii][1][1] = Integer.parseInt(inception[8]);
-					LootLayer.lootLayer[i][ii][1] = inception[9];
-					tmll = inception[3];
-					MobLayer.placeMobForce(i, ii, inception[4], 0);
-					MobLayer.mobLayer[i][ii][0][0] = inception[5];
-					MobLayer.placeMobForce(i, ii, inception[10], 1);
-					MobLayer.mobLayer[i][ii][0][1] = inception[11];
-					LootLayer.lootLayer[i][ii][0] = tmll;
-					CropLayer.cropLayer[i][ii][0] = Integer.parseInt(inception[12]);
-					CropLayer.cropLayer[i][ii][1] = Integer.parseInt(inception[13]);
-				} catch (Exception ex) {
-					ObjLayer.ObjLayer[i][ii][0][0] = 666;
-					ObjLayer.ObjLayer[i][ii][1][0] = 0;
-					LootLayer.lootLayer[i][ii][0] = "n";
-					ex.printStackTrace(Resource.eps);
-				}
-				xx++;
-				ii++;
-			}
-			ii = 0;
-			i++;
-		}
-		Utils.out("Loaded all layers (" + xx + " layer cells). Loading worldprop.dat...");
-		String h = (MadSand.SAVEDIR + "worlds/" + MadSand.WORLDNAME + "/worldprop.dat");
-		Utils.out(h);
-		String propq = (getExternal(h));
-		MadSand.worldtime = Integer.parseInt(propq.split("@")[0]);
-		i = 1;
-		while (i <= MadSand.QUESTS) {
-			Utils.out("Loading quest " + i);
-			MadSand.quests[i - 1][0] = Integer.parseInt(propq.split("@")[i].split("\\|")[0]);
-			MadSand.quests[i - 1][1] = Integer.parseInt(propq.split("@")[i].split("\\|")[1]);
-			i++;
-		}
-		MadSand.name = propq.split(":")[1];
+		// TODO
 	}
 
 	public static String[] mapDataBlock(String filename, int num) {

@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 
+import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.strings.InventoryNames;
 import values.PlayerStats;
 
@@ -238,35 +239,10 @@ public class Gui {
 		launch.addActor(launchTbl);
 
 		onlinebtn.addListener(new ChangeListener() {
-			@SuppressWarnings("deprecation")
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				Gui.tr.onlineChecker.stop();
-				int log = 0;
-				try {
-					if (Gui.loadedpass) {
-						log = NetApi.checkLogOn(namefield.getText(), pwdfield.getText());
-					} else {
-						log = NetApi.checkLogOn(namefield.getText().trim(), Gui.sha1(pwdfield.getText()));
-					}
-				} catch (Exception localException1) {
-				}
-				if ((log == 1) && (!namefield.getText().trim().equals(""))) {
-					MadSand.setName(namefield.getText());
-					MultiPlayer.setIp(iptext.getText());
-					MadSand.goOnline();
-					try {
-						Gui.saveToExternal("lastname.dat", namefield.getText());
-						if (Gui.loadedpass) {
-							Gui.saveToExternal("lastpass.dat", pwdfield.getText());
-						} else
-							Gui.saveToExternal("lastpass.dat", Gui.sha1(pwdfield.getText()));
-						Gui.saveToExternal("lastip.dat", Gui.ip);
-					} catch (Exception e1) {
-						e1.printStackTrace(Resource.eps);
-					}
-				} else {
-					Gui.drawOkDialog("Failed to log in. Wrong nickname or password.");
-				}
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				// TODO remove
 
 			}
 
@@ -354,13 +330,13 @@ public class Gui {
 	}
 
 	static void rollStats() {
-		ACCUR = WorldGen.rand(1, 4);
-		CONSTITUTION = WorldGen.rand(6, 11);
-		ATK = WorldGen.rand(1, 5);
-		STAMINA = WorldGen.rand(4, 11);
-		LUCK = WorldGen.rand(1, 2);
-		INT = WorldGen.rand(0, 5);
-		DEX = WorldGen.rand(0, 4);
+		ACCUR = World.rand(1, 4);
+		CONSTITUTION = World.rand(6, 11);
+		ATK = World.rand(1, 5);
+		STAMINA = World.rand(4, 11);
+		LUCK = World.rand(1, 2);
+		INT = World.rand(0, 5);
+		DEX = World.rand(0, 4);
 		setStats();
 	}
 
@@ -484,22 +460,7 @@ public class Gui {
 				MadSand.setParams(Math.round(renderslide.getValue()), Math.round(worldslide.getValue()));
 				Gui.saveToExternal("lastrend.dat", Math.round(renderslide.getValue()) + "");
 				Gui.saveToExternal("lastworld.dat", Math.round(worldslide.getValue()) + "");
-
-				WorldGen.world = new int[MadSand.MAPSIZE + MadSand.BORDER][MadSand.MAPSIZE
-						+ MadSand.BORDER][MadSand.OBJLEVELS];
-				CropLayer.cropLayer = new int[MadSand.MAPSIZE + MadSand.BORDER][MadSand.MAPSIZE + MadSand.BORDER][2];
-				LootLayer.lootLayer = new String[MadSand.MAPSIZE + MadSand.BORDER][MadSand.MAPSIZE
-						+ MadSand.BORDER][MadSand.OBJLEVELS];
-				MobLayer.mobLayer = new String[MadSand.MAPSIZE + MadSand.BORDER][MadSand.MAPSIZE
-						+ MadSand.BORDER][MobLayer.statsq][MadSand.OBJLEVELS];
-				ObjLayer.ObjLayer = new int[MadSand.MAPSIZE + MadSand.BORDER][MadSand.MAPSIZE
-						+ MadSand.BORDER][2][MadSand.OBJLEVELS];
-				PlayerLayer.playerLayer = new String[MadSand.MAPSIZE + MadSand.BORDER][MadSand.MAPSIZE
-						+ MadSand.BORDER][5];
-				PlayerLayer.playerLayer1 = new String[MadSand.MAPSIZE + MadSand.BORDER][MadSand.MAPSIZE
-						+ MadSand.BORDER][5];
-				WorldGen.makeEmpty();
-				MadSand.makeEmptyA();
+				// TODO
 				dialog.remove();
 			}
 
@@ -705,8 +666,8 @@ public class Gui {
 		Gui.contbtn[0].addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				if (MadSand.wclickx > MadSand.x) {
-					MadSand.look = "right";
-					MadSand.sm.turn(MadSand.look);
+					MadSand.player.look = Direction.RIGHT;
+					MadSand.sm.turn(MadSand.player.look);
 					MadSand.sm.isInFront();
 				} else if (MadSand.wclickx < MadSand.x) {
 					MadSand.look = "left";
@@ -721,7 +682,7 @@ public class Gui {
 					MadSand.sm.turn(MadSand.look);
 					MadSand.sm.isInFront();
 				}
-				Player.interact(MadSand.x, MadSand.y, MadSand.look);
+				MadSand.player.interact(MadSand.x, MadSand.y, MadSand.look);
 			}
 
 		});

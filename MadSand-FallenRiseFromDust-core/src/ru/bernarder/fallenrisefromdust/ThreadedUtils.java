@@ -10,112 +10,6 @@ import java.net.Socket;
 public class ThreadedUtils {
 	public static boolean mapstop = false;
 
-	public Thread worldtimer = new Thread(new Runnable() {
-		public void run() {
-
-			for (;;) {
-				try {
-					Thread.sleep(5000);
-					if (MadSand.state.equals("GAME")) {
-						Utils.makeTurn();
-					}
-				} catch (Exception e) {
-					e.printStackTrace(Resource.eps);
-				}
-			}
-
-		}
-	});
-
-	public Thread mapGet = new Thread(new Runnable() {
-		public void run() {
-			if ((MadSand.multiplayer) && (!ThreadedUtils.mapstop)) {
-
-				for (;;) {
-					try {
-						Thread.sleep(100);
-						if (ThreadedUtils.mapstop) {
-							MadSand.KsendSector(false);
-							ThreadedUtils.mapstop = false;
-						} else {
-							MadSand.gmp();
-						}
-						MadSand.updChat();
-						MadSand.sendpos();
-						MadSand.getKicked();
-						MadSand.out.writeUTF("getplayers");
-						MadSand.out.flush();
-						String a = MadSand.in.readUTF();
-						MadSand.raw = a.split("@");
-						int i = 0;
-						MadSand.makeEmpty();
-						while (i < MadSand.raw.length) {
-							MadSand.info = MadSand.raw[i].split("-");
-							if (MadSand.info[3] != "0") {
-								PlayerLayer.playerLayer1[new Integer(MadSand.info[0])
-										.intValue()][new Integer(MadSand.info[1]).intValue()][0] = MadSand.info[4];
-								PlayerLayer.playerLayer1[new Integer(MadSand.info[0])
-										.intValue()][new Integer(MadSand.info[1]).intValue()][1] = MadSand.info[3];
-								PlayerLayer.playerLayer1[new Integer(MadSand.info[0])
-										.intValue()][new Integer(MadSand.info[1]).intValue()][2] = MadSand.info[5];
-								PlayerLayer.playerLayer1[new Integer(MadSand.info[0])
-										.intValue()][new Integer(MadSand.info[1]).intValue()][3] = MadSand.info[6];
-							}
-							i++;
-						}
-						if (!MadSand.isEmpty())
-							PlayerLayer.playerLayer = PlayerLayer.playerLayer1;
-					} catch (Exception e) {
-						e.printStackTrace(Resource.eps);
-					}
-				}
-
-			}
-		}
-	});
-
-	public Thread onlineChecker = new Thread(new Runnable() {
-		public void run() {
-			for (;;) {
-				int port = 3265;
-				String ip = Gui.ip;
-				try {
-					Thread.sleep(3000L);
-				} catch (InterruptedException e) {
-					e.printStackTrace(Resource.eps);
-				}
-				if (ip != "") {
-					try {
-						InetAddress ipAddress = InetAddress.getByName(ip);
-						Socket socket = new Socket();
-						socket.connect(new java.net.InetSocketAddress(ipAddress, port), 100);
-						java.io.OutputStream sout = socket.getOutputStream();
-						DataOutputStream out = new DataOutputStream(sout);
-						InputStream sin = socket.getInputStream();
-						DataInputStream in = new DataInputStream(sin);
-						out.writeUTF("online");
-						out.flush();
-						Gui.onlinelbl.setText("Server is online! Finally! " + in.readInt() + " player(s) online!");
-						socket.close();
-						Gui.onlinebtn.setDisabled(false);
-					} catch (Exception e1) {
-						Gui.onlinelbl.setText("Server didn't respond.");
-						Gui.onlinebtn.setDisabled(true);
-					}
-				}
-			}
-		}
-	});
-
-	public Thread invSend = new Thread(new Runnable() {
-		@SuppressWarnings("deprecation")
-		public void run() {
-			if (MadSand.multiplayer)
-				MadSand.KsyncInv();
-			ThreadedUtils.this.invSend.stop();
-		}
-	});
-
 	public Thread worldGen = new Thread(new Runnable() {
 		@SuppressWarnings("deprecation")
 		public void run() {
@@ -237,16 +131,6 @@ public class ThreadedUtils {
 				}
 			}
 			ThreadedUtils.this.gotoSector.stop();
-		}
-	});
-
-	public Thread mapSendK = new Thread(new Runnable() {
-		@SuppressWarnings("deprecation")
-		public void run() {
-			if (MadSand.multiplayer) {
-				ThreadedUtils.mapstop = true;
-				ThreadedUtils.this.mapSendK.stop();
-			}
 		}
 	});
 

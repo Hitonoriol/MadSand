@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
+import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.strings.InventoryNames;
 
 import java.io.DataInputStream;
@@ -146,7 +147,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static int turn = 0;
 	static int rendered = 2;
 	float percent = 0.0F;
-	public static String look = "down";
 	public static String name = "";
 	public static int[][] inv = new int[INVENTORYSIZE][4];
 	public static int[][] trade = new int[INVENTORYSIZE][4];
@@ -175,8 +175,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static boolean encounter = false;
 
 	static Vector2[] rcoords;
-
-	WorldGen Wgen = new WorldGen();
 	static Utils sm = new Utils();
 	GameSaver gs;
 
@@ -219,6 +217,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 	}
 
 	public static World world;
+	public static Player player;
 
 	public void create() {
 		Utils.out("Starting initialization!");
@@ -267,8 +266,8 @@ public class MadSand extends com.badlogic.gdx.Game {
 			Gui.log[cxxc] = new Label(" ", Gui.skin);
 			cxxc++;
 		}
-		sm.ubound = (WorldGen.GetParam(MadSand.MAPSIZE) - 33);
-		sm.lbound = (WorldGen.GetParam(MadSand.MAPSIZE) - 33);
+		sm.ubound = (World.GetParam(MadSand.MAPSIZE) - 33);
+		sm.lbound = (World.GetParam(MadSand.MAPSIZE) - 33);
 		camera = new OrthographicCamera();
 		this.invcamera = new OrthographicCamera();
 		this.invbatch = new SpriteBatch();
@@ -338,7 +337,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 		try {
 			int i = 0;
 			while (i < rcoords.length) {
-				sm.batch.draw(sm.tile[WorldGen.rend(y + (int) rcoords[i].y, x + (int) rcoords[i].x)],
+				sm.batch.draw(sm.tile[world.rend(y + (int) rcoords[i].y, x + (int) rcoords[i].x)],
 						Utils.ppos.x + rcoords[i].x * 33, Utils.ppos.y + rcoords[i].y * 33);
 				i++;
 			}
@@ -394,7 +393,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 	void drawWorld() {
 		int i = 0;
 		while (i < rcoords.length) {
-			sm.batch.draw(sm.tile[WorldGen.rend(y + (int) rcoords[i].y, x + (int) rcoords[i].x)],
+			sm.batch.draw(sm.tile[world.rend(y + (int) rcoords[i].y, x + (int) rcoords[i].x)],
 					Utils.ppos.x + rcoords[i].x * 33, Utils.ppos.y + rcoords[i].y * 33);
 			i++;
 		}
@@ -478,22 +477,22 @@ public class MadSand extends com.badlogic.gdx.Game {
 	void drawPlayer() {
 		if (stepping) {
 			this.elapsedTime += Gdx.graphics.getDeltaTime();
-			if (look.equals("right")) {
+			if (player.look == Direction.RIGHT) {
 				sm.batch.draw((TextureRegion) Utils.ranim.getKeyFrame(this.elapsedTime, true), Utils.ppos.x - stepx,
 						Utils.ppos.y);
 				updateCamToxy(Utils.ppos.x - stepx, Utils.ppos.y);
 			}
-			if (look.equals("left")) {
+			if (player.look == Direction.LEFT) {
 				sm.batch.draw((TextureRegion) Utils.lanim.getKeyFrame(this.elapsedTime, true), Utils.ppos.x + stepx,
 						Utils.ppos.y);
 				updateCamToxy(Utils.ppos.x + stepx, Utils.ppos.y);
 			}
-			if (look.equals("up")) {
+			if (player.look == Direction.UP) {
 				sm.batch.draw((TextureRegion) Utils.uanim.getKeyFrame(this.elapsedTime, true), Utils.ppos.x,
 						Utils.ppos.y - stepy);
 				updateCamToxy(Utils.ppos.x, Utils.ppos.y - stepy);
 			}
-			if (look.equals("down")) {
+			if (player.look == Direction.DOWN) {
 				sm.batch.draw((TextureRegion) Utils.danim.getKeyFrame(this.elapsedTime, true), Utils.ppos.x,
 						Utils.ppos.y + stepy);
 				updateCamToxy(Utils.ppos.x, Utils.ppos.y + stepy);

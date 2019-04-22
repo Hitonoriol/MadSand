@@ -2,6 +2,7 @@ package ru.bernarder.fallenrisefromdust;
 
 import com.badlogic.gdx.math.Vector2;
 
+import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.strings.InventoryNames;
 
 import java.util.Random;
@@ -64,7 +65,7 @@ public class InvUtils {
 
 	public static void checkHands(int id) {
 		if (getSameCell(id, 1) == -1)
-			values.PlayerStats.hand = 0;
+			MadSand.player.hand = 0;
 	}
 
 	public static int getAltObject(int id) {
@@ -203,13 +204,13 @@ public class InvUtils {
 				r = false;
 			} else {
 				MadSand.inv[cid][1] = finalQuantity;
-				if (MadSand.look == "up")
+				if (MadSand.player.look == Direction.UP)
 					LootLayer.putLoot(MadSand.x, MadSand.y + 1, id, quantity);
-				if (MadSand.look == "down")
+				if (MadSand.player.look == Direction.DOWN)
 					LootLayer.putLoot(MadSand.x, MadSand.y - 1, id, quantity);
-				if (MadSand.look == "left")
+				if (MadSand.player.look == Direction.LEFT)
 					LootLayer.putLoot(MadSand.x - 1, MadSand.y, id, quantity);
-				if (MadSand.look == "right")
+				if (MadSand.player.look == Direction.RIGHT)
 					LootLayer.putLoot(MadSand.x + 1, MadSand.y, id, quantity);
 				r = true;
 			}
