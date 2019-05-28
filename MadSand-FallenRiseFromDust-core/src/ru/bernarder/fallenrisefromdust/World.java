@@ -78,7 +78,7 @@ public class World {
 	public static int[] ores = { 22, 23 };
 	static int biome;
 
-	public void Generate(boolean tofile) {
+	public void Generate() {
 		Utils.out("WorldGen start!");
 		try {
 			makeEmpty();
@@ -95,8 +95,6 @@ public class World {
 			genObjByTemplate();
 			if ((MadSand.curxwpos == 5) && (MadSand.curywpos == 5))
 				MadSand.setUpScene();
-			if (tofile)
-				GameSaver.saveWorld(MadSand.WORLDNAME);
 			Utils.out("End of WorldGen!");
 		} catch (Exception e) {
 			Utils.out("Whoops, fatal error... See MadSandCritical.log and/or MadSandErrors.log files.");

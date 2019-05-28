@@ -14,7 +14,7 @@ public class ThreadedUtils {
 		@SuppressWarnings("deprecation")
 		public void run() {
 			if (MadSand.tonext) {
-				if (WorldGen.rand(0, MadSand.ENCOUNTERCHANCE) == MadSand.ENCOUNTERCHANCE) {
+				if (World.rand(0, MadSand.ENCOUNTERCHANCE) == MadSand.ENCOUNTERCHANCE) {
 					try {
 						MadSand.curxwpos = MadSand.tempwx;
 						MadSand.curywpos = MadSand.tempwy;
@@ -26,9 +26,9 @@ public class ThreadedUtils {
 						Utils.out("Error on random encounter start: " + e.getMessage());
 					}
 				} else
-					WorldGen.world = WorldGen.Generate(false);
+					MadSand.world.Generate();
 			} else {
-				WorldGen.world = WorldGen.Generate(false);
+				MadSand.world.Generate();
 			}
 			MadSand.tonext = false;
 			MadSand.state = "GAME";
@@ -39,7 +39,7 @@ public class ThreadedUtils {
 	public Thread initialWorldGen = new Thread(new Runnable() {
 		@SuppressWarnings("deprecation")
 		public void run() {
-			WorldGen.world = WorldGen.Generate(false);
+			MadSand.world.Generate();
 			MadSand.state = "GAME";
 			Gui.createCharDialog();
 			ThreadedUtils.this.worldGen.stop();
@@ -54,12 +54,6 @@ public class ThreadedUtils {
 			MadSand.tonext = true;
 			if (!MadSand.multiplayer) {
 				MadSand.print("Going to (" + MadSand.curxwpos + ", " + MadSand.curywpos + ")");
-				if (!MadSand.encounter)
-					GameSaver.saveMap(
-							"MadSand_Saves/worlds/" + MadSand.WORLDNAME + "/" + "sector-" + MadSand.curxwpos + "-"
-									+ MadSand.curywpos + ".mws",
-							WorldGen.world, ObjLayer.ObjLayer, LootLayer.lootLayer, MadSand.curxwpos, MadSand.curywpos,
-							MobLayer.mobLayer, CropLayer.cropLayer);
 				MadSand.encounter = false;
 
 				if ((Utils.gotodir == "left") && (MadSand.curxwpos > 0)) {

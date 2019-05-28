@@ -97,7 +97,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 	static String QUESTFILE = SAVEDIR + "quest.xml";
 	static String RESFILE = SAVEDIR + "res.xml";
 	static int numlook = 0;
-	public static boolean multiplayer = false;
 
 	static final int XDEF = 1280;
 	static final int YDEF = 720;
