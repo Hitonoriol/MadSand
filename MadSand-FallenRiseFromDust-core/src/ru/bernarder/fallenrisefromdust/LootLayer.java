@@ -25,13 +25,11 @@ public class LootLayer {
 			addLootToInv(MadSand.x, MadSand.y);
 			removeLoot(MadSand.x, MadSand.y);
 			MadSand.print("You picked some things up");
-			new ThreadedUtils().mapSendK.start();
 		}
 	}
 
 	static void removeLoot(int x, int y) {
 		lootLayer[x][y][MadSand.curlayer] = "n";
-		new ThreadedUtils().mapSendK.start();
 	}
 
 	public static void putLoot(int x, int y, int id, int q) {
@@ -41,7 +39,6 @@ public class LootLayer {
 		int tmp39_36 = MadSand.curlayer;
 		String[] tmp39_35 = lootLayer[x][y];
 		tmp39_35[tmp39_36] = (tmp39_35[tmp39_36] + ":" + id + "/" + q);
-		new ThreadedUtils().mapSendK.start();
 	}
 
 	public static void putLootQuery(int x, int y, String query) {
@@ -51,7 +48,6 @@ public class LootLayer {
 		int tmp39_36 = MadSand.curlayer;
 		String[] tmp39_35 = lootLayer[x][y];
 		tmp39_35[tmp39_36] = (tmp39_35[tmp39_36] + query);
-		new ThreadedUtils().mapSendK.start();
 	}
 
 	public static int addLootToInv(int x, int y) {

@@ -27,8 +27,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Random;
 
-import values.PlayerStats;
-
 public class MadSand extends com.badlogic.gdx.Game {
 	public static String VER = "";
 	static int[][] quests;
@@ -232,9 +230,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 		createDirs();
 		sm.Initf();
 		world = new World(MadSand.MAPSIZE);
-		if (!roguelike)
-			new ThreadedUtils().worldtimer.start();
-		MobLayer.initLayer();
 		this.objn = new InventoryNames();
 		Gui.createBasicSkin();
 		Gui.chat = new Label[15];
@@ -245,9 +240,9 @@ public class MadSand extends com.badlogic.gdx.Game {
 		}
 
 		Gui.gui = new Label[4];
-		Gui.gui[0] = new Label("HP: " + PlayerStats.blood + "/" + PlayerStats.maxblood, Gui.skin);
-		Gui.gui[1] = new Label("Level: " + PlayerStats.lvl, Gui.skin);
-		Gui.gui[2] = new Label("Experience: " + PlayerStats.exp + "/" + PlayerStats.requiredexp, Gui.skin);
+		Gui.gui[0] = new Label("HP: " + player.hp + "/" + player.mhp, Gui.skin);
+		Gui.gui[1] = new Label("Level: " + player.lvl, Gui.skin);
+		Gui.gui[2] = new Label("Experience: " + player.exp + "/" + player.requiredexp, Gui.skin);
 		Gui.gui[3] = new Label("", Gui.skin);
 		Gui.log = new Label[10];
 		QuestUtils.init();
@@ -272,11 +267,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 		this.invbatch = new SpriteBatch();
 		camera.update();
 		Gui.font = new BitmapFont();
-		WeaponWorker.init();
-		if (multiplayer) {
-			state = "GAME";
-			Gui.initmenu();
-		}
 		Utils.ppos.x = (x * 33);
 		Utils.ppos.y = (y * 33);
 		Gui.equip = new Image[5];
@@ -303,7 +293,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 
 	static void setUpScene() {
 		Utils.out("Setting starting scene up!");
-		MobLayer.placeMobForce(50, 50, "5", 0);
 		world.getCurLoc().addObject(50, 49, 6);
 	}
 
@@ -364,10 +353,10 @@ public class MadSand extends com.badlogic.gdx.Game {
 					sm.batch.draw(sm.objects[7], Utils.ppos.x + (int) rcoords[i].x * 33,
 							Utils.ppos.y + (int) rcoords[i].y * 33);
 				}
-				if (MobLayer.getMobId(trdx, trdy) != 0) {
+				/*if (MobLayer.getMobId(trdx, trdy) != 0) {
 					sm.batch.draw(sm.npc[MobLayer.getMobId(trdx, trdy)], Utils.ppos.x + (int) rcoords[i].x * 33,
 							Utils.ppos.y + (int) rcoords[i].y * 33);
-				}
+				}*/
 
 				i++;
 			}
@@ -377,10 +366,10 @@ public class MadSand extends com.badlogic.gdx.Game {
 			i = 0;
 			sm.batch.draw(sm.mapcursor, wmx * 33, wmy * 33);
 			sm.batch.end();
-			Gui.gui[0].setText("HP: " + PlayerStats.blood + "/" + PlayerStats.maxblood);
-			Gui.gui[1].setText("Level: " + PlayerStats.lvl);
-			Gui.gui[2].setText("Experience: " + PlayerStats.exp + "/" + PlayerStats.requiredexp);
-			Gui.gui[3].setText("Hand: " + sm.getItem(PlayerStats.hand));
+			Gui.gui[0].setText("HP: " + player.hp + "/" + player.mhp);
+			Gui.gui[1].setText("Level: " + player.lvl);
+			Gui.gui[2].setText("Experience: " + player.exp + "/" + player.requiredexp);
+			Gui.gui[3].setText("Hand: " + sm.getItem(player.hand));
 
 			sm.batch.begin();
 		} catch (Exception e) {
@@ -541,7 +530,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public void render() {
 		if (state.equals("GAME")) {
 			Gdx.input.setInputProcessor(Gui.overlay);
-			StatsChecker.checkStats();
 			sm.checkFocus();
 			if (Gui.overlay.getKeyboardFocus() != Gui.msgf && !charcrt) {
 				Utils.updMouseCoords();
@@ -556,7 +544,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 			DrawGame();
 			Gui.overlay.draw();
 			Gui.overlay.act();
-			this.percent = (PlayerStats.blood * 100 / PlayerStats.maxblood);
 			sm.batch.end();
 		} else if (state.equals("INVENTORY")) {
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
@@ -625,7 +612,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 			Gdx.gl.glClear(16384);
 			sm.batch.begin();
 			drawWorld();
-			this.percent = (PlayerStats.blood * 100 / PlayerStats.maxblood);
 			sm.batch.end();
 			Gui.stage.act();
 			Gui.stage.draw();
@@ -642,7 +628,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 			Gdx.gl.glClear(16384);
 			sm.batch.begin();
 			drawWorld();
-			this.percent = (PlayerStats.blood * 100 / PlayerStats.maxblood);
+			this.percent = (player.hp * 100 / player.mhp);
 			sm.batch.end();
 			Gui.launch.draw();
 			Gui.launch.act();

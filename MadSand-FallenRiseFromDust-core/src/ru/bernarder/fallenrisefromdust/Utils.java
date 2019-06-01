@@ -191,16 +191,16 @@ public class Utils {
 			counter++;
 		}
 		counter = 1;
-		ObjLayer.altitems = new String[MadSand.LASTOBJID][3];
+		Tuple<Integer, String> tmp = new Tuple<Integer, String>(0, "");
 		while (counter < MadSand.LASTOBJID) {
 			this.objects[counter] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "obj/" + counter + ".png"));
 			Objects.name.put(counter, getKey(RES, "object", "" + counter, "name"));
 			Objects.hp.put(counter, Integer.parseInt(getKey(RES, "object", "" + counter, "tough")));
-			ObjLayer.altitems[counter][0] = getKey(RES, "object", "" + counter, "altitem");
-			ObjLayer.altitems[counter][1] = getKey(RES, "object", "" + counter, "hand");
-			ObjLayer.altitems[counter][2] = getKey(RES, "object", "" + counter, "skillbonus");
-			ObjLayer.vRendMasks[counter] = Integer.parseInt(getKey(RES, "object", "" + counter, "vmask"));
-			ObjLayer.hRendMasks[counter] = Integer.parseInt(getKey(RES, "object", "" + counter, "hmask"));
+			Objects.altitems.put(tmp.set(counter, "altitem"), getKey(RES, "object", "" + counter, "altitem"));
+			Objects.altitems.put(tmp.set(counter, "hand"), getKey(RES, "object", "" + counter, "hand"));
+			Objects.altitems.put(tmp.set(counter, "skillbonus"), getKey(RES, "object", "" + counter, "skillbonus"));
+			Objects.vRendMasks.put(counter, Integer.parseInt(getKey(RES, "object", "" + counter, "vmask")));
+			Objects.hRendMasks.put(counter, Integer.parseInt(getKey(RES, "object", "" + counter, "hmask")));
 			counter++;
 		}
 		counter = 0;
@@ -211,21 +211,19 @@ public class Utils {
 			counter++;
 		}
 		counter = 0;
-		MobLayer.start();
 		while (counter < MadSand.NPCSPRITES) {
 			this.npc[counter] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "npc/" + counter + ".png"));
-			MobLayer.mobStats[counter][0] = getKey(RES, "npc", "" + counter, "hp");
-			MobLayer.mobStats[counter][1] = getKey(RES, "npc", "" + counter, "maxhp");
-			MobLayer.mobStats[counter][2] = getKey(RES, "npc", "" + counter, "rewardexp");
-			MobLayer.mobStats[counter][3] = getKey(RES, "npc", "" + counter, "drop");
-			MobLayer.mobStats[counter][4] = getKey(RES, "npc", "" + counter, "name");
-			MobLayer.mobStats[counter][5] = counter + "";
-			MobLayer.mobStats[counter][6] = getKey(RES, "npc", "" + counter, "atk");
-			MobLayer.mobStats[counter][7] = getKey(RES, "npc", "" + counter, "accuracy");
-			MobLayer.mobStats[counter][8] = getKey(RES, "npc", "" + counter, "friendly");
-			MobLayer.mobStats[counter][9] = getKey(RES, "npc", "" + counter, "fraction");
-			MobLayer.mobStats[counter][10] = getKey(RES, "npc", "" + counter, "spawnonce");
-			MobLayer.mobStats[counter][11] = getKey(RES, "npc", "" + counter, "qids");
+			getKey(RES, "npc", "" + counter, "hp");
+			getKey(RES, "npc", "" + counter, "maxhp");
+			getKey(RES, "npc", "" + counter, "rewardexp");
+			getKey(RES, "npc", "" + counter, "drop");
+			getKey(RES, "npc", "" + counter, "name");
+			getKey(RES, "npc", "" + counter, "atk");
+			getKey(RES, "npc", "" + counter, "accuracy");
+			getKey(RES, "npc", "" + counter, "friendly");
+			getKey(RES, "npc", "" + counter, "fraction");
+			getKey(RES, "npc", "" + counter, "spawnonce");
+			getKey(RES, "npc", "" + counter, "qids");
 			counter++;
 		}
 
@@ -274,44 +272,29 @@ public class Utils {
 					+ InvUtils.getItemPriceByCursorCoord(selected) + " gold.", 0);
 			Gui.acceptD.addListener(new ChangeListener() {
 				public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-					if (InvUtils.getSameCell(21, InvUtils.getItemPriceByCursorCoord(Utils.selected)) != -1) {
-						InvUtils.delItem(21, InvUtils.getItemPriceByCursorCoord(Utils.selected));
-						InvUtils.putItem(Utils.selected, 1, false);
-						InvUtils.delItemT(Utils.selected, 1);
-						LootLayer.tInvToLoot(ObjLayer.mx, ObjLayer.my);
-					}
-					Utils.selected = 0;
-					MadSand.maindialog.setVisible(false);
-					MadSand.state = "BUY";
+
 				}
 
 			});
 			Gui.refuseD.addListener(new com.badlogic.gdx.scenes.scene2d.utils.ChangeListener() {
 				public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-					Utils.selected = 0;
-					MadSand.maindialog.setVisible(false);
-					MadSand.state = "BUY";
+
 				}
 			});
 		}
 	}
 
-	static void putTile(int x, int y, int id, int layer) {
-		WorldGen.world[x][y][layer] = id;
-	}
-
 	public static void useKeyAction() {
-		int id = PlayerStats.hand;
+		int id = MadSand.player.hand;
 		InvUtils.checkHands(id);
 		if ((id == 41) && (gettileId(MadSand.x, MadSand.y) == 0)) {
 			MadSand.print("You plowed a dirt");
-			putTile(MadSand.y, MadSand.x, 15, 0);
+			MadSand.world.putMapTile(MadSand.x, MadSand.y, 15);
 		}
 		if ((gettileId(MadSand.x, MadSand.y) == 6) || (gettileId(MadSand.x, MadSand.y) == 16)) {
 			MadSand.print("You entered the dungeon.");
 			MadSand.curlayer += 1;
-			ObjLayer.delObjectL(MadSand.x, MadSand.y, MadSand.curlayer);
-			WorldGen.world[MadSand.x][MadSand.y][MadSand.curlayer] = 7;
+			MadSand.world.delObj(MadSand.x, MadSand.y);
 		}
 		if (id == 6) {
 			if (gettileId(MadSand.x, MadSand.y) == 0) {
@@ -405,7 +388,7 @@ public class Utils {
 			MadSand.print("You've just dropped 1 " + InvUtils.getItemName(InvUtils.getItemIdByCursorCoord()));
 		}
 		if ((Gdx.input.isKeyJustPressed(45)) && (tester)) {
-			WorldGen.makeEmpty();
+			MadSand.world.makeEmpty(); 
 		}
 
 		if (Gdx.input.isKeyJustPressed(66)) {
@@ -712,11 +695,9 @@ public class Utils {
 		}
 	}
 
-	public void move(String dir) {
-		if ((!Player.isCollision(MadSand.x, MadSand.y, dir, 0)) && (!MobLayer.isMobCollision(MadSand.look))
-				&& (!PlayerLayer.isCollision(MadSand.x, MadSand.y, dir)) && (MadSand.dialogflag)) {
-			MobLayer.updateMobLogic();
-			if ((dir == "up") && (!VerifyPosition(dir)) && (!MobLayer.isMobCollision(MadSand.look))) {
+	public void move(Direction dir) {
+		if ((!Player.isCollision(MadSand.x, MadSand.y, dir, 0)) && (MadSand.dialogflag)) {
+			if ((dir == Direction.UP) && (!VerifyPosition(dir)) && (!MobLayer.isMobCollision(MadSand.look))) {
 				MadSand.y += 1;
 				ppos.y += 33.0F;
 			}
@@ -740,18 +721,18 @@ public class Utils {
 		}
 	}
 
-	public boolean VerifyPosition(String dir) {
+	public boolean VerifyPosition(Direction dir) {
 		boolean ret = false;
-		if (MadSand.x >= MadSand.MAPSIZE - 1 && (dir == "right")) {
+		if (MadSand.x >= MadSand.MAPSIZE - 1 && (dir == Direction.RIGHT)) {
 			ret = true;
 		}
-		if (MadSand.y >= MadSand.MAPSIZE - 1 && (dir == "up")) {
+		if (MadSand.y >= MadSand.MAPSIZE - 1 && (dir == Direction.UP)) {
 			ret = true;
 		}
-		if (MadSand.x <= 1 && (dir == "left")) {
+		if (MadSand.x <= 1 && (dir == Direction.LEFT)) {
 			ret = true;
 		}
-		if (MadSand.y <= 1 && (dir == "down")) {
+		if (MadSand.y <= 1 && (dir == Direction.DOWN)) {
 			ret = true;
 		}
 		return ret;
@@ -779,26 +760,16 @@ public class Utils {
 				com.badlogic.gdx.scenes.scene2d.actions.Actions.moveTo(MadSand.mx + 60, MadSand.my - 70, 0.1F));
 		try {
 			Gui.mouselabel[0].setText("World coords: " + MadSand.wmx + ", " + MadSand.wmy);
-			Gui.mouselabel[1].setText("Tile: " + Tiles.name.get(gettileId(MadSand.wmx, MadSand.wmy)));
-			Gui.mouselabel[2].setText(
-					"Object: " + Objects.name.get(ObjLayer.getBlock(MadSand.wmx, MadSand.wmy, MadSand.curlayer)) + " ("
-							+ ObjLayer.getBlock(MadSand.wmx, MadSand.wmy, MadSand.curlayer) + ")");
-			Gui.mouselabel[3].setText("Creature: " + MobLayer.getMobStat(MadSand.wmx, MadSand.wmy, 4) + " ("
-					+ MobLayer.getMobStat(MadSand.wmx, MadSand.wmy, 5) + " "
-					+ MobLayer.getMobStat(MadSand.wmx, MadSand.wmy, 8) + ")");
-			Gui.mouselabel[4].setText("Turn: " + MadSand.turn + "\nWorld time: " + MadSand.worldtime + "\nMob count: "
-					+ MobLayer.mobcount + "\nPlayer position: (" + MadSand.x + ", " + MadSand.y + ")\nStamina: "
-					+ Math.round(PlayerStats.stamina));
+			Gui.mouselabel[1]
+					.setText("Tile: " + Tiles.name.get(MadSand.world.getCurLoc().getTile(MadSand.wmx, MadSand.wmy)));
+			Gui.mouselabel[2].setText("Object: " + " ()");
+			Gui.mouselabel[3].setText("Creature: " + " ()");
+			Gui.mouselabel[4]
+					.setText("Turn: " + MadSand.turn + "\nWorld time: " + MadSand.worldtime + "\nPlayer position: ("
+							+ MadSand.x + ", " + MadSand.y + ")\nStamina: " + Math.round(MadSand.player.stamina));
 		} catch (Exception e) {
 			e.printStackTrace(Resource.eps);
 		}
-	}
-
-	public static int gettileId(int x, int y) {
-		if (x < MadSand.MAPSIZE && y < MadSand.MAPSIZE && x >= 0 && y >= 0)
-			return WorldGen.world[y][x][MadSand.curlayer];
-		else
-			return 0;
 	}
 
 	public void checkInvKeys() {
@@ -878,17 +849,6 @@ public class Utils {
 
 		if ((Gdx.input.isKeyJustPressed(66)) && (Gui.overlay.getKeyboardFocus() == Gui.msgf)
 				&& (!Gui.msgf.getText().trim().equals(""))) {
-			if (MadSand.multiplayer) {
-				try {
-					MadSand.out.writeUTF("sendmsg");
-					MadSand.out.writeUTF(Gui.msgf.getText());
-					MadSand.out.flush();
-					Gui.msgf.setText("");
-					Gui.overlay.unfocus(Gui.msgf);
-				} catch (IOException e) {
-					e.printStackTrace(Resource.eps);
-				}
-			}
 			if ((admin) || (tester)) {
 				try {
 					if (Gui.msgf.getText().split(" ")[0].equals("give")) {
@@ -897,18 +857,13 @@ public class Utils {
 						MadSand.print("Obtained " + Gui.msgf.getText().split(" ")[2] + " "
 								+ InventoryNames.name.get(new Integer(Gui.msgf.getText().split(" ")[1])));
 					} else if (Gui.msgf.getText().equalsIgnoreCase("erase")) {
-						WorldGen.makeEmpty();
+						MadSand.world.makeEmpty();
 					} else if (Gui.msgf.getText().split(" ")[0].equals("exec")) {
 						BuildScript
 								.execute(GameSaver.getExternalNl("MadSand_Saves" + Gui.msgf.getText().split(" ")[1]));
 					} else if (Gui.msgf.getText().split(" ")[0].equals("spawn")) {
-						MobLayer.placeMob(new Integer(Gui.msgf.getText().split(" ")[2]).intValue(),
-								new Integer(Gui.msgf.getText().split(" ")[3]).intValue(),
-								Gui.msgf.getText().split(" ")[1]);
 						MadSand.print("Spawned mob");
 					} else if (Gui.msgf.getText().split(" ")[0].equals("despawn")) {
-						MobLayer.delMob(new Integer(Gui.msgf.getText().split(" ")[1]).intValue(),
-								new Integer(Gui.msgf.getText().split(" ")[2]).intValue(), MadSand.curlayer);
 						MadSand.print("Despawned mob");
 
 					} else if (Gui.msgf.getText().split(" ")[0].equals("help")) {

@@ -262,13 +262,21 @@ public class World {
 		getCurLoc().addObject(x, y, id);
 	}
 
+	void delObj(int x, int y) {
+		addObj(x, y, 0);
+	}
+
 	void addObj(int x, int y, int layer, int id) {
 		getCurLoc(layer).addObject(x, y, id);
 	}
 
+	void delObj(int x, int y, int layer) {
+		addObj(x, y, layer, 0);
+	}
+
 	// end of lazyass area
 
-	public void makeEmpty() {	//Should be in map alongside with purge()
+	public void makeEmpty() { // Should be in map alongside with purge()
 		Utils.out("makeEmpty start!");
 		biome = 0;
 		int i = 0;
