@@ -661,16 +661,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 			sm.batch.end();
 			Gui.dead.act();
 			Gui.dead.draw();
-		} else if (state.equals("KICK")) {
-			camera.position.set(0.0F, 0.0F, 0.0F);
-			sm.batch.setProjectionMatrix(camera.combined);
-			camera.update();
-			sm.batch.begin();
-			Gdx.gl.glClear(16384);
-			Gui.font1.draw(sm.batch, "You've been kicked from the server.\nEnter to quit.", 0.0F, 0.0F);
-			if (Gdx.input.isKeyJustPressed(66))
-				Gdx.app.exit();
-			sm.batch.end();
 		} else if (state.equals("MSG")) {
 			camera.position.set(0.0F, 0.0F, 0.0F);
 			sm.batch.setProjectionMatrix(camera.combined);

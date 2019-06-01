@@ -1,11 +1,7 @@
 package ru.bernarder.fallenrisefromdust;
 
-import java.io.File;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
 import ru.bernarder.fallenrisefromdust.enums.*;
 
@@ -82,15 +78,15 @@ public class Player {
 		return true;
 	}
 
-	static void skillBonusItems(int x, int y, String direction, int id) {
+	void skillBonusItems(int x, int y, String direction, int id) {
 		// Idk what's this thing
 	}
 
-	static void damagePlayer(int to) {
+	void damagePlayer(int to) {
 		hp -= to;
 	}
 
-	static void healPlayer(int to) {
+	void healPlayer(int to) {
 		if (hp + to < mhp) {
 			hp += to;
 		} else {
@@ -98,7 +94,7 @@ public class Player {
 		}
 	}
 
-	static void increaseStamina(int to) {
+	void increaseStamina(int to) {
 		if (stamina + to < maxstamina) {
 			stamina += to;
 		} else {
@@ -106,7 +102,7 @@ public class Player {
 		}
 	}
 
-	public static void checkStats() {
+	public void checkStats() {
 		if (exp >= requiredexp) {
 			lvl += 1;
 			exp = 0;

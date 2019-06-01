@@ -8,6 +8,8 @@ import com.github.czyzby.noise4j.map.generator.noise.NoiseGenerator;
 import com.github.czyzby.noise4j.map.generator.room.dungeon.DungeonGenerator;
 import com.github.czyzby.noise4j.map.generator.util.Generators;
 
+import ru.bernarder.fallenrisefromdust.enums.Direction;
+
 /*	Old worldgen
 	public static int[] ores = { 22, 23 };
 	public static int[][][] world = new int[MadSand.MAPSIZE + MadSand.BORDER][MadSand.MAPSIZE
@@ -249,6 +251,18 @@ public class World {
 	}
 
 	// Lazyass area
+
+	int getTileId(int x, int y) {
+		return getCurLoc().getTile(x, y).id;
+	}
+	
+	int getObjID(int x, int y) {
+		return getCurLoc().getObject(x, y).id;
+	}
+	
+	int getObjID(int x, int y, Direction dir) {
+		return getCurLoc().getObject(x, y, dir).id;
+	}
 
 	void putMapTile(int x, int y, int id) {
 		getCurLoc().addTile(x, y, id);
