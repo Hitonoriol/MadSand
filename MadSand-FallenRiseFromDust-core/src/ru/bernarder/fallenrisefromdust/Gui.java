@@ -916,7 +916,7 @@ public class Gui {
 		while (cg < MadSand.CRAFTABLES) {
 			Gui.craftbtn[cg] = new TextButton(InventoryNames.name.get(MadSand.craftableid[cg]), Gui.skin);
 			Gui.craftbl.add(Gui.craftbtn[cg]).width(250.0F);
-			Gui.craftbl.add(new Label(" " + LootLayer.getTextQuery(InventoryNames.recipe.get(MadSand.craftableid[cg])),
+			Gui.craftbl.add(new Label(" " + LootNode.getTextQuery(InventoryNames.recipe.get(MadSand.craftableid[cg])),
 					Gui.skin)).align(8);
 			Gui.craftbl.row();
 			final int ssa = cg;

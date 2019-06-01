@@ -1,12 +1,5 @@
 package ru.bernarder.fallenrisefromdust;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.InetAddress;
-import java.net.Socket;
-
 public class ThreadedUtils {
 	public static boolean mapstop = false;
 
@@ -14,7 +7,7 @@ public class ThreadedUtils {
 		@SuppressWarnings("deprecation")
 		public void run() {
 			if (MadSand.tonext) {
-				if (World.rand(0, MadSand.ENCOUNTERCHANCE) == MadSand.ENCOUNTERCHANCE) {
+				if (Utils.rand(0, MadSand.ENCOUNTERCHANCE) == MadSand.ENCOUNTERCHANCE) {
 					try {
 						MadSand.curxwpos = MadSand.tempwx;
 						MadSand.curywpos = MadSand.tempwy;
@@ -52,78 +45,38 @@ public class ThreadedUtils {
 			MadSand.tempwx = MadSand.curxwpos;
 			MadSand.tempwy = MadSand.curywpos;
 			MadSand.tonext = true;
-			if (!MadSand.multiplayer) {
-				MadSand.print("Going to (" + MadSand.curxwpos + ", " + MadSand.curywpos + ")");
-				MadSand.encounter = false;
+			MadSand.print("Going to (" + MadSand.curxwpos + ", " + MadSand.curywpos + ")");
+			MadSand.encounter = false;
 
-				if ((Utils.gotodir == "left") && (MadSand.curxwpos > 0)) {
-					MadSand.curxwpos -= 1;
-					MadSand.x = MadSand.MAPSIZE - 2;
-					Utils.updCoords();
-				}
-				if ((Utils.gotodir == "right") && (MadSand.curxwpos < 9)) {
-					MadSand.curxwpos += 1;
-					MadSand.x = 0;
-					Utils.updCoords();
-				}
-				if ((Utils.gotodir == "down") && (MadSand.curywpos > 0)) {
-					MadSand.curywpos -= 1;
-					MadSand.y = MadSand.MAPSIZE - 2;
-					Utils.updCoords();
-				}
-				if ((Utils.gotodir == "up") && (MadSand.curywpos < 9)) {
-					MadSand.curywpos += 1;
-					MadSand.y = 0;
-					Utils.updCoords();
-				}
-				WorldGen.makeEmpty();
-				if (GameSaver.verifyNextSector(MadSand.curxwpos, MadSand.curywpos)) {
-					GameSaver.loadMap("MadSand_Saves/worlds/" + MadSand.WORLDNAME + "/" + "sector-" + MadSand.curxwpos
-							+ "-" + MadSand.curywpos + ".mws");
-				} else {
-					MadSand.state = "WORLDGEN";
-					new ThreadedUtils().worldGen.start();
-				}
-
-			} else {
-				if ((Utils.gotodir == "left") && (MadSand.curxwpos > 0)) {
-					MadSand.curxwpos -= 1;
-					MadSand.x = 98;
-					Utils.updCoords();
-				}
-				if ((Utils.gotodir == "right") && (MadSand.curxwpos < 9)) {
-					MadSand.curxwpos += 1;
-					MadSand.x = 0;
-					Utils.updCoords();
-				}
-				if ((Utils.gotodir == "down") && (MadSand.curywpos > 0)) {
-					MadSand.curywpos -= 1;
-					MadSand.y = 98;
-					Utils.updCoords();
-				}
-				if ((Utils.gotodir == "up") && (MadSand.curywpos < 9)) {
-					MadSand.curywpos += 1;
-					MadSand.y = 0;
-					Utils.updCoords();
-				}
-				try {
-					MadSand.out.writeUTF("changewxy");
-					MadSand.out.writeUTF(MadSand.curxwpos + "");
-					MadSand.out.writeUTF(MadSand.curywpos + "");
-					MadSand.out.flush();
-					MadSand.out.writeUTF("sectorexists");
-
-					MadSand.out.writeUTF(MadSand.curxwpos + "");
-					MadSand.out.writeUTF(MadSand.curywpos + "");
-					MadSand.out.flush();
-					if (!MadSand.in.readBoolean()) {
-						MadSand.KsendSector(true);
-					}
-					MadSand.state = "GAME";
-				} catch (IOException e) {
-					e.printStackTrace(Resource.eps);
-				}
+			if ((Utils.gotodir == "left") && (MadSand.curxwpos > 0)) {
+				MadSand.curxwpos -= 1;
+				MadSand.x = MadSand.MAPSIZE - 2;
+				Utils.updCoords();
 			}
+			if ((Utils.gotodir == "right") && (MadSand.curxwpos < 9)) {
+				MadSand.curxwpos += 1;
+				MadSand.x = 0;
+				Utils.updCoords();
+			}
+			if ((Utils.gotodir == "down") && (MadSand.curywpos > 0)) {
+				MadSand.curywpos -= 1;
+				MadSand.y = MadSand.MAPSIZE - 2;
+				Utils.updCoords();
+			}
+			if ((Utils.gotodir == "up") && (MadSand.curywpos < 9)) {
+				MadSand.curywpos += 1;
+				MadSand.y = 0;
+				Utils.updCoords();
+			}
+			MadSand.world.makeEmpty();
+			if (GameSaver.verifyNextSector(MadSand.curxwpos, MadSand.curywpos)) {
+				GameSaver.loadMap("MadSand_Saves/worlds/" + MadSand.WORLDNAME + "/" + "sector-" + MadSand.curxwpos + "-"
+						+ MadSand.curywpos + ".mws");
+			} else {
+				MadSand.state = "WORLDGEN";
+				new ThreadedUtils().worldGen.start();
+			}
+
 			ThreadedUtils.this.gotoSector.stop();
 		}
 	});

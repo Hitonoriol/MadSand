@@ -41,7 +41,7 @@ public class BuildScript {
 					Utils.putTile(Integer.parseInt(opline[1]), Integer.parseInt(opline[2]), Integer.parseInt(opline[3]),
 							MadSand.curlayer);
 				if (opline[0].equalsIgnoreCase("pl"))
-					LootLayer.putLootQuery(Integer.parseInt(opline[1]), Integer.parseInt(opline[2]), opline[3]);
+					LootNode.putLootQuery(Integer.parseInt(opline[1]), Integer.parseInt(opline[2]), opline[3]);
 				if (opline[0].equalsIgnoreCase("clear"))
 					MadSand.world.makeEmpty();
 				if (opline[0].equalsIgnoreCase("bsquare")) {
@@ -57,7 +57,7 @@ public class BuildScript {
 					}
 				}
 				if (opline[0].equals("randomloot")) {
-					LootLayer.putLoot(Integer.parseInt(opline[1]), Integer.parseInt(opline[2]),
+					LootNode.putLoot(Integer.parseInt(opline[1]), Integer.parseInt(opline[2]),
 							World.rand(1, MadSand.LASTITEMID), World.rand(1, 50));
 				}
 				if (opline[0].equalsIgnoreCase("tsquare")) {

@@ -301,8 +301,6 @@ public class World {
 				addObj(ii, i, 1, 13);
 				addObj(i, ii, 0);
 				putMapTile(ii, i, 0);
-				LootLayer.lootLayer[i][ii][0] = "n";
-				LootLayer.lootLayer[i][ii][1] = "n";
 				ii++;
 			}
 			i++;
@@ -378,10 +376,6 @@ public class World {
 		int h = 0;
 		h = q * 33;
 		return h;
-	}
-
-	public static int rand(int min, int max) {
-		return Utils.random.nextInt((max - min) + 1) + min;
 	}
 
 	int getWidth() {

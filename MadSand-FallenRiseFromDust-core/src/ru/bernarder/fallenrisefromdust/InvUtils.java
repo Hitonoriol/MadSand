@@ -137,7 +137,7 @@ public class InvUtils {
 			new ThreadedUtils().invSend.start();
 		}
 		if (!silent) {
-			MadSand.print("You got " + LootLayer.getTextQuery(":" + id + "/" + quantity));
+			MadSand.print("You got " + LootNode.getTextQuery(":" + id + "/" + quantity));
 		}
 		return r;
 	}
@@ -205,13 +205,13 @@ public class InvUtils {
 			} else {
 				MadSand.inv[cid][1] = finalQuantity;
 				if (MadSand.player.look == Direction.UP)
-					LootLayer.putLoot(MadSand.x, MadSand.y + 1, id, quantity);
+					LootNode.putLoot(MadSand.x, MadSand.y + 1, id, quantity);
 				if (MadSand.player.look == Direction.DOWN)
-					LootLayer.putLoot(MadSand.x, MadSand.y - 1, id, quantity);
+					LootNode.putLoot(MadSand.x, MadSand.y - 1, id, quantity);
 				if (MadSand.player.look == Direction.LEFT)
-					LootLayer.putLoot(MadSand.x - 1, MadSand.y, id, quantity);
+					LootNode.putLoot(MadSand.x - 1, MadSand.y, id, quantity);
 				if (MadSand.player.look == Direction.RIGHT)
-					LootLayer.putLoot(MadSand.x + 1, MadSand.y, id, quantity);
+					LootNode.putLoot(MadSand.x + 1, MadSand.y, id, quantity);
 				r = true;
 			}
 			new ThreadedUtils().invSend.start();

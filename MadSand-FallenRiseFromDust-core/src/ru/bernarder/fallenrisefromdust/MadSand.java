@@ -246,7 +246,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 		Gui.gui[3] = new Label("", Gui.skin);
 		Gui.log = new Label[10];
 		QuestUtils.init();
-		LootLayer.init();
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.local(SAVEDIR + FONT_PATH));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		parameter.characters = "Ð™Ð¦Ð£ÐšÐ•Ð�Ð“Ð¨Ð©Ð—Ð¥ÐªÐ¤Ð«Ð’Ð�ÐŸÐ ÐžÐ›Ð”Ð–Ð­Ð¯Ð§Ð¡ÐœÐ˜Ð¢Ð¬Ð‘Ð®Ð�Ð¹Ñ†ÑƒÐºÐµÐ½Ð³ÑˆÑ‰Ð·Ñ…ÑŠÑ„Ñ‹Ð²Ð°Ð¿Ñ€Ð¾Ð»Ð´Ð¶Ñ�Ñ�Ñ‡Ñ�Ð¼Ð¸Ñ‚ÑŒÐ±ÑŽÑ‘abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\\\/?-+=()*&.;:,{}\\\"'<>";
@@ -535,7 +534,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 				Utils.updMouseCoords();
 				sm.mouseMovement();
 				sm.KeyCheck();
-				LootLayer.lootCollision();
+				LootNode.lootCollision();
 				sm.InvKeyCheck();
 			}
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);

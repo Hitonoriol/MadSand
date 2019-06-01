@@ -2,23 +2,7 @@ package ru.bernarder.fallenrisefromdust;
 
 import ru.bernarder.fallenrisefromdust.strings.InventoryNames;
 
-public class LootLayer {
-	public static String[][][] lootLayer = new String[MadSand.MAPSIZE + MadSand.BORDER][MadSand.MAPSIZE
-			+ MadSand.BORDER][MadSand.OBJLEVELS];
-
-	public static void init() {
-		int i = 0;
-		int ii = 0;
-		while (i < MadSand.MAPSIZE + MadSand.BORDER) {
-			while (ii < MadSand.MAPSIZE + MadSand.BORDER) {
-				lootLayer[i][ii][0] = "n";
-				lootLayer[i][ii][1] = "n";
-				ii++;
-			}
-			i++;
-			ii = 0;
-		}
-	}
+public class LootNode {
 
 	static void lootCollision() {
 		if (Player.standingOnLoot(MadSand.x, MadSand.y)) {
@@ -29,30 +13,19 @@ public class LootLayer {
 	}
 
 	static void removeLoot(int x, int y) {
-		lootLayer[x][y][MadSand.curlayer] = "n";
+
 	}
 
 	public static void putLoot(int x, int y, int id, int q) {
-		if (lootLayer[x][y][MadSand.curlayer] == "n") {
-			lootLayer[x][y][MadSand.curlayer] = "";
-		}
-		int tmp39_36 = MadSand.curlayer;
-		String[] tmp39_35 = lootLayer[x][y];
-		tmp39_35[tmp39_36] = (tmp39_35[tmp39_36] + ":" + id + "/" + q);
+
 	}
 
-	public static void putLootQuery(int x, int y, String query) {
-		if (lootLayer[x][y][MadSand.curlayer] == "n") {
-			lootLayer[x][y][MadSand.curlayer] = "";
-		}
-		int tmp39_36 = MadSand.curlayer;
-		String[] tmp39_35 = lootLayer[x][y];
-		tmp39_35[tmp39_36] = (tmp39_35[tmp39_36] + query);
+	public static void addLootToInv(int x, int y) {
+
 	}
 
-	public static int addLootToInv(int x, int y) {
+	public static int addLootQToInv(String temp) {
 		int i = 1;
-		String temp = lootLayer[x][y][MadSand.curlayer];
 		Utils.out("Loot Cell contents: " + temp);
 		try {
 			String[] block = temp.split(":");
@@ -66,7 +39,6 @@ public class LootLayer {
 				}
 				return Integer.parseInt(attr[0]);
 			}
-			removeLoot(x, y);
 			return 0;
 		} catch (Exception localException) {
 		}
@@ -137,7 +109,7 @@ public class LootLayer {
 		return 0;
 	}
 
-	public static boolean ifExist(String sequence) {
+	public static boolean invExists(String sequence) {
 		int i = 1;
 
 		String temp = sequence;

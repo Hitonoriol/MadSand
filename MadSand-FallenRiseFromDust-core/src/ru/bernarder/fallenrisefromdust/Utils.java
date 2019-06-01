@@ -18,7 +18,6 @@ import ru.bernarder.fallenrisefromdust.strings.Tiles;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.StringReader;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
@@ -518,7 +517,7 @@ public class Utils {
 		if ((Gdx.input.isKeyJustPressed(Keys.H)) && (tester)) {
 			MadSand.player.damagePlayer(10);
 		}
-		if ((Gdx.input.isKeyJustPressed(Keys.F)) && (PlayerStats.hand != 0)) {
+		if ((Gdx.input.isKeyJustPressed(Keys.F)) && (MadSand.player.hand != 0)) {
 			MadSand.player.hand = 0;
 			MadSand.print("You freed your hands.");
 			Gui.equip[4].setDrawable(new com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable(new Sprite(cursor)));
@@ -526,7 +525,7 @@ public class Utils {
 		if ((Gdx.input.isKeyPressed(29)) && (!MadSand.stepping)) {
 			MadSand.player.look = Direction.LEFT;
 			turn(MadSand.player.look);
-			if (!VerifyPosition(MadSand.look))
+			if (!VerifyPosition(MadSand.player.look))
 				move(MadSand.player.look);
 			isInFront();
 		}
@@ -557,24 +556,24 @@ public class Utils {
 		if ((Gdx.input.isButtonPressed(0)) && (MadSand.state == "GAME") && (!MadSand.stepping)
 				&& (!MadSand.contextopened)) {
 			if (MadSand.wmx > MadSand.x) {
-				MadSand.look = "right";
-				turn(MadSand.look);
-				move(MadSand.look);
+				MadSand.player.look = Direction.RIGHT;
+				turn(MadSand.player.look);
+				move(MadSand.player.look);
 				isInFront();
 			} else if (MadSand.wmx < MadSand.x) {
-				MadSand.look = "left";
-				turn(MadSand.look);
-				move(MadSand.look);
+				MadSand.player.look = Direction.LEFT;
+				turn(MadSand.player.look);
+				move(MadSand.player.look);
 				isInFront();
 			} else if (MadSand.wmy > MadSand.y) {
-				MadSand.look = "up";
-				turn(MadSand.look);
-				move(MadSand.look);
+				MadSand.player.look = Direction.UP;
+				turn(MadSand.player.look);
+				move(MadSand.player.look);
 				isInFront();
 			} else if (MadSand.wmy < MadSand.y) {
-				MadSand.look = "down";
-				turn(MadSand.look);
-				move(MadSand.look);
+				MadSand.player.look = Direction.DOWN;
+				turn(MadSand.player.look);
+				move(MadSand.player.look);
 				isInFront();
 			}
 		}
@@ -598,20 +597,21 @@ public class Utils {
 		}
 	}
 
+	public static int rand(int min, int max) {
+		return Utils.random.nextInt((max - min) + 1) + min;
+	}
+
 	public static void passHour() {
 		MadSand.worldtime += 1;
 		if (((MadSand.worldtime >= 0) && (MadSand.worldtime <= 5))
 				|| ((MadSand.worldtime >= 21) && (MadSand.worldtime <= 23))) {
-			if (WorldGen.rand(0, 5) == WorldGen.rand(0, 5))
-				MobLayer.placeMob(Utils.random.nextInt(MadSand.MAPSIZE), Utils.random.nextInt(MadSand.MAPSIZE),
-						Utils.random.nextInt(MadSand.NPCSPRITES) + "");
+			// spawn mobs
 		}
 	}
 
 	public static void makeTurn() {
 		tileDmg();
 		passHour();
-		PlayerActions.regen();
 		CropLayer.updCrops();
 		if (MadSand.worldtime == 24)
 			MadSand.worldtime = 0;
@@ -624,29 +624,29 @@ public class Utils {
 	}
 
 	public static void tileDmg() {
-		int dmg = Tiles.damage.get(WorldGen.world[MadSand.y][MadSand.x][MadSand.curlayer]);
+		int tid = MadSand.world.getTileId(MadSand.x, MadSand.y);
+		int dmg = Tiles.damage.get(tid);
 		if (dmg > 0) {
-			MadSand.print("You took " + dmg + " damage from "
-					+ (Tiles.name.get(WorldGen.world[MadSand.y][MadSand.x][MadSand.curlayer])));
-			PlayerActions.damagePlayer(dmg);
+			MadSand.print("You took " + dmg + " damage from " + (Tiles.name.get(tid)));
+			MadSand.player.damagePlayer(dmg);
 		}
 	}
 
 	public void move(Direction dir) {
 		if ((!Player.isCollision(MadSand.x, MadSand.y, dir, 0)) && (MadSand.dialogflag)) {
-			if ((dir == Direction.UP) && (!VerifyPosition(dir)) && (!MobLayer.isMobCollision(MadSand.look))) {
+			if ((dir == Direction.UP) && (!VerifyPosition(dir))) {
 				MadSand.y += 1;
 				ppos.y += 33.0F;
 			}
-			if ((dir == "down") && (!VerifyPosition(dir)) && (!MobLayer.isMobCollision(MadSand.look))) {
+			if ((dir == Direction.DOWN) && (!VerifyPosition(dir))) {
 				MadSand.y -= 1;
 				ppos.y -= 33.0F;
 			}
-			if ((dir == "left") && (!VerifyPosition(dir)) && (!MobLayer.isMobCollision(MadSand.look))) {
+			if ((dir == Direction.LEFT) && (!VerifyPosition(dir))) {
 				MadSand.x -= 1;
 				ppos.x -= 33.0F;
 			}
-			if ((dir == "right") && (!VerifyPosition(dir)) && (!MobLayer.isMobCollision(MadSand.look))) {
+			if ((dir == Direction.RIGHT) && (!VerifyPosition(dir))) {
 				MadSand.x += 1;
 				ppos.x += 33.0F;
 			}
@@ -698,7 +698,7 @@ public class Utils {
 		try {
 			Gui.mouselabel[0].setText("World coords: " + MadSand.wmx + ", " + MadSand.wmy);
 			Gui.mouselabel[1]
-					.setText("Tile: " + Tiles.name.get(MadSand.world.getCurLoc().getTile(MadSand.wmx, MadSand.wmy)));
+					.setText("Tile: " + Tiles.name.get(MadSand.world.getCurLoc().getTile(MadSand.wmx, MadSand.wmy).id));
 			Gui.mouselabel[2].setText("Object: " + " ()");
 			Gui.mouselabel[3].setText("Creature: " + " ()");
 			Gui.mouselabel[4]
