@@ -5,5 +5,5 @@ bin
 .settings
 .classpath
 .project
-build.gradle
 .metadata
+.gradle/
