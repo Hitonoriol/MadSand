@@ -10,7 +10,6 @@ public class CropLayer {
 	}
 
 	public static void putCropInDir(int x, int y, int id, String dir) {
-		PlayerActions.harvestUp();
 		if (dir == "up") {
 			cropLayer[x][(y + 1)][0] = id;
 			cropLayer[x][(y + 1)][1] = MadSand.worldtime;

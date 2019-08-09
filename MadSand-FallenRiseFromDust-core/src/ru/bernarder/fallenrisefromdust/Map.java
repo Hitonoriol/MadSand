@@ -20,6 +20,7 @@ public class Map {
 	Pair coords = new Pair(0, 0);
 
 	public Map(int xsz, int ysz) {
+		Utils.out("Creating map " + xsz + "x" + ysz);
 		this.xsz = xsz;
 		this.ysz = ysz;
 		purge();
@@ -162,6 +163,8 @@ public class Map {
 	}
 
 	void randPlaceObject(int id) {
+		Utils.out("" + xsz);
+		Utils.out("" + ysz);
 		int x = Utils.random.nextInt(this.xsz);
 		int y = Utils.random.nextInt(this.ysz);
 		addObject(x, y, id);

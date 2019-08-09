@@ -217,6 +217,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static Player player;
 
 	public void create() {
+		player = new Player(name);
 		Utils.out("Starting initialization!");
 		setRenderRadius();
 		Utils.out("Render area: " + rcoords.length);
@@ -229,7 +230,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 		}
 		createDirs();
 		sm.Initf();
-		world = new World(MadSand.MAPSIZE);
+		world = new World(10);
 		this.objn = new InventoryNames();
 		Gui.createBasicSkin();
 		Gui.chat = new Label[15];
@@ -248,7 +249,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 		QuestUtils.init();
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.local(SAVEDIR + FONT_PATH));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-		parameter.characters = "Ð™Ð¦Ð£ÐšÐ•Ð�Ð“Ð¨Ð©Ð—Ð¥ÐªÐ¤Ð«Ð’Ð�ÐŸÐ ÐžÐ›Ð”Ð–Ð­Ð¯Ð§Ð¡ÐœÐ˜Ð¢Ð¬Ð‘Ð®Ð�Ð¹Ñ†ÑƒÐºÐµÐ½Ð³ÑˆÑ‰Ð·Ñ…ÑŠÑ„Ñ‹Ð²Ð°Ð¿Ñ€Ð¾Ð»Ð´Ð¶Ñ�Ñ�Ñ‡Ñ�Ð¼Ð¸Ñ‚ÑŒÐ±ÑŽÑ‘abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\\\/?-+=()*&.;:,{}\\\"'<>";
+		parameter.characters = "Ã�â„¢Ã�Â¦Ã�Â£Ã�Å¡Ã�â€¢Ã�ï¿½Ã�â€œÃ�Â¨Ã�Â©Ã�â€”Ã�Â¥Ã�ÂªÃ�Â¤Ã�Â«Ã�â€™Ã�ï¿½Ã�Å¸Ã�Â Ã�Å¾Ã�â€ºÃ�â€�Ã�â€“Ã�Â­Ã�Â¯Ã�Â§Ã�Â¡Ã�Å“Ã�ËœÃ�Â¢Ã�Â¬Ã�â€˜Ã�Â®Ã�ï¿½Ã�Â¹Ã‘â€ Ã‘Æ’Ã�ÂºÃ�ÂµÃ�Â½Ã�Â³Ã‘Ë†Ã‘â€°Ã�Â·Ã‘â€¦Ã‘Å Ã‘â€žÃ‘â€¹Ã�Â²Ã�Â°Ã�Â¿Ã‘â‚¬Ã�Â¾Ã�Â»Ã�Â´Ã�Â¶Ã‘ï¿½Ã‘ï¿½Ã‘â€¡Ã‘ï¿½Ã�Â¼Ã�Â¸Ã‘â€šÃ‘Å’Ã�Â±Ã‘Å½Ã‘â€˜abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\\\/?-+=()*&.;:,{}\\\"'<>";
 		parameter.size = 24;
 		parameter.color = Color.BLUE;
 		Gui.font1 = generator.generateFont(parameter);
@@ -534,7 +535,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 				Utils.updMouseCoords();
 				sm.mouseMovement();
 				sm.KeyCheck();
-				LootNode.lootCollision();
+				//TODO: loot collision
 				sm.InvKeyCheck();
 			}
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);

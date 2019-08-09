@@ -134,10 +134,9 @@ public class InvUtils {
 			MadSand.inv[getFreeCell(id)][1] = finalQuantity;
 			MadSand.inv[getFreeCell(id)][2] = InventoryNames.type.get(id);
 			r = true;
-			new ThreadedUtils().invSend.start();
 		}
 		if (!silent) {
-			MadSand.print("You got " + LootNode.getTextQuery(":" + id + "/" + quantity));
+			MadSand.print("You got " + Loot.getTextQuery(":" + id + "/" + quantity));
 		}
 		return r;
 	}
@@ -168,7 +167,6 @@ public class InvUtils {
 				MadSand.inv[cid][1] = finalQuantity;
 				r = true;
 			}
-			new ThreadedUtils().invSend.start();
 		}
 		return r;
 	}
@@ -205,16 +203,15 @@ public class InvUtils {
 			} else {
 				MadSand.inv[cid][1] = finalQuantity;
 				if (MadSand.player.look == Direction.UP)
-					LootNode.putLoot(MadSand.x, MadSand.y + 1, id, quantity);
+					Loot.putLoot(MadSand.x, MadSand.y + 1, id, quantity);
 				if (MadSand.player.look == Direction.DOWN)
-					LootNode.putLoot(MadSand.x, MadSand.y - 1, id, quantity);
+					Loot.putLoot(MadSand.x, MadSand.y - 1, id, quantity);
 				if (MadSand.player.look == Direction.LEFT)
-					LootNode.putLoot(MadSand.x - 1, MadSand.y, id, quantity);
+					Loot.putLoot(MadSand.x - 1, MadSand.y, id, quantity);
 				if (MadSand.player.look == Direction.RIGHT)
-					LootNode.putLoot(MadSand.x + 1, MadSand.y, id, quantity);
+					Loot.putLoot(MadSand.x + 1, MadSand.y, id, quantity);
 				r = true;
 			}
-			new ThreadedUtils().invSend.start();
 		}
 		return r;
 	}

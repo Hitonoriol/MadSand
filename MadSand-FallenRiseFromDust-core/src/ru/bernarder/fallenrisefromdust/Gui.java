@@ -29,7 +29,6 @@ import com.badlogic.gdx.utils.Align;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.strings.InventoryNames;
-import values.PlayerStats;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -51,7 +50,7 @@ public class Gui {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(
 				Gdx.files.local(MadSand.SAVEDIR + MadSand.FONT_PATH));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-		parameter.characters = "АБВГДЕЁЖЗИЙКЛМНОПРСТФХЦЧШЩЫЪЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщыэюяъьabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"'<>";
+		parameter.characters = "Ð�Ð‘Ð’Ð“Ð”Ð•Ð�Ð–Ð—Ð˜Ð™ÐšÐ›ÐœÐ�ÐžÐŸÐ Ð¡Ð¢Ð¤Ð¥Ð¦Ð§Ð¨Ð©Ð«ÐªÐ¬Ð­Ð®Ð¯Ð°Ð±Ð²Ð³Ð´ÐµÑ‘Ð¶Ð·Ð¸Ð¹ÐºÐ»Ð¼Ð½Ð¾Ð¿Ñ€Ñ�Ñ‚ÑƒÑ„Ñ…Ñ†Ñ‡ÑˆÑ‰Ñ‹Ñ�ÑŽÑ�ÑŠÑŒabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"'<>";
 		parameter.size = 16;
 		// parameter.borderWidth = 0.9f;
 		// parameter.borderColor = Color.BLACK;
@@ -129,18 +128,18 @@ public class Gui {
 		dialog.setBackground(bck);
 		dialog.setMovable(true);
 		dialog.add(new Label("", Gui.skin));
-		ATKl.setText("Strength: " + PlayerStats.atk);
-		STM.setText("Stamina: " + PlayerStats.maxstamina / 10 + " (" + PlayerStats.stamina + "/"
-				+ PlayerStats.maxstamina + ")");
-		ACC.setText("Accuracy: " + PlayerStats.accur);
-		CNT.setText("Constitution: " + PlayerStats.maxblood / 10 + " (" + PlayerStats.blood + "/" + PlayerStats.maxblood
+		ATKl.setText("Strength: " + MadSand.player.atk);
+		STM.setText("Stamina: " + MadSand.player.maxstamina / 10 + " (" + MadSand.player.stamina + "/"
+				+ MadSand.player.maxstamina + ")");
+		ACC.setText("Accuracy: " + MadSand.player.accur);
+		CNT.setText("Constitution: " + MadSand.player.mhp / 10 + " (" + MadSand.player.hp + "/" + MadSand.player.mhp
 				+ ")");
-		IN.setText("Intelligence: " + PlayerStats.intelligence);
-		LK.setText("Luck: " + PlayerStats.luck);
-		DX.setText("Dexterity: " + PlayerStats.dexterity);
+		IN.setText("Intelligence: " + MadSand.player.intelligence);
+		LK.setText("Luck: " + MadSand.player.luck);
+		DX.setText("Dexterity: " + MadSand.player.dexterity);
 		dialog.row();
-		dialog.add(new Label("Level: " + PlayerStats.lvl + " (" + PlayerStats.exp + "/" + PlayerStats.requiredexp + ")",
-				Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
+		dialog.add(new Label("Level: " + MadSand.player.lvl + " (" + MadSand.player.exp + "/" + MadSand.player.requiredexp + ")",
+				Gui.skin))/*.width(Gdx.graphics.getWidth() / 4).row()*/;
 		dialog.row();
 		dialog.add(new Label("", Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
 		dialog.row();
@@ -164,17 +163,17 @@ public class Gui {
 		dialog.row();
 		dialog.add(new Label("Skills:", Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
 		dialog.row();
-		dialog.add(new Label("Woodcutting: " + PlayerStats.woodcutterskill[0], Gui.skin))
-				.width(Gdx.graphics.getWidth() / 4).row();
+		dialog.add(new Label("Woodcutting: " + MadSand.player.woodcutterskill[0], Gui.skin))
+				/*.width(Gdx.graphics.getWidth() / 4).row()*/;
 		dialog.row();
-		dialog.add(new Label("Harvesting: " + PlayerStats.harvestskill[0], Gui.skin)).width(Gdx.graphics.getWidth() / 4)
-				.row();
+		dialog.add(new Label("Harvesting: " + MadSand.player.harvestskill[0], Gui.skin))/*.width(Gdx.graphics.getWidth() / 4)
+				.row()*/;
 		dialog.row();
-		dialog.add(new Label("Mining: " + PlayerStats.miningskill[0], Gui.skin)).width(Gdx.graphics.getWidth() / 4)
-				.row();
+		dialog.add(new Label("Mining: " + MadSand.player.miningskill[0], Gui.skin))/*.width(Gdx.graphics.getWidth() / 4)
+				.row()*/;
 		dialog.row();
-		dialog.add(new Label("Survival: " + PlayerStats.survivalskill[0], Gui.skin)).width(Gdx.graphics.getWidth() / 4)
-				.row();
+		dialog.add(new Label("Survival: " + MadSand.player.survivalskill[0], Gui.skin))/*.width(Gdx.graphics.getWidth() / 4)
+				.row()*/;
 		dialog.row();
 		dialog.add(ok).width(Gdx.graphics.getWidth() / 4).row();
 		dialog.show(Gui.overlay);
@@ -200,7 +199,6 @@ public class Gui {
 			MadSand.VER = "[GREEN]" + (GameSaver.getExternal("MadSandData/version.dat"));
 		verlbl = new Label(MadSand.VER, Gui.skin);
 		tr = new ThreadedUtils();
-		tr.onlineChecker.start();
 		TextButton offlinebtn = new TextButton("Play singleplayer", Gui.skin);
 		namefield.setText(getExternal("lastname.dat"));
 		if (new File("MadSand_Saves/lastip.dat").exists())
@@ -248,10 +246,8 @@ public class Gui {
 
 		});
 		offlinebtn.addListener(new ChangeListener() {
-			@SuppressWarnings("deprecation")
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				if (!namefield.getText().trim().equals("")) {
-					Gui.tr.onlineChecker.stop();
 					MadSand.setName(namefield.getText());
 					MadSand.state = "NMENU";
 					Gdx.input.setInputProcessor(Gui.stage);
@@ -318,25 +314,25 @@ public class Gui {
 	static int ACCUR, CONSTITUTION, ATK, STAMINA, DEX, LUCK, INT;
 
 	static void setStats() {
-		PlayerStats.atk = ATK;
-		PlayerStats.stamina = STAMINA * 5;
-		PlayerStats.maxstamina = STAMINA * 5;
-		PlayerStats.accur = ACCUR;
-		PlayerStats.blood = CONSTITUTION * 10;
-		PlayerStats.maxblood = CONSTITUTION * 10;
-		PlayerStats.luck = LUCK;
-		PlayerStats.dexterity = DEX;
-		PlayerStats.intelligence = INT;
+		MadSand.player.atk = ATK;
+		MadSand.player.stamina = STAMINA * 5;
+		MadSand.player.maxstamina = STAMINA * 5;
+		MadSand.player.accur = ACCUR;
+		MadSand.player.hp = CONSTITUTION * 10;
+		MadSand.player.mhp = CONSTITUTION * 10;
+		MadSand.player.luck = LUCK;
+		MadSand.player.dexterity = DEX;
+		MadSand.player.intelligence = INT;
 	}
 
 	static void rollStats() {
-		ACCUR = World.rand(1, 4);
-		CONSTITUTION = World.rand(6, 11);
-		ATK = World.rand(1, 5);
-		STAMINA = World.rand(4, 11);
-		LUCK = World.rand(1, 2);
-		INT = World.rand(0, 5);
-		DEX = World.rand(0, 4);
+		ACCUR = Utils.rand(1, 4);
+		CONSTITUTION = Utils.rand(6, 11);
+		ATK = Utils.rand(1, 5);
+		STAMINA = Utils.rand(4, 11);
+		LUCK = Utils.rand(1, 2);
+		INT = Utils.rand(0, 5);
+		DEX = Utils.rand(0, 4);
 		setStats();
 	}
 
@@ -665,24 +661,8 @@ public class Gui {
 		Gui.contbtn[0] = new TextButton("Interact", Gui.skin);
 		Gui.contbtn[0].addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				if (MadSand.wclickx > MadSand.x) {
-					MadSand.player.look = Direction.RIGHT;
-					MadSand.sm.turn(MadSand.player.look);
-					MadSand.sm.isInFront();
-				} else if (MadSand.wclickx < MadSand.x) {
-					MadSand.look = "left";
-					MadSand.sm.turn(MadSand.look);
-					MadSand.sm.isInFront();
-				} else if (MadSand.wclicky > MadSand.y) {
-					MadSand.look = "up";
-					MadSand.sm.turn(MadSand.look);
-					MadSand.sm.isInFront();
-				} else if (MadSand.wclicky < MadSand.y) {
-					MadSand.look = "down";
-					MadSand.sm.turn(MadSand.look);
-					MadSand.sm.isInFront();
-				}
-				MadSand.player.interact(MadSand.x, MadSand.y, MadSand.look);
+				lookAtMouse();
+				MadSand.player.interact(MadSand.x, MadSand.y, MadSand.player.look);
 			}
 
 		});
@@ -697,7 +677,7 @@ public class Gui {
 		Gui.contbtn[4].addListener(new ChangeListener() {
 
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				values.PlayerStats.hand = 0;
+				MadSand.player.hand = 0;
 				MadSand.print("You freed your hands.");
 				Gui.equip[4].setDrawable(new com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable(
 						new com.badlogic.gdx.graphics.g2d.Sprite(Utils.cursor)));
@@ -707,57 +687,13 @@ public class Gui {
 		Gui.contbtn[1] = new TextButton("Fight", Gui.skin);
 		Gui.contbtn[1].addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				if (MadSand.wclickx > MadSand.x) {
-					MadSand.look = "right";
-					MadSand.sm.turn(MadSand.look);
-					MadSand.sm.isInFront();
-				} else if (MadSand.wclickx < MadSand.x) {
-					MadSand.look = "left";
-					MadSand.sm.turn(MadSand.look);
-					MadSand.sm.isInFront();
-				} else if (MadSand.wclicky > MadSand.y) {
-					MadSand.look = "up";
-					MadSand.sm.turn(MadSand.look);
-					MadSand.sm.isInFront();
-				} else if (MadSand.wclicky < MadSand.y) {
-					MadSand.look = "down";
-					MadSand.sm.turn(MadSand.look);
-					MadSand.sm.isInFront();
-				}
-				if (MobLayer.isMobCollision(MadSand.look)) {
-					if (MadSand.look == "up")
-						MobLayer.fight(MadSand.x, MadSand.y + 1);
-					if (MadSand.look == "down")
-						MobLayer.fight(MadSand.x, MadSand.y - 1);
-					if (MadSand.look == "left")
-						MobLayer.fight(MadSand.x - 1, MadSand.y);
-					if (MadSand.look == "right") {
-						MobLayer.fight(MadSand.x + 1, MadSand.y);
-					}
-
-				}
+				lookAtMouse();
 			}
 		});
 		Gui.contbtn[2] = new TextButton("Turn", Gui.skin);
 		Gui.contbtn[2].addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				if (MadSand.wclickx > MadSand.x) {
-					MadSand.look = "right";
-					MadSand.sm.turn(MadSand.look);
-					MadSand.sm.isInFront();
-				} else if (MadSand.wclickx < MadSand.x) {
-					MadSand.look = "left";
-					MadSand.sm.turn(MadSand.look);
-					MadSand.sm.isInFront();
-				} else if (MadSand.wclicky > MadSand.y) {
-					MadSand.look = "up";
-					MadSand.sm.turn(MadSand.look);
-					MadSand.sm.isInFront();
-				} else if (MadSand.wclicky < MadSand.y) {
-					MadSand.look = "down";
-					MadSand.sm.turn(MadSand.look);
-					MadSand.sm.isInFront();
-				}
+				lookAtMouse();
 			}
 		});
 
@@ -916,8 +852,7 @@ public class Gui {
 		while (cg < MadSand.CRAFTABLES) {
 			Gui.craftbtn[cg] = new TextButton(InventoryNames.name.get(MadSand.craftableid[cg]), Gui.skin);
 			Gui.craftbl.add(Gui.craftbtn[cg]).width(250.0F);
-			Gui.craftbl.add(new Label(" " + LootNode.getTextQuery(InventoryNames.recipe.get(MadSand.craftableid[cg])),
-					Gui.skin)).align(8);
+			Gui.craftbl.add(new Label(" " + Loot.getTextQuery(InventoryNames.recipe.get(MadSand.craftableid[cg])), Gui.skin))/*.align(8)*/;
 			Gui.craftbl.row();
 			final int ssa = cg;
 			Gui.craftbtn[ssa].addListener(new ChangeListener() {
@@ -992,19 +927,19 @@ public class Gui {
 		RespawnButton.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				MadSand.state = "GAME";
-				values.PlayerStats.blood = values.PlayerStats.maxblood;
-				if (PlayerStats.rest[0] == -1) {
-					MadSand.x = WorldGen.rand(0, 99);
-					MadSand.y = WorldGen.rand(0, 99);
+				MadSand.player.hp = MadSand.player.mhp;
+				if (MadSand.player.rest[0] == -1) {
+					MadSand.x = Utils.rand(0, 99);
+					MadSand.y = Utils.rand(0, 99);
 				} else {
-					if (PlayerStats.rest[2] == MadSand.curxwpos && PlayerStats.rest[3] == MadSand.curywpos) {
-						MadSand.x = PlayerStats.rest[0];
-						MadSand.y = PlayerStats.rest[1];
+					if (MadSand.player.rest[2] == MadSand.curxwpos && MadSand.player.rest[3] == MadSand.curywpos) {
+						MadSand.x = MadSand.player.rest[0];
+						MadSand.y = MadSand.player.rest[1];
 					} else {
-						MadSand.curxwpos = PlayerStats.rest[2];
-						MadSand.curywpos = PlayerStats.rest[3];
+						MadSand.curxwpos = MadSand.player.rest[2];
+						MadSand.curywpos = MadSand.player.rest[3];
 						if (GameSaver.verifyNextSector(MadSand.curxwpos, MadSand.curywpos)) {
-							WorldGen.makeEmpty();
+							MadSand.world.makeEmpty();
 							GameSaver.loadMap("MadSand_Saves/worlds/" + MadSand.WORLDNAME + "/" + "sector-"
 									+ MadSand.curxwpos + "-" + MadSand.curywpos + ".mws");
 						} else {
@@ -1090,6 +1025,27 @@ public class Gui {
 		Gdx.input.setInputProcessor(launch);
 	}
 
+	static Direction lookAtMouse() {
+		if (MadSand.wclickx > MadSand.x) {
+			MadSand.player.look = Direction.RIGHT;
+			MadSand.sm.turn(MadSand.player.look);
+			MadSand.sm.isInFront();
+		} else if (MadSand.wclickx < MadSand.x) {
+			MadSand.player.look = Direction.LEFT;
+			MadSand.sm.turn(MadSand.player.look);
+			MadSand.sm.isInFront();
+		} else if (MadSand.wclicky > MadSand.y) {
+			MadSand.player.look = Direction.UP;
+			MadSand.sm.turn(MadSand.player.look);
+			MadSand.sm.isInFront();
+		} else if (MadSand.wclicky < MadSand.y) {
+			MadSand.player.look = Direction.DOWN;
+			MadSand.sm.turn(MadSand.player.look);
+			MadSand.sm.isInFront();
+		}
+		return MadSand.player.look;
+	}
+	
 	static Image[] equip;
 	static Table darkness;
 	static com.badlogic.gdx.scenes.scene2d.ui.ScrollPane scroll;
@@ -1109,7 +1065,7 @@ public class Gui {
 	static Label[] log;
 	static Stage overlay;
 	static Table craftbl;
-	static com.badlogic.gdx.scenes.scene2d.ui.Skin skin;
+	static Skin skin;
 	static Stage invstage;
 	static Stage craft;
 	static TextButton[] craftbtn;

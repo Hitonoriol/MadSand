@@ -70,7 +70,7 @@ public class Player {
 	}
 
 	static boolean standingOnLoot(int x, int y) {
-		String ass = LootNode.getCell(x, y);
+		String ass = Loot.getCell(x, y);
 		int n = ass.length();
 		if (n == "n".length()) {
 			return false;

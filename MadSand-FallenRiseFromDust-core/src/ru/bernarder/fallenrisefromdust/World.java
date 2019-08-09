@@ -19,13 +19,14 @@ import ru.bernarder.fallenrisefromdust.enums.Direction;
  */
 
 public class World {
+	Map nullLoc = new Map(0, 0);
 	private int xsz, ysz;
-	HashMap<MapID, Map> WorldLoc;
+	HashMap<MapID, Map> WorldLoc = new HashMap<MapID, Map>();
 
 	public World(int sz) {
 		this.xsz = sz;
 		this.ysz = sz;
-		createBasicLoc(new Pair(5, 5));
+		createBasicLoc(new Pair(5, 5), 100, 100);
 	}
 
 	boolean locExists(MapID loc) {
@@ -41,11 +42,12 @@ public class World {
 	}
 
 	Map getLoc(Pair wc, int layer, int id) {
+		Utils.out("GetLoc " + wc.x + " " + wc.y + " Layer " + layer + "Id " + id);
 		MapID loc = new MapID(wc, layer, id);
 		if (locExists(loc)) {
 			return WorldLoc.get(loc);
 		} else
-			return null;
+			return nullLoc;
 	}
 
 	Map getLoc(int x, int y, int layer) {
@@ -69,10 +71,10 @@ public class World {
 		return putLoc(new Pair(x, y), layer, 0, loc);
 	}
 
-	boolean createBasicLoc(Pair wc) {
-		if (!this.createLoc(new MapID(wc, 0, 0), new Map(xsz, ysz)))
+	boolean createBasicLoc(Pair wc, int mx, int my) {
+		if (!this.createLoc(new MapID(wc, 0, 0), new Map(mx, my)))
 			return false;
-		if (!this.createLoc(new MapID(wc, 1, 0), new Map(xsz, ysz)))
+		if (!this.createLoc(new MapID(wc, 1, 0), new Map(mx, my)))
 			return false;
 		return true;
 	}
@@ -255,11 +257,11 @@ public class World {
 	int getTileId(int x, int y) {
 		return getCurLoc().getTile(x, y).id;
 	}
-	
+
 	int getObjID(int x, int y) {
 		return getCurLoc().getObject(x, y).id;
 	}
-	
+
 	int getObjID(int x, int y, Direction dir) {
 		return getCurLoc().getObject(x, y, dir).id;
 	}

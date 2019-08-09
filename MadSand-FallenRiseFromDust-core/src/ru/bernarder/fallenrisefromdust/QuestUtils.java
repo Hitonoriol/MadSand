@@ -35,10 +35,10 @@ public class QuestUtils {
 
 	public static void invokeQuest(int id) {
 		if (id < qu) {
-			if ((MadSand.quests[id][1] == 1) && (LootNode.ifExist(questList[id][4]))) {
-				LootNode.putLootQuery(MadSand.x, MadSand.y, questList[id][0]);
+			if ((MadSand.quests[id][1] == 1) && (Loot.invExists(questList[id][4]))) {
+				Loot.addLootQToInv(questList[id][0]);
 				MadSand.showDialog(1, questList[id][2], id);
-				LootNode.removeLootFromInv(questList[id][4]);
+				Loot.removeLootFromInv(questList[id][4]);
 				MadSand.quests[id][0] = 1;
 				MadSand.quests[id][1] = 0;
 				return;
@@ -46,7 +46,7 @@ public class QuestUtils {
 			if (((MadSand.quests[id][1] != 1) && (MadSand.quests[id][0] != 1)) || (questList[id][6] == "1")) {
 				MadSand.quests[id][1] = 1;
 				MadSand.showDialog(1, questList[id][1], id);
-				LootNode.putLootQuery(MadSand.x, MadSand.y, questList[id][9]);
+				Loot.addLootQToInv(questList[id][9]);
 				return;
 			}
 			if (MadSand.quests[id][1] == 1) {

@@ -189,7 +189,7 @@ public class Utils {
 			InventoryNames.heal.put(counter, getKey(RES, "item", "" + counter, "heal"));
 			counter++;
 		}
-		counter = 1;
+		counter = 0;
 		Tuple<Integer, String> tmp = new Tuple<Integer, String>(0, "");
 		while (counter < MadSand.LASTOBJID) {
 			this.objects[counter] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "obj/" + counter + ".png"));

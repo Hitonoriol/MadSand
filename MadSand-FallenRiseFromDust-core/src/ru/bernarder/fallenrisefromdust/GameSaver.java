@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
 
-import values.PlayerStats;
-
 public class GameSaver {
 
 	Thread saver = new Thread(new Runnable() {
@@ -124,20 +122,20 @@ public class GameSaver {
 			i++;
 		}
 
-		query = query + global + PlayerStats.blood + invblock + PlayerStats.maxblood + invblock + PlayerStats.atk
-				+ invblock + PlayerStats.accur + invblock + PlayerStats.stamina + invblock + PlayerStats.exp + invblock
-				+ PlayerStats.requiredexp + invblock + PlayerStats.lvl + invblock + PlayerStats.helmet + invblock
-				+ PlayerStats.cplate + invblock + PlayerStats.shield + invblock + PlayerStats.maxstamina + invblock
-				+ PlayerStats.woodcutterskill[0] + invblock + PlayerStats.woodcutterskill[1] + invblock
-				+ PlayerStats.woodcutterskill[2] + invblock + PlayerStats.miningskill[0] + invblock
-				+ PlayerStats.miningskill[1] + invblock + PlayerStats.miningskill[2] + invblock
-				+ PlayerStats.survivalskill[0] + invblock + PlayerStats.survivalskill[1] + invblock
-				+ PlayerStats.survivalskill[2] + invblock + PlayerStats.harvestskill[0] + invblock
-				+ PlayerStats.harvestskill[1] + invblock + PlayerStats.harvestskill[2] + invblock
-				+ PlayerStats.craftingskill[0] + invblock + PlayerStats.craftingskill[1] + invblock
-				+ PlayerStats.craftingskill[2] + invblock + PlayerStats.rest[0] + invblock + PlayerStats.rest[1]
-				+ invblock + PlayerStats.rest[2] + invblock + PlayerStats.rest[3] + invblock + PlayerStats.dexterity
-				+ invblock + PlayerStats.intelligence + global + MadSand.x + invblock + MadSand.y + global
+		query = query + global + MadSand.player.hp + invblock + MadSand.player.mhp + invblock + MadSand.player.atk
+				+ invblock + MadSand.player.accur + invblock + MadSand.player.stamina + invblock + MadSand.player.exp + invblock
+				+ MadSand.player.requiredexp + invblock + MadSand.player.lvl + invblock + MadSand.player.helmet + invblock
+				+ MadSand.player.cplate + invblock + MadSand.player.shield + invblock + MadSand.player.maxstamina + invblock
+				+ MadSand.player.woodcutterskill[0] + invblock + MadSand.player.woodcutterskill[1] + invblock
+				+ MadSand.player.woodcutterskill[2] + invblock + MadSand.player.miningskill[0] + invblock
+				+ MadSand.player.miningskill[1] + invblock + MadSand.player.miningskill[2] + invblock
+				+ MadSand.player.survivalskill[0] + invblock + MadSand.player.survivalskill[1] + invblock
+				+ MadSand.player.survivalskill[2] + invblock + MadSand.player.harvestskill[0] + invblock
+				+ MadSand.player.harvestskill[1] + invblock + MadSand.player.harvestskill[2] + invblock
+				+ MadSand.player.craftingskill[0] + invblock + MadSand.player.craftingskill[1] + invblock
+				+ MadSand.player.craftingskill[2] + invblock + MadSand.player.rest[0] + invblock + MadSand.player.rest[1]
+				+ invblock + MadSand.player.rest[2] + invblock + MadSand.player.rest[3] + invblock + MadSand.player.dexterity
+				+ invblock + MadSand.player.intelligence + global + MadSand.x + invblock + MadSand.y + global
 				+ MadSand.curxwpos + invblock + MadSand.curywpos + global;
 		saveToExternal(fl, query);
 	}
@@ -190,43 +188,43 @@ public class GameSaver {
 		}
 		String[] hpb = glob[1].split(invblock);
 		// STATS
-		PlayerStats.blood = Integer.parseInt(hpb[0]);
-		PlayerStats.maxblood = Integer.parseInt(hpb[1]);
-		PlayerStats.atk = Integer.parseInt(hpb[2]);
-		PlayerStats.accur = Integer.parseInt(hpb[2]);
-		PlayerStats.luck = Integer.parseInt(hpb[3]);
-		PlayerStats.stamina = Float.parseFloat(hpb[4]);
-		PlayerStats.maxstamina = Float.parseFloat(hpb[11]);
-		PlayerStats.exp = Integer.parseInt(hpb[5]);
-		PlayerStats.requiredexp = Integer.parseInt(hpb[6]);
-		PlayerStats.lvl = Integer.parseInt(hpb[7]);
-		PlayerStats.dexterity = Integer.parseInt(hpb[31]);
-		PlayerStats.intelligence = Integer.parseInt(hpb[32]);
+		MadSand.player.hp = Integer.parseInt(hpb[0]);
+		MadSand.player.mhp = Integer.parseInt(hpb[1]);
+		MadSand.player.atk = Integer.parseInt(hpb[2]);
+		MadSand.player.accur = Integer.parseInt(hpb[2]);
+		MadSand.player.luck = Integer.parseInt(hpb[3]);
+		MadSand.player.stamina = Float.parseFloat(hpb[4]);
+		MadSand.player.maxstamina = Float.parseFloat(hpb[11]);
+		MadSand.player.exp = Integer.parseInt(hpb[5]);
+		MadSand.player.requiredexp = Integer.parseInt(hpb[6]);
+		MadSand.player.lvl = Integer.parseInt(hpb[7]);
+		MadSand.player.dexterity = Integer.parseInt(hpb[31]);
+		MadSand.player.intelligence = Integer.parseInt(hpb[32]);
 		// EQUIPMENT
-		PlayerStats.helmet = Integer.parseInt(hpb[8]);
-		PlayerStats.cplate = Integer.parseInt(hpb[9]);
-		PlayerStats.shield = Integer.parseInt(hpb[10]);
+		MadSand.player.helmet = Integer.parseInt(hpb[8]);
+		MadSand.player.cplate = Integer.parseInt(hpb[9]);
+		MadSand.player.shield = Integer.parseInt(hpb[10]);
 		// SKILLS
-		PlayerStats.woodcutterskill[0] = Integer.parseInt(hpb[12]);
-		PlayerStats.woodcutterskill[1] = Integer.parseInt(hpb[13]);
-		PlayerStats.woodcutterskill[2] = Integer.parseInt(hpb[14]);
-		PlayerStats.miningskill[0] = Integer.parseInt(hpb[15]);
-		PlayerStats.miningskill[1] = Integer.parseInt(hpb[16]);
-		PlayerStats.miningskill[2] = Integer.parseInt(hpb[17]);
-		PlayerStats.survivalskill[0] = Integer.parseInt(hpb[18]);
-		PlayerStats.survivalskill[1] = Integer.parseInt(hpb[19]);
-		PlayerStats.survivalskill[2] = Integer.parseInt(hpb[20]);
-		PlayerStats.harvestskill[0] = Integer.parseInt(hpb[21]);
-		PlayerStats.harvestskill[1] = Integer.parseInt(hpb[22]);
-		PlayerStats.harvestskill[2] = Integer.parseInt(hpb[23]);
-		PlayerStats.craftingskill[0] = Integer.parseInt(hpb[24]);
-		PlayerStats.craftingskill[1] = Integer.parseInt(hpb[25]);
-		PlayerStats.craftingskill[2] = Integer.parseInt(hpb[26]);
+		MadSand.player.woodcutterskill[0] = Integer.parseInt(hpb[12]);
+		MadSand.player.woodcutterskill[1] = Integer.parseInt(hpb[13]);
+		MadSand.player.woodcutterskill[2] = Integer.parseInt(hpb[14]);
+		MadSand.player.miningskill[0] = Integer.parseInt(hpb[15]);
+		MadSand.player.miningskill[1] = Integer.parseInt(hpb[16]);
+		MadSand.player.miningskill[2] = Integer.parseInt(hpb[17]);
+		MadSand.player.survivalskill[0] = Integer.parseInt(hpb[18]);
+		MadSand.player.survivalskill[1] = Integer.parseInt(hpb[19]);
+		MadSand.player.survivalskill[2] = Integer.parseInt(hpb[20]);
+		MadSand.player.harvestskill[0] = Integer.parseInt(hpb[21]);
+		MadSand.player.harvestskill[1] = Integer.parseInt(hpb[22]);
+		MadSand.player.harvestskill[2] = Integer.parseInt(hpb[23]);
+		MadSand.player.craftingskill[0] = Integer.parseInt(hpb[24]);
+		MadSand.player.craftingskill[1] = Integer.parseInt(hpb[25]);
+		MadSand.player.craftingskill[2] = Integer.parseInt(hpb[26]);
 		// REST POINT
-		PlayerStats.rest[0] = Integer.parseInt(hpb[27]);
-		PlayerStats.rest[1] = Integer.parseInt(hpb[28]);
-		PlayerStats.rest[2] = Integer.parseInt(hpb[29]);
-		PlayerStats.rest[3] = Integer.parseInt(hpb[30]);
+		MadSand.player.rest[0] = Integer.parseInt(hpb[27]);
+		MadSand.player.rest[1] = Integer.parseInt(hpb[28]);
+		MadSand.player.rest[2] = Integer.parseInt(hpb[29]);
+		MadSand.player.rest[3] = Integer.parseInt(hpb[30]);
 
 		String[] hpbb = glob[2].split(invblock);
 		String[] ph = glob[3].split(invblock);
