@@ -42,7 +42,7 @@ public class World {
 	}
 
 	Map getLoc(Pair wc, int layer, int id) {
-		Utils.out("GetLoc " + wc.x + " " + wc.y + " Layer " + layer + "Id " + id);
+		//Utils.out("GetLoc " + wc.x + " " + wc.y + " Layer " + layer + "Id " + id);
 		MapID loc = new MapID(wc, layer, id);
 		if (locExists(loc)) {
 			return WorldLoc.get(loc);
