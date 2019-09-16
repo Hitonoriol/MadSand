@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
 
+import ru.bernarder.fallenrisefromdust.enums.GameState;
+
 public class GameSaver {
 
 	Thread saver = new Thread(new Runnable() {
@@ -78,12 +80,12 @@ public class GameSaver {
 		File f = new File("MadSand_Saves/worlds/" + filename);
 		if (!f.exists()) {
 			MadSand.print("Unable to load world");
-			MadSand.state = "NMENU";
+			MadSand.state = GameState.NMENU;
 			return false;
 		}
 		if (!f.isDirectory()) {
 			MadSand.print("Unable to load world");
-			MadSand.state = "NMENU";
+			MadSand.state = GameState.NMENU;
 			return false;
 		}
 

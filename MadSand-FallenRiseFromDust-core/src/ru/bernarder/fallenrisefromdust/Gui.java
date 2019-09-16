@@ -28,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
+import ru.bernarder.fallenrisefromdust.enums.GameState;
 import ru.bernarder.fallenrisefromdust.strings.InventoryNames;
 
 import java.io.BufferedReader;
@@ -39,10 +40,7 @@ import java.util.Random;
 public class Gui {
 	static TextButton resumeButton;
 	public static Stage launch;
-	private static boolean loadedpass;
-	public static String ip = "applang.tk";
-	public static TextButton onlinebtn;
-	public static Label onlinelbl, verlbl;
+	public static Label verlbl;
 	public static int yyy;
 	static NinePatchDrawable transparency;
 
@@ -52,8 +50,8 @@ public class Gui {
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		parameter.characters = "Ð�Ð‘Ð’Ð“Ð”Ð•Ð�Ð–Ð—Ð˜Ð™ÐšÐ›ÐœÐ�ÐžÐŸÐ Ð¡Ð¢Ð¤Ð¥Ð¦Ð§Ð¨Ð©Ð«ÐªÐ¬Ð­Ð®Ð¯Ð°Ð±Ð²Ð³Ð´ÐµÑ‘Ð¶Ð·Ð¸Ð¹ÐºÐ»Ð¼Ð½Ð¾Ð¿Ñ€Ñ�Ñ‚ÑƒÑ„Ñ…Ñ†Ñ‡ÑˆÑ‰Ñ‹Ñ�ÑŽÑ�ÑŠÑŒabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"'<>";
 		parameter.size = 16;
-		// parameter.borderWidth = 0.9f;
-		// parameter.borderColor = Color.BLACK;
+		parameter.borderWidth = 0.9f;
+		parameter.borderColor = Color.BLACK;
 		parameter.color = Color.WHITE;
 		com.badlogic.gdx.graphics.g2d.BitmapFont font = generator.generateFont(parameter);
 		font.getData().markupEnabled = true;
@@ -132,14 +130,15 @@ public class Gui {
 		STM.setText("Stamina: " + MadSand.player.maxstamina / 10 + " (" + MadSand.player.stamina + "/"
 				+ MadSand.player.maxstamina + ")");
 		ACC.setText("Accuracy: " + MadSand.player.accur);
-		CNT.setText("Constitution: " + MadSand.player.mhp / 10 + " (" + MadSand.player.hp + "/" + MadSand.player.mhp
-				+ ")");
+		CNT.setText(
+				"Constitution: " + MadSand.player.mhp / 10 + " (" + MadSand.player.hp + "/" + MadSand.player.mhp + ")");
 		IN.setText("Intelligence: " + MadSand.player.intelligence);
 		LK.setText("Luck: " + MadSand.player.luck);
 		DX.setText("Dexterity: " + MadSand.player.dexterity);
 		dialog.row();
-		dialog.add(new Label("Level: " + MadSand.player.lvl + " (" + MadSand.player.exp + "/" + MadSand.player.requiredexp + ")",
-				Gui.skin))/*.width(Gdx.graphics.getWidth() / 4).row()*/;
+		dialog.add(new Label(
+				"Level: " + MadSand.player.lvl + " (" + MadSand.player.exp + "/" + MadSand.player.requiredexp + ")",
+				Gui.skin))/* .width(Gdx.graphics.getWidth() / 4).row() */;
 		dialog.row();
 		dialog.add(new Label("", Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
 		dialog.row();
@@ -164,16 +163,22 @@ public class Gui {
 		dialog.add(new Label("Skills:", Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
 		dialog.row();
 		dialog.add(new Label("Woodcutting: " + MadSand.player.woodcutterskill[0], Gui.skin))
-				/*.width(Gdx.graphics.getWidth() / 4).row()*/;
+		/* .width(Gdx.graphics.getWidth() / 4).row() */;
 		dialog.row();
-		dialog.add(new Label("Harvesting: " + MadSand.player.harvestskill[0], Gui.skin))/*.width(Gdx.graphics.getWidth() / 4)
-				.row()*/;
+		dialog.add(new Label("Harvesting: " + MadSand.player.harvestskill[0],
+				Gui.skin))/*
+							 * .width(Gdx.graphics.getWidth() / 4) .row()
+							 */;
 		dialog.row();
-		dialog.add(new Label("Mining: " + MadSand.player.miningskill[0], Gui.skin))/*.width(Gdx.graphics.getWidth() / 4)
-				.row()*/;
+		dialog.add(new Label("Mining: " + MadSand.player.miningskill[0],
+				Gui.skin))/*
+							 * .width(Gdx.graphics.getWidth() / 4) .row()
+							 */;
 		dialog.row();
-		dialog.add(new Label("Survival: " + MadSand.player.survivalskill[0], Gui.skin))/*.width(Gdx.graphics.getWidth() / 4)
-				.row()*/;
+		dialog.add(new Label("Survival: " + MadSand.player.survivalskill[0],
+				Gui.skin))/*
+							 * .width(Gdx.graphics.getWidth() / 4) .row()
+							 */;
 		dialog.row();
 		dialog.add(ok).width(Gdx.graphics.getWidth() / 4).row();
 		dialog.show(Gui.overlay);
@@ -181,84 +186,37 @@ public class Gui {
 
 	static void initLaunchMenu() {
 		launch = new Stage();
-		final TextField iptext = new TextField("applang.tk", Gui.skin);
-		iptext.setDisabled(true);
 		Table launchTbl = new Table();
 		launchTbl.setFillParent(true);
 		final TextField namefield = new TextField("", Gui.skin);
-		final TextField pwdfield = new TextField("", Gui.skin);
-		pwdfield.setPasswordMode(true);
-		pwdfield.setPasswordCharacter('*');
-		onlinebtn = new TextButton("Play multiplayer", Gui.skin);
-		onlinebtn.setDisabled(true);
-		onlinelbl = new Label("The server didn't respond", Gui.skin);
-		if (!GameSaver.getExternal("MadSandData/version.dat")
-				.equalsIgnoreCase("Run game from launcher to get build number."))
-			MadSand.VER = "[GREEN]b-" + (GameSaver.getExternal("MadSandData/version.dat")) + "-alpha";
+		if (!GameSaver.getExternal("MadSandData/version.dat").equals(""))
+			MadSand.VER = "[GREEN]b-" + (GameSaver.getExternal("MadSandData/version.dat"));
 		else
-			MadSand.VER = "[GREEN]" + (GameSaver.getExternal("MadSandData/version.dat"));
+			MadSand.VER = "[GREEN]Version file not found";
 		verlbl = new Label(MadSand.VER, Gui.skin);
 		tr = new ThreadedUtils();
-		TextButton offlinebtn = new TextButton("Play singleplayer", Gui.skin);
+		TextButton offlinebtn = new TextButton("Play", Gui.skin);
 		namefield.setText(getExternal("lastname.dat"));
-		if (new File("MadSand_Saves/lastip.dat").exists())
-			iptext.setText(getExternal("lastip.dat"));
-		if (new File("MadSand_Saves/lastpass.dat").exists()) {
-			loadedpass = true;
-			pwdfield.setText(getExternal("lastpass.dat"));
-		}
-		launch.addListener(new InputListener() {
-			public boolean keyUp(InputEvent event, int keycode) {
-				ip = iptext.getText();
-				if (Gui.loadedpass) {
-					Gui.loadedpass = false;
-					pwdfield.setText("");
-				}
-				return false;
-			}
-		});
-		pwdfield.setPasswordMode(true);
-		launchTbl.add(new Label("Player name:", Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
+		launchTbl.add(new Label("Profile name:", Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
 		launchTbl.add(namefield).width(Gdx.graphics.getWidth() / 4).row();
-		launchTbl.add(new Label("Password:", Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
-		launchTbl.add(pwdfield).width(Gdx.graphics.getWidth() / 4).row();
-		launchTbl.add(new Label("Server:", Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
-		launchTbl.add(iptext).width(Gdx.graphics.getWidth() / 4).row();
 		launchTbl.add(new Label("", Gui.skin)).row();
 		launchTbl.add(offlinebtn).width(Gdx.graphics.getWidth() / 4).row();
 		launchTbl.add(new Label("", Gui.skin)).row();
-		launchTbl.add(onlinebtn).width(Gdx.graphics.getWidth() / 4).row();
-		launchTbl.add(new Label("", Gui.skin)).row();
-		launchTbl.add(onlinelbl).row();
 		launchTbl.add(new Label("", Gui.skin)).row();
 		launchTbl.add(verlbl).row();
 		launchTbl.background(bck);
 
 		launch.addActor(launchTbl);
 
-		onlinebtn.addListener(new ChangeListener() {
-
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				// TODO remove
-
-			}
-
-		});
 		offlinebtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				if (!namefield.getText().trim().equals("")) {
 					MadSand.setName(namefield.getText());
-					MadSand.state = "NMENU";
+					MadSand.state = GameState.NMENU;
 					Gdx.input.setInputProcessor(Gui.stage);
 					Gui.saveToExternal("lastname.dat", namefield.getText());
-					if (Gui.loadedpass) {
-						Gui.saveToExternal("lastpass.dat", pwdfield.getText());
-					} else {
-						Gui.saveToExternal("lastpass.dat", Gui.sha1(pwdfield.getText()));
-					}
 				} else {
-					Gui.drawOkDialog("Name of your character cannot be empty.");
+					Gui.drawOkDialog("Profile name can't be empty.");
 				}
 			}
 		});
@@ -499,7 +457,7 @@ public class Gui {
 				public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 					MadSand.WORLDNAME = sa;
 					if (GameSaver.loadWorld(sa)) {
-						MadSand.state = "GAME";
+						MadSand.state = GameState.GAME;
 					} else
 						drawOkDialog("Unable to load game.");
 
@@ -571,7 +529,7 @@ public class Gui {
 					} catch (Exception localException) {
 					}
 
-					MadSand.state = "WORLDGEN";
+					MadSand.state = GameState.WORLDGEN;
 					new ThreadedUtils().initialWorldGen.start();
 					Gdx.input.setInputProcessor(Gui.overlay);
 					MadSand.x = new Random().nextInt(MadSand.MAPSIZE);
@@ -791,7 +749,7 @@ public class Gui {
 		Gui.overlay.addListener(new ClickListener(1) {
 			public void clicked(InputEvent event, float x, float y) {
 				if (!MadSand.dontlisten) {
-					if (MadSand.state == "GAME") {
+					if (MadSand.state == GameState.GAME) {
 						if (Gui.mousemenu.isVisible()) {
 							Gui.mousemenu.setVisible(false);
 							Gui.gamecontext.setVisible(true);
@@ -805,7 +763,7 @@ public class Gui {
 							MadSand.contextopened = false;
 						}
 					}
-					if ((MadSand.state == "INVENTORY") || (MadSand.state == "BUY")) {
+					if ((MadSand.state == GameState.INVENTORY) || (MadSand.state == GameState.BUY)) {
 						if (!Gui.invcontext.isVisible()) {
 							Gui.invcontext.setVisible(true);
 							Gui.invcontext.setPosition(MadSand.mx, MadSand.my);
@@ -822,10 +780,10 @@ public class Gui {
 		Gui.overlay.addListener(new ClickListener(0) {
 			public void clicked(InputEvent event, float x, float y) {
 				if (!MadSand.dontlisten) {
-					if ((MadSand.state == "BUY") && (!MadSand.contextopened)) {
+					if ((MadSand.state == GameState.BUY) && (!MadSand.contextopened)) {
 						Utils.buyAction();
 					}
-					if ((MadSand.state == "INVENTORY") && (!MadSand.contextopened)) {
+					if ((MadSand.state == GameState.INVENTORY) && (!MadSand.contextopened)) {
 						Utils.inventoryAction();
 					}
 
@@ -852,7 +810,8 @@ public class Gui {
 		while (cg < MadSand.CRAFTABLES) {
 			Gui.craftbtn[cg] = new TextButton(InventoryNames.name.get(MadSand.craftableid[cg]), Gui.skin);
 			Gui.craftbl.add(Gui.craftbtn[cg]).width(250.0F);
-			Gui.craftbl.add(new Label(" " + Loot.getTextQuery(InventoryNames.recipe.get(MadSand.craftableid[cg])), Gui.skin))/*.align(8)*/;
+			Gui.craftbl.add(new Label(" " + Loot.getTextQuery(InventoryNames.recipe.get(MadSand.craftableid[cg])),
+					Gui.skin))/* .align(8) */;
 			Gui.craftbl.row();
 			final int ssa = cg;
 			Gui.craftbtn[ssa].addListener(new ChangeListener() {
@@ -926,7 +885,7 @@ public class Gui {
 		Gui.stage.addActor(menut);
 		RespawnButton.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				MadSand.state = "GAME";
+				MadSand.state = GameState.GAME;
 				MadSand.player.hp = MadSand.player.mhp;
 				if (MadSand.player.rest[0] == -1) {
 					MadSand.x = Utils.rand(0, 99);
@@ -944,7 +903,7 @@ public class Gui {
 									+ MadSand.curxwpos + "-" + MadSand.curywpos + ".mws");
 						} else {
 
-							MadSand.state = "WORLDGEN";
+							MadSand.state = GameState.WORLDGEN;
 							new ThreadedUtils().worldGen.start();
 						}
 					}
@@ -988,7 +947,7 @@ public class Gui {
 		resumeButton.addListener(new ChangeListener() {
 
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				MadSand.state = "GAME";
+				MadSand.state = GameState.GAME;
 				Gdx.input.setInputProcessor(Gui.overlay);
 			}
 
@@ -1004,20 +963,20 @@ public class Gui {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				Gdx.input.setInputProcessor(Gui.craft);
 				Gui.craft.setScrollFocus(Gui.scroll);
-				MadSand.state = "CRAFT";
+				MadSand.state = GameState.CRAFT;
 			}
 		});
 		Gui.exitButton.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				Gui.resumeButton.setVisible(true);
 				Gdx.input.setInputProcessor(Gui.stage);
-				MadSand.state = "NMENU";
+				MadSand.state = GameState.NMENU;
 			}
 		});
 		back.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				Gdx.input.setInputProcessor(Gui.overlay);
-				MadSand.state = "INVENTORY";
+				MadSand.state = GameState.INVENTORY;
 			}
 		});
 		initLaunchMenu();
@@ -1045,7 +1004,7 @@ public class Gui {
 		}
 		return MadSand.player.look;
 	}
-	
+
 	static Image[] equip;
 	static Table darkness;
 	static com.badlogic.gdx.scenes.scene2d.ui.ScrollPane scroll;

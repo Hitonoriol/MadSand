@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
+import ru.bernarder.fallenrisefromdust.enums.GameState;
 import ru.bernarder.fallenrisefromdust.strings.InventoryNames;
 import ru.bernarder.fallenrisefromdust.strings.Objects;
 import ru.bernarder.fallenrisefromdust.strings.Tiles;
@@ -255,7 +256,7 @@ public class Utils {
 			MadSand.contextopened = false;
 			InvUtils.emptyInvT();
 			invent = false;
-			MadSand.state = "GAME";
+			MadSand.state = GameState.GAME;
 			funcButtonsSet(false);
 			return;
 		}
@@ -358,7 +359,7 @@ public class Utils {
 				funcButtonsSet(false);
 				Gui.invcontext.setVisible(false);
 				MadSand.contextopened = false;
-				MadSand.state = "GAME";
+				MadSand.state = GameState.GAME;
 				Gui.mousemenu.setVisible(true);
 				invent = false;
 				MadSand.tradeflag = false;
@@ -368,7 +369,7 @@ public class Utils {
 				Gui.mousemenu.setVisible(false);
 				funcButtonsSet(true);
 				Gdx.input.setInputProcessor(Gui.overlay);
-				MadSand.state = "INVENTORY";
+				MadSand.state = GameState.INVENTORY;
 				invent = true;
 			}
 		}
@@ -403,7 +404,7 @@ public class Utils {
 				Gui.equip[4].setDrawable(
 						new com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable(new Sprite(item[selected])));
 				invent = false;
-				MadSand.state = "GAME";
+				MadSand.state = GameState.GAME;
 				Gui.mousemenu.setVisible(true);
 				Gui.invcontext.setVisible(false);
 				funcButtonsSet(false);
@@ -505,7 +506,7 @@ public class Utils {
 		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
 			Gui.resumeButton.setVisible(true);
 			Gdx.input.setInputProcessor(Gui.stage);
-			MadSand.state = "NMENU";
+			MadSand.state = GameState.NMENU;
 		}
 		if ((Gdx.input.isKeyJustPressed(Keys.G)) && (tester)) {
 			GameSaver saver = new GameSaver();
@@ -553,7 +554,7 @@ public class Utils {
 	}
 
 	void mouseMovement() {
-		if ((Gdx.input.isButtonPressed(0)) && (MadSand.state == "GAME") && (!MadSand.stepping)
+		if ((Gdx.input.isButtonPressed(0)) && (MadSand.state == GameState.GAME) && (!MadSand.stepping)
 				&& (!MadSand.contextopened)) {
 			if (MadSand.wmx > MadSand.x) {
 				MadSand.player.look = Direction.RIGHT;
@@ -684,7 +685,7 @@ public class Utils {
 
 	public void gotoSector(String dir) {
 		gotodir = dir;
-		MadSand.state = "GOTO";
+		MadSand.state = GameState.GOT;
 		new ThreadedUtils().gotoSector.start();
 	}
 
@@ -775,7 +776,7 @@ public class Utils {
 
 	public void checkMsgKeys() {
 		if (Gdx.input.isKeyJustPressed(66)) {
-			MadSand.state = "GAME";
+			MadSand.state = GameState.GAME;
 		}
 	}
 

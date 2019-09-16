@@ -2,11 +2,11 @@ package ru.bernarder.fallenrisefromdust;
 
 import ru.bernarder.fallenrisefromdust.strings.Objects;
 
-public class Object {
+public class MapObject {
 	int id, hp;
 	String name;
 
-	public Object(int id) {
+	public MapObject(int id) {
 		this.id = id;
 		this.name = Objects.name.get(id);
 		this.hp = Objects.hp.get(id);
@@ -25,7 +25,7 @@ public class Object {
 		}
 	}
 
-	Object takeDamage() {
+	MapObject takeDamage() {
 		this.hp--;
 		this.verify();
 		return this;

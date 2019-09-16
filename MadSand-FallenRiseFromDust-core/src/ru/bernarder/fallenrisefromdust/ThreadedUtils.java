@@ -1,5 +1,7 @@
 package ru.bernarder.fallenrisefromdust;
 
+import ru.bernarder.fallenrisefromdust.enums.GameState;
+
 public class ThreadedUtils {
 	public static boolean mapstop = false;
 
@@ -24,7 +26,7 @@ public class ThreadedUtils {
 				MadSand.world.Generate();
 			}
 			MadSand.tonext = false;
-			MadSand.state = "GAME";
+			MadSand.state = GameState.GAME;
 			ThreadedUtils.this.worldGen.stop();
 		}
 	});
@@ -33,7 +35,7 @@ public class ThreadedUtils {
 		@SuppressWarnings("deprecation")
 		public void run() {
 			MadSand.world.Generate();
-			MadSand.state = "GAME";
+			MadSand.state = GameState.GAME;
 			Gui.createCharDialog();
 			ThreadedUtils.this.worldGen.stop();
 		}
@@ -73,7 +75,7 @@ public class ThreadedUtils {
 				GameSaver.loadMap("MadSand_Saves/worlds/" + MadSand.WORLDNAME + "/" + "sector-" + MadSand.curxwpos + "-"
 						+ MadSand.curywpos + ".mws");
 			} else {
-				MadSand.state = "WORLDGEN";
+				MadSand.state = GameState.WORLDGEN;
 				new ThreadedUtils().worldGen.start();
 			}
 

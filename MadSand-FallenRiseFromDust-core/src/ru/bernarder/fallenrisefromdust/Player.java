@@ -127,7 +127,7 @@ public class Player {
 		if (hp <= 0) {
 			hp = 0;
 			Gdx.input.setInputProcessor(Gui.dead);
-			MadSand.state = "DEAD";
+			MadSand.state = GameState.DEAD;
 			InvUtils.emptyInv();
 		}
 	}

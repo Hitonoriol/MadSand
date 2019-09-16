@@ -17,14 +17,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
+import ru.bernarder.fallenrisefromdust.enums.GameState;
 import ru.bernarder.fallenrisefromdust.strings.InventoryNames;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.PrintStream;
-import java.net.InetAddress;
-import java.net.Socket;
 import java.util.Random;
 
 public class MadSand extends com.badlogic.gdx.Game {
@@ -63,17 +60,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 	static Table dialog;
 	static Table maindialog;
 	static int wtime = 12;
-	static int port = 3265;
-	public static String ip = "applang.tk";
-	static InetAddress ipAddress;
-	static Socket socket;
 	static int renderradius = 12 * 33;
-
-	static java.io.InputStream sin;
-	static java.io.OutputStream sout;
-	static DataInputStream in;
-	static DataOutputStream out;
-	String map;
 	static int mx = 0;
 	static int my = 0;
 
@@ -156,7 +143,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 	OrthographicCamera invcamera;
 	private float elapsedTime;
 	static boolean charcrt = false;;
-	public static String state = "LAUNCHER";
+	public static GameState state = GameState.LAUNCHER;
 	public static int wmx = 0;
 	public static int wmy = 0;
 	public static boolean contextopened = false;
@@ -231,6 +218,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 		createDirs();
 		sm.Initf();
 		world = new World(10);
+
 		this.objn = new InventoryNames();
 		Gui.createBasicSkin();
 		Gui.chat = new Label[15];
@@ -353,10 +341,11 @@ public class MadSand extends com.badlogic.gdx.Game {
 					sm.batch.draw(sm.objects[7], Utils.ppos.x + (int) rcoords[i].x * 33,
 							Utils.ppos.y + (int) rcoords[i].y * 33);
 				}
-				/*if (MobLayer.getMobId(trdx, trdy) != 0) {
-					sm.batch.draw(sm.npc[MobLayer.getMobId(trdx, trdy)], Utils.ppos.x + (int) rcoords[i].x * 33,
-							Utils.ppos.y + (int) rcoords[i].y * 33);
-				}*/
+				/*
+				 * if (MobLayer.getMobId(trdx, trdy) != 0) {
+				 * sm.batch.draw(sm.npc[MobLayer.getMobId(trdx, trdy)], Utils.ppos.x + (int)
+				 * rcoords[i].x * 33, Utils.ppos.y + (int) rcoords[i].y * 33); }
+				 */
 
 				i++;
 			}
@@ -424,7 +413,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 		Gui.acceptD.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				MadSand.dialogflag = true;
-				MadSand.state = "GAME";
+				MadSand.state = GameState.GAME;
 				MadSand.dialogresult = 0;
 				MadSand.maindialog.setVisible(false);
 				if (lott)
@@ -433,7 +422,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 		});
 		Gui.refuseD.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				MadSand.state = "GAME";
+				MadSand.state = GameState.GAME;
 				MadSand.dialogflag = true;
 				MadSand.dialogresult = 1;
 				MadSand.maindialog.setVisible(false);
@@ -528,14 +517,14 @@ public class MadSand extends com.badlogic.gdx.Game {
 	}
 
 	public void render() {
-		if (state.equals("GAME")) {
+		if (state.equals(GameState.GAME)) {
 			Gdx.input.setInputProcessor(Gui.overlay);
 			sm.checkFocus();
 			if (Gui.overlay.getKeyboardFocus() != Gui.msgf && !charcrt) {
 				Utils.updMouseCoords();
 				sm.mouseMovement();
 				sm.KeyCheck();
-				//TODO: loot collision
+				// TODO: loot collision
 				sm.InvKeyCheck();
 			}
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
@@ -545,7 +534,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 			Gui.overlay.draw();
 			Gui.overlay.act();
 			sm.batch.end();
-		} else if (state.equals("INVENTORY")) {
+		} else if (state.equals(GameState.INVENTORY)) {
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			sm.batch.begin();
 			DrawGame();
@@ -579,7 +568,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 				Gui.overlay.act();
 				Gui.overlay.draw();
 			}
-		} else if (state.equals("BUY")) {
+		} else if (state.equals(GameState.BUY)) {
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			sm.batch.begin();
 			DrawGame();
@@ -607,7 +596,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 			this.invbatch.end();
 			Gui.overlay.act();
 			Gui.overlay.draw();
-		} else if (state.equals("NMENU")) {
+		} else if (state.equals(GameState.NMENU)) {
 			Gdx.gl.glClearColor(1.0F, 1.0F, 1.0F, 1.0F);
 			Gdx.gl.glClear(16384);
 			sm.batch.begin();
@@ -615,7 +604,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 			sm.batch.end();
 			Gui.stage.act();
 			Gui.stage.draw();
-		} else if (state.equals("LAUNCHER")) {
+		} else if (state.equals(GameState.LAUNCHER)) {
 			if (this.started) {
 				Utils.out("Everything's loaded! I'm in launcher state!");
 				this.started = false;
@@ -628,11 +617,10 @@ public class MadSand extends com.badlogic.gdx.Game {
 			Gdx.gl.glClear(16384);
 			sm.batch.begin();
 			drawWorld();
-			this.percent = (player.hp * 100 / player.mhp);
 			sm.batch.end();
 			Gui.launch.draw();
 			Gui.launch.act();
-		} else if (state.equals("WORLDGEN")) {
+		} else if (state.equals(GameState.WORLDGEN)) {
 			sm.batch.begin();
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);
@@ -640,28 +628,28 @@ public class MadSand extends com.badlogic.gdx.Game {
 			drawWorld();
 			Gui.worldg.draw();
 			sm.batch.end();
-		} else if (state.equals("LOAD")) {
+		} else if (state.equals(GameState.LOAD)) {
 			sm.batch.begin();
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);
 			drawWorld();
 			Gui.loadg.draw();
 			sm.batch.end();
-		} else if (state.equals("GOTO")) {
+		} else if (state.equals(GameState.GOT)) {
 			sm.batch.begin();
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);
 			drawWorld();
 			Gui.gotodg.draw();
 			sm.batch.end();
-		} else if (state.equals("DEAD")) {
+		} else if (state.equals(GameState.DEAD)) {
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			sm.batch.begin();
 			DrawGame();
 			sm.batch.end();
 			Gui.dead.act();
 			Gui.dead.draw();
-		} else if (state.equals("MSG")) {
+		} else if (state.equals(GameState.MSG)) {
 			camera.position.set(0.0F, 0.0F, 0.0F);
 			sm.batch.setProjectionMatrix(camera.combined);
 			camera.update();
@@ -670,7 +658,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 			sm.batch.begin();
 			DrawGame();
 			sm.batch.end();
-		} else if (state.equals("CRAFT")) {
+		} else if (state.equals(GameState.CRAFT)) {
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			sm.batch.begin();
 			DrawGame();

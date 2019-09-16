@@ -26,7 +26,8 @@ public class World {
 	public World(int sz) {
 		this.xsz = sz;
 		this.ysz = sz;
-		createBasicLoc(new Pair(5, 5), 100, 100);
+		if (!createBasicLoc(new Pair(5, 5), 100, 100))
+			System.exit(-1);
 	}
 
 	boolean locExists(MapID loc) {
@@ -55,6 +56,7 @@ public class World {
 	}
 
 	Map getCurLoc() {
+		//Utils.out("Getloc wx " + MadSand.curxwpos + " wy " + MadSand.curywpos + " layer " +MadSand.curlayer);
 		return getLoc(MadSand.curxwpos, MadSand.curywpos, MadSand.curlayer);
 	}
 
@@ -72,9 +74,9 @@ public class World {
 	}
 
 	boolean createBasicLoc(Pair wc, int mx, int my) {
-		if (!this.createLoc(new MapID(wc, 0, 0), new Map(mx, my)))
+		if (!this.createLoc(new MapID(wc, 0), new Map(mx, my)))
 			return false;
-		if (!this.createLoc(new MapID(wc, 1, 0), new Map(mx, my)))
+		if (!this.createLoc(new MapID(wc, 1), new Map(mx, my)))
 			return false;
 		return true;
 	}

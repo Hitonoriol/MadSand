@@ -9,11 +9,11 @@ public class Map {
 	private int xsz, ysz;
 
 	static final Tile nullTile = new Tile(0);
-	static final Object nullObject = new Object(0);
+	static final MapObject nullObject = new MapObject(0);
 	static final Loot nullLoot = new Loot("n");
 
 	private HashMap<Pair, Tile> mapTiles;
-	private HashMap<Pair, Object> mapObjects;
+	private HashMap<Pair, MapObject> mapObjects;
 	private HashMap<Pair, Loot> mapLoot;
 	private HashMap<Pair, Npc> mapNpcs;
 
@@ -36,7 +36,7 @@ public class Map {
 
 	void purge() {
 		mapTiles = new HashMap<Pair, Tile>();
-		mapObjects = new HashMap<Pair, Object>();
+		mapObjects = new HashMap<Pair, MapObject>();
 		mapLoot = new HashMap<Pair, Loot>();
 		mapNpcs = new HashMap<Pair, Npc>();
 	}
@@ -97,8 +97,12 @@ public class Map {
 
 	Tile getTile(int x, int y) {
 		try {
-			if (correctCoords(coords.set(x, y)))
-				return mapTiles.get(coords);
+			if (correctCoords(coords.set(x, y))) {
+				Tile ret = mapTiles.get(coords);
+				if (ret == null)
+					ret = nullTile;
+				return ret;
+			}
 			else
 				return nullTile;
 		} catch (Exception e) {
@@ -134,7 +138,7 @@ public class Map {
 
 	boolean addObject(int x, int y, int id) {
 		if (correctCoords(coords.set(x, y))) {
-			mapObjects.put(coords, new Object(id));
+			mapObjects.put(coords, new MapObject(id));
 			addRendMasks(x, y, id);
 			return true;
 		} else
@@ -151,7 +155,7 @@ public class Map {
 		return addObject(coords.x, coords.y, id);
 	}
 
-	Object getObject(int x, int y) {
+	MapObject getObject(int x, int y) {
 		try {
 			if (correctCoords(coords.set(x, y))) {
 				return mapObjects.get(coords);
@@ -180,7 +184,7 @@ public class Map {
 		addTile(x, y, id);
 	}
 
-	Object getObject(int x, int y, Direction dir) {
+	MapObject getObject(int x, int y, Direction dir) {
 		if (correctCoords(coords.set(x, y))) {
 			coords.addDirection(dir);
 			return getObject(coords.x, coords.y);

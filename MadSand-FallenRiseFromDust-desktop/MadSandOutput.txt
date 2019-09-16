@@ -1,25 +1,15 @@
-[01:58:57] Starting initialization!
-[01:58:57] Render area: 529
-[01:58:57] Resfile hash: eace73e8d33ee289a178abddee1d87c7570618b0
-[01:58:57] 6 crops
-[01:58:57] 112 objects
-[01:58:58] 19 craftable items
-[01:58:58] 44 tiles
-[01:58:58] 36 npcs
-[01:59:00] Creating map 0x0
-[01:59:00] Creating map 100x100
-[01:59:00] Creating map 100x100
-[01:59:00] 2 quests loaded
-[01:59:00] End of initialization!
-[01:59:00] Everything's loaded! I'm in launcher state!
-[01:59:27] WorldGen start!
-[01:59:27] makeEmpty start!
-[01:59:27] End of makeEmpty!
-[01:59:27] Generating terrain!
-[01:59:27] Done generating terrain!
-[01:59:27] Generating dungeon!
-[01:59:27] Done dungeon generating!
-[01:59:27] Generating biome objects!
-[01:59:27] 0
-[01:59:27] 0
-[01:59:27] Whoops, fatal error... See MadSandCritical.log and/or MadSandErrors.log files.
+[17:32:44] Starting initialization!
+[17:32:44] Render area: 529
+[17:32:44] Resfile hash: eace73e8d33ee289a178abddee1d87c7570618b0
+[17:32:45] 6 crops
+[17:32:45] 112 objects
+[17:32:45] 19 craftable items
+[17:32:45] 44 tiles
+[17:32:45] 36 npcs
+[17:32:47] Creating map 0x0
+[17:32:47] Creating map 100x100
+[17:32:47] Creating map 100x100
+[17:32:47] 2 quests loaded
+[17:32:47] End of initialization!
+[17:32:47] Everything's loaded! I'm in launcher state!
+[17:33:44] Bye!
