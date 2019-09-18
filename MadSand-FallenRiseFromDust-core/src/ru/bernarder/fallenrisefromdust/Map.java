@@ -102,8 +102,7 @@ public class Map {
 				if (ret == null)
 					ret = nullTile;
 				return ret;
-			}
-			else
+			} else
 				return nullTile;
 		} catch (Exception e) {
 			return nullTile;
@@ -156,14 +155,10 @@ public class Map {
 	}
 
 	MapObject getObject(int x, int y) {
-		try {
-			if (correctCoords(coords.set(x, y))) {
-				return mapObjects.get(coords);
-			} else
-				return nullObject;
-		} catch (Exception e) {
+		if (correctCoords(coords.set(x, y))) {
+			return mapObjects.get(coords);
+		} else
 			return nullObject;
-		}
 	}
 
 	void randPlaceObject(int id) {
@@ -193,11 +188,14 @@ public class Map {
 	}
 
 	Loot getLoot(int x, int y) {
-		try {
-			return mapLoot.get(coords.set(x, y));
-		} catch (Exception e) {
+		if (correctCoords(coords.set(x, y))) {
+			Loot ret = mapLoot.get(coords.set(x, y));
+			if (ret != null)
+				return ret;
+			else
+				return nullLoot;
+		} else
 			return nullLoot;
-		}
 	}
 
 }

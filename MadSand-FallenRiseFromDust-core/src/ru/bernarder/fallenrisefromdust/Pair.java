@@ -1,5 +1,8 @@
 package ru.bernarder.fallenrisefromdust;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 
 public class Pair {
@@ -38,5 +41,21 @@ public class Pair {
 
 	Pair addDirection(Direction dir) {
 		return this.add(directionToCoord(dir));
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(211, 233).append(x).append(y).toHashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Pair))
+			return false;
+		if (obj == this)
+			return true;
+
+		Pair rhs = (Pair) obj;
+		return new EqualsBuilder().append(x, rhs.x).append(y, rhs.y).isEquals();
 	}
 }

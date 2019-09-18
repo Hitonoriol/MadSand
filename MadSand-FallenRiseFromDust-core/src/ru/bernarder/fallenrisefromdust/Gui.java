@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -33,6 +32,7 @@ import ru.bernarder.fallenrisefromdust.strings.InventoryNames;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.PrintWriter;
 import java.security.MessageDigest;
 import java.util.Random;
@@ -48,7 +48,7 @@ public class Gui {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(
 				Gdx.files.local(MadSand.SAVEDIR + MadSand.FONT_PATH));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-		parameter.characters = "Ð�Ð‘Ð’Ð“Ð”Ð•Ð�Ð–Ð—Ð˜Ð™ÐšÐ›ÐœÐ�ÐžÐŸÐ Ð¡Ð¢Ð¤Ð¥Ð¦Ð§Ð¨Ð©Ð«ÐªÐ¬Ð­Ð®Ð¯Ð°Ð±Ð²Ð³Ð´ÐµÑ‘Ð¶Ð·Ð¸Ð¹ÐºÐ»Ð¼Ð½Ð¾Ð¿Ñ€Ñ�Ñ‚ÑƒÑ„Ñ…Ñ†Ñ‡ÑˆÑ‰Ñ‹Ñ�ÑŽÑ�ÑŠÑŒabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"'<>";
+		parameter.characters = MadSand.FONT_CHARS;
 		parameter.size = 16;
 		parameter.borderWidth = 0.9f;
 		parameter.borderColor = Color.BLACK;
@@ -116,13 +116,13 @@ public class Gui {
 			}
 
 		});
-		final Label CNT = new Label("[BLACK]Constitution: " + CONSTITUTION, Gui.skin);
-		final Label STM = new Label("[BLACK]Stamina: " + STAMINA, Gui.skin);
-		final Label ATKl = new Label("[BLACK]Strength: " + ATK, Gui.skin);
-		final Label ACC = new Label("[BLACK]Accuracy: " + ACCUR, Gui.skin);
-		final Label IN = new Label("[BLACK]Intelligence: " + INT, Gui.skin);
-		final Label LK = new Label("[BLACK]Luck: " + LUCK, Gui.skin);
-		final Label DX = new Label("[BLACK]Dexterity: " + DEX, Gui.skin);
+		final Label CNT = new Label("Constitution: " + CONSTITUTION, Gui.skin);
+		final Label STM = new Label("Stamina: " + STAMINA, Gui.skin);
+		final Label ATKl = new Label("Strength: " + ATK, Gui.skin);
+		final Label ACC = new Label("Accuracy: " + ACCUR, Gui.skin);
+		final Label IN = new Label("Intelligence: " + INT, Gui.skin);
+		final Label LK = new Label("Luck: " + LUCK, Gui.skin);
+		final Label DX = new Label("Dexterity: " + DEX, Gui.skin);
 		dialog.setBackground(bck);
 		dialog.setMovable(true);
 		dialog.add(new Label("", Gui.skin));
@@ -190,7 +190,7 @@ public class Gui {
 		launchTbl.setFillParent(true);
 		final TextField namefield = new TextField("", Gui.skin);
 		if (!GameSaver.getExternal("MadSandData/version.dat").equals(""))
-			MadSand.VER = "[GREEN]b-" + (GameSaver.getExternal("MadSandData/version.dat"));
+			MadSand.VER = "[GREEN]b-" + (GameSaver.getExternal(MadSand.VERFILE));
 		else
 			MadSand.VER = "[GREEN]Version file not found";
 		verlbl = new Label(MadSand.VER, Gui.skin);
@@ -296,13 +296,13 @@ public class Gui {
 
 	static void createCharDialog() {
 		rollStats();
-		final Label CNT = new Label("[BLACK]Constitution: " + CONSTITUTION, Gui.skin);
-		final Label STM = new Label("[BLACK]Stamina: " + STAMINA, Gui.skin);
-		final Label ATKl = new Label("[BLACK]Strength: " + ATK, Gui.skin);
-		final Label ACC = new Label("[BLACK]Accuracy: " + ACCUR, Gui.skin);
-		final Label IN = new Label("[BLACK]Intelligence: " + INT, Gui.skin);
-		final Label LK = new Label("[BLACK]Luck: " + LUCK, Gui.skin);
-		final Label DX = new Label("[BLACK]Dexterity: " + DEX, Gui.skin);
+		final Label CNT = new Label("Constitution: " + CONSTITUTION, Gui.skin);
+		final Label STM = new Label("Stamina: " + STAMINA, Gui.skin);
+		final Label ATKl = new Label("Strength: " + ATK, Gui.skin);
+		final Label ACC = new Label("Accuracy: " + ACCUR, Gui.skin);
+		final Label IN = new Label("Intelligence: " + INT, Gui.skin);
+		final Label LK = new Label("Luck: " + LUCK, Gui.skin);
+		final Label DX = new Label("Dexterity: " + DEX, Gui.skin);
 		MadSand.charcrt = true;
 
 		String msg = "Character creation.";
@@ -348,13 +348,13 @@ public class Gui {
 		rbtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				rollStats();
-				ATKl.setText("[BLACK]Strength: " + ATK);
-				STM.setText("[BLACK]Stamina: " + STAMINA);
-				ACC.setText("[BLACK]Accuracy: " + ACCUR);
-				CNT.setText("[BLACK]Constitution: " + CONSTITUTION);
-				IN.setText("[BLACK]Intelligence: " + INT);
-				LK.setText("[BLACK]Luck: " + LUCK);
-				DX.setText("[BLACK]Dexterity: " + DEX);
+				ATKl.setText("Strength: " + ATK);
+				STM.setText("Stamina: " + STAMINA);
+				ACC.setText("Accuracy: " + ACCUR);
+				CNT.setText("Constitution: " + CONSTITUTION);
+				IN.setText("Intelligence: " + INT);
+				LK.setText("Luck: " + LUCK);
+				DX.setText("Dexterity: " + DEX);
 			}
 
 		});
@@ -429,8 +429,8 @@ public class Gui {
 	}
 
 	static void loadWorldDialog() {
-		File file = new File("MadSand_Saves/worlds");
-		String[] dirs = file.list(new java.io.FilenameFilter() {
+		File file = new File(MadSand.MAPDIR);
+		String[] dirs = file.list(new FilenameFilter() {
 			public boolean accept(File current, String name) {
 				return new File(current, name).isDirectory();
 			}
@@ -481,8 +481,8 @@ public class Gui {
 	}
 
 	static void createWorldDialog() {
-		File file = new File("MadSand_Saves/worlds");
-		String[] dirs = file.list(new java.io.FilenameFilter() {
+		File file = new File(MadSand.MAPDIR);
+		String[] dirs = file.list(new FilenameFilter() {
 			public boolean accept(File current, String name) {
 				return new File(current, name).isDirectory();
 			}
@@ -577,7 +577,7 @@ public class Gui {
 
 	public static String getExternal(String name) {
 		try {
-			File file = new File("MadSand_Saves/" + name);
+			File file = new File(MadSand.SAVEDIR + name);
 			BufferedReader br = new BufferedReader(new java.io.FileReader(file));
 			String line1 = br.readLine();
 			br.close();
@@ -589,7 +589,7 @@ public class Gui {
 
 	public static void saveToExternal(String name, String text) {
 		try {
-			File file = new File("MadSand_Saves/" + name);
+			File file = new File(MadSand.SAVEDIR + name);
 			PrintWriter pw = new PrintWriter(file);
 			pw.print((text));
 			pw.close();
@@ -899,7 +899,7 @@ public class Gui {
 						MadSand.curywpos = MadSand.player.rest[3];
 						if (GameSaver.verifyNextSector(MadSand.curxwpos, MadSand.curywpos)) {
 							MadSand.world.makeEmpty();
-							GameSaver.loadMap("MadSand_Saves/worlds/" + MadSand.WORLDNAME + "/" + "sector-"
+							GameSaver.loadMap(MadSand.MAPDIR + MadSand.WORLDNAME + "/" + "sector-"
 									+ MadSand.curxwpos + "-" + MadSand.curywpos + ".mws");
 						} else {
 

@@ -365,9 +365,9 @@ public class World {
 		Utils.out("Done generating biome objects!");
 	}
 
-	public int rend(int w, int h) {
-		if (w >= 0 && h >= 0 && w < MadSand.MAPSIZE && h < MadSand.MAPSIZE) {
-			int tile = getCurLoc().getTile(w, h).id;
+	public int rend(int x, int y) {
+		if (x >= 0 && y >= 0 && x < MadSand.MAPSIZE && y < MadSand.MAPSIZE) {
+			int tile = getCurLoc().getTile(x, y).id;
 			if (tile >= 0 && tile <= MadSand.LASTTILEID)
 				return tile;
 			else
@@ -376,10 +376,8 @@ public class World {
 			return 0;
 	}
 
-	public static int GetParam(int q) {
-		int h = 0;
-		h = q * 33;
-		return h;
+	public static int worldCoord(int q) {
+		return q * MadSand.TILESIZE;
 	}
 
 	int getWidth() {

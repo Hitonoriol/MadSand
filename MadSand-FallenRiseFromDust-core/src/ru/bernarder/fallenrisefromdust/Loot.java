@@ -7,7 +7,7 @@ import ru.bernarder.fallenrisefromdust.strings.InventoryNames;
 public class Loot {
 	Vector<String> contents = new Vector<String>();
 
-	public Loot(String cont) {	// LootNode(Vector of Loot objs) <-- Loot
+	public Loot(String cont) {
 		contents.add(cont);
 	}
 	
@@ -116,12 +116,5 @@ public class Loot {
 			i++;
 		}
 		return true;
-	}
-
-	public static String getCell(int x, int y) {
-		String t = "n";
-		if (x < MadSand.MAPSIZE && y < MadSand.MAPSIZE && x >= 0 && y >= 0)
-			t = "todo";
-		return t;
 	}
 }

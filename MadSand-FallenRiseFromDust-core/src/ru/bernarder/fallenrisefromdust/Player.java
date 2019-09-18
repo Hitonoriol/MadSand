@@ -1,6 +1,5 @@
 package ru.bernarder.fallenrisefromdust;
 
-
 import com.badlogic.gdx.Gdx;
 
 import ru.bernarder.fallenrisefromdust.enums.*;
@@ -70,12 +69,10 @@ public class Player {
 	}
 
 	static boolean standingOnLoot(int x, int y) {
-		String ass = Loot.getCell(x, y);
-		int n = ass.length();
-		if (n == "n".length()) {
+		if (MadSand.world.getCurLoc().getLoot(x, y).equals(Map.nullLoot))
 			return false;
-		}
-		return true;
+		else
+			return true;
 	}
 
 	void skillBonusItems(int x, int y, String direction, int id) {

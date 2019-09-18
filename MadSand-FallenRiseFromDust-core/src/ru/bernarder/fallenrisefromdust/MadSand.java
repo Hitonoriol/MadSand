@@ -78,9 +78,14 @@ public class MadSand extends com.badlogic.gdx.Game {
 	static int MAPSIZE = 100;
 	static final int BORDER = 1;
 	static final int OBJPROPS = 2;
-	public static final String SAVEDIR = "MadSand_Saves/";
+	
+	static final String SAVEDIR = "MadSand_Saves/";
 	static String QUESTFILE = SAVEDIR + "quest.xml";
 	static String RESFILE = SAVEDIR + "res.xml";
+	static final String VERFILE = SAVEDIR + "ver.dat";
+	static final String MAPDIR = SAVEDIR + "worlds/";
+	
+	
 	static int numlook = 0;
 
 	static final int XDEF = 1280;
@@ -114,7 +119,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static int SEED = 100;
 	static int SPEED = 100;
 	static float ZOOM = 1.5F;
-	static final String FONT_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"'<>";
+	static final String FONT_CHARS = "АБВГДЕЁЖЗИЙКЛМНОПРСТФХЦЧШЩЪЬЫЭЮЯабвгдеёжзийклмнопрстфхцчшщыъьэюяabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"'<>";
 	static final String FONT_PATH = "fonts/8bitoperator.ttf";
 
 	boolean started = true;
@@ -248,8 +253,8 @@ public class MadSand extends com.badlogic.gdx.Game {
 			Gui.log[cxxc] = new Label(" ", Gui.skin);
 			cxxc++;
 		}
-		sm.ubound = (World.GetParam(MadSand.MAPSIZE) - 33);
-		sm.lbound = (World.GetParam(MadSand.MAPSIZE) - 33);
+		sm.ubound = (World.worldCoord(MadSand.MAPSIZE) - 33);
+		sm.lbound = (World.worldCoord(MadSand.MAPSIZE) - 33);
 		camera = new OrthographicCamera();
 		this.invcamera = new OrthographicCamera();
 		this.invbatch = new SpriteBatch();
@@ -539,7 +544,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 			sm.batch.begin();
 			DrawGame();
 			sm.batch.end();
-
 			this.invbatch.begin();
 			this.invcamera.position.set(314.0F, 235.0F, 0.0F);
 			this.invcamera.viewportWidth = ((float) (Gdx.graphics.getWidth() / 0.97D));
