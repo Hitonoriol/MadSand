@@ -532,10 +532,10 @@ public class Gui {
 					MadSand.state = GameState.WORLDGEN;
 					new ThreadedUtils().initialWorldGen.start();
 					Gdx.input.setInputProcessor(Gui.overlay);
-					MadSand.x = new Random().nextInt(MadSand.MAPSIZE);
-					MadSand.y = new Random().nextInt(MadSand.MAPSIZE);
-					Utils.ppos.x = (MadSand.x * 33);
-					Utils.ppos.y = (MadSand.y * 33);
+					MadSand.player.x = new Random().nextInt(MadSand.MAPSIZE);
+					MadSand.player.y = new Random().nextInt(MadSand.MAPSIZE);
+					Utils.ppos.x = (MadSand.player.x * 33);
+					Utils.ppos.y = (MadSand.player.y * 33);
 					Gui.exitButton.setVisible(false);
 					Gui.craftButton.setVisible(false);
 					Utils.invent = false;
@@ -606,8 +606,7 @@ public class Gui {
 		Gui.invcontext.add(Gui.invcontbtn[0]).width(100.0F).height(50.0F).row();
 		Gui.invcontbtn[0].addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				InvUtils.dropItem(InvUtils.getItemIdByCursorCoord(), 1);
-				MadSand.print("You've just dropped 1 " + InvUtils.getItemName(InvUtils.getItemIdByCursorCoord()));
+				// drop item
 			}
 
 		});
@@ -620,7 +619,7 @@ public class Gui {
 		Gui.contbtn[0].addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				lookAtMouse();
-				MadSand.player.interact(MadSand.x, MadSand.y, MadSand.player.look);
+				MadSand.player.interact(MadSand.player.look);
 			}
 
 		});
@@ -781,7 +780,7 @@ public class Gui {
 			public void clicked(InputEvent event, float x, float y) {
 				if (!MadSand.dontlisten) {
 					if ((MadSand.state == GameState.BUY) && (!MadSand.contextopened)) {
-						Utils.buyAction();
+						//TODO: show buy context menu
 					}
 					if ((MadSand.state == GameState.INVENTORY) && (!MadSand.contextopened)) {
 						Utils.inventoryAction();
@@ -810,7 +809,7 @@ public class Gui {
 		while (cg < MadSand.CRAFTABLES) {
 			Gui.craftbtn[cg] = new TextButton(InventoryNames.name.get(MadSand.craftableid[cg]), Gui.skin);
 			Gui.craftbl.add(Gui.craftbtn[cg]).width(250.0F);
-			Gui.craftbl.add(new Label(" " + Loot.getTextQuery(InventoryNames.recipe.get(MadSand.craftableid[cg])),
+			Gui.craftbl.add(new Label(" " + Item.queryToName(InventoryNames.recipe.get(MadSand.craftableid[cg])),
 					Gui.skin))/* .align(8) */;
 			Gui.craftbl.row();
 			final int ssa = cg;
@@ -888,19 +887,19 @@ public class Gui {
 				MadSand.state = GameState.GAME;
 				MadSand.player.hp = MadSand.player.mhp;
 				if (MadSand.player.rest[0] == -1) {
-					MadSand.x = Utils.rand(0, 99);
-					MadSand.y = Utils.rand(0, 99);
+					MadSand.player.x = Utils.rand(0, 99);
+					MadSand.player.y = Utils.rand(0, 99);
 				} else {
 					if (MadSand.player.rest[2] == MadSand.curxwpos && MadSand.player.rest[3] == MadSand.curywpos) {
-						MadSand.x = MadSand.player.rest[0];
-						MadSand.y = MadSand.player.rest[1];
+						MadSand.player.x = MadSand.player.rest[0];
+						MadSand.player.y = MadSand.player.rest[1];
 					} else {
 						MadSand.curxwpos = MadSand.player.rest[2];
 						MadSand.curywpos = MadSand.player.rest[3];
 						if (GameSaver.verifyNextSector(MadSand.curxwpos, MadSand.curywpos)) {
 							MadSand.world.clearCurLoc();
-							GameSaver.loadMap(MadSand.MAPDIR + MadSand.WORLDNAME + "/" + "sector-"
-									+ MadSand.curxwpos + "-" + MadSand.curywpos + ".mws");
+							GameSaver.loadMap(MadSand.MAPDIR + MadSand.WORLDNAME + "/" + "sector-" + MadSand.curxwpos
+									+ "-" + MadSand.curywpos + ".mws");
 						} else {
 
 							MadSand.state = GameState.WORLDGEN;
@@ -985,19 +984,19 @@ public class Gui {
 	}
 
 	static Direction lookAtMouse() {
-		if (MadSand.wclickx > MadSand.x) {
+		if (MadSand.wclickx > MadSand.player.x) {
 			MadSand.player.look = Direction.RIGHT;
 			MadSand.sm.turn(MadSand.player.look);
 			MadSand.sm.isInFront();
-		} else if (MadSand.wclickx < MadSand.x) {
+		} else if (MadSand.wclickx < MadSand.player.x) {
 			MadSand.player.look = Direction.LEFT;
 			MadSand.sm.turn(MadSand.player.look);
 			MadSand.sm.isInFront();
-		} else if (MadSand.wclicky > MadSand.y) {
+		} else if (MadSand.wclicky > MadSand.player.y) {
 			MadSand.player.look = Direction.UP;
 			MadSand.sm.turn(MadSand.player.look);
 			MadSand.sm.isInFront();
-		} else if (MadSand.wclicky < MadSand.y) {
+		} else if (MadSand.wclicky < MadSand.player.y) {
 			MadSand.player.look = Direction.DOWN;
 			MadSand.sm.turn(MadSand.player.look);
 			MadSand.sm.isInFront();

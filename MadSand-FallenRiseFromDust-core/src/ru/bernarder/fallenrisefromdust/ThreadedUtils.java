@@ -52,22 +52,22 @@ public class ThreadedUtils {
 
 			if ((Utils.gotodir == "left") && (MadSand.curxwpos > 0)) {
 				MadSand.curxwpos -= 1;
-				MadSand.x = MadSand.MAPSIZE - 2;
+				MadSand.player.x = MadSand.MAPSIZE - 2;
 				Utils.updCoords();
 			}
 			if ((Utils.gotodir == "right") && (MadSand.curxwpos < 9)) {
 				MadSand.curxwpos += 1;
-				MadSand.x = 0;
+				MadSand.player.x = 0;
 				Utils.updCoords();
 			}
 			if ((Utils.gotodir == "down") && (MadSand.curywpos > 0)) {
 				MadSand.curywpos -= 1;
-				MadSand.y = MadSand.MAPSIZE - 2;
+				MadSand.player.y = MadSand.MAPSIZE - 2;
 				Utils.updCoords();
 			}
 			if ((Utils.gotodir == "up") && (MadSand.curywpos < 9)) {
 				MadSand.curywpos += 1;
-				MadSand.y = 0;
+				MadSand.player.y = 0;
 				Utils.updCoords();
 			}
 			MadSand.world.clearCurLoc();

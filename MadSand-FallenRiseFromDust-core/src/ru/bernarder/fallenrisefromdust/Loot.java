@@ -10,25 +10,24 @@ public class Loot {
 	public Loot(String cont) {
 		contents.add(cont);
 	}
-	
 
 	static void lootCollision() {
-		if (Player.standingOnLoot(MadSand.x, MadSand.y)) {
-			addLootToInv(MadSand.x, MadSand.y);
-			removeLoot(MadSand.x, MadSand.y);
+		if (Player.standingOnLoot(MadSand.player.x, MadSand.player.y)) {
+			addLootToInv(MadSand.player.x, MadSand.player.y);
+			MadSand.world.getCurLoc().removeLoot(MadSand.player.x, MadSand.player.y);
 			MadSand.print("You picked some things up");
 		}
 	}
-	
+
 	public Loot add(int id, int q) {
-		
+
 		return this;
 	}
 
 	public static void addLootToInv(int x, int y) {
 
 	}
-	
+
 	public static int addLootQToInv(String temp) {
 		int i = 1;
 		Utils.out("Loot Cell contents: " + temp);
@@ -39,7 +38,7 @@ public class Loot {
 				while (i < block.length) {
 					attr = block[i].split("/");
 
-					InvUtils.putItem(Integer.parseInt(attr[0]), Integer.parseInt(attr[1]), false);
+					MadSand.player.inventory.putItem(Integer.parseInt(attr[0]), Integer.parseInt(attr[1]), false);
 					i++;
 				}
 				return Integer.parseInt(attr[0]);
@@ -51,7 +50,7 @@ public class Loot {
 		return 0;
 	}
 
-	public static boolean removeLootFromInv(String query) {	//TODO --> to inventory
+	public static boolean removeLootFromInv(String query) { // TODO --> to inventory
 		int i = 1;
 		String temp = query;
 		try {
@@ -59,7 +58,7 @@ public class Loot {
 			String[] attr = new String[0];
 			while (i < block.length) {
 				attr = block[i].split("/");
-				if (InvUtils.getSameCell(Integer.parseInt(attr[0]), Integer.parseInt(attr[1])) == -1) {
+				if (MadSand.player.inventory.getSameCell(Integer.parseInt(attr[0]), Integer.parseInt(attr[1])) == -1) {
 					return false;
 				}
 				i++;
@@ -67,7 +66,7 @@ public class Loot {
 			i = 1;
 			while (i < block.length) {
 				attr = block[i].split("/");
-				InvUtils.delItem(Integer.parseInt(attr[0]), Integer.parseInt(attr[1]));
+				MadSand.player.inventory.delItem(Integer.parseInt(attr[0]), Integer.parseInt(attr[1]));
 				i++;
 			}
 			return true;
@@ -88,7 +87,7 @@ public class Loot {
 			attr = block[i].split("/");
 			id = Integer.parseInt(attr[0]);
 			q = Integer.parseInt(attr[1]);
-			if (InvUtils.getSameCell(id, q) == -1) {
+			if (MadSand.player.inventory.getSameCell(id, q) == -1) {
 				return false;
 			}
 			i++;

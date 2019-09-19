@@ -41,7 +41,7 @@ public class Inventory {
 		return false;
 	}
 
-	public static boolean delItem(int id, int quantity) {
+	public boolean delItem(int id, int quantity) {
 		boolean r = false;
 		// TODO
 		return r;

@@ -57,7 +57,9 @@ public class Item {
 		return weight * quantity;
 	}
 
-	static String queryToName(String query) {
+	// Static functions for general item related needs:
+
+	static String queryToName(String query) { // item query format: id1:quantity1/id2:quantity2/...
 		int i = 0;
 		String ret = "";
 		if (!query.contains(BLOCK_DELIM))
@@ -75,5 +77,13 @@ public class Item {
 			e.printStackTrace(Resource.eps);
 		}
 		return "";
+	}
+
+	static int getType(int id) {
+		return InventoryNames.type.get(id);
+	}
+
+	static int getAltObject(int id) {
+		return InventoryNames.altObject.get(id);
 	}
 }

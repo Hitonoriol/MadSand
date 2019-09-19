@@ -78,14 +78,13 @@ public class MadSand extends com.badlogic.gdx.Game {
 	static int MAPSIZE = 100;
 	static final int BORDER = 1;
 	static final int OBJPROPS = 2;
-	
+
 	static final String SAVEDIR = "MadSand_Saves/";
 	static String QUESTFILE = SAVEDIR + "quest.xml";
 	static String RESFILE = SAVEDIR + "res.xml";
 	static final String VERFILE = SAVEDIR + "ver.dat";
 	static final String MAPDIR = SAVEDIR + "worlds/";
-	
-	
+
 	static int numlook = 0;
 
 	static final int XDEF = 1280;
@@ -258,8 +257,8 @@ public class MadSand extends com.badlogic.gdx.Game {
 		this.invbatch = new SpriteBatch();
 		camera.update();
 		Gui.font = new BitmapFont();
-		Utils.ppos.x = (x * 33);
-		Utils.ppos.y = (y * 33);
+		Utils.ppos.x = (player.x * 33);
+		Utils.ppos.y = (player.y * 33);
 		Gui.equip = new Image[5];
 		Gui.equip[0] = new Image(new TextureRegionDrawable(new TextureRegion(sm.placeholder)));
 		Gui.equip[1] = new Image(new TextureRegionDrawable(new TextureRegion(sm.placeholder)));
@@ -316,17 +315,17 @@ public class MadSand extends com.badlogic.gdx.Game {
 		try {
 			int i = 0;
 			while (i < rcoords.length) {
-				sm.batch.draw(sm.tile[world.rend(y + (int) rcoords[i].y, x + (int) rcoords[i].x)],
+				sm.batch.draw(sm.tile[world.rend(player.y + (int) rcoords[i].y, player.x + (int) rcoords[i].x)],
 						Utils.ppos.x + rcoords[i].x * 33, Utils.ppos.y + rcoords[i].y * 33);
 				i++;
 			}
-			if (Player.isCollisionMask(x, y)) {
+			if (Player.isCollisionMask(player.x, player.y)) {
 				drawPlayer();
 			}
 			i = 0;
 			while (i < rcoords.length) {
-				trdx = x + (int) rcoords[i].x;
-				trdy = y + (int) rcoords[i].y;
+				trdx = player.x + (int) rcoords[i].x;
+				trdy = player.y + (int) rcoords[i].y;
 				if (trdx < 0)
 					trdx = 0;
 				if (trdy < 0)
@@ -352,7 +351,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 
 				i++;
 			}
-			if (!Player.isCollisionMask(x, y)) {
+			if (!Player.isCollisionMask(player.x, player.y)) {
 				drawPlayer();
 			}
 			i = 0;
@@ -373,7 +372,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 	void drawWorld() {
 		int i = 0;
 		while (i < rcoords.length) {
-			sm.batch.draw(sm.tile[world.rend(y + (int) rcoords[i].y, x + (int) rcoords[i].x)],
+			sm.batch.draw(sm.tile[world.rend(player.y + (int) rcoords[i].y, player.x + (int) rcoords[i].x)],
 					Utils.ppos.x + rcoords[i].x * 33, Utils.ppos.y + rcoords[i].y * 33);
 			i++;
 		}
@@ -384,8 +383,8 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static void teleport(int x, int y) {
 		Utils.ppos.x = (x * 33);
 		Utils.ppos.y = (y * 33);
-		MadSand.x = x;
-		MadSand.y = y;
+		player.x = x;
+		player.y = y;
 	}
 
 	static void showDialog(final int type, String text, final int qid) {
@@ -551,51 +550,21 @@ public class MadSand extends com.badlogic.gdx.Game {
 			this.invcamera.unproject(mouseinworld);
 			this.invbatch.setProjectionMatrix(this.invcamera.combined);
 			this.invbatch.draw(sm.inv, 0.0F, 0.0F);
-			int i = 0;
-			while (i < 30) {
-				if (inv[i][0] != 0)
-					this.invbatch.draw(Utils.item[inv[i][0]], InvUtils.getItemCellCoord(i).x,
-							InvUtils.getItemCellCoord(i).y);
-				if (inv[i][0] != 0)
-					Gui.font.draw(this.invbatch, " " + inv[i][1], InvUtils.getItemCellCoord(i).x,
-							InvUtils.getItemCellCoord(i).y + Gui.font.getLineHeight());
-				i++;
-			}
-			this.invbatch.draw(Utils.cursor, cx, cy);
+			//TODO: draw inventory (ImageButtons in scrollpane)
+			//Utils.item[] <-- item sprites
 			sm.InvKeyCheck();
 			sm.inInvKeyCheck();
-			sm.checkInvKeys();
 			this.invbatch.end();
 			if (!tradeflag) {
 				Gui.overlay.act();
 				Gui.overlay.draw();
 			}
 		} else if (state.equals(GameState.BUY)) {
+			//TODO: Trade menu
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			sm.batch.begin();
 			DrawGame();
 			sm.batch.end();
-			this.invbatch.begin();
-			this.invcamera.position.set(314.0F, 235.0F, 0.0F);
-			this.invcamera.update();
-			mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
-			this.invcamera.unproject(mouseinworld);
-			this.invbatch.setProjectionMatrix(this.invcamera.combined);
-			this.invbatch.draw(sm.inv, 0.0F, 0.0F);
-			int i = 0;
-			while (i < 30) {
-				if (trade[i][0] != 0)
-					this.invbatch.draw(Utils.item[trade[i][0]], InvUtils.getItemCellCoord(i).x,
-							InvUtils.getItemCellCoord(i).y);
-				if (trade[i][0] != 0)
-					Gui.font.draw(this.invbatch, " " + trade[i][1], InvUtils.getItemCellCoord(i).x,
-							InvUtils.getItemCellCoord(i).y + Gui.font.getLineHeight());
-				i++;
-			}
-			this.invbatch.draw(Utils.cursor, cx, cy);
-			sm.tradeCheckKeys();
-			sm.checkInvKeys();
-			this.invbatch.end();
 			Gui.overlay.act();
 			Gui.overlay.draw();
 		} else if (state.equals(GameState.NMENU)) {

@@ -38,8 +38,8 @@ public class Utils {
 	public static boolean tester = true;
 	public int ubound;
 	public int lbound;
-	public static float x = MadSand.x * 33;
-	public static float y = MadSand.y * 33;
+	public static float x = MadSand.player.x * 33;
+	public static float y = MadSand.player.y * 33;
 	public static Vector2 ppos;
 	public static boolean invent = false;
 	public static float pspeed = 33.0F;
@@ -250,105 +250,75 @@ public class Utils {
 		return InventoryNames.name.get(id);
 	}
 
-	public void tradeCheckKeys() {
-		if (Gdx.input.isKeyJustPressed(33)) {
-			Gui.gamecontext.setVisible(false);
-			MadSand.contextopened = false;
-			InvUtils.emptyInvT();
-			invent = false;
-			MadSand.state = GameState.GAME;
-			funcButtonsSet(false);
-			return;
-		}
-		if (Gdx.input.isKeyJustPressed(66)) {
-			buyAction();
-		}
-	}
-
-	public static void buyAction() {
-		selected = InvUtils.getItemIdByCursorCoordT();
-		if (selected != 0) {
-			MadSand.showDialog(2, "You are about to buy " + InvUtils.getItemName(selected) + " for "
-					+ InvUtils.getItemPriceByCursorCoord(selected) + " gold.", 0);
-			Gui.acceptD.addListener(new ChangeListener() {
-				public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-
-				}
-
-			});
-			Gui.refuseD.addListener(new com.badlogic.gdx.scenes.scene2d.utils.ChangeListener() {
-				public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-
-				}
-			});
-		}
-	}
-
-	public static void useKeyAction() {
+	public static void useKeyAction() { // TODO: usekey actions using BuildScript
 		int id = MadSand.player.hand;
-		int ptile = MadSand.world.getTileId(MadSand.x, MadSand.y);
-		InvUtils.checkHands(id);
+		int ptile = MadSand.world.getTileId(MadSand.player.x, MadSand.player.y);
+		MadSand.player.checkHands(id);
 		if ((id == 41) && (ptile == 0)) {
 			MadSand.print("You plowed a dirt");
-			MadSand.world.putMapTile(MadSand.x, MadSand.y, 15);
+			MadSand.world.putMapTile(MadSand.player.x, MadSand.player.y, 15);
 		}
 		if ((ptile == 6) || (ptile == 16)) {
 			MadSand.print("You entered the dungeon.");
 			MadSand.curlayer += 1;
-			MadSand.world.delObj(MadSand.x, MadSand.y);
+			MadSand.world.delObj(MadSand.player.x, MadSand.player.y);
 		}
 		if (id == 6) {
 			if (ptile == 0) {
-				MadSand.world.putMapTile(MadSand.y, MadSand.x, 6);
+				MadSand.world.putMapTile(MadSand.player.y, MadSand.player.x, 6);
 				MadSand.print("You dug a hole.");
 			}
 			if (ptile == 3) {
-				MadSand.world.putMapTile(MadSand.y, MadSand.x, 16);
+				MadSand.world.putMapTile(MadSand.player.y, MadSand.player.x, 16);
 				MadSand.print("You dug a hole.");
 			}
 			if (ptile == 1) {
-				InvUtils.putItem(5, 1, true);
-				MadSand.world.putMapTile(MadSand.y, MadSand.x, 0);
+				MadSand.player.inventory.putItem(5, 1, true);
+				MadSand.world.putMapTile(MadSand.player.y, MadSand.player.x, 0);
 				MadSand.print("You dug some clay");
 			}
 			if (ptile == 2) {
-				InvUtils.putItem(9, 1, true);
-				MadSand.world.putMapTile(MadSand.y, MadSand.x, 0);
+				MadSand.player.inventory.putItem(9, 1, true);
+				MadSand.world.putMapTile(MadSand.player.y, MadSand.player.x, 0);
 				MadSand.print("You dug some flint");
 			}
 		}
-		if (InvUtils.getType(id) == 9) {
+		if (Item.getType(id) == 9) {
 			MadSand.print("You ate one " + InventoryNames.name.get(id));
-			MadSand.player.healPlayer(Integer.parseInt(InventoryNames.heal.get(id).split(":")[0]));
+			MadSand.player.heal(Integer.parseInt(InventoryNames.heal.get(id).split(":")[0]));
 			MadSand.player.increaseStamina(Integer.parseInt(InventoryNames.heal.get(id).split(":")[1]));
 		}
-		if ((id == 9) && (InvUtils.getSameCell(9, 1) != -1) && (InvUtils.getSameCell(1, 5) != -1)) {
+		if ((id == 9) && (MadSand.player.inventory.getSameCell(9, 1) != -1)
+				&& (MadSand.player.inventory.getSameCell(1, 5) != -1)) {
 			MadSand.print("You placed a campfire");
-			InvUtils.delItem(9, 1);
-			InvUtils.delItem(1, 5);
-			MadSand.world.getCurLoc().addObject(MadSand.x, MadSand.y, MadSand.player.look, 6);
+			MadSand.player.inventory.delItem(9, 1);
+			MadSand.player.inventory.delItem(1, 5);
+			MadSand.world.getCurLoc().addObject(MadSand.player.x, MadSand.player.y, MadSand.player.look, 6);
 		}
-		if (InvUtils.getType(id) == 4) {
+		if (Item.getType(id) == 4) {
 			// equip helmet
 		}
-		if (InvUtils.getType(id) == 5) {
+		if (Item.getType(id) == 5) {
 			// equip chestplate
 		}
-		if (InvUtils.getType(id) == 6) {
+		if (Item.getType(id) == 6) {
 			// equip shield
 		}
-		if (InvUtils.getType(id) == 3) { // crop
-			InvUtils.delItem(id, 1);
-			MadSand.world.getCurLoc().addObject(MadSand.x, MadSand.y, MadSand.player.look, InvUtils.getAltObject(id));
+		if (Item.getType(id) == 3) { // crop
+			MadSand.player.inventory.delItem(id, 1);
+			MadSand.world.getCurLoc().addObject(MadSand.player.x, MadSand.player.y, MadSand.player.look,
+					Item.getAltObject(id));
 			// put crop in direction
 		}
-		if (InvUtils.getType(id) == 1) {
-			InvUtils.delItem(id, 1);
-			MadSand.world.getCurLoc().addObject(MadSand.x, MadSand.y, MadSand.player.look, InvUtils.getAltObject(id));
+		if (Item.getType(id) == 1) {
+			MadSand.player.inventory.delItem(id, 1);
+			MadSand.world.getCurLoc().addObject(MadSand.player.x, MadSand.player.y, MadSand.player.look,
+					Item.getAltObject(id));
 		}
-		if (InvUtils.getType(id) == 2) {
-			InvUtils.delItem(id, 1);
-			MadSand.world.getCurLoc().addTile(MadSand.x, MadSand.y, MadSand.player.look, InvUtils.getAltObject(id));
+		if (Item.getType(id) == 2) {
+			MadSand.player.inventory.delItem(id, 1);
+			MadSand.world.getCurLoc().addTile(MadSand.player.x, MadSand.player.y, MadSand.player.look,
+					Item.getAltObject(id));
 		}
 
 	}
@@ -381,44 +351,18 @@ public class Utils {
 	}
 
 	public void inInvKeyCheck() {
-		int id = InvUtils.getItemIdByCursorCoord();
-		if ((Gdx.input.isKeyJustPressed(46)) && (id > 0)) {
-			InvUtils.dropItem(id, 1);
-			MadSand.print("You've just dropped 1 " + InvUtils.getItemName(id));
-		}
-		if ((Gdx.input.isKeyJustPressed(45)) && (tester)) {
-			MadSand.world.clearCurLoc();
-		}
-
+		//TODO remove dis
 		if (Gdx.input.isKeyJustPressed(66)) {
 			inventoryAction();
 		}
 	}
 
 	public static void inventoryAction() {
-		int selected = InvUtils.getItemIdByCursorCoord();
-		if (selected != 0) {
-			if (!MadSand.tradeflag) {
-				MadSand.player.hand = selected;
-				MadSand.print("You took " + InvUtils.getItemName(selected) + " in your hand");
-				Gui.equip[4].setDrawable(
-						new com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable(new Sprite(item[selected])));
-				invent = false;
-				MadSand.state = GameState.GAME;
-				Gui.mousemenu.setVisible(true);
-				Gui.invcontext.setVisible(false);
-				funcButtonsSet(false);
-			} else {
-				int prc = InvUtils.getItemPriceByCursorCoord(selected) / 2;
-				MadSand.print("You sold " + InvUtils.getItemName(selected) + " for " + prc + " gold");
-				InvUtils.putItem(21, prc, true);
-				InvUtils.delItem(selected, 1);
-			}
-		}
+		//TODO
 	}
 
 	public void isInFront() {
-		int obj = MadSand.world.getObjID(MadSand.x, MadSand.y, MadSand.player.look);
+		int obj = MadSand.world.getObjID(MadSand.player.x, MadSand.player.y, MadSand.player.look);
 		if ((obj != 666) && (obj != 0)) {
 			MadSand.print("You see: " + Objects.name.get(obj));
 		}
@@ -429,7 +373,7 @@ public class Utils {
 			Gui.showStatsWindow();
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER)) {
-			MadSand.player.interact(MadSand.x, MadSand.y, MadSand.player.look);
+			MadSand.player.interact(MadSand.player.look);
 		}
 		if (Gdx.input.isKeyPressed(145))
 			MadSand.ZOOM = (float) (MadSand.ZOOM + 0.01D);
@@ -472,13 +416,13 @@ public class Utils {
 			turn(Direction.RIGHT);
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.N) && MadSand.curxwpos != 0 && MadSand.curywpos != 0) {
-			if (MadSand.x == MadSand.MAPSIZE - 1 && MadSand.player.look == Direction.RIGHT)
+			if (MadSand.player.x == MadSand.MAPSIZE - 1 && MadSand.player.look == Direction.RIGHT)
 				gotoSector("right");
-			if (MadSand.y == MadSand.MAPSIZE - 1 && MadSand.player.look == Direction.UP)
+			if (MadSand.player.y == MadSand.MAPSIZE - 1 && MadSand.player.look == Direction.UP)
 				gotoSector("up");
-			if (MadSand.x == MadSand.BORDER && MadSand.player.look == Direction.LEFT)
+			if (MadSand.player.x == MadSand.BORDER && MadSand.player.look == Direction.LEFT)
 				gotoSector("left");
-			if (MadSand.y == MadSand.BORDER && MadSand.player.look == Direction.DOWN)
+			if (MadSand.player.y == MadSand.BORDER && MadSand.player.look == Direction.DOWN)
 				gotoSector("down");
 
 		}
@@ -516,7 +460,7 @@ public class Utils {
 			GameSaver.loadWorld(MadSand.WORLDNAME);
 		}
 		if ((Gdx.input.isKeyJustPressed(Keys.H)) && (tester)) {
-			MadSand.player.damagePlayer(10);
+			MadSand.player.damage(10);
 		}
 		if ((Gdx.input.isKeyJustPressed(Keys.F)) && (MadSand.player.hand != 0)) {
 			MadSand.player.hand = 0;
@@ -556,22 +500,22 @@ public class Utils {
 	void mouseMovement() {
 		if ((Gdx.input.isButtonPressed(0)) && (MadSand.state == GameState.GAME) && (!MadSand.stepping)
 				&& (!MadSand.contextopened)) {
-			if (MadSand.wmx > MadSand.x) {
+			if (MadSand.wmx > MadSand.player.x) {
 				MadSand.player.look = Direction.RIGHT;
 				turn(MadSand.player.look);
 				move(MadSand.player.look);
 				isInFront();
-			} else if (MadSand.wmx < MadSand.x) {
+			} else if (MadSand.wmx < MadSand.player.x) {
 				MadSand.player.look = Direction.LEFT;
 				turn(MadSand.player.look);
 				move(MadSand.player.look);
 				isInFront();
-			} else if (MadSand.wmy > MadSand.y) {
+			} else if (MadSand.wmy > MadSand.player.y) {
 				MadSand.player.look = Direction.UP;
 				turn(MadSand.player.look);
 				move(MadSand.player.look);
 				isInFront();
-			} else if (MadSand.wmy < MadSand.y) {
+			} else if (MadSand.wmy < MadSand.player.y) {
 				MadSand.player.look = Direction.DOWN;
 				turn(MadSand.player.look);
 				move(MadSand.player.look);
@@ -625,34 +569,34 @@ public class Utils {
 	}
 
 	public static void tileDmg() {
-		int tid = MadSand.world.getTileId(MadSand.x, MadSand.y);
+		int tid = MadSand.world.getTileId(MadSand.player.x, MadSand.player.y);
 		int dmg = Tiles.damage.get(tid);
 		if (dmg > 0) {
 			MadSand.print("You took " + dmg + " damage from " + (Tiles.name.get(tid)));
-			MadSand.player.damagePlayer(dmg);
+			MadSand.player.damage(dmg);
 		}
 	}
 
 	public void move(Direction dir) {
-		if ((!Player.isCollision(MadSand.x, MadSand.y, dir, 0)) && (MadSand.dialogflag)) {
+		if ((!MadSand.player.isCollision(dir, 0)) && (MadSand.dialogflag)) {
 			if ((dir == Direction.UP) && (!VerifyPosition(dir))) {
-				MadSand.y += 1;
+				MadSand.player.y += 1;
 				ppos.y += 33.0F;
 			}
 			if ((dir == Direction.DOWN) && (!VerifyPosition(dir))) {
-				MadSand.y -= 1;
+				MadSand.player.y -= 1;
 				ppos.y -= 33.0F;
 			}
 			if ((dir == Direction.LEFT) && (!VerifyPosition(dir))) {
-				MadSand.x -= 1;
+				MadSand.player.x -= 1;
 				ppos.x -= 33.0F;
 			}
 			if ((dir == Direction.RIGHT) && (!VerifyPosition(dir))) {
-				MadSand.x += 1;
+				MadSand.player.x += 1;
 				ppos.x += 33.0F;
 			}
-			if (MadSand.x == MadSand.MAPSIZE - 1 || MadSand.y == MadSand.MAPSIZE - 1 || MadSand.x == MadSand.BORDER
-					|| MadSand.y == MadSand.BORDER) {
+			if (MadSand.player.x == MadSand.MAPSIZE - 1 || MadSand.player.y == MadSand.MAPSIZE - 1
+					|| MadSand.player.x == MadSand.BORDER || MadSand.player.y == MadSand.BORDER) {
 				MadSand.print("Press [GRAY]N[WHITE] to move to the next sector.");
 			}
 			MadSand.stepping = true;
@@ -661,24 +605,24 @@ public class Utils {
 
 	public boolean VerifyPosition(Direction dir) {
 		boolean ret = false;
-		if (MadSand.x >= MadSand.MAPSIZE - 1 && (dir == Direction.RIGHT)) {
+		if (MadSand.player.x >= MadSand.MAPSIZE - 1 && (dir == Direction.RIGHT)) {
 			ret = true;
 		}
-		if (MadSand.y >= MadSand.MAPSIZE - 1 && (dir == Direction.UP)) {
+		if (MadSand.player.y >= MadSand.MAPSIZE - 1 && (dir == Direction.UP)) {
 			ret = true;
 		}
-		if (MadSand.x <= 1 && (dir == Direction.LEFT)) {
+		if (MadSand.player.x <= 1 && (dir == Direction.LEFT)) {
 			ret = true;
 		}
-		if (MadSand.y <= 1 && (dir == Direction.DOWN)) {
+		if (MadSand.player.y <= 1 && (dir == Direction.DOWN)) {
 			ret = true;
 		}
 		return ret;
 	}
 
 	static void updCoords() {
-		ppos.x = (MadSand.x * 33);
-		ppos.y = (MadSand.y * 33);
+		ppos.x = (MadSand.player.x * 33);
+		ppos.y = (MadSand.player.y * 33);
 	}
 
 	public static String gotodir = "";
@@ -702,21 +646,12 @@ public class Utils {
 					.setText("Tile: " + Tiles.name.get(MadSand.world.getCurLoc().getTile(MadSand.wmx, MadSand.wmy).id));
 			Gui.mouselabel[2].setText("Object: " + " ()");
 			Gui.mouselabel[3].setText("Creature: " + " ()");
-			Gui.mouselabel[4]
-					.setText("Turn: " + MadSand.turn + "\nWorld time: " + MadSand.worldtime + "\nPlayer position: ("
-							+ MadSand.x + ", " + MadSand.y + ")\nStamina: " + Math.round(MadSand.player.stamina));
+			Gui.mouselabel[4].setText("Turn: " + MadSand.turn + "\nWorld time: " + MadSand.worldtime
+					+ "\nPlayer position: (" + MadSand.player.x + ", " + MadSand.player.y + ")\nStamina: "
+					+ Math.round(MadSand.player.stamina));
 		} catch (Exception e) {
 			e.printStackTrace(Resource.eps);
 		}
-	}
-
-	public void checkInvKeys() {
-		MadSand.mx = Gdx.input.getX();
-		MadSand.my = Gdx.graphics.getHeight() - Gdx.input.getY();
-		MadSand.cx = (int) InvUtils
-				.getItemCellCoord(InvUtils.getItemCell((int) MadSand.mouseinworld.x, (int) MadSand.mouseinworld.y)).x;
-		MadSand.cy = (int) InvUtils
-				.getItemCellCoord(InvUtils.getItemCell((int) MadSand.mouseinworld.x, (int) MadSand.mouseinworld.y)).y;
 	}
 
 	public static void out(String arg) {
@@ -790,7 +725,7 @@ public class Utils {
 			if ((admin) || (tester)) {
 				try {
 					if (Gui.msgf.getText().split(" ")[0].equals("give")) {
-						InvUtils.putItem(new Integer(Gui.msgf.getText().split(" ")[1]).intValue(),
+						MadSand.player.inventory.putItem(new Integer(Gui.msgf.getText().split(" ")[1]).intValue(),
 								new Integer(Gui.msgf.getText().split(" ")[2]).intValue(), true);
 						MadSand.print("Obtained " + Gui.msgf.getText().split(" ")[2] + " "
 								+ InventoryNames.name.get(new Integer(Gui.msgf.getText().split(" ")[1])));

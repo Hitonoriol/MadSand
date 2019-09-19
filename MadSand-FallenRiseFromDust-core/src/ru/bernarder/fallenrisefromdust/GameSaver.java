@@ -137,7 +137,7 @@ public class GameSaver {
 				+ MadSand.player.craftingskill[0] + invblock + MadSand.player.craftingskill[1] + invblock
 				+ MadSand.player.craftingskill[2] + invblock + MadSand.player.rest[0] + invblock + MadSand.player.rest[1]
 				+ invblock + MadSand.player.rest[2] + invblock + MadSand.player.rest[3] + invblock + MadSand.player.dexterity
-				+ invblock + MadSand.player.intelligence + global + MadSand.x + invblock + MadSand.y + global
+				+ invblock + MadSand.player.intelligence + global + MadSand.player.x + invblock + MadSand.player.y + global
 				+ MadSand.curxwpos + invblock + MadSand.curywpos + global;
 		saveToExternal(fl, query);
 	}
@@ -233,8 +233,8 @@ public class GameSaver {
 		if (flag == 1) {
 			MadSand.curxwpos = Integer.parseInt(ph[0]);
 			MadSand.curywpos = Integer.parseInt(ph[1]);
-			MadSand.x = Integer.parseInt(hpbb[0]);
-			MadSand.y = Integer.parseInt(hpbb[1]);
+			MadSand.player.x = Integer.parseInt(hpbb[0]);
+			MadSand.player.y = Integer.parseInt(hpbb[1]);
 			Utils.updCoords();
 		}
 	}
