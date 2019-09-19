@@ -70,7 +70,7 @@ public class ThreadedUtils {
 				MadSand.y = 0;
 				Utils.updCoords();
 			}
-			MadSand.world.makeEmpty();
+			MadSand.world.clearCurLoc();
 			if (GameSaver.verifyNextSector(MadSand.curxwpos, MadSand.curywpos)) {
 				GameSaver.loadMap("MadSand_Saves/worlds/" + MadSand.WORLDNAME + "/" + "sector-" + MadSand.curxwpos + "-"
 						+ MadSand.curywpos + ".mws");

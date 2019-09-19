@@ -87,7 +87,7 @@ public class World {
 	public void Generate() {
 		Utils.out("WorldGen start!");
 		try {
-			makeEmpty();
+			clearCurLoc();
 			Utils.random = new Random();
 			if ((MadSand.curxwpos == 5) && (MadSand.curywpos == 5))
 				biome = 0;
@@ -294,8 +294,8 @@ public class World {
 
 	// end of lazyass area
 
-	public void makeEmpty() { // Should be in map alongside with purge()
-		Utils.out("makeEmpty start!");
+	public void clearCurLoc() {
+		Utils.out("clearCurLoc");
 		biome = 0;
 		int i = 0;
 		int ii = 0;
@@ -310,7 +310,7 @@ public class World {
 			i++;
 			ii = 0;
 		}
-		Utils.out("End of makeEmpty!");
+		Utils.out("End of clearCurLoc!");
 	}
 
 	void genObjByTemplate() {

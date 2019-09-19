@@ -92,7 +92,7 @@ public class GameSaver {
 		File file = new File("MadSand_Saves/worlds/" + filename + "/" + "sector-" + MadSand.curxwpos + "-"
 				+ MadSand.curywpos + ".mws");
 		if (file.exists()) {
-			MadSand.world.makeEmpty();
+			MadSand.world.clearCurLoc();
 			loadMap("MadSand_Saves/worlds/" + filename + "/" + "sector-" + MadSand.curxwpos + "-" + MadSand.curywpos
 					+ ".mws");
 			loadChar(1);

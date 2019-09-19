@@ -123,8 +123,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 	static final String FONT_PATH = "fonts/8bitoperator.ttf";
 
 	boolean started = true;
-	public static int x = new Random().nextInt(MadSand.MAPSIZE);
-	public static int y = new Random().nextInt(MadSand.MAPSIZE);
 	public static int curxwpos = 5;
 	public static int curywpos = 5;
 	public static int tx;

@@ -1,11 +1,16 @@
 package ru.bernarder.fallenrisefromdust;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 
 import ru.bernarder.fallenrisefromdust.enums.*;
 
 public class Player {
 
+	public int x = new Random().nextInt(MadSand.MAPSIZE);
+	public int y = new Random().nextInt(MadSand.MAPSIZE);
+	
 	public int hand = 0;
 	public int accur = 2; // ACCUR
 	public int hp = 200; // CONSTITUTION*10
@@ -34,6 +39,8 @@ public class Player {
 	public int[] harvestskill = { 1, 0, 35 };
 	public int[] craftingskill = { 1, 0, 30 };
 
+	Inventory inventory;
+
 	float speed, splim; // moves/actions per world tick
 	String name;
 	boolean isMain;
@@ -44,12 +51,23 @@ public class Player {
 		this.name = name;
 	}
 
-	boolean interact(final int x, final int y, final Direction direction) {
+	public void checkHands(int id) {
+		if (inventory.getSameCell(id, 1) == -1)
+			MadSand.player.hand = 0;
+	}
+
+	public boolean dropItem(int id, int quantity) {
+		boolean r = false;
+		// TODO
+		return r;
+	}
+
+	boolean interact(final Direction direction) {		//TODO: BuildScript onInteract events
 		// TODO
 		return true;
 	}
 
-	public static boolean isCollision(int x, int y, Direction direction, int flag) {
+	public boolean isCollision(Direction direction, int flag) {
 		boolean collision = false;
 		int oid = MadSand.world.getCurLoc().getObject(x, y, direction).id;
 		if (((flag == 0) && (oid == 12)) || (oid == 0) || (oid == 666)) {
@@ -79,11 +97,11 @@ public class Player {
 		// Idk what's this thing
 	}
 
-	void damagePlayer(int to) {
+	void damage(int to) {
 		hp -= to;
 	}
 
-	void healPlayer(int to) {
+	void heal(int to) {
 		if (hp + to < mhp) {
 			hp += to;
 		} else {
@@ -125,7 +143,6 @@ public class Player {
 			hp = 0;
 			Gdx.input.setInputProcessor(Gui.dead);
 			MadSand.state = GameState.DEAD;
-			InvUtils.emptyInv();
 		}
 	}
 }

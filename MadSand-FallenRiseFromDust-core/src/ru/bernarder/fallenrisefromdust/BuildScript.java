@@ -41,7 +41,7 @@ public class BuildScript {
 					MadSand.world.putMapTile(Integer.parseInt(opline[1]), Integer.parseInt(opline[2]), Integer.parseInt(opline[3]),
 							MadSand.curlayer);
 				if (opline[0].equalsIgnoreCase("clear"))
-					MadSand.world.makeEmpty();
+					MadSand.world.clearCurLoc();
 				if (opline[0].equalsIgnoreCase("bsquare")) {
 					int ii = 0;
 					int h = Integer.parseInt(opline[4]);
@@ -53,10 +53,6 @@ public class BuildScript {
 						x++;
 						ii++;
 					}
-				}
-				if (opline[0].equals("randomloot")) {
-					Loot.putLoot(Integer.parseInt(opline[1]), Integer.parseInt(opline[2]),
-							Utils.rand(1, MadSand.LASTITEMID), Utils.rand(1, 50));
 				}
 				if (opline[0].equalsIgnoreCase("tsquare")) {
 					int ii = 0;
@@ -85,7 +81,7 @@ public class BuildScript {
 				i++;
 			}
 		} catch (Exception e) {
-			MadSand.print("An error has occured in your script on op " + i);
+			MadSand.print("An error has occured in script on op " + i);
 		}
 	}
 }

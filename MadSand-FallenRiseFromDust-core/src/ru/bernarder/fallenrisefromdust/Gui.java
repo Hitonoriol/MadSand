@@ -898,7 +898,7 @@ public class Gui {
 						MadSand.curxwpos = MadSand.player.rest[2];
 						MadSand.curywpos = MadSand.player.rest[3];
 						if (GameSaver.verifyNextSector(MadSand.curxwpos, MadSand.curywpos)) {
-							MadSand.world.makeEmpty();
+							MadSand.world.clearCurLoc();
 							GameSaver.loadMap(MadSand.MAPDIR + MadSand.WORLDNAME + "/" + "sector-"
 									+ MadSand.curxwpos + "-" + MadSand.curywpos + ".mws");
 						} else {

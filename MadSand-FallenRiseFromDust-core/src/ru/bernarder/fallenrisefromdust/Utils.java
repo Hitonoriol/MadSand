@@ -387,7 +387,7 @@ public class Utils {
 			MadSand.print("You've just dropped 1 " + InvUtils.getItemName(id));
 		}
 		if ((Gdx.input.isKeyJustPressed(45)) && (tester)) {
-			MadSand.world.makeEmpty();
+			MadSand.world.clearCurLoc();
 		}
 
 		if (Gdx.input.isKeyJustPressed(66)) {
@@ -795,7 +795,7 @@ public class Utils {
 						MadSand.print("Obtained " + Gui.msgf.getText().split(" ")[2] + " "
 								+ InventoryNames.name.get(new Integer(Gui.msgf.getText().split(" ")[1])));
 					} else if (Gui.msgf.getText().equalsIgnoreCase("erase")) {
-						MadSand.world.makeEmpty();
+						MadSand.world.clearCurLoc();
 					} else if (Gui.msgf.getText().split(" ")[0].equals("exec")) {
 						BuildScript
 								.execute(GameSaver.getExternalNl("MadSand_Saves" + Gui.msgf.getText().split(" ")[1]));

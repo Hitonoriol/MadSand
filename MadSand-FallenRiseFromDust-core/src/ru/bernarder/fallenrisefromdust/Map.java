@@ -156,7 +156,11 @@ public class Map {
 
 	MapObject getObject(int x, int y) {
 		if (correctCoords(coords.set(x, y))) {
-			return mapObjects.get(coords);
+			MapObject ret = mapObjects.get(coords);
+			if (ret != null)
+				return ret;
+			else
+				return nullObject;
 		} else
 			return nullObject;
 	}
@@ -196,6 +200,17 @@ public class Map {
 				return nullLoot;
 		} else
 			return nullLoot;
+	}
+
+	void removeLoot(int x, int y) {
+		if (correctCoords(coords.set(x, y)))
+			mapLoot.remove(coords);
+	}
+
+	void putLoot(int x, int y, int id, int q) {
+		if (correctCoords(coords.set(x, y))) {
+			mapLoot.put(coords, getLoot(x, y).add(id, q));
+		}
 	}
 
 }

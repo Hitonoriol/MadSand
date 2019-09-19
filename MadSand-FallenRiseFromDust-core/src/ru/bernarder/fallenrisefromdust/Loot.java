@@ -19,13 +19,10 @@ public class Loot {
 			MadSand.print("You picked some things up");
 		}
 	}
-
-	static void removeLoot(int x, int y) {
-
-	}
-
-	public static void putLoot(int x, int y, int id, int q) {
-
+	
+	public Loot add(int id, int q) {
+		
+		return this;
 	}
 
 	public static void addLootToInv(int x, int y) {
@@ -54,26 +51,7 @@ public class Loot {
 		return 0;
 	}
 
-	public static String getTextQuery(String query) {
-		int i = 1;
-		String temp = query;
-		String ret = "";
-		try {
-			String[] block = temp.split(":");
-			String[] attr = new String[0];
-			while (i < block.length) {
-				attr = block[i].split("/");
-				ret = ret + attr[1] + " " + InventoryNames.name.get(Integer.parseInt(attr[0])) + " ";
-				i++;
-			}
-			return ret;
-		} catch (Exception e) {
-			e.printStackTrace(Resource.eps);
-		}
-		return "";
-	}
-
-	public static boolean removeLootFromInv(String query) {
+	public static boolean removeLootFromInv(String query) {	//TODO --> to inventory
 		int i = 1;
 		String temp = query;
 		try {
