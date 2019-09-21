@@ -27,6 +27,7 @@ public class World {
 	static final int BORDER = 1;
 	static int MAPSIZE = 100;
 	HashMap<MapID, Map> WorldLoc = new HashMap<MapID, Map>();
+	static int worldtime = 12;
 
 	public World(int sz) {
 		this.xsz = sz;

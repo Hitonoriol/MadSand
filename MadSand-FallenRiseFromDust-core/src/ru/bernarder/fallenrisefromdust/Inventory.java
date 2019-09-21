@@ -8,10 +8,6 @@ public class Inventory {
 
 	public Inventory(float maxWeight) {
 		this.maxWeight = maxWeight;
-		putItem(1, 13);
-		putItem(27, 3);
-		putItem(11, 9);
-		dump();
 	}
 
 	void dump() {
@@ -46,13 +42,14 @@ public class Inventory {
 		int existingIdx = getSameCell(id);
 		if (newWeight <= maxWeight) {
 			if (existingIdx != -1)
-				items.get(existingIdx).quantity++;
+				items.get(existingIdx).quantity += quantity;
 			else
 				items.add(item);
 			curWeight = newWeight;
 			if (!silent)
-				MadSand.print("You got " + Item.queryToName(":" + id + "/" + quantity));
+				MadSand.print("You got " + Item.queryToName(id + "/" + quantity));
 			Utils.out("ITEM PUT " + id + " " + quantity);
+			dump();
 			return true;
 		}
 		return false;
@@ -68,8 +65,11 @@ public class Inventory {
 			return false;
 		else {
 			curWeight -= new Item(id, quantity).getWeight();
-			if (--items.get(idx).quantity <= 0)
+			if ((items.get(idx).quantity - quantity) <= 0)
 				items.remove(idx);
+			else
+				items.get(idx).quantity -= quantity;
+			dump();
 			return true;
 		}
 	}

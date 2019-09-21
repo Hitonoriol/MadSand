@@ -1,5 +1,7 @@
 package ru.bernarder.fallenrisefromdust;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 import ru.bernarder.fallenrisefromdust.strings.InventoryNames;
 
 public class Item {
@@ -34,6 +36,17 @@ public class Item {
 		id = Integer.parseInt(blocks[0]);
 		quantity = Integer.parseInt(blocks[1]);
 		loadProperties();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Item))
+			return false;
+		if (obj == this)
+			return true;
+
+		Item rhs = (Item) obj;
+		return new EqualsBuilder().append(id, rhs.id).isEquals();
 	}
 
 	Item reinit(int id, int q) {

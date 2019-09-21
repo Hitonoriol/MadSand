@@ -34,7 +34,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 	static String gameVrf;
 
 	static int QUESTS = 0;
-	static int day = 1;
 
 	static boolean dontlisten = false;
 
@@ -42,12 +41,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 	static int wclickx = 0;
 	static int wclicky = 0;
 
-	static int worldtime = 12;
-	static int lastpass = 0;
-	static int TURNSTOCHANGE = 12;
-
-	public static boolean buyflag = false;
-	public static boolean tradeflag = false;
 	public String resp;
 	static String[] raw;
 	static String[] info;
@@ -88,12 +81,12 @@ public class MadSand extends com.badlogic.gdx.Game {
 
 	static final int TREESDENSITY = 30;
 	static final int BOULDERDENSITY = 3;
-	static final int EASTERS = 2;			//TODO move worldgen params to .xml
+	static final int EASTERS = 2; // TODO move worldgen params to .xml
 	static final int BUSHDENSITY = 20;
 	static final int CACTDENS = 35;
 	static final int MAXOREFIELDSIZE = 10;
 	static boolean renderc = false;
-	
+
 	static String WORLDNAME = "My world";
 
 	public static int[] craftableid;
@@ -508,7 +501,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 			}
 			Gdx.input.setInputProcessor(Gui.overlay);
 			Utils.checkFocus();
-			if (Gui.overlay.getKeyboardFocus() != Gui.msgf && !charcrt) {
+			if (Gui.overlay.getKeyboardFocus() != Gui.inputField && !charcrt) {
 				Utils.updMouseCoords();
 				Utils.mouseMovement();
 				Utils.KeyCheck();
@@ -541,10 +534,10 @@ public class MadSand extends com.badlogic.gdx.Game {
 			Utils.InvKeyCheck();
 			Utils.inInvKeyCheck();
 			this.invbatch.end();
-			if (!tradeflag) {
-				Gui.overlay.act();
-				Gui.overlay.draw();
-			}
+
+			Gui.overlay.act();
+			Gui.overlay.draw();
+
 		} else if (state.equals(GameState.BUY)) {
 			// TODO: Trade menu
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);

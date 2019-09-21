@@ -329,7 +329,6 @@ public class Utils {
 				MadSand.state = GameState.GAME;
 				Gui.mousemenu.setVisible(true);
 				invent = false;
-				MadSand.tradeflag = false;
 			} else {
 				Gui.gamecontext.setVisible(false);
 				MadSand.contextopened = false;
@@ -348,14 +347,14 @@ public class Utils {
 	}
 
 	public static void inInvKeyCheck() {
-		//TODO remove dis
+		// TODO remove dis
 		if (Gdx.input.isKeyJustPressed(66)) {
 			inventoryAction();
 		}
 	}
 
 	public static void inventoryAction() {
-		//TODO
+		// TODO
 	}
 
 	public static void isInFront() {
@@ -544,9 +543,9 @@ public class Utils {
 	}
 
 	public static void passHour() {
-		MadSand.worldtime += 1;
-		if (((MadSand.worldtime >= 0) && (MadSand.worldtime <= 5))
-				|| ((MadSand.worldtime >= 21) && (MadSand.worldtime <= 23))) {
+		World.worldtime += 1;
+		if (((World.worldtime >= 0) && (World.worldtime <= 5))
+				|| ((World.worldtime >= 21) && (World.worldtime <= 23))) {
 			// spawn mobs
 		}
 	}
@@ -555,10 +554,10 @@ public class Utils {
 		tileDmg();
 		passHour();
 		CropLayer.updCrops();
-		if (MadSand.worldtime == 24)
-			MadSand.worldtime = 0;
-		if (((MadSand.worldtime >= 0) && (MadSand.worldtime <= 5))
-				|| ((MadSand.worldtime >= 21) && (MadSand.worldtime <= 23))) {
+		if (World.worldtime == 24)
+			World.worldtime = 0;
+		if (((World.worldtime >= 0) && (World.worldtime <= 5))
+				|| ((World.worldtime >= 21) && (World.worldtime <= 23))) {
 			Gui.darkness.setVisible(true);
 		} else {
 			Gui.darkness.setVisible(false);
@@ -643,7 +642,7 @@ public class Utils {
 					.setText("Tile: " + Tiles.name.get(MadSand.world.getCurLoc().getTile(MadSand.wmx, MadSand.wmy).id));
 			Gui.mouselabel[2].setText("Object: " + " ()");
 			Gui.mouselabel[3].setText("Creature: " + " ()");
-			Gui.mouselabel[4].setText("Turn: " + MadSand.turn + "\nWorld time: " + MadSand.worldtime
+			Gui.mouselabel[4].setText("Turn: " + MadSand.turn + "\nWorld time: " + World.worldtime
 					+ "\nPlayer position: (" + MadSand.player.x + ", " + MadSand.player.y + ")\nStamina: "
 					+ Math.round(MadSand.player.stamina));
 		} catch (Exception e) {
@@ -689,47 +688,24 @@ public class Utils {
 	}
 
 	public void checkMsgKeys() {
-		if (Gdx.input.isKeyJustPressed(66)) {
+		if (Gdx.input.isKeyJustPressed(Keys.ENTER)) {
 			MadSand.state = GameState.GAME;
 		}
 	}
 
 	public static void checkFocus() {
-		if (Gdx.input.isKeyJustPressed(48)) {
-			Gui.overlay.setKeyboardFocus(Gui.msgf);
+		if (Gdx.input.isKeyJustPressed(Keys.T)) {
+			Gui.overlay.setKeyboardFocus(Gui.inputField);
 		}
-
-		if ((Gdx.input.isKeyJustPressed(66)) && (Gui.overlay.getKeyboardFocus() == Gui.msgf)
-				&& (!Gui.msgf.getText().trim().equals(""))) {
-			if ((admin) || (tester)) {
-				try {
-					if (Gui.msgf.getText().split(" ")[0].equals("give")) {
-						MadSand.player.inventory.putItem(new Integer(Gui.msgf.getText().split(" ")[1]).intValue(),
-								new Integer(Gui.msgf.getText().split(" ")[2]).intValue(), true);
-						MadSand.print("Obtained " + Gui.msgf.getText().split(" ")[2] + " "
-								+ InventoryNames.name.get(new Integer(Gui.msgf.getText().split(" ")[1])));
-					} else if (Gui.msgf.getText().equalsIgnoreCase("erase")) {
-						MadSand.world.clearCurLoc();
-					} else if (Gui.msgf.getText().split(" ")[0].equals("exec")) {
-						BuildScript
-								.execute(GameSaver.getExternalNl("MadSand_Saves" + Gui.msgf.getText().split(" ")[1]));
-					} else if (Gui.msgf.getText().split(" ")[0].equals("spawn")) {
-						MadSand.print("Spawned mob");
-					} else if (Gui.msgf.getText().split(" ")[0].equals("despawn")) {
-						MadSand.print("Despawned mob");
-
-					} else if (Gui.msgf.getText().split(" ")[0].equals("help")) {
-						MadSand.print(
-								"give <id> <quantity>\nerase\nexec <scriptname>\nspawn <mobid> <x> <y>\ndespawn <x> <y>");
-					} else {
-						MadSand.print("[GREY]No such command! Type 'help' for command list.[WHITE]");
-					}
-				} catch (Exception e) {
-					MadSand.print("Syntax error");
-				}
-				Gui.msgf.setText("");
-				Gui.overlay.unfocus(Gui.msgf);
+		if ((Gdx.input.isKeyJustPressed(Keys.ENTER)) && (Gui.overlay.getKeyboardFocus() == Gui.inputField) && tester) {
+			String cmd = Gui.inputField.getText().trim();
+			try {
+				BuildScript.execute(cmd);
+			} catch (Exception e) {
+				MadSand.print("Syntax error");
 			}
+			Gui.inputField.setText("");
+			Gui.overlay.unfocus(Gui.inputField);
 		}
 	}
 }

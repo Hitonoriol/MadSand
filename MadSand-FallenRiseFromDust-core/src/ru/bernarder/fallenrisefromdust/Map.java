@@ -80,6 +80,8 @@ public class Map {
 
 	boolean addTile(int x, int y, int id) {
 		if (correctCoords(coords.set(x, y))) {
+			if (mapTiles.containsKey(coords))
+				mapTiles.remove(coords);
 			mapTiles.put(coords, new Tile(id));
 			return true;
 		} else
@@ -135,8 +137,15 @@ public class Map {
 		}
 	}
 
+	void delObject(int x, int y) {
+		if (correctCoords(coords.set(x, y)))
+			mapObjects.remove(coords);
+	}
+
 	boolean addObject(int x, int y, int id) {
 		if (correctCoords(coords.set(x, y))) {
+			if (mapObjects.containsKey(coords))
+				mapObjects.remove(coords);
 			mapObjects.put(coords, new MapObject(id));
 			addRendMasks(x, y, id);
 			return true;
