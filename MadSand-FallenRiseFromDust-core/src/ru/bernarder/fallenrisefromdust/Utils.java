@@ -6,10 +6,9 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
@@ -36,45 +35,45 @@ import org.xml.sax.InputSource;
 
 public class Utils {
 	public static boolean tester = true;
-	public int ubound;
-	public int lbound;
+	public static int ubound;
+	public static int lbound;
 	public static float x = MadSand.player.x * 33;
 	public static float y = MadSand.player.y * 33;
 	public static Vector2 ppos;
 	public static boolean invent = false;
 	public static float pspeed = 33.0F;
-	com.badlogic.gdx.graphics.g2d.SpriteBatch batch;
-	Texture hp;
-	Texture dtex;
-	Texture utex;
-	Texture ltex;
-	Texture rtex;
-	Texture inv;
+	static SpriteBatch batch;
+	static Texture hp;
+	static Texture dtex;
+	static Texture utex;
+	static Texture ltex;
+	static Texture rtex;
+	static Texture inv;
 	static Texture dark;
-	Texture curs;
-	Texture placeholder;
+	static Texture curs;
+	static Texture placeholder;
 	static Sprite cursor;
-	Sprite Splayer;
+	static Sprite Splayer;
 	Texture[] lgt = new Texture[7];
 	static Texture[] item;
-	Texture[] objects;
-	Texture[] tile;
-	Texture[] npc;
+	static Texture[] objects;
+	static Texture[] tile;
+	static Texture[] npc;
 	static boolean admin = true;
-	TextureRegion[] animdown = new TextureRegion[2];
-	TextureRegion[][] tmpAnim;
-	Texture animsheet;
-	TextureRegion[] animup = new TextureRegion[2];
-	TextureRegion[] animleft = new TextureRegion[2];
-	TextureRegion[] animright = new TextureRegion[2];
+	static TextureRegion[] animdown = new TextureRegion[2];
+	static TextureRegion[][] tmpAnim;
+	static Texture animsheet;
+	static TextureRegion[] animup = new TextureRegion[2];
+	static TextureRegion[] animleft = new TextureRegion[2];
+	static TextureRegion[] animright = new TextureRegion[2];
 	static Animation<TextureRegion> uanim;
 	static Animation<TextureRegion> danim;
 	static Animation<TextureRegion> lanim;
-	Texture mapcursor;
+	static Texture mapcursor;
 	public static Random random = new Random();
 	static Animation<TextureRegion> ranim;
 	static int selected;
-	static String RES;
+	static Document resdoc;
 
 	public static Document XMLString(String xml) {
 		try {
@@ -83,15 +82,14 @@ public class Utils {
 			InputSource is = new InputSource(new StringReader(xml));
 			return builder.parse(is);
 		} catch (Exception e) {
-			out("Something has fucked up (" + e.getMessage() + ")");
+			out("Oopsie (" + e.getMessage() + ")");
 			e.printStackTrace(Resource.eps);
 			return null;
 		}
 	}
 
-	static int countKeys(String res, String list) {
+	static int countKeys(Document doc, String list) {
 		try {
-			Document doc = XMLString(res);// dBuilder.parse(fXmlFile);
 			doc.getDocumentElement().normalize();
 			NodeList nList = doc.getElementsByTagName(list);
 			int temp, c = 0;
@@ -108,9 +106,8 @@ public class Utils {
 		}
 	}
 
-	static String getKey(String res, String list, String id, String element) {
+	static String getKey(Document doc, String list, String id, String element) {
 		try {
-			Document doc = XMLString(res);
 			doc.getDocumentElement().normalize();
 			NodeList nList = doc.getElementsByTagName(list);
 			for (int temp = 0; temp < nList.getLength(); temp++) {
@@ -128,125 +125,125 @@ public class Utils {
 		}
 	}
 
-	public void Initf() {
+	public static void Initf() {
 		MadSand.gameVrf = getSHA1(new File(MadSand.RESFILE));
 		out("Resfile hash: " + MadSand.gameVrf);
-		RES = GameSaver.getExternalNl(MadSand.RESFILE);
-		MadSand.QUESTS = countKeys(RES, "quest");
+		resdoc = XMLString(GameSaver.getExternalNl(MadSand.RESFILE));
+		MadSand.QUESTS = countKeys(resdoc, "quest");
 		MadSand.quests = new int[MadSand.QUESTS][2];
-		this.mapcursor = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/cur.png"));
-		this.animsheet = new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/anim.png"));
-		this.tmpAnim = TextureRegion.split(this.animsheet, 35, 74);
-		this.animdown[0] = this.tmpAnim[0][0];
-		this.animdown[1] = this.tmpAnim[0][1];
-		this.animleft[0] = this.tmpAnim[1][0];
-		this.animleft[1] = this.tmpAnim[1][1];
-		this.animright[0] = this.tmpAnim[2][0];
-		this.animright[1] = this.tmpAnim[2][1];
-		this.animup[0] = this.tmpAnim[3][0];
-		this.animup[1] = this.tmpAnim[3][1];
-		uanim = new Animation<TextureRegion>(0.2F, this.animup);
-		danim = new Animation<TextureRegion>(0.2F, this.animdown);
-		lanim = new Animation<TextureRegion>(0.2F, this.animleft);
-		ranim = new Animation<TextureRegion>(0.2F, this.animright);
+		mapcursor = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/cur.png"));
+		animsheet = new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/anim.png"));
+		tmpAnim = TextureRegion.split(animsheet, 35, 74);
+		animdown[0] = tmpAnim[0][0];
+		animdown[1] = tmpAnim[0][1];
+		animleft[0] = tmpAnim[1][0];
+		animleft[1] = tmpAnim[1][1];
+		animright[0] = tmpAnim[2][0];
+		animright[1] = tmpAnim[2][1];
+		animup[0] = tmpAnim[3][0];
+		animup[1] = tmpAnim[3][1];
+		uanim = new Animation<TextureRegion>(0.2F, animup);
+		danim = new Animation<TextureRegion>(0.2F, animdown);
+		lanim = new Animation<TextureRegion>(0.2F, animleft);
+		ranim = new Animation<TextureRegion>(0.2F, animright);
 		com.badlogic.gdx.graphics.Cursor customCursor = Gdx.graphics
 				.newCursor(new com.badlogic.gdx.graphics.Pixmap(Gdx.files.local(MadSand.SAVEDIR + "cursor.png")), 0, 0);
 		Gdx.graphics.setCursor(customCursor);
-		MadSand.LASTITEMID = countKeys(RES, "item");
-		MadSand.CROPS = countKeys(RES, "stages");
+		MadSand.LASTITEMID = countKeys(resdoc, "item");
+		MadSand.CROPS = countKeys(resdoc, "stages");
 
 		out(MadSand.CROPS + " crops");
-		MadSand.LASTOBJID = countKeys(RES, "object");
+		MadSand.LASTOBJID = countKeys(resdoc, "object");
 		out(MadSand.LASTOBJID + " objects");
 		CropLayer.stages = new String[MadSand.LASTOBJID];
-		MadSand.LASTTILEID = countKeys(RES, "tile");
-		MadSand.NPCSPRITES = countKeys(RES, "npc");
-		MadSand.CRAFTABLES = countKeys(RES, "recipe");
+		MadSand.LASTTILEID = countKeys(resdoc, "tile");
+		MadSand.NPCSPRITES = countKeys(resdoc, "npc");
+		MadSand.CRAFTABLES = countKeys(resdoc, "recipe");
 		out(MadSand.CRAFTABLES + " craftable items");
 		out(MadSand.LASTTILEID + " tiles");
 		out(MadSand.NPCSPRITES + " npcs");
 		MadSand.craftableid = new int[MadSand.CRAFTABLES];
 		item = new Texture[MadSand.LASTITEMID + 1];
-		this.objects = new Texture[MadSand.LASTOBJID];
-		this.tile = new Texture[MadSand.LASTTILEID + 1];
-		this.npc = new Texture[MadSand.NPCSPRITES + 1];
-		int counter = 1, cc = 0;
-		while (counter <= MadSand.LASTITEMID) {
+		objects = new Texture[MadSand.LASTOBJID];
+		tile = new Texture[MadSand.LASTTILEID + 1];
+		npc = new Texture[MadSand.NPCSPRITES + 1];
+		int counter = 0, cc = 0;
+		while (counter < MadSand.LASTITEMID) {
 			item[counter] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "inv/" + counter + ".png"));
-			if (!getKey(RES, "item", "" + counter, "recipe").equals("-1")) {
+			if (!getKey(resdoc, "item", "" + counter, "recipe").equals("-1")) {
 				MadSand.craftableid[cc] = counter;
 				cc++;
 			}
-			if (!getKey(RES, "item", "" + counter, "stages").equals("-1")) {
-				CropLayer.stages[counter] = getKey(RES, "item", "" + counter, "stages");
+			if (!getKey(resdoc, "item", "" + counter, "stages").equals("-1")) {
+				CropLayer.stages[counter] = getKey(resdoc, "item", "" + counter, "stages");
 			}
-			InventoryNames.name.put(counter, getKey(RES, "item", "" + counter, "name"));
-			InventoryNames.type.put(counter, Integer.parseInt(getKey(RES, "item", "" + counter, "type")));
-			InventoryNames.altObject.put(counter, Integer.parseInt(getKey(RES, "item", "" + counter, "altobject")));
-			InventoryNames.cost.put(counter, Integer.parseInt(getKey(RES, "item", "" + counter, "cost")));
+			InventoryNames.name.put(counter, getKey(resdoc, "item", "" + counter, "name"));
+			InventoryNames.type.put(counter, Integer.parseInt(getKey(resdoc, "item", "" + counter, "type")));
+			InventoryNames.altObject.put(counter, Integer.parseInt(getKey(resdoc, "item", "" + counter, "altobject")));
+			InventoryNames.cost.put(counter, Integer.parseInt(getKey(resdoc, "item", "" + counter, "cost")));
 			InventoryNames.craftable.put(counter,
-					Integer.parseInt(getKey(RES, "item", "" + counter, "craftable")) != 0);
-			InventoryNames.recipe.put(counter, getKey(RES, "item", "" + counter, "recipe"));
-			InventoryNames.heal.put(counter, getKey(RES, "item", "" + counter, "heal"));
+					Integer.parseInt(getKey(resdoc, "item", "" + counter, "craftable")) != 0);
+			InventoryNames.recipe.put(counter, getKey(resdoc, "item", "" + counter, "recipe"));
+			InventoryNames.heal.put(counter, getKey(resdoc, "item", "" + counter, "heal"));
 			counter++;
 		}
 		counter = 0;
 		Tuple<Integer, String> tmp = new Tuple<Integer, String>(0, "");
 		while (counter < MadSand.LASTOBJID) {
-			this.objects[counter] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "obj/" + counter + ".png"));
-			Objects.name.put(counter, getKey(RES, "object", "" + counter, "name"));
-			Objects.hp.put(counter, Integer.parseInt(getKey(RES, "object", "" + counter, "tough")));
-			Objects.altitems.put(tmp.set(counter, "altitem"), getKey(RES, "object", "" + counter, "altitem"));
-			Objects.altitems.put(tmp.set(counter, "hand"), getKey(RES, "object", "" + counter, "hand"));
-			Objects.altitems.put(tmp.set(counter, "skillbonus"), getKey(RES, "object", "" + counter, "skillbonus"));
-			Objects.vRendMasks.put(counter, Integer.parseInt(getKey(RES, "object", "" + counter, "vmask")));
-			Objects.hRendMasks.put(counter, Integer.parseInt(getKey(RES, "object", "" + counter, "hmask")));
+			objects[counter] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "obj/" + counter + ".png"));
+			Objects.name.put(counter, getKey(resdoc, "object", "" + counter, "name"));
+			Objects.hp.put(counter, Integer.parseInt(getKey(resdoc, "object", "" + counter, "tough")));
+			Objects.altitems.put(tmp.set(counter, "altitem"), getKey(resdoc, "object", "" + counter, "altitem"));
+			Objects.altitems.put(tmp.set(counter, "hand"), getKey(resdoc, "object", "" + counter, "hand"));
+			Objects.altitems.put(tmp.set(counter, "skillbonus"), getKey(resdoc, "object", "" + counter, "skillbonus"));
+			Objects.vRendMasks.put(counter, Integer.parseInt(getKey(resdoc, "object", "" + counter, "vmask")));
+			Objects.hRendMasks.put(counter, Integer.parseInt(getKey(resdoc, "object", "" + counter, "hmask")));
 			counter++;
 		}
 		counter = 0;
 		while (counter < MadSand.LASTTILEID) {
-			this.tile[counter] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "terrain/" + counter + ".png"));
-			Tiles.name.put(counter, getKey(RES, "tile", "" + counter, "name"));
-			Tiles.damage.put(counter, Integer.parseInt(getKey(RES, "tile", "" + counter, "damage")));
+			tile[counter] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "terrain/" + counter + ".png"));
+			Tiles.name.put(counter, getKey(resdoc, "tile", "" + counter, "name"));
+			Tiles.damage.put(counter, Integer.parseInt(getKey(resdoc, "tile", "" + counter, "damage")));
 			counter++;
 		}
 		counter = 0;
 		while (counter < MadSand.NPCSPRITES) {
-			this.npc[counter] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "npc/" + counter + ".png"));
-			getKey(RES, "npc", "" + counter, "hp");
-			getKey(RES, "npc", "" + counter, "maxhp");
-			getKey(RES, "npc", "" + counter, "rewardexp");
-			getKey(RES, "npc", "" + counter, "drop");
-			getKey(RES, "npc", "" + counter, "name");
-			getKey(RES, "npc", "" + counter, "atk");
-			getKey(RES, "npc", "" + counter, "accuracy");
-			getKey(RES, "npc", "" + counter, "friendly");
-			getKey(RES, "npc", "" + counter, "fraction");
-			getKey(RES, "npc", "" + counter, "spawnonce");
-			getKey(RES, "npc", "" + counter, "qids");
+			npc[counter] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "npc/" + counter + ".png"));
+			getKey(resdoc, "npc", "" + counter, "hp");
+			getKey(resdoc, "npc", "" + counter, "maxhp");
+			getKey(resdoc, "npc", "" + counter, "rewardexp");
+			getKey(resdoc, "npc", "" + counter, "drop");
+			getKey(resdoc, "npc", "" + counter, "name");
+			getKey(resdoc, "npc", "" + counter, "atk");
+			getKey(resdoc, "npc", "" + counter, "accuracy");
+			getKey(resdoc, "npc", "" + counter, "friendly");
+			getKey(resdoc, "npc", "" + counter, "fraction");
+			getKey(resdoc, "npc", "" + counter, "spawnonce");
+			getKey(resdoc, "npc", "" + counter, "qids");
 			counter++;
 		}
 
-		this.hp = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/heart.png"));
+		hp = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/heart.png"));
 		dark = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/darkness.png"));
-		this.curs = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/cursor.png"));
-		this.placeholder = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/placeholder.png"));
-		this.inv = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/invsheet.png"));
+		curs = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/cursor.png"));
+		placeholder = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/placeholder.png"));
+		inv = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/invsheet.png"));
 		ppos = new Vector2(x, y);
 		com.badlogic.gdx.files.FileHandle pfhandle = Gdx.files.local(MadSand.SAVEDIR + "player/d1.png");
-		this.batch = new com.badlogic.gdx.graphics.g2d.SpriteBatch();
-		this.dtex = new Texture(pfhandle);
+		batch = new com.badlogic.gdx.graphics.g2d.SpriteBatch();
+		dtex = new Texture(pfhandle);
 		pfhandle = Gdx.files.local(MadSand.SAVEDIR + "player/u1.png");
-		this.utex = new Texture(pfhandle);
+		utex = new Texture(pfhandle);
 		pfhandle = Gdx.files.local(MadSand.SAVEDIR + "player/r1.png");
-		this.rtex = new Texture(pfhandle);
+		rtex = new Texture(pfhandle);
 		pfhandle = Gdx.files.local(MadSand.SAVEDIR + "player/l1.png");
-		this.ltex = new Texture(pfhandle);
-		cursor = new Sprite(this.curs);
-		this.Splayer = new Sprite(this.dtex);
+		ltex = new Texture(pfhandle);
+		cursor = new Sprite(curs);
+		Splayer = new Sprite(dtex);
 	}
 
-	public String getItem(int id) {
+	public static String getItem(int id) {
 		return InventoryNames.name.get(id);
 	}
 
@@ -260,7 +257,7 @@ public class Utils {
 		}
 		if ((ptile == 6) || (ptile == 16)) {
 			MadSand.print("You entered the dungeon.");
-			MadSand.curlayer += 1;
+			MadSand.world.curlayer += 1;
 			MadSand.world.delObj(MadSand.player.x, MadSand.player.y);
 		}
 		if (id == 6) {
@@ -323,7 +320,7 @@ public class Utils {
 
 	}
 
-	public void InvKeyCheck() {
+	public static void InvKeyCheck() {
 		if (Gdx.input.isKeyJustPressed(33)) {
 			if (invent) {
 				funcButtonsSet(false);
@@ -350,7 +347,7 @@ public class Utils {
 		Gui.exitButton.setVisible(visible);
 	}
 
-	public void inInvKeyCheck() {
+	public static void inInvKeyCheck() {
 		//TODO remove dis
 		if (Gdx.input.isKeyJustPressed(66)) {
 			inventoryAction();
@@ -361,14 +358,14 @@ public class Utils {
 		//TODO
 	}
 
-	public void isInFront() {
+	public static void isInFront() {
 		int obj = MadSand.world.getObjID(MadSand.player.x, MadSand.player.y, MadSand.player.look);
 		if ((obj != 666) && (obj != 0)) {
 			MadSand.print("You see: " + Objects.name.get(obj));
 		}
 	}
 
-	public void KeyCheck() {
+	public static void KeyCheck() {
 		if (Gdx.input.isKeyJustPressed(Keys.Q)) {
 			Gui.showStatsWindow();
 		}
@@ -415,14 +412,14 @@ public class Utils {
 		if (Gdx.input.isKeyJustPressed(Keys.RIGHT) && (!MadSand.stepping)) {
 			turn(Direction.RIGHT);
 		}
-		if (Gdx.input.isKeyJustPressed(Keys.N) && MadSand.curxwpos != 0 && MadSand.curywpos != 0) {
-			if (MadSand.player.x == MadSand.MAPSIZE - 1 && MadSand.player.look == Direction.RIGHT)
+		if (Gdx.input.isKeyJustPressed(Keys.N) && MadSand.world.curxwpos != 0 && MadSand.world.curywpos != 0) {
+			if (MadSand.player.x == World.MAPSIZE - 1 && MadSand.player.look == Direction.RIGHT)
 				gotoSector("right");
-			if (MadSand.player.y == MadSand.MAPSIZE - 1 && MadSand.player.look == Direction.UP)
+			if (MadSand.player.y == World.MAPSIZE - 1 && MadSand.player.look == Direction.UP)
 				gotoSector("up");
-			if (MadSand.player.x == MadSand.BORDER && MadSand.player.look == Direction.LEFT)
+			if (MadSand.player.x == World.BORDER && MadSand.player.look == Direction.LEFT)
 				gotoSector("left");
-			if (MadSand.player.y == MadSand.BORDER && MadSand.player.look == Direction.DOWN)
+			if (MadSand.player.y == World.BORDER && MadSand.player.look == Direction.DOWN)
 				gotoSector("down");
 
 		}
@@ -434,10 +431,10 @@ public class Utils {
 			MadSand.world.Generate();
 		}
 		if ((Gdx.input.isKeyPressed(129)) && (Gdx.input.isKeyPressed(20)) && (tester)) {
-			MadSand.curlayer = 1;
+			MadSand.world.curlayer = 1;
 		}
 		if ((Gdx.input.isKeyPressed(129)) && (Gdx.input.isKeyPressed(19)) && (tester)) {
-			MadSand.curlayer = 0;
+			MadSand.world.curlayer = 0;
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.F11)) {
 			Boolean fullScreen = Boolean.valueOf(Gdx.graphics.isFullscreen());
@@ -449,7 +446,7 @@ public class Utils {
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
 			Gui.resumeButton.setVisible(true);
-			Gdx.input.setInputProcessor(Gui.stage);
+			Gdx.input.setInputProcessor(Gui.menu);
 			MadSand.state = GameState.NMENU;
 		}
 		if ((Gdx.input.isKeyJustPressed(Keys.G)) && (tester)) {
@@ -497,7 +494,7 @@ public class Utils {
 		}
 	}
 
-	void mouseMovement() {
+	static void mouseMovement() {
 		if ((Gdx.input.isButtonPressed(0)) && (MadSand.state == GameState.GAME) && (!MadSand.stepping)
 				&& (!MadSand.contextopened)) {
 			if (MadSand.wmx > MadSand.player.x) {
@@ -524,20 +521,20 @@ public class Utils {
 		}
 	}
 
-	public void turn(Direction dir) {
+	public static void turn(Direction dir) {
 		MadSand.player.look = dir;
 		if (!MadSand.stepping) {
 			if (dir == Direction.UP) {
-				this.Splayer = new Sprite(this.utex);
+				Splayer = new Sprite(utex);
 			}
 			if (dir == Direction.DOWN) {
-				this.Splayer = new Sprite(this.dtex);
+				Splayer = new Sprite(dtex);
 			}
 			if (dir == Direction.LEFT) {
-				this.Splayer = new Sprite(this.ltex);
+				Splayer = new Sprite(ltex);
 			}
 			if (dir == Direction.RIGHT) {
-				this.Splayer = new Sprite(this.rtex);
+				Splayer = new Sprite(rtex);
 			}
 		}
 	}
@@ -577,7 +574,7 @@ public class Utils {
 		}
 	}
 
-	public void move(Direction dir) {
+	public static void move(Direction dir) {
 		if ((!MadSand.player.isCollision(dir, 0)) && (MadSand.dialogflag)) {
 			if ((dir == Direction.UP) && (!VerifyPosition(dir))) {
 				MadSand.player.y += 1;
@@ -595,20 +592,20 @@ public class Utils {
 				MadSand.player.x += 1;
 				ppos.x += 33.0F;
 			}
-			if (MadSand.player.x == MadSand.MAPSIZE - 1 || MadSand.player.y == MadSand.MAPSIZE - 1
-					|| MadSand.player.x == MadSand.BORDER || MadSand.player.y == MadSand.BORDER) {
+			if (MadSand.player.x == World.MAPSIZE - 1 || MadSand.player.y == World.MAPSIZE - 1
+					|| MadSand.player.x == World.BORDER || MadSand.player.y == World.BORDER) {
 				MadSand.print("Press [GRAY]N[WHITE] to move to the next sector.");
 			}
 			MadSand.stepping = true;
 		}
 	}
 
-	public boolean VerifyPosition(Direction dir) {
+	public static boolean VerifyPosition(Direction dir) {
 		boolean ret = false;
-		if (MadSand.player.x >= MadSand.MAPSIZE - 1 && (dir == Direction.RIGHT)) {
+		if (MadSand.player.x >= World.MAPSIZE - 1 && (dir == Direction.RIGHT)) {
 			ret = true;
 		}
-		if (MadSand.player.y >= MadSand.MAPSIZE - 1 && (dir == Direction.UP)) {
+		if (MadSand.player.y >= World.MAPSIZE - 1 && (dir == Direction.UP)) {
 			ret = true;
 		}
 		if (MadSand.player.x <= 1 && (dir == Direction.LEFT)) {
@@ -627,7 +624,7 @@ public class Utils {
 
 	public static String gotodir = "";
 
-	public void gotoSector(String dir) {
+	public static void gotoSector(String dir) {
 		gotodir = dir;
 		MadSand.state = GameState.GOT;
 		new ThreadedUtils().gotoSector.start();
@@ -668,24 +665,6 @@ public class Utils {
 		}
 	}
 
-	public boolean VerInvPos(String dir) {
-		boolean ret = false;
-		int b = 480;
-		if ((MadSand.cx >= 290) && (dir == "right")) {
-			ret = true;
-		}
-		if ((MadSand.cy > b - 80) && (dir == "up")) {
-			ret = true;
-		}
-		if ((MadSand.cx <= 80) && (dir == "left")) {
-			ret = true;
-		}
-		if ((MadSand.cy < 80) && (dir == "down")) {
-			ret = true;
-		}
-		return ret;
-	}
-
 	static String getSHA1(File file) {
 		try {
 			MessageDigest digest = MessageDigest.getInstance("SHA-1");
@@ -715,7 +694,7 @@ public class Utils {
 		}
 	}
 
-	public void checkFocus() {
+	public static void checkFocus() {
 		if (Gdx.input.isKeyJustPressed(48)) {
 			Gui.overlay.setKeyboardFocus(Gui.msgf);
 		}

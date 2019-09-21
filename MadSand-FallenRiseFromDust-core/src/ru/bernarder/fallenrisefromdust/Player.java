@@ -8,14 +8,14 @@ import ru.bernarder.fallenrisefromdust.enums.*;
 
 public class Player {
 
-	public int x = new Random().nextInt(MadSand.MAPSIZE);
-	public int y = new Random().nextInt(MadSand.MAPSIZE);
-	
+	public int x = new Random().nextInt(World.MAPSIZE);
+	public int y = new Random().nextInt(World.MAPSIZE);
+
 	public int hand = 0;
 	public int accur = 2; // ACCUR
 	public int hp = 200; // CONSTITUTION*10
 	public int mhp = 200;
-	public int atk = 3;// ATK
+	public int str = 3;// ATK
 	public int luck = 1; // LUCK
 	public int dexterity = 1; // DEX
 	public int intelligence = 1; // INT
@@ -50,6 +50,10 @@ public class Player {
 	public Player(String name) {
 		this.name = name;
 	}
+	
+	void reinit() {
+		inventory = new Inventory(str * 50);
+	}
 
 	public void checkHands(int id) {
 		if (inventory.getSameCell(id, 1) == -1)
@@ -62,7 +66,7 @@ public class Player {
 		return r;
 	}
 
-	boolean interact(final Direction direction) {		//TODO: BuildScript onInteract events
+	boolean interact(final Direction direction) { // TODO: BuildScript onInteract events
 		// TODO
 		return true;
 	}
@@ -78,7 +82,7 @@ public class Player {
 	}
 
 	public static boolean isCollisionMask(int x, int y) {
-		if (x < MadSand.MAPSIZE && y < MadSand.MAPSIZE) {
+		if (x < World.MAPSIZE && y < World.MAPSIZE) {
 			if (MadSand.world.getCurLoc().getObject(x, y).id == 666) {
 				return true;
 			}
@@ -123,7 +127,7 @@ public class Player {
 			exp = 0;
 			requiredexp *= 2;
 			MadSand.print("You've leveled up!");
-			atk += 1;
+			str += 1;
 			mhp += 50;
 			maxstamina += 15;
 		}

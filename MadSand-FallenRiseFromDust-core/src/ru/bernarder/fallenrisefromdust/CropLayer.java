@@ -1,7 +1,7 @@
 package ru.bernarder.fallenrisefromdust;
 
 public class CropLayer {
-	public static int[][][] cropLayer = new int[MadSand.MAPSIZE + MadSand.BORDER][MadSand.MAPSIZE + MadSand.BORDER][2];
+	public static int[][][] cropLayer = new int[World.MAPSIZE + World.BORDER][World.MAPSIZE + World.BORDER][2];
 	public static String[] stages;
 
 	public static void putCrop(int x, int y, int id) {
@@ -29,8 +29,8 @@ public class CropLayer {
 	public static void updCrops() {
 		int i = 0;
 		int ii = 0;
-		while (i < MadSand.MAPSIZE + MadSand.BORDER) {
-			while (ii < MadSand.MAPSIZE + MadSand.BORDER) {
+		while (i < World.MAPSIZE + World.BORDER) {
+			while (ii < World.MAPSIZE + World.BORDER) {
 				if ((cropLayer[i][ii][0] >= 40)) {
 					if (MadSand.worldtime - cropLayer[i][ii][1] < 10
 							&& MadSand.world.getCurLoc().getObject(i, ii).id != Integer

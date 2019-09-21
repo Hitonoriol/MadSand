@@ -19,6 +19,10 @@ public class Item {
 		loadProperties();
 	}
 
+	public Item() {
+		this(0);
+	}
+
 	public Item(int id, int q) {
 		this(id);
 		this.quantity = q;
@@ -53,7 +57,7 @@ public class Item {
 		return id + ITEM_DELIM + quantity;
 	}
 
-	double getMass() {
+	double getWeight() {
 		return weight * quantity;
 	}
 

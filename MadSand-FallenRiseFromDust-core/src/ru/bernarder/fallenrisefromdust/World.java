@@ -21,12 +21,17 @@ import ru.bernarder.fallenrisefromdust.enums.Direction;
 public class World {
 	Map nullLoc = new Map(0, 0);
 	private int xsz, ysz;
+	public int curywpos = 5;
+	public int curxwpos = 5;
+	public int curlayer = 0;
+	static final int BORDER = 1;
+	static int MAPSIZE = 100;
 	HashMap<MapID, Map> WorldLoc = new HashMap<MapID, Map>();
 
 	public World(int sz) {
 		this.xsz = sz;
 		this.ysz = sz;
-		if (!createBasicLoc(new Pair(5, 5), 100, 100))
+		if (!createBasicLoc(new Pair(curxwpos, curywpos), MAPSIZE, MAPSIZE))
 			System.exit(-1);
 	}
 
@@ -43,7 +48,7 @@ public class World {
 	}
 
 	Map getLoc(Pair wc, int layer, int id) {
-		//Utils.out("GetLoc " + wc.x + " " + wc.y + " Layer " + layer + "Id " + id);
+		// Utils.out("GetLoc " + wc.x + " " + wc.y + " Layer " + layer + "Id " + id);
 		MapID loc = new MapID(wc, layer, id);
 		if (locExists(loc)) {
 			return WorldLoc.get(loc);
@@ -56,12 +61,13 @@ public class World {
 	}
 
 	Map getCurLoc() {
-		//Utils.out("Getloc wx " + MadSand.curxwpos + " wy " + MadSand.curywpos + " layer " +MadSand.curlayer);
-		return getLoc(MadSand.curxwpos, MadSand.curywpos, MadSand.curlayer);
+		// Utils.out("Getloc wx " + MadSand.curxwpos + " wy " + MadSand.curywpos + "
+		// layer " +MadSand.curlayer);
+		return getLoc(curxwpos, curywpos, curlayer);
 	}
 
 	Map getCurLoc(int layer) {
-		return getLoc(MadSand.curxwpos, MadSand.curywpos, layer);
+		return getLoc(curxwpos, curywpos, layer);
 	}
 
 	Map putLoc(Pair wc, int layer, int id, Map loc) {
@@ -89,7 +95,7 @@ public class World {
 		try {
 			clearCurLoc();
 			Utils.random = new Random();
-			if ((MadSand.curxwpos == 5) && (MadSand.curywpos == 5))
+			if ((curxwpos == 5) && (curywpos == 5))
 				biome = 0;
 			else
 				biome = Utils.random.nextInt(MadSand.BIOMES);
@@ -99,7 +105,7 @@ public class World {
 			else
 				genDungeon();
 			genObjByTemplate();
-			if ((MadSand.curxwpos == 5) && (MadSand.curywpos == 5))
+			if ((curxwpos == 5) && (curywpos == 5))
 				MadSand.setUpScene();
 			Utils.out("End of WorldGen!");
 		} catch (Exception e) {
@@ -111,7 +117,7 @@ public class World {
 
 	public void genTerrain() {
 		Utils.out("Generating terrain!");
-		final Grid grid = new Grid(MadSand.MAPSIZE + MadSand.BORDER);
+		final Grid grid = new Grid(World.MAPSIZE + World.BORDER);
 		final NoiseGenerator noiseGenerator = new NoiseGenerator();
 		noiseGenerator.setRadius(4);
 		noiseGenerator.setModifier(1f);
@@ -121,8 +127,8 @@ public class World {
 		int i = 0;
 		int ii = 0;
 
-		while (i < MadSand.MAPSIZE + 1) {
-			while (ii < MadSand.MAPSIZE + 1) {
+		while (i < World.MAPSIZE + 1) {
+			while (ii < World.MAPSIZE + 1) {
 				genBiomeTerrain(ii, i);
 				ii++;
 			}
@@ -131,8 +137,8 @@ public class World {
 		}
 		i = 0;
 		ii = 0;
-		while (i < MadSand.MAPSIZE + MadSand.BORDER) {
-			while (ii < MadSand.MAPSIZE + MadSand.BORDER) {
+		while (i < World.MAPSIZE + World.BORDER) {
+			while (ii < World.MAPSIZE + World.BORDER) {
 				if (biome == 0) {
 					if (grid.get(ii, i) >= 0.1f && grid.get(ii, i) <= 0.27f) {
 						getCurLoc().addTile(ii, i, 8);
@@ -153,16 +159,16 @@ public class World {
 
 	public void genDungeon() {
 		Utils.out("Generating dungeon!");
-		final Grid grid = new Grid(MadSand.MAPSIZE);
+		final Grid grid = new Grid(World.MAPSIZE);
 		final DungeonGenerator dungeonGenerator = new DungeonGenerator();
-		dungeonGenerator.setRoomGenerationAttempts(MadSand.MAPSIZE);
+		dungeonGenerator.setRoomGenerationAttempts(World.MAPSIZE);
 		dungeonGenerator.setMaxRoomSize(25);
 		dungeonGenerator.setTolerance(10); // Max difference between width and height.
 		dungeonGenerator.setMinRoomSize(5);
 		dungeonGenerator.generate(grid);
 		int it = 0, iit = 0;
-		while (it < MadSand.MAPSIZE) {
-			while (iit < MadSand.MAPSIZE) {
+		while (it < World.MAPSIZE) {
+			while (iit < World.MAPSIZE) {
 				if (grid.get(iit, it) == 0.0f) {
 					getCurLoc(1).addObject(iit, it, 0);
 					getCurLoc(1).addTile(it, iit, 5);
@@ -188,12 +194,12 @@ public class World {
 		while (a > 0) {
 
 			try {
-				MadSand.curlayer = 1;
-				int x = Utils.random.nextInt(MadSand.MAPSIZE);
-				int y = Utils.random.nextInt(MadSand.MAPSIZE);
+				curlayer = 1;
+				int x = Utils.random.nextInt(World.MAPSIZE);
+				int y = Utils.random.nextInt(World.MAPSIZE);
 				int w = Utils.random.nextInt(MadSand.MAXOREFIELDSIZE) + 1;
 				int h = Utils.random.nextInt(MadSand.MAXOREFIELDSIZE) + 1;
-				if ((x + w < MadSand.MAPSIZE) && (y + h < MadSand.MAPSIZE)) {
+				if ((x + w < World.MAPSIZE) && (y + h < World.MAPSIZE)) {
 					int id = ores[Utils.random.nextInt(ores.length)];
 					int k = 0;
 					int kk = 0;
@@ -206,7 +212,7 @@ public class World {
 						kk++;
 					}
 				}
-				MadSand.curlayer = 0;
+				curlayer = 0;
 
 			} catch (Exception e) {
 				e.printStackTrace(Resource.eps);
@@ -299,8 +305,8 @@ public class World {
 		biome = 0;
 		int i = 0;
 		int ii = 0;
-		while (i < MadSand.MAPSIZE + MadSand.BORDER) {
-			while (ii < MadSand.MAPSIZE + MadSand.BORDER) {
+		while (i < World.MAPSIZE + World.BORDER) {
+			while (ii < World.MAPSIZE + World.BORDER) {
 				putMapTile(ii, i, 1, 5);
 				addObj(ii, i, 1, 13);
 				addObj(i, ii, 0);
@@ -366,7 +372,7 @@ public class World {
 	}
 
 	public int rend(int x, int y) {
-		if (x >= 0 && y >= 0 && x < MadSand.MAPSIZE && y < MadSand.MAPSIZE) {
+		if (x >= 0 && y >= 0 && x < World.MAPSIZE && y < World.MAPSIZE) {
 			int tile = getCurLoc().getTile(x, y).id;
 			if (tile >= 0 && tile <= MadSand.LASTTILEID)
 				return tile;

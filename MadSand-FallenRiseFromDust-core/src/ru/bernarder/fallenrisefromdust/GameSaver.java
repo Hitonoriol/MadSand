@@ -69,8 +69,8 @@ public class GameSaver {
 		if (!new File("MadSand_Saves/scripts").exists()) {
 			new File("MadSand_Saves/scripts").mkdirs();
 		}
-		String curf = "MadSand_Saves/worlds/" + filename + "/" + "sector-" + MadSand.curxwpos + "-" + MadSand.curywpos
-				+ ".mws";
+		String curf = "MadSand_Saves/worlds/" + filename + "/" + "sector-" + MadSand.world.curxwpos + "-"
+				+ MadSand.world.curywpos + ".mws";
 		saveChar();
 		// saveMap();
 		saveChar();
@@ -89,12 +89,12 @@ public class GameSaver {
 			return false;
 		}
 
-		File file = new File("MadSand_Saves/worlds/" + filename + "/" + "sector-" + MadSand.curxwpos + "-"
-				+ MadSand.curywpos + ".mws");
+		File file = new File("MadSand_Saves/worlds/" + filename + "/" + "sector-" + MadSand.world.curxwpos + "-"
+				+ MadSand.world.curywpos + ".mws");
 		if (file.exists()) {
 			MadSand.world.clearCurLoc();
-			loadMap("MadSand_Saves/worlds/" + filename + "/" + "sector-" + MadSand.curxwpos + "-" + MadSand.curywpos
-					+ ".mws");
+			loadMap("MadSand_Saves/worlds/" + filename + "/" + "sector-" + MadSand.world.curxwpos + "-"
+					+ MadSand.world.curywpos + ".mws");
 			loadChar(1);
 			MadSand.print("Loaded Game!");
 			return true;
@@ -119,55 +119,34 @@ public class GameSaver {
 		String invblock = "-@-";
 		String idblock = "-!-";
 		int i = 0;
-		while (i < 30) {
-			query = query + MadSand.inv[i][0] + idblock + MadSand.inv[i][1] + invblock;
-			i++;
-		}
+		// TODO save inventory
 
-		query = query + global + MadSand.player.hp + invblock + MadSand.player.mhp + invblock + MadSand.player.atk
-				+ invblock + MadSand.player.accur + invblock + MadSand.player.stamina + invblock + MadSand.player.exp + invblock
-				+ MadSand.player.requiredexp + invblock + MadSand.player.lvl + invblock + MadSand.player.helmet + invblock
-				+ MadSand.player.cplate + invblock + MadSand.player.shield + invblock + MadSand.player.maxstamina + invblock
-				+ MadSand.player.woodcutterskill[0] + invblock + MadSand.player.woodcutterskill[1] + invblock
-				+ MadSand.player.woodcutterskill[2] + invblock + MadSand.player.miningskill[0] + invblock
-				+ MadSand.player.miningskill[1] + invblock + MadSand.player.miningskill[2] + invblock
-				+ MadSand.player.survivalskill[0] + invblock + MadSand.player.survivalskill[1] + invblock
-				+ MadSand.player.survivalskill[2] + invblock + MadSand.player.harvestskill[0] + invblock
-				+ MadSand.player.harvestskill[1] + invblock + MadSand.player.harvestskill[2] + invblock
-				+ MadSand.player.craftingskill[0] + invblock + MadSand.player.craftingskill[1] + invblock
-				+ MadSand.player.craftingskill[2] + invblock + MadSand.player.rest[0] + invblock + MadSand.player.rest[1]
-				+ invblock + MadSand.player.rest[2] + invblock + MadSand.player.rest[3] + invblock + MadSand.player.dexterity
-				+ invblock + MadSand.player.intelligence + global + MadSand.player.x + invblock + MadSand.player.y + global
-				+ MadSand.curxwpos + invblock + MadSand.curywpos + global;
+		query = query + global + MadSand.player.hp + invblock + MadSand.player.mhp + invblock + MadSand.player.str
+				+ invblock + MadSand.player.accur + invblock + MadSand.player.stamina + invblock + MadSand.player.exp
+				+ invblock + MadSand.player.requiredexp + invblock + MadSand.player.lvl + invblock
+				+ MadSand.player.helmet + invblock + MadSand.player.cplate + invblock + MadSand.player.shield + invblock
+				+ MadSand.player.maxstamina + invblock + MadSand.player.woodcutterskill[0] + invblock
+				+ MadSand.player.woodcutterskill[1] + invblock + MadSand.player.woodcutterskill[2] + invblock
+				+ MadSand.player.miningskill[0] + invblock + MadSand.player.miningskill[1] + invblock
+				+ MadSand.player.miningskill[2] + invblock + MadSand.player.survivalskill[0] + invblock
+				+ MadSand.player.survivalskill[1] + invblock + MadSand.player.survivalskill[2] + invblock
+				+ MadSand.player.harvestskill[0] + invblock + MadSand.player.harvestskill[1] + invblock
+				+ MadSand.player.harvestskill[2] + invblock + MadSand.player.craftingskill[0] + invblock
+				+ MadSand.player.craftingskill[1] + invblock + MadSand.player.craftingskill[2] + invblock
+				+ MadSand.player.rest[0] + invblock + MadSand.player.rest[1] + invblock + MadSand.player.rest[2]
+				+ invblock + MadSand.player.rest[3] + invblock + MadSand.player.dexterity + invblock
+				+ MadSand.player.intelligence + global + MadSand.player.x + invblock + MadSand.player.y + global
+				+ MadSand.world.curxwpos + invblock + MadSand.world.curywpos + global;
 		saveToExternal(fl, query);
 	}
 
 	static String saveInv() {
-		String query = "";
-
-		String global = ":";
-		String invblock = "-@-";
-		String idblock = "-!-";
-		int i = 0;
-		while (i < 30) {
-			query = query + MadSand.inv[i][0] + idblock + MadSand.inv[i][1] + invblock;
-			i++;
-		}
-		query = query + global;
-		return query;
+		// TODO save inventory
+		return "";
 	}
 
 	static void loadInv(String query) {
-		String global = ":";
-		String invblock = "-@-";
-		String idblock = "-!-";
-		int i = 0;
-		String[] glob = query.split(global);
-		while (i < 30) {
-			MadSand.inv[i][0] = Integer.parseInt(glob[0].split(invblock)[i].split(idblock)[0]);
-			MadSand.inv[i][1] = Integer.parseInt(glob[0].split(invblock)[i].split(idblock)[1]);
-			i++;
-		}
+		// TODO load inventory
 	}
 
 	static void loadChar(int flag) {
@@ -183,16 +162,12 @@ public class GameSaver {
 		String idblock = "-!-";
 		int i = 0;
 		String[] glob = query.split(global);
-		while (i < 30) {
-			MadSand.inv[i][0] = Integer.parseInt(glob[0].split(invblock)[i].split(idblock)[0]);
-			MadSand.inv[i][1] = Integer.parseInt(glob[0].split(invblock)[i].split(idblock)[1]);
-			i++;
-		}
+		// TODO load inventory
 		String[] hpb = glob[1].split(invblock);
 		// STATS
 		MadSand.player.hp = Integer.parseInt(hpb[0]);
 		MadSand.player.mhp = Integer.parseInt(hpb[1]);
-		MadSand.player.atk = Integer.parseInt(hpb[2]);
+		MadSand.player.str = Integer.parseInt(hpb[2]);
 		MadSand.player.accur = Integer.parseInt(hpb[2]);
 		MadSand.player.luck = Integer.parseInt(hpb[3]);
 		MadSand.player.stamina = Float.parseFloat(hpb[4]);
@@ -231,8 +206,8 @@ public class GameSaver {
 		String[] hpbb = glob[2].split(invblock);
 		String[] ph = glob[3].split(invblock);
 		if (flag == 1) {
-			MadSand.curxwpos = Integer.parseInt(ph[0]);
-			MadSand.curywpos = Integer.parseInt(ph[1]);
+			MadSand.world.curxwpos = Integer.parseInt(ph[0]);
+			MadSand.world.curywpos = Integer.parseInt(ph[1]);
 			MadSand.player.x = Integer.parseInt(hpbb[0]);
 			MadSand.player.y = Integer.parseInt(hpbb[1]);
 			Utils.updCoords();

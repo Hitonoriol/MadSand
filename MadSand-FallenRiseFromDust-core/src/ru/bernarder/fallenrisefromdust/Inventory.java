@@ -4,11 +4,22 @@ import java.util.Vector;
 
 public class Inventory {
 	Vector<Item> items = new Vector<Item>();
-	Item item;
-	float curWeight, maxWeight;
+	double curWeight, maxWeight;
 
 	public Inventory(float maxWeight) {
 		this.maxWeight = maxWeight;
+		putItem(1, 13);
+		putItem(27, 3);
+		putItem(11, 9);
+		dump();
+	}
+
+	void dump() {
+		Utils.out("Inventory dump: ");
+		Utils.out("Weight: " + curWeight + " / " + maxWeight);
+		for (Item item : items) {
+			Utils.out(item.quantity + " " + item.name);
+		}
 	}
 
 	int getSameCell(int id) {
@@ -30,20 +41,36 @@ public class Inventory {
 	}
 
 	boolean putItem(int id, int quantity, boolean silent) {
-		Utils.out("ITEM PUT " + quantity + " " + id);
-		double newWeight = item.reinit(id, quantity).getMass() + curWeight;
-		if (getSameCell(id) != -1 && newWeight <= maxWeight) {
-			items.add(item);
+		Item item = new Item(id, quantity);
+		double newWeight = item.getWeight() + curWeight;
+		int existingIdx = getSameCell(id);
+		if (newWeight <= maxWeight) {
+			if (existingIdx != -1)
+				items.get(existingIdx).quantity++;
+			else
+				items.add(item);
+			curWeight = newWeight;
 			if (!silent)
 				MadSand.print("You got " + Item.queryToName(":" + id + "/" + quantity));
+			Utils.out("ITEM PUT " + id + " " + quantity);
 			return true;
 		}
 		return false;
 	}
 
+	boolean putItem(int id, int q) {
+		return putItem(id, q, false);
+	}
+
 	public boolean delItem(int id, int quantity) {
-		boolean r = false;
-		// TODO
-		return r;
+		int idx = getSameCell(id, quantity);
+		if (idx == -1)
+			return false;
+		else {
+			curWeight -= new Item(id, quantity).getWeight();
+			if (--items.get(idx).quantity <= 0)
+				items.remove(idx);
+			return true;
+		}
 	}
 }

@@ -39,7 +39,7 @@ public class BuildScript {
 							Integer.parseInt(opline[1]));
 				if (opline[0].equalsIgnoreCase("pt"))
 					MadSand.world.putMapTile(Integer.parseInt(opline[1]), Integer.parseInt(opline[2]), Integer.parseInt(opline[3]),
-							MadSand.curlayer);
+							MadSand.world.curlayer);
 				if (opline[0].equalsIgnoreCase("clear"))
 					MadSand.world.clearCurLoc();
 				if (opline[0].equalsIgnoreCase("bsquare")) {

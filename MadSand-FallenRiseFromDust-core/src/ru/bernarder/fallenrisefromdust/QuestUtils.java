@@ -17,18 +17,18 @@ public class QuestUtils {
 	static int qu;
 
 	public static void init() {
-		qu = Utils.countKeys(Utils.RES, "quest");
+		qu = Utils.countKeys(Utils.resdoc, "quest");
 		Utils.out(qu + " quests loaded");
 		questList = new String[qu][10];
 		int i = 0;
 		while (i < qu) {
 			questList[i][0] = "n";
-			questList[i][1] = Utils.getKey(Utils.RES, "quest", i + "", "starttext");
-			questList[i][2] = Utils.getKey(Utils.RES, "quest", i + "", "completedtext");
-			questList[i][3] = Utils.getKey(Utils.RES, "quest", i + "", "afterstarttext");
-			questList[i][4] = Utils.getKey(Utils.RES, "quest", i + "", "requirement");
-			questList[i][6] = Utils.getKey(Utils.RES, "quest", i + "", "repeatable");
-			questList[i][9] = Utils.getKey(Utils.RES, "quest", i + "", "forquest");
+			questList[i][1] = Utils.getKey(Utils.resdoc, "quest", i + "", "starttext");
+			questList[i][2] = Utils.getKey(Utils.resdoc, "quest", i + "", "completedtext");
+			questList[i][3] = Utils.getKey(Utils.resdoc, "quest", i + "", "afterstarttext");
+			questList[i][4] = Utils.getKey(Utils.resdoc, "quest", i + "", "requirement");
+			questList[i][6] = Utils.getKey(Utils.resdoc, "quest", i + "", "repeatable");
+			questList[i][9] = Utils.getKey(Utils.resdoc, "quest", i + "", "forquest");
 			i++;
 		}
 	}

@@ -1177,6 +1177,10 @@
       
    </mobs>
    <items>
+   	<item id="0">
+         <name>Void</name>
+         <cost>0</cost>
+      </item>
       <item id="1">
          <name>Wood</name>
          <type>1</type>

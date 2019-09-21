@@ -116,7 +116,7 @@ public class Map {
 
 	void addRendMasks(int x, int y, int id) {
 		int i = Objects.vRendMasks.get(id);
-		if (y + 1 < MadSand.MAPSIZE - 1) {
+		if (y + 1 < World.MAPSIZE - 1) {
 			while (i > 0) {
 				if (y + i < ysz) {
 					addObject(x, y + i, 666);
@@ -125,7 +125,7 @@ public class Map {
 			}
 		}
 		i = Objects.hRendMasks.get(id);
-		if (x + 1 < MadSand.MAPSIZE - 1) {
+		if (x + 1 < World.MAPSIZE - 1) {
 			while (i > 0) {
 				if (x + i < xsz) {
 					addObject(x + i, y, 666);
@@ -166,8 +166,6 @@ public class Map {
 	}
 
 	void randPlaceObject(int id) {
-		Utils.out("" + xsz);
-		Utils.out("" + ysz);
 		int x = Utils.random.nextInt(this.xsz);
 		int y = Utils.random.nextInt(this.ysz);
 		addObject(x, y, id);
