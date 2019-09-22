@@ -29,7 +29,7 @@ import com.badlogic.gdx.utils.Align;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
-import ru.bernarder.fallenrisefromdust.strings.InventoryNames;
+import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -104,6 +104,18 @@ public class Gui {
 	public static ThreadedUtils tr;
 	static Dialog dialog;
 
+	static int ACCUR, CONSTITUTION, ATK, STAMINA, DEX, LUCK, INT;
+	static final int STAT_SUM = 25;
+	static final int STAT_RAND_MAX = 4;
+
+	static Label CNT;
+	static Label STM;
+	static Label ATKl;
+	static Label ACC;
+	static Label IN;
+	static Label LK;
+	static Label DX;
+
 	public static void showStatsWindow() {
 		final Dialog dialog = new Dialog("", Gui.skin);
 		dialog.text(MadSand.name);
@@ -116,13 +128,6 @@ public class Gui {
 			}
 
 		});
-		final Label CNT = new Label("Constitution: " + CONSTITUTION, Gui.skin);
-		final Label STM = new Label("Stamina: " + STAMINA, Gui.skin);
-		final Label ATKl = new Label("Strength: " + ATK, Gui.skin);
-		final Label ACC = new Label("Accuracy: " + ACCUR, Gui.skin);
-		final Label IN = new Label("Intelligence: " + INT, Gui.skin);
-		final Label LK = new Label("Luck: " + LUCK, Gui.skin);
-		final Label DX = new Label("Dexterity: " + DEX, Gui.skin);
 		dialog.setBackground(bck);
 		dialog.setMovable(true);
 		dialog.add(new Label("", Gui.skin));
@@ -236,8 +241,6 @@ public class Gui {
 		dialog.show(menu);
 	}
 
-	static int ACCUR, CONSTITUTION, ATK, STAMINA, DEX, LUCK, INT;
-
 	static void setStats() {
 		MadSand.player.str = ATK;
 		MadSand.player.stamina = STAMINA * 5;
@@ -251,25 +254,28 @@ public class Gui {
 	}
 
 	static void rollStats() {
-		ACCUR = Utils.rand(1, 4);
-		CONSTITUTION = Utils.rand(6, 11);
-		ATK = Utils.rand(1, 5);
-		STAMINA = Utils.rand(4, 11);
-		LUCK = Utils.rand(1, 2);
-		INT = Utils.rand(0, 5);
-		DEX = Utils.rand(0, 4);
+		ACCUR = Utils.rand(1, STAT_RAND_MAX);
+		CONSTITUTION = Utils.rand(1, STAT_RAND_MAX);
+		ATK = Utils.rand(1, STAT_RAND_MAX);
+		STAMINA = Utils.rand(1, STAT_RAND_MAX);
+		LUCK = Utils.rand(1, STAT_RAND_MAX);
+		INT = Utils.rand(1, STAT_RAND_MAX);
+		DEX = Utils.rand(1, STAT_RAND_MAX);
 		setStats();
+	}
+
+	static void setStatLabels() {
+		ATKl.setText("Strength: " + ATK);
+		STM.setText("Stamina: " + STAMINA);
+		ACC.setText("Accuracy: " + ACCUR);
+		CNT.setText("Constitution: " + CONSTITUTION);
+		IN.setText("Intelligence: " + INT);
+		LK.setText("Luck: " + LUCK);
+		DX.setText("Dexterity: " + DEX);
 	}
 
 	static void createCharDialog() {
 		rollStats();
-		final Label CNT = new Label("Constitution: " + CONSTITUTION, Gui.skin);
-		final Label STM = new Label("Stamina: " + STAMINA, Gui.skin);
-		final Label ATKl = new Label("Strength: " + ATK, Gui.skin);
-		final Label ACC = new Label("Accuracy: " + ACCUR, Gui.skin);
-		final Label IN = new Label("Intelligence: " + INT, Gui.skin);
-		final Label LK = new Label("Luck: " + LUCK, Gui.skin);
-		final Label DX = new Label("Dexterity: " + DEX, Gui.skin);
 		MadSand.charcrt = true;
 
 		String msg = "Character creation";
@@ -278,6 +284,7 @@ public class Gui {
 		dialog.text(msg);
 		dialog.row();
 		final TextField nameField = new TextField("Johnny", Gui.skin);
+		setStatLabels();
 		dialog.add(new Label("Character name:", Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
 		dialog.row();
 		dialog.add(nameField).width(Gdx.graphics.getWidth() / 4).row();
@@ -316,13 +323,7 @@ public class Gui {
 		rbtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				rollStats();
-				ATKl.setText("Strength: " + ATK);
-				STM.setText("Stamina: " + STAMINA);
-				ACC.setText("Accuracy: " + ACCUR);
-				CNT.setText("Constitution: " + CONSTITUTION);
-				IN.setText("Intelligence: " + INT);
-				LK.setText("Luck: " + LUCK);
-				DX.setText("Dexterity: " + DEX);
+				setStatLabels();
 			}
 
 		});
@@ -330,7 +331,6 @@ public class Gui {
 	}
 
 	static void drawSettingsDialog() {
-		int wsize = 100;
 		int radius = 12;
 
 		final Dialog dialog = new Dialog(" ", Gui.skin);
@@ -338,22 +338,13 @@ public class Gui {
 		dialog.row();
 		dialog.align(Align.center);
 		final Label renderv = new Label("", Gui.skin);
-		final Label worldv = new Label("", Gui.skin);
 		final Slider renderslide = new Slider(5, 125, 5, false, Gui.skin);
-		final Slider worldslide = new Slider(10, 250, 5, false, Gui.skin);
 		if (new File("MadSand_Saves/lastrend.dat").exists())
 			radius = (Integer.parseInt(getExternal("lastrend.dat")));
-		if (new File("MadSand_Saves/lastworld.dat").exists())
-			wsize = (Integer.parseInt(getExternal("lastworld.dat")));
-		worldslide.setValue(wsize);
 		renderslide.setValue(radius);
 		renderv.setText("Render radius (" + (int) renderslide.getValue() + ")");
-		worldv.setText("World size (" + (int) worldslide.getValue() + ")");
 		TextButton cbtn = new TextButton("Set", Gui.skin);
 		TextButton cancel = new TextButton("Cancel", Gui.skin);
-
-		dialog.add(worldv).row();
-		dialog.add(worldslide).width(Gdx.graphics.getWidth() / 4).row();
 
 		dialog.add(renderv).row();
 		dialog.add(renderslide).width(Gdx.graphics.getWidth() / 4).row();
@@ -365,23 +356,12 @@ public class Gui {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				renderv.setText("Render radius (" + (int) renderslide.getValue() + ")");
-				if (renderslide.getValue() >= worldslide.getValue() / 2)
-					renderslide.setValue(worldslide.getValue() / 2);
-			}
-		});
-		worldslide.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				worldv.setText("World size (" + (int) worldslide.getValue() + ")");
-				if (renderslide.getValue() >= worldslide.getValue() / 2)
-					renderslide.setValue(worldslide.getValue() / 2);
 			}
 		});
 		cbtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				MadSand.setParams(Math.round(renderslide.getValue()), Math.round(worldslide.getValue()));
+				MadSand.setParams(Math.round(renderslide.getValue()));
 				Gui.saveToExternal("lastrend.dat", Math.round(renderslide.getValue()) + "");
-				Gui.saveToExternal("lastworld.dat", Math.round(worldslide.getValue()) + "");
 				// TODO
 				dialog.remove();
 			}
@@ -574,6 +554,14 @@ public class Gui {
 	}
 
 	static void initmenu() {
+		CNT = new Label("Constitution: " + CONSTITUTION, Gui.skin);
+		STM = new Label("Stamina: " + STAMINA, Gui.skin);
+		ATKl = new Label("Strength: " + ATK, Gui.skin);
+		ACC = new Label("Accuracy: " + ACCUR, Gui.skin);
+		IN = new Label("Intelligence: " + INT, Gui.skin);
+		LK = new Label("Luck: " + LUCK, Gui.skin);
+		DX = new Label("Dexterity: " + DEX, Gui.skin);
+
 		Gui.gamecontext = new Table(Gui.skin);
 		Gui.contextMenuBtn = new TextButton[5];
 		Gui.invcontbtn = new TextButton[1];
@@ -783,9 +771,9 @@ public class Gui {
 		Gui.craftbtn = new TextButton[MadSand.CRAFTABLES];
 
 		while (cg < MadSand.CRAFTABLES) {
-			Gui.craftbtn[cg] = new TextButton(InventoryNames.name.get(MadSand.craftableid[cg]), Gui.skin);
+			Gui.craftbtn[cg] = new TextButton(ItemProp.name.get(MadSand.craftableid[cg]), Gui.skin);
 			Gui.craftbl.add(Gui.craftbtn[cg]).width(250.0F);
-			Gui.craftbl.add(new Label(" " + Item.queryToName(InventoryNames.recipe.get(MadSand.craftableid[cg])),
+			Gui.craftbl.add(new Label(" " + Item.queryToName(ItemProp.recipe.get(MadSand.craftableid[cg])),
 					Gui.skin))/* .align(8) */;
 			Gui.craftbl.row();
 			final int ssa = cg;

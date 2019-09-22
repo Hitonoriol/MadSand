@@ -1,6 +1,6 @@
 package ru.bernarder.fallenrisefromdust;
 
-import ru.bernarder.fallenrisefromdust.strings.Tiles;
+import ru.bernarder.fallenrisefromdust.properties.TileProp;
 
 public class Tile {
 	int id;
@@ -8,6 +8,6 @@ public class Tile {
 
 	public Tile(int id) {
 		this.id = id;
-		this.name = Tiles.name.get(id);
+		this.name = TileProp.name.get(id);
 	}
 }

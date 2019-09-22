@@ -66,9 +66,8 @@ public class Player {
 		return r;
 	}
 
-	boolean interact(final Direction direction) { // TODO: BuildScript onInteract events
+	void interact(final Direction direction) { // TODO: BuildScript onInteract events
 		// TODO
-		return true;
 	}
 
 	public boolean isCollision(Direction direction, int flag) {

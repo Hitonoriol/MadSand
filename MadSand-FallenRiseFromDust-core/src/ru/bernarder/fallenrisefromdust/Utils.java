@@ -12,9 +12,9 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
-import ru.bernarder.fallenrisefromdust.strings.InventoryNames;
-import ru.bernarder.fallenrisefromdust.strings.Objects;
-import ru.bernarder.fallenrisefromdust.strings.Tiles;
+import ru.bernarder.fallenrisefromdust.properties.ItemProp;
+import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
+import ru.bernarder.fallenrisefromdust.properties.TileProp;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -83,7 +83,7 @@ public class Utils {
 			return builder.parse(is);
 		} catch (Exception e) {
 			out("Oopsie (" + e.getMessage() + ")");
-			e.printStackTrace(Resource.eps);
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -101,7 +101,7 @@ public class Utils {
 			}
 			return c;
 		} catch (Exception e) {
-			e.printStackTrace(Resource.eps);
+			e.printStackTrace();
 			return -1;
 		}
 	}
@@ -167,61 +167,62 @@ public class Utils {
 		objects = new Texture[MadSand.LASTOBJID];
 		tile = new Texture[MadSand.LASTTILEID + 1];
 		npc = new Texture[MadSand.NPCSPRITES + 1];
-		int counter = 0, cc = 0;
-		while (counter < MadSand.LASTITEMID) {
-			item[counter] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "inv/" + counter + ".png"));
-			if (!getKey(resdoc, "item", "" + counter, "recipe").equals("-1")) {
-				MadSand.craftableid[cc] = counter;
+		int i = 0, cc = 0;
+		while (i < MadSand.LASTITEMID) {
+			item[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "inv/" + i + ".png"));
+			if (!getKey(resdoc, "item", "" + i, "recipe").equals("-1")) {
+				MadSand.craftableid[cc] = i;
 				cc++;
 			}
-			if (!getKey(resdoc, "item", "" + counter, "stages").equals("-1")) {
-				CropLayer.stages[counter] = getKey(resdoc, "item", "" + counter, "stages");
+			if (!getKey(resdoc, "item", "" + i, "stages").equals("-1")) {
+				CropLayer.stages[i] = getKey(resdoc, "item", "" + i, "stages");
 			}
-			InventoryNames.name.put(counter, getKey(resdoc, "item", "" + counter, "name"));
-			InventoryNames.type.put(counter, Integer.parseInt(getKey(resdoc, "item", "" + counter, "type")));
-			InventoryNames.altObject.put(counter, Integer.parseInt(getKey(resdoc, "item", "" + counter, "altobject")));
-			InventoryNames.cost.put(counter, Integer.parseInt(getKey(resdoc, "item", "" + counter, "cost")));
-			InventoryNames.craftable.put(counter,
-					Integer.parseInt(getKey(resdoc, "item", "" + counter, "craftable")) != 0);
-			InventoryNames.recipe.put(counter, getKey(resdoc, "item", "" + counter, "recipe"));
-			InventoryNames.heal.put(counter, getKey(resdoc, "item", "" + counter, "heal"));
-			counter++;
+			ItemProp.name.put(i, getKey(resdoc, "item", "" + i, "name"));
+			ItemProp.type.put(i, Integer.parseInt(getKey(resdoc, "item", "" + i, "type")));
+			ItemProp.altObject.put(i, Integer.parseInt(getKey(resdoc, "item", "" + i, "altobject")));
+			ItemProp.cost.put(i, Integer.parseInt(getKey(resdoc, "item", "" + i, "cost")));
+			ItemProp.craftable.put(i, Integer.parseInt(getKey(resdoc, "item", "" + i, "craftable")) != 0);
+			ItemProp.recipe.put(i, getKey(resdoc, "item", "" + i, "recipe"));
+			ItemProp.heal.put(i, getKey(resdoc, "item", "" + i, "heal"));
+			ItemProp.useAction.put(i, getKey(resdoc, "item", "" + i, "onuse"));
+			i++;
 		}
-		counter = 0;
+		i = 0;
 		Tuple<Integer, String> tmp = new Tuple<Integer, String>(0, "");
-		while (counter < MadSand.LASTOBJID) {
-			objects[counter] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "obj/" + counter + ".png"));
-			Objects.name.put(counter, getKey(resdoc, "object", "" + counter, "name"));
-			Objects.hp.put(counter, Integer.parseInt(getKey(resdoc, "object", "" + counter, "tough")));
-			Objects.altitems.put(tmp.set(counter, "altitem"), getKey(resdoc, "object", "" + counter, "altitem"));
-			Objects.altitems.put(tmp.set(counter, "hand"), getKey(resdoc, "object", "" + counter, "hand"));
-			Objects.altitems.put(tmp.set(counter, "skillbonus"), getKey(resdoc, "object", "" + counter, "skillbonus"));
-			Objects.vRendMasks.put(counter, Integer.parseInt(getKey(resdoc, "object", "" + counter, "vmask")));
-			Objects.hRendMasks.put(counter, Integer.parseInt(getKey(resdoc, "object", "" + counter, "hmask")));
-			counter++;
+		while (i < MadSand.LASTOBJID) {
+			objects[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "obj/" + i + ".png"));
+			ObjectProp.name.put(i, getKey(resdoc, "object", "" + i, "name"));
+			ObjectProp.hp.put(i, Integer.parseInt(getKey(resdoc, "object", "" + i, "tough")));
+			ObjectProp.altitems.put(tmp.set(i, "altitem"), getKey(resdoc, "object", "" + i, "altitem"));
+			ObjectProp.altitems.put(tmp.set(i, "hand"), getKey(resdoc, "object", "" + i, "hand"));
+			ObjectProp.altitems.put(tmp.set(i, "skillbonus"), getKey(resdoc, "object", "" + i, "skillbonus"));
+			ObjectProp.vRendMasks.put(i, Integer.parseInt(getKey(resdoc, "object", "" + i, "vmask")));
+			ObjectProp.hRendMasks.put(i, Integer.parseInt(getKey(resdoc, "object", "" + i, "hmask")));
+			ObjectProp.interactAction.put(i, getKey(resdoc, "object", "" + i, "oninteract"));
+			i++;
 		}
-		counter = 0;
-		while (counter < MadSand.LASTTILEID) {
-			tile[counter] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "terrain/" + counter + ".png"));
-			Tiles.name.put(counter, getKey(resdoc, "tile", "" + counter, "name"));
-			Tiles.damage.put(counter, Integer.parseInt(getKey(resdoc, "tile", "" + counter, "damage")));
-			counter++;
+		i = 0;
+		while (i < MadSand.LASTTILEID) {
+			tile[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "terrain/" + i + ".png"));
+			TileProp.name.put(i, getKey(resdoc, "tile", "" + i, "name"));
+			TileProp.damage.put(i, Integer.parseInt(getKey(resdoc, "tile", "" + i, "damage")));
+			i++;
 		}
-		counter = 0;
-		while (counter < MadSand.NPCSPRITES) {
-			npc[counter] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "npc/" + counter + ".png"));
-			getKey(resdoc, "npc", "" + counter, "hp");
-			getKey(resdoc, "npc", "" + counter, "maxhp");
-			getKey(resdoc, "npc", "" + counter, "rewardexp");
-			getKey(resdoc, "npc", "" + counter, "drop");
-			getKey(resdoc, "npc", "" + counter, "name");
-			getKey(resdoc, "npc", "" + counter, "atk");
-			getKey(resdoc, "npc", "" + counter, "accuracy");
-			getKey(resdoc, "npc", "" + counter, "friendly");
-			getKey(resdoc, "npc", "" + counter, "fraction");
-			getKey(resdoc, "npc", "" + counter, "spawnonce");
-			getKey(resdoc, "npc", "" + counter, "qids");
-			counter++;
+		i = 0;
+		while (i < MadSand.NPCSPRITES) {
+			npc[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "npc/" + i + ".png"));
+			getKey(resdoc, "npc", "" + i, "hp");
+			getKey(resdoc, "npc", "" + i, "maxhp");
+			getKey(resdoc, "npc", "" + i, "rewardexp");
+			getKey(resdoc, "npc", "" + i, "drop");
+			getKey(resdoc, "npc", "" + i, "name");
+			getKey(resdoc, "npc", "" + i, "atk");
+			getKey(resdoc, "npc", "" + i, "accuracy");
+			getKey(resdoc, "npc", "" + i, "friendly");
+			getKey(resdoc, "npc", "" + i, "fraction");
+			getKey(resdoc, "npc", "" + i, "spawnonce");
+			getKey(resdoc, "npc", "" + i, "qids");
+			i++;
 		}
 
 		hp = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/heart.png"));
@@ -244,17 +245,16 @@ public class Utils {
 	}
 
 	public static String getItem(int id) {
-		return InventoryNames.name.get(id);
+		return ItemProp.name.get(id);
 	}
 
 	public static void useKeyAction() { // TODO: usekey actions using BuildScript
 		int id = MadSand.player.hand;
 		int ptile = MadSand.world.getTileId(MadSand.player.x, MadSand.player.y);
 		MadSand.player.checkHands(id);
-		if ((id == 41) && (ptile == 0)) {
-			MadSand.print("You plowed a dirt");
-			MadSand.world.putMapTile(MadSand.player.x, MadSand.player.y, 15);
-		}
+		String action = ItemProp.useAction.get(id);
+		if (action != "-1")
+			BuildScript.execute(action);
 		if ((ptile == 6) || (ptile == 16)) {
 			MadSand.print("You entered the dungeon.");
 			MadSand.world.curlayer += 1;
@@ -281,9 +281,9 @@ public class Utils {
 			}
 		}
 		if (Item.getType(id) == 9) {
-			MadSand.print("You ate one " + InventoryNames.name.get(id));
-			MadSand.player.heal(Integer.parseInt(InventoryNames.heal.get(id).split(":")[0]));
-			MadSand.player.increaseStamina(Integer.parseInt(InventoryNames.heal.get(id).split(":")[1]));
+			MadSand.print("You ate one " + ItemProp.name.get(id));
+			MadSand.player.heal(Integer.parseInt(ItemProp.heal.get(id).split(":")[0]));
+			MadSand.player.increaseStamina(Integer.parseInt(ItemProp.heal.get(id).split(":")[1]));
 		}
 		if ((id == 9) && (MadSand.player.inventory.getSameCell(9, 1) != -1)
 				&& (MadSand.player.inventory.getSameCell(1, 5) != -1)) {
@@ -360,7 +360,7 @@ public class Utils {
 	public static void isInFront() {
 		int obj = MadSand.world.getObjID(MadSand.player.x, MadSand.player.y, MadSand.player.look);
 		if ((obj != 666) && (obj != 0)) {
-			MadSand.print("You see: " + Objects.name.get(obj));
+			MadSand.print("You see: " + ObjectProp.name.get(obj));
 		}
 	}
 
@@ -566,9 +566,9 @@ public class Utils {
 
 	public static void tileDmg() {
 		int tid = MadSand.world.getTileId(MadSand.player.x, MadSand.player.y);
-		int dmg = Tiles.damage.get(tid);
+		int dmg = TileProp.damage.get(tid);
 		if (dmg > 0) {
-			MadSand.print("You took " + dmg + " damage from " + (Tiles.name.get(tid)));
+			MadSand.print("You took " + dmg + " damage from " + (TileProp.name.get(tid)));
 			MadSand.player.damage(dmg);
 		}
 	}
@@ -638,15 +638,15 @@ public class Utils {
 				com.badlogic.gdx.scenes.scene2d.actions.Actions.moveTo(MadSand.mx + 60, MadSand.my - 70, 0.1F));
 		try {
 			Gui.mouselabel[0].setText("World coords: " + MadSand.wmx + ", " + MadSand.wmy);
-			Gui.mouselabel[1]
-					.setText("Tile: " + Tiles.name.get(MadSand.world.getCurLoc().getTile(MadSand.wmx, MadSand.wmy).id));
+			Gui.mouselabel[1].setText(
+					"Tile: " + TileProp.name.get(MadSand.world.getCurLoc().getTile(MadSand.wmx, MadSand.wmy).id));
 			Gui.mouselabel[2].setText("Object: " + " ()");
 			Gui.mouselabel[3].setText("Creature: " + " ()");
 			Gui.mouselabel[4].setText("Turn: " + MadSand.turn + "\nWorld time: " + World.worldtime
 					+ "\nPlayer position: (" + MadSand.player.x + ", " + MadSand.player.y + ")\nStamina: "
 					+ Math.round(MadSand.player.stamina));
 		} catch (Exception e) {
-			e.printStackTrace(Resource.eps);
+			e.printStackTrace();
 		}
 	}
 
@@ -682,7 +682,7 @@ public class Utils {
 			}
 			return sb.toString();
 		} catch (Exception e) {
-			e.printStackTrace(Resource.eps);
+			e.printStackTrace();
 			return "";
 		}
 	}

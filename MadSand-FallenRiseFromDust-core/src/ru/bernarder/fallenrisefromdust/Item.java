@@ -2,7 +2,7 @@ package ru.bernarder.fallenrisefromdust;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
-import ru.bernarder.fallenrisefromdust.strings.InventoryNames;
+import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 
 public class Item {
 	String name, recipe, heal;
@@ -57,13 +57,13 @@ public class Item {
 	}
 
 	private void loadProperties() {
-		this.name = InventoryNames.name.get(id);
-		this.recipe = InventoryNames.recipe.get(id);
-		this.heal = InventoryNames.heal.get(id);
-		this.type = InventoryNames.type.get(id);
-		this.altobject = InventoryNames.altObject.get(id);
-		this.cost = InventoryNames.cost.get(id);
-		this.craftable = InventoryNames.craftable.get(id);
+		this.name = ItemProp.name.get(id);
+		this.recipe = ItemProp.recipe.get(id);
+		this.heal = ItemProp.heal.get(id);
+		this.type = ItemProp.type.get(id);
+		this.altobject = ItemProp.altObject.get(id);
+		this.cost = ItemProp.cost.get(id);
+		this.craftable = ItemProp.craftable.get(id);
 	}
 
 	public String getString() {
@@ -86,21 +86,21 @@ public class Item {
 			String[] attr;
 			while (i < block.length) {
 				attr = block[i].split(ITEM_DELIM);
-				ret = ret + attr[1] + " " + InventoryNames.name.get(Integer.parseInt(attr[0])) + " ";
+				ret = ret + attr[1] + " " + ItemProp.name.get(Integer.parseInt(attr[0])) + " ";
 				i++;
 			}
 			return ret;
 		} catch (Exception e) {
-			e.printStackTrace(Resource.eps);
+			e.printStackTrace();
 		}
 		return "";
 	}
 
 	static int getType(int id) {
-		return InventoryNames.type.get(id);
+		return ItemProp.type.get(id);
 	}
 
 	static int getAltObject(int id) {
-		return InventoryNames.altObject.get(id);
+		return ItemProp.altObject.get(id);
 	}
 }

@@ -41,7 +41,7 @@ public class GameSaver {
 			br.close();
 			return line1;
 		} catch (Exception e) {
-			e.printStackTrace(Resource.eps);
+			e.printStackTrace();
 			return "";
 		}
 	}

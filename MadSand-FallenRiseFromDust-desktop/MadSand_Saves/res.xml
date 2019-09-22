@@ -1415,6 +1415,7 @@
          <cost>11</cost>
          <craftable>1</craftable>
          <recipe>2/13:8/5</recipe>
+         <onuse>!0 place_tile $player_x $player_y 15</onuse>
       </item>
       <item id="42">
          <name>Mixed stone wall</name>

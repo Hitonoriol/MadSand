@@ -2,13 +2,15 @@ package ru.bernarder.fallenrisefromdust;
 
 import java.util.ArrayList;
 import java.util.Map.Entry;
-import java.util.StringTokenizer;
 
-import ru.bernarder.fallenrisefromdust.strings.InventoryNames;
+import ru.bernarder.fallenrisefromdust.properties.ItemProp;
+
+import java.util.StringTokenizer;
 
 public class BuildScript {
 
-	/* [token] [value || constant]; */
+	/* [condition] [token] [value || constant]; */
+	final static char standingOnID = '!'; // !1 player_give @gold 100
 	final static char valueID = '$';
 	final static char itemStringID = '@';
 	final static String LINE_DELIMITER = ";";
@@ -24,7 +26,7 @@ public class BuildScript {
 				MAP_CLEAR = "map_clear", OBJECT_SQUARE = "object_square", TILE_SQUARE = "tile_square",
 				OBJECT_LINE = "object_line", TILE_LINE = "tile_line", PLAYER_GIVE = "player_give",
 				DAMAGE_OBJECT = "damage_object", PLAYER_HEAL = "player_heal", PLAYER_SATIATE = "player_satiate",
-				PLAYER_REMOVE_ITEM = "player_remove_item";
+				PLAYER_REMOVE_ITEM = "player_remove_item", PLAYER_HAND_SET = "player_hand_set";
 	}
 
 	public static void bLine(int x, int y, int dir, int id, int len, int head) {
@@ -61,7 +63,7 @@ public class BuildScript {
 	}
 
 	static int getItemID(String arg) {
-		for (Entry<Integer, String> entry : InventoryNames.name.entrySet()) {
+		for (Entry<Integer, String> entry : ItemProp.name.entrySet()) {
 			if (entry.getValue().equalsIgnoreCase(arg)) {
 				return entry.getKey();
 			}
@@ -85,9 +87,29 @@ public class BuildScript {
 		return ret;
 	}
 
+	static boolean conditionFalse(char id, String cond) {
+		int sid = Integer.parseInt(cond.split(COMMAND_DELIMITER)[0].substring(1));
+		switch (id) {
+		case standingOnID:
+			if (MadSand.world.getCurLoc().getTile(MadSand.player.x, MadSand.player.y).id == sid)
+				return false;
+			else
+				return true;
+		default:
+			return false;
+		}
+	}
+
 	public static void execute(String command, StringTokenizer tokens) {
 		ArrayList<Integer> arg = getAllArgs(tokens);
 		int x, y, id, i, height, dir;
+		char cid = command.charAt(0);
+		if (!Character.isLetter(cid)) {
+			if (conditionFalse(cid, command))
+				return;
+			else
+				command = command.split(COMMAND_DELIMITER)[1];
+		}
 		switch (command) {
 		case Token.PLACE_OBJECT:
 			x = arg.get(0);
@@ -168,12 +190,17 @@ public class BuildScript {
 			MadSand.player.heal(amount);
 			break;
 
+		case Token.PLAYER_HAND_SET:
+			id = arg.get(0);
+			MadSand.player.hand = id;
+			break;
+
 		case Token.PLAYER_GIVE:
 			id = arg.get(0);
 			int q = arg.get(1);
 			MadSand.player.inventory.putItem(id, q);
 			break;
-			
+
 		case Token.PLAYER_REMOVE_ITEM:
 			id = arg.get(0);
 			q = arg.get(1);
@@ -191,11 +218,14 @@ public class BuildScript {
 		try {
 			while (lineTokens.hasMoreTokens()) {
 				commandTokens = new StringTokenizer(lineTokens.nextToken(), COMMAND_DELIMITER);
-				command = commandTokens.nextToken();
+				command = commandTokens.nextToken().trim();
+				if (!Character.isLetter(command.charAt(0)))
+					command += COMMAND_DELIMITER + commandTokens.nextToken();
 				execute(command, commandTokens);
 			}
 		} catch (Exception e) {
 			MadSand.print("An error has occured in script: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 }

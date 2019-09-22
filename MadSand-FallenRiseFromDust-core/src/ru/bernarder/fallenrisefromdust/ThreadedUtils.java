@@ -17,7 +17,7 @@ public class ThreadedUtils {
 						MadSand.print("You came to a strange place...");
 						BuildScript.execute((GameSaver.getExternal("MadSand_Saves/scripts/encounter.msl")));
 					} catch (Exception e) {
-						e.printStackTrace(Resource.eps);
+						e.printStackTrace();
 						Utils.out("Error on random encounter start: " + e.getMessage());
 					}
 				} else
@@ -88,7 +88,7 @@ public class ThreadedUtils {
 			try {
 				Thread.sleep(1000L);
 			} catch (InterruptedException e) {
-				e.printStackTrace(Resource.eps);
+				e.printStackTrace();
 			}
 			MadSand.dontlisten = false;
 			ThreadedUtils.this.wontlisten.stop();

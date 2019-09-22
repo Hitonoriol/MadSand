@@ -108,7 +108,7 @@ public class World {
 			Utils.out("End of WorldGen!");
 		} catch (Exception e) {
 			Utils.out("Whoops, fatal error... See MadSandCritical.log and/or MadSandErrors.log files.");
-			e.printStackTrace(Resource.eps);
+			e.printStackTrace();
 			System.exit(1);
 		}
 	}
@@ -213,7 +213,7 @@ public class World {
 				curlayer = 0;
 
 			} catch (Exception e) {
-				e.printStackTrace(Resource.eps);
+				e.printStackTrace();
 			}
 			a--;
 		}

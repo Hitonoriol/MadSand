@@ -18,7 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
-import ru.bernarder.fallenrisefromdust.strings.InventoryNames;
+import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -115,7 +115,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static String name = "";
 
 	public static float[][] rawWorld;
-	InventoryNames objn;
+	ItemProp objn;
 	static OrthographicCamera camera;
 
 	SpriteBatch invbatch;
@@ -182,22 +182,26 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static Player player;
 
 	public void create() {
+		int radius = 13;
+		if (new File(SAVEDIR + "lastrend.dat").exists())
+			radius = (Integer.parseInt(Gui.getExternal("lastrend.dat")));
+		setParams(radius);
+
 		player = new Player(name);
 		Utils.out("Starting initialization!");
 		setRenderRadius();
 		Utils.out("Render area: " + rcoords.length);
 		try {
-			Resource.eps = new PrintStream(Resource.file);
 			PrintStream ge = new PrintStream(new File("MadSandCritical.log"));
 			System.setErr(ge);
 		} catch (Exception e) {
-			e.printStackTrace(Resource.eps);
+			e.printStackTrace();
 		}
 		createDirs();
 		Utils.Initf();
 		world = new World(10);
 
-		this.objn = new InventoryNames();
+		this.objn = new ItemProp();
 		Gui.createBasicSkin();
 		Gui.chat = new Label[15];
 		int vc = 0;
@@ -215,7 +219,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 		QuestUtils.init();
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.local(SAVEDIR + FONT_PATH));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-		parameter.characters = "Ã�â„¢Ã�Â¦Ã�Â£Ã�Å¡Ã�â€¢Ã�ï¿½Ã�â€œÃ�Â¨Ã�Â©Ã�â€”Ã�Â¥Ã�ÂªÃ�Â¤Ã�Â«Ã�â€™Ã�ï¿½Ã�Å¸Ã�Â Ã�Å¾Ã�â€ºÃ�â€�Ã�â€“Ã�Â­Ã�Â¯Ã�Â§Ã�Â¡Ã�Å“Ã�ËœÃ�Â¢Ã�Â¬Ã�â€˜Ã�Â®Ã�ï¿½Ã�Â¹Ã‘â€ Ã‘Æ’Ã�ÂºÃ�ÂµÃ�Â½Ã�Â³Ã‘Ë†Ã‘â€°Ã�Â·Ã‘â€¦Ã‘Å Ã‘â€žÃ‘â€¹Ã�Â²Ã�Â°Ã�Â¿Ã‘â‚¬Ã�Â¾Ã�Â»Ã�Â´Ã�Â¶Ã‘ï¿½Ã‘ï¿½Ã‘â€¡Ã‘ï¿½Ã�Â¼Ã�Â¸Ã‘â€šÃ‘Å’Ã�Â±Ã‘Å½Ã‘â€˜abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\\\/?-+=()*&.;:,{}\\\"'<>";
+		parameter.characters = FONT_CHARS;
 		parameter.size = 24;
 		parameter.color = Color.BLUE;
 		Gui.font1 = generator.generateFont(parameter);
@@ -251,10 +255,9 @@ public class MadSand extends com.badlogic.gdx.Game {
 		name = arg;
 	}
 
-	public static void setParams(int radius, int mapsize) {
+	public static void setParams(int radius) {
 		renderradius = radius * MadSand.TILESIZE;
 		setRenderRadius();
-		World.MAPSIZE = mapsize;
 	}
 
 	static void setUpScene() {
@@ -340,7 +343,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 
 			Utils.batch.begin();
 		} catch (Exception e) {
-			e.printStackTrace(Resource.eps);
+			e.printStackTrace();
 			Utils.out("Render error. See errorlog.");
 		}
 	}

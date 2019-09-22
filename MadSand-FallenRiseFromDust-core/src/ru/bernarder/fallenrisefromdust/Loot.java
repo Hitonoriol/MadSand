@@ -2,7 +2,7 @@ package ru.bernarder.fallenrisefromdust;
 
 import java.util.Vector;
 
-import ru.bernarder.fallenrisefromdust.strings.InventoryNames;
+import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 
 public class Loot {
 	Vector<String> contents = new Vector<String>();
@@ -71,7 +71,7 @@ public class Loot {
 			}
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace(Resource.eps);
+			e.printStackTrace();
 		}
 		return false;
 	}

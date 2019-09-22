@@ -3,7 +3,7 @@ package ru.bernarder.fallenrisefromdust;
 import java.util.HashMap;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
-import ru.bernarder.fallenrisefromdust.strings.Objects;
+import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 
 public class Map {
 	private int xsz, ysz;
@@ -117,7 +117,7 @@ public class Map {
 	}
 
 	void addRendMasks(int x, int y, int id) {
-		int i = Objects.vRendMasks.get(id);
+		int i = ObjectProp.vRendMasks.get(id);
 		if (y + 1 < World.MAPSIZE - 1) {
 			while (i > 0) {
 				if (y + i < ysz) {
@@ -126,7 +126,7 @@ public class Map {
 				i--;
 			}
 		}
-		i = Objects.hRendMasks.get(id);
+		i = ObjectProp.hRendMasks.get(id);
 		if (x + 1 < World.MAPSIZE - 1) {
 			while (i > 0) {
 				if (x + i < xsz) {

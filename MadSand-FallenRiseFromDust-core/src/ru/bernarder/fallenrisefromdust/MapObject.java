@@ -1,6 +1,6 @@
 package ru.bernarder.fallenrisefromdust;
 
-import ru.bernarder.fallenrisefromdust.strings.Objects;
+import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 
 public class MapObject {
 	int id, hp;
@@ -8,8 +8,8 @@ public class MapObject {
 
 	public MapObject(int id) {
 		this.id = id;
-		this.name = Objects.name.get(id);
-		this.hp = Objects.hp.get(id);
+		this.name = ObjectProp.name.get(id);
+		this.hp = ObjectProp.hp.get(id);
 	}
 
 	void destroy() {
