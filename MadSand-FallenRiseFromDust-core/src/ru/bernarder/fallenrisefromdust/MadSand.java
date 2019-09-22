@@ -291,7 +291,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 		try {
 			int i = 0;
 			while (i < rcoords.length) {
-				Utils.batch.draw(Utils.tile[world.rend(player.y + (int) rcoords[i].y, player.x + (int) rcoords[i].x)],
+				Utils.batch.draw(Utils.tile[world.rend(player.x + (int) rcoords[i].x, player.y + (int) rcoords[i].y)],
 						Utils.ppos.x + rcoords[i].x * 33, Utils.ppos.y + rcoords[i].y * 33);
 				i++;
 			}
@@ -499,6 +499,8 @@ public class MadSand extends com.badlogic.gdx.Game {
 				Gui.createCharDialog();
 				started = false;
 			}
+			mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
+			camera.unproject(mouseinworld);
 			Gdx.input.setInputProcessor(Gui.overlay);
 			Utils.checkFocus();
 			if (Gui.overlay.getKeyboardFocus() != Gui.inputField && !charcrt) {

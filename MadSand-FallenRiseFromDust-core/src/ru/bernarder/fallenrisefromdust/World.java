@@ -49,7 +49,6 @@ public class World {
 	}
 
 	Map getLoc(Pair wc, int layer, int id) {
-		// Utils.out("GetLoc " + wc.x + " " + wc.y + " Layer " + layer + "Id " + id);
 		MapID loc = new MapID(wc, layer, id);
 		if (locExists(loc)) {
 			return WorldLoc.get(loc);
@@ -62,8 +61,6 @@ public class World {
 	}
 
 	Map getCurLoc() {
-		// Utils.out("Getloc wx " + MadSand.curxwpos + " wy " + MadSand.curywpos + "
-		// layer " +MadSand.curlayer);
 		return getLoc(curxwpos, curywpos, curlayer);
 	}
 
@@ -303,14 +300,16 @@ public class World {
 
 	public void clearCurLoc() {
 		Utils.out("clearCurLoc");
+		Map curLoc = getCurLoc();
+		int xsz = curLoc.getWidth(), ysz = curLoc.getHeight();
 		biome = 0;
 		int i = 0;
 		int ii = 0;
-		while (i < World.MAPSIZE + World.BORDER) {
-			while (ii < World.MAPSIZE + World.BORDER) {
+		while (i < ysz + World.BORDER) {
+			while (ii < xsz + World.BORDER) {
 				putMapTile(ii, i, 1, 5);
 				addObj(ii, i, 1, 13);
-				addObj(i, ii, 0);
+				addObj(ii, i, 0);
 				putMapTile(ii, i, 0);
 				ii++;
 			}
@@ -373,7 +372,7 @@ public class World {
 	}
 
 	public int rend(int x, int y) {
-		if (x >= 0 && y >= 0 && x < World.MAPSIZE && y < World.MAPSIZE) {
+		if (x >= 0 && y >= 0 && x < getCurLoc().getWidth() && y < getCurLoc().getHeight()) {
 			int tile = getCurLoc().getTile(x, y).id;
 			if (tile >= 0 && tile <= MadSand.LASTTILEID)
 				return tile;
