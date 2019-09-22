@@ -182,11 +182,11 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static Player player;
 
 	public void create() {
+
 		int radius = 13;
 		if (new File(SAVEDIR + "lastrend.dat").exists())
 			radius = (Integer.parseInt(Gui.getExternal("lastrend.dat")));
 		setParams(radius);
-
 		player = new Player(name);
 		Utils.out("Starting initialization!");
 		setRenderRadius();
@@ -248,6 +248,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 		Gui.initmenu();
 		Gui.font.getData().markupEnabled = true;
 		Gui.font1.getData().markupEnabled = true;
+		Gui.setUpInventory();
 		Utils.out("End of initialization!");
 	}
 
@@ -521,27 +522,24 @@ public class MadSand extends com.badlogic.gdx.Game {
 			Gui.overlay.act();
 			Utils.batch.end();
 		} else if (state.equals(GameState.INVENTORY)) {
-			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
-			Utils.batch.begin();
-			DrawGame();
-			Utils.batch.end();
-			this.invbatch.begin();
-			this.invcamera.position.set(314.0F, 235.0F, 0.0F);
-			this.invcamera.viewportWidth = ((float) (Gdx.graphics.getWidth() / 0.97D));
-			this.invcamera.viewportHeight = ((float) (Gdx.graphics.getHeight() / 0.97D));
-			this.invcamera.update();
-			mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
-			this.invcamera.unproject(mouseinworld);
-			this.invbatch.setProjectionMatrix(this.invcamera.combined);
-			this.invbatch.draw(Utils.inv, 0.0F, 0.0F);
-			// TODO: draw inventory (ImageButtons in scrollpane)
-			// Utils.item[] <-- item sprites
-			Utils.InvKeyCheck();
-			Utils.inInvKeyCheck();
-			this.invbatch.end();
+			try {
+				Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
+				Utils.batch.begin();
+				DrawGame();
+				Utils.batch.end();
+				mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
+				// this.invbatch.setProjectionMatrix(this.invcamera.combined);
+				// TODO: draw inventory (ImageButtons in scrollpane)
+				// Utils.item[] <-- item sprites
+				Utils.InvKeyCheck();
+				Utils.inInvKeyCheck();
+				// this.invbatch.end();
 
-			Gui.overlay.act();
-			Gui.overlay.draw();
+				Gui.overlay.act();
+				Gui.overlay.draw();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
 		} else if (state.equals(GameState.BUY)) {
 			// TODO: Trade menu

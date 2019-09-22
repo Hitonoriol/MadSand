@@ -10,7 +10,9 @@ import java.util.StringTokenizer;
 public class BuildScript {
 
 	/* [condition] [token] [value || constant]; */
+	final static char printID = '=';
 	final static char standingOnID = '!'; // !1 player_give @gold 100
+	final static char objInFrontID = '^';
 	final static char valueID = '$';
 	final static char itemStringID = '@';
 	final static String LINE_DELIMITER = ";";
@@ -52,11 +54,16 @@ public class BuildScript {
 	}
 
 	static int getValue(String arg) {
+		Pair coords = new Pair(MadSand.player.x, MadSand.player.y);
 		switch (arg) {
 		case Value.VALUE_PLAYERX:
-			return MadSand.player.x;
+			return coords.x;
 		case Value.VALUE_PLAYERY:
-			return MadSand.player.y;
+			return coords.y;
+		case Value.VALUE_PLAYER_LOOK_X:
+			return coords.addDirection(MadSand.player.look).x;
+		case Value.VALUE_PLAYER_LOOK_Y:
+			return coords.addDirection(MadSand.player.look).y;
 		default:
 			return 0;
 		}
@@ -89,15 +96,18 @@ public class BuildScript {
 
 	static boolean conditionFalse(char id, String cond) {
 		int sid = Integer.parseInt(cond.split(COMMAND_DELIMITER)[0].substring(1));
+		int x = MadSand.player.x;
+		int y = MadSand.player.y;
+		boolean condition = false;
 		switch (id) {
 		case standingOnID:
-			if (MadSand.world.getCurLoc().getTile(MadSand.player.x, MadSand.player.y).id == sid)
-				return false;
-			else
-				return true;
-		default:
-			return false;
+			condition = (MadSand.world.getCurLoc().getTile(x, y).id == sid);
+			break;
+		case objInFrontID:
+			condition = (MadSand.world.getCurLoc().getObject(x, y, MadSand.player.look).id == sid);
+			break;
 		}
+		return !condition;
 	}
 
 	public static void execute(String command, StringTokenizer tokens) {
@@ -215,11 +225,17 @@ public class BuildScript {
 		StringTokenizer lineTokens = new StringTokenizer(query, LINE_DELIMITER);
 		StringTokenizer commandTokens;
 		String command;
+		char id;
 		try {
 			while (lineTokens.hasMoreTokens()) {
 				commandTokens = new StringTokenizer(lineTokens.nextToken(), COMMAND_DELIMITER);
 				command = commandTokens.nextToken().trim();
-				if (!Character.isLetter(command.charAt(0)))
+				id = command.charAt(0);
+				if (id == printID) {
+					MadSand.print(query.substring(command.length()));
+					continue;
+				}
+				if (!Character.isLetter(id))
 					command += COMMAND_DELIMITER + commandTokens.nextToken();
 				execute(command, commandTokens);
 			}

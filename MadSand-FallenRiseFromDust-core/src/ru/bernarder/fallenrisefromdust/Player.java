@@ -5,6 +5,7 @@ import java.util.Random;
 import com.badlogic.gdx.Gdx;
 
 import ru.bernarder.fallenrisefromdust.enums.*;
+import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 
 public class Player {
 
@@ -50,7 +51,7 @@ public class Player {
 	public Player(String name) {
 		this.name = name;
 	}
-	
+
 	void reinit() {
 		inventory = new Inventory(str * 50);
 	}
@@ -67,7 +68,10 @@ public class Player {
 	}
 
 	void interact(final Direction direction) { // TODO: BuildScript onInteract events
-		// TODO
+		int id = MadSand.world.getCurLoc().getObject(x, y, look).id;
+		String action = ObjectProp.interactAction.get(id);
+		if (action != "-1")
+			BuildScript.execute(action);
 	}
 
 	public boolean isCollision(Direction direction, int flag) {

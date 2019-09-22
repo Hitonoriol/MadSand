@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
+import ru.bernarder.fallenrisefromdust.enums.ItemType;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
@@ -253,8 +254,10 @@ public class Utils {
 		int ptile = MadSand.world.getTileId(MadSand.player.x, MadSand.player.y);
 		MadSand.player.checkHands(id);
 		String action = ItemProp.useAction.get(id);
-		if (action != "-1")
+		if (action != "-1") {
 			BuildScript.execute(action);
+			return;
+		}
 		if ((ptile == 6) || (ptile == 16)) {
 			MadSand.print("You entered the dungeon.");
 			MadSand.world.curlayer += 1;
@@ -280,7 +283,7 @@ public class Utils {
 				MadSand.print("You dug some flint");
 			}
 		}
-		if (Item.getType(id) == 9) {
+		if (Item.getType(id) == ItemType.Consumable.get()) {
 			MadSand.print("You ate one " + ItemProp.name.get(id));
 			MadSand.player.heal(Integer.parseInt(ItemProp.heal.get(id).split(":")[0]));
 			MadSand.player.increaseStamina(Integer.parseInt(ItemProp.heal.get(id).split(":")[1]));
@@ -292,27 +295,27 @@ public class Utils {
 			MadSand.player.inventory.delItem(1, 5);
 			MadSand.world.getCurLoc().addObject(MadSand.player.x, MadSand.player.y, MadSand.player.look, 6);
 		}
-		if (Item.getType(id) == 4) {
+		if (Item.getType(id) == ItemType.HeadArmor.get()) {
 			// equip helmet
 		}
-		if (Item.getType(id) == 5) {
+		if (Item.getType(id) == ItemType.ChestArmor.get()) {
 			// equip chestplate
 		}
-		if (Item.getType(id) == 6) {
+		if (Item.getType(id) == ItemType.Shield.get()) {
 			// equip shield
 		}
-		if (Item.getType(id) == 3) { // crop
+		if (Item.getType(id) == ItemType.Crop.get()) { // crop
 			MadSand.player.inventory.delItem(id, 1);
 			MadSand.world.getCurLoc().addObject(MadSand.player.x, MadSand.player.y, MadSand.player.look,
 					Item.getAltObject(id));
 			// put crop in direction
 		}
-		if (Item.getType(id) == 1) {
+		if (Item.getType(id) == ItemType.PlaceableObject.get()) {
 			MadSand.player.inventory.delItem(id, 1);
 			MadSand.world.getCurLoc().addObject(MadSand.player.x, MadSand.player.y, MadSand.player.look,
 					Item.getAltObject(id));
 		}
-		if (Item.getType(id) == 2) {
+		if (Item.getType(id) == ItemType.PlaceableTile.get()) {
 			MadSand.player.inventory.delItem(id, 1);
 			MadSand.world.getCurLoc().addTile(MadSand.player.x, MadSand.player.y, MadSand.player.look,
 					Item.getAltObject(id));
@@ -321,15 +324,20 @@ public class Utils {
 	}
 
 	public static void InvKeyCheck() {
-		if (Gdx.input.isKeyJustPressed(33)) {
+		if (Gdx.input.isKeyJustPressed(Keys.E)) {
 			if (invent) {
 				funcButtonsSet(false);
+				Gdx.input.setInputProcessor(Gui.overlay);
 				Gui.invcontext.setVisible(false);
 				MadSand.contextopened = false;
 				MadSand.state = GameState.GAME;
 				Gui.mousemenu.setVisible(true);
+				Gui.overlay.setDebugAll(false);
+				Gui.invScroll.setVisible(false);
 				invent = false;
 			} else {
+				Gui.overlay.setDebugAll(true);
+				Gui.invScroll.setVisible(true);
 				Gui.gamecontext.setVisible(false);
 				MadSand.contextopened = false;
 				Gui.mousemenu.setVisible(false);
@@ -649,11 +657,12 @@ public class Utils {
 			e.printStackTrace();
 		}
 	}
+	static Calendar cal = Calendar.getInstance();
+	static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 
 	public static void out(String arg) {
 		if (tester) {
-			Calendar cal = Calendar.getInstance();
-			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+			
 			System.out.print("[" + sdf.format(cal.getTime()) + "] " + arg + "\n");
 		}
 	}

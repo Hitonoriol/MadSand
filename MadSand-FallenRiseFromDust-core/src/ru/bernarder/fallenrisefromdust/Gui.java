@@ -53,7 +53,7 @@ public class Gui {
 		parameter.borderWidth = 0.9f;
 		parameter.borderColor = Color.BLACK;
 		parameter.color = Color.WHITE;
-		com.badlogic.gdx.graphics.g2d.BitmapFont font = generator.generateFont(parameter);
+		BitmapFont font = generator.generateFont(parameter);
 		font.getData().markupEnabled = true;
 		Gui.skin = new Skin();
 		Gui.skin.add("default", font);
@@ -115,6 +115,29 @@ public class Gui {
 	static Label IN;
 	static Label LK;
 	static Label DX;
+
+	static ScrollPane invScroll;
+	static Table invTable;
+
+	static void setUpInventory() {
+		int w = 800, h = 400;
+		invTable = new Table();
+		invTable.setBackground(bck);
+		invTable.align(Align.topRight);
+		invScroll = new ScrollPane(invTable);
+		invScroll.setVisible(false);
+		invTable.setWidth(w);
+		invScroll.setHeight(h);
+		invScroll.setWidth(invTable.getWidth());
+		invTable.add();
+		invTable.add();
+		invTable.add();
+		invTable.add();
+		invTable.row();
+
+		invScroll.setPosition(Gdx.graphics.getWidth() / 2 - w/2, Gdx.graphics.getHeight() / 2 - h/2);
+		overlay.addActor(invScroll);
+	}
 
 	public static void showStatsWindow() {
 		final Dialog dialog = new Dialog("", Gui.skin);
@@ -634,7 +657,6 @@ public class Gui {
 		}
 		Gui.overlay = new Stage();
 		Gui.menu = new Stage();
-		Gui.invstage = new Stage();
 		Gui.craft = new Stage();
 		Gui.craftbl = new Table();
 		Gui.inputField = new TextField("", Gui.skin);
@@ -797,12 +819,12 @@ public class Gui {
 		ovtbl.add();
 		ovtbl.add();
 		ovtbl.add();
-		ovtbl.add(Gui.craftButton).width(200.0F).align(16).row();
+		ovtbl.add(Gui.craftButton).width(200.0F).row();
 		Gui.craftButton.setVisible(false);
 		ovtbl.add();
 		ovtbl.add();
 		ovtbl.add();
-		ovtbl.add(Gui.exitButton).width(200.0F).align(16).row();
+		ovtbl.add(Gui.exitButton).width(200.0F).row();
 		int aa = 0;
 		while (aa < 4) {
 			ovtbl.add();
@@ -992,7 +1014,6 @@ public class Gui {
 	static Stage overlay;
 	static Table craftbl;
 	static Skin skin;
-	static Stage invstage;
 	static Stage craft;
 	static TextButton[] craftbtn;
 	static Stage menu;
