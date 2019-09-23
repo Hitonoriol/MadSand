@@ -46,7 +46,7 @@ public class Player {
 	String name;
 	boolean isMain;
 	Faction faction;
-	Direction look;
+	Direction look = Direction.DOWN;
 
 	public Player(String name) {
 		this.name = name;

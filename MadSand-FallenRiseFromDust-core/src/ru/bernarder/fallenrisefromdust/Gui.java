@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -25,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
@@ -118,24 +120,23 @@ public class Gui {
 
 	static ScrollPane invScroll;
 	static Table invTable;
+	static int ITEMS_PER_ROW = 5;
 
 	static void setUpInventory() {
-		int w = 800, h = 400;
+		int w = 400, h = 400, offset = 5;
 		invTable = new Table();
 		invTable.setBackground(bck);
-		invTable.align(Align.topRight);
+		invTable.align(Align.topLeft);
 		invScroll = new ScrollPane(invTable);
 		invScroll.setVisible(false);
 		invTable.setWidth(w);
 		invScroll.setHeight(h);
-		invScroll.setWidth(invTable.getWidth());
-		invTable.add();
-		invTable.add();
-		invTable.add();
-		invTable.add();
-		invTable.row();
-
-		invScroll.setPosition(Gdx.graphics.getWidth() / 2 - w/2, Gdx.graphics.getHeight() / 2 - h/2);
+		invScroll.setWidth(w + offset);
+		//invTable.add(new InventoryUICell(new Item(10,1 )).cell);
+		//invTable.row();
+		invScroll.setOverscroll(false, false);
+		invScroll.setScrollingDisabled(true, false);
+		invScroll.setPosition(Gdx.graphics.getWidth() / 2 - w / 2, Gdx.graphics.getHeight() / 2 - h / 2);
 		overlay.addActor(invScroll);
 	}
 
@@ -623,8 +624,7 @@ public class Gui {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				MadSand.player.hand = 0;
 				MadSand.print("You freed your hands.");
-				Gui.equip[4].setDrawable(new com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable(
-						new com.badlogic.gdx.graphics.g2d.Sprite(Utils.cursor)));
+				Gui.equip[4].setDrawable(new SpriteDrawable(new Sprite(Utils.cursor)));
 			}
 
 		});
@@ -672,8 +672,6 @@ public class Gui {
 			}
 		});
 		Table logtbl = new Table(Gui.skin).align(10);
-		Table ovchat = new Table(Gui.skin).align(8);
-		ovchat.setFillParent(true);
 		logtbl.setFillParent(true);
 		int tpm = 0;
 		while (tpm < 10) {
@@ -681,15 +679,9 @@ public class Gui {
 			logtbl.row();
 			tpm++;
 		}
+		logtbl.add(Gui.inputField).width(200).height(30);
+		Gui.inputField.setVisible(false);
 		tpm = 0;
-
-		while (tpm <= 14) {
-			ovchat.add(Gui.chat[tpm]).width(100.0F);
-			ovchat.row();
-			tpm++;
-		}
-		ovchat.add(Gui.inputField).width(200.0F);
-		ovchat.row();
 		Table ovtbl = new Table(Gui.skin).align(18);
 		MadSand.dialog = new Table(Gui.skin).align(1);
 		Gui.acceptD = new TextButton("Accept", Gui.skin);
@@ -727,7 +719,6 @@ public class Gui {
 		Gui.overlay.addActor(ovtbl);
 		Gui.overlay.addActor(MadSand.maindialog);
 		Gui.overlay.addActor(logtbl);
-		Gui.overlay.addActor(ovchat);
 		Gui.overlay.addActor(Gui.mousemenu);
 		Gui.overlay.addActor(Gui.invcontext);
 		Gui.overlay.addActor(Gui.gamecontext);

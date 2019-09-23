@@ -126,7 +126,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static int wmx = 0;
 	public static int wmy = 0;
 	public static boolean contextopened = false;
-	public static int camoffset;
+	public static int camxoffset;
 	public static int camyoffset;
 	public static int OREFIELDS = 10;
 	public static int OVERWORLD = 1;
@@ -267,7 +267,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 	}
 
 	public void updateCamToxy(float f, float y2) {
-		camera.position.set(f + 17.0F + camoffset, y2 + 37.0F + camyoffset, 0.0F);
+		camera.position.set(f + 17.0F + camxoffset, y2 + 37.0F + camyoffset, 0.0F);
 		if (camera.position.y < 260.0F)
 			camera.position.y = 250.0F;
 		if (camera.position.x < 320.0F)

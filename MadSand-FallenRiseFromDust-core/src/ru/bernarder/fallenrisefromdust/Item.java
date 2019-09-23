@@ -1,6 +1,7 @@
 package ru.bernarder.fallenrisefromdust;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 
@@ -47,6 +48,11 @@ public class Item {
 
 		Item rhs = (Item) obj;
 		return new EqualsBuilder().append(id, rhs.id).isEquals();
+	}
+	
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(14407, 7177).append(id).toHashCode();
 	}
 
 	Item reinit(int id, int q) {

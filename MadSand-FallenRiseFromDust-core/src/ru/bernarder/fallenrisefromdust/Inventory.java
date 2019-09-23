@@ -1,9 +1,11 @@
 package ru.bernarder.fallenrisefromdust;
 
+import java.util.HashMap;
 import java.util.Vector;
 
 public class Inventory {
 	Vector<Item> items = new Vector<Item>();
+	HashMap<Item, InventoryUICell> itemUI = new HashMap<Item, InventoryUICell>();
 	double curWeight, maxWeight;
 
 	public Inventory(float maxWeight) {
@@ -36,15 +38,38 @@ public class Inventory {
 		curWeight = 0;
 	}
 
+	private void refreshRemoveItem(Item item) {
+		if (itemUI.containsKey(item)) {
+			itemUI.get(item).cell.remove();
+			itemUI.remove(item);
+			Gui.invTable.pack();
+		}
+	}
+
+	private void refreshItem(Item item) {
+		if (itemUI.containsKey(item))
+			itemUI.get(item).setText(item.quantity + "");
+		else {
+			InventoryUICell cell = new InventoryUICell(item);
+			itemUI.put(item, cell);
+			Gui.invTable.add(cell.cell);
+		}
+	}
+
 	boolean putItem(int id, int quantity, boolean silent) {
 		Item item = new Item(id, quantity);
+		Item updItem;
 		double newWeight = item.getWeight() + curWeight;
 		int existingIdx = getSameCell(id);
 		if (newWeight <= maxWeight) {
-			if (existingIdx != -1)
+			if (existingIdx != -1) {
 				items.get(existingIdx).quantity += quantity;
-			else
+				updItem = items.get(existingIdx);
+			} else {
 				items.add(item);
+				updItem = item;
+			}
+			refreshItem(updItem);
 			curWeight = newWeight;
 			if (!silent)
 				MadSand.print("You got " + Item.queryToName(id + "/" + quantity));
@@ -64,11 +89,15 @@ public class Inventory {
 		if (idx == -1)
 			return false;
 		else {
-			curWeight -= new Item(id, quantity).getWeight();
-			if ((items.get(idx).quantity - quantity) <= 0)
+			Item item = new Item(id, quantity);
+			curWeight -= item.getWeight();
+			if ((items.get(idx).quantity - quantity) <= 0) {
 				items.remove(idx);
-			else
+				refreshRemoveItem(item);
+			} else {
 				items.get(idx).quantity -= quantity;
+				refreshItem(items.get(idx));
+			}
 			dump();
 			return true;
 		}

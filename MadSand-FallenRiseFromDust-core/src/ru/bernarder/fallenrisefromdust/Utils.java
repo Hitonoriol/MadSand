@@ -373,39 +373,30 @@ public class Utils {
 	}
 
 	public static void KeyCheck() {
-		if (Gdx.input.isKeyJustPressed(Keys.Q)) {
+		if (Gdx.input.isKeyJustPressed(Keys.GRAVE))
+			Gui.inputField.setVisible(!Gui.inputField.isVisible());
+		if (Gdx.input.isKeyJustPressed(Keys.Q))
 			Gui.showStatsWindow();
-		}
-		if (Gdx.input.isKeyJustPressed(Keys.ENTER)) {
+		if (Gdx.input.isKeyJustPressed(Keys.ENTER))
 			MadSand.player.interact(MadSand.player.look);
-		}
-		if (Gdx.input.isKeyPressed(145))
+		if (Gdx.input.isKeyPressed(Keys.NUMPAD_3))
 			MadSand.ZOOM = (float) (MadSand.ZOOM + 0.01D);
-		if (Gdx.input.isKeyPressed(147))
+		if (Gdx.input.isKeyPressed(Keys.NUMPAD_1))
 			MadSand.ZOOM = (float) (MadSand.ZOOM - 0.01D);
-		if (Gdx.input.isKeyPressed(148))
-			MadSand.camoffset -= 2;
-		if (Gdx.input.isKeyPressed(150))
-			MadSand.camoffset += 2;
-		if (Gdx.input.isKeyPressed(152))
+		if (Gdx.input.isKeyPressed(Keys.NUMPAD_4))
+			MadSand.camxoffset -= 2;
+		if (Gdx.input.isKeyPressed(Keys.NUMPAD_6))
+			MadSand.camxoffset += 2;
+		if (Gdx.input.isKeyPressed(Keys.NUMPAD_8))
 			MadSand.camyoffset += 2;
-		if (Gdx.input.isKeyPressed(146))
+		if (Gdx.input.isKeyPressed(Keys.NUMPAD_2))
 			MadSand.camyoffset -= 2;
-		if (Gdx.input.isKeyPressed(149)) {
+		if (Gdx.input.isKeyPressed(Keys.NUMPAD_5)) {
 			MadSand.camyoffset = 0;
-			MadSand.camoffset = 0;
+			MadSand.camxoffset = 0;
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.U)) {
 			useKeyAction();
-		}
-		if (Gdx.input.isKeyJustPressed(Keys.Z)) {
-			if (tester) {
-				tester = false;
-				MadSand.showMsg("Tester mode turned off!");
-			} else {
-				tester = true;
-				MadSand.showMsg("Tester mode turned on!\nCheck the console output!");
-			}
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.UP) && (!MadSand.stepping)) {
 			turn(Direction.UP);
@@ -434,13 +425,13 @@ public class Utils {
 		if ((Gdx.input.isKeyJustPressed(Keys.Y)) && (tester)) {
 			MadSand.teleport(MadSand.wmx, MadSand.wmy);
 		}
-		if ((Gdx.input.isKeyPressed(129)) && (Gdx.input.isKeyPressed(46)) && (tester)) {
+		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyPressed(Keys.R)) && (tester)) {
 			MadSand.world.Generate();
 		}
-		if ((Gdx.input.isKeyPressed(129)) && (Gdx.input.isKeyPressed(20)) && (tester)) {
+		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyPressed(Keys.DOWN)) && (tester)) {
 			MadSand.world.curlayer = 1;
 		}
-		if ((Gdx.input.isKeyPressed(129)) && (Gdx.input.isKeyPressed(19)) && (tester)) {
+		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyPressed(Keys.UP)) && (tester)) {
 			MadSand.world.curlayer = 0;
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.F11)) {
@@ -471,28 +462,28 @@ public class Utils {
 			MadSand.print("You freed your hands.");
 			Gui.equip[4].setDrawable(new com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable(new Sprite(cursor)));
 		}
-		if ((Gdx.input.isKeyPressed(29)) && (!MadSand.stepping)) {
+		if ((Gdx.input.isKeyPressed(Keys.A)) && (!MadSand.stepping)) {
 			MadSand.player.look = Direction.LEFT;
 			turn(MadSand.player.look);
 			if (!VerifyPosition(MadSand.player.look))
 				move(MadSand.player.look);
 			isInFront();
 		}
-		if ((Gdx.input.isKeyPressed(32)) && (!MadSand.stepping)) {
+		if ((Gdx.input.isKeyPressed(Keys.D)) && (!MadSand.stepping)) {
 			MadSand.player.look = Direction.RIGHT;
 			turn(MadSand.player.look);
 			if (!VerifyPosition(MadSand.player.look))
 				move(MadSand.player.look);
 			isInFront();
 		}
-		if ((Gdx.input.isKeyPressed(51)) && (!MadSand.stepping)) {
+		if ((Gdx.input.isKeyPressed(Keys.W)) && (!MadSand.stepping)) {
 			MadSand.player.look = Direction.UP;
 			turn(MadSand.player.look);
 			if (!VerifyPosition(MadSand.player.look))
 				move(MadSand.player.look);
 			isInFront();
 		}
-		if ((Gdx.input.isKeyPressed(47)) && (!MadSand.stepping)) {
+		if ((Gdx.input.isKeyPressed(Keys.S)) && (!MadSand.stepping)) {
 			MadSand.player.look = Direction.DOWN;
 			turn(MadSand.player.look);
 			if (!VerifyPosition(MadSand.player.look))
@@ -657,12 +648,13 @@ public class Utils {
 			e.printStackTrace();
 		}
 	}
+
 	static Calendar cal = Calendar.getInstance();
 	static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 
 	public static void out(String arg) {
 		if (tester) {
-			
+
 			System.out.print("[" + sdf.format(cal.getTime()) + "] " + arg + "\n");
 		}
 	}
