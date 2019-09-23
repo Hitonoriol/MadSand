@@ -12,7 +12,6 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
-import ru.bernarder.fallenrisefromdust.enums.ItemType;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
@@ -189,14 +188,13 @@ public class Utils {
 			i++;
 		}
 		i = 0;
-		Tuple<Integer, String> tmp = new Tuple<Integer, String>(0, "");
 		while (i < MadSand.LASTOBJID) {
 			objects[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "obj/" + i + ".png"));
 			ObjectProp.name.put(i, getKey(resdoc, "object", "" + i, "name"));
 			ObjectProp.hp.put(i, Integer.parseInt(getKey(resdoc, "object", "" + i, "tough")));
-			ObjectProp.altitems.put(tmp.set(i, "altitem"), getKey(resdoc, "object", "" + i, "altitem"));
-			ObjectProp.altitems.put(tmp.set(i, "hand"), getKey(resdoc, "object", "" + i, "hand"));
-			ObjectProp.altitems.put(tmp.set(i, "skillbonus"), getKey(resdoc, "object", "" + i, "skillbonus"));
+			ObjectProp.altitems.put(new Tuple<Integer, String>(i, "altitem"), getKey(resdoc, "object", "" + i, "altitem"));
+			ObjectProp.altitems.put(new Tuple<Integer, String>(i, "hand"), getKey(resdoc, "object", "" + i, "hand"));
+			ObjectProp.altitems.put(new Tuple<Integer, String>(i, "skillbonus"), getKey(resdoc, "object", "" + i, "skillbonus"));
 			ObjectProp.vRendMasks.put(i, Integer.parseInt(getKey(resdoc, "object", "" + i, "vmask")));
 			ObjectProp.hRendMasks.put(i, Integer.parseInt(getKey(resdoc, "object", "" + i, "hmask")));
 			ObjectProp.interactAction.put(i, getKey(resdoc, "object", "" + i, "oninteract"));
@@ -248,104 +246,33 @@ public class Utils {
 	public static String getItem(int id) {
 		return ItemProp.name.get(id);
 	}
-
-	public static void useKeyAction() { // TODO: usekey actions using BuildScript
-		int id = MadSand.player.hand;
-		int ptile = MadSand.world.getTileId(MadSand.player.x, MadSand.player.y);
-		MadSand.player.checkHands(id);
-		String action = ItemProp.useAction.get(id);
-		if (action != "-1") {
-			BuildScript.execute(action);
-			return;
+	
+	static void toggleInventory() {
+		if (invent) {
+			funcButtonsSet(false);
+			Gdx.input.setInputProcessor(Gui.overlay);
+			MadSand.contextopened = false;
+			MadSand.state = GameState.GAME;
+			Gui.mousemenu.setVisible(true);
+			Gui.overlay.setDebugAll(false);
+			MadSand.player.inventory.inventoryUI.toggleVisible();
+			invent = false;
+		} else {
+			Gui.overlay.setDebugAll(true);
+			MadSand.player.inventory.inventoryUI.toggleVisible();
+			Gui.gamecontext.setVisible(false);
+			MadSand.contextopened = false;
+			Gui.mousemenu.setVisible(false);
+			funcButtonsSet(true);
+			Gdx.input.setInputProcessor(Gui.overlay);
+			MadSand.state = GameState.INVENTORY;
+			invent = true;
 		}
-		if ((ptile == 6) || (ptile == 16)) {
-			MadSand.print("You entered the dungeon.");
-			MadSand.world.curlayer += 1;
-			MadSand.world.delObj(MadSand.player.x, MadSand.player.y);
-		}
-		if (id == 6) {
-			if (ptile == 0) {
-				MadSand.world.putMapTile(MadSand.player.y, MadSand.player.x, 6);
-				MadSand.print("You dug a hole.");
-			}
-			if (ptile == 3) {
-				MadSand.world.putMapTile(MadSand.player.y, MadSand.player.x, 16);
-				MadSand.print("You dug a hole.");
-			}
-			if (ptile == 1) {
-				MadSand.player.inventory.putItem(5, 1, true);
-				MadSand.world.putMapTile(MadSand.player.y, MadSand.player.x, 0);
-				MadSand.print("You dug some clay");
-			}
-			if (ptile == 2) {
-				MadSand.player.inventory.putItem(9, 1, true);
-				MadSand.world.putMapTile(MadSand.player.y, MadSand.player.x, 0);
-				MadSand.print("You dug some flint");
-			}
-		}
-		if (Item.getType(id) == ItemType.Consumable.get()) {
-			MadSand.print("You ate one " + ItemProp.name.get(id));
-			MadSand.player.heal(Integer.parseInt(ItemProp.heal.get(id).split(":")[0]));
-			MadSand.player.increaseStamina(Integer.parseInt(ItemProp.heal.get(id).split(":")[1]));
-		}
-		if ((id == 9) && (MadSand.player.inventory.getSameCell(9, 1) != -1)
-				&& (MadSand.player.inventory.getSameCell(1, 5) != -1)) {
-			MadSand.print("You placed a campfire");
-			MadSand.player.inventory.delItem(9, 1);
-			MadSand.player.inventory.delItem(1, 5);
-			MadSand.world.getCurLoc().addObject(MadSand.player.x, MadSand.player.y, MadSand.player.look, 6);
-		}
-		if (Item.getType(id) == ItemType.HeadArmor.get()) {
-			// equip helmet
-		}
-		if (Item.getType(id) == ItemType.ChestArmor.get()) {
-			// equip chestplate
-		}
-		if (Item.getType(id) == ItemType.Shield.get()) {
-			// equip shield
-		}
-		if (Item.getType(id) == ItemType.Crop.get()) { // crop
-			MadSand.player.inventory.delItem(id, 1);
-			MadSand.world.getCurLoc().addObject(MadSand.player.x, MadSand.player.y, MadSand.player.look,
-					Item.getAltObject(id));
-			// put crop in direction
-		}
-		if (Item.getType(id) == ItemType.PlaceableObject.get()) {
-			MadSand.player.inventory.delItem(id, 1);
-			MadSand.world.getCurLoc().addObject(MadSand.player.x, MadSand.player.y, MadSand.player.look,
-					Item.getAltObject(id));
-		}
-		if (Item.getType(id) == ItemType.PlaceableTile.get()) {
-			MadSand.player.inventory.delItem(id, 1);
-			MadSand.world.getCurLoc().addTile(MadSand.player.x, MadSand.player.y, MadSand.player.look,
-					Item.getAltObject(id));
-		}
-
 	}
 
 	public static void InvKeyCheck() {
 		if (Gdx.input.isKeyJustPressed(Keys.E)) {
-			if (invent) {
-				funcButtonsSet(false);
-				Gdx.input.setInputProcessor(Gui.overlay);
-				Gui.invcontext.setVisible(false);
-				MadSand.contextopened = false;
-				MadSand.state = GameState.GAME;
-				Gui.mousemenu.setVisible(true);
-				Gui.overlay.setDebugAll(false);
-				Gui.invScroll.setVisible(false);
-				invent = false;
-			} else {
-				Gui.overlay.setDebugAll(true);
-				Gui.invScroll.setVisible(true);
-				Gui.gamecontext.setVisible(false);
-				MadSand.contextopened = false;
-				Gui.mousemenu.setVisible(false);
-				funcButtonsSet(true);
-				Gdx.input.setInputProcessor(Gui.overlay);
-				MadSand.state = GameState.INVENTORY;
-				invent = true;
-			}
+			toggleInventory();
 		}
 	}
 
@@ -396,7 +323,7 @@ public class Utils {
 			MadSand.camxoffset = 0;
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.U)) {
-			useKeyAction();
+			MadSand.player.useItem();
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.UP) && (!MadSand.stepping)) {
 			turn(Direction.UP);

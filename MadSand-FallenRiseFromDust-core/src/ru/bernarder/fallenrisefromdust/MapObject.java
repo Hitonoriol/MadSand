@@ -30,4 +30,14 @@ public class MapObject {
 		this.verify();
 		return this;
 	}
+
+	static int getAltItem(int id) {
+		Utils.out("Getting altitem for obj " + id);
+		String items = ObjectProp.altitems.get(new Tuple<Integer, String>(id, "altitem"));
+		if (items.indexOf(',') != -1) {
+			String it[] = items.split("\\,");
+			return Integer.parseInt(it[Utils.random.nextInt(it.length)]);
+		} else
+			return Integer.parseInt(items);
+	}
 }

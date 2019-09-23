@@ -4,19 +4,25 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
+import com.esotericsoftware.kryo.Kryo;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
+import ru.bernarder.fallenrisefromdust.enums.Faction;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 
@@ -87,7 +93,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 	static final int MAXOREFIELDSIZE = 10;
 	static boolean renderc = false;
 
-	static String WORLDNAME = "My world";
+	static String WORLDNAME = "Save Slot #1";
 
 	public static int[] craftableid;
 	public static int CRAFTABLES = 0;
@@ -131,7 +137,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static int OREFIELDS = 10;
 	public static int OVERWORLD = 1;
 	public static int UNDERWORLD = 0;
-	public static int MAXSAVESLOTS = 4;
+	public static int MAXSAVESLOTS = 11;
 	public static int CROPS;
 	public static boolean tonext = false;
 	public static int tempwx, tempwy;
@@ -181,7 +187,24 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static World world;
 	public static Player player;
 
+	static Kryo kryo;
+
 	public void create() {
+		kryo = new Kryo();
+		kryo.register(Player.class);
+		kryo.register(int[].class);
+		kryo.register(Faction.class);
+		kryo.register(Inventory.class);
+		kryo.register(InventoryUI.class);
+		kryo.register(Label.class);
+		kryo.register(Group.class);
+		kryo.register(ImageButton.class);
+		kryo.register(Array.class);
+		kryo.register(Object[].class);
+		kryo.register(BitmapFontCache.class);
+		kryo.register(com.badlogic.gdx.graphics.Color.class);
+		kryo.register(com.badlogic.gdx.graphics.g2d.BitmapFont.class);
+		kryo.register(java.util.Vector.class);
 
 		int radius = 13;
 		if (new File(SAVEDIR + "lastrend.dat").exists())
@@ -197,7 +220,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		createDirs();
 		Utils.Initf();
 		world = new World(10);
 
@@ -215,7 +237,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 		Gui.gui[1] = new Label("Level: " + player.lvl, Gui.skin);
 		Gui.gui[2] = new Label("Experience: " + player.exp + "/" + player.requiredexp, Gui.skin);
 		Gui.gui[3] = new Label("", Gui.skin);
-		Gui.log = new Label[10];
 		QuestUtils.init();
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.local(SAVEDIR + FONT_PATH));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -225,11 +246,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 		Gui.font1 = generator.generateFont(parameter);
 		generator.dispose();
 		Gdx.graphics.setContinuousRendering(true);
-		int cxxc = 0;
-		while (cxxc < 10) {
-			Gui.log[cxxc] = new Label(" ", Gui.skin);
-			cxxc++;
-		}
 		Utils.ubound = (World.worldCoord(World.MAPSIZE) - 33);
 		Utils.lbound = (World.worldCoord(World.MAPSIZE) - 33);
 		camera = new OrthographicCamera();
@@ -248,7 +264,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 		Gui.initmenu();
 		Gui.font.getData().markupEnabled = true;
 		Gui.font1.getData().markupEnabled = true;
-		Gui.setUpInventory();
 		Utils.out("End of initialization!");
 	}
 
@@ -473,6 +488,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static void createDirs() {
 		File saveloc = new File(SAVEDIR);
 		File maploc = new File(MAPDIR);
+		File curworld = new File(MadSand.MAPDIR + MadSand.WORLDNAME);
 
 		if (!saveloc.exists()) {
 			saveloc.mkdirs();
@@ -480,21 +496,30 @@ public class MadSand extends com.badlogic.gdx.Game {
 		if (!maploc.exists()) {
 			maploc.mkdirs();
 		}
+		if (!curworld.exists())
+			curworld.mkdirs();
 	}
 
+	static int repeat = 1;
+	static int li;
+	static String oldarg = "";
+
 	public static void print(String arg) {
-		String ar = Gui.log[0].getText().toString();
-		if (!ar.equals(arg)) {
+		if (!oldarg.equals(arg)) {
+			repeat = 1;
+			oldarg = arg;
 			int i = Gui.log.length - 1;
 			while (i >= 0) {
 				if (i != 0)
 					Gui.log[i].setText(Gui.log[i - 1].getText());
-				else
+				else {
 					Gui.log[i].setText(arg);
-				;
+					li = i;
+				}
 				i--;
 			}
-		}
+		} else
+			Gui.log[li].setText(oldarg + " x" + (++repeat));
 	}
 
 	public void render() {
@@ -528,12 +553,8 @@ public class MadSand extends com.badlogic.gdx.Game {
 				DrawGame();
 				Utils.batch.end();
 				mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
-				// this.invbatch.setProjectionMatrix(this.invcamera.combined);
-				// TODO: draw inventory (ImageButtons in scrollpane)
-				// Utils.item[] <-- item sprites
 				Utils.InvKeyCheck();
 				Utils.inInvKeyCheck();
-				// this.invbatch.end();
 
 				Gui.overlay.act();
 				Gui.overlay.draw();

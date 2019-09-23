@@ -750,7 +750,7 @@
          <atk>0</atk>
          <accuracy>0</accuracy>
          <friendly>0</friendly>
-         <fraction>Nobody</fraction>
+         <faction>Nobody</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="1">
@@ -762,7 +762,7 @@
          <atk>1</atk>
          <accuracy>2</accuracy>
          <friendly>1</friendly>
-         <fraction>Marauders</fraction>
+         <faction>Marauders</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="2">
@@ -774,7 +774,7 @@
          <atk>1</atk>
          <accuracy>2</accuracy>
          <friendly>1</friendly>
-         <fraction>Outlaws</fraction>
+         <faction>Outlaws</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="3">
@@ -786,7 +786,7 @@
          <atk>4</atk>
          <accuracy>5</accuracy>
          <friendly>1</friendly>
-         <fraction>Marauders</fraction>
+         <faction>Marauders</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="4">
@@ -798,7 +798,7 @@
          <atk>5</atk>
          <accuracy>5</accuracy>
          <friendly>1</friendly>
-         <fraction>Marauders</fraction>
+         <faction>Marauders</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="5">
@@ -810,7 +810,7 @@
          <atk>11</atk>
          <accuracy>50</accuracy>
          <friendly>1</friendly>
-         <fraction>Partisans</fraction>
+         <faction>Partisans</faction>
          <spawnonce>1</spawnonce>
          <qids>0,1</qids>
       </npc>
@@ -823,7 +823,7 @@
          <atk>20</atk>
          <accuracy>25</accuracy>
          <friendly>1</friendly>
-         <fraction>Outlaws</fraction>
+         <faction>Outlaws</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="7">
@@ -835,7 +835,7 @@
          <atk>18</atk>
          <accuracy>20</accuracy>
          <friendly>1</friendly>
-         <fraction>Outlaws</fraction>
+         <faction>Outlaws</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="8">
@@ -847,7 +847,7 @@
          <atk>11</atk>
          <accuracy>50</accuracy>
          <friendly>1</friendly>
-         <fraction>Marauders</fraction>
+         <faction>Marauders</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="9">
@@ -859,7 +859,7 @@
          <atk>5</atk>
          <accuracy>10</accuracy>
          <friendly>1</friendly>
-         <fraction>Partisans</fraction>
+         <faction>Partisans</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="10">
@@ -871,7 +871,7 @@
          <atk>5</atk>
          <accuracy>5</accuracy>
          <friendly>1</friendly>
-         <fraction>Partisans</fraction>
+         <faction>Partisans</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="11">
@@ -883,7 +883,7 @@
          <atk>35</atk>
          <accuracy>5</accuracy>
          <friendly>1</friendly>
-         <fraction>Outlaws</fraction>
+         <faction>Outlaws</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="12">
@@ -895,7 +895,7 @@
          <atk>5</atk>
          <accuracy>1</accuracy>
          <friendly>1</friendly>
-         <fraction>Partisans</fraction>
+         <faction>Partisans</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="13">
@@ -907,7 +907,7 @@
          <atk>11</atk>
          <accuracy>50</accuracy>
          <friendly>1</friendly>
-         <fraction>Marauders</fraction>
+         <faction>Marauders</faction>
          <spawnonce>1</spawnonce>
       </npc>
       <npc id="14">
@@ -919,7 +919,7 @@
          <atk>1</atk>
          <accuracy>5</accuracy>
          <friendly>1</friendly>
-         <fraction>Monsters</fraction>
+         <faction>Monsters</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="15">
@@ -931,7 +931,7 @@
          <atk>4</atk>
          <accuracy>10</accuracy>
          <friendly>1</friendly>
-         <fraction>Monsters</fraction>
+         <faction>Monsters</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="16">
@@ -943,7 +943,7 @@
          <atk>7</atk>
          <accuracy>4</accuracy>
          <friendly>1</friendly>
-         <fraction>Monsters</fraction>
+         <faction>Monsters</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="17">
@@ -955,7 +955,7 @@
          <atk>11</atk>
          <accuracy>9</accuracy>
          <friendly>1</friendly>
-         <fraction>Monsters</fraction>
+         <faction>Monsters</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="18">
@@ -967,7 +967,7 @@
          <atk>1</atk>
          <accuracy>5</accuracy>
          <friendly>1</friendly>
-         <fraction>Monsters</fraction>
+         <faction>Monsters</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="19">
@@ -979,7 +979,7 @@
          <atk>2</atk>
          <accuracy>15</accuracy>
          <friendly>1</friendly>
-         <fraction>Monsters</fraction>
+         <faction>Monsters</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="20">
@@ -991,7 +991,7 @@
          <atk>10</atk>
          <accuracy>5</accuracy>
          <friendly>1</friendly>
-         <fraction>Monsters</fraction>
+         <faction>Monsters</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="21">
@@ -1003,7 +1003,7 @@
          <atk>1</atk>
          <accuracy>1</accuracy>
          <friendly>1</friendly>
-         <fraction>Monsters</fraction>
+         <faction>Monsters</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="22">
@@ -1015,7 +1015,7 @@
          <atk>1</atk>
          <accuracy>1</accuracy>
          <friendly>1</friendly>
-         <fraction>Monsters</fraction>
+         <faction>Monsters</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="23">
@@ -1027,7 +1027,7 @@
          <atk>1</atk>
          <accuracy>1</accuracy>
          <friendly>1</friendly>
-         <fraction>Monsters</fraction>
+         <faction>Monsters</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="24">
@@ -1039,7 +1039,7 @@
          <atk>1</atk>
          <accuracy>1</accuracy>
          <friendly>1</friendly>
-         <fraction>Monsters</fraction>
+         <faction>Monsters</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="25">
@@ -1051,7 +1051,7 @@
          <atk>1</atk>
          <accuracy>1</accuracy>
          <friendly>1</friendly>
-         <fraction>Monsters</fraction>
+         <faction>Monsters</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="26">
@@ -1063,7 +1063,7 @@
          <atk>13</atk>
          <accuracy>25</accuracy>
          <friendly>1</friendly>
-         <fraction>Monsters</fraction>
+         <faction>Monsters</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="27">
@@ -1075,7 +1075,7 @@
          <atk>4</atk>
          <accuracy>5</accuracy>
          <friendly>1</friendly>
-         <fraction>Monsters</fraction>
+         <faction>Monsters</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="28">
@@ -1087,7 +1087,7 @@
          <atk>1</atk>
          <accuracy>1</accuracy>
          <friendly>1</friendly>
-         <fraction>Monsters</fraction>
+         <faction>Monsters</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="29">
@@ -1099,7 +1099,7 @@
          <atk>11</atk>
          <accuracy>10</accuracy>
          <friendly>1</friendly>
-         <fraction>Monsters</fraction>
+         <faction>Monsters</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="30">
@@ -1111,7 +1111,7 @@
          <atk>8</atk>
          <accuracy>8</accuracy>
          <friendly>1</friendly>
-         <fraction>Monsters</fraction>
+         <faction>Monsters</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="31">
@@ -1123,7 +1123,7 @@
          <atk>4</atk>
          <accuracy>5</accuracy>
          <friendly>1</friendly>
-         <fraction>Monsters</fraction>
+         <faction>Monsters</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="32">
@@ -1135,7 +1135,7 @@
          <atk>12</atk>
          <accuracy>12</accuracy>
          <friendly>1</friendly>
-         <fraction>Monsters</fraction>
+         <faction>Monsters</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="33">
@@ -1147,7 +1147,7 @@
          <atk>1</atk>
          <accuracy>1</accuracy>
          <friendly>1</friendly>
-         <fraction>Monsters</fraction>
+         <faction>Monsters</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="34">
@@ -1159,7 +1159,7 @@
          <atk>1</atk>
          <accuracy>1</accuracy>
          <friendly>1</friendly>
-         <fraction>Monsters</fraction>
+         <faction>Monsters</faction>
          <spawnonce>0</spawnonce>
       </npc>
       <npc id="35">
@@ -1171,14 +1171,14 @@
          <atk>3</atk>
          <accuracy>5</accuracy>
          <friendly>1</friendly>
-         <fraction>Monsters</fraction>
+         <faction>Monsters</faction>
          <spawnonce>0</spawnonce>
       </npc>
       
    </mobs>
    <items>
    	<item id="0">
-         <name>Void</name>
+         <name>Nothing</name>
          <cost>0</cost>
       </item>
       <item id="1">

@@ -5,11 +5,18 @@ import java.util.Vector;
 
 public class Inventory {
 	Vector<Item> items = new Vector<Item>();
-	HashMap<Item, InventoryUICell> itemUI = new HashMap<Item, InventoryUICell>();
 	double curWeight, maxWeight;
 
+	private HashMap<Item, InventoryUICell> itemUI = new HashMap<Item, InventoryUICell>();
+	InventoryUI inventoryUI = new InventoryUI();
+
 	public Inventory(float maxWeight) {
-		this.maxWeight = maxWeight;
+		setMaxWeight(maxWeight);
+	}
+
+	void setMaxWeight(float val) {
+		maxWeight = val;
+		inventoryUI.setMass(curWeight, maxWeight);
 	}
 
 	void dump() {
@@ -40,19 +47,21 @@ public class Inventory {
 
 	private void refreshRemoveItem(Item item) {
 		if (itemUI.containsKey(item)) {
+			inventoryUI.setMass(curWeight, maxWeight);
 			itemUI.get(item).cell.remove();
 			itemUI.remove(item);
-			Gui.invTable.pack();
+			inventoryUI.invTable.pack();
 		}
 	}
 
 	private void refreshItem(Item item) {
+		inventoryUI.setMass(curWeight, maxWeight);
 		if (itemUI.containsKey(item))
 			itemUI.get(item).setText(item.quantity + "");
 		else {
 			InventoryUICell cell = new InventoryUICell(item);
 			itemUI.put(item, cell);
-			Gui.invTable.add(cell.cell);
+			inventoryUI.invTable.add(cell.cell);
 		}
 	}
 

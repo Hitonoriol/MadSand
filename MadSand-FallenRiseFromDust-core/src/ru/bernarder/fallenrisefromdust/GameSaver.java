@@ -2,8 +2,15 @@ package ru.bernarder.fallenrisefromdust;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.PrintWriter;
+import java.util.Vector;
+
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 import ru.bernarder.fallenrisefromdust.enums.GameState;
 
@@ -12,7 +19,7 @@ public class GameSaver {
 	Thread saver = new Thread(new Runnable() {
 		@SuppressWarnings("deprecation")
 		public void run() {
-			MadSand.print("World saving... Don't quit the game!");
+			MadSand.print("World is saving... Don't quit the game!");
 			GameSaver.saveWorld(MadSand.WORLDNAME);
 			MadSand.print("World saved!");
 			GameSaver.this.saver.stop();
@@ -20,6 +27,17 @@ public class GameSaver {
 	});
 
 	public void init() {
+	}
+
+	static byte[] encode2(int val) {
+		byte data[] = new byte[2];
+		data[1] = (byte) (val & 0xFF);
+		data[0] = (byte) ((val >> 8) & 0xFF);
+		return data;
+	}
+
+	static int decode2(byte[] bytes) {
+		return (bytes[0] << 8) | (bytes[1] & 0xFF);
 	}
 
 	public static void saveToExternal(String name, String text) {
@@ -63,21 +81,15 @@ public class GameSaver {
 	}
 
 	public static void saveWorld(String filename) {
-		if (!new File("MadSand_Saves/worlds/" + filename).exists()) {
-			new File("MadSand_Saves/worlds/" + filename).mkdirs();
-		}
-		if (!new File("MadSand_Saves/scripts").exists()) {
-			new File("MadSand_Saves/scripts").mkdirs();
-		}
-		String curf = "MadSand_Saves/worlds/" + filename + "/" + "sector-" + MadSand.world.curxwpos + "-"
+		MadSand.createDirs();
+		String curf = MadSand.MAPDIR + filename + "/" + "sector-" + MadSand.world.curxwpos + "-"
 				+ MadSand.world.curywpos + ".mws";
-		saveChar();
 		// saveMap();
 		saveChar();
 	}
 
 	public static boolean loadWorld(String filename) {
-		File f = new File("MadSand_Saves/worlds/" + filename);
+		File f = new File(MadSand.MAPDIR + filename);
 		if (!f.exists()) {
 			MadSand.print("Unable to load world");
 			MadSand.state = GameState.NMENU;
@@ -89,13 +101,13 @@ public class GameSaver {
 			return false;
 		}
 
-		File file = new File("MadSand_Saves/worlds/" + filename + "/" + "sector-" + MadSand.world.curxwpos + "-"
+		File file = new File(MadSand.MAPDIR + filename + "/" + "sector-" + MadSand.world.curxwpos + "-"
 				+ MadSand.world.curywpos + ".mws");
 		if (file.exists()) {
 			MadSand.world.clearCurLoc();
-			loadMap("MadSand_Saves/worlds/" + filename + "/" + "sector-" + MadSand.world.curxwpos + "-"
-					+ MadSand.world.curywpos + ".mws");
-			loadChar(1);
+			loadMap(MadSand.MAPDIR + filename + "/" + "sector-" + MadSand.world.curxwpos + "-" + MadSand.world.curywpos
+					+ ".mws");
+			loadChar();
 			MadSand.print("Loaded Game!");
 			return true;
 		} else
@@ -104,7 +116,7 @@ public class GameSaver {
 	}
 
 	public static boolean verifyNextSector(int x, int y) {
-		File file = new File("MadSand_Saves/worlds/" + MadSand.WORLDNAME + "/" + "sector-" + x + "-" + y + ".mws");
+		File file = new File(MadSand.MAPDIR + MadSand.WORLDNAME + "/" + "sector-" + x + "-" + y + ".mws");
 		if (file.exists()) {
 			return true;
 		}
@@ -112,105 +124,27 @@ public class GameSaver {
 	}
 
 	static void saveChar() {
-		String fl = "MadSand_Saves/worlds/" + MadSand.WORLDNAME + "/" + MadSand.name + ".mc";
-		String query = "";
-
-		String global = ":";
-		String invblock = "-@-";
-		String idblock = "-!-";
-		int i = 0;
-		// TODO save inventory
-
-		query = query + global + MadSand.player.hp + invblock + MadSand.player.mhp + invblock + MadSand.player.str
-				+ invblock + MadSand.player.accur + invblock + MadSand.player.stamina + invblock + MadSand.player.exp
-				+ invblock + MadSand.player.requiredexp + invblock + MadSand.player.lvl + invblock
-				+ MadSand.player.helmet + invblock + MadSand.player.cplate + invblock + MadSand.player.shield + invblock
-				+ MadSand.player.maxstamina + invblock + MadSand.player.woodcutterskill[0] + invblock
-				+ MadSand.player.woodcutterskill[1] + invblock + MadSand.player.woodcutterskill[2] + invblock
-				+ MadSand.player.miningskill[0] + invblock + MadSand.player.miningskill[1] + invblock
-				+ MadSand.player.miningskill[2] + invblock + MadSand.player.survivalskill[0] + invblock
-				+ MadSand.player.survivalskill[1] + invblock + MadSand.player.survivalskill[2] + invblock
-				+ MadSand.player.harvestskill[0] + invblock + MadSand.player.harvestskill[1] + invblock
-				+ MadSand.player.harvestskill[2] + invblock + MadSand.player.craftingskill[0] + invblock
-				+ MadSand.player.craftingskill[1] + invblock + MadSand.player.craftingskill[2] + invblock
-				+ MadSand.player.rest[0] + invblock + MadSand.player.rest[1] + invblock + MadSand.player.rest[2]
-				+ invblock + MadSand.player.rest[3] + invblock + MadSand.player.dexterity + invblock
-				+ MadSand.player.intelligence + global + MadSand.player.x + invblock + MadSand.player.y + global
-				+ MadSand.world.curxwpos + invblock + MadSand.world.curywpos + global;
-		saveToExternal(fl, query);
-	}
-
-	static String saveInv() {
-		// TODO save inventory
-		return "";
-	}
-
-	static void loadInv(String query) {
-		// TODO load inventory
-	}
-
-	static void loadChar(int flag) {
-		String fl = "MadSand_Saves/worlds/" + MadSand.WORLDNAME + "/" + MadSand.name + ".mc";
-		File file = new File(fl);
-		if (!file.exists()) {
-			return;
+		try {
+			String fl = MadSand.MAPDIR + MadSand.WORLDNAME + "/" + MadSand.name + ".mc";
+			Output output = new Output(new FileOutputStream(fl));
+			MadSand.kryo.writeObject(output, MadSand.player.inventory.items);
+			output.close();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		String query = "";
-		query = getExternal(fl);
-		String global = ":";
-		String invblock = "-@-";
-		String idblock = "-!-";
-		int i = 0;
-		String[] glob = query.split(global);
-		// TODO load inventory
-		String[] hpb = glob[1].split(invblock);
-		// STATS
-		MadSand.player.hp = Integer.parseInt(hpb[0]);
-		MadSand.player.mhp = Integer.parseInt(hpb[1]);
-		MadSand.player.str = Integer.parseInt(hpb[2]);
-		MadSand.player.accur = Integer.parseInt(hpb[2]);
-		MadSand.player.luck = Integer.parseInt(hpb[3]);
-		MadSand.player.stamina = Float.parseFloat(hpb[4]);
-		MadSand.player.maxstamina = Float.parseFloat(hpb[11]);
-		MadSand.player.exp = Integer.parseInt(hpb[5]);
-		MadSand.player.requiredexp = Integer.parseInt(hpb[6]);
-		MadSand.player.lvl = Integer.parseInt(hpb[7]);
-		MadSand.player.dexterity = Integer.parseInt(hpb[31]);
-		MadSand.player.intelligence = Integer.parseInt(hpb[32]);
-		// EQUIPMENT
-		MadSand.player.helmet = Integer.parseInt(hpb[8]);
-		MadSand.player.cplate = Integer.parseInt(hpb[9]);
-		MadSand.player.shield = Integer.parseInt(hpb[10]);
-		// SKILLS
-		MadSand.player.woodcutterskill[0] = Integer.parseInt(hpb[12]);
-		MadSand.player.woodcutterskill[1] = Integer.parseInt(hpb[13]);
-		MadSand.player.woodcutterskill[2] = Integer.parseInt(hpb[14]);
-		MadSand.player.miningskill[0] = Integer.parseInt(hpb[15]);
-		MadSand.player.miningskill[1] = Integer.parseInt(hpb[16]);
-		MadSand.player.miningskill[2] = Integer.parseInt(hpb[17]);
-		MadSand.player.survivalskill[0] = Integer.parseInt(hpb[18]);
-		MadSand.player.survivalskill[1] = Integer.parseInt(hpb[19]);
-		MadSand.player.survivalskill[2] = Integer.parseInt(hpb[20]);
-		MadSand.player.harvestskill[0] = Integer.parseInt(hpb[21]);
-		MadSand.player.harvestskill[1] = Integer.parseInt(hpb[22]);
-		MadSand.player.harvestskill[2] = Integer.parseInt(hpb[23]);
-		MadSand.player.craftingskill[0] = Integer.parseInt(hpb[24]);
-		MadSand.player.craftingskill[1] = Integer.parseInt(hpb[25]);
-		MadSand.player.craftingskill[2] = Integer.parseInt(hpb[26]);
-		// REST POINT
-		MadSand.player.rest[0] = Integer.parseInt(hpb[27]);
-		MadSand.player.rest[1] = Integer.parseInt(hpb[28]);
-		MadSand.player.rest[2] = Integer.parseInt(hpb[29]);
-		MadSand.player.rest[3] = Integer.parseInt(hpb[30]);
+	}
 
-		String[] hpbb = glob[2].split(invblock);
-		String[] ph = glob[3].split(invblock);
-		if (flag == 1) {
-			MadSand.world.curxwpos = Integer.parseInt(ph[0]);
-			MadSand.world.curywpos = Integer.parseInt(ph[1]);
-			MadSand.player.x = Integer.parseInt(hpbb[0]);
-			MadSand.player.y = Integer.parseInt(hpbb[1]);
-			Utils.updCoords();
+	@SuppressWarnings("unchecked")
+	static void loadChar() {
+		try {
+			String fl = MadSand.MAPDIR + MadSand.WORLDNAME + "/" + MadSand.name + ".mc";
+			Kryo kryo = new Kryo();
+			Input input = new Input(new FileInputStream(fl));
+			Vector<Item> items = kryo.readObject(input, Vector.class);
+			MadSand.player.inventory.items = items;
+			input.close();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -218,22 +152,7 @@ public class GameSaver {
 		// TODO
 	}
 
-	public static String saveMapSec() {
-		// TODO ((i dont even remember what this one was supposed to do))
-		return "";
-	}
-
 	public static void loadMap(String filename) {
-		// TODO
-	}
-
-	public static String[] mapDataBlock(String filename, int num) {
-		String query = (getExternal(filename));
-		String[] buf = query.split("@");
-		return buf;
-	}
-
-	public static void loadMapSec(String query, int x, int y) {
 		// TODO
 	}
 

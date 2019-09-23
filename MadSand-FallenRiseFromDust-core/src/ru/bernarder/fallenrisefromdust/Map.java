@@ -155,7 +155,7 @@ public class Map {
 
 	void dmgObjInDir(int x, int y, Direction direction) {
 		coords.set(x, y).addDirection(direction);
-		mapObjects.put(coords, getObject(coords.x, coords.y).takeDamage());
+		mapObjects.get(coords).takeDamage();
 	}
 
 	boolean addObject(int x, int y, Direction dir, int id) {

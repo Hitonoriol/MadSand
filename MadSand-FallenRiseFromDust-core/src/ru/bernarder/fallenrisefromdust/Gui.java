@@ -45,6 +45,7 @@ public class Gui {
 	static TextButton resumeButton;
 	public static Label verlbl;
 	static NinePatchDrawable transparency;
+	static int LOG_LENGTH = 20;
 
 	public static void createBasicSkin() {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(
@@ -117,28 +118,6 @@ public class Gui {
 	static Label IN;
 	static Label LK;
 	static Label DX;
-
-	static ScrollPane invScroll;
-	static Table invTable;
-	static int ITEMS_PER_ROW = 5;
-
-	static void setUpInventory() {
-		int w = 400, h = 400, offset = 5;
-		invTable = new Table();
-		invTable.setBackground(bck);
-		invTable.align(Align.topLeft);
-		invScroll = new ScrollPane(invTable);
-		invScroll.setVisible(false);
-		invTable.setWidth(w);
-		invScroll.setHeight(h);
-		invScroll.setWidth(w + offset);
-		//invTable.add(new InventoryUICell(new Item(10,1 )).cell);
-		//invTable.row();
-		invScroll.setOverscroll(false, false);
-		invScroll.setScrollingDisabled(true, false);
-		invScroll.setPosition(Gdx.graphics.getWidth() / 2 - w / 2, Gdx.graphics.getHeight() / 2 - h / 2);
-		overlay.addActor(invScroll);
-	}
 
 	public static void showStatsWindow() {
 		final Dialog dialog = new Dialog("", Gui.skin);
@@ -473,7 +452,7 @@ public class Gui {
 		TextButton okbtn = new TextButton("Proceed", Gui.skin);
 		TextButton nobtn = new TextButton("Cancel", Gui.skin);
 		if (slots == MadSand.MAXSAVESLOTS) {
-			worldtxt.setText("All save slots are busy!");
+			worldtxt.setText("No free slots left!");
 			worldtxt.setDisabled(true);
 			okbtn.setDisabled(true);
 		}
@@ -588,17 +567,6 @@ public class Gui {
 
 		Gui.gamecontext = new Table(Gui.skin);
 		Gui.contextMenuBtn = new TextButton[5];
-		Gui.invcontbtn = new TextButton[1];
-		Gui.invcontbtn[0] = new TextButton("Drop", Gui.skin);
-		Gui.invcontext = new Table(Gui.skin);
-		Gui.invcontext.add(Gui.invcontbtn[0]).width(100.0F).height(50.0F).row();
-		Gui.invcontbtn[0].addListener(new ChangeListener() {
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				// drop item
-			}
-
-		});
-		Gui.invcontext.setVisible(false);
 		Gui.mousemenu = new Table(Gui.skin);
 		Gui.mousemenu.setVisible(true);
 		Gui.mouselabel = new Label[5];
@@ -674,7 +642,13 @@ public class Gui {
 		Table logtbl = new Table(Gui.skin).align(10);
 		logtbl.setFillParent(true);
 		int tpm = 0;
-		while (tpm < 10) {
+		Gui.log = new Label[LOG_LENGTH];
+		int cxxc = 0;
+		while (cxxc < LOG_LENGTH) {
+			Gui.log[cxxc] = new Label(" ", Gui.skin);
+			cxxc++;
+		}
+		while (tpm < LOG_LENGTH) {
 			logtbl.add(Gui.log[tpm]).width(200.0F);
 			logtbl.row();
 			tpm++;
@@ -720,7 +694,6 @@ public class Gui {
 		Gui.overlay.addActor(MadSand.maindialog);
 		Gui.overlay.addActor(logtbl);
 		Gui.overlay.addActor(Gui.mousemenu);
-		Gui.overlay.addActor(Gui.invcontext);
 		Gui.overlay.addActor(Gui.gamecontext);
 		Gui.overlay.addListener(new ClickListener(1) {
 			public void clicked(InputEvent event, float x, float y) {
@@ -738,17 +711,6 @@ public class Gui {
 							Gui.gamecontext.setVisible(false);
 							MadSand.contextopened = false;
 						}
-					}
-					if ((MadSand.state == GameState.INVENTORY) || (MadSand.state == GameState.BUY)) {
-						if (!Gui.invcontext.isVisible()) {
-							Gui.invcontext.setVisible(true);
-							Gui.invcontext.setPosition(MadSand.mx, MadSand.my);
-							MadSand.contextopened = true;
-						} else {
-							Gui.invcontext.setVisible(false);
-							MadSand.contextopened = false;
-						}
-
 					}
 				}
 			}
@@ -990,8 +952,6 @@ public class Gui {
 	static com.badlogic.gdx.scenes.scene2d.ui.ScrollPane scroll;
 	static Table gamecontext;
 	static TextButton[] contextMenuBtn;
-	static Table invcontext;
-	static TextButton[] invcontbtn;
 	static Table mousemenu;
 	static Label[] mouselabel;
 	public static TextButton craftButton;

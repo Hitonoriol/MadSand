@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Map.Entry;
 
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
+import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 
 import java.util.StringTokenizer;
 
@@ -13,6 +14,7 @@ public class BuildScript {
 	final static char printID = '=';
 	final static char standingOnID = '!'; // !1 player_give @gold 100
 	final static char objInFrontID = '^';
+	final static char inHandID = '#';
 	final static char valueID = '$';
 	final static char itemStringID = '@';
 	final static String LINE_DELIMITER = ";";
@@ -20,7 +22,8 @@ public class BuildScript {
 
 	public static class Value {
 		final static String VALUE_PLAYERX = "$player_x", VALUE_PLAYERY = "$player_y",
-				VALUE_PLAYER_LOOK_X = "$player_look_x", VALUE_PLAYER_LOOK_Y = "$player_look_y";
+				VALUE_PLAYER_LOOK_X = "$player_look_x", VALUE_PLAYER_LOOK_Y = "$player_look_y",
+				VALUE_ALTITEM = "$altitem";
 	}
 
 	public static class Token {
@@ -64,6 +67,10 @@ public class BuildScript {
 			return coords.addDirection(MadSand.player.look).x;
 		case Value.VALUE_PLAYER_LOOK_Y:
 			return coords.addDirection(MadSand.player.look).y;
+		case Value.VALUE_ALTITEM:
+			int id = MadSand.world.getCurLoc().getObject(MadSand.player.x, MadSand.player.y, MadSand.player.look).id;
+			return MapObject.getAltItem(id);
+
 		default:
 			return 0;
 		}
@@ -105,6 +112,9 @@ public class BuildScript {
 			break;
 		case objInFrontID:
 			condition = (MadSand.world.getCurLoc().getObject(x, y, MadSand.player.look).id == sid);
+			break;
+		case inHandID:
+			condition = (MadSand.player.hand == sid);
 			break;
 		}
 		return !condition;
