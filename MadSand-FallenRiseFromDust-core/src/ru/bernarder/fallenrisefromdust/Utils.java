@@ -40,7 +40,6 @@ public class Utils {
 	public static int lbound;
 	public static float x = MadSand.player.x * 33;
 	public static float y = MadSand.player.y * 33;
-	public static Vector2 ppos;
 	public static boolean invent = false;
 	public static float pspeed = 33.0F;
 	static SpriteBatch batch;
@@ -232,7 +231,7 @@ public class Utils {
 		curs = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/cursor.png"));
 		placeholder = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/placeholder.png"));
 		inv = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/invsheet.png"));
-		ppos = new Vector2(x, y);
+		MadSand.player.globalPos = new Vector2(x, y);
 		com.badlogic.gdx.files.FileHandle pfhandle = Gdx.files.local(MadSand.SAVEDIR + "player/d1.png");
 		batch = new com.badlogic.gdx.graphics.g2d.SpriteBatch();
 		dtex = new Texture(pfhandle);
@@ -378,8 +377,7 @@ public class Utils {
 			MadSand.state = GameState.NMENU;
 		}
 		if ((Gdx.input.isKeyJustPressed(Keys.G)) && (tester)) {
-			GameSaver saver = new GameSaver();
-			saver.saver.start();
+			GameSaver.saveWorld();
 		}
 		if ((Gdx.input.isKeyJustPressed(Keys.L)) && (tester)) {
 			GameSaver.loadWorld(MadSand.WORLDNAME);
@@ -485,19 +483,19 @@ public class Utils {
 		if ((!MadSand.player.isCollision(dir, 0)) && (MadSand.dialogflag)) {
 			if ((dir == Direction.UP) && (!VerifyPosition(dir))) {
 				MadSand.player.y += 1;
-				ppos.y += 33.0F;
+				MadSand.player.globalPos.y += 33.0F;
 			}
 			if ((dir == Direction.DOWN) && (!VerifyPosition(dir))) {
 				MadSand.player.y -= 1;
-				ppos.y -= 33.0F;
+				MadSand.player.globalPos.y -= 33.0F;
 			}
 			if ((dir == Direction.LEFT) && (!VerifyPosition(dir))) {
 				MadSand.player.x -= 1;
-				ppos.x -= 33.0F;
+				MadSand.player.globalPos.x -= 33.0F;
 			}
 			if ((dir == Direction.RIGHT) && (!VerifyPosition(dir))) {
 				MadSand.player.x += 1;
-				ppos.x += 33.0F;
+				MadSand.player.globalPos.x += 33.0F;
 			}
 			if (MadSand.player.x == World.MAPSIZE - 1 || MadSand.player.y == World.MAPSIZE - 1
 					|| MadSand.player.x == World.BORDER || MadSand.player.y == World.BORDER) {
@@ -525,8 +523,8 @@ public class Utils {
 	}
 
 	static void updCoords() {
-		ppos.x = (MadSand.player.x * 33);
-		ppos.y = (MadSand.player.y * 33);
+		MadSand.player.globalPos.x = (MadSand.player.x * 33);
+		MadSand.player.globalPos.y = (MadSand.player.y * 33);
 	}
 
 	public static String gotodir = "";

@@ -10,7 +10,7 @@ public class Map {
 
 	static final Tile nullTile = new Tile(0);
 	static final MapObject nullObject = new MapObject(0);
-	static final Loot nullLoot = new Loot("n");
+	static final Loot nullLoot = new Loot();
 
 	private HashMap<Pair, Tile> mapTiles;
 	private HashMap<Pair, MapObject> mapObjects;
@@ -129,10 +129,15 @@ public class Map {
 				if (ret == null)
 					ret = nullTile;
 				return ret;
-			} else
+			} else {
+				Utils.out("CorrectCoords false");
 				return nullTile;
+			}
 		} catch (Exception e) {
+			Utils.out("gettile error " + e.getMessage());
+			e.printStackTrace();
 			return nullTile;
+
 		}
 	}
 

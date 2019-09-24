@@ -3,6 +3,7 @@ package ru.bernarder.fallenrisefromdust;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 
 import ru.bernarder.fallenrisefromdust.enums.*;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
@@ -17,6 +18,7 @@ public class Player {
 	Inventory inventory;
 
 	float speed; // moves/actions per world tick
+	public Vector2 globalPos;
 
 	public Player(String name) {
 		stats.name = name;
@@ -25,7 +27,7 @@ public class Player {
 	public Player() {
 		this("");
 	}
-	
+
 	void initInventory() {
 		inventory = new Inventory();
 	}
@@ -87,11 +89,15 @@ public class Player {
 		return false;
 	}
 
-	static boolean standingOnLoot(int x, int y) {
+	boolean standingOnLoot(int x, int y) {
 		if (MadSand.world.getCurLoc().getLoot(x, y).equals(Map.nullLoot))
 			return false;
 		else
 			return true;
+	}
+
+	boolean standingOnLoot() {
+		return standingOnLoot(x, y);
 	}
 
 	void skillBonusItems(int x, int y, String direction, int id) {

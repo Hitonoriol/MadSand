@@ -5,18 +5,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Vector;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
-import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.esotericsoftware.kryo.serializers.MapSerializer;
 
 import ru.bernarder.fallenrisefromdust.enums.GameState;
-import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 
 public class GameSaver {
 
@@ -28,6 +27,34 @@ public class GameSaver {
 			GameSaver.this.saver.stop();
 		}
 	});
+
+	static byte[] concat(byte[]... arrays) {
+		int totalLength = 0;
+		for (int i = 0; i < arrays.length; i++) {
+			totalLength += arrays[i].length;
+		}
+
+		byte[] result = new byte[totalLength];
+
+		int currentIndex = 0;
+		for (int i = 0; i < arrays.length; i++) {
+			System.arraycopy(arrays[i], 0, result, currentIndex, arrays[i].length);
+			currentIndex += arrays[i].length;
+		}
+
+		return result;
+	}
+
+	static byte[] encode2(int val) {
+		byte data[] = new byte[2];
+		data[1] = (byte) (val & 0xFF);
+		data[0] = (byte) ((val >> 8) & 0xFF);
+		return data;
+	}
+
+	static int decode2(byte[] bytes) {
+		return (bytes[0] << 8) | (bytes[1] & 0xFF);
+	}
 
 	public static void saveToExternal(String name, String text) {
 		try {
@@ -148,14 +175,9 @@ public class GameSaver {
 
 	public static boolean saveSector(int wx, int wy, int layer) {
 		try {
-			String fl = getSectorFile(wx, wy).getAbsolutePath();
-			MapID key = new MapID(new Pair(wx, wy), layer);
-			Output output = new Output(new FileOutputStream(fl));
-			HashMap<MapID, Map> map = MadSand.world._getLoc(wx, wy, layer);
-			Location loc = new Location();
-			loc.put(key, map.get(key));
-			MadSand.mapSerializer.write(MadSand.kryo, output, loc);
-			output.close();
+			OutputStream os = new FileOutputStream(getSectorFile(wx, wy));
+			os.write(MadSand.world.WorldLoc.sectorToBytes(wx, wy, layer));
+			os.close();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -164,20 +186,14 @@ public class GameSaver {
 	}
 
 	static boolean saveSector() {
-		return saveSector(MadSand.world.curxwpos, MadSand.world.curywpos, 0);
+		return saveSector(MadSand.world.curxwpos, MadSand.world.curywpos, MadSand.world.curlayer);
 	}
 
 	public static boolean loadSector(int wx, int wy, int layer) {
 		try {
-			MapID key = new MapID(new Pair(wx, wy), layer);
-			String fl = getSectorFile(wx, wy).getAbsolutePath();
-			Utils.out("LoadSector: " + fl);
-			Input input = new Input(new FileInputStream(fl));
-			HashMap<MapID, Map> map = MadSand.mapSerializer.read(MadSand.kryo, input, Location.class);
-			if (MadSand.world.locExists(key))
-				MadSand.world.WorldLoc.remove(key);
-			MadSand.world.WorldLoc.put(key, map.get(key));
-			input.close();
+			Path fileLocation = Paths.get(getSectorFile(wx, wy).toURI());
+			byte[] data = Files.readAllBytes(fileLocation);
+			MadSand.world.WorldLoc.bytesToSector(data, wx, wy, layer);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -186,7 +202,7 @@ public class GameSaver {
 	}
 
 	static boolean loadSector() {
-		return loadSector(MadSand.world.curxwpos, MadSand.world.curywpos, 0);
+		return loadSector(MadSand.world.curxwpos, MadSand.world.curywpos, MadSand.world.curlayer);
 	}
 
 }

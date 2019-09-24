@@ -32,6 +32,11 @@ public class Item {
 	}
 
 	public Item(String query) {
+		if (query == "n") {
+			this.id = 0;
+			loadProperties();
+			return;
+		}
 		String blocks[];
 		blocks = query.split("\\" + ITEM_DELIM);
 		id = Integer.parseInt(blocks[0]);
@@ -49,7 +54,7 @@ public class Item {
 		Item rhs = (Item) obj;
 		return new EqualsBuilder().append(id, rhs.id).isEquals();
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(14407, 7177).append(id).toHashCode();
@@ -78,6 +83,10 @@ public class Item {
 
 	double getWeight() {
 		return weight * quantity;
+	}
+
+	String getQuery() {
+		return id + ":" + quantity;
 	}
 
 	// Static functions for general item related needs:

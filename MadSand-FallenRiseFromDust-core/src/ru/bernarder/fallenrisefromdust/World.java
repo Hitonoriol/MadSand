@@ -26,7 +26,7 @@ public class World {
 	public int curlayer = 0;
 	static final int BORDER = 1;
 	static int MAPSIZE = 100;
-	HashMap<MapID, Map> WorldLoc = new HashMap<MapID, Map>();
+	Location WorldLoc = new Location();
 	static int wtime = 12;
 	static int worldtime = 12;
 

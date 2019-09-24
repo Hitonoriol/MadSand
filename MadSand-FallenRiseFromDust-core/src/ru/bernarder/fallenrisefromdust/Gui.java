@@ -493,8 +493,8 @@ public class Gui {
 					Gdx.input.setInputProcessor(Gui.overlay);
 					MadSand.player.x = new Random().nextInt(World.MAPSIZE);
 					MadSand.player.y = new Random().nextInt(World.MAPSIZE);
-					Utils.ppos.x = (MadSand.player.x * 33);
-					Utils.ppos.y = (MadSand.player.y * 33);
+					MadSand.player.globalPos.x = (MadSand.player.x * MadSand.TILESIZE);
+					MadSand.player.globalPos.y = (MadSand.player.y * MadSand.TILESIZE);
 					Gui.exitButton.setVisible(false);
 					Gui.craftButton.setVisible(false);
 					Utils.invent = false;
