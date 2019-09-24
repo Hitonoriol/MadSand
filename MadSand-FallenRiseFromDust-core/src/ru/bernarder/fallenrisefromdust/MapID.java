@@ -19,6 +19,10 @@ public class MapID {
 		this.id = 0;
 	}
 
+	public MapID() {
+		this(new Pair(0, 0), 0);
+	}
+
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(67, 139).append(worldxy.x).append(worldxy.y).append(layer).append(id).toHashCode();

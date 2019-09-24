@@ -71,8 +71,7 @@ public class ThreadedUtils {
 			}
 			MadSand.world.clearCurLoc();
 			if (GameSaver.verifyNextSector(MadSand.world.curxwpos, MadSand.world.curywpos)) {
-				GameSaver.loadMap("MadSand_Saves/worlds/" + MadSand.WORLDNAME + "/" + "sector-" + MadSand.world.curxwpos + "-"
-						+ MadSand.world.curywpos + ".mws");
+				GameSaver.loadSector();
 			} else {
 				MadSand.state = GameState.WORLDGEN;
 				new ThreadedUtils().worldGen.start();

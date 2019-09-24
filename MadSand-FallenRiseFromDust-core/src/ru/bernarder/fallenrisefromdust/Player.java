@@ -13,53 +13,34 @@ public class Player {
 	public int x = new Random().nextInt(World.MAPSIZE);
 	public int y = new Random().nextInt(World.MAPSIZE);
 
-	public int hand = 0;
-	public int accur = 2; // ACCUR
-	public int hp = 200; // CONSTITUTION*10
-	public int mhp = 200;
-	public int str = 3;// ATK
-	public int luck = 1; // LUCK
-	public int dexterity = 1; // DEX
-	public int intelligence = 1; // INT
-	public float stamina = 50.0F; // STAMINA*5
-	public float maxstamina = 50.0F;
-	public int[] def = new int[3];
-
-	public int[] rest = { -1, -1, -1, -1 };
-
-	public int helmet = 0;
-	public int cplate = 0;
-	public int shield = 0;
-
-	public int lvl = 0;
-	public int exp = 0;
-	public int requiredexp = 100;
-
-	public int[] woodcutterskill = { 1, 0, 50 };
-	public int[] miningskill = { 1, 0, 50 };
-	public int[] survivalskill = { 1, 0, 65 };
-	public int[] harvestskill = { 1, 0, 35 };
-	public int[] craftingskill = { 1, 0, 30 };
-
+	Stats stats = new Stats();
 	Inventory inventory;
 
-	float speed, splim; // moves/actions per world tick
-	String name;
-	boolean isMain;
-	Faction faction;
-	Direction look = Direction.DOWN;
+	float speed; // moves/actions per world tick
 
 	public Player(String name) {
-		this.name = name;
+		stats.name = name;
+	}
+
+	public Player() {
+		this("");
+	}
+	
+	void initInventory() {
+		inventory = new Inventory();
+	}
+
+	void setName(String name) {
+		stats.name = name;
 	}
 
 	void reinit() {
-		inventory = new Inventory(str * 50);
+		inventory = new Inventory(stats.str * Stats.STR_WEIGHT_MULTIPLIER);
 	}
 
 	public void checkHands(int id) {
 		if (inventory.getSameCell(id, 1) == -1)
-			MadSand.player.hand = 0;
+			MadSand.player.stats.hand = 0;
 	}
 
 	public boolean dropItem(int id, int quantity) {
@@ -69,7 +50,7 @@ public class Player {
 	}
 
 	void interact(final Direction direction) { // TODO: BuildScript onInteract events
-		int id = MadSand.world.getCurLoc().getObject(x, y, look).id;
+		int id = MadSand.world.getCurLoc().getObject(x, y, stats.look).id;
 		Utils.out("Interacting with " + id);
 		String action = ObjectProp.interactAction.get(id);
 		if (action != "-1") {
@@ -80,7 +61,7 @@ public class Player {
 		int item = MapObject.getAltItem(id);
 		int hand = Integer.parseInt(ObjectProp.altitems.get(pair));
 		if (item != -1) {
-			if (hand == -1 || hand == MadSand.player.hand) {
+			if (hand == -1 || hand == MadSand.player.stats.hand) {
 				MadSand.player.inventory.putItem(item, 1);
 				MadSand.world.getCurLoc().dmgObjInDir(x, y, direction);
 			}
@@ -118,56 +99,32 @@ public class Player {
 	}
 
 	void damage(int to) {
-		hp -= to;
+		stats.hp -= to;
 	}
 
 	void heal(int to) {
-		if (hp + to < mhp) {
-			hp += to;
+		if (stats.hp + to < stats.mhp) {
+			stats.hp += to;
 		} else {
-			hp = mhp;
+			stats.hp = stats.mhp;
 		}
 	}
 
 	void increaseStamina(int to) {
-		if (stamina + to < maxstamina) {
-			stamina += to;
+		if (stats.stamina + to < stats.maxstamina) {
+			stats.stamina += to;
 		} else {
-			stamina = maxstamina;
+			stats.stamina = stats.maxstamina;
 		}
 	}
 
-	public void checkStats() {
-		if (exp >= requiredexp) {
-			lvl += 1;
-			exp = 0;
-			requiredexp *= 2;
-			MadSand.print("You've leveled up!");
-			str += 1;
-			mhp += 50;
-			maxstamina += 15;
-		}
-
-		if (stamina > maxstamina) {
-			stamina = maxstamina;
-		}
-		if (stamina < 0.0F) {
-			stamina = 0.0F;
-		}
-
-		if (hp > mhp) {
-			hp = mhp;
-		}
-
-		if (hp <= 0) {
-			hp = 0;
-			Gdx.input.setInputProcessor(Gui.dead);
-			MadSand.state = GameState.DEAD;
-		}
+	void die() {
+		Gdx.input.setInputProcessor(Gui.dead);
+		MadSand.state = GameState.DEAD;
 	}
 
 	public void useItem() {
-		int id = hand;
+		int id = stats.hand;
 		int ptile = MadSand.world.getTileId(x, y);
 		checkHands(id);
 		String action = ItemProp.useAction.get(id);
@@ -210,7 +167,7 @@ public class Player {
 			MadSand.print("You placed a campfire");
 			MadSand.player.inventory.delItem(9, 1);
 			MadSand.player.inventory.delItem(1, 5);
-			MadSand.world.getCurLoc().addObject(MadSand.player.x, MadSand.player.y, MadSand.player.look, 6);
+			MadSand.world.getCurLoc().addObject(MadSand.player.x, MadSand.player.y, MadSand.player.stats.look, 6);
 		}
 		if (Item.getType(id) == ItemType.HeadArmor.get()) {
 			// equip helmet
@@ -223,18 +180,18 @@ public class Player {
 		}
 		if (Item.getType(id) == ItemType.Crop.get()) { // crop
 			MadSand.player.inventory.delItem(id, 1);
-			MadSand.world.getCurLoc().addObject(MadSand.player.x, MadSand.player.y, MadSand.player.look,
+			MadSand.world.getCurLoc().addObject(MadSand.player.x, MadSand.player.y, MadSand.player.stats.look,
 					Item.getAltObject(id));
 			// put crop in direction
 		}
 		if (Item.getType(id) == ItemType.PlaceableObject.get()) {
 			MadSand.player.inventory.delItem(id, 1);
-			MadSand.world.getCurLoc().addObject(MadSand.player.x, MadSand.player.y, MadSand.player.look,
+			MadSand.world.getCurLoc().addObject(MadSand.player.x, MadSand.player.y, MadSand.player.stats.look,
 					Item.getAltObject(id));
 		}
 		if (Item.getType(id) == ItemType.PlaceableTile.get()) {
 			MadSand.player.inventory.delItem(id, 1);
-			MadSand.world.getCurLoc().addTile(MadSand.player.x, MadSand.player.y, MadSand.player.look,
+			MadSand.world.getCurLoc().addTile(MadSand.player.x, MadSand.player.y, MadSand.player.stats.look,
 					Item.getAltObject(id));
 		}
 

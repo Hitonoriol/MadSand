@@ -26,6 +26,31 @@ public class Map {
 		purge();
 	}
 
+	public Map() {
+		this(0, 0);
+	}
+
+	HashMap<Pair, Tile> getTiles() {
+		return mapTiles;
+	}
+
+	HashMap<Pair, MapObject> getObjects() {
+		return mapObjects;
+	}
+
+	void setTiles(HashMap<Pair, Tile> tiles) {
+		mapTiles = tiles;
+	}
+
+	void setObjects(HashMap<Pair, MapObject> objects) {
+		mapObjects = objects;
+	}
+
+	void setSize(int xsz, int ysz) {
+		this.xsz = xsz;
+		this.ysz = ysz;
+	}
+
 	int getWidth() {
 		return xsz;
 	}

@@ -10,4 +10,8 @@ public class Tile {
 		this.id = id;
 		this.name = TileProp.name.get(id);
 	}
+
+	public Tile() {
+		this(0);
+	}
 }

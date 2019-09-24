@@ -12,6 +12,10 @@ public class MapObject {
 		this.hp = ObjectProp.hp.get(id);
 	}
 
+	public MapObject() {
+		this(0);
+	}
+
 	void destroy() {
 		this.id = 0;
 	}

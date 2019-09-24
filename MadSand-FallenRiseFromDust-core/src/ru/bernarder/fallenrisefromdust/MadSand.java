@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.serializers.MapSerializer;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.Faction;
@@ -28,6 +29,7 @@ import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 
 import java.io.File;
 import java.io.PrintStream;
+import java.util.HashMap;
 
 public class MadSand extends com.badlogic.gdx.Game {
 	public static String VER = "";
@@ -39,38 +41,31 @@ public class MadSand extends com.badlogic.gdx.Game {
 
 	static String gameVrf;
 
-	static int QUESTS = 0;
-
-	static boolean dontlisten = false;
-
 	static Vector3 mouseinworld = new Vector3(0.0F, 0.0F, 0.0F);
 	static int wclickx = 0;
 	static int wclicky = 0;
 
-	public String resp;
-	static String[] raw;
-	static String[] info;
+	static boolean dontlisten = false;
 	static int dialogresult;
 	static int questid = 0;
 	static boolean dialogflag = true;
 	static Table dialog;
 	static Table maindialog;
-	static int wtime = 12;
+
 	static int renderradius = 12 * 33;
+
 	static int mx = 0;
 	static int my = 0;
 
+	static final int TILESIZE = 33;
 	public static int OBJLEVELS = 2;
+	static final int WORLDSIZE = 10;
+
 	public static boolean stepping = false;
-	public static int stepx = 33;
-	public static int stepy = 33;
+	public static int stepx = TILESIZE;
+	public static int stepy = TILESIZE;
 	public static int movespeed = 2;
 	public static int runspeed = movespeed * 2;
-
-	static final int TILESIZE = 33;
-	static final int LOGYPOS = 100;
-	static final int LOGXPOS = 300;
-	static final int OBJPROPS = 2;
 
 	static final String SAVEDIR = "MadSand_Saves/";
 	static String QUESTFILE = SAVEDIR + "quest.xml";
@@ -78,6 +73,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 	static final String VERFILE = SAVEDIR + "ver.dat";
 	static final String MAPDIR = SAVEDIR + "worlds/";
 	static final String SCRIPTDIR = SAVEDIR + "scripts";
+	static final String PLAYERFILE = "/Player.mc";
 
 	static int numlook = 0;
 
@@ -99,18 +95,20 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static int CRAFTABLES = 0;
 	public static int LASTITEMID;
 	public static int LASTOBJID;
+	public static int NPCSPRITES;
 	public static int LASTTILEID;
 	public static int OREFIELDCOUNT = 5;
+	public static int BIOMES = 4;
 	public static int MAXMOBSONMAP = 35;
+	static int QUESTS = 0;
 
 	public static final int GUILABELS = 4;
-	public static final int BIOMES = 4;
-	public static int NPCSPRITES;
 	public static int ENCOUNTERCHANCE = 10;
 	public static int[] COSMETICSPRITES = { 17 };
 	public static int SEED = 100;
 	static int SPEED = 100;
 	static float ZOOM = 1.5F;
+
 	static final String FONT_CHARS = "АБВГДЕЁЖЗИЙКЛМНОПРСТФХЦЧШЩЪЬЫЭЮЯабвгдеёжзийклмнопрстфхцчшщыъьэюяabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"'<>";
 	static final String FONT_PATH = "fonts/8bitoperator.ttf";
 
@@ -118,7 +116,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static int turn = 0;
 	static int rendered = 2;
 	float percent = 0.0F;
-	public static String name = "";
 
 	public static float[][] rawWorld;
 	ItemProp objn;
@@ -144,7 +141,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static boolean encounter = false;
 
 	static Vector2[] rcoords;
-	GameSaver gs;
 
 	static int countRcells() {
 		int i = 0;
@@ -188,29 +184,32 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static Player player;
 
 	static Kryo kryo;
+	static MapSerializer<HashMap<MapID, Map>> mapSerializer = new MapSerializer<HashMap<MapID, Map>>();
 
 	public void create() {
 		kryo = new Kryo();
-		kryo.register(Player.class);
+		kryo.register(Pair.class);
 		kryo.register(int[].class);
 		kryo.register(Faction.class);
-		kryo.register(Inventory.class);
-		kryo.register(InventoryUI.class);
-		kryo.register(Label.class);
-		kryo.register(Group.class);
-		kryo.register(ImageButton.class);
+		kryo.register(MapID.class);
+		kryo.register(Map.class);
 		kryo.register(Array.class);
 		kryo.register(Object[].class);
-		kryo.register(BitmapFontCache.class);
-		kryo.register(com.badlogic.gdx.graphics.Color.class);
-		kryo.register(com.badlogic.gdx.graphics.g2d.BitmapFont.class);
+		kryo.register(Direction.class);
 		kryo.register(java.util.Vector.class);
+		kryo.register(Stats.class);
+		kryo.register(HashMap.class);
+		kryo.register(MapObject.class);
+		kryo.register(Tile.class);
+		kryo.register(Loot.class);
+		kryo.register(Npc.class);
+		kryo.register(Location.class);
 
 		int radius = 13;
 		if (new File(SAVEDIR + "lastrend.dat").exists())
 			radius = (Integer.parseInt(Gui.getExternal("lastrend.dat")));
 		setParams(radius);
-		player = new Player(name);
+		player = new Player();
 		Utils.out("Starting initialization!");
 		setRenderRadius();
 		Utils.out("Render area: " + rcoords.length);
@@ -221,8 +220,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 			e.printStackTrace();
 		}
 		Utils.Initf();
-		world = new World(10);
-
+		world = new World(MadSand.WORLDSIZE);
 		this.objn = new ItemProp();
 		Gui.createBasicSkin();
 		Gui.chat = new Label[15];
@@ -233,10 +231,11 @@ public class MadSand extends com.badlogic.gdx.Game {
 		}
 
 		Gui.gui = new Label[4];
-		Gui.gui[0] = new Label("HP: " + player.hp + "/" + player.mhp, Gui.skin);
-		Gui.gui[1] = new Label("Level: " + player.lvl, Gui.skin);
-		Gui.gui[2] = new Label("Experience: " + player.exp + "/" + player.requiredexp, Gui.skin);
-		Gui.gui[3] = new Label("", Gui.skin);
+		vc = 0;
+		while (vc < Gui.gui.length) {
+			Gui.gui[vc] = new Label(" ", Gui.skin);
+			++vc;
+		}
 		QuestUtils.init();
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.local(SAVEDIR + FONT_PATH));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -264,11 +263,8 @@ public class MadSand extends com.badlogic.gdx.Game {
 		Gui.initmenu();
 		Gui.font.getData().markupEnabled = true;
 		Gui.font1.getData().markupEnabled = true;
+		player.initInventory();
 		Utils.out("End of initialization!");
-	}
-
-	public static void setName(String arg) {
-		name = arg;
 	}
 
 	public static void setParams(int radius) {
@@ -352,11 +348,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 			i = 0;
 			Utils.batch.draw(Utils.mapcursor, wmx * 33, wmy * 33);
 			Utils.batch.end();
-			Gui.gui[0].setText("HP: " + player.hp + "/" + player.mhp);
-			Gui.gui[1].setText("Level: " + player.lvl);
-			Gui.gui[2].setText("Experience: " + player.exp + "/" + player.requiredexp);
-			Gui.gui[3].setText("Hand: " + Utils.getItem(player.hand));
-
+			Gui.refreshOverlay();
 			Utils.batch.begin();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -445,28 +437,28 @@ public class MadSand extends com.badlogic.gdx.Game {
 	}
 
 	int countCoordFromWorld(int arg) {
-		return arg * 33;
+		return arg * MadSand.TILESIZE;
 	}
 
 	void drawPlayer() {
 		if (stepping) {
 			this.elapsedTime += Gdx.graphics.getDeltaTime();
-			if (player.look == Direction.RIGHT) {
+			if (player.stats.look == Direction.RIGHT) {
 				Utils.batch.draw((TextureRegion) Utils.ranim.getKeyFrame(this.elapsedTime, true), Utils.ppos.x - stepx,
 						Utils.ppos.y);
 				updateCamToxy(Utils.ppos.x - stepx, Utils.ppos.y);
 			}
-			if (player.look == Direction.LEFT) {
+			if (player.stats.look == Direction.LEFT) {
 				Utils.batch.draw((TextureRegion) Utils.lanim.getKeyFrame(this.elapsedTime, true), Utils.ppos.x + stepx,
 						Utils.ppos.y);
 				updateCamToxy(Utils.ppos.x + stepx, Utils.ppos.y);
 			}
-			if (player.look == Direction.UP) {
+			if (player.stats.look == Direction.UP) {
 				Utils.batch.draw((TextureRegion) Utils.uanim.getKeyFrame(this.elapsedTime, true), Utils.ppos.x,
 						Utils.ppos.y - stepy);
 				updateCamToxy(Utils.ppos.x, Utils.ppos.y - stepy);
 			}
-			if (player.look == Direction.DOWN) {
+			if (player.stats.look == Direction.DOWN) {
 				Utils.batch.draw((TextureRegion) Utils.danim.getKeyFrame(this.elapsedTime, true), Utils.ppos.x,
 						Utils.ppos.y + stepy);
 				updateCamToxy(Utils.ppos.x, Utils.ppos.y + stepy);
@@ -525,7 +517,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public void render() {
 		if (state.equals(GameState.GAME)) {
 			if (started) {
-				Gui.createCharDialog();
 				started = false;
 			}
 			mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
@@ -634,7 +625,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 	}
 
 	public static void setTime(int arg) {
-		wtime = arg;
+		World.wtime = arg;
 	}
 
 	static void showMsg(String text) {

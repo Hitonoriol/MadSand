@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Map.Entry;
 
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
-import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 
 import java.util.StringTokenizer;
 
@@ -64,11 +63,12 @@ public class BuildScript {
 		case Value.VALUE_PLAYERY:
 			return coords.y;
 		case Value.VALUE_PLAYER_LOOK_X:
-			return coords.addDirection(MadSand.player.look).x;
+			return coords.addDirection(MadSand.player.stats.look).x;
 		case Value.VALUE_PLAYER_LOOK_Y:
-			return coords.addDirection(MadSand.player.look).y;
+			return coords.addDirection(MadSand.player.stats.look).y;
 		case Value.VALUE_ALTITEM:
-			int id = MadSand.world.getCurLoc().getObject(MadSand.player.x, MadSand.player.y, MadSand.player.look).id;
+			int id = MadSand.world.getCurLoc().getObject(MadSand.player.x, MadSand.player.y,
+					MadSand.player.stats.look).id;
 			return MapObject.getAltItem(id);
 
 		default:
@@ -111,10 +111,10 @@ public class BuildScript {
 			condition = (MadSand.world.getCurLoc().getTile(x, y).id == sid);
 			break;
 		case objInFrontID:
-			condition = (MadSand.world.getCurLoc().getObject(x, y, MadSand.player.look).id == sid);
+			condition = (MadSand.world.getCurLoc().getObject(x, y, MadSand.player.stats.look).id == sid);
 			break;
 		case inHandID:
-			condition = (MadSand.player.hand == sid);
+			condition = (MadSand.player.stats.hand == sid);
 			break;
 		}
 		return !condition;
@@ -202,7 +202,7 @@ public class BuildScript {
 			break;
 
 		case Token.DAMAGE_OBJECT:
-			MadSand.world.getCurLoc().dmgObjInDir(MadSand.player.x, MadSand.player.y, MadSand.player.look);
+			MadSand.world.getCurLoc().dmgObjInDir(MadSand.player.x, MadSand.player.y, MadSand.player.stats.look);
 			break;
 
 		case Token.PLAYER_HEAL:
@@ -212,7 +212,7 @@ public class BuildScript {
 
 		case Token.PLAYER_HAND_SET:
 			id = arg.get(0);
-			MadSand.player.hand = id;
+			MadSand.player.stats.hand = id;
 			break;
 
 		case Token.PLAYER_GIVE:
@@ -229,26 +229,33 @@ public class BuildScript {
 		}
 	}
 
+	static boolean stop = false;
+
 	public static void execute(String query) {
 		Utils.out(query);
 		query.replaceAll("\n", "");
 		StringTokenizer lineTokens = new StringTokenizer(query, LINE_DELIMITER);
 		StringTokenizer commandTokens;
 		String command;
+		String printCond;
 		char id;
 		try {
-			while (lineTokens.hasMoreTokens()) {
+			while (lineTokens.hasMoreTokens() && !stop) {
 				commandTokens = new StringTokenizer(lineTokens.nextToken(), COMMAND_DELIMITER);
 				command = commandTokens.nextToken().trim();
 				id = command.charAt(0);
 				if (id == printID) {
-					MadSand.print(query.substring(command.length()));
+					printCond = commandTokens.nextToken();
+					if (!conditionFalse(printCond.charAt(0), printCond + COMMAND_DELIMITER))
+						MadSand.print(query.substring(command.length()));
 					continue;
 				}
 				if (!Character.isLetter(id))
 					command += COMMAND_DELIMITER + commandTokens.nextToken();
 				execute(command, commandTokens);
 			}
+			if (stop)
+				stop = false;
 		} catch (Exception e) {
 			MadSand.print("An error has occured in script: " + e.getMessage());
 			e.printStackTrace();

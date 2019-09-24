@@ -27,6 +27,7 @@ public class World {
 	static final int BORDER = 1;
 	static int MAPSIZE = 100;
 	HashMap<MapID, Map> WorldLoc = new HashMap<MapID, Map>();
+	static int wtime = 12;
 	static int worldtime = 12;
 
 	public World(int sz) {
@@ -34,6 +35,12 @@ public class World {
 		this.ysz = sz;
 		if (!createBasicLoc(new Pair(curxwpos, curywpos), MAPSIZE, MAPSIZE))
 			System.exit(-1);
+	}
+
+	HashMap<MapID, Map> _getLoc(int wx, int wy, int layer) {
+		HashMap<MapID, Map> ret = new HashMap<MapID, Map>();
+		ret.put(new MapID(new Pair(wx, wy), layer), getLoc(wx, wy, layer));
+		return ret;
 	}
 
 	boolean locExists(MapID loc) {

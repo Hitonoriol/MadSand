@@ -47,7 +47,7 @@ public class InventoryUICell {
 		});
 		btn.addListener(new ClickListener(Buttons.LEFT) {
 			public void clicked(InputEvent event, float x, float y) {
-				MadSand.player.hand = item.id;
+				MadSand.player.stats.hand = item.id;
 				Utils.toggleInventory();
 			}
 		});

@@ -7,12 +7,16 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.Vector;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.esotericsoftware.kryo.serializers.MapSerializer;
 
 import ru.bernarder.fallenrisefromdust.enums.GameState;
+import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 
 public class GameSaver {
 
@@ -20,25 +24,10 @@ public class GameSaver {
 		@SuppressWarnings("deprecation")
 		public void run() {
 			MadSand.print("World is saving... Don't quit the game!");
-			GameSaver.saveWorld(MadSand.WORLDNAME);
-			MadSand.print("World saved!");
+			GameSaver.saveWorld();
 			GameSaver.this.saver.stop();
 		}
 	});
-
-	public void init() {
-	}
-
-	static byte[] encode2(int val) {
-		byte data[] = new byte[2];
-		data[1] = (byte) (val & 0xFF);
-		data[0] = (byte) ((val >> 8) & 0xFF);
-		return data;
-	}
-
-	static int decode2(byte[] bytes) {
-		return (bytes[0] << 8) | (bytes[1] & 0xFF);
-	}
 
 	public static void saveToExternal(String name, String text) {
 		try {
@@ -49,6 +38,13 @@ public class GameSaver {
 		} catch (Exception e) {
 
 		}
+	}
+
+	static String SECTOR_DELIM = "!";
+
+	static File getSectorFile(int wx, int wy) {
+		return new File(
+				MadSand.MAPDIR + MadSand.WORLDNAME + "/sector" + SECTOR_DELIM + wx + SECTOR_DELIM + wy + ".mws");
 	}
 
 	public static String getExternal(String name) {
@@ -80,16 +76,18 @@ public class GameSaver {
 		}
 	}
 
-	public static void saveWorld(String filename) {
+	public static void saveWorld() {
 		MadSand.createDirs();
-		String curf = MadSand.MAPDIR + filename + "/" + "sector-" + MadSand.world.curxwpos + "-"
-				+ MadSand.world.curywpos + ".mws";
-		// saveMap();
-		saveChar();
+		if (saveSector() && saveChar())
+			MadSand.print("Game saved!");
+		else
+			MadSand.print("Couldn't save the game. Check logs.");
 	}
 
 	public static boolean loadWorld(String filename) {
+		MadSand.WORLDNAME = filename;
 		File f = new File(MadSand.MAPDIR + filename);
+		Utils.out("Loading " + f.getAbsolutePath() + " Exists: " + f.exists() + " isDirectory: " + f.isDirectory());
 		if (!f.exists()) {
 			MadSand.print("Unable to load world");
 			MadSand.state = GameState.NMENU;
@@ -100,14 +98,8 @@ public class GameSaver {
 			MadSand.state = GameState.NMENU;
 			return false;
 		}
-
-		File file = new File(MadSand.MAPDIR + filename + "/" + "sector-" + MadSand.world.curxwpos + "-"
-				+ MadSand.world.curywpos + ".mws");
-		if (file.exists()) {
-			MadSand.world.clearCurLoc();
-			loadMap(MadSand.MAPDIR + filename + "/" + "sector-" + MadSand.world.curxwpos + "-" + MadSand.world.curywpos
-					+ ".mws");
-			loadChar();
+		MadSand.world.clearCurLoc();
+		if (loadSector() && loadChar()) {
 			MadSand.print("Loaded Game!");
 			return true;
 		} else
@@ -116,44 +108,85 @@ public class GameSaver {
 	}
 
 	public static boolean verifyNextSector(int x, int y) {
-		File file = new File(MadSand.MAPDIR + MadSand.WORLDNAME + "/" + "sector-" + x + "-" + y + ".mws");
+		File file = getSectorFile(x, y);
 		if (file.exists()) {
 			return true;
 		}
 		return false;
 	}
 
-	static void saveChar() {
+	static boolean saveChar() {
 		try {
-			String fl = MadSand.MAPDIR + MadSand.WORLDNAME + "/" + MadSand.name + ".mc";
+			String fl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.PLAYERFILE;
 			Output output = new Output(new FileOutputStream(fl));
 			MadSand.kryo.writeObject(output, MadSand.player.inventory.items);
+			MadSand.kryo.writeObject(output, MadSand.player.stats);
 			output.close();
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	static void loadChar() {
+	static boolean loadChar() {
 		try {
-			String fl = MadSand.MAPDIR + MadSand.WORLDNAME + "/" + MadSand.name + ".mc";
-			Kryo kryo = new Kryo();
+			String fl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.PLAYERFILE;
 			Input input = new Input(new FileInputStream(fl));
-			Vector<Item> items = kryo.readObject(input, Vector.class);
-			MadSand.player.inventory.items = items;
+			MadSand.player.inventory.items = MadSand.kryo.readObject(input, Vector.class);
+			MadSand.player.stats = MadSand.kryo.readObject(input, Stats.class);
+			MadSand.player.inventory.setMaxWeight(MadSand.player.stats.str * Stats.STR_WEIGHT_MULTIPLIER);
+			MadSand.player.inventory.refreshWeight();
 			input.close();
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 
-	public static void saveMap(Map map) {
-		// TODO
+	public static boolean saveSector(int wx, int wy, int layer) {
+		try {
+			String fl = getSectorFile(wx, wy).getAbsolutePath();
+			MapID key = new MapID(new Pair(wx, wy), layer);
+			Output output = new Output(new FileOutputStream(fl));
+			HashMap<MapID, Map> map = MadSand.world._getLoc(wx, wy, layer);
+			Location loc = new Location();
+			loc.put(key, map.get(key));
+			MadSand.mapSerializer.write(MadSand.kryo, output, loc);
+			output.close();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
-	public static void loadMap(String filename) {
-		// TODO
+	static boolean saveSector() {
+		return saveSector(MadSand.world.curxwpos, MadSand.world.curywpos, 0);
+	}
+
+	public static boolean loadSector(int wx, int wy, int layer) {
+		try {
+			MapID key = new MapID(new Pair(wx, wy), layer);
+			String fl = getSectorFile(wx, wy).getAbsolutePath();
+			Utils.out("LoadSector: " + fl);
+			Input input = new Input(new FileInputStream(fl));
+			HashMap<MapID, Map> map = MadSand.mapSerializer.read(MadSand.kryo, input, Location.class);
+			if (MadSand.world.locExists(key))
+				MadSand.world.WorldLoc.remove(key);
+			MadSand.world.WorldLoc.put(key, map.get(key));
+			input.close();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	static boolean loadSector() {
+		return loadSector(MadSand.world.curxwpos, MadSand.world.curywpos, 0);
 	}
 
 }

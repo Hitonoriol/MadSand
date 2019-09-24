@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
@@ -192,9 +193,11 @@ public class Utils {
 			objects[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "obj/" + i + ".png"));
 			ObjectProp.name.put(i, getKey(resdoc, "object", "" + i, "name"));
 			ObjectProp.hp.put(i, Integer.parseInt(getKey(resdoc, "object", "" + i, "tough")));
-			ObjectProp.altitems.put(new Tuple<Integer, String>(i, "altitem"), getKey(resdoc, "object", "" + i, "altitem"));
+			ObjectProp.altitems.put(new Tuple<Integer, String>(i, "altitem"),
+					getKey(resdoc, "object", "" + i, "altitem"));
 			ObjectProp.altitems.put(new Tuple<Integer, String>(i, "hand"), getKey(resdoc, "object", "" + i, "hand"));
-			ObjectProp.altitems.put(new Tuple<Integer, String>(i, "skillbonus"), getKey(resdoc, "object", "" + i, "skillbonus"));
+			ObjectProp.altitems.put(new Tuple<Integer, String>(i, "skillbonus"),
+					getKey(resdoc, "object", "" + i, "skillbonus"));
 			ObjectProp.vRendMasks.put(i, Integer.parseInt(getKey(resdoc, "object", "" + i, "vmask")));
 			ObjectProp.hRendMasks.put(i, Integer.parseInt(getKey(resdoc, "object", "" + i, "hmask")));
 			ObjectProp.interactAction.put(i, getKey(resdoc, "object", "" + i, "oninteract"));
@@ -246,7 +249,7 @@ public class Utils {
 	public static String getItem(int id) {
 		return ItemProp.name.get(id);
 	}
-	
+
 	static void toggleInventory() {
 		if (invent) {
 			funcButtonsSet(false);
@@ -293,7 +296,7 @@ public class Utils {
 	}
 
 	public static void isInFront() {
-		int obj = MadSand.world.getObjID(MadSand.player.x, MadSand.player.y, MadSand.player.look);
+		int obj = MadSand.world.getObjID(MadSand.player.x, MadSand.player.y, MadSand.player.stats.look);
 		if ((obj != 666) && (obj != 0)) {
 			MadSand.print("You see: " + ObjectProp.name.get(obj));
 		}
@@ -305,7 +308,7 @@ public class Utils {
 		if (Gdx.input.isKeyJustPressed(Keys.Q))
 			Gui.showStatsWindow();
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER))
-			MadSand.player.interact(MadSand.player.look);
+			MadSand.player.interact(MadSand.player.stats.look);
 		if (Gdx.input.isKeyPressed(Keys.NUMPAD_3))
 			MadSand.ZOOM = (float) (MadSand.ZOOM + 0.01D);
 		if (Gdx.input.isKeyPressed(Keys.NUMPAD_1))
@@ -338,13 +341,13 @@ public class Utils {
 			turn(Direction.RIGHT);
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.N) && MadSand.world.curxwpos != 0 && MadSand.world.curywpos != 0) {
-			if (MadSand.player.x == World.MAPSIZE - 1 && MadSand.player.look == Direction.RIGHT)
+			if (MadSand.player.x == World.MAPSIZE - 1 && MadSand.player.stats.look == Direction.RIGHT)
 				gotoSector("right");
-			if (MadSand.player.y == World.MAPSIZE - 1 && MadSand.player.look == Direction.UP)
+			if (MadSand.player.y == World.MAPSIZE - 1 && MadSand.player.stats.look == Direction.UP)
 				gotoSector("up");
-			if (MadSand.player.x == World.BORDER && MadSand.player.look == Direction.LEFT)
+			if (MadSand.player.x == World.BORDER && MadSand.player.stats.look == Direction.LEFT)
 				gotoSector("left");
-			if (MadSand.player.y == World.BORDER && MadSand.player.look == Direction.DOWN)
+			if (MadSand.player.y == World.BORDER && MadSand.player.stats.look == Direction.DOWN)
 				gotoSector("down");
 
 		}
@@ -384,70 +387,49 @@ public class Utils {
 		if ((Gdx.input.isKeyJustPressed(Keys.H)) && (tester)) {
 			MadSand.player.damage(10);
 		}
-		if ((Gdx.input.isKeyJustPressed(Keys.F)) && (MadSand.player.hand != 0)) {
-			MadSand.player.hand = 0;
+		if ((Gdx.input.isKeyJustPressed(Keys.F)) && (MadSand.player.stats.hand != 0)) {
+			MadSand.player.stats.hand = 0;
 			MadSand.print("You freed your hands.");
-			Gui.equip[4].setDrawable(new com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable(new Sprite(cursor)));
+			Gui.equip[4].setDrawable(new SpriteDrawable(new Sprite(cursor)));
 		}
 		if ((Gdx.input.isKeyPressed(Keys.A)) && (!MadSand.stepping)) {
-			MadSand.player.look = Direction.LEFT;
-			turn(MadSand.player.look);
-			if (!VerifyPosition(MadSand.player.look))
-				move(MadSand.player.look);
-			isInFront();
+			walk(Direction.LEFT);
 		}
 		if ((Gdx.input.isKeyPressed(Keys.D)) && (!MadSand.stepping)) {
-			MadSand.player.look = Direction.RIGHT;
-			turn(MadSand.player.look);
-			if (!VerifyPosition(MadSand.player.look))
-				move(MadSand.player.look);
-			isInFront();
+			walk(Direction.RIGHT);
 		}
 		if ((Gdx.input.isKeyPressed(Keys.W)) && (!MadSand.stepping)) {
-			MadSand.player.look = Direction.UP;
-			turn(MadSand.player.look);
-			if (!VerifyPosition(MadSand.player.look))
-				move(MadSand.player.look);
-			isInFront();
+			walk(Direction.UP);
 		}
 		if ((Gdx.input.isKeyPressed(Keys.S)) && (!MadSand.stepping)) {
-			MadSand.player.look = Direction.DOWN;
-			turn(MadSand.player.look);
-			if (!VerifyPosition(MadSand.player.look))
-				move(MadSand.player.look);
-			isInFront();
+			walk(Direction.DOWN);
 		}
+	}
+
+	static void walk(Direction dir) {
+		MadSand.player.stats.look = dir;
+		turn(MadSand.player.stats.look);
+		if (!VerifyPosition(MadSand.player.stats.look))
+			move(MadSand.player.stats.look);
+		isInFront();
 	}
 
 	static void mouseMovement() {
 		if ((Gdx.input.isButtonPressed(0)) && (MadSand.state == GameState.GAME) && (!MadSand.stepping)
 				&& (!MadSand.contextopened)) {
-			if (MadSand.wmx > MadSand.player.x) {
-				MadSand.player.look = Direction.RIGHT;
-				turn(MadSand.player.look);
-				move(MadSand.player.look);
-				isInFront();
-			} else if (MadSand.wmx < MadSand.player.x) {
-				MadSand.player.look = Direction.LEFT;
-				turn(MadSand.player.look);
-				move(MadSand.player.look);
-				isInFront();
-			} else if (MadSand.wmy > MadSand.player.y) {
-				MadSand.player.look = Direction.UP;
-				turn(MadSand.player.look);
-				move(MadSand.player.look);
-				isInFront();
-			} else if (MadSand.wmy < MadSand.player.y) {
-				MadSand.player.look = Direction.DOWN;
-				turn(MadSand.player.look);
-				move(MadSand.player.look);
-				isInFront();
-			}
+			if (MadSand.wmx > MadSand.player.x)
+				walk(Direction.RIGHT);
+			else if (MadSand.wmx < MadSand.player.x)
+				walk(Direction.LEFT);
+			else if (MadSand.wmy > MadSand.player.y)
+				walk(Direction.UP);
+			else if (MadSand.wmy < MadSand.player.y)
+				walk(Direction.DOWN);
 		}
 	}
 
 	public static void turn(Direction dir) {
-		MadSand.player.look = dir;
+		MadSand.player.stats.look = dir;
 		if (!MadSand.stepping) {
 			if (dir == Direction.UP) {
 				Splayer = new Sprite(utex);
@@ -570,7 +552,7 @@ public class Utils {
 			Gui.mouselabel[3].setText("Creature: " + " ()");
 			Gui.mouselabel[4].setText("Turn: " + MadSand.turn + "\nWorld time: " + World.worldtime
 					+ "\nPlayer position: (" + MadSand.player.x + ", " + MadSand.player.y + ")\nStamina: "
-					+ Math.round(MadSand.player.stamina));
+					+ Math.round(MadSand.player.stats.stamina));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

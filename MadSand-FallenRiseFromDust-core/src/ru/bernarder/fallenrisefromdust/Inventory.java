@@ -14,9 +14,21 @@ public class Inventory {
 		setMaxWeight(maxWeight);
 	}
 
+	public Inventory() {
+		curWeight = 0;
+		maxWeight = 0;
+	}
+
 	void setMaxWeight(float val) {
 		maxWeight = val;
 		inventoryUI.setMass(curWeight, maxWeight);
+	}
+
+	void refreshWeight() {
+		curWeight = 0;
+		for (Item item : items) {
+			curWeight += item.getWeight();
+		}
 	}
 
 	void dump() {
