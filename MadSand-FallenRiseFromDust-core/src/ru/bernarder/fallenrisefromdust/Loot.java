@@ -18,10 +18,8 @@ public class Loot {
 	String getContents() {
 		String ret = "";
 		for (Item item : contents) {
-			ret += item.getQuery() + "/";
+			ret += item.getString() + "/";
 		}
-		if (ret == "")
-			ret = "n";
 		return ret;
 	}
 

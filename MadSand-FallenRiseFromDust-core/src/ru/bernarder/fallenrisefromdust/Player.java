@@ -202,4 +202,15 @@ public class Player {
 		}
 
 	}
+
+	void updCoords() {
+		MadSand.player.globalPos.x = (x * MadSand.TILESIZE);
+		MadSand.player.globalPos.y = (y * MadSand.TILESIZE);
+	}
+
+	public void teleport(int x, int y) {
+		this.x = x;
+		this.y = y;
+		updCoords();
+	}
 }

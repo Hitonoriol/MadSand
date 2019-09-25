@@ -14,6 +14,7 @@ public class Item {
 
 	private final static String ITEM_DELIM = "/";
 	private final static String BLOCK_DELIM = ":";
+	static final String EMPTY_QUERY = "n";
 
 	public Item(int id) {
 		this.id = id;
@@ -32,7 +33,7 @@ public class Item {
 	}
 
 	public Item(String query) {
-		if (query == "n") {
+		if (query == EMPTY_QUERY) {
 			this.id = 0;
 			loadProperties();
 			return;
@@ -78,20 +79,19 @@ public class Item {
 	}
 
 	public String getString() {
-		return id + ITEM_DELIM + quantity;
+		if (id == 0)
+			return EMPTY_QUERY;
+		else
+			return id + ITEM_DELIM + quantity;
 	}
 
 	double getWeight() {
 		return weight * quantity;
 	}
 
-	String getQuery() {
-		return id + ":" + quantity;
-	}
-
 	// Static functions for general item related needs:
 
-	static String queryToName(String query) { // item query format: id1:quantity1/id2:quantity2/...
+	static String queryToName(String query) { // item query format: id1/quantity1:id2/quantity2:...
 		int i = 0;
 		String ret = "";
 		if (!query.contains(BLOCK_DELIM))

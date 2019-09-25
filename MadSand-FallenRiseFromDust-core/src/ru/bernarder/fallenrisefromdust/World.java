@@ -92,11 +92,17 @@ public class World {
 		return true;
 	}
 
+	boolean createBasicLoc(int wx, int wy) {
+		return createBasicLoc(new Pair(wx, wy), MAPSIZE, MAPSIZE);
+	}
+
 	public static int[] ores = { 22, 23 };
 	static int biome;
 
 	public void Generate() {
 		Utils.out("WorldGen start!");
+		if (!locExists(new MapID(new Pair(curxwpos, curywpos), 0)))
+			createBasicLoc(curxwpos, curywpos);
 		try {
 			clearCurLoc();
 			Utils.random = new Random();

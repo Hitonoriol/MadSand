@@ -148,6 +148,8 @@ public class GameSaver {
 			Output output = new Output(new FileOutputStream(fl));
 			MadSand.kryo.writeObject(output, MadSand.player.inventory.items);
 			MadSand.kryo.writeObject(output, MadSand.player.stats);
+			MadSand.kryo.writeObject(output, MadSand.player.x);
+			MadSand.kryo.writeObject(output, MadSand.player.y);
 			output.close();
 			return true;
 		} catch (Exception e) {
@@ -165,6 +167,9 @@ public class GameSaver {
 			MadSand.player.stats = MadSand.kryo.readObject(input, Stats.class);
 			MadSand.player.inventory.setMaxWeight(MadSand.player.stats.str * Stats.STR_WEIGHT_MULTIPLIER);
 			MadSand.player.inventory.refreshWeight();
+			MadSand.player.x = MadSand.kryo.readObject(input, Integer.class);
+			MadSand.player.y = MadSand.kryo.readObject(input, Integer.class);
+			MadSand.player.updCoords();
 			input.close();
 			return true;
 		} catch (Exception e) {

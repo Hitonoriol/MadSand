@@ -256,11 +256,9 @@ public class Utils {
 			MadSand.contextopened = false;
 			MadSand.state = GameState.GAME;
 			Gui.mousemenu.setVisible(true);
-			Gui.overlay.setDebugAll(false);
 			MadSand.player.inventory.inventoryUI.toggleVisible();
 			invent = false;
 		} else {
-			Gui.overlay.setDebugAll(true);
 			MadSand.player.inventory.inventoryUI.toggleVisible();
 			Gui.gamecontext.setVisible(false);
 			MadSand.contextopened = false;
@@ -341,18 +339,18 @@ public class Utils {
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.N) && MadSand.world.curxwpos != 0 && MadSand.world.curywpos != 0) {
 			if (MadSand.player.x == World.MAPSIZE - 1 && MadSand.player.stats.look == Direction.RIGHT)
-				gotoSector("right");
+				gotoSector(MadSand.player.stats.look);
 			if (MadSand.player.y == World.MAPSIZE - 1 && MadSand.player.stats.look == Direction.UP)
-				gotoSector("up");
+				gotoSector(MadSand.player.stats.look);
 			if (MadSand.player.x == World.BORDER && MadSand.player.stats.look == Direction.LEFT)
-				gotoSector("left");
+				gotoSector(MadSand.player.stats.look);
 			if (MadSand.player.y == World.BORDER && MadSand.player.stats.look == Direction.DOWN)
-				gotoSector("down");
+				gotoSector(MadSand.player.stats.look);
 
 		}
 
 		if ((Gdx.input.isKeyJustPressed(Keys.Y)) && (tester)) {
-			MadSand.teleport(MadSand.wmx, MadSand.wmy);
+			MadSand.player.teleport(MadSand.wmx, MadSand.wmy);
 		}
 		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyPressed(Keys.R)) && (tester)) {
 			MadSand.world.Generate();
@@ -483,19 +481,19 @@ public class Utils {
 		if ((!MadSand.player.isCollision(dir, 0)) && (MadSand.dialogflag)) {
 			if ((dir == Direction.UP) && (!VerifyPosition(dir))) {
 				MadSand.player.y += 1;
-				MadSand.player.globalPos.y += 33.0F;
+				MadSand.player.globalPos.y += MadSand.TILESIZE;
 			}
 			if ((dir == Direction.DOWN) && (!VerifyPosition(dir))) {
 				MadSand.player.y -= 1;
-				MadSand.player.globalPos.y -= 33.0F;
+				MadSand.player.globalPos.y -= MadSand.TILESIZE;
 			}
 			if ((dir == Direction.LEFT) && (!VerifyPosition(dir))) {
 				MadSand.player.x -= 1;
-				MadSand.player.globalPos.x -= 33.0F;
+				MadSand.player.globalPos.x -= MadSand.TILESIZE;
 			}
 			if ((dir == Direction.RIGHT) && (!VerifyPosition(dir))) {
 				MadSand.player.x += 1;
-				MadSand.player.globalPos.x += 33.0F;
+				MadSand.player.globalPos.x += MadSand.TILESIZE;
 			}
 			if (MadSand.player.x == World.MAPSIZE - 1 || MadSand.player.y == World.MAPSIZE - 1
 					|| MadSand.player.x == World.BORDER || MadSand.player.y == World.BORDER) {
@@ -522,17 +520,61 @@ public class Utils {
 		return ret;
 	}
 
-	static void updCoords() {
-		MadSand.player.globalPos.x = (MadSand.player.x * 33);
-		MadSand.player.globalPos.y = (MadSand.player.y * 33);
-	}
+	public static Direction gotodir;
 
-	public static String gotodir = "";
-
-	public static void gotoSector(String dir) {
+	public static void gotoSector(Direction dir) {
 		gotodir = dir;
 		MadSand.state = GameState.GOT;
-		new ThreadedUtils().gotoSector.start();
+		MadSand.tempwx = MadSand.world.curxwpos;
+		MadSand.tempwy = MadSand.world.curywpos;
+		MadSand.tonext = true;
+		MadSand.encounter = false;
+
+		if ((Utils.gotodir == Direction.LEFT) && (MadSand.world.curxwpos > 0)) {
+			MadSand.world.curxwpos -= 1;
+			MadSand.player.x = World.MAPSIZE - 2;
+			MadSand.player.updCoords();
+		}
+		if ((Utils.gotodir == Direction.RIGHT) && (MadSand.world.curxwpos < 9)) {
+			MadSand.world.curxwpos += 1;
+			MadSand.player.x = 0;
+			MadSand.player.updCoords();
+		}
+		if ((Utils.gotodir == Direction.DOWN) && (MadSand.world.curywpos > 0)) {
+			MadSand.world.curywpos -= 1;
+			MadSand.player.y = World.MAPSIZE - 2;
+			MadSand.player.updCoords();
+		}
+		if ((Utils.gotodir == Direction.UP) && (MadSand.world.curywpos < 9)) {
+			MadSand.world.curywpos += 1;
+			MadSand.player.y = 0;
+			MadSand.player.updCoords();
+		}
+		MadSand.print("Going to (" + MadSand.world.curxwpos + ", " + MadSand.world.curywpos + ")");
+		if (GameSaver.verifyNextSector(MadSand.world.curxwpos, MadSand.world.curywpos)) {
+			GameSaver.loadSector();
+		} else {
+			MadSand.state = GameState.WORLDGEN;
+			if (MadSand.tonext) {
+				if (Utils.rand(0, MadSand.ENCOUNTERCHANCE) == MadSand.ENCOUNTERCHANCE) {
+					try {
+						MadSand.world.curxwpos = MadSand.tempwx;
+						MadSand.world.curywpos = MadSand.tempwy;
+						MadSand.encounter = true;
+						MadSand.print("You came to a strange place...");
+						BuildScript.execute((GameSaver.getExternal("MadSand_Saves/scripts/encounter.msl")));
+					} catch (Exception e) {
+						e.printStackTrace();
+						Utils.out("Error on random encounter start: " + e.getMessage());
+					}
+				} else
+					MadSand.world.Generate();
+			} else {
+				MadSand.world.Generate();
+			}
+			MadSand.tonext = false;
+			MadSand.state = GameState.GAME;
+		}
 	}
 
 	public static void updMouseCoords() {

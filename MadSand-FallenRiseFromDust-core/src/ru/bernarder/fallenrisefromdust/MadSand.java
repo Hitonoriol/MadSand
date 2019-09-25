@@ -356,13 +356,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 		i = 0;
 	}
 
-	public static void teleport(int x, int y) {
-		player.globalPos.x = (x * 33);
-		player.globalPos.y = (y * 33);
-		player.x = x;
-		player.y = y;
-	}
-
 	static void showDialog(final int type, String text, final int qid) {
 		boolean lot = false;
 		String toin = "";

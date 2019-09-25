@@ -859,7 +859,7 @@ public class Gui {
 						}
 					}
 				}
-				Utils.updCoords();
+				MadSand.player.updCoords();
 			}
 		});
 		settingsButton.addListener(new ChangeListener() {
