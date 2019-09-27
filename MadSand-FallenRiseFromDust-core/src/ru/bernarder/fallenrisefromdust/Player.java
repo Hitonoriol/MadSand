@@ -46,9 +46,27 @@ public class Player {
 	}
 
 	public boolean dropItem(int id, int quantity) {
-		boolean r = false;
-		// TODO
-		return r;
+		Utils.out("Item drop: " + id + " " + quantity);
+		if (inventory.getSameCell(id, quantity) == -1)
+			return false;
+		inventory.delItem(id, quantity);
+		Pair coord = new Pair(x, y).addDirection(stats.look);
+		MadSand.world.getCurLoc().putLoot(coord.x, coord.y, id, quantity);
+		return true;
+	}
+
+	void pickUpLoot() {
+		Loot loot = MadSand.world.getCurLoc().getLoot(x, y);
+		Item item = new Item();
+		if (loot != Map.nullLoot) {
+			for (int i = loot.contents.size() - 1; i >= 0; --i) {
+				item = loot.contents.get(i);
+				if (inventory.putItem(loot.contents.get(i)))
+					loot.remove(i);
+				else
+					break;
+			}
+		}
 	}
 
 	void interact(final Direction direction) { // TODO: BuildScript onInteract events

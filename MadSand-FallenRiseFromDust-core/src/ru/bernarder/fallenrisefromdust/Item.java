@@ -12,9 +12,9 @@ public class Item {
 	int quantity;
 	double weight;
 
-	private final static String ITEM_DELIM = "/";
-	private final static String BLOCK_DELIM = ":";
-	static final String EMPTY_QUERY = "n";
+	final static String ITEM_DELIM = "/";
+	final static String BLOCK_DELIM = ":";
+	final static String EMPTY_QUERY = "n";
 
 	public Item(int id) {
 		this.id = id;

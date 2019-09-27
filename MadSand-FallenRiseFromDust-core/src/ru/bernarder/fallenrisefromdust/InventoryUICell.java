@@ -42,6 +42,7 @@ public class InventoryUICell {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				invcontext.setVisible(false);
 				MadSand.contextopened = false;
+				MadSand.player.dropItem(item.id, item.quantity);
 			}
 
 		});

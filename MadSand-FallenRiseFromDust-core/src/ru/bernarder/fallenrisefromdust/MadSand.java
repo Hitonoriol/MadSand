@@ -193,6 +193,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 		kryo.register(Direction.class);
 		kryo.register(java.util.Vector.class);
 		kryo.register(Stats.class);
+		kryo.register(Item.class);
 
 		int radius = 13;
 		if (new File(SAVEDIR + "lastrend.dat").exists())
@@ -426,13 +427,13 @@ public class MadSand extends com.badlogic.gdx.Game {
 		if (stepping) {
 			this.elapsedTime += Gdx.graphics.getDeltaTime();
 			if (player.stats.look == Direction.RIGHT) {
-				Utils.batch.draw((TextureRegion) Utils.ranim.getKeyFrame(this.elapsedTime, true), player.globalPos.x - stepx,
-						player.globalPos.y);
+				Utils.batch.draw((TextureRegion) Utils.ranim.getKeyFrame(this.elapsedTime, true),
+						player.globalPos.x - stepx, player.globalPos.y);
 				updateCamToxy(player.globalPos.x - stepx, player.globalPos.y);
 			}
 			if (player.stats.look == Direction.LEFT) {
-				Utils.batch.draw((TextureRegion) Utils.lanim.getKeyFrame(this.elapsedTime, true), player.globalPos.x + stepx,
-						player.globalPos.y);
+				Utils.batch.draw((TextureRegion) Utils.lanim.getKeyFrame(this.elapsedTime, true),
+						player.globalPos.x + stepx, player.globalPos.y);
 				updateCamToxy(player.globalPos.x + stepx, player.globalPos.y);
 			}
 			if (player.stats.look == Direction.UP) {
@@ -509,7 +510,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 				Utils.updMouseCoords();
 				Utils.mouseMovement();
 				Utils.KeyCheck();
-				// TODO: loot collision
+				player.pickUpLoot();
 				Utils.InvKeyCheck();
 			}
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);

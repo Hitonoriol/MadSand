@@ -46,8 +46,10 @@ public class Inventory {
 	int getSameCell(int id, int q) { // find q or more items
 		int i = getSameCell(id);
 		if (i != -1) {
-			if (items.get(i).quantity < q)
+			if (items.get(i).quantity < q) {
+				Utils.out("getSameCell " + id + " " + q + " not found");
 				return -1;
+			}
 		}
 		return i;
 	}
@@ -103,6 +105,10 @@ public class Inventory {
 
 	boolean putItem(int id, int q) {
 		return putItem(id, q, false);
+	}
+
+	boolean putItem(Item item) {
+		return putItem(item.id, item.quantity, false);
 	}
 
 	public boolean delItem(int id, int quantity) {

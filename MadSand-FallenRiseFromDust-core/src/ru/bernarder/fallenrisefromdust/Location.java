@@ -22,7 +22,6 @@ public class Location extends HashMap<MapID, Map> {
 			MapObject obj = new MapObject();
 			for (int y = 0; y < ysz; ++y) {
 				for (int x = 0; x < xsz; ++x) {
-					Utils.out(map.getTile(x, y).id + "");
 					stream.write(GameSaver.encode2(map.getTile(x, y).id));
 					obj = map.getObject(x, y);
 					stream.write(GameSaver.encode2(obj.id));
@@ -33,7 +32,8 @@ public class Location extends HashMap<MapID, Map> {
 			String loot;
 			for (int y = 0; y < ysz; ++y) {
 				for (int x = 0; x < xsz; ++x) {
-					loot = map.getLoot(x, y).getContents() + LOOT_DELIM;
+					loot = map.getLoot(x, y).getContents();
+					lootStream.write(GameSaver.encode2(loot.length()));
 					lootStream.write(loot.getBytes());
 				}
 			}
@@ -56,7 +56,6 @@ public class Location extends HashMap<MapID, Map> {
 			MapID loc = new MapID(new Pair(wx, wy), layer);
 			Map map = new Map(xsz, ysz);
 			map.purge();
-			Utils.out(xsz + " " + ysz);
 			ByteArrayInputStream stream = new ByteArrayInputStream(sector);
 			for (int i = 0; i < 4; ++i)
 				stream.read();
@@ -69,9 +68,23 @@ public class Location extends HashMap<MapID, Map> {
 					map.addObject(x, y, GameSaver.decode2(block));
 					stream.read(block);
 					map.getObject(x, y).hp = GameSaver.decode2(block);
-
 				}
 			}
+			String loot;
+			byte[] _len = new byte[2];
+			int len;
+			byte[] node;
+			for (int y = 0; y < ysz; ++y) {
+				for (int x = 0; x < xsz; ++x) {
+					stream.read(_len);
+					len = GameSaver.decode2(_len);
+					node = new byte[len];
+					stream.read(node);
+					loot = new String(node);
+					Loot.addLootQ(loot, x, y, map);
+				}
+			}
+
 			stream.close();
 			if (this.containsKey(loc))
 				this.remove(loc);

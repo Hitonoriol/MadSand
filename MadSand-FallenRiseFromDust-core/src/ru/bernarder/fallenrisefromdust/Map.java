@@ -59,11 +59,12 @@ public class Map {
 		return ysz;
 	}
 
-	void purge() {
+	Map purge() {
 		mapTiles = new HashMap<Pair, Tile>();
 		mapObjects = new HashMap<Pair, MapObject>();
 		mapLoot = new HashMap<Pair, Loot>();
 		mapNpcs = new HashMap<Pair, Npc>();
+		return this;
 	}
 
 	void putTileInDir(int x, int y, Direction dir, int id) {
@@ -231,9 +232,13 @@ public class Map {
 	Loot getLoot(int x, int y) {
 		if (correctCoords(coords.set(x, y))) {
 			Loot ret = mapLoot.get(coords.set(x, y));
-			if (ret != null)
+			if (ret != null) {
+				if (ret.isEmpty()) {
+					removeLoot(x, y);
+					return nullLoot;
+				}
 				return ret;
-			else
+			} else
 				return nullLoot;
 		} else
 			return nullLoot;
@@ -246,7 +251,14 @@ public class Map {
 
 	void putLoot(int x, int y, int id, int q) {
 		if (correctCoords(coords.set(x, y))) {
-			mapLoot.put(coords, getLoot(x, y).add(id, q));
+			Utils.out("Adding loot id " + id + " q " + q + "|" + x + "," + y);
+			if (mapLoot.get(coords) != null) {
+				Utils.out("Adding to existing loot node...");
+				mapLoot.get(coords).add(id, q);
+			} else {
+				Utils.out("Creating loot node...");
+				mapLoot.put(coords, new Loot(new Item(id, q)));
+			}
 		}
 	}
 

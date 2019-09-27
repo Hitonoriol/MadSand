@@ -313,7 +313,7 @@ public class World {
 
 	public void clearCurLoc() {
 		Utils.out("clearCurLoc");
-		Map curLoc = getCurLoc();
+		Map curLoc = getCurLoc().purge();
 		int xsz = curLoc.getWidth(), ysz = curLoc.getHeight();
 		biome = 0;
 		int i = 0;

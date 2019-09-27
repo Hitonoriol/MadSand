@@ -163,6 +163,7 @@ public class GameSaver {
 		try {
 			String fl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.PLAYERFILE;
 			Input input = new Input(new FileInputStream(fl));
+			MadSand.player.inventory = new Inventory();
 			MadSand.player.inventory.items = MadSand.kryo.readObject(input, Vector.class);
 			MadSand.player.stats = MadSand.kryo.readObject(input, Stats.class);
 			MadSand.player.inventory.setMaxWeight(MadSand.player.stats.str * Stats.STR_WEIGHT_MULTIPLIER);

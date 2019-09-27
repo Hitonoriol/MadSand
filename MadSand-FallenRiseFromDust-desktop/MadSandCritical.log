@@ -6,6 +6,6 @@ java.io.FileNotFoundException: MadSandData\version.dat (The system cannot find t
 	at ru.bernarder.fallenrisefromdust.GameSaver.getExternal(GameSaver.java:80)
 	at ru.bernarder.fallenrisefromdust.Gui.getVersion(Gui.java:561)
 	at ru.bernarder.fallenrisefromdust.Gui.initmenu(Gui.java:818)
-	at ru.bernarder.fallenrisefromdust.MadSand.create(MadSand.java:252)
+	at ru.bernarder.fallenrisefromdust.MadSand.create(MadSand.java:253)
 	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:149)
 	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:126)
