@@ -42,13 +42,14 @@ public class Player {
 
 	public void checkHands(int id) {
 		if (inventory.getSameCell(id, 1) == -1)
-			MadSand.player.stats.hand = 0;
+			World.player.stats.hand = 0;
 	}
 
 	public boolean dropItem(int id, int quantity) {
 		Utils.out("Item drop: " + id + " " + quantity);
 		if (inventory.getSameCell(id, quantity) == -1)
 			return false;
+		World.player.doAction();
 		inventory.delItem(id, quantity);
 		Pair coord = new Pair(x, y).addDirection(stats.look);
 		MadSand.world.getCurLoc().putLoot(coord.x, coord.y, id, quantity);
@@ -57,10 +58,8 @@ public class Player {
 
 	void pickUpLoot() {
 		Loot loot = MadSand.world.getCurLoc().getLoot(x, y);
-		Item item = new Item();
 		if (loot != Map.nullLoot) {
 			for (int i = loot.contents.size() - 1; i >= 0; --i) {
-				item = loot.contents.get(i);
 				if (inventory.putItem(loot.contents.get(i)))
 					loot.remove(i);
 				else
@@ -73,6 +72,7 @@ public class Player {
 		int id = MadSand.world.getCurLoc().getObject(x, y, stats.look).id;
 		Utils.out("Interacting with " + id);
 		String action = ObjectProp.interactAction.get(id);
+		World.player.doAction();
 		if (action != "-1") {
 			BuildScript.execute(action);
 			return;
@@ -81,8 +81,8 @@ public class Player {
 		int item = MapObject.getAltItem(id);
 		int hand = Integer.parseInt(ObjectProp.altitems.get(pair));
 		if (item != -1) {
-			if (hand == -1 || hand == MadSand.player.stats.hand) {
-				MadSand.player.inventory.putItem(item, 1);
+			if (hand == -1 || hand == World.player.stats.hand) {
+				World.player.inventory.putItem(item, 1);
 				MadSand.world.getCurLoc().dmgObjInDir(x, y, direction);
 			}
 		}
@@ -147,11 +147,34 @@ public class Player {
 		MadSand.state = GameState.DEAD;
 	}
 
+	int doAction(int ap) { // any action that uses AP
+		Utils.out(ap + "action pts spent");
+		int tmp = stats.actionPts;
+		stats.actionPts -= ap;
+		int ticks = 0;
+		if (stats.actionPts <= 0) {
+			ticks = 1 + (Math.abs(stats.actionPts) / stats.actionPtsMax);
+			stats.actionPts %= tmp;
+		}
+		if (stats.actionPts == 0) {
+			stats.actionPts = stats.actionPtsMax;
+			--ticks;
+		}
+		MadSand.world.ticks(ticks);
+		Utils.out(stats.actionPts + " AP left");
+		return stats.actionPts;
+	}
+
+	int doAction() {
+		return doAction(Stats.AP_MINOR);
+	}
+
 	public void useItem() {
 		int id = stats.hand;
 		int ptile = MadSand.world.getTileId(x, y);
 		checkHands(id);
 		String action = ItemProp.useAction.get(id);
+		World.player.doAction();
 		if (action != "-1") {
 			BuildScript.execute(action);
 			return;
@@ -159,39 +182,39 @@ public class Player {
 		if ((ptile == 6) || (ptile == 16)) {
 			MadSand.print("You entered the dungeon.");
 			MadSand.world.curlayer += 1;
-			MadSand.world.delObj(MadSand.player.x, MadSand.player.y);
+			MadSand.world.delObj(World.player.x, World.player.y);
 		}
 		if (id == 6) {
 			if (ptile == 0) {
-				MadSand.world.putMapTile(MadSand.player.y, MadSand.player.x, 6);
+				MadSand.world.putMapTile(World.player.y, World.player.x, 6);
 				MadSand.print("You dug a hole.");
 			}
 			if (ptile == 3) {
-				MadSand.world.putMapTile(MadSand.player.y, MadSand.player.x, 16);
+				MadSand.world.putMapTile(World.player.y, World.player.x, 16);
 				MadSand.print("You dug a hole.");
 			}
 			if (ptile == 1) {
-				MadSand.player.inventory.putItem(5, 1, true);
-				MadSand.world.putMapTile(MadSand.player.y, MadSand.player.x, 0);
+				World.player.inventory.putItem(5, 1, true);
+				MadSand.world.putMapTile(World.player.y, World.player.x, 0);
 				MadSand.print("You dug some clay");
 			}
 			if (ptile == 2) {
-				MadSand.player.inventory.putItem(9, 1, true);
-				MadSand.world.putMapTile(MadSand.player.y, MadSand.player.x, 0);
+				World.player.inventory.putItem(9, 1, true);
+				MadSand.world.putMapTile(World.player.y, World.player.x, 0);
 				MadSand.print("You dug some flint");
 			}
 		}
 		if (Item.getType(id) == ItemType.Consumable.get()) {
 			MadSand.print("You ate one " + ItemProp.name.get(id));
-			MadSand.player.heal(Integer.parseInt(ItemProp.heal.get(id).split(":")[0]));
-			MadSand.player.increaseStamina(Integer.parseInt(ItemProp.heal.get(id).split(":")[1]));
+			World.player.heal(Integer.parseInt(ItemProp.heal.get(id).split(":")[0]));
+			World.player.increaseStamina(Integer.parseInt(ItemProp.heal.get(id).split(":")[1]));
 		}
-		if ((id == 9) && (MadSand.player.inventory.getSameCell(9, 1) != -1)
-				&& (MadSand.player.inventory.getSameCell(1, 5) != -1)) {
+		if ((id == 9) && (World.player.inventory.getSameCell(9, 1) != -1)
+				&& (World.player.inventory.getSameCell(1, 5) != -1)) {
 			MadSand.print("You placed a campfire");
-			MadSand.player.inventory.delItem(9, 1);
-			MadSand.player.inventory.delItem(1, 5);
-			MadSand.world.getCurLoc().addObject(MadSand.player.x, MadSand.player.y, MadSand.player.stats.look, 6);
+			World.player.inventory.delItem(9, 1);
+			World.player.inventory.delItem(1, 5);
+			MadSand.world.getCurLoc().addObject(World.player.x, World.player.y, World.player.stats.look, 6);
 		}
 		if (Item.getType(id) == ItemType.HeadArmor.get()) {
 			// equip helmet
@@ -203,27 +226,27 @@ public class Player {
 			// equip shield
 		}
 		if (Item.getType(id) == ItemType.Crop.get()) { // crop
-			MadSand.player.inventory.delItem(id, 1);
-			MadSand.world.getCurLoc().addObject(MadSand.player.x, MadSand.player.y, MadSand.player.stats.look,
+			World.player.inventory.delItem(id, 1);
+			MadSand.world.getCurLoc().addObject(World.player.x, World.player.y, World.player.stats.look,
 					Item.getAltObject(id));
 			// put crop in direction
 		}
 		if (Item.getType(id) == ItemType.PlaceableObject.get()) {
-			MadSand.player.inventory.delItem(id, 1);
-			MadSand.world.getCurLoc().addObject(MadSand.player.x, MadSand.player.y, MadSand.player.stats.look,
+			World.player.inventory.delItem(id, 1);
+			MadSand.world.getCurLoc().addObject(World.player.x, World.player.y, World.player.stats.look,
 					Item.getAltObject(id));
 		}
 		if (Item.getType(id) == ItemType.PlaceableTile.get()) {
-			MadSand.player.inventory.delItem(id, 1);
-			MadSand.world.getCurLoc().addTile(MadSand.player.x, MadSand.player.y, MadSand.player.stats.look,
+			World.player.inventory.delItem(id, 1);
+			MadSand.world.getCurLoc().addTile(World.player.x, World.player.y, World.player.stats.look,
 					Item.getAltObject(id));
 		}
 
 	}
 
 	void updCoords() {
-		MadSand.player.globalPos.x = (x * MadSand.TILESIZE);
-		MadSand.player.globalPos.y = (y * MadSand.TILESIZE);
+		World.player.globalPos.x = (x * MadSand.TILESIZE);
+		World.player.globalPos.y = (y * MadSand.TILESIZE);
 	}
 
 	public void teleport(int x, int y) {

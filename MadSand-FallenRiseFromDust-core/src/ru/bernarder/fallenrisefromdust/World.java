@@ -20,15 +20,19 @@ import ru.bernarder.fallenrisefromdust.enums.Direction;
 
 public class World {
 	Map nullLoc = new Map(0, 0);
-	private int xsz, ysz;
-	public int curywpos = 5;
+	private int xsz, ysz; // max world size, not really used anywhere
+	public int curywpos = 5; // current location's global coordinates
 	public int curxwpos = 5;
-	public int curlayer = 0;
-	static final int BORDER = 1;
-	static int MAPSIZE = 100;
-	Location WorldLoc = new Location();
-	static int wtime = 12;
-	static int worldtime = 12;
+	public int curlayer = 0; // current layer: layer>0 = underworld | layer<0 overworld
+	static final int BORDER = 1;// map border(old shit, not really useful anymore)
+	static int MAPSIZE = 100; // default location size
+
+	public static Player player;
+	public Location WorldLoc = new Location();
+
+	int worldtime = 12; // time (00 - 23)
+	int ticksPerHour = 100; // ticks per one hourTick() trigger
+	int tick = 0; // tick counter
 
 	public World(int sz) {
 		this.xsz = sz;
@@ -407,7 +411,30 @@ public class World {
 		return ysz;
 	}
 
-	void timeTick() {// on successful movement or action
-		// moblogic, croplogic, playerstats update
+	void hourTick() {
+		++worldtime;
+		// CropLayer.updCrops();
+		if (MadSand.world.worldtime == 24)
+			MadSand.world.worldtime = 0;
+		if (((MadSand.world.worldtime >= 0) && (MadSand.world.worldtime <= 5))
+				|| ((MadSand.world.worldtime >= 21) && (MadSand.world.worldtime <= 23))) {
+			Gui.darkness.setVisible(true);
+		} else {
+			Gui.darkness.setVisible(false);
+		}
+	}
+
+	void tick() {
+		Utils.tileDmg();
+		Utils.out("World tick!");
+		if (++tick >= ticksPerHour - 1) {
+			tick = 0;
+			hourTick();
+		}
+	}
+
+	void ticks(int n) {
+		for (int i = n; i >= 0; --i)
+			tick();
 	}
 }

@@ -4,10 +4,19 @@ import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.Faction;
 
 public class Stats {
-	final static int STR_WEIGHT_MULTIPLIER = 50;
+	final static int STR_WEIGHT_MULTIPLIER = 25;
 	
+	final static int AP_WALK = 5;	//action points consumed by walking
+	final static int AP_MINOR = 1;	//action points consumed by minor action
+
 	public int hand = 0;
-	
+
+	public int actionPtsMax = 5;
+	public int actionPts = actionPtsMax;
+
+	public final int maxFood = 1000;
+	int food = maxFood;
+
 	public int accur = 2; // ACCUR
 	public int hp = 200; // CONSTITUTION*10
 	public int mhp = 200;
@@ -17,11 +26,11 @@ public class Stats {
 	public int intelligence = 1; // INT
 	public float stamina = 50.0F; // STAMINA*5
 	public float maxstamina = 50.0F;
-	
+
 	int respawnX = -1;
 	int respawnY = -1;
 	int respawnWX, respawnWY;
-	
+
 	public int[] def = new int[3];
 
 	public int helmet = 0;
@@ -37,14 +46,14 @@ public class Stats {
 	public int[] survivalskill = { 1, 0, 65 };
 	public int[] harvestskill = { 1, 0, 35 };
 	public int[] craftingskill = { 1, 0, 30 };
-	
+
 	Faction faction;
 	Direction look = Direction.DOWN;
-	
+
 	String name;
-	
+
 	boolean dead = false;
-	
+
 	public void check() {
 		if (exp >= requiredexp) {
 			lvl += 1;

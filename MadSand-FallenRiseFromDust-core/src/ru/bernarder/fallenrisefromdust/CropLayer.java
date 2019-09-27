@@ -1,6 +1,7 @@
 package ru.bernarder.fallenrisefromdust;
 
 public class CropLayer {
+	/*
 	public static int[][][] cropLayer = new int[World.MAPSIZE + World.BORDER][World.MAPSIZE + World.BORDER][2];
 	public static String[] stages;
 
@@ -55,5 +56,5 @@ public class CropLayer {
 			i++;
 			ii = 0;
 		}
-	}
+	} */
 }

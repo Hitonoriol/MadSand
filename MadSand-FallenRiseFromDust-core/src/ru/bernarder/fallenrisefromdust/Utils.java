@@ -38,8 +38,8 @@ public class Utils {
 	public static boolean tester = true;
 	public static int ubound;
 	public static int lbound;
-	public static float x = MadSand.player.x * 33;
-	public static float y = MadSand.player.y * 33;
+	public static float x = World.player.x * 33;
+	public static float y = World.player.y * 33;
 	public static boolean invent = false;
 	public static float pspeed = 33.0F;
 	static SpriteBatch batch;
@@ -155,7 +155,7 @@ public class Utils {
 		out(MadSand.CROPS + " crops");
 		MadSand.LASTOBJID = countKeys(resdoc, "object");
 		out(MadSand.LASTOBJID + " objects");
-		CropLayer.stages = new String[MadSand.LASTOBJID];
+		// CropLayer.stages = new String[MadSand.LASTOBJID];
 		MadSand.LASTTILEID = countKeys(resdoc, "tile");
 		MadSand.NPCSPRITES = countKeys(resdoc, "npc");
 		MadSand.CRAFTABLES = countKeys(resdoc, "recipe");
@@ -174,9 +174,9 @@ public class Utils {
 				MadSand.craftableid[cc] = i;
 				cc++;
 			}
-			if (!getKey(resdoc, "item", "" + i, "stages").equals("-1")) {
-				CropLayer.stages[i] = getKey(resdoc, "item", "" + i, "stages");
-			}
+			// if (!getKey(resdoc, "item", "" + i, "stages").equals("-1")) {
+			// CropLayer.stages[i] = getKey(resdoc, "item", "" + i, "stages");
+			// }
 			ItemProp.name.put(i, getKey(resdoc, "item", "" + i, "name"));
 			ItemProp.type.put(i, Integer.parseInt(getKey(resdoc, "item", "" + i, "type")));
 			ItemProp.altObject.put(i, Integer.parseInt(getKey(resdoc, "item", "" + i, "altobject")));
@@ -231,7 +231,7 @@ public class Utils {
 		curs = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/cursor.png"));
 		placeholder = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/placeholder.png"));
 		inv = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/invsheet.png"));
-		MadSand.player.globalPos = new Vector2(x, y);
+		World.player.globalPos = new Vector2(x, y);
 		com.badlogic.gdx.files.FileHandle pfhandle = Gdx.files.local(MadSand.SAVEDIR + "player/d1.png");
 		batch = new com.badlogic.gdx.graphics.g2d.SpriteBatch();
 		dtex = new Texture(pfhandle);
@@ -256,10 +256,10 @@ public class Utils {
 			MadSand.contextopened = false;
 			MadSand.state = GameState.GAME;
 			Gui.mousemenu.setVisible(true);
-			MadSand.player.inventory.inventoryUI.toggleVisible();
+			World.player.inventory.inventoryUI.toggleVisible();
 			invent = false;
 		} else {
-			MadSand.player.inventory.inventoryUI.toggleVisible();
+			World.player.inventory.inventoryUI.toggleVisible();
 			Gui.gamecontext.setVisible(false);
 			MadSand.contextopened = false;
 			Gui.mousemenu.setVisible(false);
@@ -293,7 +293,7 @@ public class Utils {
 	}
 
 	public static void isInFront() {
-		int obj = MadSand.world.getObjID(MadSand.player.x, MadSand.player.y, MadSand.player.stats.look);
+		int obj = MadSand.world.getObjID(World.player.x, World.player.y, World.player.stats.look);
 		if ((obj != 666) && (obj != 0)) {
 			MadSand.print("You see: " + ObjectProp.name.get(obj));
 		}
@@ -305,7 +305,7 @@ public class Utils {
 		if (Gdx.input.isKeyJustPressed(Keys.Q))
 			Gui.showStatsWindow();
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER))
-			MadSand.player.interact(MadSand.player.stats.look);
+			World.player.interact(World.player.stats.look);
 		if (Gdx.input.isKeyPressed(Keys.NUMPAD_3))
 			MadSand.ZOOM = (float) (MadSand.ZOOM + 0.01D);
 		if (Gdx.input.isKeyPressed(Keys.NUMPAD_1))
@@ -323,7 +323,7 @@ public class Utils {
 			MadSand.camxoffset = 0;
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.U)) {
-			MadSand.player.useItem();
+			World.player.useItem();
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.UP) && (!MadSand.stepping)) {
 			turn(Direction.UP);
@@ -338,19 +338,19 @@ public class Utils {
 			turn(Direction.RIGHT);
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.N) && MadSand.world.curxwpos != 0 && MadSand.world.curywpos != 0) {
-			if (MadSand.player.x == World.MAPSIZE - 1 && MadSand.player.stats.look == Direction.RIGHT)
-				gotoSector(MadSand.player.stats.look);
-			if (MadSand.player.y == World.MAPSIZE - 1 && MadSand.player.stats.look == Direction.UP)
-				gotoSector(MadSand.player.stats.look);
-			if (MadSand.player.x == World.BORDER && MadSand.player.stats.look == Direction.LEFT)
-				gotoSector(MadSand.player.stats.look);
-			if (MadSand.player.y == World.BORDER && MadSand.player.stats.look == Direction.DOWN)
-				gotoSector(MadSand.player.stats.look);
+			if (World.player.x == World.MAPSIZE - 1 && World.player.stats.look == Direction.RIGHT)
+				gotoSector(World.player.stats.look);
+			if (World.player.y == World.MAPSIZE - 1 && World.player.stats.look == Direction.UP)
+				gotoSector(World.player.stats.look);
+			if (World.player.x == World.BORDER && World.player.stats.look == Direction.LEFT)
+				gotoSector(World.player.stats.look);
+			if (World.player.y == World.BORDER && World.player.stats.look == Direction.DOWN)
+				gotoSector(World.player.stats.look);
 
 		}
 
 		if ((Gdx.input.isKeyJustPressed(Keys.Y)) && (tester)) {
-			MadSand.player.teleport(MadSand.wmx, MadSand.wmy);
+			World.player.teleport(MadSand.wmx, MadSand.wmy);
 		}
 		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyPressed(Keys.R)) && (tester)) {
 			MadSand.world.Generate();
@@ -381,10 +381,10 @@ public class Utils {
 			GameSaver.loadWorld(MadSand.WORLDNAME);
 		}
 		if ((Gdx.input.isKeyJustPressed(Keys.H)) && (tester)) {
-			MadSand.player.damage(10);
+			World.player.damage(10);
 		}
-		if ((Gdx.input.isKeyJustPressed(Keys.F)) && (MadSand.player.stats.hand != 0)) {
-			MadSand.player.stats.hand = 0;
+		if ((Gdx.input.isKeyJustPressed(Keys.F)) && (World.player.stats.hand != 0)) {
+			World.player.stats.hand = 0;
 			MadSand.print("You freed your hands.");
 			Gui.equip[4].setDrawable(new SpriteDrawable(new Sprite(cursor)));
 		}
@@ -403,29 +403,32 @@ public class Utils {
 	}
 
 	static void walk(Direction dir) {
-		MadSand.player.stats.look = dir;
-		turn(MadSand.player.stats.look);
-		if (!VerifyPosition(MadSand.player.stats.look))
-			move(MadSand.player.stats.look);
+		World.player.stats.look = dir;
+		turn(World.player.stats.look);
+		if (MadSand.world.getCurLoc().getObject(World.player.x, World.player.y, World.player.stats.look).id != 0)
+			return;
+		World.player.doAction(Stats.AP_WALK);
+		if (!VerifyPosition(World.player.stats.look))
+			move(World.player.stats.look);
 		isInFront();
 	}
 
 	static void mouseMovement() {
 		if ((Gdx.input.isButtonPressed(0)) && (MadSand.state == GameState.GAME) && (!MadSand.stepping)
 				&& (!MadSand.contextopened)) {
-			if (MadSand.wmx > MadSand.player.x)
+			if (MadSand.wmx > World.player.x)
 				walk(Direction.RIGHT);
-			else if (MadSand.wmx < MadSand.player.x)
+			else if (MadSand.wmx < World.player.x)
 				walk(Direction.LEFT);
-			else if (MadSand.wmy > MadSand.player.y)
+			else if (MadSand.wmy > World.player.y)
 				walk(Direction.UP);
-			else if (MadSand.wmy < MadSand.player.y)
+			else if (MadSand.wmy < World.player.y)
 				walk(Direction.DOWN);
 		}
 	}
 
 	public static void turn(Direction dir) {
-		MadSand.player.stats.look = dir;
+		World.player.stats.look = dir;
 		if (!MadSand.stepping) {
 			if (dir == Direction.UP) {
 				Splayer = new Sprite(utex);
@@ -446,57 +449,35 @@ public class Utils {
 		return Utils.random.nextInt((max - min) + 1) + min;
 	}
 
-	public static void passHour() {
-		World.worldtime += 1;
-		if (((World.worldtime >= 0) && (World.worldtime <= 5))
-				|| ((World.worldtime >= 21) && (World.worldtime <= 23))) {
-			// spawn mobs
-		}
-	}
-
-	public static void makeTurn() {
-		tileDmg();
-		passHour();
-		CropLayer.updCrops();
-		if (World.worldtime == 24)
-			World.worldtime = 0;
-		if (((World.worldtime >= 0) && (World.worldtime <= 5))
-				|| ((World.worldtime >= 21) && (World.worldtime <= 23))) {
-			Gui.darkness.setVisible(true);
-		} else {
-			Gui.darkness.setVisible(false);
-		}
-	}
-
 	public static void tileDmg() {
-		int tid = MadSand.world.getTileId(MadSand.player.x, MadSand.player.y);
+		int tid = MadSand.world.getTileId(World.player.x, World.player.y);
 		int dmg = TileProp.damage.get(tid);
 		if (dmg > 0) {
 			MadSand.print("You took " + dmg + " damage from " + (TileProp.name.get(tid)));
-			MadSand.player.damage(dmg);
+			World.player.damage(dmg);
 		}
 	}
 
 	public static void move(Direction dir) {
-		if ((!MadSand.player.isCollision(dir, 0)) && (MadSand.dialogflag)) {
+		if ((!World.player.isCollision(dir, 0)) && (MadSand.dialogflag)) {
 			if ((dir == Direction.UP) && (!VerifyPosition(dir))) {
-				MadSand.player.y += 1;
-				MadSand.player.globalPos.y += MadSand.TILESIZE;
+				World.player.y += 1;
+				World.player.globalPos.y += MadSand.TILESIZE;
 			}
 			if ((dir == Direction.DOWN) && (!VerifyPosition(dir))) {
-				MadSand.player.y -= 1;
-				MadSand.player.globalPos.y -= MadSand.TILESIZE;
+				World.player.y -= 1;
+				World.player.globalPos.y -= MadSand.TILESIZE;
 			}
 			if ((dir == Direction.LEFT) && (!VerifyPosition(dir))) {
-				MadSand.player.x -= 1;
-				MadSand.player.globalPos.x -= MadSand.TILESIZE;
+				World.player.x -= 1;
+				World.player.globalPos.x -= MadSand.TILESIZE;
 			}
 			if ((dir == Direction.RIGHT) && (!VerifyPosition(dir))) {
-				MadSand.player.x += 1;
-				MadSand.player.globalPos.x += MadSand.TILESIZE;
+				World.player.x += 1;
+				World.player.globalPos.x += MadSand.TILESIZE;
 			}
-			if (MadSand.player.x == World.MAPSIZE - 1 || MadSand.player.y == World.MAPSIZE - 1
-					|| MadSand.player.x == World.BORDER || MadSand.player.y == World.BORDER) {
+			if (World.player.x == World.MAPSIZE - 1 || World.player.y == World.MAPSIZE - 1
+					|| World.player.x == World.BORDER || World.player.y == World.BORDER) {
 				MadSand.print("Press [GRAY]N[WHITE] to move to the next sector.");
 			}
 			MadSand.stepping = true;
@@ -505,16 +486,16 @@ public class Utils {
 
 	public static boolean VerifyPosition(Direction dir) {
 		boolean ret = false;
-		if (MadSand.player.x >= World.MAPSIZE - 1 && (dir == Direction.RIGHT)) {
+		if (World.player.x >= World.MAPSIZE - 1 && (dir == Direction.RIGHT)) {
 			ret = true;
 		}
-		if (MadSand.player.y >= World.MAPSIZE - 1 && (dir == Direction.UP)) {
+		if (World.player.y >= World.MAPSIZE - 1 && (dir == Direction.UP)) {
 			ret = true;
 		}
-		if (MadSand.player.x <= 1 && (dir == Direction.LEFT)) {
+		if (World.player.x <= 1 && (dir == Direction.LEFT)) {
 			ret = true;
 		}
-		if (MadSand.player.y <= 1 && (dir == Direction.DOWN)) {
+		if (World.player.y <= 1 && (dir == Direction.DOWN)) {
 			ret = true;
 		}
 		return ret;
@@ -532,23 +513,23 @@ public class Utils {
 
 		if ((Utils.gotodir == Direction.LEFT) && (MadSand.world.curxwpos > 0)) {
 			MadSand.world.curxwpos -= 1;
-			MadSand.player.x = World.MAPSIZE - 2;
-			MadSand.player.updCoords();
+			World.player.x = World.MAPSIZE - 2;
+			World.player.updCoords();
 		}
 		if ((Utils.gotodir == Direction.RIGHT) && (MadSand.world.curxwpos < 9)) {
 			MadSand.world.curxwpos += 1;
-			MadSand.player.x = 0;
-			MadSand.player.updCoords();
+			World.player.x = 0;
+			World.player.updCoords();
 		}
 		if ((Utils.gotodir == Direction.DOWN) && (MadSand.world.curywpos > 0)) {
 			MadSand.world.curywpos -= 1;
-			MadSand.player.y = World.MAPSIZE - 2;
-			MadSand.player.updCoords();
+			World.player.y = World.MAPSIZE - 2;
+			World.player.updCoords();
 		}
 		if ((Utils.gotodir == Direction.UP) && (MadSand.world.curywpos < 9)) {
 			MadSand.world.curywpos += 1;
-			MadSand.player.y = 0;
-			MadSand.player.updCoords();
+			World.player.y = 0;
+			World.player.updCoords();
 		}
 		MadSand.print("Going to (" + MadSand.world.curxwpos + ", " + MadSand.world.curywpos + ")");
 		if (GameSaver.verifyNextSector(MadSand.world.curxwpos, MadSand.world.curywpos)) {
@@ -590,9 +571,9 @@ public class Utils {
 					"Tile: " + TileProp.name.get(MadSand.world.getCurLoc().getTile(MadSand.wmx, MadSand.wmy).id));
 			Gui.mouselabel[2].setText("Object: " + " ()");
 			Gui.mouselabel[3].setText("Creature: " + " ()");
-			Gui.mouselabel[4].setText("Turn: " + MadSand.turn + "\nWorld time: " + World.worldtime
-					+ "\nPlayer position: (" + MadSand.player.x + ", " + MadSand.player.y + ")\nStamina: "
-					+ Math.round(MadSand.player.stats.stamina));
+			Gui.mouselabel[4].setText("Turn: " + MadSand.turn + "\nWorld time: " + MadSand.world.worldtime
+					+ "\nPlayer position: (" + World.player.x + ", " + World.player.y + ")\nStamina: "
+					+ Math.round(World.player.stats.stamina));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

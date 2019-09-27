@@ -8,17 +8,17 @@ import ru.bernarder.fallenrisefromdust.MadSand;
 
 public class Launcher {
 	public static void main(String[] args) throws Exception {
-		if (args[0].equals("fromUpdater")) {
-			System.setOut(new PrintStream(new BufferedOutputStream(new FileOutputStream("MadSandOutput.txt")), true));
-			LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-			config.resizable = false;
-			// config.setFromDisplayMode(LwjglApplicationConfiguration.getDesktopDisplayMode());
-			config.vSyncEnabled = true;
-			config.width = 1280;
-			config.height = 720;
-			config.foregroundFPS = 60;
-			config.fullscreen = false;
-			new com.badlogic.gdx.backends.lwjgl.LwjglApplication(new MadSand(), config);
-		}
+		if (!args[0].equals("fromUpdater"))
+			return;
+		System.setOut(new PrintStream(new BufferedOutputStream(new FileOutputStream("MadSandOutput.txt")), true));
+		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		config.resizable = false;
+		// config.setFromDisplayMode(LwjglApplicationConfiguration.getDesktopDisplayMode());
+		config.vSyncEnabled = true;
+		config.width = 1280;
+		config.height = 720;
+		config.foregroundFPS = 60;
+		config.fullscreen = false;
+		new com.badlogic.gdx.backends.lwjgl.LwjglApplication(new MadSand(), config);
 	}
 }

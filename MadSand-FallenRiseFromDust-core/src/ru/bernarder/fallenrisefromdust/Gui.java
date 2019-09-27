@@ -120,15 +120,15 @@ public class Gui {
 	static Label DX;
 
 	static void refreshOverlay() {
-		gui[0].setText("HP: " + MadSand.player.stats.hp + "/" + MadSand.player.stats.mhp);
-		gui[1].setText("Level: " + MadSand.player.stats.lvl);
-		gui[2].setText("Experience: " + MadSand.player.stats.exp + "/" + MadSand.player.stats.requiredexp);
+		gui[0].setText("HP: " + World.player.stats.hp + "/" + World.player.stats.mhp);
+		gui[1].setText("Level: " + World.player.stats.lvl);
+		gui[2].setText("Experience: " + World.player.stats.exp + "/" + World.player.stats.requiredexp);
 		gui[3].setText(" ");
 	}
 
 	public static void showStatsWindow() {
 		final Dialog dialog = new Dialog("", Gui.skin);
-		dialog.text(MadSand.player.stats.name);
+		dialog.text(World.player.stats.name);
 		TextButton ok = new TextButton("Close", Gui.skin);
 		MadSand.charcrt = true;
 		ok.addListener(new ChangeListener() {
@@ -141,19 +141,19 @@ public class Gui {
 		dialog.setBackground(bck);
 		dialog.setMovable(true);
 		dialog.add(new Label("", Gui.skin));
-		ATKl.setText("Strength: " + MadSand.player.stats.str);
-		STM.setText("Stamina: " + MadSand.player.stats.maxstamina / 10 + " (" + MadSand.player.stats.stamina + "/"
-				+ MadSand.player.stats.maxstamina + ")");
-		ACC.setText("Accuracy: " + MadSand.player.stats.accur);
-		CNT.setText("Constitution: " + MadSand.player.stats.mhp / 10 + " (" + MadSand.player.stats.hp + "/"
-				+ MadSand.player.stats.mhp + ")");
-		IN.setText("Intelligence: " + MadSand.player.stats.intelligence);
-		LK.setText("Luck: " + MadSand.player.stats.luck);
-		DX.setText("Dexterity: " + MadSand.player.stats.dexterity);
+		ATKl.setText("Strength: " + World.player.stats.str);
+		STM.setText("Stamina: " + World.player.stats.maxstamina / 10 + " (" + World.player.stats.stamina + "/"
+				+ World.player.stats.maxstamina + ")");
+		ACC.setText("Accuracy: " + World.player.stats.accur);
+		CNT.setText("Constitution: " + World.player.stats.mhp / 10 + " (" + World.player.stats.hp + "/"
+				+ World.player.stats.mhp + ")");
+		IN.setText("Intelligence: " + World.player.stats.intelligence);
+		LK.setText("Luck: " + World.player.stats.luck);
+		DX.setText("Dexterity: " + World.player.stats.dexterity);
 		dialog.row();
 		dialog.add(new Label(
-				"Level: " + MadSand.player.stats.lvl + " (" + MadSand.player.stats.exp + "/"
-						+ MadSand.player.stats.requiredexp + ")",
+				"Level: " + World.player.stats.lvl + " (" + World.player.stats.exp + "/"
+						+ World.player.stats.requiredexp + ")",
 				Gui.skin))/* .width(Gdx.graphics.getWidth() / 4).row() */;
 		dialog.row();
 		dialog.add(new Label("", Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
@@ -178,20 +178,20 @@ public class Gui {
 		dialog.row();
 		dialog.add(new Label("Skills:", Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
 		dialog.row();
-		dialog.add(new Label("Woodcutting: " + MadSand.player.stats.woodcutterskill[0], Gui.skin))
+		dialog.add(new Label("Woodcutting: " + World.player.stats.woodcutterskill[0], Gui.skin))
 		/* .width(Gdx.graphics.getWidth() / 4).row() */;
 		dialog.row();
-		dialog.add(new Label("Harvesting: " + MadSand.player.stats.harvestskill[0],
+		dialog.add(new Label("Harvesting: " + World.player.stats.harvestskill[0],
 				Gui.skin))/*
 							 * .width(Gdx.graphics.getWidth() / 4) .row()
 							 */;
 		dialog.row();
-		dialog.add(new Label("Mining: " + MadSand.player.stats.miningskill[0],
+		dialog.add(new Label("Mining: " + World.player.stats.miningskill[0],
 				Gui.skin))/*
 							 * .width(Gdx.graphics.getWidth() / 4) .row()
 							 */;
 		dialog.row();
-		dialog.add(new Label("Survival: " + MadSand.player.stats.survivalskill[0],
+		dialog.add(new Label("Survival: " + World.player.stats.survivalskill[0],
 				Gui.skin))/*
 							 * .width(Gdx.graphics.getWidth() / 4) .row()
 							 */;
@@ -253,15 +253,15 @@ public class Gui {
 	}
 
 	static void setStats() {
-		MadSand.player.stats.str = ATK;
-		MadSand.player.stats.stamina = STAMINA * 5;
-		MadSand.player.stats.maxstamina = STAMINA * 5;
-		MadSand.player.stats.accur = ACCUR;
-		MadSand.player.stats.hp = CONSTITUTION * 10;
-		MadSand.player.stats.mhp = CONSTITUTION * 10;
-		MadSand.player.stats.luck = LUCK;
-		MadSand.player.stats.dexterity = DEX;
-		MadSand.player.stats.intelligence = INT;
+		World.player.stats.str = ATK;
+		World.player.stats.stamina = STAMINA * 5;
+		World.player.stats.maxstamina = STAMINA * 5;
+		World.player.stats.accur = ACCUR;
+		World.player.stats.hp = CONSTITUTION * 10;
+		World.player.stats.mhp = CONSTITUTION * 10;
+		World.player.stats.luck = LUCK;
+		World.player.stats.dexterity = DEX;
+		World.player.stats.intelligence = INT;
 	}
 
 	static void rollStats() {
@@ -322,10 +322,10 @@ public class Gui {
 		cbtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				if (!nameField.getText().trim().equals("")) {
-					MadSand.player.setName(nameField.getText());
+					World.player.setName(nameField.getText());
 					MadSand.charcrt = false;
 					setStats();
-					MadSand.player.reinit();
+					World.player.reinit();
 					dialog.remove();
 				}
 			}
@@ -491,10 +491,10 @@ public class Gui {
 					MadSand.state = GameState.WORLDGEN;
 					new ThreadedUtils().initialWorldGen.start();
 					Gdx.input.setInputProcessor(Gui.overlay);
-					MadSand.player.x = new Random().nextInt(World.MAPSIZE);
-					MadSand.player.y = new Random().nextInt(World.MAPSIZE);
-					MadSand.player.globalPos.x = (MadSand.player.x * MadSand.TILESIZE);
-					MadSand.player.globalPos.y = (MadSand.player.y * MadSand.TILESIZE);
+					World.player.x = new Random().nextInt(World.MAPSIZE);
+					World.player.y = new Random().nextInt(World.MAPSIZE);
+					World.player.globalPos.x = (World.player.x * MadSand.TILESIZE);
+					World.player.globalPos.y = (World.player.y * MadSand.TILESIZE);
 					Gui.exitButton.setVisible(false);
 					Gui.craftButton.setVisible(false);
 					Utils.invent = false;
@@ -584,7 +584,7 @@ public class Gui {
 		Gui.contextMenuBtn[0].addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				lookAtMouse();
-				MadSand.player.interact(MadSand.player.stats.look);
+				World.player.interact(World.player.stats.look);
 			}
 
 		});
@@ -599,7 +599,7 @@ public class Gui {
 		Gui.contextMenuBtn[4].addListener(new ChangeListener() {
 
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				MadSand.player.stats.hand = 0;
+				World.player.stats.hand = 0;
 				MadSand.print("You freed your hands.");
 				Gui.equip[4].setDrawable(new SpriteDrawable(new Sprite(Utils.cursor)));
 			}
@@ -838,17 +838,17 @@ public class Gui {
 				int wx = MadSand.world.curxwpos;
 				int wy = MadSand.world.curywpos;
 				MadSand.state = GameState.GAME;
-				MadSand.player.stats.hp = MadSand.player.stats.mhp;
-				if (MadSand.player.stats.respawnX == -1) {
-					MadSand.player.x = Utils.rand(0, MadSand.world.getCurLoc().getWidth());
-					MadSand.player.y = Utils.rand(0, MadSand.world.getCurLoc().getHeight());
+				World.player.stats.hp = World.player.stats.mhp;
+				if (World.player.stats.respawnX == -1) {
+					World.player.x = Utils.rand(0, MadSand.world.getCurLoc().getWidth());
+					World.player.y = Utils.rand(0, MadSand.world.getCurLoc().getHeight());
 				} else {
-					if (MadSand.player.stats.respawnWX == wx && MadSand.player.stats.respawnWY == wy) {
-						MadSand.player.x = MadSand.player.stats.respawnX;
-						MadSand.player.y = MadSand.player.stats.respawnY;
+					if (World.player.stats.respawnWX == wx && World.player.stats.respawnWY == wy) {
+						World.player.x = World.player.stats.respawnX;
+						World.player.y = World.player.stats.respawnY;
 					} else {
-						MadSand.world.curxwpos = MadSand.player.stats.respawnWX;
-						MadSand.world.curywpos = MadSand.player.stats.respawnWY;
+						MadSand.world.curxwpos = World.player.stats.respawnWX;
+						MadSand.world.curywpos = World.player.stats.respawnWY;
 						if (GameSaver.verifyNextSector(wx, wy)) {
 							MadSand.world.clearCurLoc();
 							GameSaver.loadSector();
@@ -859,7 +859,7 @@ public class Gui {
 						}
 					}
 				}
-				MadSand.player.updCoords();
+				World.player.updCoords();
 			}
 		});
 		settingsButton.addListener(new ChangeListener() {
@@ -936,24 +936,24 @@ public class Gui {
 	}
 
 	static Direction lookAtMouse() {
-		if (MadSand.wclickx > MadSand.player.x) {
-			MadSand.player.stats.look = Direction.RIGHT;
-			Utils.turn(MadSand.player.stats.look);
+		if (MadSand.wclickx > World.player.x) {
+			World.player.stats.look = Direction.RIGHT;
+			Utils.turn(World.player.stats.look);
 			Utils.isInFront();
-		} else if (MadSand.wclickx < MadSand.player.x) {
-			MadSand.player.stats.look = Direction.LEFT;
-			Utils.turn(MadSand.player.stats.look);
+		} else if (MadSand.wclickx < World.player.x) {
+			World.player.stats.look = Direction.LEFT;
+			Utils.turn(World.player.stats.look);
 			Utils.isInFront();
-		} else if (MadSand.wclicky > MadSand.player.y) {
-			MadSand.player.stats.look = Direction.UP;
-			Utils.turn(MadSand.player.stats.look);
+		} else if (MadSand.wclicky > World.player.y) {
+			World.player.stats.look = Direction.UP;
+			Utils.turn(World.player.stats.look);
 			Utils.isInFront();
-		} else if (MadSand.wclicky < MadSand.player.y) {
-			MadSand.player.stats.look = Direction.DOWN;
-			Utils.turn(MadSand.player.stats.look);
+		} else if (MadSand.wclicky < World.player.y) {
+			World.player.stats.look = Direction.DOWN;
+			Utils.turn(World.player.stats.look);
 			Utils.isInFront();
 		}
-		return MadSand.player.stats.look;
+		return World.player.stats.look;
 	}
 
 	static Image[] equip;

@@ -2,8 +2,6 @@ package ru.bernarder.fallenrisefromdust;
 
 import java.util.Vector;
 
-import ru.bernarder.fallenrisefromdust.properties.ItemProp;
-
 public class Loot {
 	int nodes = 0;
 	Vector<Item> contents = new Vector<Item>();
@@ -67,7 +65,7 @@ public class Loot {
 					id = Integer.parseInt(attr[0]);
 					q = Integer.parseInt(attr[1]);
 					if (inventory)
-						MadSand.player.inventory.putItem(id, q, false);
+						World.player.inventory.putItem(id, q, false);
 					else
 						map.putLoot(x, y, id, q);
 					i++;
@@ -98,7 +96,7 @@ public class Loot {
 			String[] attr = new String[0];
 			while (i < block.length) {
 				attr = block[i].split("/");
-				MadSand.player.inventory.delItem(Integer.parseInt(attr[0]), Integer.parseInt(attr[1]));
+				World.player.inventory.delItem(Integer.parseInt(attr[0]), Integer.parseInt(attr[1]));
 				i++;
 			}
 			return true;
@@ -119,7 +117,7 @@ public class Loot {
 			attr = block[i].split("/");
 			id = Integer.parseInt(attr[0]);
 			q = Integer.parseInt(attr[1]);
-			if (MadSand.player.inventory.getSameCell(id, q) == -1)
+			if (World.player.inventory.getSameCell(id, q) == -1)
 				return false;
 			i++;
 		}

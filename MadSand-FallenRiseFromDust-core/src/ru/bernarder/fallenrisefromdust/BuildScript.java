@@ -56,19 +56,19 @@ public class BuildScript {
 	}
 
 	static int getValue(String arg) {
-		Pair coords = new Pair(MadSand.player.x, MadSand.player.y);
+		Pair coords = new Pair(World.player.x, World.player.y);
 		switch (arg) {
 		case Value.VALUE_PLAYERX:
 			return coords.x;
 		case Value.VALUE_PLAYERY:
 			return coords.y;
 		case Value.VALUE_PLAYER_LOOK_X:
-			return coords.addDirection(MadSand.player.stats.look).x;
+			return coords.addDirection(World.player.stats.look).x;
 		case Value.VALUE_PLAYER_LOOK_Y:
-			return coords.addDirection(MadSand.player.stats.look).y;
+			return coords.addDirection(World.player.stats.look).y;
 		case Value.VALUE_ALTITEM:
-			int id = MadSand.world.getCurLoc().getObject(MadSand.player.x, MadSand.player.y,
-					MadSand.player.stats.look).id;
+			int id = MadSand.world.getCurLoc().getObject(World.player.x, World.player.y,
+					World.player.stats.look).id;
 			return MapObject.getAltItem(id);
 
 		default:
@@ -103,18 +103,18 @@ public class BuildScript {
 
 	static boolean conditionFalse(char id, String cond) {
 		int sid = Integer.parseInt(cond.split(COMMAND_DELIMITER)[0].substring(1));
-		int x = MadSand.player.x;
-		int y = MadSand.player.y;
+		int x = World.player.x;
+		int y = World.player.y;
 		boolean condition = false;
 		switch (id) {
 		case standingOnID:
 			condition = (MadSand.world.getCurLoc().getTile(x, y).id == sid);
 			break;
 		case objInFrontID:
-			condition = (MadSand.world.getCurLoc().getObject(x, y, MadSand.player.stats.look).id == sid);
+			condition = (MadSand.world.getCurLoc().getObject(x, y, World.player.stats.look).id == sid);
 			break;
 		case inHandID:
-			condition = (MadSand.player.stats.hand == sid);
+			condition = (World.player.stats.hand == sid);
 			break;
 		}
 		return !condition;
@@ -202,29 +202,29 @@ public class BuildScript {
 			break;
 
 		case Token.DAMAGE_OBJECT:
-			MadSand.world.getCurLoc().dmgObjInDir(MadSand.player.x, MadSand.player.y, MadSand.player.stats.look);
+			MadSand.world.getCurLoc().dmgObjInDir(World.player.x, World.player.y, World.player.stats.look);
 			break;
 
 		case Token.PLAYER_HEAL:
 			int amount = arg.get(0);
-			MadSand.player.heal(amount);
+			World.player.heal(amount);
 			break;
 
 		case Token.PLAYER_HAND_SET:
 			id = arg.get(0);
-			MadSand.player.stats.hand = id;
+			World.player.stats.hand = id;
 			break;
 
 		case Token.PLAYER_GIVE:
 			id = arg.get(0);
 			int q = arg.get(1);
-			MadSand.player.inventory.putItem(id, q);
+			World.player.inventory.putItem(id, q);
 			break;
 
 		case Token.PLAYER_REMOVE_ITEM:
 			id = arg.get(0);
 			q = arg.get(1);
-			MadSand.player.inventory.delItem(id, q);
+			World.player.inventory.delItem(id, q);
 			break;
 		}
 	}

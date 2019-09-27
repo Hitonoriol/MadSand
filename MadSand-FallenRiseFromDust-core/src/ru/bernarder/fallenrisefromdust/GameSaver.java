@@ -146,10 +146,10 @@ public class GameSaver {
 		try {
 			String fl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.PLAYERFILE;
 			Output output = new Output(new FileOutputStream(fl));
-			MadSand.kryo.writeObject(output, MadSand.player.inventory.items);
-			MadSand.kryo.writeObject(output, MadSand.player.stats);
-			MadSand.kryo.writeObject(output, MadSand.player.x);
-			MadSand.kryo.writeObject(output, MadSand.player.y);
+			MadSand.kryo.writeObject(output, World.player.inventory.items);
+			MadSand.kryo.writeObject(output, World.player.stats);
+			MadSand.kryo.writeObject(output, World.player.x);
+			MadSand.kryo.writeObject(output, World.player.y);
 			output.close();
 			return true;
 		} catch (Exception e) {
@@ -163,14 +163,14 @@ public class GameSaver {
 		try {
 			String fl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.PLAYERFILE;
 			Input input = new Input(new FileInputStream(fl));
-			MadSand.player.inventory = new Inventory();
-			MadSand.player.inventory.items = MadSand.kryo.readObject(input, Vector.class);
-			MadSand.player.stats = MadSand.kryo.readObject(input, Stats.class);
-			MadSand.player.inventory.setMaxWeight(MadSand.player.stats.str * Stats.STR_WEIGHT_MULTIPLIER);
-			MadSand.player.inventory.refreshWeight();
-			MadSand.player.x = MadSand.kryo.readObject(input, Integer.class);
-			MadSand.player.y = MadSand.kryo.readObject(input, Integer.class);
-			MadSand.player.updCoords();
+			World.player.inventory = new Inventory();
+			World.player.inventory.items = MadSand.kryo.readObject(input, Vector.class);
+			World.player.stats = MadSand.kryo.readObject(input, Stats.class);
+			World.player.inventory.setMaxWeight(World.player.stats.str * Stats.STR_WEIGHT_MULTIPLIER);
+			World.player.inventory.refreshWeight();
+			World.player.x = MadSand.kryo.readObject(input, Integer.class);
+			World.player.y = MadSand.kryo.readObject(input, Integer.class);
+			World.player.updCoords();
 			input.close();
 			return true;
 		} catch (Exception e) {

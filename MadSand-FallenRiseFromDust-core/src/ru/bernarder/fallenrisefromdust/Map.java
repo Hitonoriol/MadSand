@@ -130,10 +130,8 @@ public class Map {
 				if (ret == null)
 					ret = nullTile;
 				return ret;
-			} else {
-				Utils.out("CorrectCoords false");
+			} else
 				return nullTile;
-			}
 		} catch (Exception e) {
 			Utils.out("gettile error " + e.getMessage());
 			e.printStackTrace();

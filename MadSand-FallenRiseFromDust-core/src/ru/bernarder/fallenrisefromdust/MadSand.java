@@ -177,8 +177,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 	}
 
 	public static World world;
-	public static Player player;
-
 	static Kryo kryo;
 
 	public void create() {
@@ -199,7 +197,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 		if (new File(SAVEDIR + "lastrend.dat").exists())
 			radius = (Integer.parseInt(Gui.getExternal("lastrend.dat")));
 		setParams(radius);
-		player = new Player();
+		World.player = new Player();
 		Utils.out("Starting initialization!");
 		setRenderRadius();
 		Utils.out("Render area: " + rcoords.length);
@@ -242,8 +240,8 @@ public class MadSand extends com.badlogic.gdx.Game {
 		this.invbatch = new SpriteBatch();
 		camera.update();
 		Gui.font = new BitmapFont();
-		player.globalPos.x = (player.x * TILESIZE);
-		player.globalPos.y = (player.y * TILESIZE);
+		World.player.globalPos.x = (World.player.x * TILESIZE);
+		World.player.globalPos.y = (World.player.y * TILESIZE);
 		Gui.equip = new Image[5];
 		Gui.equip[0] = new Image(new TextureRegionDrawable(new TextureRegion(Utils.placeholder)));
 		Gui.equip[1] = new Image(new TextureRegionDrawable(new TextureRegion(Utils.placeholder)));
@@ -253,7 +251,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 		Gui.initmenu();
 		Gui.font.getData().markupEnabled = true;
 		Gui.font1.getData().markupEnabled = true;
-		player.initInventory();
+		World.player.initInventory();
 		Utils.out("End of initialization!");
 	}
 
@@ -273,10 +271,10 @@ public class MadSand extends com.badlogic.gdx.Game {
 			camera.position.y = 250.0F;
 		if (camera.position.x < 320.0F)
 			camera.position.x = 320.0F;
-		if (camera.position.x > (World.MAPSIZE * 33) + 100)
-			camera.position.x = (World.MAPSIZE * 33) + 100;
-		if (camera.position.y > (World.MAPSIZE * 33) + 100)
-			camera.position.y = (World.MAPSIZE * 33) + 100;
+		if (camera.position.x > (World.MAPSIZE * TILESIZE) + 100)
+			camera.position.x = (World.MAPSIZE * TILESIZE) + 100;
+		if (camera.position.y > (World.MAPSIZE * TILESIZE) + 100)
+			camera.position.y = (World.MAPSIZE * TILESIZE) + 100;
 		camera.viewportWidth = (Gdx.graphics.getWidth() / ZOOM);
 		camera.viewportHeight = (Gdx.graphics.getHeight() / ZOOM);
 		camera.update();
@@ -296,17 +294,17 @@ public class MadSand extends com.badlogic.gdx.Game {
 		try {
 			int i = 0;
 			while (i < rcoords.length) {
-				Utils.batch.draw(Utils.tile[world.rend(player.x + (int) rcoords[i].x, player.y + (int) rcoords[i].y)],
-						player.globalPos.x + rcoords[i].x * 33, player.globalPos.y + rcoords[i].y * 33);
+				Utils.batch.draw(Utils.tile[world.rend(World.player.x + (int) rcoords[i].x, World.player.y + (int) rcoords[i].y)],
+						World.player.globalPos.x + rcoords[i].x * 33, World.player.globalPos.y + rcoords[i].y * 33);
 				i++;
 			}
-			if (Player.isCollisionMask(player.x, player.y)) {
+			if (Player.isCollisionMask(World.player.x, World.player.y)) {
 				drawPlayer();
 			}
 			i = 0;
 			while (i < rcoords.length) {
-				trdx = player.x + (int) rcoords[i].x;
-				trdy = player.y + (int) rcoords[i].y;
+				trdx = World.player.x + (int) rcoords[i].x;
+				trdy = World.player.y + (int) rcoords[i].y;
 				if (trdx < 0)
 					trdx = 0;
 				if (trdy < 0)
@@ -317,12 +315,12 @@ public class MadSand extends com.badlogic.gdx.Game {
 					trdy = World.MAPSIZE + World.BORDER;
 				int objid = world.getCurLoc().getObject(trdx, trdy).id;
 				if ((objid != 0) && (objid != 666)) {
-					Utils.batch.draw(Utils.objects[objid], player.globalPos.x + (int) rcoords[i].x * TILESIZE,
-							player.globalPos.y + (int) rcoords[i].y * TILESIZE);
+					Utils.batch.draw(Utils.objects[objid], World.player.globalPos.x + (int) rcoords[i].x * TILESIZE,
+							World.player.globalPos.y + (int) rcoords[i].y * TILESIZE);
 				}
-				if (player.standingOnLoot(trdx, trdy)) {
-					Utils.batch.draw(Utils.objects[OBJECT_LOOT], player.globalPos.x + (int) rcoords[i].x * TILESIZE,
-							player.globalPos.y + (int) rcoords[i].y * TILESIZE);
+				if (World.player.standingOnLoot(trdx, trdy)) {
+					Utils.batch.draw(Utils.objects[OBJECT_LOOT], World.player.globalPos.x + (int) rcoords[i].x * TILESIZE,
+							World.player.globalPos.y + (int) rcoords[i].y * TILESIZE);
 				}
 				/*
 				 * if (MobLayer.getMobId(trdx, trdy) != 0) {
@@ -332,7 +330,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 
 				i++;
 			}
-			if (!Player.isCollisionMask(player.x, player.y)) {
+			if (!Player.isCollisionMask(World.player.x, World.player.y)) {
 				drawPlayer();
 			}
 			i = 0;
@@ -349,11 +347,11 @@ public class MadSand extends com.badlogic.gdx.Game {
 	void drawWorld() {
 		int i = 0;
 		while (i < rcoords.length) {
-			Utils.batch.draw(Utils.tile[world.rend(player.y + (int) rcoords[i].y, player.x + (int) rcoords[i].x)],
-					player.globalPos.x + rcoords[i].x * 33, player.globalPos.y + rcoords[i].y * 33);
+			Utils.batch.draw(Utils.tile[world.rend(World.player.y + (int) rcoords[i].y, World.player.x + (int) rcoords[i].x)],
+					World.player.globalPos.x + rcoords[i].x * 33, World.player.globalPos.y + rcoords[i].y * 33);
 			i++;
 		}
-		Utils.batch.draw(Utils.Splayer, player.globalPos.x, player.globalPos.y + stepy);
+		Utils.batch.draw(Utils.Splayer, World.player.globalPos.x, World.player.globalPos.y + stepy);
 		i = 0;
 	}
 
@@ -426,25 +424,25 @@ public class MadSand extends com.badlogic.gdx.Game {
 	void drawPlayer() {
 		if (stepping) {
 			this.elapsedTime += Gdx.graphics.getDeltaTime();
-			if (player.stats.look == Direction.RIGHT) {
+			if (World.player.stats.look == Direction.RIGHT) {
 				Utils.batch.draw((TextureRegion) Utils.ranim.getKeyFrame(this.elapsedTime, true),
-						player.globalPos.x - stepx, player.globalPos.y);
-				updateCamToxy(player.globalPos.x - stepx, player.globalPos.y);
+						World.player.globalPos.x - stepx, World.player.globalPos.y);
+				updateCamToxy(World.player.globalPos.x - stepx, World.player.globalPos.y);
 			}
-			if (player.stats.look == Direction.LEFT) {
+			if (World.player.stats.look == Direction.LEFT) {
 				Utils.batch.draw((TextureRegion) Utils.lanim.getKeyFrame(this.elapsedTime, true),
-						player.globalPos.x + stepx, player.globalPos.y);
-				updateCamToxy(player.globalPos.x + stepx, player.globalPos.y);
+						World.player.globalPos.x + stepx, World.player.globalPos.y);
+				updateCamToxy(World.player.globalPos.x + stepx, World.player.globalPos.y);
 			}
-			if (player.stats.look == Direction.UP) {
-				Utils.batch.draw((TextureRegion) Utils.uanim.getKeyFrame(this.elapsedTime, true), player.globalPos.x,
-						player.globalPos.y - stepy);
-				updateCamToxy(player.globalPos.x, player.globalPos.y - stepy);
+			if (World.player.stats.look == Direction.UP) {
+				Utils.batch.draw((TextureRegion) Utils.uanim.getKeyFrame(this.elapsedTime, true), World.player.globalPos.x,
+						World.player.globalPos.y - stepy);
+				updateCamToxy(World.player.globalPos.x, World.player.globalPos.y - stepy);
 			}
-			if (player.stats.look == Direction.DOWN) {
-				Utils.batch.draw((TextureRegion) Utils.danim.getKeyFrame(this.elapsedTime, true), player.globalPos.x,
-						player.globalPos.y + stepy);
-				updateCamToxy(player.globalPos.x, player.globalPos.y + stepy);
+			if (World.player.stats.look == Direction.DOWN) {
+				Utils.batch.draw((TextureRegion) Utils.danim.getKeyFrame(this.elapsedTime, true), World.player.globalPos.x,
+						World.player.globalPos.y + stepy);
+				updateCamToxy(World.player.globalPos.x, World.player.globalPos.y + stepy);
 			}
 
 			stepx -= movespeed;
@@ -455,8 +453,8 @@ public class MadSand extends com.badlogic.gdx.Game {
 				stepy = 33;
 			}
 		} else {
-			Utils.batch.draw(Utils.Splayer, player.globalPos.x, player.globalPos.y);
-			updateCamToxy(player.globalPos.x, player.globalPos.y);
+			Utils.batch.draw(Utils.Splayer, World.player.globalPos.x, World.player.globalPos.y);
+			updateCamToxy(World.player.globalPos.x, World.player.globalPos.y);
 		}
 	}
 
@@ -510,7 +508,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 				Utils.updMouseCoords();
 				Utils.mouseMovement();
 				Utils.KeyCheck();
-				player.pickUpLoot();
+				World.player.pickUpLoot();
 				Utils.InvKeyCheck();
 			}
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
@@ -547,7 +545,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 		} else if (state.equals(GameState.NMENU)) {
 			Gdx.gl.glClearColor(1.0F, 1.0F, 1.0F, 1.0F);
 			Gdx.gl.glClear(16384);
-			updateCamToxy(player.globalPos.x, player.globalPos.y);
+			updateCamToxy(World.player.globalPos.x, World.player.globalPos.y);
 
 			camera.viewportWidth = (Gdx.graphics.getWidth() / ZOOM);
 			camera.viewportHeight = (Gdx.graphics.getHeight() / ZOOM);
@@ -563,7 +561,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 			Utils.batch.begin();
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);
-			updateCamToxy(player.globalPos.x, player.globalPos.y);
+			updateCamToxy(World.player.globalPos.x, World.player.globalPos.y);
 			drawWorld();
 			Gui.worldg.draw();
 			Utils.batch.end();
@@ -605,10 +603,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 			Gui.craft.act();
 			Gui.craft.draw();
 		}
-	}
-
-	public static void setTime(int arg) {
-		World.wtime = arg;
 	}
 
 	static void showMsg(String text) {

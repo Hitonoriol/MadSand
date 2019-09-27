@@ -42,13 +42,14 @@ public class InventoryUICell {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				invcontext.setVisible(false);
 				MadSand.contextopened = false;
-				MadSand.player.dropItem(item.id, item.quantity);
+				World.player.dropItem(item.id, item.quantity);
 			}
 
 		});
 		btn.addListener(new ClickListener(Buttons.LEFT) {
 			public void clicked(InputEvent event, float x, float y) {
-				MadSand.player.stats.hand = item.id;
+				World.player.stats.hand = item.id;
+				World.player.doAction();
 				Utils.toggleInventory();
 			}
 		});
