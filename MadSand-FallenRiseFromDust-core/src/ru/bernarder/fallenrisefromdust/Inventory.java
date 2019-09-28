@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Vector;
 
 public class Inventory {
-	Vector<Item> items = new Vector<Item>();
-	double curWeight, maxWeight;
+	public Vector<Item> items = new Vector<Item>();
+	public double curWeight, maxWeight;
 
 	private HashMap<Item, InventoryUICell> itemUI = new HashMap<Item, InventoryUICell>();
 	InventoryUI inventoryUI = new InventoryUI();
@@ -22,6 +22,13 @@ public class Inventory {
 	void setMaxWeight(float val) {
 		maxWeight = val;
 		inventoryUI.setMass(curWeight, maxWeight);
+	}
+
+	void refreshContents() {
+		for (int i = 0; i < items.size(); ++i)
+			refreshItem(items.get(i).reinit());
+		refreshWeight();
+
 	}
 
 	void refreshWeight() {
@@ -128,5 +135,9 @@ public class Inventory {
 			dump();
 			return true;
 		}
+	}
+
+	public boolean delItem(int id) {
+		return delItem(id, 1);
 	}
 }

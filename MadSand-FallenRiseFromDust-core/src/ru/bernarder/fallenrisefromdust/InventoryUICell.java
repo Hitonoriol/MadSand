@@ -17,35 +17,40 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 public class InventoryUICell {
 	private final int size = 80;
 	private ImageButton btn;
-	private Label label;
+	private Label itemQuantityLabel;
+	private Table invCellContextContainer;
+	private TextButton[] invCellContextMenu;
+
+	private final int CONTEXT_BUTTONS = 1;
 
 	Group cell;
 
 	public InventoryUICell(Item item) {
 		btn = new ImageButton(new SpriteDrawable(new Sprite(Utils.item[item.id])));
-		label = new Label(item.quantity + "", Gui.skin);
+		itemQuantityLabel = new Label(item.quantity + "", Gui.skin);
+		
 		cell = new Group();
 		cell.addActor(btn);
-		cell.addActor(label);
+		cell.addActor(itemQuantityLabel);
 		cell.setSize(size, size);
 
-		Table invcontext;
-		TextButton[] invcontbtn;
-		invcontbtn = new TextButton[1];
-		invcontbtn[0] = new TextButton("Drop", Gui.skin);
-		invcontext = new Table(Gui.skin);
-		invcontext.add(invcontbtn[0]).width(100.0F).height(50.0F).row();
-		invcontext.setVisible(false);
-		Gui.overlay.addActor(invcontext);
+		invCellContextMenu = new TextButton[CONTEXT_BUTTONS];
+		invCellContextMenu[0] = new TextButton("Drop", Gui.skin);
 
-		invcontbtn[0].addListener(new ChangeListener() {
+		invCellContextContainer = new Table(Gui.skin);
+		invCellContextContainer.add(invCellContextMenu[0]).width(100.0F).height(50.0F).row();
+		invCellContextContainer.setVisible(false);
+		Gui.overlay.addActor(invCellContextContainer);
+
+		invCellContextMenu[0].addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				invcontext.setVisible(false);
+				invCellContextContainer.setVisible(false);
 				MadSand.contextopened = false;
 				World.player.dropItem(item.id, item.quantity);
 			}
 
 		});
+		
 		btn.addListener(new ClickListener(Buttons.LEFT) {
 			public void clicked(InputEvent event, float x, float y) {
 				World.player.stats.hand = item.id;
@@ -53,17 +58,18 @@ public class InventoryUICell {
 				Utils.toggleInventory();
 			}
 		});
+		
 		btn.addListener(new ClickListener(Buttons.RIGHT) {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if (!invcontext.isVisible() && !MadSand.contextopened) {
-					invcontext.setVisible(true);
+				if (!invCellContextContainer.isVisible() && !MadSand.contextopened) {
+					invCellContextContainer.setVisible(true);
 					MadSand.mx = Gdx.input.getX();
 					MadSand.my = Gdx.graphics.getHeight() - Gdx.input.getY();
-					invcontext.setPosition(MadSand.mx, MadSand.my);
+					invCellContextContainer.setPosition(MadSand.mx, MadSand.my);
 					MadSand.contextopened = true;
 				} else {
-					invcontext.setVisible(false);
+					invCellContextContainer.setVisible(false);
 					MadSand.contextopened = false;
 				}
 			}
@@ -71,6 +77,6 @@ public class InventoryUICell {
 	}
 
 	void setText(String str) {
-		label.setText(str);
+		itemQuantityLabel.setText(str);
 	}
 }

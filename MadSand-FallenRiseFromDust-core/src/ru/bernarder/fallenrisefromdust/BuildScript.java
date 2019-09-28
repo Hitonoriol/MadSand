@@ -16,8 +16,14 @@ public class BuildScript {
 	final static char inHandID = '#';
 	final static char valueID = '$';
 	final static char itemStringID = '@';
+	final static char modeID = '*';
 	final static String LINE_DELIMITER = ";";
 	final static String COMMAND_DELIMITER = " ";
+
+	public static class Mode {
+		final static String NONSTRICT = "nonstrict", STRICT = "strict"; // strict = stop execution after the first
+																		// false condition
+	}
 
 	public static class Value {
 		final static String VALUE_PLAYERX = "$player_x", VALUE_PLAYERY = "$player_y",
@@ -30,7 +36,8 @@ public class BuildScript {
 				MAP_CLEAR = "map_clear", OBJECT_SQUARE = "object_square", TILE_SQUARE = "tile_square",
 				OBJECT_LINE = "object_line", TILE_LINE = "tile_line", PLAYER_GIVE = "player_give",
 				DAMAGE_OBJECT = "damage_object", PLAYER_HEAL = "player_heal", PLAYER_SATIATE = "player_satiate",
-				PLAYER_REMOVE_ITEM = "player_remove_item", PLAYER_HAND_SET = "player_hand_set";
+				PLAYER_REMOVE_ITEM = "player_remove_item", PLAYER_HAND_SET = "player_hand_set",
+				PLAYER_KILL = "player_kill";
 	}
 
 	public static void bLine(int x, int y, int dir, int id, int len, int head) {
@@ -67,8 +74,7 @@ public class BuildScript {
 		case Value.VALUE_PLAYER_LOOK_Y:
 			return coords.addDirection(World.player.stats.look).y;
 		case Value.VALUE_ALTITEM:
-			int id = MadSand.world.getCurLoc().getObject(World.player.x, World.player.y,
-					World.player.stats.look).id;
+			int id = MadSand.world.getCurLoc().getObject(World.player.x, World.player.y, World.player.stats.look).id;
 			return MapObject.getAltItem(id);
 
 		default:
@@ -117,6 +123,8 @@ public class BuildScript {
 			condition = (World.player.stats.hand == sid);
 			break;
 		}
+		if (!condition && strict)
+			stop = true;
 		return !condition;
 	}
 
@@ -226,10 +234,16 @@ public class BuildScript {
 			q = arg.get(1);
 			World.player.inventory.delItem(id, q);
 			break;
+
+		case Token.PLAYER_KILL:
+			World.player.damage(World.player.stats.hp);
+			break;
 		}
 	}
 
 	static boolean stop = false;
+
+	static boolean strict = false;
 
 	public static void execute(String query) {
 		Utils.out(query);
@@ -238,17 +252,30 @@ public class BuildScript {
 		StringTokenizer commandTokens;
 		String command;
 		String printCond;
+		String token;
 		char id;
 		try {
 			while (lineTokens.hasMoreTokens() && !stop) {
-				commandTokens = new StringTokenizer(lineTokens.nextToken(), COMMAND_DELIMITER);
-				command = commandTokens.nextToken().trim();
+				token = lineTokens.nextToken();
+				commandTokens = new StringTokenizer(token, COMMAND_DELIMITER);
+				command = commandTokens.nextToken();
 				id = command.charAt(0);
-				if (id == printID) {
+				switch (id) {
+				case printID:
 					printCond = commandTokens.nextToken();
 					if (!conditionFalse(printCond.charAt(0), printCond + COMMAND_DELIMITER))
-						MadSand.print(query.substring(command.length()));
+						MadSand.print(token.substring(printCond.length() + command.length() + 2).trim());
 					continue;
+				case modeID:
+					switch (command.substring(1)) {
+					case Mode.NONSTRICT:
+						strict = false;
+						break;
+					case Mode.STRICT:
+						strict = true;
+						break;
+					}
+					break;
 				}
 				if (!Character.isLetter(id))
 					command += COMMAND_DELIMITER + commandTokens.nextToken();

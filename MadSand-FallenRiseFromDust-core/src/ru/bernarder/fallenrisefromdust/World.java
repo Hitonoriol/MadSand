@@ -27,18 +27,24 @@ public class World {
 	static final int BORDER = 1;// map border(old shit, not really useful anymore)
 	static int MAPSIZE = 100; // default location size
 
-	public static Player player;
-	public Location WorldLoc = new Location();
+	static Player player;
+	Location WorldLoc;
 
-	int worldtime = 12; // time (00 - 23)
+	public int worldtime = 12; // time (00 - 23)
 	int ticksPerHour = 100; // ticks per one hourTick() trigger
-	int tick = 0; // tick counter
+	public int tick = 0; // tick counter, resets every <ticksPerHour> ticks
+	public long globalTick = 0; // global tick counter, never resets
 
 	public World(int sz) {
 		this.xsz = sz;
 		this.ysz = sz;
+		WorldLoc = new Location();
 		if (!createBasicLoc(new Pair(curxwpos, curywpos), MAPSIZE, MAPSIZE))
 			System.exit(-1);
+	}
+
+	public World() {
+		// Quite empty here...
 	}
 
 	HashMap<MapID, Map> _getLoc(int wx, int wy, int layer) {
@@ -426,7 +432,10 @@ public class World {
 
 	void tick() {
 		Utils.tileDmg();
+		getCurLoc().update();
+		player.stats.perTickCheck();
 		Utils.out("World tick!");
+		++globalTick;
 		if (++tick >= ticksPerHour - 1) {
 			tick = 0;
 			hourTick();
@@ -434,7 +443,7 @@ public class World {
 	}
 
 	void ticks(int n) {
-		for (int i = n; i >= 0; --i)
+		for (int i = n; i > 0; --i)
 			tick();
 	}
 }

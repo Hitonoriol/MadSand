@@ -5,9 +5,12 @@ import ru.bernarder.fallenrisefromdust.enums.Faction;
 
 public class Stats {
 	final static int STR_WEIGHT_MULTIPLIER = 25;
-	
-	final static int AP_WALK = 5;	//action points consumed by walking
-	final static int AP_MINOR = 1;	//action points consumed by minor action
+
+	final static int AP_WALK = 5; // action points consumed by walking
+	final static int AP_MINOR = 1; // action points consumed by minor action
+
+	final static int STARVE_DMG = 1;
+	final static int FOOD_HEAL = 3;
 
 	public int hand = 0;
 
@@ -15,7 +18,8 @@ public class Stats {
 	public int actionPts = actionPtsMax;
 
 	public final int maxFood = 1000;
-	int food = maxFood;
+	public final int satiatedVal = (int) (maxFood * 0.9);
+	public int food = maxFood;
 
 	public int accur = 2; // ACCUR
 	public int hp = 200; // CONSTITUTION*10
@@ -27,9 +31,9 @@ public class Stats {
 	public float stamina = 50.0F; // STAMINA*5
 	public float maxstamina = 50.0F;
 
-	int respawnX = -1;
-	int respawnY = -1;
-	int respawnWX, respawnWY;
+	public int respawnX = -1;
+	public int respawnY = -1;
+	public int respawnWX = -1, respawnWY = -1;
 
 	public int[] def = new int[3];
 
@@ -47,12 +51,14 @@ public class Stats {
 	public int[] harvestskill = { 1, 0, 35 };
 	public int[] craftingskill = { 1, 0, 30 };
 
-	Faction faction;
-	Direction look = Direction.DOWN;
+	public Faction faction;
+	public Direction look = Direction.DOWN;
 
-	String name;
+	public String name;
 
 	boolean dead = false;
+
+	StatAction actions;
 
 	public void check() {
 		if (exp >= requiredexp) {
@@ -65,20 +71,35 @@ public class Stats {
 			maxstamina += 15;
 		}
 
-		if (stamina > maxstamina) {
-			stamina = maxstamina;
-		}
-		if (stamina < 0.0F) {
-			stamina = 0.0F;
-		}
+		if (food > maxFood)
+			food = maxFood;
 
-		if (hp > mhp) {
+		if (food < 0)
+			food = 0;
+
+		if (stamina > maxstamina)
+			stamina = maxstamina;
+
+		if (stamina < 0)
+			stamina = 0F;
+
+		if (hp > mhp)
 			hp = mhp;
-		}
 
 		if (hp <= 0) {
 			hp = 0;
 			dead = true;
+			actions._die();
 		}
+	}
+
+	public void perTickCheck() {
+		--food;
+
+		if (food <= 0)
+			actions._damage(STARVE_DMG);
+
+		if (food >= satiatedVal)
+			actions._heal(FOOD_HEAL);
 	}
 }

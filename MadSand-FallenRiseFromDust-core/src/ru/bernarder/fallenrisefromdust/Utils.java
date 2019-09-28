@@ -3,6 +3,7 @@ package ru.bernarder.fallenrisefromdust;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
+import ru.bernarder.fallenrisefromdust.properties.CropProp;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
@@ -24,6 +26,7 @@ import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Random;
+import java.util.Vector;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -43,12 +46,10 @@ public class Utils {
 	public static boolean invent = false;
 	public static float pspeed = 33.0F;
 	static SpriteBatch batch;
-	static Texture hp;
 	static Texture dtex;
 	static Texture utex;
 	static Texture ltex;
 	static Texture rtex;
-	static Texture inv;
 	static Texture dark;
 	static Texture curs;
 	static Texture placeholder;
@@ -167,16 +168,37 @@ public class Utils {
 		objects = new Texture[MadSand.LASTOBJID];
 		tile = new Texture[MadSand.LASTTILEID + 1];
 		npc = new Texture[MadSand.NPCSPRITES + 1];
+		String stgs, stglen;
+		String[] cont;
+		Vector<Integer> stages, slens;
 		int i = 0, cc = 0;
+
+		// Loading everything about inventory items
+		// Craft recipes
 		while (i < MadSand.LASTITEMID) {
 			item[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "inv/" + i + ".png"));
 			if (!getKey(resdoc, "item", "" + i, "recipe").equals("-1")) {
 				MadSand.craftableid[cc] = i;
 				cc++;
 			}
-			// if (!getKey(resdoc, "item", "" + i, "stages").equals("-1")) {
-			// CropLayer.stages[i] = getKey(resdoc, "item", "" + i, "stages");
-			// }
+
+			// Crops
+			stgs = getKey(resdoc, "item", "" + i, "stages");
+			if (!stgs.equals("-1")) {
+				cont = stgs.split("\\,");
+				stages = new Vector<Integer>();
+				for (String stage : cont)
+					stages.add(Integer.parseInt(stage));
+				CropProp.stages.put(i, stages);
+				stglen = getKey(resdoc, "item", "" + i, "stages");
+				cont = stglen.split("\\,");
+				slens = new Vector<Integer>();
+				for (String slen : cont)
+					slens.add(Integer.parseInt(slen));
+				CropProp.stagelen.put(i, slens);
+			}
+
+			// Item properties
 			ItemProp.name.put(i, getKey(resdoc, "item", "" + i, "name"));
 			ItemProp.type.put(i, Integer.parseInt(getKey(resdoc, "item", "" + i, "type")));
 			ItemProp.altObject.put(i, Integer.parseInt(getKey(resdoc, "item", "" + i, "altobject")));
@@ -188,6 +210,8 @@ public class Utils {
 			i++;
 		}
 		i = 0;
+
+		// Loading map objects
 		while (i < MadSand.LASTOBJID) {
 			objects[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "obj/" + i + ".png"));
 			ObjectProp.name.put(i, getKey(resdoc, "object", "" + i, "name"));
@@ -203,6 +227,8 @@ public class Utils {
 			i++;
 		}
 		i = 0;
+
+		// Loading tiles
 		while (i < MadSand.LASTTILEID) {
 			tile[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "terrain/" + i + ".png"));
 			TileProp.name.put(i, getKey(resdoc, "tile", "" + i, "name"));
@@ -210,6 +236,8 @@ public class Utils {
 			i++;
 		}
 		i = 0;
+
+		// Loading NPCs
 		while (i < MadSand.NPCSPRITES) {
 			npc[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "npc/" + i + ".png"));
 			getKey(resdoc, "npc", "" + i, "hp");
@@ -226,14 +254,13 @@ public class Utils {
 			i++;
 		}
 
-		hp = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/heart.png"));
+		// UI resource fuckery
 		dark = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/darkness.png"));
 		curs = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/cursor.png"));
 		placeholder = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/placeholder.png"));
-		inv = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/invsheet.png"));
-		World.player.globalPos = new Vector2(x, y);
-		com.badlogic.gdx.files.FileHandle pfhandle = Gdx.files.local(MadSand.SAVEDIR + "player/d1.png");
-		batch = new com.badlogic.gdx.graphics.g2d.SpriteBatch();
+		World.player.globalPos = new PairFloat(x, y);
+		FileHandle pfhandle = Gdx.files.local(MadSand.SAVEDIR + "player/d1.png");
+		batch = new SpriteBatch();
 		dtex = new Texture(pfhandle);
 		pfhandle = Gdx.files.local(MadSand.SAVEDIR + "player/u1.png");
 		utex = new Texture(pfhandle);
@@ -281,17 +308,6 @@ public class Utils {
 		Gui.exitButton.setVisible(visible);
 	}
 
-	public static void inInvKeyCheck() {
-		// TODO remove dis
-		if (Gdx.input.isKeyJustPressed(66)) {
-			inventoryAction();
-		}
-	}
-
-	public static void inventoryAction() {
-		// TODO
-	}
-
 	public static void isInFront() {
 		int obj = MadSand.world.getObjID(World.player.x, World.player.y, World.player.stats.look);
 		if ((obj != 666) && (obj != 0)) {
@@ -300,8 +316,10 @@ public class Utils {
 	}
 
 	public static void KeyCheck() {
-		if (Gdx.input.isKeyJustPressed(Keys.GRAVE))
+		if (Gdx.input.isKeyJustPressed(Keys.GRAVE)) {
 			Gui.inputField.setVisible(!Gui.inputField.isVisible());
+			Gui.overlay.setKeyboardFocus(Gui.inputField);
+		}
 		if (Gdx.input.isKeyJustPressed(Keys.Q))
 			Gui.showStatsWindow();
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER))
@@ -625,13 +643,11 @@ public class Utils {
 	}
 
 	public static void checkFocus() {
-		if (Gdx.input.isKeyJustPressed(Keys.T)) {
-			Gui.overlay.setKeyboardFocus(Gui.inputField);
-		}
 		if ((Gdx.input.isKeyJustPressed(Keys.ENTER)) && (Gui.overlay.getKeyboardFocus() == Gui.inputField) && tester) {
 			String cmd = Gui.inputField.getText().trim();
 			try {
 				BuildScript.execute(cmd);
+				Gui.inputField.setVisible(!Gui.inputField.isVisible());
 			} catch (Exception e) {
 				MadSand.print("Syntax error");
 			}

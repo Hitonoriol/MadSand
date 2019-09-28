@@ -7,9 +7,10 @@ import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 
 public class Item {
 	String name, recipe, heal;
-	int id, type, altobject, cost;
+	public int id;
+	public int quantity;
+	int type, altobject, cost;
 	boolean craftable;
-	int quantity;
 	double weight;
 
 	final static String ITEM_DELIM = "/";
@@ -67,6 +68,11 @@ public class Item {
 		loadProperties();
 		return this;
 	}
+	
+	Item reinit() {
+		loadProperties();
+		return this;
+	}
 
 	private void loadProperties() {
 		this.name = ItemProp.name.get(id);
@@ -78,7 +84,8 @@ public class Item {
 		this.craftable = ItemProp.craftable.get(id);
 	}
 
-	public String getString() {
+	
+	String getString() {
 		if (id == 0)
 			return EMPTY_QUERY;
 		else

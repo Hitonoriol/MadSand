@@ -123,7 +123,7 @@ public class Gui {
 		gui[0].setText("HP: " + World.player.stats.hp + "/" + World.player.stats.mhp);
 		gui[1].setText("Level: " + World.player.stats.lvl);
 		gui[2].setText("Experience: " + World.player.stats.exp + "/" + World.player.stats.requiredexp);
-		gui[3].setText(" ");
+		gui[3].setText("Food: " + World.player.stats.food + " / " + World.player.stats.maxFood);
 	}
 
 	public static void showStatsWindow() {
@@ -724,20 +724,6 @@ public class Gui {
 				}
 			}
 		});
-		Gui.overlay.addListener(new ClickListener(0) {
-			public void clicked(InputEvent event, float x, float y) {
-				if (!MadSand.dontlisten) {
-					if ((MadSand.state == GameState.BUY) && (!MadSand.contextopened)) {
-						// TODO: show buy context menu
-					}
-					if ((MadSand.state == GameState.INVENTORY) && (!MadSand.contextopened)) {
-						Utils.inventoryAction();
-					}
-
-				}
-
-			}
-		});
 		Gui.exitButton = new TextButton("Exit to menu", Gui.skin);
 		Gui.craftButton = new TextButton("Crafting", Gui.skin);
 		TextButton back = new TextButton("Back", Gui.skin);
@@ -812,6 +798,7 @@ public class Gui {
 		tab.row();
 		tab.add(RespawnButton).width(500.0F).row();
 		Gui.dead = new Stage();
+		Gui.dead.addActor(darkness);
 		tab.setFillParent(true);
 		Gui.dead.addActor(tab);
 
@@ -835,31 +822,8 @@ public class Gui {
 		Gui.menu.addActor(menut);
 		RespawnButton.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				int wx = MadSand.world.curxwpos;
-				int wy = MadSand.world.curywpos;
-				MadSand.state = GameState.GAME;
-				World.player.stats.hp = World.player.stats.mhp;
-				if (World.player.stats.respawnX == -1) {
-					World.player.x = Utils.rand(0, MadSand.world.getCurLoc().getWidth());
-					World.player.y = Utils.rand(0, MadSand.world.getCurLoc().getHeight());
-				} else {
-					if (World.player.stats.respawnWX == wx && World.player.stats.respawnWY == wy) {
-						World.player.x = World.player.stats.respawnX;
-						World.player.y = World.player.stats.respawnY;
-					} else {
-						MadSand.world.curxwpos = World.player.stats.respawnWX;
-						MadSand.world.curywpos = World.player.stats.respawnWY;
-						if (GameSaver.verifyNextSector(wx, wy)) {
-							MadSand.world.clearCurLoc();
-							GameSaver.loadSector();
-						} else {
-
-							MadSand.state = GameState.WORLDGEN;
-							new ThreadedUtils().worldGen.start();
-						}
-					}
-				}
-				World.player.updCoords();
+				darkness.setVisible(false);
+				World.player.respawn();
 			}
 		});
 		settingsButton.addListener(new ChangeListener() {

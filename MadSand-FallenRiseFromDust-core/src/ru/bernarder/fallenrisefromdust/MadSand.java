@@ -15,11 +15,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Array;
-import com.esotericsoftware.kryo.Kryo;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
-import ru.bernarder.fallenrisefromdust.enums.Faction;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 
@@ -70,6 +68,8 @@ public class MadSand extends com.badlogic.gdx.Game {
 	static final String MAPDIR = SAVEDIR + "worlds/";
 	static final String SCRIPTDIR = SAVEDIR + "scripts";
 	static final String PLAYERFILE = "/Player.mc";
+	static final String WORLDFILE = "/World.mw";
+	static final String INVFILE = "/PlayerInventory.mpi";
 
 	static int numlook = 0;
 
@@ -137,6 +137,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static boolean encounter = false;
 
 	static Vector2[] rcoords;
+	static ObjectMapper mapper = new ObjectMapper();
 
 	static int countRcells() {
 		int i = 0;
@@ -177,21 +178,8 @@ public class MadSand extends com.badlogic.gdx.Game {
 	}
 
 	public static World world;
-	static Kryo kryo;
 
 	public void create() {
-		kryo = new Kryo();
-		kryo.register(Pair.class);
-		kryo.register(int[].class);
-		kryo.register(Faction.class);
-		kryo.register(MapID.class);
-		kryo.register(Map.class);
-		kryo.register(Array.class);
-		kryo.register(Object[].class);
-		kryo.register(Direction.class);
-		kryo.register(java.util.Vector.class);
-		kryo.register(Stats.class);
-		kryo.register(Item.class);
 
 		int radius = 13;
 		if (new File(SAVEDIR + "lastrend.dat").exists())
@@ -208,7 +196,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 			e.printStackTrace();
 		}
 		Utils.Initf();
-		world = new World(MadSand.WORLDSIZE);
 		this.objn = new ItemProp();
 		Gui.createBasicSkin();
 		Gui.chat = new Label[15];
@@ -240,6 +227,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 		this.invbatch = new SpriteBatch();
 		camera.update();
 		Gui.font = new BitmapFont();
+		world = new World(MadSand.WORLDSIZE);
 		World.player.globalPos.x = (World.player.x * TILESIZE);
 		World.player.globalPos.y = (World.player.y * TILESIZE);
 		Gui.equip = new Image[5];
@@ -526,7 +514,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 				Utils.batch.end();
 				mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
 				Utils.InvKeyCheck();
-				Utils.inInvKeyCheck();
 
 				Gui.overlay.act();
 				Gui.overlay.draw();

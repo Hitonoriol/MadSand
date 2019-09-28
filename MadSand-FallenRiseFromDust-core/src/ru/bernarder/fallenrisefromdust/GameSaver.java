@@ -2,7 +2,6 @@ package ru.bernarder.fallenrisefromdust;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.OutputStream;
@@ -10,10 +9,8 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Vector;
 
-import com.esotericsoftware.kryo.io.Input;
-import com.esotericsoftware.kryo.io.Output;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ru.bernarder.fallenrisefromdust.enums.GameState;
 
@@ -42,6 +39,24 @@ public class GameSaver {
 			currentIndex += arrays[i].length;
 		}
 
+		return result;
+	}
+
+	public static byte[] encode8(long l) {
+		byte[] result = new byte[8];
+		for (int i = 7; i >= 0; i--) {
+			result[i] = (byte) (l & 0xFF);
+			l >>= 8;
+		}
+		return result;
+	}
+
+	public static long decode8(byte[] b) {
+		long result = 0;
+		for (int i = 0; i < 8; i++) {
+			result <<= 8;
+			result |= (b[i] & 0xFF);
+		}
 		return result;
 	}
 
@@ -145,12 +160,11 @@ public class GameSaver {
 	static boolean saveChar() {
 		try {
 			String fl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.PLAYERFILE;
-			Output output = new Output(new FileOutputStream(fl));
-			MadSand.kryo.writeObject(output, World.player.inventory.items);
-			MadSand.kryo.writeObject(output, World.player.stats);
-			MadSand.kryo.writeObject(output, World.player.x);
-			MadSand.kryo.writeObject(output, World.player.y);
-			output.close();
+			String wfl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.WORLDFILE;
+			String ifl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.INVFILE;
+			MadSand.mapper.writeValue(new File(fl), World.player);
+			MadSand.mapper.writeValue(new File(ifl), World.player.inventory);
+			MadSand.mapper.writeValue(new File(wfl), MadSand.world);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -158,20 +172,29 @@ public class GameSaver {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	static boolean loadChar() {
 		try {
 			String fl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.PLAYERFILE;
-			Input input = new Input(new FileInputStream(fl));
+			String wfl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.WORLDFILE;
+			String ifl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.INVFILE;
+
 			World.player.inventory = new Inventory();
-			World.player.inventory.items = MadSand.kryo.readObject(input, Vector.class);
-			World.player.stats = MadSand.kryo.readObject(input, Stats.class);
-			World.player.inventory.setMaxWeight(World.player.stats.str * Stats.STR_WEIGHT_MULTIPLIER);
-			World.player.inventory.refreshWeight();
-			World.player.x = MadSand.kryo.readObject(input, Integer.class);
-			World.player.y = MadSand.kryo.readObject(input, Integer.class);
-			World.player.updCoords();
-			input.close();
+
+			World.player = MadSand.mapper.readValue(getExternal(fl), Player.class);
+
+			World.player.reinit();
+			World.player.inventory = MadSand.mapper.readValue(getExternal(ifl), Inventory.class);
+			World.player.inventory.refreshContents();
+
+			World w;
+			w = MadSand.mapper.readValue(getExternal(wfl), World.class);
+			MadSand.world.curxwpos = w.curxwpos;
+			MadSand.world.curywpos = w.curywpos;
+			MadSand.world.curlayer = w.curlayer;
+			MadSand.world.worldtime = w.worldtime;
+			MadSand.world.tick = w.tick;
+
+			World.player.init();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -1,6 +1,8 @@
 package ru.bernarder.fallenrisefromdust;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Vector;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
@@ -8,13 +10,17 @@ import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 public class Map {
 	private int xsz, ysz;
 
-	static final Tile nullTile = new Tile(0);
-	static final MapObject nullObject = new MapObject(0);
-	static final Loot nullLoot = new Loot();
+	public static int PLOWED_SOIL = 15;
+
+	static Tile nullTile = new Tile(0);
+	static MapObject nullObject = new MapObject(0);
+	static Loot nullLoot = new Loot();
+	static Crop nullCrop = new Crop();
 
 	private HashMap<Pair, Tile> mapTiles;
 	private HashMap<Pair, MapObject> mapObjects;
 	private HashMap<Pair, Loot> mapLoot;
+	private HashMap<Pair, Crop> mapCrops;
 	private HashMap<Pair, Npc> mapNpcs;
 
 	Pair coords = new Pair(0, 0);
@@ -64,6 +70,7 @@ public class Map {
 		mapObjects = new HashMap<Pair, MapObject>();
 		mapLoot = new HashMap<Pair, Loot>();
 		mapNpcs = new HashMap<Pair, Npc>();
+		mapCrops = new HashMap<Pair, Crop>();
 		return this;
 	}
 
@@ -182,6 +189,10 @@ public class Map {
 			return false;
 	}
 
+	boolean addObject(Pair coord, int id) {
+		return addObject(coord.x, coord.y, id);
+	}
+
 	void dmgObjInDir(int x, int y, Direction direction) {
 		coords.set(x, y).addDirection(direction);
 		mapObjects.get(coords).takeDamage();
@@ -201,6 +212,13 @@ public class Map {
 				return nullObject;
 		} else
 			return nullObject;
+	}
+
+	boolean objectExists(int x, int y) {
+		if (correctCoords(coords.set(x, y))) {
+			return !getObject(x, y).equals(nullObject);
+		} else
+			return false;
 	}
 
 	void randPlaceObject(int id) {
@@ -258,6 +276,65 @@ public class Map {
 				mapLoot.put(coords, new Loot(new Item(id, q)));
 			}
 		}
+	}
+
+	void update() {
+		Pair coord = new Pair();
+		Crop newCrop;
+		Vector<Pair> del = new Vector<Pair>();
+		for (Entry<Pair, Crop> crop : mapCrops.entrySet()) {
+			if (crop.getValue().upd()) {
+				coord = crop.getKey();
+				newCrop = crop.getValue();
+
+				if (newCrop.curStage == Crop.STAGE_COUNT - 1)
+					del.add(coord);
+
+				addObject(new Pair(coord), newCrop.objId);
+				// mapCrops.remove(new Pair(coord));
+				// mapCrops.put(new Pair(coord), newCrop);
+			}
+		}
+		for (int i = 0; i < del.size(); ++i)
+			mapCrops.remove(del.get(i));
+	}
+
+	boolean putCrop(int x, int y, int id) { // item id
+		if (!correctCoords(coords.set(x, y)))
+			return false;
+		if (objectExists(x, y))
+			return false;
+		if (getTile(x, y).id != PLOWED_SOIL)
+			return false;
+
+		Crop newCrop = new Crop(id, MadSand.world.globalTick);
+		mapCrops.put(new Pair(coords), newCrop);
+		addObject(x, y, newCrop.objId);
+		return true;
+	}
+
+	boolean putCrop(int x, int y, Crop crop) {
+		if (!correctCoords(coords.set(x, y)))
+			return false;
+		if (getTile(x, y).id != PLOWED_SOIL)
+			return false;
+		addObject(x, y, crop.objId);
+		mapCrops.put(new Pair(coords), crop);
+		return true;
+	}
+
+	Crop getCrop(int x, int y) {
+		if (correctCoords(coords.set(x, y))) {
+			Crop ret = mapCrops.get(new Pair(coords));
+			if (ret != null)
+				return ret;
+		}
+		return nullCrop;
+	}
+
+	void removeCrop(int x, int y) {
+		if (correctCoords(coords.set(x, y)))
+			mapCrops.remove(new Pair(coords));
 	}
 
 }

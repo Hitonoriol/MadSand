@@ -9,6 +9,7 @@ public class Location extends HashMap<MapID, Map> {
 	private static final long serialVersionUID = -4489829388439109446L;
 
 	final String LOOT_DELIM = "|";
+	final int CROP_BLOCK_LEN = 16;
 
 	byte[] sectorToBytes(int wx, int wy, int layer) {
 		try {
@@ -20,28 +21,43 @@ public class Location extends HashMap<MapID, Map> {
 			stream.write(GameSaver.encode2(xsz));
 			stream.write(GameSaver.encode2(ysz));
 			MapObject obj = new MapObject();
+
+			ByteArrayOutputStream lootStream = new ByteArrayOutputStream();
+
+			ByteArrayOutputStream cropStream = new ByteArrayOutputStream();
+			String loot;
+			Crop crop;
+			int cropBlocks = 0;
 			for (int y = 0; y < ysz; ++y) {
 				for (int x = 0; x < xsz; ++x) {
 					stream.write(GameSaver.encode2(map.getTile(x, y).id));
 					obj = map.getObject(x, y);
 					stream.write(GameSaver.encode2(obj.id));
 					stream.write(GameSaver.encode2(obj.hp));
-				}
-			}
-			ByteArrayOutputStream lootStream = new ByteArrayOutputStream();
-			String loot;
-			for (int y = 0; y < ysz; ++y) {
-				for (int x = 0; x < xsz; ++x) {
+
 					loot = map.getLoot(x, y).getContents();
 					lootStream.write(GameSaver.encode2(loot.length()));
 					lootStream.write(loot.getBytes());
+
+					crop = map.getCrop(x, y);
+					if (crop.id == Map.nullCrop.id)
+						continue;
+					cropStream.write(GameSaver.encode2(x));
+					cropStream.write(GameSaver.encode2(y));
+					cropStream.write(GameSaver.encode2(crop.id));
+					cropStream.write(GameSaver.encode8(crop.plantTime));
+					cropStream.write(GameSaver.encode2(crop.curStage));
+					++cropBlocks;
 				}
 			}
+			byte[] cropCount = GameSaver.encode2(cropBlocks);
+			byte[] _crops = cropStream.toByteArray();
+			cropStream.close();
 			byte[] _loot = lootStream.toByteArray();
 			lootStream.close();
 			byte ret[] = stream.toByteArray();
 			stream.close();
-			ret = GameSaver.concat(ret, _loot);
+			ret = GameSaver.concat(ret, _loot, cropCount, _crops);
 			return ret;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -83,6 +99,19 @@ public class Location extends HashMap<MapID, Map> {
 					loot = new String(node);
 					Loot.addLootQ(loot, x, y, map);
 				}
+			}
+			int cropsCount = GameSaver.decode2(stream.readNBytes(2));
+			int x, y, id, stage;
+			long ptime;
+			Crop crop;
+			for (int i = 0; i < cropsCount; ++i) {
+				x = GameSaver.decode2(stream.readNBytes(2));
+				y = GameSaver.decode2(stream.readNBytes(2));
+				id = GameSaver.decode2(stream.readNBytes(2));
+				ptime = GameSaver.decode8(stream.readNBytes(8));
+				stage = GameSaver.decode2(stream.readNBytes(2));
+				crop = new Crop(id, ptime, stage);
+				map.putCrop(x, y, crop);
 			}
 
 			stream.close();

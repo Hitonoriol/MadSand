@@ -1,5 +1,7 @@
 package ru.bernarder.fallenrisefromdust;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 
 public class MapObject {
@@ -43,5 +45,16 @@ public class MapObject {
 			return Integer.parseInt(it[Utils.random.nextInt(it.length)]);
 		} else
 			return Integer.parseInt(items);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof MapObject))
+			return false;
+		if (obj == this)
+			return true;
+
+		MapObject rhs = (MapObject) obj;
+		return new EqualsBuilder().append(id, rhs.id).isEquals();
 	}
 }

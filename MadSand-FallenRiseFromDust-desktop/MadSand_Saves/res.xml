@@ -230,7 +230,7 @@
       <object id="1">
          <name>Boulder</name>
          <skillbonus>mining</skillbonus>
-         <tough>30</tough>
+         <tough>11</tough>
          <altitem>2</altitem>
       </object>
       <object id="2">
@@ -257,7 +257,7 @@
       <object id="6">
          <name>Campfire</name>
          <skillbonus>survival</skillbonus>
-         <tough>3</tough>
+         <tough>20</tough>
       </object>
       <object id="7">
          <name>Chest</name>
@@ -318,16 +318,16 @@
       </object>
       <object id="19">
          <name>Cucumber sprout</name>
-         <tough>30</tough>
+         <tough>5</tough>
       </object>
       <object id="20">
          <name>Cucumber seeds</name>
-         <tough>30</tough>
+         <tough>5</tough>
       </object>
       <object id="21">
          <name>Cucumber bush</name>
          <skillbonus>harvest</skillbonus>
-         <tough>30</tough>
+         <tough>7</tough>
          <altitem>39</altitem>
       </object>
       <object id="22">
@@ -346,7 +346,7 @@
       </object>
       <object id="24">
          <name>Tumbleweed</name>
-         <tough>30</tough>
+         <tough>3</tough>
       </object>
       <object id="25">
          <name>Coal</name>
@@ -1401,6 +1401,8 @@
       </item>
       <item id="39">
          <name>Cucumber</name>
+         <type>9</type>
+         <heal>3:8</heal>
          <cost>3</cost>
       </item>
       <item id="40">
@@ -1408,6 +1410,7 @@
          <altobject>20</altobject>
          <type>3</type>
          <stages>20,19,63,21</stages>
+         <stagelen>20,25,30,35</stagelen>
          <cost>7</cost>
       </item>
       <item id="41">
@@ -1442,7 +1445,7 @@
       <item id="45">
          <name>Amanita</name>
          <type>9</type>
-         <heal>-18:0</heal>
+         <heal>-18:-10</heal>
          <cost>5</cost>
       </item>
       <item id="46">
@@ -1454,25 +1457,25 @@
       <item id="47">
          <name>Carrot</name>
          <type>9</type>
-         <heal>16:8</heal>
+         <heal>10:11</heal>
          <cost>21</cost>
       </item>
       <item id="48">
          <name>Tomatoes</name>
          <type>9</type>
-         <heal>22:3</heal>
+         <heal>5:10</heal>
          <cost>21</cost>
       </item>
       <item id="49">
          <name>Pepper</name>
          <type>9</type>
-         <heal>9:9</heal>
+         <heal>9:10</heal>
          <cost>15</cost>
       </item>
       <item id="50">
          <name>Corn</name>
          <type>9</type>
-         <heal>34:29</heal>
+         <heal>5:30</heal>
          <cost>41</cost>
       </item>
       <item id="51">
@@ -1481,6 +1484,7 @@
          <type>3</type>
          <cost>41</cost>
          <stages>43,44,45,46</stages>
+         <stagelen>20,25,30,35</stagelen>
       </item>
       <item id="52">
          <name>Carrot seed</name>
@@ -1488,6 +1492,7 @@
          <type>3</type>
          <cost>41</cost>
          <stages>47,48,49,50</stages>
+         <stagelen>20,25,30,35</stagelen>
       </item>
       <item id="53">
          <name>Tomato seed</name>
@@ -1495,6 +1500,7 @@
          <type>3</type>
          <cost>41</cost>
          <stages>51,52,53,54</stages>
+         <stagelen>20,25,30,35</stagelen>
       </item>
       <item id="54">
          <name>Pepper seed</name>
@@ -1502,6 +1508,7 @@
          <type>3</type>
          <cost>41</cost>
          <stages>55,56,57,58</stages>
+         <stagelen>20,25,30,35</stagelen>
       </item>
       <item id="55">
          <name>Corn seed</name>
@@ -1509,6 +1516,7 @@
          <type>3</type>
          <cost>41</cost>
          <stages>59,60,61,62</stages>
+         <stagelen>20,25,30,35</stagelen>
       </item>
       <item id="56">
          <name>Coal</name>
@@ -1516,19 +1524,27 @@
       </item>
       <item id="57">
          <name>Ham</name>
+         <type>9</type>
+         <heal>15:50</heal>
          <cost>11</cost>
       </item>
       <item id="58">
          <name>Pint of beer</name>
+         <type>9</type>
+         <heal>5:20</heal>
          <cost>25</cost>
       </item>
       <item id="59">
-         <name>Chicken's leg</name>
+         <name>Chicken leg</name>
          <cost>15</cost>
+         <type>9</type>
+         <heal>10:45</heal>
       </item>
       <item id="60">
          <name>Healing potion</name>
          <cost>20</cost>
+         <type>9</type>
+         <heal>25:0</heal>
       </item>
       <item id="61">
          <name>Steel shield</name>
