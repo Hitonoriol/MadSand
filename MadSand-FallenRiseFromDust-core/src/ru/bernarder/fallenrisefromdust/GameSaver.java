@@ -114,6 +114,7 @@ public class GameSaver {
 			br.close();
 			return lk;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return "";
 		}
 	}

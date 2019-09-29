@@ -120,10 +120,11 @@ public class Gui {
 	static Label DX;
 
 	static void refreshOverlay() {
-		gui[0].setText("HP: " + World.player.stats.hp + "/" + World.player.stats.mhp);
-		gui[1].setText("Level: " + World.player.stats.lvl);
-		gui[2].setText("Experience: " + World.player.stats.exp + "/" + World.player.stats.requiredexp);
-		gui[3].setText("Food: " + World.player.stats.food + " / " + World.player.stats.maxFood);
+		overlayStatLabels[0].setText("HP: " + World.player.stats.hp + "/" + World.player.stats.mhp);
+		overlayStatLabels[1].setText("Level: " + World.player.stats.lvl);
+		overlayStatLabels[2].setText("Experience: " + World.player.stats.exp + "/" + World.player.stats.requiredexp);
+		overlayStatLabels[3].setText("Food: " + World.player.stats.food + " / " + World.player.stats.maxFood);
+		overlayStatLabels[4].setText("Hand: " + ItemProp.name.get(World.player.stats.hand));
 	}
 
 	public static void showStatsWindow() {
@@ -565,7 +566,11 @@ public class Gui {
 		verlbl = new Label(MadSand.VER, Gui.skin);
 	}
 
+	static final int OVSTAT_COUNT = 6;
+
 	static void initmenu() {
+		Gui.overlayStatLabels = new Label[OVSTAT_COUNT];
+
 		CNT = new Label("Constitution: " + CONSTITUTION, Gui.skin);
 		STM = new Label("Stamina: " + STAMINA, Gui.skin);
 		ATKl = new Label("Strength: " + ATK, Gui.skin);
@@ -633,6 +638,7 @@ public class Gui {
 			cc++;
 		}
 		Gui.overlay = new Stage();
+		// overlay.setDebugAll(true);
 		Gui.menu = new Stage();
 		Gui.craft = new Stage();
 		Gui.craftbl = new Table();
@@ -683,13 +689,18 @@ public class Gui {
 		MadSand.dialog.add(Gui.acceptD).width(500.0F).height(50.0F);
 		MadSand.dialog.row();
 		MadSand.dialog.add(Gui.refuseD).width(500.0F).height(50.0F);
+		Table ovstatTbl = new Table();
 		ovtbl.setFillParent(true);
+		ovstatTbl.setFillParent(true);
+		ovstatTbl.align(Align.topRight);
 		int count = 0;
-		while (count < 4) {
-			Gui.gui[count].setWrap(true);
-			ovtbl.add(Gui.gui[count]).width(200.0F);
+		while (count < OVSTAT_COUNT) {
+			Gui.overlayStatLabels[count] = new Label(" ", skin);
+			Gui.overlayStatLabels[count].setWrap(false);
+			ovstatTbl.add(Gui.overlayStatLabels[count]).width(170);
 			count++;
 		}
+		Gui.overlay.addActor(ovstatTbl);
 		ScrollPane dsp = new ScrollPane(MadSand.dialog, Gui.skin);
 		Gui.darkness = new Table();
 		Gui.darkness.setBackground(bck);
@@ -764,6 +775,7 @@ public class Gui {
 		Gui.craftButton.align(16);
 		Gui.craftButton.setWidth(250.0F);
 		ovtbl.row();
+		ovtbl.row();
 		ovtbl.add();
 		ovtbl.add();
 		ovtbl.add();
@@ -778,13 +790,13 @@ public class Gui {
 			ovtbl.add();
 			ovtbl.add();
 			ovtbl.add();
-			ovtbl.add(Gui.equip[aa]).width(80.0F).align(16).row();
+			ovtbl.add(Gui.equip[aa]).width(80.0F).align(Align.right).row();
 			aa++;
 		}
 		ovtbl.add();
 		ovtbl.add();
 		ovtbl.add();
-		ovtbl.add(Gui.equip[4]).width(80.0F).align(16).row();
+		ovtbl.add(Gui.equip[4]).width(80.0F).align(Align.right).row();
 
 		Gui.exitButton.setVisible(false);
 
@@ -933,7 +945,7 @@ public class Gui {
 	static Label dialMSG;
 	static Stage dead;
 	static TextField inputField;
-	static Label[] gui;
+	static Label[] overlayStatLabels;
 	static Label[] log;
 	static Stage overlay;
 	static Table craftbl;
@@ -941,7 +953,6 @@ public class Gui {
 	static Stage craft;
 	static TextButton[] craftbtn;
 	static Stage menu;
-	static Label[] chat;
 	public static BitmapFont font;
 	public static BitmapFont font1;
 	public static TextButton exitButton;

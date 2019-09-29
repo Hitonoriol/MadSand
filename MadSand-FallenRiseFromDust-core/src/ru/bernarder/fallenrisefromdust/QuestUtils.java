@@ -17,7 +17,7 @@ public class QuestUtils {
 	static int qu;
 
 	public static void init() {
-		qu = Utils.countKeys(Utils.resdoc, "quest");
+		qu = MadSand.QUESTS;
 		Utils.out(qu + " quests loaded");
 		questList = new String[qu][10];
 		int i = 0;

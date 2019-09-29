@@ -190,7 +190,7 @@ public class World {
 		int it = 0, iit = 0;
 		while (it < World.MAPSIZE) {
 			while (iit < World.MAPSIZE) {
-				if (grid.get(iit, it) == 0.0f) {
+				if (grid.get(iit, it) == 0.0f) {	//TODO find out wtf was this supposed to do
 					getCurLoc(1).addObject(iit, it, 0);
 					getCurLoc(1).addTile(it, iit, 5);
 				}
@@ -269,7 +269,7 @@ public class World {
 				putMapTile(ii, i, 11);
 			} else
 				putMapTile(ii, i, 15);
-		} else if (biome == 1) { // DESSERT
+		} else if (biome == 1) { // DESERT
 			if (Utils.random.nextInt(100) == 4) {
 				putMapTile(ii, i, 3);
 			} else if (Utils.random.nextInt(1000) == Utils.random.nextInt(1000)) {

@@ -62,7 +62,8 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static int runspeed = movespeed * 2;
 
 	static final String SAVEDIR = "MadSand_Saves/";
-	static String QUESTFILE = SAVEDIR + "quest.xml";
+	static String QUESTFILE = SAVEDIR + "quests.xml";
+	static String GENFILE = SAVEDIR + "worldgen.xml";
 	static String RESFILE = SAVEDIR + "res.xml";
 	static final String VERFILE = SAVEDIR + "ver.dat";
 	static final String MAPDIR = SAVEDIR + "worlds/";
@@ -198,19 +199,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 		Utils.Initf();
 		this.objn = new ItemProp();
 		Gui.createBasicSkin();
-		Gui.chat = new Label[15];
-		int vc = 0;
-		while (vc < 15) {
-			Gui.chat[vc] = new Label(" ", Gui.skin);
-			vc++;
-		}
-
-		Gui.gui = new Label[4];
-		vc = 0;
-		while (vc < Gui.gui.length) {
-			Gui.gui[vc] = new Label(" ", Gui.skin);
-			++vc;
-		}
 		QuestUtils.init();
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.local(SAVEDIR + FONT_PATH));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();

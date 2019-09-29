@@ -74,7 +74,10 @@ public class Utils {
 	public static Random random = new Random();
 	static Animation<TextureRegion> ranim;
 	static int selected;
+
 	static Document resdoc;
+	static Document questdoc;
+	static Document gendoc;
 
 	public static Document XMLString(String xml) {
 		try {
@@ -102,7 +105,6 @@ public class Utils {
 			}
 			return c;
 		} catch (Exception e) {
-			e.printStackTrace();
 			return -1;
 		}
 	}
@@ -130,7 +132,9 @@ public class Utils {
 		MadSand.gameVrf = getSHA1(new File(MadSand.RESFILE));
 		out("Resfile hash: " + MadSand.gameVrf);
 		resdoc = XMLString(GameSaver.getExternalNl(MadSand.RESFILE));
-		MadSand.QUESTS = countKeys(resdoc, "quest");
+		questdoc = XMLString(GameSaver.getExternalNl(MadSand.QUESTFILE));
+		gendoc = XMLString(GameSaver.getExternalNl(MadSand.GENFILE));
+		MadSand.QUESTS = countKeys(questdoc, "quest");
 		MadSand.quests = new int[MadSand.QUESTS][2];
 		mapcursor = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/cur.png"));
 		animsheet = new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/anim.png"));
@@ -156,10 +160,11 @@ public class Utils {
 		out(MadSand.CROPS + " crops");
 		MadSand.LASTOBJID = countKeys(resdoc, "object");
 		out(MadSand.LASTOBJID + " objects");
-		// CropLayer.stages = new String[MadSand.LASTOBJID];
 		MadSand.LASTTILEID = countKeys(resdoc, "tile");
 		MadSand.NPCSPRITES = countKeys(resdoc, "npc");
 		MadSand.CRAFTABLES = countKeys(resdoc, "recipe");
+		MadSand.BIOMES = countKeys(gendoc, "biome");
+		out(MadSand.BIOMES + " biomes");
 		out(MadSand.CRAFTABLES + " craftable items");
 		out(MadSand.LASTTILEID + " tiles");
 		out(MadSand.NPCSPRITES + " npcs");

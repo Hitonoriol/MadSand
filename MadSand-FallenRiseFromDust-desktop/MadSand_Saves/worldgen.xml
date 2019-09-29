@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<worldgen>
+	<biome id="0" name="Plains">
+		<tiles>
+			<tile id="0" />
+			<group id="0" tiles="1,2" count="100" />
+			<group id="1" tiles="6" count="1" />
+			<lake tid="8" radius="4" modifier="1" from="0.1" to="0.27" />
+		</tiles>
+		<objects>
+			<group id="0" objects="2,30,35,36" count="30" />
+			<group id="1" objects="1,27,28" count="5" />
+			<group id="2" objects="37,4" count="20" />
+		</objects>
+		<underworld>
+			<tile id="" />
+			<object id="" />
+			<ore ids="22,23" count="10" maxsize="10" />
+			<dungeon probability="10000" maxroomsize="15" minroomsize="3" tolerance="10" roomfloortile="5"/>
+		</underworld>
+	</biome>
+	
+	<biome id="1" name="Desert">
+		<tiles>
+			<tile id="4" />
+			<group id="0" tiles="3,4" count="100"/>
+			<group id="1" tiles="17" count="1"/>
+		</tiles>
+		
+		<objects>
+			<group id="0" objects="10,24" count="35" />
+		</objects>
+	</biome>
+	
+	<biome id="2" name="Cold plains">
+		<tiles>
+			<tile id="20" />
+			<group id="0" tiles="21" count="25"/>
+		</tiles>
+		
+		<objects>
+			<group id="0" objects="32,38,33" count="30" />
+		</objects>
+	</biome>
+	
+	<biome id="3" name="Dead lands">
+		<tiles>
+			<tile id="15" />
+			<group id="0" tiles="10,11" count="100"/>
+			<lake tid="22" radius="4" modifier="1" from="0.1" to="0.27" />
+		</tiles>
+		
+		<objects>
+			<group id="0" objects="34,33" count="30" />
+			<group id="1" objects="39" count="20" />
+		</objects>
+	</biome>
+</worldgen>

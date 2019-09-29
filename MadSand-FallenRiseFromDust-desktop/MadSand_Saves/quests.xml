@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+   <quests>
+      <quest id="0">
+         <starttext>Oh, hello there... !@!Uhm...I haven't seen you here before, who are you?!@!Well, to be honest, it doesn't matter. Not in this place.!@!My name is... uhm... Dick, but I don't really like it. Call me Richard. !@! You seem lost... You know what? If you can prove you can be of any use, then we'll talk.!@!Can you please bring me some wood for the campfire? Here's axe, it'll help you.</starttext>
+         <completedtext>Thanks a lot, stranger. !@!I'd like to know your name now...!@! Nice to meet you, {PLAYER}! !@!Hm... Okay. You can take axe as a reward. If you want some job or a good story, just ask!</completedtext>
+         <requirement>:1/35</requirement>
+         <forquest>:3/1</forquest>
+         <repeatable>0</repeatable>
+         <afterstarttext>Please, give me 35 wood pieces.</afterstarttext>
+      </quest>
+      <quest id="1">
+         <starttext>Hello, {PLAYER}! Our lands are suffering from Marauders.!@!These bastards kill our children and steal our money!!@!Go kill some of them and prove your loyalty to us, the mighty Partisans, brave one!</starttext>
+         <completedtext>Thank you, hero! Take your reward and return to me when you are ready for the next task.</completedtext>
+         <requirement>:22/10</requirement>
+         <forquest>:2/5</forquest>
+         <repeatable>0</repeatable>
+         <afterstarttext>Give me 10 leather pieces to prove that you are true defender of the Partisan Settlement!</afterstarttext>
+      </quest>
+   </quests>
