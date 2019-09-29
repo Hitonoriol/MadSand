@@ -1,6 +1,6 @@
 # MadSand
 ### Survival roguelike with RPG elements
-### <a href="https://github.com/Hitonoriol/MadSand/releases/download/launcher-r14/MadSandLauncher.jar">Download Launcher</a>
+### <a href="https://github.com/Hitonoriol/MadSand/releases/download/launcher-r15/MadSandLauncher.jar">Download Launcher</a>
 ### <a href="https://github.com/Hitonoriol/MadSand/wiki">Wiki</a>
 
 
