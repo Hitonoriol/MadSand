@@ -150,13 +150,13 @@ public class Utils {
 	}
 
 	static String nodeMapDump(NamedNodeMap map) {
+		if (map == null)
+			return "-1";
 		String ret = "";
 		int len = map.getLength();
-		out("Map len: " + len);
 		for (int i = 1; i < len; ++i) {
 			Node attr = map.item(i);
 			ret += attr.getNodeValue();
-			out(attr.getNodeValue());
 			if (i < len - 1)
 				ret += ",";
 		}
@@ -168,41 +168,38 @@ public class Utils {
 		return ret;
 	}
 
-	static HashMap<String, String> nodeMapToHashMap(NamedNodeMap map) {
-		HashMap<String, String> ret = new HashMap<String, String>();
+	static HashMap<String, Integer> nodeMapToHashMap(NamedNodeMap map) {
+		HashMap<String, Integer> ret = new HashMap<String, Integer>();
+		if (map == null) {
+			ret.put("tid", -1);
+			return ret;
+		}
 		int len = map.getLength();
-		out("Map len: " + len);
-		for (int i = 1; i < len; ++i) {
+		for (int i = 0; i < len; ++i) {
 			Node attr = map.item(i);
-			ret.put(attr.getNodeName(), attr.getNodeValue());
-			out(attr.getNodeValue());
+			ret.put(attr.getNodeName(), val(attr.getNodeValue()));
+			out(attr.getNodeName() + ": " +attr.getNodeValue());
 		}
 		return ret;
 	}
 
-	static String getNested(Document doc, String list, String id, String name, String iid) {
+	static NamedNodeMap getNested(Document doc, String list, String id, String name, String iid) {
 		try {
-			out("nested " + name);
+			out("getting " + name);
 			doc.getDocumentElement().normalize();
 			NodeList nList = doc.getElementsByTagName(list);
 			for (int temp = 0; temp < nList.getLength(); temp++) {
-				out("+nested " + name);
 				Node nNode = nList.item(temp);
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-					out("++nested " + name);
 					Element eElement = (Element) nNode;
 					if (eElement.getAttribute("id").equals(id)) {
-						out("+++nested " + name);
 						NodeList cList = eElement.getChildNodes();
 						for (int pos = 0; pos < cList.getLength(); pos++) {
-							out("++++nested " + name);
 							Node cNode = cList.item(pos);
 							if (cNode.getNodeType() == Node.ELEMENT_NODE) {
-								out("+++++nested " + name);
 								Element cElement = (Element) cNode;
 								if (cElement.getTagName().equals(name) && cElement.getAttribute("id").equals(iid)) {
-									out("!!!!!!nested " + name);
-									return nodeMapDump(cElement.getAttributes());
+									return (cElement.getAttributes());
 								}
 							}
 						}
@@ -211,10 +208,14 @@ public class Utils {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "-1";
+			return null;
 
 		}
-		return "-1";
+		return null;
+	}
+
+	static String getAttrValues(Document doc, String list, String id, String name, String iid) {
+		return nodeMapDump(getNested(doc, list, id, name, iid));
 	}
 
 	static Vector<String> getGroup(int biome, String gname) {
@@ -222,11 +223,10 @@ public class Utils {
 		int j = 0;
 		String tmp = "";
 		while (!tmp.equals("-1")) {
-			tmp = getNested(gendoc, "biome", str(biome), gname, str(j));
+			tmp = getAttrValues(gendoc, "biome", str(biome), gname, str(j));
 			if (tmp.equals("-1"))
 				break;
 			group.add(tmp);
-			out(tmp);
 			++j;
 		}
 		return group;
@@ -285,25 +285,30 @@ public class Utils {
 		// Loading worldgen config
 		Vector<Integer> def;
 		Vector<String> group;
-		Vector<String> lake;
+		HashMap<String, Integer> lake;
 
 		Vector<String> objGroup;
+		Vector<String> ore = new Vector<String>();
+		String defT, defO;
+		HashMap<String, Integer> vdungeon;
 		while (i < MadSand.BIOMES) {
 			def = new Vector<Integer>();
-			group = new Vector<String>();
-			lake = new Vector<String>();
-
-			objGroup = new Vector<String>();
+			lake = new HashMap<String, Integer>();
 
 			WorldGenProp.name.add(getAttr(gendoc, "biome", str(i), "name"));
 			group = getGroup(i, "tile_group");
 			objGroup = getGroup(i, "object_group");
 
-			def.add(Integer.parseInt(getNested(gendoc, "biome", str(i), "def_tile", str(-1))));
-			lake.add(getNested(gendoc, "biome", str(i), "lake", str(-1)));
+			def.add(Integer.parseInt(getAttrValues(gendoc, "biome", str(i), "def_tile", str(-1))));
+			lake = nodeMapToHashMap(getNested(gendoc, "biome", str(i), "lake", str(-1)));
 
 			WorldGenProp.loadTileBlock(i, def, group, lake);
 			WorldGenProp.loadObjectBlock(i, objGroup);
+			defT = getAttrValues(gendoc, "biome", str(i), "cave_tile", str(-1));
+			defO = getAttrValues(gendoc, "biome", str(i), "cave_object", str(-1));
+			ore.add(getAttrValues(gendoc, "biome", str(i), "ore", str(-1)));
+			vdungeon = nodeMapToHashMap(getNested(gendoc, "biome", str(i), "dungeon", str(-1)));
+			WorldGenProp.loadUnderworldBlock(i, defT, defO, ore, vdungeon);
 			++i;
 		}
 		i = 0;
@@ -512,7 +517,7 @@ public class Utils {
 		if ((Gdx.input.isKeyJustPressed(Keys.Y)) && (tester)) {
 			World.player.teleport(MadSand.wmx, MadSand.wmy);
 		}
-		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyPressed(Keys.R)) && (tester)) {
+		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.R)) && (tester)) {
 			MadSand.world.Generate();
 		}
 		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyPressed(Keys.DOWN)) && (tester)) {

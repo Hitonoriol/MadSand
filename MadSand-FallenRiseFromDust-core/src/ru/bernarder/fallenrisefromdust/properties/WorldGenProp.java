@@ -9,9 +9,9 @@ public class WorldGenProp {
 
 	private static HashMap<Integer, Vector<Vector<Integer>>> tile = new HashMap<Integer, Vector<Vector<Integer>>>();
 	private static HashMap<Integer, Vector<Vector<Integer>>> object = new HashMap<Integer, Vector<Vector<Integer>>>();
-	private static HashMap<Integer, Vector<Integer>> lake = new HashMap<Integer, Vector<Integer>>();
+	private static HashMap<Integer, HashMap<String, Integer>> lake = new HashMap<Integer, HashMap<String, Integer>>();
 	private static HashMap<Integer, Vector<Integer>> underworld = new HashMap<Integer, Vector<Integer>>();
-	private static HashMap<Integer, Vector<Integer>> dungeon = new HashMap<Integer, Vector<Integer>>();
+	private static HashMap<Integer, HashMap<String, Integer>> dungeon = new HashMap<Integer, HashMap<String, Integer>>();
 
 	public static Vector<Vector<Integer>> getBiomeTiles(int id) {
 		return tile.get(id);
@@ -21,7 +21,7 @@ public class WorldGenProp {
 		return tile.get(id);
 	}
 
-	public static Vector<Integer> getBiomeLake(int id) {
+	public static HashMap<String, Integer> getBiomeLake(int id) {
 		return lake.get(id);
 	}
 
@@ -29,7 +29,7 @@ public class WorldGenProp {
 		return underworld.get(id);
 	}
 
-	public static Vector<Integer> getBiomedungeon(int id) {
+	public static HashMap<String, Integer> getBiomedungeon(int id) {
 		return dungeon.get(id);
 	}
 
@@ -47,25 +47,20 @@ public class WorldGenProp {
 		return sblock;
 	}
 
-	public static void loadTileBlock(int id, Vector<Integer> def, Vector<String> group, Vector<String> vlake) {
+	public static void loadTileBlock(int id, Vector<Integer> def, Vector<String> group, HashMap<String, Integer> vlake) {
 		Vector<Vector<Integer>> sblock = loadGroup(group);
 		sblock.add(0, def);
 		tile.put(id, sblock);
 
-		Vector<Integer> reslake = loadGroup(vlake).get(0);
-		lake.put(id, reslake);
+		lake.put(id, vlake);
 	}
 
 	public static void loadObjectBlock(int id, Vector<String> group) {
 		object.put(id, loadGroup(group));
 	}
 
-	static void loadUnderworldBlock(int id, String defT, String defO, Vector<String> ore, Vector<String> vdungeon) {
-		Vector<Integer> dblock = new Vector<Integer>();
-		for (int i = 0; i < vdungeon.size(); ++i) {
-			dblock.add(Integer.parseInt(vdungeon.get(i)));
-		}
-		dungeon.put(id, dblock);
+	public static void loadUnderworldBlock(int id, String defT, String defO, Vector<String> ore, HashMap<String, Integer> vdungeon) {
+		dungeon.put(id, vdungeon);
 
 		Vector<Integer> sblock = loadGroup(ore).get(0);
 		sblock.add(0, Integer.parseInt(defT));

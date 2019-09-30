@@ -117,16 +117,13 @@ public class World {
 			createBasicLoc(curxwpos, curywpos);
 		try {
 			clearCurLoc();
-			Utils.random = new Random();
 			if ((curxwpos == 5) && (curywpos == 5))
 				biome = 0;
 			else
 				biome = Utils.random.nextInt(MadSand.BIOMES);
 			genTerrain();
-			if (Utils.random.nextBoolean())
-				genOreFields();
-			else
-				genDungeon();
+			genUnderworld();
+			genDungeon();
 			genObjByTemplate();
 			if ((curxwpos == 5) && (curywpos == 5))
 				MadSand.setUpScene();
@@ -138,16 +135,16 @@ public class World {
 		}
 	}
 
-	final int LAKE_TID = 0;
-	final int LAKE_RADIUS = 1;
-	final int LAKE_MODIFIER = 2;
-	final int LAKE_FROM = 3;
-	final int LAKE_TO = 4;
+	final String LAKE_TID = "tid";
+	final String LAKE_RADIUS = "radius";
+	final String LAKE_MODIFIER = "modifier";
+	final String LAKE_FROM = "from";
+	final String LAKE_TO = "to";
 
 	public void genTerrain() {
 		Utils.out("Generating terrain!");
 		genBiomeTerrain();
-		Vector<Integer> lake = WorldGenProp.getBiomeLake(biome);
+		HashMap<String, Integer> lake = WorldGenProp.getBiomeLake(biome);
 		if (lake.get(LAKE_TID) != -1) {
 			final Grid grid = new Grid(World.MAPSIZE + World.BORDER);
 			final NoiseGenerator noiseGenerator = new NoiseGenerator();
@@ -158,10 +155,10 @@ public class World {
 
 			int i = 0;
 			int ii = 0;
-			float from = 10f / ((float) lake.get(LAKE_FROM));
-			float to = 100f / ((float) lake.get(LAKE_TO));
+			float from = ((float) lake.get(LAKE_FROM)) / 10f;
+			float to = ((float) lake.get(LAKE_TO)) / 100f;
 
-			Utils.out("from: " + from + " to: " + to);
+			Utils.out("lakes from: " + from + " to: " + to);
 
 			while (i < World.MAPSIZE + World.BORDER) {
 				while (ii < World.MAPSIZE + World.BORDER) {
@@ -179,6 +176,7 @@ public class World {
 
 	public void genDungeon() {
 		Utils.out("Generating dungeon!");
+		
 		final Grid grid = new Grid(World.MAPSIZE);
 		final DungeonGenerator dungeonGenerator = new DungeonGenerator();
 		dungeonGenerator.setRoomGenerationAttempts(World.MAPSIZE);
@@ -208,19 +206,27 @@ public class World {
 		Utils.out("Done dungeon generating!");
 	}
 
-	void genOreFields() {
-		Utils.out("Generating orefields...");
-		int a = Utils.random.nextInt(MadSand.OREFIELDS);
-		while (a > 0) {
+	final int CAVE_TILE = 0;
+	final int CAVE_OBJECT = 1;
 
+	void genUnderworld() {
+		Utils.out("Generating underworld...");
+		curlayer = 1;
+		Vector<Integer> underworld = WorldGenProp.getBiomeUnderworld(biome);
+		int usz = underworld.size();
+		int maxOreFieldSize = underworld.get(usz - 2);
+		int count = underworld.get(usz - 1);
+		getCurLoc().fillTile(underworld.get(CAVE_TILE));
+		getCurLoc().fillObject(underworld.get(CAVE_OBJECT));
+		int a = Utils.random.nextInt(count) + 1;
+		while (a > 0) {
 			try {
-				curlayer = 1;
 				int x = Utils.random.nextInt(World.MAPSIZE);
 				int y = Utils.random.nextInt(World.MAPSIZE);
-				int w = Utils.random.nextInt(MadSand.MAXOREFIELDSIZE) + 1;
-				int h = Utils.random.nextInt(MadSand.MAXOREFIELDSIZE) + 1;
+				int w = Utils.random.nextInt(maxOreFieldSize) + 1;
+				int h = Utils.random.nextInt(maxOreFieldSize) + 1;
 				if ((x + w < World.MAPSIZE) && (y + h < World.MAPSIZE)) {
-					int id = ores[Utils.random.nextInt(ores.length)];
+					int id = underworld.get(Utils.rand(1, usz - 3));
 					int k = 0;
 					int kk = 0;
 					while (kk < w) {
@@ -239,7 +245,7 @@ public class World {
 			}
 			a--;
 		}
-		Utils.out("Orefields generated!");
+		Utils.out("Underworld generated!");
 	}
 
 	public void genBiomeTerrain() {
@@ -395,7 +401,6 @@ public class World {
 
 	void hourTick() {
 		++worldtime;
-		// CropLayer.updCrops();
 		if (MadSand.world.worldtime == 24)
 			MadSand.world.worldtime = 0;
 		if (((MadSand.world.worldtime >= 0) && (MadSand.world.worldtime <= 5))
@@ -410,7 +415,6 @@ public class World {
 		Utils.tileDmg();
 		getCurLoc().update();
 		player.stats.perTickCheck();
-		Utils.out("World tick!");
 		++globalTick;
 		if (++tick >= ticksPerHour - 1) {
 			tick = 0;

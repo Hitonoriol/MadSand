@@ -180,7 +180,6 @@ public class Player {
 	}
 
 	int doAction(int ap) { // any action that uses AP
-		Utils.out(ap + " action pts spent");
 		int tmp = stats.actionPts;
 		stats.actionPts -= ap;
 		int ticks = 0, absPts = Math.abs(stats.actionPts), absTmp = Math.abs(tmp);
@@ -205,7 +204,6 @@ public class Player {
 			++ticks;
 		}
 		MadSand.world.ticks(ticks);
-		Utils.out(stats.actionPts + " AP left");
 		return stats.actionPts;
 	}
 
