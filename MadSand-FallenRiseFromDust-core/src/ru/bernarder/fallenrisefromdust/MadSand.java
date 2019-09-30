@@ -11,7 +11,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -110,7 +109,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 	static final String FONT_PATH = "fonts/8bitoperator.ttf";
 
 	boolean started = true;
-	public static int turn = 0;
 	static int rendered = 2;
 	float percent = 0.0F;
 

@@ -79,7 +79,7 @@ public class Location extends HashMap<MapID, Map> {
 			for (int y = 0; y < ysz; ++y) {
 				for (int x = 0; x < xsz; ++x) {
 					stream.read(block);
-					map.addTile(x, y, GameSaver.decode2(block));
+					map.addTile(x, y, GameSaver.decode2(block), true);
 					stream.read(block);
 					map.addObject(x, y, GameSaver.decode2(block));
 					stream.read(block);

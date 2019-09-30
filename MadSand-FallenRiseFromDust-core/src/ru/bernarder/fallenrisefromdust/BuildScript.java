@@ -55,9 +55,9 @@ public class BuildScript {
 		int ii = 0;
 		while (ii < len) {
 			if (head == 0) {
-				MadSand.world.getCurLoc().addTile(x + ii * dir, y, id);
+				MadSand.world.getCurLoc().addTile(x + ii * dir, y, id, true);
 			} else
-				MadSand.world.getCurLoc().addTile(x, y + ii * dir, id);
+				MadSand.world.getCurLoc().addTile(x, y + ii * dir, id, true);
 			ii++;
 		}
 	}

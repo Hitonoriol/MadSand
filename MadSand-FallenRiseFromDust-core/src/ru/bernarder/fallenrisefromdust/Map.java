@@ -82,7 +82,7 @@ public class Map {
 		int i = 0, ii = 0;
 		while (i <= xsz) {
 			while (ii <= ysz) {
-				this.addTile(i, ii, id);
+				this.addTile(i, ii, id, true);
 				ii++;
 			}
 			ii = 0;
@@ -111,9 +111,9 @@ public class Map {
 			return false;
 	}
 
-	boolean addTile(int x, int y, int id) {
+	boolean addTile(int x, int y, int id, boolean force) {
 		if (correctCoords(coords.set(x, y))) {
-			if (mapTiles.containsKey(coords))
+			if (mapTiles.containsKey(coords) && force)
 				mapTiles.remove(coords);
 			mapTiles.put(coords, new Tile(id));
 			return true;
@@ -121,10 +121,14 @@ public class Map {
 			return false;
 	}
 
+	boolean addTile(int x, int y, int id) {
+		return addTile(x, y, id, false);
+	}
+
 	boolean addTile(int x, int y, Direction dir, int id) {
 		if (correctCoords(coords.set(x, y))) {
 			coords.addDirection(dir);
-			addTile(coords.x, coords.y, id);
+			addTile(coords.x, coords.y, id, false);
 			return true;
 		} else
 			return false;
@@ -234,7 +238,7 @@ public class Map {
 	void randPlaceTile(int id) {
 		int x = Utils.random.nextInt(this.xsz);
 		int y = Utils.random.nextInt(this.ysz);
-		addTile(x, y, id);
+		addTile(x, y, id, true);
 	}
 
 	MapObject getObject(int x, int y, Direction dir) {

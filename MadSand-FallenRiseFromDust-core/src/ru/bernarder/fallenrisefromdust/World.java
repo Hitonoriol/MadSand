@@ -2,6 +2,7 @@ package ru.bernarder.fallenrisefromdust;
 
 import java.util.HashMap;
 import java.util.Random;
+import java.util.Vector;
 
 import com.github.czyzby.noise4j.map.Grid;
 import com.github.czyzby.noise4j.map.generator.noise.NoiseGenerator;
@@ -9,6 +10,7 @@ import com.github.czyzby.noise4j.map.generator.room.dungeon.DungeonGenerator;
 import com.github.czyzby.noise4j.map.generator.util.Generators;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
+import ru.bernarder.fallenrisefromdust.properties.WorldGenProp;
 
 /*	Old worldgen
 	public static int[] ores = { 22, 23 };
@@ -107,7 +109,7 @@ public class World {
 	}
 
 	public static int[] ores = { 22, 23 };
-	static int biome;
+	int biome;
 
 	public void Generate() {
 		Utils.out("WorldGen start!");
@@ -136,44 +138,41 @@ public class World {
 		}
 	}
 
+	final int LAKE_TID = 0;
+	final int LAKE_RADIUS = 1;
+	final int LAKE_MODIFIER = 2;
+	final int LAKE_FROM = 3;
+	final int LAKE_TO = 4;
+
 	public void genTerrain() {
 		Utils.out("Generating terrain!");
-		final Grid grid = new Grid(World.MAPSIZE + World.BORDER);
-		final NoiseGenerator noiseGenerator = new NoiseGenerator();
-		noiseGenerator.setRadius(4);
-		noiseGenerator.setModifier(1f);
-		noiseGenerator.setSeed(Generators.rollSeed());
-		noiseGenerator.generate(grid);
+		genBiomeTerrain();
+		Vector<Integer> lake = WorldGenProp.getBiomeLake(biome);
+		if (lake.get(LAKE_TID) != -1) {
+			final Grid grid = new Grid(World.MAPSIZE + World.BORDER);
+			final NoiseGenerator noiseGenerator = new NoiseGenerator();
+			noiseGenerator.setRadius(lake.get(LAKE_RADIUS));
+			noiseGenerator.setModifier(lake.get(LAKE_MODIFIER));
+			noiseGenerator.setSeed(Generators.rollSeed());
+			noiseGenerator.generate(grid);
 
-		int i = 0;
-		int ii = 0;
+			int i = 0;
+			int ii = 0;
+			float from = 10f / ((float) lake.get(LAKE_FROM));
+			float to = 100f / ((float) lake.get(LAKE_TO));
 
-		while (i < World.MAPSIZE + 1) {
-			while (ii < World.MAPSIZE + 1) {
-				genBiomeTerrain(ii, i);
-				ii++;
-			}
-			i++;
-			ii = 0;
-		}
-		i = 0;
-		ii = 0;
-		while (i < World.MAPSIZE + World.BORDER) {
-			while (ii < World.MAPSIZE + World.BORDER) {
-				if (biome == 0) {
-					if (grid.get(ii, i) >= 0.1f && grid.get(ii, i) <= 0.27f) {
-						getCurLoc().addTile(ii, i, 8);
+			Utils.out("from: " + from + " to: " + to);
+
+			while (i < World.MAPSIZE + World.BORDER) {
+				while (ii < World.MAPSIZE + World.BORDER) {
+					if (grid.get(ii, i) >= from && grid.get(ii, i) <= to) {
+						getCurLoc().addTile(ii, i, lake.get(LAKE_TID));
 					}
+					ii++;
 				}
-				if (biome == 3) {
-					if (grid.get(ii, i) >= 0.1f && grid.get(ii, i) <= 0.27f) {
-						getCurLoc().addTile(ii, i, 22);
-					}
-				}
-				ii++;
+				i++;
+				ii = 0;
 			}
-			i++;
-			ii = 0;
 		}
 		Utils.out("Done generating terrain!");
 	}
@@ -190,7 +189,7 @@ public class World {
 		int it = 0, iit = 0;
 		while (it < World.MAPSIZE) {
 			while (iit < World.MAPSIZE) {
-				if (grid.get(iit, it) == 0.0f) {	//TODO find out wtf was this supposed to do
+				if (grid.get(iit, it) == 0.0f) { // TODO find out wtf was this supposed to do
 					getCurLoc(1).addObject(iit, it, 0);
 					getCurLoc(1).addTile(it, iit, 5);
 				}
@@ -243,45 +242,24 @@ public class World {
 		Utils.out("Orefields generated!");
 	}
 
-	public void genBiomeTerrain(int ii, int i) {
-
-		if (biome == 0) { // PLAIN
-			if (Utils.random.nextInt(100) == 99) {
-				putMapTile(ii, i, 2);
-			} else if (Utils.random.nextInt(100) == 99) {
-				putMapTile(ii, i, 1);
-			} else if (Utils.random.nextInt(2000) == Utils.random.nextInt(2000)) {
-				putMapTile(ii, i, 6);
-			} else {
-
-				putMapTile(ii, i, 0);
-			}
-		} else if (biome == 2) { // SNOW BIOME
-			if (Utils.random.nextInt(1000) == 0) {
-				putMapTile(ii, i, 21);
-			} else {
-				putMapTile(ii, i, 20);
-			}
-		} else if (biome == 3) { // SULFUR BIOME
-			if (Utils.random.nextInt(100) == 0) {
-				putMapTile(ii, i, 10);
-			} else if (Utils.random.nextInt(100) == 1) {
-				putMapTile(ii, i, 11);
-			} else
-				putMapTile(ii, i, 15);
-		} else if (biome == 1) { // DESERT
-			if (Utils.random.nextInt(100) == 4) {
-				putMapTile(ii, i, 3);
-			} else if (Utils.random.nextInt(1000) == Utils.random.nextInt(1000)) {
-				putMapTile(ii, i, 17);
-			} else {
-				putMapTile(ii, i, 4);
+	public void genBiomeTerrain() {
+		Vector<Vector<Integer>> terrainBlock = WorldGenProp.getBiomeTiles(biome);
+		int def = terrainBlock.get(0).get(0); // getting default tile
+		getCurLoc().fillTile(def);
+		int quantity, gsz;
+		Vector<Integer> group;
+		for (int i = 1; i < terrainBlock.size(); ++i) {
+			group = terrainBlock.get(i);
+			gsz = group.size();
+			quantity = group.get(--gsz); // last value of every group is the total quantity of objects from group to
+											// generate
+			for (int j = 0; j < quantity; ++j) {
+				getCurLoc().randPlaceTile(group.get(Utils.rand(0, gsz))); // we don't check whether there are tiles
+																			// already on rand()'d place, but who gives
+																			// a 5h17?
 			}
 		}
-
 	}
-
-	// Lazyass area
 
 	int getTileId(int x, int y) {
 		return getCurLoc().getTile(x, y).id;
@@ -318,8 +296,6 @@ public class World {
 	void delObj(int x, int y, int layer) {
 		addObj(x, y, layer, 0);
 	}
-
-	// end of lazyass area
 
 	public void clearCurLoc() {
 		Utils.out("clearCurLoc");

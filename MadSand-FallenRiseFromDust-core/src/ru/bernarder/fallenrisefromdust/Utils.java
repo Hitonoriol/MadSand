@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
@@ -18,6 +17,7 @@ import ru.bernarder.fallenrisefromdust.properties.CropProp;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
+import ru.bernarder.fallenrisefromdust.properties.WorldGenProp;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,6 +25,7 @@ import java.io.StringReader;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.Vector;
 
@@ -33,6 +34,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -128,6 +130,108 @@ public class Utils {
 		}
 	}
 
+	static String getAttr(Document doc, String list, String id, String attr) {
+		try {
+			doc.getDocumentElement().normalize();
+			NodeList nList = doc.getElementsByTagName(list);
+			for (int temp = 0; temp < nList.getLength(); temp++) {
+				Node nNode = nList.item(temp);
+				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+					Element eElement = (Element) nNode;
+					if (eElement.getAttribute("id").equals(id) || !eElement.hasAttribute("id")) {
+						return eElement.getAttribute(attr);
+					}
+				}
+			}
+			return "-1";
+		} catch (Exception e) {
+			return "-1";
+		}
+	}
+
+	static String nodeMapDump(NamedNodeMap map) {
+		String ret = "";
+		int len = map.getLength();
+		out("Map len: " + len);
+		for (int i = 1; i < len; ++i) {
+			Node attr = map.item(i);
+			ret += attr.getNodeValue();
+			out(attr.getNodeValue());
+			if (i < len - 1)
+				ret += ",";
+		}
+		if (ret.equals("")) {
+			out("nodemapdump oopsie");
+			return "-1";
+		}
+		out("ret: " + ret);
+		return ret;
+	}
+
+	static HashMap<String, String> nodeMapToHashMap(NamedNodeMap map) {
+		HashMap<String, String> ret = new HashMap<String, String>();
+		int len = map.getLength();
+		out("Map len: " + len);
+		for (int i = 1; i < len; ++i) {
+			Node attr = map.item(i);
+			ret.put(attr.getNodeName(), attr.getNodeValue());
+			out(attr.getNodeValue());
+		}
+		return ret;
+	}
+
+	static String getNested(Document doc, String list, String id, String name, String iid) {
+		try {
+			out("nested " + name);
+			doc.getDocumentElement().normalize();
+			NodeList nList = doc.getElementsByTagName(list);
+			for (int temp = 0; temp < nList.getLength(); temp++) {
+				out("+nested " + name);
+				Node nNode = nList.item(temp);
+				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+					out("++nested " + name);
+					Element eElement = (Element) nNode;
+					if (eElement.getAttribute("id").equals(id)) {
+						out("+++nested " + name);
+						NodeList cList = eElement.getChildNodes();
+						for (int pos = 0; pos < cList.getLength(); pos++) {
+							out("++++nested " + name);
+							Node cNode = cList.item(pos);
+							if (cNode.getNodeType() == Node.ELEMENT_NODE) {
+								out("+++++nested " + name);
+								Element cElement = (Element) cNode;
+								if (cElement.getTagName().equals(name) && cElement.getAttribute("id").equals(iid)) {
+									out("!!!!!!nested " + name);
+									return nodeMapDump(cElement.getAttributes());
+								}
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "-1";
+
+		}
+		return "-1";
+	}
+
+	static Vector<String> getGroup(int biome, String gname) {
+		Vector<String> group = new Vector<String>();
+		int j = 0;
+		String tmp = "";
+		while (!tmp.equals("-1")) {
+			tmp = getNested(gendoc, "biome", str(biome), gname, str(j));
+			if (tmp.equals("-1"))
+				break;
+			group.add(tmp);
+			out(tmp);
+			++j;
+		}
+		return group;
+	}
+
 	public static void Initf() {
 		MadSand.gameVrf = getSHA1(new File(MadSand.RESFILE));
 		out("Resfile hash: " + MadSand.gameVrf);
@@ -178,6 +282,31 @@ public class Utils {
 		Vector<Integer> stages, slens;
 		int i = 0, cc = 0;
 
+		// Loading worldgen config
+		Vector<Integer> def;
+		Vector<String> group;
+		Vector<String> lake;
+
+		Vector<String> objGroup;
+		while (i < MadSand.BIOMES) {
+			def = new Vector<Integer>();
+			group = new Vector<String>();
+			lake = new Vector<String>();
+
+			objGroup = new Vector<String>();
+
+			WorldGenProp.name.add(getAttr(gendoc, "biome", str(i), "name"));
+			group = getGroup(i, "tile_group");
+			objGroup = getGroup(i, "object_group");
+
+			def.add(Integer.parseInt(getNested(gendoc, "biome", str(i), "def_tile", str(-1))));
+			lake.add(getNested(gendoc, "biome", str(i), "lake", str(-1)));
+
+			WorldGenProp.loadTileBlock(i, def, group, lake);
+			WorldGenProp.loadObjectBlock(i, objGroup);
+			++i;
+		}
+		i = 0;
 		// Loading everything about inventory items
 		// Craft recipes
 		while (i < MadSand.LASTITEMID) {
@@ -237,7 +366,7 @@ public class Utils {
 		while (i < MadSand.LASTTILEID) {
 			tile[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "terrain/" + i + ".png"));
 			TileProp.name.put(i, getKey(resdoc, "tile", "" + i, "name"));
-			TileProp.damage.put(i, Integer.parseInt(getKey(resdoc, "tile", "" + i, "damage")));
+			TileProp.damage.put(i, val(getKey(resdoc, "tile", "" + i, "damage")));
 			i++;
 		}
 		i = 0;
@@ -275,6 +404,14 @@ public class Utils {
 		ltex = new Texture(pfhandle);
 		cursor = new Sprite(curs);
 		Splayer = new Sprite(dtex);
+	}
+
+	public static String str(int val) {
+		return Integer.toString(val);
+	}
+
+	public static int val(String str) {
+		return Integer.parseInt(str);
 	}
 
 	public static String getItem(int id) {
@@ -474,7 +611,7 @@ public class Utils {
 
 	public static void tileDmg() {
 		int tid = MadSand.world.getTileId(World.player.x, World.player.y);
-		int dmg = TileProp.damage.get(tid);
+		int dmg = TileProp.damage.getOrDefault(tid, 0);
 		if (dmg > 0) {
 			MadSand.print("You took " + dmg + " damage from " + (TileProp.name.get(tid)));
 			World.player.damage(dmg);
@@ -592,11 +729,11 @@ public class Utils {
 			Gui.mouselabel[0].setText("World coords: " + MadSand.wmx + ", " + MadSand.wmy);
 			Gui.mouselabel[1].setText(
 					"Tile: " + TileProp.name.get(MadSand.world.getCurLoc().getTile(MadSand.wmx, MadSand.wmy).id));
-			Gui.mouselabel[2].setText("Object: " + " ()");
+			Gui.mouselabel[2].setText("Object: " + " ("
+					+ ObjectProp.name.get(MadSand.world.getCurLoc().getObject(MadSand.wmx, MadSand.wmy).id) + ")");
 			Gui.mouselabel[3].setText("Creature: " + " ()");
-			Gui.mouselabel[4].setText("Turn: " + MadSand.turn + "\nWorld time: " + MadSand.world.worldtime
-					+ "\nPlayer position: (" + World.player.x + ", " + World.player.y + ")\nStamina: "
-					+ Math.round(World.player.stats.stamina));
+			Gui.mouselabel[4].setText("Global ticks: " + MadSand.world.globalTick + "\nWorld time: "
+					+ MadSand.world.worldtime + "\nPlayer position: (" + World.player.x + ", " + World.player.y);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
