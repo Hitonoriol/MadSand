@@ -13,12 +13,16 @@ public class WorldGenProp {
 	private static HashMap<Integer, Vector<Integer>> underworld = new HashMap<Integer, Vector<Integer>>();
 	private static HashMap<Integer, HashMap<String, Integer>> dungeon = new HashMap<Integer, HashMap<String, Integer>>();
 
+	public static int getDefaultTile(int id) {
+		return tile.get(id).get(0).get(0);
+	}
+
 	public static Vector<Vector<Integer>> getBiomeTiles(int id) {
 		return tile.get(id);
 	}
 
 	public static Vector<Vector<Integer>> getBiomeObjects(int id) {
-		return tile.get(id);
+		return object.get(id);
 	}
 
 	public static HashMap<String, Integer> getBiomeLake(int id) {
@@ -47,7 +51,8 @@ public class WorldGenProp {
 		return sblock;
 	}
 
-	public static void loadTileBlock(int id, Vector<Integer> def, Vector<String> group, HashMap<String, Integer> vlake) {
+	public static void loadTileBlock(int id, Vector<Integer> def, Vector<String> group,
+			HashMap<String, Integer> vlake) {
 		Vector<Vector<Integer>> sblock = loadGroup(group);
 		sblock.add(0, def);
 		tile.put(id, sblock);
@@ -59,7 +64,8 @@ public class WorldGenProp {
 		object.put(id, loadGroup(group));
 	}
 
-	public static void loadUnderworldBlock(int id, String defT, String defO, Vector<String> ore, HashMap<String, Integer> vdungeon) {
+	public static void loadUnderworldBlock(int id, String defT, String defO, Vector<String> ore,
+			HashMap<String, Integer> vdungeon) {
 		dungeon.put(id, vdungeon);
 
 		Vector<Integer> sblock = loadGroup(ore).get(0);

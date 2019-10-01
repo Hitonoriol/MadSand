@@ -291,6 +291,7 @@ public class Utils {
 		Vector<String> ore = new Vector<String>();
 		String defT, defO;
 		HashMap<String, Integer> vdungeon;
+		out("Initializing worldgen...");
 		while (i < MadSand.BIOMES) {
 			def = new Vector<Integer>();
 			lake = new HashMap<String, Integer>();
@@ -311,6 +312,7 @@ public class Utils {
 			WorldGenProp.loadUnderworldBlock(i, defT, defO, ore, vdungeon);
 			++i;
 		}
+		out("Done initializing WorldGen!");
 		i = 0;
 		// Loading everything about inventory items
 		// Craft recipes

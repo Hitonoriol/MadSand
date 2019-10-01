@@ -49,6 +49,10 @@ public class World {
 		// Quite empty here...
 	}
 
+	int randBiome() {
+		return Utils.random.nextInt(MadSand.BIOMES);
+	}
+
 	HashMap<MapID, Map> _getLoc(int wx, int wy, int layer) {
 		HashMap<MapID, Map> ret = new HashMap<MapID, Map>();
 		ret.put(new MapID(new Pair(wx, wy), layer), getLoc(wx, wy, layer));
@@ -108,7 +112,6 @@ public class World {
 		return createBasicLoc(new Pair(wx, wy), MAPSIZE, MAPSIZE);
 	}
 
-	public static int[] ores = { 22, 23 };
 	int biome;
 
 	public void Generate() {
@@ -120,18 +123,16 @@ public class World {
 			if ((curxwpos == 5) && (curywpos == 5))
 				biome = 0;
 			else
-				biome = Utils.random.nextInt(MadSand.BIOMES);
+				biome = randBiome();
+			getCurLoc().setBiome(biome);
 			genTerrain();
 			genUnderworld();
 			genDungeon();
 			genObjByTemplate();
-			if ((curxwpos == 5) && (curywpos == 5))
-				MadSand.setUpScene();
 			Utils.out("End of WorldGen!");
 		} catch (Exception e) {
-			Utils.out("Whoops, fatal error... See MadSandCritical.log and/or MadSandErrors.log files.");
+			Utils.out("Whoops, fatal error during worldgen... See MadSandCritical.log and/or MadSandErrors.log files.");
 			e.printStackTrace();
-			System.exit(1);
 		}
 	}
 
@@ -174,15 +175,26 @@ public class World {
 		Utils.out("Done generating terrain!");
 	}
 
+	private static String DUNGEON_PROBABILITY = "probability";
+	private static String DUNGEON_MAXROOMSIZE = "maxroomsize";
+	private static String DUNGEON_MINROOMSIZE = "minroomsize";
+	private static String DUNGEON_TOLERANCE = "tolerance";
+	private static int PROB_DIVISOR = 2;
+
 	public void genDungeon() {
 		Utils.out("Generating dungeon!");
-		
+		HashMap<String, Integer> dungeon = WorldGenProp.getBiomedungeon(biome);
+		int prob = dungeon.get(DUNGEON_PROBABILITY);
+		if (prob > 0 && Utils.random.nextInt(prob) == prob / PROB_DIVISOR) {
+			Utils.out("Nope... Not feeling like generating your sheet");
+			return;
+		}
 		final Grid grid = new Grid(World.MAPSIZE);
 		final DungeonGenerator dungeonGenerator = new DungeonGenerator();
 		dungeonGenerator.setRoomGenerationAttempts(World.MAPSIZE);
-		dungeonGenerator.setMaxRoomSize(25);
-		dungeonGenerator.setTolerance(10); // Max difference between width and height.
-		dungeonGenerator.setMinRoomSize(5);
+		dungeonGenerator.setMaxRoomSize(dungeon.get(DUNGEON_MAXROOMSIZE));
+		dungeonGenerator.setTolerance(dungeon.get(DUNGEON_TOLERANCE)); // Max difference between width and height.
+		dungeonGenerator.setMinRoomSize(dungeon.get(DUNGEON_MINROOMSIZE));
 		dungeonGenerator.generate(grid);
 		int it = 0, iit = 0;
 		while (it < World.MAPSIZE) {
@@ -195,7 +207,7 @@ public class World {
 					getCurLoc(1).addObject(iit, it, 13);
 				if (grid.get(iit, it) == 0.5f) {
 					getCurLoc(1).addObject(iit, it, 0);
-					getCurLoc(1).addTile(it, iit, 5);
+					getCurLoc(1).addTile(it, iit, 12);
 				}
 
 				iit++;
@@ -259,7 +271,7 @@ public class World {
 			gsz = group.size();
 			quantity = group.get(--gsz); // last value of every group is the total quantity of objects from group to
 											// generate
-			for (int j = 0; j < quantity; ++j) {
+			for (int j = 0; j < quantity - 1; ++j) {
 				getCurLoc().randPlaceTile(group.get(Utils.rand(0, gsz))); // we don't check whether there are tiles
 																			// already on rand()'d place, but who gives
 																			// a 5h17?
@@ -326,51 +338,16 @@ public class World {
 
 	void genObjByTemplate() {
 		Utils.out("Generating biome objects!");
-		int iii = 0;
-		if (biome == 0) {
-			iii = 0;
-			while (iii < MadSand.TREESDENSITY) {
-				getCurLoc().randPlaceObject(new int[] { 2, 30, 35, 36 });
-				iii++;
-			}
-			iii = 0;
-			while (iii < MadSand.BOULDERDENSITY) {
-				getCurLoc().randPlaceObject(new int[] { 1, 27, 28 });
-				iii++;
-			}
-			iii = 0;
-			while (iii < MadSand.BUSHDENSITY) {
-				getCurLoc().randPlaceObject(new int[] { 37, 4 });
-				iii++;
-			}
-		}
-		if (biome == 2) {
-			iii = 0;
-			while (iii < MadSand.TREESDENSITY) {
-				getCurLoc().randPlaceObject(new int[] { 32, 38, 33 });
-				iii++;
-			}
-		}
-		if (biome == 3) {
-			iii = 0;
-			while (iii < MadSand.TREESDENSITY) {
-				getCurLoc().randPlaceObject(new int[] { 34, 33 });
-				iii++;
-			}
-			if (biome == 2) {
-				iii = 0;
-				while (iii < MadSand.BUSHDENSITY) {
-					getCurLoc().randPlaceObject(new int[] { 39 });
-					iii++;
-				}
-			}
-		}
-		if (biome == 1) {
-			iii = 0;
-			while (iii < 35) {
-				getCurLoc().randPlaceObject(10);
-				getCurLoc().randPlaceObject(24);
-				iii++;
+		Vector<Vector<Integer>> object = WorldGenProp.getBiomeObjects(biome);
+		Vector<Integer> block;
+		int count;
+		int range;
+		for (int i = 0; i < object.size(); ++i) {
+			block = object.get(i);
+			range = block.size() - 1;
+			count = block.get(range);
+			for (int j = 0; j < count; ++j) {
+				getCurLoc().randPlaceObject(block, range);
 			}
 		}
 		Utils.out("Done generating biome objects!");

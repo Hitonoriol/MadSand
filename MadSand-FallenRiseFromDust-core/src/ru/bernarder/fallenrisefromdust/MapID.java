@@ -14,9 +14,11 @@ public class MapID {
 	}
 
 	public MapID(Pair coords, int layer) {
-		this.worldxy = coords;
-		this.layer = layer;
-		this.id = 0;
+		this(coords, layer, 0);
+	}
+
+	public MapID(Pair coords) {
+		this(coords, 0);
 	}
 
 	public MapID() {

@@ -10,6 +10,7 @@ public class Location extends HashMap<MapID, Map> {
 
 	final String LOOT_DELIM = "|";
 	final int CROP_BLOCK_LEN = 16;
+	final int BLOCK_SIZE = 2;
 
 	byte[] sectorToBytes(int wx, int wy, int layer) {
 		try {
@@ -18,8 +19,10 @@ public class Location extends HashMap<MapID, Map> {
 			Map map = this.get(loc);
 			int xsz = map.getWidth();
 			int ysz = map.getHeight();
+			// header: width, height, biome
 			stream.write(GameSaver.encode2(xsz));
 			stream.write(GameSaver.encode2(ysz));
+			stream.write(GameSaver.encode2(map.getBiome()));
 			MapObject obj = new MapObject();
 
 			ByteArrayOutputStream lootStream = new ByteArrayOutputStream();
@@ -67,14 +70,14 @@ public class Location extends HashMap<MapID, Map> {
 
 	void bytesToSector(byte[] sector, int wx, int wy, int layer) {
 		try {
-			int xsz = GameSaver.decode2(Arrays.copyOfRange(sector, 0, 2));
-			int ysz = GameSaver.decode2(Arrays.copyOfRange(sector, 2, 4));
+			ByteArrayInputStream stream = new ByteArrayInputStream(sector);
+			int xsz = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
+			int ysz = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
+			int biome = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
 			MapID loc = new MapID(new Pair(wx, wy), layer);
 			Map map = new Map(xsz, ysz);
 			map.purge();
-			ByteArrayInputStream stream = new ByteArrayInputStream(sector);
-			for (int i = 0; i < 4; ++i)
-				stream.read();
+			map.setBiome(biome);
 			byte[] block = new byte[2];
 			for (int y = 0; y < ysz; ++y) {
 				for (int x = 0; x < xsz; ++x) {

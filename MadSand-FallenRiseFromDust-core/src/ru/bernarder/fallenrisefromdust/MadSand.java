@@ -234,11 +234,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 		setRenderRadius();
 	}
 
-	static void setUpScene() {
-		Utils.out("Setting starting scene up!");
-		world.getCurLoc().addObject(50, 49, 6);
-	}
-
 	public void updateCamToxy(float f, float y2) {
 		camera.position.set(f + 17.0F + camxoffset, y2 + 37.0F + camyoffset, 0.0F);
 		if (camera.position.y < 260.0F)
@@ -268,8 +263,11 @@ public class MadSand extends com.badlogic.gdx.Game {
 		try {
 			int i = 0;
 			while (i < rcoords.length) {
-				Utils.batch.draw(Utils.tile[world.rend(World.player.x + (int) rcoords[i].x, World.player.y + (int) rcoords[i].y)],
-						World.player.globalPos.x + rcoords[i].x * 33, World.player.globalPos.y + rcoords[i].y * 33);
+				Utils.batch.draw(
+						Utils.tile[world.rend(World.player.x + (int) rcoords[i].x,
+								World.player.y + (int) rcoords[i].y)],
+						World.player.globalPos.x + rcoords[i].x * TILESIZE,
+						World.player.globalPos.y + rcoords[i].y * TILESIZE);
 				i++;
 			}
 			if (Player.isCollisionMask(World.player.x, World.player.y)) {
@@ -279,28 +277,24 @@ public class MadSand extends com.badlogic.gdx.Game {
 			while (i < rcoords.length) {
 				trdx = World.player.x + (int) rcoords[i].x;
 				trdy = World.player.y + (int) rcoords[i].y;
-				if (trdx < 0)
+				/*if (trdx < 0)
 					trdx = 0;
 				if (trdy < 0)
 					trdy = 0;
 				if (trdx >= World.MAPSIZE + World.BORDER)
 					trdx = World.MAPSIZE + World.BORDER;
 				if (trdy >= World.MAPSIZE + World.BORDER)
-					trdy = World.MAPSIZE + World.BORDER;
+					trdy = World.MAPSIZE + World.BORDER;*/
 				int objid = world.getCurLoc().getObject(trdx, trdy).id;
 				if ((objid != 0) && (objid != 666)) {
 					Utils.batch.draw(Utils.objects[objid], World.player.globalPos.x + (int) rcoords[i].x * TILESIZE,
 							World.player.globalPos.y + (int) rcoords[i].y * TILESIZE);
 				}
 				if (World.player.standingOnLoot(trdx, trdy)) {
-					Utils.batch.draw(Utils.objects[OBJECT_LOOT], World.player.globalPos.x + (int) rcoords[i].x * TILESIZE,
+					Utils.batch.draw(Utils.objects[OBJECT_LOOT],
+							World.player.globalPos.x + (int) rcoords[i].x * TILESIZE,
 							World.player.globalPos.y + (int) rcoords[i].y * TILESIZE);
 				}
-				/*
-				 * if (MobLayer.getMobId(trdx, trdy) != 0) {
-				 * Utils.batch.draw(Utils.npc[MobLayer.getMobId(trdx, trdy)], Utils.ppos.x +
-				 * (int) rcoords[i].x * 33, Utils.ppos.y + (int) rcoords[i].y * 33); }
-				 */
 
 				i++;
 			}
@@ -315,13 +309,15 @@ public class MadSand extends com.badlogic.gdx.Game {
 		} catch (Exception e) {
 			e.printStackTrace();
 			Utils.out("Render error. See errorlog.");
+			System.exit(-1);
 		}
 	}
 
 	void drawWorld() {
 		int i = 0;
 		while (i < rcoords.length) {
-			Utils.batch.draw(Utils.tile[world.rend(World.player.y + (int) rcoords[i].y, World.player.x + (int) rcoords[i].x)],
+			Utils.batch.draw(
+					Utils.tile[world.rend(World.player.y + (int) rcoords[i].y, World.player.x + (int) rcoords[i].x)],
 					World.player.globalPos.x + rcoords[i].x * 33, World.player.globalPos.y + rcoords[i].y * 33);
 			i++;
 		}
@@ -409,13 +405,13 @@ public class MadSand extends com.badlogic.gdx.Game {
 				updateCamToxy(World.player.globalPos.x + stepx, World.player.globalPos.y);
 			}
 			if (World.player.stats.look == Direction.UP) {
-				Utils.batch.draw((TextureRegion) Utils.uanim.getKeyFrame(this.elapsedTime, true), World.player.globalPos.x,
-						World.player.globalPos.y - stepy);
+				Utils.batch.draw((TextureRegion) Utils.uanim.getKeyFrame(this.elapsedTime, true),
+						World.player.globalPos.x, World.player.globalPos.y - stepy);
 				updateCamToxy(World.player.globalPos.x, World.player.globalPos.y - stepy);
 			}
 			if (World.player.stats.look == Direction.DOWN) {
-				Utils.batch.draw((TextureRegion) Utils.danim.getKeyFrame(this.elapsedTime, true), World.player.globalPos.x,
-						World.player.globalPos.y + stepy);
+				Utils.batch.draw((TextureRegion) Utils.danim.getKeyFrame(this.elapsedTime, true),
+						World.player.globalPos.x, World.player.globalPos.y + stepy);
 				updateCamToxy(World.player.globalPos.x, World.player.globalPos.y + stepy);
 			}
 

@@ -12,6 +12,8 @@ public class Map {
 
 	public static int PLOWED_SOIL = 15;
 
+	private int biome = -1;
+	
 	static Tile nullTile = new Tile(0);
 	static MapObject nullObject = new MapObject(0);
 	static Loot nullLoot = new Loot();
@@ -34,6 +36,14 @@ public class Map {
 
 	public Map() {
 		this(0, 0);
+	}
+
+	int getBiome() {
+		return biome;
+	}
+
+	void setBiome(int val) {
+		biome = val;
 	}
 
 	HashMap<Pair, Tile> getTiles() {
@@ -231,8 +241,8 @@ public class Map {
 		addObject(x, y, id);
 	}
 
-	void randPlaceObject(int[] id) {
-		randPlaceObject(id[Utils.random.nextInt(id.length)]);
+	void randPlaceObject(Vector<Integer> id, int range) {
+		randPlaceObject(id.get(Utils.random.nextInt(range)));
 	}
 
 	void randPlaceTile(int id) {
