@@ -119,6 +119,16 @@ public class Gui {
 	static Label LK;
 	static Label DX;
 
+	static int ITEM_DISPLAY_HOLDING = 4;
+	static int ITEM_DISPLAY_SLOTS = 5;
+
+	public static void setHandDisplay(int id) {
+		Sprite img = Utils.cursor;
+		if (id != 0)
+			img = new Sprite(Utils.item[id]);
+		equip[ITEM_DISPLAY_HOLDING].setDrawable(new SpriteDrawable(img));
+	}
+
 	static void refreshOverlay() {
 		overlayStatLabels[0].setText("HP: " + World.player.stats.hp + "/" + World.player.stats.mhp);
 		overlayStatLabels[1].setText("Level: " + World.player.stats.lvl);
@@ -559,8 +569,9 @@ public class Gui {
 	}
 
 	static void getVersion() {
-		if (!GameSaver.getExternal("MadSandData/version.dat").equals(""))
-			MadSand.VER = "[GREEN]b-" + (GameSaver.getExternal(MadSand.VERFILE));
+		String ver = "MadSandData/version.dat";
+		if (!GameSaver.getExternal(ver).equals(""))
+			MadSand.VER = "[GREEN]b-" + (GameSaver.getExternal(ver));
 		else
 			MadSand.VER = "[GREEN]Version file not found";
 		verlbl = new Label(MadSand.VER, Gui.skin);
@@ -604,9 +615,7 @@ public class Gui {
 		Gui.contextMenuBtn[4].addListener(new ChangeListener() {
 
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				World.player.stats.hand = 0;
-				MadSand.print("You freed your hands.");
-				Gui.equip[4].setDrawable(new SpriteDrawable(new Sprite(Utils.cursor)));
+				World.player.freeHands();
 			}
 
 		});
@@ -786,17 +795,13 @@ public class Gui {
 		ovtbl.add();
 		ovtbl.add(Gui.exitButton).width(200.0F).row();
 		int aa = 0;
-		while (aa < 4) {
+		while (aa < ITEM_DISPLAY_SLOTS) {
 			ovtbl.add();
 			ovtbl.add();
 			ovtbl.add();
 			ovtbl.add(Gui.equip[aa]).width(80.0F).align(Align.right).row();
 			aa++;
 		}
-		ovtbl.add();
-		ovtbl.add();
-		ovtbl.add();
-		ovtbl.add(Gui.equip[4]).width(80.0F).align(Align.right).row();
 
 		Gui.exitButton.setVisible(false);
 

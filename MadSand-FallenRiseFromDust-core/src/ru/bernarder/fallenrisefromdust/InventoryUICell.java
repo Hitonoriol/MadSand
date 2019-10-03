@@ -28,7 +28,7 @@ public class InventoryUICell {
 	public InventoryUICell(Item item) {
 		btn = new ImageButton(new SpriteDrawable(new Sprite(Utils.item[item.id])));
 		itemQuantityLabel = new Label(item.quantity + "", Gui.skin);
-		
+
 		cell = new Group();
 		cell.addActor(btn);
 		cell.addActor(itemQuantityLabel);
@@ -50,15 +50,16 @@ public class InventoryUICell {
 			}
 
 		});
-		
+
 		btn.addListener(new ClickListener(Buttons.LEFT) {
 			public void clicked(InputEvent event, float x, float y) {
 				World.player.stats.hand = item.id;
+				Gui.setHandDisplay(item.id);
 				World.player.doAction();
 				Utils.toggleInventory();
 			}
 		});
-		
+
 		btn.addListener(new ClickListener(Buttons.RIGHT) {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {

@@ -64,7 +64,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 	static String QUESTFILE = SAVEDIR + "quests.xml";
 	static String GENFILE = SAVEDIR + "worldgen.xml";
 	static String RESFILE = SAVEDIR + "res.xml";
-	static final String VERFILE = SAVEDIR + "ver.dat";
 	static final String MAPDIR = SAVEDIR + "worlds/";
 	static final String SCRIPTDIR = SAVEDIR + "scripts";
 	static final String PLAYERFILE = "/Player.mc";
@@ -76,13 +75,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 	static final int XDEF = 1280;
 	static final int YDEF = 720;
 	static float GUISTART = 20.0F;
-
-	static final int TREESDENSITY = 30;
-	static final int BOULDERDENSITY = 3;
-	static final int EASTERS = 2; // TODO move worldgen params to .xml
-	static final int BUSHDENSITY = 20;
-	static final int CACTDENS = 35;
-	static final int MAXOREFIELDSIZE = 10;
 	static boolean renderc = false;
 
 	static String WORLDNAME = "Save Slot #1";

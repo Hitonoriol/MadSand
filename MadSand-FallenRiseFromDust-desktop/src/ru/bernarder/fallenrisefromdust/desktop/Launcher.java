@@ -8,8 +8,6 @@ import ru.bernarder.fallenrisefromdust.MadSand;
 
 public class Launcher {
 	public static void main(String[] args) throws Exception {
-		if (!args[0].equals("fromUpdater"))
-			return;
 		System.setOut(new PrintStream(new BufferedOutputStream(new FileOutputStream("MadSandOutput.txt")), true));
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.resizable = false;

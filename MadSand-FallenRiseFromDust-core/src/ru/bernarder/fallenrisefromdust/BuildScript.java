@@ -75,7 +75,7 @@ public class BuildScript {
 			return coords.addDirection(World.player.stats.look).y;
 		case Value.VALUE_ALTITEM:
 			int id = MadSand.world.getCurLoc().getObject(World.player.x, World.player.y, World.player.stats.look).id;
-			return MapObject.getAltItem(id);
+			return MapObject.getAltItem(id, World.player.stats.hand);
 
 		default:
 			return 0;

@@ -2,7 +2,6 @@ package ru.bernarder.fallenrisefromdust;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class Location extends HashMap<MapID, Map> {

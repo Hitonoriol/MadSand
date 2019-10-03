@@ -9,10 +9,10 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
+import ru.bernarder.fallenrisefromdust.enums.ItemType;
 import ru.bernarder.fallenrisefromdust.properties.CropProp;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -58,7 +59,7 @@ public class Utils {
 	static Sprite cursor;
 	static Sprite Splayer;
 	Texture[] lgt = new Texture[7];
-	static Texture[] item;
+	public static Texture[] item;
 	static Texture[] objects;
 	static Texture[] tile;
 	static Texture[] npc;
@@ -164,7 +165,7 @@ public class Utils {
 			out("nodemapdump oopsie");
 			return "-1";
 		}
-		out("ret: " + ret);
+		// out("ret: " + ret);
 		return ret;
 	}
 
@@ -178,14 +179,13 @@ public class Utils {
 		for (int i = 0; i < len; ++i) {
 			Node attr = map.item(i);
 			ret.put(attr.getNodeName(), val(attr.getNodeValue()));
-			out(attr.getNodeName() + ": " +attr.getNodeValue());
+			// out(attr.getNodeName() + ": " + attr.getNodeValue());
 		}
 		return ret;
 	}
 
 	static NamedNodeMap getNested(Document doc, String list, String id, String name, String iid) {
 		try {
-			out("getting " + name);
 			doc.getDocumentElement().normalize();
 			NodeList nList = doc.getElementsByTagName(list);
 			for (int temp = 0; temp < nList.getLength(); temp++) {
@@ -341,7 +341,7 @@ public class Utils {
 
 			// Item properties
 			ItemProp.name.put(i, getKey(resdoc, "item", "" + i, "name"));
-			ItemProp.type.put(i, Integer.parseInt(getKey(resdoc, "item", "" + i, "type")));
+			ItemProp.type.put(i, ItemType.get(Integer.parseInt(getKey(resdoc, "item", "" + i, "type"))));
 			ItemProp.altObject.put(i, Integer.parseInt(getKey(resdoc, "item", "" + i, "altobject")));
 			ItemProp.cost.put(i, Integer.parseInt(getKey(resdoc, "item", "" + i, "cost")));
 			ItemProp.craftable.put(i, Integer.parseInt(getKey(resdoc, "item", "" + i, "craftable")) != 0);
@@ -355,16 +355,15 @@ public class Utils {
 		// Loading map objects
 		while (i < MadSand.LASTOBJID) {
 			objects[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "obj/" + i + ".png"));
-			ObjectProp.name.put(i, getKey(resdoc, "object", "" + i, "name"));
-			ObjectProp.hp.put(i, Integer.parseInt(getKey(resdoc, "object", "" + i, "tough")));
-			ObjectProp.altitems.put(new Tuple<Integer, String>(i, "altitem"),
-					getKey(resdoc, "object", "" + i, "altitem"));
-			ObjectProp.altitems.put(new Tuple<Integer, String>(i, "hand"), getKey(resdoc, "object", "" + i, "hand"));
-			ObjectProp.altitems.put(new Tuple<Integer, String>(i, "skillbonus"),
-					getKey(resdoc, "object", "" + i, "skillbonus"));
-			ObjectProp.vRendMasks.put(i, Integer.parseInt(getKey(resdoc, "object", "" + i, "vmask")));
-			ObjectProp.hRendMasks.put(i, Integer.parseInt(getKey(resdoc, "object", "" + i, "hmask")));
-			ObjectProp.interactAction.put(i, getKey(resdoc, "object", "" + i, "oninteract"));
+			ObjectProp.name.put(i, getKey(resdoc, "object", str(i), "name"));
+			ObjectProp.hp.put(i, Integer.parseInt(getKey(resdoc, "object", str(i), "tough")));
+			ObjectProp.harvestHp.put(i, Integer.parseInt(getKey(resdoc, "object", str(i), "harvesthp")));
+
+			ObjectProp.altitems.put(makeTuple(i, "altitem"), getAitem(i, "object"));
+
+			ObjectProp.vRendMasks.put(i, Integer.parseInt(getKey(resdoc, "object", str(i), "vmask")));
+			ObjectProp.hRendMasks.put(i, Integer.parseInt(getKey(resdoc, "object", str(i), "hmask")));
+			ObjectProp.interactAction.put(i, getKey(resdoc, "object", str(i), "oninteract"));
 			i++;
 		}
 		i = 0;
@@ -411,6 +410,34 @@ public class Utils {
 		ltex = new Texture(pfhandle);
 		cursor = new Sprite(curs);
 		Splayer = new Sprite(dtex);
+	}
+
+	static HashMap<Integer, Vector<Integer>> getAitem(int id, String field) {
+		int i = 0;
+		String hand = "";
+		HashMap<Integer, Vector<Integer>> ret = new HashMap<Integer, Vector<Integer>>();
+		Vector<Integer> block;
+		StringTokenizer tok;
+		int hid;
+		while (hand != "-1") {
+			hand = getAttrValues(resdoc, field, str(id), "altitem", str(i));
+			if (hand == "-1")
+				break;
+			Utils.out("altitem for " + field + " id " + id + ": " + hand);
+			block = new Vector<Integer>();
+			tok = new StringTokenizer(hand, ",");
+			while (tok.hasMoreTokens()) {
+				block.add(val(tok.nextToken()));
+			}
+			hid = block.remove(0);
+			ret.put(hid, block);
+			++i;
+		}
+		return ret;
+	}
+
+	public static Tuple<Integer, String> makeTuple(int key, String val) {
+		return new Tuple<Integer, String>(key, val);
 	}
 
 	public static String str(int val) {
@@ -551,9 +578,7 @@ public class Utils {
 			World.player.damage(10);
 		}
 		if ((Gdx.input.isKeyJustPressed(Keys.F)) && (World.player.stats.hand != 0)) {
-			World.player.stats.hand = 0;
-			MadSand.print("You freed your hands.");
-			Gui.equip[4].setDrawable(new SpriteDrawable(new Sprite(cursor)));
+			World.player.freeHands();
 		}
 		if ((Gdx.input.isKeyPressed(Keys.A)) && (!MadSand.stepping)) {
 			walk(Direction.LEFT);
@@ -572,11 +597,11 @@ public class Utils {
 	static void walk(Direction dir) {
 		World.player.stats.look = dir;
 		turn(World.player.stats.look);
-		if (MadSand.world.getCurLoc().getObject(World.player.x, World.player.y, World.player.stats.look).id != 0)
+		if (MadSand.world.getCurLoc().getObject(World.player.x, World.player.y, World.player.stats.look).id != 0
+				|| VerifyPosition(World.player.stats.look))
 			return;
 		World.player.doAction(Stats.AP_WALK);
-		if (!VerifyPosition(World.player.stats.look))
-			move(World.player.stats.look);
+		move(World.player.stats.look);
 		isInFront();
 	}
 

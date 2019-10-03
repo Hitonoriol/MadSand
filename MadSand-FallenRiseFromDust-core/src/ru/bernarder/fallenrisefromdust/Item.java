@@ -3,13 +3,15 @@ package ru.bernarder.fallenrisefromdust;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import ru.bernarder.fallenrisefromdust.enums.ItemType;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 
 public class Item {
 	String name, recipe, heal;
 	public int id;
 	public int quantity;
-	int type, altobject, cost;
+	int altobject, cost;
+	ItemType type = ItemType.Item;
 	boolean craftable;
 	double weight;
 
@@ -118,7 +120,7 @@ public class Item {
 		return "";
 	}
 
-	static int getType(int id) {
+	static ItemType getType(int id) {
 		return ItemProp.type.get(id);
 	}
 

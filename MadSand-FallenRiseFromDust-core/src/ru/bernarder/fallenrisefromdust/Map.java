@@ -13,7 +13,7 @@ public class Map {
 	public static int PLOWED_SOIL = 15;
 
 	private int biome = -1;
-	
+
 	static Tile nullTile = new Tile(0);
 	static MapObject nullObject = new MapObject(0);
 	static Loot nullLoot = new Loot();
@@ -207,9 +207,9 @@ public class Map {
 		return addObject(coord.x, coord.y, id);
 	}
 
-	void dmgObjInDir(int x, int y, Direction direction) {
+	boolean dmgObjInDir(int x, int y, Direction direction) {
 		coords.set(x, y).addDirection(direction);
-		mapObjects.get(coords).takeDamage();
+		return mapObjects.get(coords).takeDamage();
 	}
 
 	boolean addObject(int x, int y, Direction dir, int id) {

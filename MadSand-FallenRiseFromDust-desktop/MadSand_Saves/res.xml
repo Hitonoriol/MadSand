@@ -10,6 +10,7 @@
          <name>Grass with clay</name>
          <damage>0</damage>
          <cover>0</cover>
+         <altitem>5</altitem>
       </tile>
       <tile id="2">
          <name>Flint</name>
@@ -44,7 +45,7 @@
       <tile id="8">
          <name>Water</name>
          <damage>0</damage>
-         <cover>0</cover>
+         <cover>1</cover>
       </tile>
       <tile id="9">
          <name>Wooden floor</name>
@@ -231,24 +232,27 @@
          <name>Boulder</name>
          <skillbonus>mining</skillbonus>
          <tough>11</tough>
-         <altitem>2</altitem>
+         <harvesthp>9</harvesthp>
+         <altitem id="0" inhand="0" item="2" />
       </object>
       <object id="2">
          <name>Tree</name>
          <skillbonus>wood</skillbonus>
          <tough>11</tough>
-         <altitem>1,8</altitem>
+         <harvesthp>4</harvesthp>
+         <altitem id="0" inhand="0" item="8" />
+         <altitem id="1" inhand="8" item="1" />
       </object>
       <object id="3">
          <name>Cake</name>
          <tough>1</tough>
-         <altitem>4</altitem>
       </object>
       <object id="4">
          <name>Berry bush</name>
          <skillbonus>wood</skillbonus>
-         <tough>7</tough>
-         <altitem>7,8</altitem>
+         <tough>5</tough>
+         <harvesthp>2</harvesthp>
+         <altitem id="0" inhand="0" item="7,8" />
       </object>
       <object id="5">
          <name>---</name>
@@ -270,8 +274,10 @@
       <object id="9">
          <name>Wooden planks</name>
          <skillbonus>wood</skillbonus>
-         <tough>10</tough>
-         <altitem>1</altitem>
+         <tough>1</tough>
+         <harvesthp>10</harvesthp>
+         <altitem id="0" inhand="0" item="0"/>
+         <altitem id="1" inhand="8" item="1"/>
       </object>
       <object id="10">
          <name>Cactus</name>
@@ -288,9 +294,10 @@
       <object id="13">
          <name>Rock</name>
          <skillbonus>mining</skillbonus>
-         <tough>8</tough>
-         <hand>11</hand>
-         <altitem>25</altitem>
+         <tough>1</tough>
+         <harvesthp>15</harvesthp>
+         <altitem id="0" inhand="0" item="0"/>
+         <altitem id="1" inhand="10" item="25"/>
       </object>
       <object id="14">
          <name>Trapdoor</name>
@@ -299,18 +306,24 @@
       </object>
       <object id="15">
          <name>Stone wall</name>
-         <tough>30</tough>
-         <altitem>32</altitem>
+         <tough>1</tough>
+         <harvesthp>15</harvesthp>
+         <altitem id="0" inhand="0" item="0"/>
+         <altitem id="1" inhand="10" item="32"/>
       </object>
       <object id="16">
          <name>Stone wall</name>
-         <tough>30</tough>
-         <altitem>33</altitem>
+         <tough>1</tough>
+         <harvesthp>15</harvesthp>
+         <altitem id="0" inhand="0" item="0"/>
+         <altitem id="1" inhand="10" item="33"/>
       </object>
       <object id="17">
          <name>Stone wall</name>
-         <tough>30</tough>
-         <altitem>34</altitem>
+         <tough>1</tough>
+         <harvesthp>15</harvesthp>
+         <altitem id="0" inhand="0" item="0"/>
+         <altitem id="1" inhand="10" item="34"/>
       </object>
       <object id="18">
          <name>Sign</name>
@@ -327,22 +340,25 @@
       <object id="21">
          <name>Cucumber bush</name>
          <skillbonus>harvest</skillbonus>
-         <tough>7</tough>
-         <altitem>39</altitem>
+         <tough>5</tough>
+         <harvesthp>1</harvesthp>
+         <altitem id="0" inhand="0" item="39"/>
       </object>
       <object id="22">
          <name>Iron ore</name>
          <skillbonus>mining</skillbonus>
-         <hand>11</hand>
-         <tough>4</tough>
-         <altitem>23</altitem>
+         <tough>1</tough>
+         <harvesthp>15</harvesthp>
+         <altitem id="0" inhand="0" item="0"/>
+         <altitem id="1" inhand="10" item="23"/>
       </object>
       <object id="23">
          <name>Gold ore</name>
          <skillbonus>mining</skillbonus>
-         <hand>11</hand>
-         <tough>2</tough>
-         <altitem>24</altitem>
+         <tough>1</tough>
+         <harvesthp>15</harvesthp>
+         <altitem id="0" inhand="0" item="0"/>
+         <altitem id="1" inhand="10" item="24"/>
       </object>
       <object id="24">
          <name>Tumbleweed</name>
@@ -351,9 +367,10 @@
       <object id="25">
          <name>Coal</name>
          <skillbonus>mining</skillbonus>
-         <tough>10</tough>
-         <hand>11</hand>
-         <altitem>56</altitem>
+         <tough>1</tough>
+         <harvesthp>15</harvesthp>
+         <altitem id="0" inhand="0" item="0"/>
+         <altitem id="1" inhand="10" item="56"/>
       </object>
       <object id="26">
          <name>Mixed brick wall</name>
@@ -362,14 +379,16 @@
       <object id="27">
          <name>Boulder</name>
          <skillbonus>mining</skillbonus>
-         <tough>30</tough>
-         <altitem>2</altitem>
+         <tough>10</tough>
+         <harvesthp>9</harvesthp>
+         <altitem id="0" inhand="0" item="2"/>
       </object>
       <object id="28">
          <name>Boulder</name>
          <skillbonus>mining</skillbonus>
-         <tough>30</tough>
-         <altitem>2</altitem>
+         <tough>10</tough>
+         <harvesthp>9</harvesthp>
+         <altitem id="0" inhand="0" item="2"/>
       </object>
       <object id="29">
          <name>Spruce tree</name>
@@ -380,56 +399,73 @@
       <object id="30">
          <name>Tree</name>
          <skillbonus>wood</skillbonus>
-         <tough>10</tough>
-         <altitem>1</altitem>
+         <tough>11</tough>
+         <harvesthp>4</harvesthp>
+         <altitem id="0" inhand="0" item="8"/>
+         <altitem id="1" inhand="8" item="1"/>
       </object>
       <object id="31">
          <name>Palm tree</name>
          <skillbonus>wood</skillbonus>
-         <tough>10</tough>
-         <altitem>1</altitem>
+         <tough>11</tough>
+         <harvesthp>4</harvesthp>
+         <altitem id="0" inhand="0" item="8"/>
+         <altitem id="1" inhand="8" item="1"/>
       </object>
       <object id="32">
       <skillbonus>wood</skillbonus>
          <name>Pine</name>
-         <tough>15</tough>
-         <altitem>1</altitem>
+         <tough>11</tough>
+         <harvesthp>4</harvesthp>
+         <altitem id="0" inhand="0" item="8"/>
+         <altitem id="1" inhand="8" item="1"/>
       </object>
       <object id="33">
          <name>Stump</name>
          <skillbonus>wood</skillbonus>
-         <tough>5</tough>
-         <altitem>1</altitem>
+         <tough>11</tough>
+         <harvesthp>4</harvesthp>
+         <altitem id="0" inhand="0" item="8"/>
+         <altitem id="1" inhand="8" item="1"/>
       </object>
       <object id="34">
          <name>Dead tree</name>
          <skillbonus>wood</skillbonus>
-         <tough>5</tough>
-         <altitem>1</altitem>
+         <tough>11</tough>
+         <harvesthp>4</harvesthp>
+         <altitem id="0" inhand="0" item="8"/>
+         <altitem id="1" inhand="8" item="1"/>
       </object>
       <object id="35">
       <skillbonus>wood</skillbonus>
          <name>Tree</name>
-         <tough>10</tough>
-         <altitem>1</altitem>
+         <tough>11</tough>
+         <harvesthp>4</harvesthp>
+         <altitem id="0" inhand="0" item="8"/>
+         <altitem id="1" inhand="8" item="1"/>
       </object>
       <object id="36">
       <skillbonus>wood</skillbonus>
          <name>Tree</name>
-         <altitem>1</altitem>
-         <tough>10</tough>
+         <tough>11</tough>
+         <harvesthp>4</harvesthp>
+         <altitem id="0" inhand="0" item="8"/>
+         <altitem id="1" inhand="8" item="1"/>
       </object>
       <object id="37">
          <name>Bush</name>
          <skillbonus>harvest</skillbonus>
          <tough>5</tough>
-         <altitem>8</altitem>
+         <harvesthp>2</harvesthp>
+         <altitem id="0" inhand="0" item="8"/>
       </object>
       <object id="38">
       <skillbonus>wood</skillbonus>
          <name>Spruce tree</name>
-         <altitem>1</altitem>
-         <tough>5</tough>
+         <tough>11</tough>
+         <harvesthp>4</harvesthp>
+         <altitem id="0" inhand="0" item="8"/>
+         <altitem id="1" inhand="8" item="1"/>
       </object>
       <object id="39">
          <name>Cross</name>
@@ -442,14 +478,16 @@
       <object id="41">
       <skillbonus>harvest</skillbonus>
          <name>Edible mushrooms</name>
-         <altitem>44</altitem>
+         <altitem id="0" inhand="0" item="44"/>
          <tough>1</tough>
+         <harvesthp>1</harvesthp>
       </object>
       <object id="42">
       <skillbonus>harvest</skillbonus>
          <name>Amanita</name>
-         <altitem>45</altitem>
+         <altitem id="0" inhand="0" item="45"/>
          <tough>1</tough>
+         <harvesthp>1</harvesthp>
       </object>
       <object id="43">
          <name>Potato sprout</name>
@@ -466,8 +504,9 @@
       <object id="46">
       <skillbonus>harvest</skillbonus>
          <name>Potato sprout</name>
-         <altitem>46</altitem>
-         <tough>1</tough>
+         <altitem id="0" inhand="0" item="46"/>
+         <tough>8</tough>
+         <harvesthp>1</harvesthp>
       </object>
       <object id="47">
          <name>Carrot sprout</name>
@@ -484,8 +523,9 @@
       <object id="50">
       <skillbonus>harvest</skillbonus>
          <name>Carrot sprout</name>
-         <altitem>47</altitem>
-         <tough>1</tough>
+         <altitem id="0" inhand="0" item="47"/>
+         <tough>8</tough>
+         <harvesthp>1</harvesthp>
       </object>
       <object id="51">
          <name>Tomato sprout</name>
@@ -502,8 +542,9 @@
       <object id="54">
       <skillbonus>harvest</skillbonus>
          <name>Tomato sprout</name>
-         <altitem>48</altitem>
-         <tough>1</tough>
+         <altitem id="0" inhand="0" item="48"/>
+         <tough>8</tough>
+         <harvesthp>1</harvesthp>
       </object>
       <object id="55">
          <name>Pepper sprout</name>
@@ -520,8 +561,9 @@
       <object id="58">
       <skillbonus>harvest</skillbonus>
          <name>Pepper sprout</name>
-         <altitem>49</altitem>
-         <tough>1</tough>
+         <altitem id="0" inhand="0" item="49"/>
+         <tough>8</tough>
+         <harvesthp>1</harvesthp>
       </object>
       <object id="59">
          <name>Corn sprout</name>
@@ -538,8 +580,9 @@
       <object id="62">
       <skillbonus>harvest</skillbonus>
          <name>Corn sprout</name>
-         <altitem>50</altitem>
-         <tough>1</tough>
+         <altitem id="0" inhand="0" item="50"/>
+         <tough>8</tough>
+         <harvesthp>1</harvesthp>
       </object>
       <object id="63">
          <name>Cucumber sprout</name>
@@ -1193,13 +1236,14 @@
       </item>
       <item id="3">
          <name>Stone axe</name>
+         <type>8</type>
          <cost>9</cost>
          <craftable>1</craftable>
          <recipe>2/5:8/3</recipe>
       </item>
       <item id="4">
          <name>Cake</name>
-         <type>9</type>
+         <type>7</type>
          <heal>30:30</heal>
          <cost>25</cost>
          <craftable>1</craftable>
@@ -1212,12 +1256,13 @@
       <item id="6">
          <name>Stone shovel</name>
          <cost>10</cost>
+         <type>9</type>
          <craftable>1</craftable>
          <recipe>2/9:8/3</recipe>
       </item>
       <item id="7">
          <name>Berry</name>
-         <type>9</type>
+         <type>7</type>
          <heal>5:15</heal>
          <cost>4</cost>
       </item>
@@ -1242,6 +1287,7 @@
       <item id="11">
          <name>Stone pickaxe</name>
          <cost>10</cost>
+         <type>10</type>
          <craftable>1</craftable>
          <recipe>2/13:8/7</recipe>
       </item>
@@ -1401,7 +1447,7 @@
       </item>
       <item id="39">
          <name>Cucumber</name>
-         <type>9</type>
+         <type>7</type>
          <heal>3:8</heal>
          <cost>3</cost>
       </item>
@@ -1418,6 +1464,7 @@
          <cost>11</cost>
          <craftable>1</craftable>
          <recipe>2/13:8/5</recipe>
+         <type>11</type>
          <onuse>!0 place_tile $player_x $player_y 15;= !15 You plowed the soil</onuse>
       </item>
       <item id="42">
@@ -1438,43 +1485,43 @@
       </item>
       <item id="44">
          <name>Edible mushroom</name>
-         <type>9</type>
+         <type>7</type>
          <heal>20:0</heal>
          <cost>15</cost>
       </item>
       <item id="45">
          <name>Amanita</name>
-         <type>9</type>
+         <type>7</type>
          <heal>-18:-10</heal>
          <cost>5</cost>
       </item>
       <item id="46">
          <name>Potatoes</name>
-         <type>9</type>
+         <type>7</type>
          <heal>6:25</heal>
          <cost>13</cost>
       </item>
       <item id="47">
          <name>Carrot</name>
-         <type>9</type>
+         <type>7</type>
          <heal>10:11</heal>
          <cost>21</cost>
       </item>
       <item id="48">
          <name>Tomatoes</name>
-         <type>9</type>
+         <type>7</type>
          <heal>5:10</heal>
          <cost>21</cost>
       </item>
       <item id="49">
          <name>Pepper</name>
-         <type>9</type>
+         <type>7</type>
          <heal>9:10</heal>
          <cost>15</cost>
       </item>
       <item id="50">
          <name>Corn</name>
-         <type>9</type>
+         <type>7</type>
          <heal>5:30</heal>
          <cost>41</cost>
       </item>
@@ -1524,26 +1571,26 @@
       </item>
       <item id="57">
          <name>Ham</name>
-         <type>9</type>
+         <type>7</type>
          <heal>15:50</heal>
          <cost>11</cost>
       </item>
       <item id="58">
          <name>Pint of beer</name>
-         <type>9</type>
+         <type>7</type>
          <heal>5:20</heal>
          <cost>25</cost>
       </item>
       <item id="59">
          <name>Chicken leg</name>
          <cost>15</cost>
-         <type>9</type>
+         <type>7</type>
          <heal>10:45</heal>
       </item>
       <item id="60">
          <name>Healing potion</name>
          <cost>20</cost>
-         <type>9</type>
+         <type>7</type>
          <heal>25:0</heal>
       </item>
       <item id="61">

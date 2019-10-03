@@ -88,7 +88,7 @@ public class Player {
 		}
 	}
 
-	void interact(final Direction direction) { // TODO: BuildScript onInteract events
+	void interact(final Direction direction) {
 		int id = MadSand.world.getCurLoc().getObject(x, y, stats.look).id;
 		Utils.out("Interacting with " + id);
 		String action = ObjectProp.interactAction.get(id);
@@ -97,15 +97,17 @@ public class Player {
 			BuildScript.execute(action);
 			return;
 		}
-		Tuple<Integer, String> pair = new Tuple<Integer, String>(id, "hand");
-		int item = MapObject.getAltItem(id);
-		int hand = Integer.parseInt(ObjectProp.altitems.get(pair));
-		if (item != -1) {
-			if (hand == -1 || hand == stats.hand) {
-				inventory.putItem(item, 1);
-				MadSand.world.getCurLoc().dmgObjInDir(x, y, direction);
-			}
+		int item = MapObject.getAltItem(id, ItemProp.type.get(stats.hand).get());
+		MapObject obj = MadSand.world.getCurLoc().getObject(x, y, stats.look);
+		int mhp = ObjectProp.harvestHp.get(obj.id);
+		boolean destroyed = obj.takeDamage();
+		if (item != -1 && destroyed) {
+			inventory.putItem(item, 1);
 		}
+		if (!destroyed)
+			MadSand.print("Harvesting from " + obj.name + " [ " + obj.harverstHp + " / " + mhp + " ]");
+		if (item == -1 && destroyed)
+			MadSand.print("You damaged " + obj.name);
 	}
 
 	public boolean isCollision(Direction direction, int flag) {
@@ -246,7 +248,7 @@ public class Player {
 				MadSand.print("You dug some flint");
 			}
 		}
-		if (Item.getType(id) == ItemType.Consumable.get()) {
+		if (Item.getType(id) == ItemType.Consumable) {
 			MadSand.print("You ate one " + ItemProp.name.get(id));
 			String cont[] = ItemProp.heal.get(id).split(":");
 			heal(Integer.parseInt(cont[0]));
@@ -260,16 +262,16 @@ public class Player {
 			World.player.inventory.delItem(1);
 			MadSand.world.getCurLoc().addObject(World.player.x, World.player.y, World.player.stats.look, 6);
 		}
-		if (Item.getType(id) == ItemType.HeadArmor.get()) {
+		if (Item.getType(id) == ItemType.HeadArmor) {
 			// equip helmet
 		}
-		if (Item.getType(id) == ItemType.ChestArmor.get()) {
+		if (Item.getType(id) == ItemType.ChestArmor) {
 			// equip chestplate
 		}
-		if (Item.getType(id) == ItemType.Shield.get()) {
+		if (Item.getType(id) == ItemType.Shield) {
 			// equip shield
 		}
-		if (Item.getType(id) == ItemType.Crop.get()) { // crop
+		if (Item.getType(id) == ItemType.Crop) { // crop
 			Pair coords = new Pair(x, y).addDirection(stats.look);
 			if (MadSand.world.getCurLoc().putCrop(coords.x, coords.y, id)) {
 				MadSand.print("You planted 1 " + new Item(id).name);
@@ -277,17 +279,23 @@ public class Player {
 			}
 
 		}
-		if (Item.getType(id) == ItemType.PlaceableObject.get()) {
+		if (Item.getType(id) == ItemType.PlaceableObject) {
 			World.player.inventory.delItem(id);
 			MadSand.world.getCurLoc().addObject(World.player.x, World.player.y, World.player.stats.look,
 					Item.getAltObject(id));
 		}
-		if (Item.getType(id) == ItemType.PlaceableTile.get()) {
+		if (Item.getType(id) == ItemType.PlaceableTile) {
 			World.player.inventory.delItem(id);
 			MadSand.world.getCurLoc().addTile(World.player.x, World.player.y, World.player.stats.look,
 					Item.getAltObject(id));
 		}
 
+	}
+
+	public void freeHands() {
+		MadSand.print("You put your " + ObjectProp.name.get(stats.hand) + " back to your inventory");
+		stats.hand = 0;
+		Gui.setHandDisplay(stats.hand);
 	}
 
 	void updCoords() {

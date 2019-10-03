@@ -1,7 +1,6 @@
 package ru.bernarder.fallenrisefromdust;
 
 import java.util.HashMap;
-import java.util.Random;
 import java.util.Vector;
 
 import com.github.czyzby.noise4j.map.Grid;
@@ -11,14 +10,6 @@ import com.github.czyzby.noise4j.map.generator.util.Generators;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.properties.WorldGenProp;
-
-/*	Old worldgen
-	public static int[] ores = { 22, 23 };
-	public static int[][][] world = new int[MadSand.MAPSIZE + MadSand.BORDER][MadSand.MAPSIZE
-			+ MadSand.BORDER][MadSand.OBJLEVELS];
-	public static Random random = new Random();
-	static int biome;
- */
 
 public class World {
 	Map nullLoc = new Map(0, 0);
