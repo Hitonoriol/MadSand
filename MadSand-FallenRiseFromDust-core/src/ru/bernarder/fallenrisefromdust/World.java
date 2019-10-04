@@ -20,6 +20,9 @@ public class World {
 	static final int BORDER = 1;// map border(old shit, not really useful anymore)
 	static int MAPSIZE = 100; // default location size
 
+	static final int LAYER_OVERWORLD = 0;
+	static final int LAYER_UNDERWORLD = 1;
+
 	static Player player;
 	Location WorldLoc;
 
@@ -37,6 +40,7 @@ public class World {
 	}
 
 	public World() {
+		this(10);
 		// Quite empty here...
 	}
 
@@ -82,6 +86,14 @@ public class World {
 		return getLoc(curxwpos, curywpos, layer);
 	}
 
+	int getLocBiome() {
+		return getCurLoc(LAYER_OVERWORLD).getBiome();
+	}
+
+	int getDefaultTile() {
+		return getCurLoc().getDefTile();
+	}
+
 	Map putLoc(Pair wc, int layer, int id, Map loc) {
 		WorldLoc.put(new MapID(wc, layer, id), loc);
 		return loc;
@@ -117,9 +129,10 @@ public class World {
 				biome = randBiome();
 			getCurLoc().setBiome(biome);
 			genTerrain();
+			genObjByTemplate();
 			genUnderworld();
 			genDungeon();
-			genObjByTemplate();
+			curlayer = 0;
 			Utils.out("End of WorldGen!");
 		} catch (Exception e) {
 			Utils.out("Whoops, fatal error during worldgen... See MadSandCritical.log and/or MadSandErrors.log files.");
@@ -190,7 +203,7 @@ public class World {
 		int it = 0, iit = 0;
 		while (it < World.MAPSIZE) {
 			while (iit < World.MAPSIZE) {
-				if (grid.get(iit, it) == 0.0f) { // TODO find out wtf was this supposed to do
+				if (grid.get(iit, it) == 0.0f) {
 					getCurLoc(1).addObject(iit, it, 0);
 					getCurLoc(1).addTile(it, iit, 5);
 				}
@@ -214,13 +227,14 @@ public class World {
 
 	void genUnderworld() {
 		Utils.out("Generating underworld...");
-		curlayer = 1;
 		Vector<Integer> underworld = WorldGenProp.getBiomeUnderworld(biome);
 		int usz = underworld.size();
 		int maxOreFieldSize = underworld.get(usz - 2);
 		int count = underworld.get(usz - 1);
-		getCurLoc().fillTile(underworld.get(CAVE_TILE));
-		getCurLoc().fillObject(underworld.get(CAVE_OBJECT));
+		int cdef = underworld.get(CAVE_TILE);
+		getCurLoc(LAYER_UNDERWORLD).fillTile(cdef);
+		getCurLoc(LAYER_UNDERWORLD).fillObject(underworld.get(CAVE_OBJECT));
+		getCurLoc(LAYER_UNDERWORLD).setDefTile(cdef);
 		int a = Utils.random.nextInt(count) + 1;
 		while (a > 0) {
 			try {
@@ -234,15 +248,13 @@ public class World {
 					int kk = 0;
 					while (kk < w) {
 						while (k < h) {
-							addObj(x + kk, y + k, 1, id);
+							getCurLoc(LAYER_UNDERWORLD).addObject(x + kk, y + k, id);
 							k++;
 						}
 						k = 0;
 						kk++;
 					}
 				}
-				curlayer = 0;
-
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -254,10 +266,12 @@ public class World {
 	public void genBiomeTerrain() {
 		Vector<Vector<Integer>> terrainBlock = WorldGenProp.getBiomeTiles(biome);
 		int def = terrainBlock.get(0).get(0); // getting default tile
+		getCurLoc().setDefTile(def);
+		Utils.out("Default tile: " + def);
 		getCurLoc().fillTile(def);
 		int quantity, gsz;
 		Vector<Integer> group;
-		for (int i = 1; i < terrainBlock.size(); ++i) {
+		for (int i = 1; i < terrainBlock.size() - 1; ++i) {
 			group = terrainBlock.get(i);
 			gsz = group.size();
 			quantity = group.get(--gsz); // last value of every group is the total quantity of objects from group to
@@ -344,15 +358,15 @@ public class World {
 		Utils.out("Done generating biome objects!");
 	}
 
-	public int rend(int x, int y) {
+	public int getTileOrDefault(int x, int y) {
 		if (x >= 0 && y >= 0 && x < getCurLoc().getWidth() && y < getCurLoc().getHeight()) {
 			int tile = getCurLoc().getTile(x, y).id;
 			if (tile >= 0 && tile <= MadSand.LASTTILEID)
 				return tile;
 			else
-				return 0;
+				return getDefaultTile();
 		} else
-			return 0;
+			return getDefaultTile();
 	}
 
 	public static int worldCoord(int q) {

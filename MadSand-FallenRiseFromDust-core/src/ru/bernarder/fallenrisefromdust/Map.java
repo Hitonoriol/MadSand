@@ -13,6 +13,7 @@ public class Map {
 	public static int PLOWED_SOIL = 15;
 
 	private int biome = -1;
+	private int defTile = 0;
 
 	static Tile nullTile = new Tile(0);
 	static MapObject nullObject = new MapObject(0);
@@ -32,6 +33,14 @@ public class Map {
 		this.xsz = xsz;
 		this.ysz = ysz;
 		purge();
+	}
+	
+	void setDefTile(int tile) {
+		defTile = tile;
+	}
+	
+	int getDefTile() {
+		return defTile;
 	}
 
 	public Map() {

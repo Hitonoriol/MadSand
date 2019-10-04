@@ -139,8 +139,10 @@ public class GameSaver {
 			MadSand.state = GameState.NMENU;
 			return false;
 		}
-		MadSand.world.clearCurLoc();
-		if (loadSector() && loadChar()) {
+		MadSand.world = new World();
+		if (!loadChar())
+			return false;
+		if (loadSector()) {
 			MadSand.print("Loaded Game!");
 			return true;
 		} else

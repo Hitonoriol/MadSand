@@ -14,7 +14,7 @@ public class MapObject {
 	public MapObject(int id) {
 		this.id = id;
 		this.name = ObjectProp.name.get(id);
-		this.hp = ObjectProp.hp.get(id);
+		this.hp = ObjectProp.hp.getOrDefault(id, 1);
 		this.harverstHp = ObjectProp.harvestHp.get(id);
 	}
 

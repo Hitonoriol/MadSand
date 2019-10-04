@@ -256,7 +256,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 			int i = 0;
 			while (i < rcoords.length) {
 				Utils.batch.draw(
-						Utils.tile[world.rend(World.player.x + (int) rcoords[i].x,
+						Utils.tile[world.getTileOrDefault(World.player.x + (int) rcoords[i].x,
 								World.player.y + (int) rcoords[i].y)],
 						World.player.globalPos.x + rcoords[i].x * TILESIZE,
 						World.player.globalPos.y + rcoords[i].y * TILESIZE);
@@ -309,7 +309,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 		int i = 0;
 		while (i < rcoords.length) {
 			Utils.batch.draw(
-					Utils.tile[world.rend(World.player.y + (int) rcoords[i].y, World.player.x + (int) rcoords[i].x)],
+					Utils.tile[world.getTileOrDefault(World.player.y + (int) rcoords[i].y, World.player.x + (int) rcoords[i].x)],
 					World.player.globalPos.x + rcoords[i].x * 33, World.player.globalPos.y + rcoords[i].y * 33);
 			i++;
 		}

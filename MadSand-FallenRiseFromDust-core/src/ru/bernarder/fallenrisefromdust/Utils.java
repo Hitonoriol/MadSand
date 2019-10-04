@@ -540,6 +540,7 @@ public class Utils {
 				gotoSector(World.player.stats.look);
 			if (World.player.y == World.BORDER && World.player.stats.look == Direction.DOWN)
 				gotoSector(World.player.stats.look);
+			MadSand.world.curlayer = 0;
 
 		}
 
@@ -696,6 +697,7 @@ public class Utils {
 	public static Direction gotodir;
 
 	public static void gotoSector(Direction dir) {
+		GameSaver.saveWorld();
 		gotodir = dir;
 		MadSand.state = GameState.GOT;
 		MadSand.tempwx = MadSand.world.curxwpos;
