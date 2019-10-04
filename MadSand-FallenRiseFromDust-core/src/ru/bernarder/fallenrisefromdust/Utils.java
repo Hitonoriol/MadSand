@@ -705,22 +705,22 @@ public class Utils {
 		MadSand.tonext = true;
 		MadSand.encounter = false;
 
-		if ((Utils.gotodir == Direction.LEFT) && (MadSand.world.curxwpos > 0)) {
+		if ((Utils.gotodir == Direction.LEFT)) {
 			MadSand.world.curxwpos -= 1;
 			World.player.x = World.MAPSIZE - 2;
 			World.player.updCoords();
 		}
-		if ((Utils.gotodir == Direction.RIGHT) && (MadSand.world.curxwpos < 9)) {
+		if ((Utils.gotodir == Direction.RIGHT)) {
 			MadSand.world.curxwpos += 1;
 			World.player.x = 0;
 			World.player.updCoords();
 		}
-		if ((Utils.gotodir == Direction.DOWN) && (MadSand.world.curywpos > 0)) {
+		if ((Utils.gotodir == Direction.DOWN)) {
 			MadSand.world.curywpos -= 1;
 			World.player.y = World.MAPSIZE - 2;
 			World.player.updCoords();
 		}
-		if ((Utils.gotodir == Direction.UP) && (MadSand.world.curywpos < 9)) {
+		if ((Utils.gotodir == Direction.UP)) {
 			MadSand.world.curywpos += 1;
 			World.player.y = 0;
 			World.player.updCoords();

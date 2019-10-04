@@ -706,7 +706,7 @@ public class Gui {
 		while (count < OVSTAT_COUNT) {
 			Gui.overlayStatLabels[count] = new Label(" ", skin);
 			Gui.overlayStatLabels[count].setWrap(false);
-			ovstatTbl.add(Gui.overlayStatLabels[count]).width(170);
+			ovstatTbl.add(Gui.overlayStatLabels[count]).width(165);
 			count++;
 		}
 		Gui.overlay.addActor(ovstatTbl);

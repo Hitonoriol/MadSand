@@ -3,6 +3,9 @@ package ru.bernarder.fallenrisefromdust;
 import java.util.HashMap;
 import java.util.Vector;
 
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+
 public class Inventory {
 	public Vector<Item> items = new Vector<Item>();
 	public double curWeight, maxWeight;
@@ -69,9 +72,17 @@ public class Inventory {
 	private void refreshRemoveItem(Item item) {
 		if (itemUI.containsKey(item)) {
 			inventoryUI.setMass(curWeight, maxWeight);
-			itemUI.get(item).cell.remove();
+			Group rcell = itemUI.get(item).cell;
+			Cell<Group> cell = inventoryUI.invTable.getCell(rcell);
+			rcell.remove();
+			// remove cell from table
+			inventoryUI.invTable.getCells().removeValue(cell, true);
+			inventoryUI.invTable.invalidate();
+			// itemUI.get(item).cell.remove();
 			itemUI.remove(item);
-			inventoryUI.invTable.pack();
+			inventoryUI.stacks -= 1;
+			inventoryUI.refresh(itemUI.entrySet());
+			Utils.out("Removed item stacks: " + inventoryUI.stacks);
 		}
 	}
 
@@ -82,7 +93,8 @@ public class Inventory {
 		else {
 			InventoryUICell cell = new InventoryUICell(item);
 			itemUI.put(item, cell);
-			inventoryUI.invTable.add(cell.cell);
+			inventoryUI.putNewItem(cell.cell);
+			inventoryUI.refresh(itemUI.entrySet());
 		}
 	}
 

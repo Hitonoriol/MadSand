@@ -34,11 +34,11 @@ public class Map {
 		this.ysz = ysz;
 		purge();
 	}
-	
+
 	void setDefTile(int tile) {
 		defTile = tile;
 	}
-	
+
 	int getDefTile() {
 		return defTile;
 	}
@@ -229,9 +229,13 @@ public class Map {
 	MapObject getObject(int x, int y) {
 		if (correctCoords(coords.set(x, y))) {
 			MapObject ret = mapObjects.get(coords);
-			if (ret != null)
+			if (ret != null) {
+				if (ret.id == 0) {
+					mapObjects.remove(coords);
+					return nullObject;
+				}
 				return ret;
-			else
+			} else
 				return nullObject;
 		} else
 			return nullObject;

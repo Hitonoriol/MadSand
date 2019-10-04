@@ -117,13 +117,13 @@ public class World {
 
 	int biome;
 
-	public void Generate() {
+	public void Generate(int wx, int wy) {
 		Utils.out("WorldGen start!");
 		if (!locExists(new MapID(new Pair(curxwpos, curywpos), 0)))
-			createBasicLoc(curxwpos, curywpos);
+			createBasicLoc(wx, wy);
 		try {
 			clearCurLoc();
-			if ((curxwpos == 5) && (curywpos == 5))
+			if ((wx == 5) && (wy == 5))
 				biome = 0;
 			else
 				biome = randBiome();
@@ -138,6 +138,10 @@ public class World {
 			Utils.out("Whoops, fatal error during worldgen... See MadSandCritical.log and/or MadSandErrors.log files.");
 			e.printStackTrace();
 		}
+	}
+
+	public void Generate() {
+		Generate(curxwpos, curywpos);
 	}
 
 	final String LAKE_TID = "tid";

@@ -218,6 +218,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 		Gui.font.getData().markupEnabled = true;
 		Gui.font1.getData().markupEnabled = true;
 		World.player.initInventory();
+		world.Generate();
 		Utils.out("End of initialization!");
 	}
 

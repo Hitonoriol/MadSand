@@ -1,7 +1,5 @@
 package ru.bernarder.fallenrisefromdust;
 
-import java.util.Random;
-
 import com.badlogic.gdx.Gdx;
 
 import ru.bernarder.fallenrisefromdust.enums.*;
@@ -10,8 +8,8 @@ import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 
 public class Player {
 
-	public int x = new Random().nextInt(World.MAPSIZE);
-	public int y = new Random().nextInt(World.MAPSIZE);
+	public int x = World.MAPSIZE / 2;
+	public int y = World.MAPSIZE / 2;
 
 	private String name;
 	public Stats stats = new Stats();
@@ -90,6 +88,8 @@ public class Player {
 
 	void interact(final Direction direction) {
 		int id = MadSand.world.getCurLoc().getObject(x, y, stats.look).id;
+		if (id == 0)
+			return;
 		Utils.out("Interacting with " + id);
 		String action = ObjectProp.interactAction.get(id);
 		doAction();
