@@ -46,6 +46,11 @@ public class Player {
 		};
 	}
 
+	void increaseSkill(Skill skill) {
+		stats.skills.increaseSkill(skill);
+		stats.skills.increaseSkill(Skill.Level);
+	}
+
 	void initInventory() {
 		inventory = new Inventory();
 	}
@@ -90,7 +95,6 @@ public class Player {
 		int id = MadSand.world.getCurLoc().getObject(x, y, stats.look).id;
 		if (id == 0)
 			return;
-		Utils.out("Interacting with " + id);
 		String action = ObjectProp.interactAction.get(id);
 		doAction();
 		if (action != "-1") {
@@ -100,9 +104,11 @@ public class Player {
 		int item = MapObject.getAltItem(id, ItemProp.type.get(stats.hand).get());
 		MapObject obj = MadSand.world.getCurLoc().getObject(x, y, stats.look);
 		int mhp = ObjectProp.harvestHp.get(obj.id);
+		Skill skill = obj.skill;
 		boolean destroyed = obj.takeDamage();
 		if (item != -1 && destroyed) {
-			inventory.putItem(item, 1);
+			inventory.putItem(item);
+			increaseSkill(skill);
 		}
 		if (!destroyed)
 			MadSand.print("Harvesting from " + obj.name + " [ " + obj.harverstHp + " / " + mhp + " ]");
@@ -216,7 +222,13 @@ public class Player {
 	public void useItem() {
 		int id = stats.hand;
 		int ptile = MadSand.world.getTileId(x, y);
+		int item = MapObject.getTileAltItem(ptile, ItemProp.type.get(stats.hand).get());
 		checkHands(id);
+		if (item != -1) {
+			MadSand.world.getCurLoc().delTile(x, y);
+			World.player.inventory.putItem(item, 1);
+			MadSand.print("You dug up some " + ItemProp.name.get(item));
+		}
 		String action = ItemProp.useAction.get(id);
 		World.player.doAction();
 		if (action != "-1") {
@@ -239,12 +251,12 @@ public class Player {
 			}
 			if (ptile == 1) {
 				World.player.inventory.putItem(5, 1, true);
-				MadSand.world.putMapTile(World.player.y, World.player.x, 0);
+				MadSand.world.putMapTile(World.player.x, World.player.y, 0);
 				MadSand.print("You dug some clay");
 			}
 			if (ptile == 2) {
 				World.player.inventory.putItem(9, 1, true);
-				MadSand.world.putMapTile(World.player.y, World.player.x, 0);
+				MadSand.world.putMapTile(World.player.x, World.player.y, 0);
 				MadSand.print("You dug some flint");
 			}
 		}

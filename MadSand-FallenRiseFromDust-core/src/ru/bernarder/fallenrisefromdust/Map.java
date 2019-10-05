@@ -140,6 +140,11 @@ public class Map {
 			return false;
 	}
 
+	void delTile(int x, int y) {
+		mapTiles.remove(coords.set(x, y));
+		mapTiles.put(coords, new Tile(defTile));
+	}
+
 	boolean addTile(int x, int y, int id) {
 		return addTile(x, y, id, false);
 	}

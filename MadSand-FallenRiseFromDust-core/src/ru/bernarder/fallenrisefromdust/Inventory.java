@@ -126,6 +126,10 @@ public class Inventory {
 		return putItem(id, q, false);
 	}
 
+	boolean putItem(int id) {
+		return putItem(id, 1, false);
+	}
+
 	boolean putItem(Item item) {
 		return putItem(item.id, item.quantity, false);
 	}

@@ -31,6 +31,7 @@ import com.badlogic.gdx.utils.Align;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
+import ru.bernarder.fallenrisefromdust.enums.Skill;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 
 import java.io.BufferedReader;
@@ -131,8 +132,8 @@ public class Gui {
 
 	static void refreshOverlay() {
 		overlayStatLabels[0].setText("HP: " + World.player.stats.hp + "/" + World.player.stats.mhp);
-		overlayStatLabels[1].setText("Level: " + World.player.stats.lvl);
-		overlayStatLabels[2].setText("Experience: " + World.player.stats.exp + "/" + World.player.stats.requiredexp);
+		overlayStatLabels[1].setText("Level: " + World.player.stats.skills.getLvl(Skill.Level));
+		overlayStatLabels[2].setText("Experience: " + World.player.stats.skills.getExpString(Skill.Level));
 		overlayStatLabels[3].setText("Food: " + World.player.stats.food + " / " + World.player.stats.maxFood);
 		overlayStatLabels[4].setText("Hand: " + ItemProp.name.get(World.player.stats.hand));
 	}
@@ -163,8 +164,8 @@ public class Gui {
 		DX.setText("Dexterity: " + World.player.stats.dexterity);
 		dialog.row();
 		dialog.add(new Label(
-				"Level: " + World.player.stats.lvl + " (" + World.player.stats.exp + "/"
-						+ World.player.stats.requiredexp + ")",
+				"Level: " + World.player.stats.skills.getLvl(Skill.Level) + " ("
+						+ World.player.stats.skills.getExpString(Skill.Level) + ")",
 				Gui.skin))/* .width(Gdx.graphics.getWidth() / 4).row() */;
 		dialog.row();
 		dialog.add(new Label("", Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
@@ -189,23 +190,17 @@ public class Gui {
 		dialog.row();
 		dialog.add(new Label("Skills:", Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
 		dialog.row();
-		dialog.add(new Label("Woodcutting: " + World.player.stats.woodcutterskill[0], Gui.skin))
-		/* .width(Gdx.graphics.getWidth() / 4).row() */;
+		dialog.add(new Label("Woodcutting: " + World.player.stats.skills.getLvlString(Skill.Woodcutting), Gui.skin))
+				.width(Gdx.graphics.getWidth() / 4).row();
 		dialog.row();
-		dialog.add(new Label("Harvesting: " + World.player.stats.harvestskill[0],
-				Gui.skin))/*
-							 * .width(Gdx.graphics.getWidth() / 4) .row()
-							 */;
+		dialog.add(new Label("Harvesting: " + World.player.stats.skills.getLvlString(Skill.Harvesting), Gui.skin))
+				.width(Gdx.graphics.getWidth() / 4).row();
 		dialog.row();
-		dialog.add(new Label("Mining: " + World.player.stats.miningskill[0],
-				Gui.skin))/*
-							 * .width(Gdx.graphics.getWidth() / 4) .row()
-							 */;
+		dialog.add(new Label("Mining: " + World.player.stats.skills.getLvlString(Skill.Mining), Gui.skin))
+				.width(Gdx.graphics.getWidth() / 4).row();
 		dialog.row();
-		dialog.add(new Label("Survival: " + World.player.stats.survivalskill[0],
-				Gui.skin))/*
-							 * .width(Gdx.graphics.getWidth() / 4) .row()
-							 */;
+		dialog.add(new Label("Survival: " + World.player.stats.skills.getLvlString(Skill.Survival), Gui.skin))
+				.width(Gdx.graphics.getWidth() / 4).row();
 		dialog.row();
 		dialog.add(ok).width(Gdx.graphics.getWidth() / 4).row();
 		dialog.show(Gui.overlay);

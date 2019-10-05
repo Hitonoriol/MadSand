@@ -41,15 +41,7 @@ public class Stats {
 	public int cplate = 0;
 	public int shield = 0;
 
-	public int lvl = 0;
-	public int exp = 0;
-	public int requiredexp = 100;
-
-	public int[] woodcutterskill = { 1, 0, 50 };
-	public int[] miningskill = { 1, 0, 50 };
-	public int[] survivalskill = { 1, 0, 65 };
-	public int[] harvestskill = { 1, 0, 35 };
-	public int[] craftingskill = { 1, 0, 30 };
+	public SkillContainer skills = new SkillContainer();
 
 	public Faction faction;
 	public Direction look = Direction.DOWN;
@@ -61,15 +53,7 @@ public class Stats {
 	StatAction actions;
 
 	public void check() {
-		if (exp >= requiredexp) {
-			lvl += 1;
-			exp = 0;
-			requiredexp *= 2;
-			MadSand.print("You leveled up!");
-			str += 1;
-			mhp += 50;
-			maxstamina += 15;
-		}
+		skills.check();
 
 		if (food > maxFood)
 			food = maxFood;

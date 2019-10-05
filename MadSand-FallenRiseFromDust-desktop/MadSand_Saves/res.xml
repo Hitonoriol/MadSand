@@ -10,12 +10,13 @@
          <name>Grass with clay</name>
          <damage>0</damage>
          <cover>0</cover>
-         <altitem>5</altitem>
+         <altitem id="0" inhand="9" item="5" />
       </tile>
       <tile id="2">
          <name>Flint</name>
          <damage>0</damage>
          <cover>0</cover>
+         <altitem id="0" inhand="9" item="9" />
       </tile>
       <tile id="3">
          <name>Sandstone</name>
@@ -230,14 +231,14 @@
       </object>
       <object id="1">
          <name>Boulder</name>
-         <skillbonus>mining</skillbonus>
+         <skill>Mining</skill>
          <tough>11</tough>
          <harvesthp>9</harvesthp>
          <altitem id="0" inhand="0" item="2" />
       </object>
       <object id="2">
          <name>Tree</name>
-         <skillbonus>wood</skillbonus>
+         <skill>Woodcutting</skill>
          <tough>11</tough>
          <harvesthp>4</harvesthp>
          <altitem id="0" inhand="0" item="8" />
@@ -249,7 +250,7 @@
       </object>
       <object id="4">
          <name>Berry bush</name>
-         <skillbonus>wood</skillbonus>
+         <skill>Harvesting</skill>
          <tough>5</tough>
          <harvesthp>2</harvesthp>
          <altitem id="0" inhand="0" item="7,8" />
@@ -260,7 +261,7 @@
       </object>
       <object id="6">
          <name>Campfire</name>
-         <skillbonus>survival</skillbonus>
+         <skill>Survival</skill>
          <tough>20</tough>
       </object>
       <object id="7">
@@ -273,7 +274,7 @@
       </object>
       <object id="9">
          <name>Wooden planks</name>
-         <skillbonus>wood</skillbonus>
+         <skill>Woodcutting</skill>
          <tough>1</tough>
          <harvesthp>10</harvesthp>
          <altitem id="0" inhand="0" item="0"/>
@@ -293,7 +294,7 @@
       </object>
       <object id="13">
          <name>Rock</name>
-         <skillbonus>mining</skillbonus>
+         <skill>Mining</skill>
          <tough>1</tough>
          <harvesthp>15</harvesthp>
          <altitem id="0" inhand="0" item="0"/>
@@ -301,7 +302,6 @@
       </object>
       <object id="14">
          <name>Trapdoor</name>
-         <skillbonus>crafting</skillbonus>
          <tough>30</tough>
       </object>
       <object id="15">
@@ -339,14 +339,14 @@
       </object>
       <object id="21">
          <name>Cucumber bush</name>
-         <skillbonus>harvest</skillbonus>
+         <skill>Harvesting</skill>
          <tough>5</tough>
          <harvesthp>1</harvesthp>
          <altitem id="0" inhand="0" item="39"/>
       </object>
       <object id="22">
          <name>Iron ore</name>
-         <skillbonus>mining</skillbonus>
+         <skill>Mining</skill>
          <tough>1</tough>
          <harvesthp>15</harvesthp>
          <altitem id="0" inhand="0" item="0"/>
@@ -354,7 +354,7 @@
       </object>
       <object id="23">
          <name>Gold ore</name>
-         <skillbonus>mining</skillbonus>
+         <skill>Mining</skill>
          <tough>1</tough>
          <harvesthp>15</harvesthp>
          <altitem id="0" inhand="0" item="0"/>
@@ -366,7 +366,7 @@
       </object>
       <object id="25">
          <name>Coal</name>
-         <skillbonus>mining</skillbonus>
+         <skill>Mining</skill>
          <tough>1</tough>
          <harvesthp>15</harvesthp>
          <altitem id="0" inhand="0" item="0"/>
@@ -378,27 +378,27 @@
       </object>
       <object id="27">
          <name>Boulder</name>
-         <skillbonus>mining</skillbonus>
+         <skill>Mining</skill>
          <tough>10</tough>
          <harvesthp>9</harvesthp>
          <altitem id="0" inhand="0" item="2"/>
       </object>
       <object id="28">
          <name>Boulder</name>
-         <skillbonus>mining</skillbonus>
+         <skill>Mining</skill>
          <tough>10</tough>
          <harvesthp>9</harvesthp>
          <altitem id="0" inhand="0" item="2"/>
       </object>
       <object id="29">
          <name>Spruce tree</name>
-         <skillbonus>wood</skillbonus>
+         <skill>Woodcutting</skill>
          <tough>10</tough>
          <altitem>1</altitem>
       </object>
       <object id="30">
          <name>Tree</name>
-         <skillbonus>wood</skillbonus>
+         <skill>Woodcutting</skill>
          <tough>11</tough>
          <harvesthp>4</harvesthp>
          <altitem id="0" inhand="0" item="8"/>
@@ -406,14 +406,14 @@
       </object>
       <object id="31">
          <name>Palm tree</name>
-         <skillbonus>wood</skillbonus>
+         <skill>Woodcutting</skill>
          <tough>11</tough>
          <harvesthp>4</harvesthp>
          <altitem id="0" inhand="0" item="8"/>
          <altitem id="1" inhand="8" item="1"/>
       </object>
       <object id="32">
-      <skillbonus>wood</skillbonus>
+      <skill>Woodcutting</skill>
          <name>Pine</name>
          <tough>11</tough>
          <harvesthp>4</harvesthp>
@@ -422,7 +422,7 @@
       </object>
       <object id="33">
          <name>Stump</name>
-         <skillbonus>wood</skillbonus>
+         <skill>Woodcutting</skill>
          <tough>11</tough>
          <harvesthp>4</harvesthp>
          <altitem id="0" inhand="0" item="8"/>
@@ -430,14 +430,14 @@
       </object>
       <object id="34">
          <name>Dead tree</name>
-         <skillbonus>wood</skillbonus>
+         <skill>Woodcutting</skill>
          <tough>11</tough>
          <harvesthp>4</harvesthp>
          <altitem id="0" inhand="0" item="8"/>
          <altitem id="1" inhand="8" item="1"/>
       </object>
       <object id="35">
-      <skillbonus>wood</skillbonus>
+      <skill>Woodcutting</skill>
          <name>Tree</name>
          <tough>11</tough>
          <harvesthp>4</harvesthp>
@@ -445,7 +445,7 @@
          <altitem id="1" inhand="8" item="1"/>
       </object>
       <object id="36">
-      <skillbonus>wood</skillbonus>
+      <skill>Woodcutting</skill>
          <name>Tree</name>
          <tough>11</tough>
          <harvesthp>4</harvesthp>
@@ -454,13 +454,13 @@
       </object>
       <object id="37">
          <name>Bush</name>
-         <skillbonus>harvest</skillbonus>
+         <skill>Harvesting</skill>
          <tough>5</tough>
          <harvesthp>2</harvesthp>
          <altitem id="0" inhand="0" item="8"/>
       </object>
       <object id="38">
-      <skillbonus>wood</skillbonus>
+      <skill>Woodcutting</skill>
          <name>Spruce tree</name>
          <tough>11</tough>
          <harvesthp>4</harvesthp>
@@ -476,14 +476,14 @@
          <tough>15</tough>
       </object>
       <object id="41">
-      <skillbonus>harvest</skillbonus>
+      <skill>Harvesting</skill>
          <name>Edible mushrooms</name>
          <altitem id="0" inhand="0" item="44"/>
          <tough>1</tough>
          <harvesthp>1</harvesthp>
       </object>
       <object id="42">
-      <skillbonus>harvest</skillbonus>
+      <skill>Harvesting</skill>
          <name>Amanita</name>
          <altitem id="0" inhand="0" item="45"/>
          <tough>1</tough>
@@ -502,7 +502,7 @@
          <tough>1</tough>
       </object>
       <object id="46">
-      <skillbonus>harvest</skillbonus>
+      <skill>Harvesting</skill>
          <name>Potato sprout</name>
          <altitem id="0" inhand="0" item="46"/>
          <tough>8</tough>
@@ -521,7 +521,7 @@
          <tough>1</tough>
       </object>
       <object id="50">
-      <skillbonus>harvest</skillbonus>
+      <skill>Harvesting</skill>
          <name>Carrot sprout</name>
          <altitem id="0" inhand="0" item="47"/>
          <tough>8</tough>
@@ -540,7 +540,7 @@
          <tough>1</tough>
       </object>
       <object id="54">
-      <skillbonus>harvest</skillbonus>
+      <skill>Harvesting</skill>
          <name>Tomato sprout</name>
          <altitem id="0" inhand="0" item="48"/>
          <tough>8</tough>
@@ -559,7 +559,7 @@
          <tough>1</tough>
       </object>
       <object id="58">
-      <skillbonus>harvest</skillbonus>
+      <skill>Harvesting</skill>
          <name>Pepper sprout</name>
          <altitem id="0" inhand="0" item="49"/>
          <tough>8</tough>
@@ -578,7 +578,7 @@
          <tough>1</tough>
       </object>
       <object id="62">
-      <skillbonus>harvest</skillbonus>
+      <skill>Harvesting</skill>
          <name>Corn sprout</name>
          <altitem id="0" inhand="0" item="50"/>
          <tough>8</tough>

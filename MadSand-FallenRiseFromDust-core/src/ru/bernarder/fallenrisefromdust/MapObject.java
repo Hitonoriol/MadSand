@@ -5,10 +5,13 @@ import java.util.Vector;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
+import ru.bernarder.fallenrisefromdust.enums.Skill;
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
+import ru.bernarder.fallenrisefromdust.properties.TileProp;
 
 public class MapObject {
 	int id, hp, harverstHp;
+	Skill skill;
 	String name;
 
 	public MapObject(int id) {
@@ -16,6 +19,7 @@ public class MapObject {
 		this.name = ObjectProp.name.get(id);
 		this.hp = ObjectProp.hp.getOrDefault(id, 1);
 		this.harverstHp = ObjectProp.harvestHp.get(id);
+		this.skill = ObjectProp.skill.getOrDefault(id, Skill.None);
 	}
 
 	public MapObject() {
@@ -23,7 +27,7 @@ public class MapObject {
 	}
 
 	void destroy() {
-		this.id = 0;
+		this.id = 0; // cleaned up later in map
 	}
 
 	private boolean verify() {
@@ -46,15 +50,23 @@ public class MapObject {
 		return dmg;
 	}
 
-	static int getAltItem(int id, int hand) {
+	private static int getAltItem(int id, int hand, HashMap<Integer, HashMap<Integer, Vector<Integer>>> container) {
 		Utils.out("Getting altitem for obj " + id + "hand: " + hand);
-		HashMap<Integer, Vector<Integer>> items = ObjectProp.altitems.get(new Tuple<Integer, String>(id, "altitem"));
+		HashMap<Integer, Vector<Integer>> items = container.get(id);
 		if (!items.containsKey(hand))
 			hand = 0;
 		if (!items.containsKey(hand) || items.get(hand).equals(null))
 			return -1;
 		Vector<Integer> aitems = items.get(hand);
 		return aitems.get(Utils.random.nextInt(aitems.size()));
+	}
+
+	static int getAltItem(int id, int hand) {
+		return getAltItem(id, hand, ObjectProp.altitems);
+	}
+
+	static int getTileAltItem(int id, int hand) {
+		return getAltItem(id, hand, TileProp.altitems);
 	}
 
 	@Override

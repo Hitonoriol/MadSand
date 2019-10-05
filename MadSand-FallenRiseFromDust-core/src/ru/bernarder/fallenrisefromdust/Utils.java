@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
 import ru.bernarder.fallenrisefromdust.enums.ItemType;
+import ru.bernarder.fallenrisefromdust.enums.Skill;
 import ru.bernarder.fallenrisefromdust.properties.CropProp;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
@@ -353,13 +354,17 @@ public class Utils {
 		i = 0;
 
 		// Loading map objects
+		String skill;
 		while (i < MadSand.LASTOBJID) {
 			objects[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "obj/" + i + ".png"));
 			ObjectProp.name.put(i, getKey(resdoc, "object", str(i), "name"));
 			ObjectProp.hp.put(i, Integer.parseInt(getKey(resdoc, "object", str(i), "tough")));
 			ObjectProp.harvestHp.put(i, Integer.parseInt(getKey(resdoc, "object", str(i), "harvesthp")));
 
-			ObjectProp.altitems.put(makeTuple(i, "altitem"), getAitem(i, "object"));
+			skill = getKey(resdoc, "object", str(i), "skill");
+			if (!skill.equals("-1"))
+				ObjectProp.skill.put(i, Skill.valueOf(skill));
+			ObjectProp.altitems.put(i, getAitem(i, "object"));
 
 			ObjectProp.vRendMasks.put(i, Integer.parseInt(getKey(resdoc, "object", str(i), "vmask")));
 			ObjectProp.hRendMasks.put(i, Integer.parseInt(getKey(resdoc, "object", str(i), "hmask")));
@@ -373,6 +378,7 @@ public class Utils {
 			tile[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "terrain/" + i + ".png"));
 			TileProp.name.put(i, getKey(resdoc, "tile", "" + i, "name"));
 			TileProp.damage.put(i, val(getKey(resdoc, "tile", "" + i, "damage")));
+			TileProp.altitems.put(i, getAitem(i, "tile"));
 			i++;
 		}
 		i = 0;
@@ -773,12 +779,10 @@ public class Utils {
 		}
 	}
 
-	static Calendar cal = Calendar.getInstance();
-	static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-
 	public static void out(String arg) {
 		if (tester) {
-
+			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 			System.out.print("[" + sdf.format(cal.getTime()) + "] " + arg + "\n");
 		}
 	}
