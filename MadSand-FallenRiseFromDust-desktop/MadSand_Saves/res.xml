@@ -233,7 +233,7 @@
          <name>Boulder</name>
          <skill>Mining</skill>
          <tough>11</tough>
-         <harvesthp>9</harvesthp>
+         <harvesthp>4</harvesthp>
          <altitem id="0" inhand="0" item="2" />
       </object>
       <object id="2">
@@ -379,14 +379,14 @@
       <object id="27">
          <name>Boulder</name>
          <skill>Mining</skill>
-         <tough>10</tough>
+         <tough>6</tough>
          <harvesthp>9</harvesthp>
          <altitem id="0" inhand="0" item="2"/>
       </object>
       <object id="28">
          <name>Boulder</name>
          <skill>Mining</skill>
-         <tough>10</tough>
+         <tough>6</tough>
          <harvesthp>9</harvesthp>
          <altitem id="0" inhand="0" item="2"/>
       </object>

@@ -139,20 +139,22 @@ public class Gui {
 	}
 
 	public static void showStatsWindow() {
-		final Dialog dialog = new Dialog("", Gui.skin);
-		dialog.text(World.player.stats.name);
+		Utils.out("showStats");
+		final Dialog statWindow = new Dialog("", Gui.skin);
+		statWindow.text(World.player.stats.name);
 		TextButton ok = new TextButton("Close", Gui.skin);
 		MadSand.charcrt = true;
 		ok.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				MadSand.charcrt = false;
-				dialog.remove();
+				statWindow.remove();
+				statWindow.clearActions();
 			}
 
 		});
-		dialog.setBackground(bck);
-		dialog.setMovable(true);
-		dialog.add(new Label("", Gui.skin));
+		statWindow.setBackground(bck);
+		statWindow.setMovable(true);
+		statWindow.add(new Label("", Gui.skin));
 		ATKl.setText("Strength: " + World.player.stats.str);
 		STM.setText("Stamina: " + World.player.stats.maxstamina / 10 + " (" + World.player.stats.stamina + "/"
 				+ World.player.stats.maxstamina + ")");
@@ -162,48 +164,45 @@ public class Gui {
 		IN.setText("Intelligence: " + World.player.stats.intelligence);
 		LK.setText("Luck: " + World.player.stats.luck);
 		DX.setText("Dexterity: " + World.player.stats.dexterity);
-		dialog.row();
-		dialog.add(new Label(
+		statWindow.row();
+		statWindow.add(new Label(
 				"Level: " + World.player.stats.skills.getLvl(Skill.Level) + " ("
 						+ World.player.stats.skills.getExpString(Skill.Level) + ")",
 				Gui.skin))/* .width(Gdx.graphics.getWidth() / 4).row() */;
-		dialog.row();
-		dialog.add(new Label("", Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
-		dialog.row();
-		dialog.add(new Label("Stats:", Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
-		dialog.row();
-		dialog.add(CNT).width(Gdx.graphics.getWidth() / 4).row();
-		dialog.row();
-		dialog.add(STM).width(Gdx.graphics.getWidth() / 4).row();
-		dialog.row();
-		dialog.add(ATKl).width(Gdx.graphics.getWidth() / 4).row();
-		dialog.row();
-		dialog.add(ACC).width(Gdx.graphics.getWidth() / 4).row();
-		dialog.row();
-		dialog.add(IN).width(Gdx.graphics.getWidth() / 4).row();
-		dialog.row();
-		dialog.add(LK).width(Gdx.graphics.getWidth() / 4).row();
-		dialog.row();
-		dialog.add(DX).width(Gdx.graphics.getWidth() / 4).row();
-		dialog.row();
-		dialog.add(new Label("", Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
-		dialog.row();
-		dialog.add(new Label("Skills:", Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
-		dialog.row();
-		dialog.add(new Label("Woodcutting: " + World.player.stats.skills.getLvlString(Skill.Woodcutting), Gui.skin))
-				.width(Gdx.graphics.getWidth() / 4).row();
-		dialog.row();
-		dialog.add(new Label("Harvesting: " + World.player.stats.skills.getLvlString(Skill.Harvesting), Gui.skin))
-				.width(Gdx.graphics.getWidth() / 4).row();
-		dialog.row();
-		dialog.add(new Label("Mining: " + World.player.stats.skills.getLvlString(Skill.Mining), Gui.skin))
-				.width(Gdx.graphics.getWidth() / 4).row();
-		dialog.row();
-		dialog.add(new Label("Survival: " + World.player.stats.skills.getLvlString(Skill.Survival), Gui.skin))
-				.width(Gdx.graphics.getWidth() / 4).row();
-		dialog.row();
-		dialog.add(ok).width(Gdx.graphics.getWidth() / 4).row();
-		dialog.show(Gui.overlay);
+		statWindow.row();
+		statWindow.add(new Label("", Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
+		statWindow.row();
+		statWindow.add(new Label("Stats:", Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
+		statWindow.row();
+		statWindow.add(CNT).width(Gdx.graphics.getWidth() / 4).row();
+		statWindow.row();
+		statWindow.add(STM).width(Gdx.graphics.getWidth() / 4).row();
+		statWindow.row();
+		statWindow.add(ATKl).width(Gdx.graphics.getWidth() / 4).row();
+		statWindow.row();
+		statWindow.add(ACC).width(Gdx.graphics.getWidth() / 4).row();
+		statWindow.row();
+		statWindow.add(IN).width(Gdx.graphics.getWidth() / 4).row();
+		statWindow.row();
+		statWindow.add(LK).width(Gdx.graphics.getWidth() / 4).row();
+		statWindow.row();
+		statWindow.add(DX).width(Gdx.graphics.getWidth() / 4).row();
+		statWindow.row();
+		statWindow.add(new Label("", Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
+		statWindow.row();
+		statWindow.add(new Label("Skills:", Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
+		statWindow.row();
+		Skill skill;
+		for (int i = 1; i < Skill.len(); ++i) {
+			skill = Skill.get(i);
+			if (skill == Skill.Level)
+				continue;
+			statWindow.add(new Label(skill + ": " + World.player.stats.skills.getLvlString(skill), Gui.skin))
+					.width(Gdx.graphics.getWidth() / 4).row();
+			statWindow.row();
+		}
+		statWindow.add(ok).width(Gdx.graphics.getWidth() / 4).row();
+		statWindow.show(Gui.overlay);
 	}
 
 	static void initLaunchMenu() {
@@ -243,11 +242,17 @@ public class Gui {
 		gotodg.addActor(gototbl);
 	}
 
-	static void drawOkDialog(String msg) {
+	static void drawOkDialog(String msg, Stage stage) {
 		final Dialog dialog = new Dialog(" ", Gui.skin);
-		dialog.text(msg);
+		int linesToSkip = 2;
+		dialog.text(msg).pad(25);
 		dialog.row();
+		for (int i = 0; i < linesToSkip; ++i) {
+			dialog.add(" ");
+			dialog.row();
+		}
 		TextButton cbtn = new TextButton("Ok", Gui.skin);
+		cbtn.align(Align.center);
 		dialog.add(cbtn).width(Gdx.graphics.getWidth() / 4).row();
 		cbtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
@@ -255,7 +260,7 @@ public class Gui {
 			}
 
 		});
-		dialog.show(menu);
+		dialog.show(stage);
 	}
 
 	static void setStats() {
@@ -424,7 +429,7 @@ public class Gui {
 					if (GameSaver.loadWorld(sa)) {
 						MadSand.state = GameState.GAME;
 					} else
-						drawOkDialog("Unable to load world " + sa);
+						drawOkDialog("Unable to load world " + sa, menu);
 
 				}
 			});
@@ -494,11 +499,11 @@ public class Gui {
 					} catch (Exception localException) {
 					}
 
-					MadSand.state = GameState.WORLDGEN;
-					new ThreadedUtils().initialWorldGen.start();
+					MadSand.state = GameState.GAME;
 					Gdx.input.setInputProcessor(Gui.overlay);
-					World.player.x = new Random().nextInt(World.MAPSIZE);
-					World.player.y = new Random().nextInt(World.MAPSIZE);
+					// MadSand.world.Generate();
+					// World.player.x = new Random().nextInt(World.MAPSIZE);
+					// World.player.y = new Random().nextInt(World.MAPSIZE);
 					World.player.globalPos.x = (World.player.x * MadSand.TILESIZE);
 					World.player.globalPos.y = (World.player.y * MadSand.TILESIZE);
 					Gui.exitButton.setVisible(false);
@@ -764,8 +769,7 @@ public class Gui {
 			final int ssa = cg;
 			Gui.craftbtn[ssa].addListener(new ChangeListener() {
 				public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-					CraftUtils.craftItem(MadSand.craftableid[ssa]);
-					Utils.out("Craft request for " + MadSand.craftableid[ssa]);
+					World.player.craftItem(MadSand.craftableid[ssa]);
 				}
 			});
 			cg++;

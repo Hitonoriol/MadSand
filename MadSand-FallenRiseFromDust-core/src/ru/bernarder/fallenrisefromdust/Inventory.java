@@ -153,6 +153,26 @@ public class Inventory {
 		}
 	}
 
+	public boolean delItem(String query) {
+		int i = 0;
+		if (query.indexOf(":") == -1)
+			query += ":";
+		try {
+			String[] block = query.split(":");
+			String[] attr;
+			while (i < block.length) {
+				attr = block[i].split("/");
+				if (!delItem(Integer.parseInt(attr[0]), Integer.parseInt(attr[1])))
+					return false;
+				i++;
+			}
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 	public boolean delItem(int id) {
 		return delItem(id, 1);
 	}

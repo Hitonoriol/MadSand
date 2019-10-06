@@ -1,7 +1,7 @@
 package ru.bernarder.fallenrisefromdust.enums;
 
 public enum Skill {
-	None(0), Level(1), Woodcutting(2), Harvesting(3), Mining(4), Survival(5);
+	None(0), Level(1), Woodcutting(2), Harvesting(3), Mining(4), Survival(5), Crafting(6), Farming(7), Digging(8);
 
 	private final int val;
 

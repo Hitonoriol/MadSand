@@ -1,8 +1,8 @@
 package ru.bernarder.fallenrisefromdust;
 
 public class SkillValue {
-	final static double DEFAULT_MULTIPLIER = 0.4;
-	final static int DEFAULT_REQUIRED_EXP = 10;
+	final static double DEFAULT_MULTIPLIER = 1.4;
+	final static int DEFAULT_REQUIRED_EXP = 30;
 
 	public int lvl, exp, requiredExp;
 	public double lvUpMultiplier;

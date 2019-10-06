@@ -88,24 +88,6 @@ public class Loot {
 		return addLootQ(query, false, x, y, map);
 	}
 
-	public static boolean removeLootFromInv(String query) {
-		int i = 0;
-		String temp = query;
-		try {
-			String[] block = temp.split(":");
-			String[] attr = new String[0];
-			while (i < block.length) {
-				attr = block[i].split("/");
-				World.player.inventory.delItem(Integer.parseInt(attr[0]), Integer.parseInt(attr[1]));
-				i++;
-			}
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-
 	public static boolean invExists(String sequence) {
 		int i = 0;
 		String temp = sequence;

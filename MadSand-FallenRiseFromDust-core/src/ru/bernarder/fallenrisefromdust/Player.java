@@ -15,11 +15,10 @@ public class Player {
 	public Stats stats = new Stats();
 	Inventory inventory;
 
-	public PairFloat globalPos;
+	public PairFloat globalPos = new PairFloat(x * MadSand.TILESIZE, y * MadSand.TILESIZE);
 
 	public Player(String name) {
 		this.name = name;
-		init();
 	}
 
 	public Player() {
@@ -219,6 +218,17 @@ public class Player {
 		return doAction(Stats.AP_MINOR);
 	}
 
+	public boolean craftItem(int id) {
+		if (inventory.delItem(ItemProp.recipe.get(id))) {
+			increaseSkill(Skill.Crafting);
+			inventory.putItem(id);
+			Gui.drawOkDialog("Crafted " + ItemProp.name.get(id), Gui.craft);
+			return true;
+		}
+		Gui.drawOkDialog("Not enough resources to craft " + ItemProp.name.get(id), Gui.craft);
+		return false;
+	}
+
 	public void useItem() {
 		int id = stats.hand;
 		int ptile = MadSand.world.getTileId(x, y);
@@ -226,8 +236,8 @@ public class Player {
 		checkHands(id);
 		if (item != -1) {
 			MadSand.world.getCurLoc().delTile(x, y);
-			World.player.inventory.putItem(item, 1);
-			MadSand.print("You dug up some " + ItemProp.name.get(item));
+			World.player.inventory.putItem(item);
+			increaseSkill(Skill.Digging);
 		}
 		String action = ItemProp.useAction.get(id);
 		World.player.doAction();
@@ -240,27 +250,8 @@ public class Player {
 			MadSand.world.curlayer += 1;
 			MadSand.world.delObj(World.player.x, World.player.y);
 		}
-		if (id == 6) {
-			if (ptile == 0) {
-				MadSand.world.putMapTile(World.player.y, World.player.x, 6);
-				MadSand.print("You dug a hole.");
-			}
-			if (ptile == 3) {
-				MadSand.world.putMapTile(World.player.y, World.player.x, 16);
-				MadSand.print("You dug a hole.");
-			}
-			if (ptile == 1) {
-				World.player.inventory.putItem(5, 1, true);
-				MadSand.world.putMapTile(World.player.x, World.player.y, 0);
-				MadSand.print("You dug some clay");
-			}
-			if (ptile == 2) {
-				World.player.inventory.putItem(9, 1, true);
-				MadSand.world.putMapTile(World.player.x, World.player.y, 0);
-				MadSand.print("You dug some flint");
-			}
-		}
 		if (Item.getType(id) == ItemType.Consumable) {
+			increaseSkill(Skill.Survival);
 			MadSand.print("You ate one " + ItemProp.name.get(id));
 			String cont[] = ItemProp.heal.get(id).split(":");
 			heal(Integer.parseInt(cont[0]));
@@ -286,6 +277,7 @@ public class Player {
 		if (Item.getType(id) == ItemType.Crop) { // crop
 			Pair coords = new Pair(x, y).addDirection(stats.look);
 			if (MadSand.world.getCurLoc().putCrop(coords.x, coords.y, id)) {
+				increaseSkill(Skill.Farming);
 				MadSand.print("You planted 1 " + new Item(id).name);
 				World.player.inventory.delItem(id);
 			}
@@ -305,7 +297,7 @@ public class Player {
 	}
 
 	public void freeHands() {
-		MadSand.print("You put your " + ObjectProp.name.get(stats.hand) + " back to your inventory");
+		MadSand.print("You put your " + ItemProp.name.get(stats.hand) + " back to your inventory");
 		stats.hand = 0;
 		Gui.setHandDisplay(stats.hand);
 	}

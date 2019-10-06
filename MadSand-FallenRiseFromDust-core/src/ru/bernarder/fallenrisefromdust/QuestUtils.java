@@ -38,7 +38,7 @@ public class QuestUtils {
 			if ((MadSand.quests[id][1] == 1) && (Loot.invExists(questList[id][4]))) {
 				Loot.addLootQ(questList[id][0]);
 				MadSand.showDialog(1, questList[id][2], id);
-				Loot.removeLootFromInv(questList[id][4]);
+				World.player.inventory.delItem(questList[id][4]);
 				MadSand.quests[id][0] = 1;
 				MadSand.quests[id][1] = 0;
 				return;

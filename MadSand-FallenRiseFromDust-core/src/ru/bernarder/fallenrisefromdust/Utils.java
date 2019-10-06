@@ -45,8 +45,6 @@ public class Utils {
 	public static boolean tester = true;
 	public static int ubound;
 	public static int lbound;
-	public static float x = World.player.x * 33;
-	public static float y = World.player.y * 33;
 	public static boolean invent = false;
 	public static float pspeed = 33.0F;
 	static SpriteBatch batch;
@@ -82,6 +80,7 @@ public class Utils {
 	static Document resdoc;
 	static Document questdoc;
 	static Document gendoc;
+	static Document skilldoc;
 
 	public static Document XMLString(String xml) {
 		try {
@@ -282,7 +281,6 @@ public class Utils {
 		String[] cont;
 		Vector<Integer> stages, slens;
 		int i = 0, cc = 0;
-
 		// Loading worldgen config
 		Vector<Integer> def;
 		Vector<String> group;
@@ -360,7 +358,6 @@ public class Utils {
 			ObjectProp.name.put(i, getKey(resdoc, "object", str(i), "name"));
 			ObjectProp.hp.put(i, Integer.parseInt(getKey(resdoc, "object", str(i), "tough")));
 			ObjectProp.harvestHp.put(i, Integer.parseInt(getKey(resdoc, "object", str(i), "harvesthp")));
-
 			skill = getKey(resdoc, "object", str(i), "skill");
 			if (!skill.equals("-1"))
 				ObjectProp.skill.put(i, Skill.valueOf(skill));
@@ -404,7 +401,6 @@ public class Utils {
 		dark = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/darkness.png"));
 		curs = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/cursor.png"));
 		placeholder = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/placeholder.png"));
-		World.player.globalPos = new PairFloat(x, y);
 		FileHandle pfhandle = Gdx.files.local(MadSand.SAVEDIR + "player/d1.png");
 		batch = new SpriteBatch();
 		dtex = new Texture(pfhandle);
@@ -416,6 +412,31 @@ public class Utils {
 		ltex = new Texture(pfhandle);
 		cursor = new Sprite(curs);
 		Splayer = new Sprite(dtex);
+	}
+
+	static void loadSkillReqs() {
+		if (SkillContainer.reqList.size() > 0)
+			return;
+		skilldoc = XMLString(GameSaver.getExternalNl(MadSand.SKILLFILE));
+		int i = 0;
+		int skills = countKeys(skilldoc, "skill");
+		Skill skill;
+		String skillStr;
+		int req;
+		double mul;
+		while (i < skills) {
+			skillStr = getAttr(skilldoc, "skill", str(i), "name");
+			if (skillStr.equals("-1")) {
+				++i;
+				continue;
+			}
+			skill = Skill.valueOf(skillStr);
+			req = val(getKey(skilldoc, "skill", str(i), "required"));
+			mul = Double.parseDouble(getKey(skilldoc, "skill", str(i), "multiplier"));
+			out(skill + " " + req + " " + mul);
+			SkillContainer.reqList.put(skill, makeTuple(req, mul));
+			++i;
+		}
 	}
 
 	static HashMap<Integer, Vector<Integer>> getAitem(int id, String field) {
@@ -444,6 +465,10 @@ public class Utils {
 
 	public static Tuple<Integer, String> makeTuple(int key, String val) {
 		return new Tuple<Integer, String>(key, val);
+	}
+
+	public static Tuple<Integer, Double> makeTuple(int key, double val) {
+		return new Tuple<Integer, Double>(key, val);
 	}
 
 	public static String str(int val) {

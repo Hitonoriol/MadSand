@@ -64,6 +64,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 	static String QUESTFILE = SAVEDIR + "quests.xml";
 	static String GENFILE = SAVEDIR + "worldgen.xml";
 	static String RESFILE = SAVEDIR + "res.xml";
+	static String SKILLFILE = SAVEDIR + "defskills.xml";
 	static final String MAPDIR = SAVEDIR + "worlds/";
 	static final String SCRIPTDIR = SAVEDIR + "scripts";
 	static final String PLAYERFILE = "/Player.mc";
@@ -171,7 +172,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static World world;
 
 	public void create() {
-
 		int radius = 13;
 		if (new File(SAVEDIR + "lastrend.dat").exists())
 			radius = (Integer.parseInt(Gui.getExternal("lastrend.dat")));
@@ -186,6 +186,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		World.player.init();
 		Utils.Initf();
 		this.objn = new ItemProp();
 		Gui.createBasicSkin();
@@ -270,14 +271,11 @@ public class MadSand extends com.badlogic.gdx.Game {
 			while (i < rcoords.length) {
 				trdx = World.player.x + (int) rcoords[i].x;
 				trdy = World.player.y + (int) rcoords[i].y;
-				/*if (trdx < 0)
-					trdx = 0;
-				if (trdy < 0)
-					trdy = 0;
-				if (trdx >= World.MAPSIZE + World.BORDER)
-					trdx = World.MAPSIZE + World.BORDER;
-				if (trdy >= World.MAPSIZE + World.BORDER)
-					trdy = World.MAPSIZE + World.BORDER;*/
+				/*
+				 * if (trdx < 0) trdx = 0; if (trdy < 0) trdy = 0; if (trdx >= World.MAPSIZE +
+				 * World.BORDER) trdx = World.MAPSIZE + World.BORDER; if (trdy >= World.MAPSIZE
+				 * + World.BORDER) trdy = World.MAPSIZE + World.BORDER;
+				 */
 				int objid = world.getCurLoc().getObject(trdx, trdy).id;
 				if ((objid != 0) && (objid != 666)) {
 					Utils.batch.draw(Utils.objects[objid], World.player.globalPos.x + (int) rcoords[i].x * TILESIZE,
@@ -310,7 +308,8 @@ public class MadSand extends com.badlogic.gdx.Game {
 		int i = 0;
 		while (i < rcoords.length) {
 			Utils.batch.draw(
-					Utils.tile[world.getTileOrDefault(World.player.y + (int) rcoords[i].y, World.player.x + (int) rcoords[i].x)],
+					Utils.tile[world.getTileOrDefault(World.player.y + (int) rcoords[i].y,
+							World.player.x + (int) rcoords[i].x)],
 					World.player.globalPos.x + rcoords[i].x * 33, World.player.globalPos.y + rcoords[i].y * 33);
 			i++;
 		}
@@ -478,8 +477,8 @@ public class MadSand extends com.badlogic.gdx.Game {
 			Gdx.gl.glClear(16384);
 			Utils.batch.begin();
 			DrawGame();
-			Gui.overlay.draw();
 			Gui.overlay.act();
+			Gui.overlay.draw();
 			Utils.batch.end();
 		} else if (state.equals(GameState.INVENTORY)) {
 			try {

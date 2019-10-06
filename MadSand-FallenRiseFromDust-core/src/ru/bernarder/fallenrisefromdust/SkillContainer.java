@@ -5,17 +5,21 @@ import java.util.HashMap;
 import ru.bernarder.fallenrisefromdust.enums.Skill;
 
 public class SkillContainer extends HashMap<Skill, SkillValue> {
-	static int LEVEL_REQ_EXP = 100;
-	static double LEVEL_MULTIPLIER = 0.9;
+	static HashMap<Skill, Tuple<Integer, Double>> reqList = new HashMap<Skill, Tuple<Integer, Double>>();
 
 	public SkillContainer() {
 		Skill skill;
 		SkillValue skillVal;
+		Tuple<Integer, Double> rs;
+		Utils.loadSkillReqs();
 		for (int i = 0; i < Skill.len(); ++i) {
 			skill = Skill.get(i);
-			if (skill == Skill.Level)
-				skillVal = new SkillValue(LEVEL_REQ_EXP, LEVEL_MULTIPLIER);
-			else
+			skillVal = new SkillValue();
+
+			if (reqList.containsKey(skill)) {
+				rs = reqList.get(skill);
+				skillVal = new SkillValue(rs.l, rs.r);
+			} else
 				skillVal = new SkillValue();
 
 			super.put(skill, skillVal);
