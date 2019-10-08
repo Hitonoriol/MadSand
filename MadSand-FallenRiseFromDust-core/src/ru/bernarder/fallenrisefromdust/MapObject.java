@@ -39,15 +39,22 @@ public class MapObject {
 		}
 	}
 
-	boolean takeDamage() {
+	boolean takeDamage(int amt) {
+		if (amt <= 0)
+			amt = 1;
 		boolean dmg = false;
-		if (--harverstHp <= 0) {
-			this.hp--;
+		harverstHp -= amt;
+		if (harverstHp <= 0) {
+			--this.hp;
 			harverstHp = ObjectProp.harvestHp.get(id);
 			dmg = true;
 		}
 		this.verify();
 		return dmg;
+	}
+	
+	boolean takeDamage() {
+		return takeDamage(0);
 	}
 
 	private static int getAltItem(int id, int hand, HashMap<Integer, HashMap<Integer, Vector<Integer>>> container) {

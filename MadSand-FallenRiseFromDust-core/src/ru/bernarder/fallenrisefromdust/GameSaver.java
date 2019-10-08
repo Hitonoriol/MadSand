@@ -118,7 +118,7 @@ public class GameSaver {
 	}
 
 	public static void saveWorld() {
-		MadSand.createDirs();
+		GameSaver.createDirs();
 		if (saveSector() && saveChar())
 			MadSand.print("Game saved!");
 		else
@@ -233,6 +233,21 @@ public class GameSaver {
 
 	static boolean loadSector() {
 		return loadSector(MadSand.world.curxwpos, MadSand.world.curywpos, MadSand.world.curlayer);
+	}
+
+	public static void createDirs() {
+		File saveloc = new File(MadSand.SAVEDIR);
+		File maploc = new File(MadSand.MAPDIR);
+		File curworld = new File(MadSand.MAPDIR + MadSand.WORLDNAME);
+	
+		if (!saveloc.exists()) {
+			saveloc.mkdirs();
+		}
+		if (!maploc.exists()) {
+			maploc.mkdirs();
+		}
+		if (!curworld.exists())
+			curworld.mkdirs();
 	}
 
 }

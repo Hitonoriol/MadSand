@@ -382,7 +382,7 @@ public class Gui {
 		});
 		cbtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				MadSand.setParams(Math.round(renderslide.getValue()));
+				MadSand.setRenderRadius(Math.round(renderslide.getValue()));
 				Gui.saveToExternal("lastrend.dat", Math.round(renderslide.getValue()) + "");
 				// TODO
 				dialog.remove();

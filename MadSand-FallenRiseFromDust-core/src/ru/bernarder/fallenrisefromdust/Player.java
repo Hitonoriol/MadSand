@@ -10,6 +10,9 @@ public class Player {
 
 	public int x = World.MAPSIZE / 2;
 	public int y = World.MAPSIZE / 2;
+	
+	public int fov;
+	public int maxFov, minFov;
 
 	private String name;
 	public Stats stats = new Stats();
@@ -104,7 +107,7 @@ public class Player {
 		MapObject obj = MadSand.world.getCurLoc().getObject(x, y, stats.look);
 		int mhp = ObjectProp.harvestHp.get(obj.id);
 		Skill skill = obj.skill;
-		boolean destroyed = obj.takeDamage();
+		boolean destroyed = obj.takeDamage(stats.skills.getLvl(skill));
 		if (item != -1 && destroyed) {
 			inventory.putItem(item);
 			increaseSkill(skill);
@@ -156,7 +159,7 @@ public class Player {
 
 	void heal(int to) {
 		if (stats.hp + to < stats.mhp) {
-			stats.hp += to;
+			stats.hp += stats.skills.getLvlReward(Skill.Survival, to);
 		} else {
 			stats.hp = stats.mhp;
 		}
@@ -254,8 +257,10 @@ public class Player {
 			increaseSkill(Skill.Survival);
 			MadSand.print("You ate one " + ItemProp.name.get(id));
 			String cont[] = ItemProp.heal.get(id).split(":");
-			heal(Integer.parseInt(cont[0]));
-			satiate(Integer.parseInt(cont[1]));
+			int healAmt = Integer.parseInt(cont[0]);
+			int satAmt = Integer.parseInt(cont[1]);
+			heal(healAmt);
+			satiate(satAmt);
 
 		}
 		if ((id == 9) && (World.player.inventory.getSameCell(9, 1) != -1)

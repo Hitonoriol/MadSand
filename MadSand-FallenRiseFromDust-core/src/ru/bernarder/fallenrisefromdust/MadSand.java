@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -44,8 +43,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 	static Table dialog;
 	static Table maindialog;
 
-	static int renderradius = 12 * 33;
-
 	static int mx = 0;
 	static int my = 0;
 
@@ -53,6 +50,8 @@ public class MadSand extends com.badlogic.gdx.Game {
 	static final int TILESIZE = 33;
 	public static int OBJLEVELS = 2;
 	static final int WORLDSIZE = 10;
+	
+	static int renderradius;
 
 	public static boolean stepping = false;
 	public static int stepx = TILESIZE;
@@ -97,6 +96,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static int SEED = 100;
 	static int SPEED = 100;
 	static float ZOOM = 1.5F;
+	static final int DEFAULT_FOV = 13;
 
 	static final String FONT_CHARS = "АБВГДЕЁЖЗИЙКЛМНОПРСТФХЦЧШЩЪЬЫЭЮЯабвгдеёжзийклмнопрстфхцчшщыъьэюяabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"'<>";
 	static final String FONT_PATH = "fonts/8bitoperator.ttf";
@@ -128,58 +128,19 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static int tempwx, tempwy;
 	public static boolean encounter = false;
 
-	static Vector2[] rcoords;
+	static PairFloat[] renderArea;
 	static ObjectMapper mapper = new ObjectMapper();
-
-	static int countRcells() {
-		int i = 0;
-		int ii = 0, cl = 0;
-		while (i < World.MAPSIZE + World.BORDER) {
-			while (ii < World.MAPSIZE + World.BORDER) {
-				if (calcDistance(50 * 33, 50 * 33, i * 33, ii * 33) <= renderradius) {
-					cl++;
-				}
-				ii++;
-			}
-			ii = 0;
-			i++;
-		}
-		return cl;
-	}
-
-	static Vector2[] getAllRcells(Vector2[] cl) {
-		int i = 0;
-		int ii = 0, clc = 0;
-		while (i < World.MAPSIZE + World.BORDER) {
-			while (ii < World.MAPSIZE + World.BORDER) {
-				if (calcDistance(50 * 33, 50 * 33, i * 33, ii * 33) <= renderradius) {
-					cl[clc] = new Vector2(50 - ii, 50 - i);
-					clc++;
-				}
-				ii++;
-			}
-			ii = 0;
-			i++;
-		}
-		return cl;
-	}
-
-	static void setRenderRadius() {
-		rcoords = new Vector2[countRcells()];
-		rcoords = getAllRcells(rcoords);
-	}
-
+	
 	public static World world;
 
+	static final int TEST_POINT = 50;
+
 	public void create() {
-		int radius = 13;
-		if (new File(SAVEDIR + "lastrend.dat").exists())
-			radius = (Integer.parseInt(Gui.getExternal("lastrend.dat")));
-		setParams(radius);
+		setRenderRadius(DEFAULT_FOV);
 		World.player = new Player();
 		Utils.out("Starting initialization!");
 		setRenderRadius();
-		Utils.out("Render area: " + rcoords.length);
+		Utils.out("Render area: " + renderArea.length);
 		try {
 			PrintStream ge = new PrintStream(new File("MadSandCritical.log"));
 			System.setErr(ge);
@@ -198,7 +159,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 		parameter.color = Color.BLUE;
 		Gui.font1 = generator.generateFont(parameter);
 		generator.dispose();
-		Gdx.graphics.setContinuousRendering(true);
+		Gdx.graphics.setContinuousRendering(false);
 		Utils.ubound = (World.worldCoord(World.MAPSIZE) - 33);
 		Utils.lbound = (World.worldCoord(World.MAPSIZE) - 33);
 		camera = new OrthographicCamera();
@@ -222,8 +183,46 @@ public class MadSand extends com.badlogic.gdx.Game {
 		world.Generate();
 		Utils.out("End of initialization!");
 	}
+	
+	static int countRcells() {
+		int i = 0;
+		int ii = 0, cl = 0;
+		while (i < World.MAPSIZE + World.BORDER) {
+			while (ii < World.MAPSIZE + World.BORDER) {
+				if (calcDistance(TEST_POINT * TILESIZE, TEST_POINT * TILESIZE, i * TILESIZE, ii * TILESIZE) <= renderradius) {
+					cl++;
+				}
+				ii++;
+			}
+			ii = 0;
+			i++;
+		}
+		return cl;
+	}
 
-	public static void setParams(int radius) {
+	private static PairFloat[] getAllRcells(PairFloat[] cl) {
+		int i = 0;
+		int ii = 0, clc = 0;
+		while (i < World.MAPSIZE + World.BORDER) {
+			while (ii < World.MAPSIZE + World.BORDER) {
+				if (calcDistance(TEST_POINT * TILESIZE, TEST_POINT * TILESIZE, i * TILESIZE, ii * TILESIZE) <= renderradius) {
+					cl[clc] = new PairFloat(TEST_POINT - ii, TEST_POINT - i);
+					clc++;
+				}
+				ii++;
+			}
+			ii = 0;
+			i++;
+		}
+		return cl;
+	}
+
+	static void setRenderRadius() {
+		renderArea = new PairFloat[countRcells()];
+		renderArea = getAllRcells(renderArea);
+	}
+
+	public static void setRenderRadius(int radius) {
 		renderradius = radius * MadSand.TILESIZE;
 		setRenderRadius();
 	}
@@ -256,21 +255,21 @@ public class MadSand extends com.badlogic.gdx.Game {
 	void DrawGame() {
 		try {
 			int i = 0;
-			while (i < rcoords.length) {
+			while (i < renderArea.length) {
 				Utils.batch.draw(
-						Utils.tile[world.getTileOrDefault(World.player.x + (int) rcoords[i].x,
-								World.player.y + (int) rcoords[i].y)],
-						World.player.globalPos.x + rcoords[i].x * TILESIZE,
-						World.player.globalPos.y + rcoords[i].y * TILESIZE);
+						Utils.tile[world.getTileOrDefault(World.player.x + (int) renderArea[i].x,
+								World.player.y + (int) renderArea[i].y)],
+						World.player.globalPos.x + renderArea[i].x * TILESIZE,
+						World.player.globalPos.y + renderArea[i].y * TILESIZE);
 				i++;
 			}
 			if (Player.isCollisionMask(World.player.x, World.player.y)) {
 				drawPlayer();
 			}
 			i = 0;
-			while (i < rcoords.length) {
-				trdx = World.player.x + (int) rcoords[i].x;
-				trdy = World.player.y + (int) rcoords[i].y;
+			while (i < renderArea.length) {
+				trdx = World.player.x + (int) renderArea[i].x;
+				trdy = World.player.y + (int) renderArea[i].y;
 				/*
 				 * if (trdx < 0) trdx = 0; if (trdy < 0) trdy = 0; if (trdx >= World.MAPSIZE +
 				 * World.BORDER) trdx = World.MAPSIZE + World.BORDER; if (trdy >= World.MAPSIZE
@@ -278,13 +277,13 @@ public class MadSand extends com.badlogic.gdx.Game {
 				 */
 				int objid = world.getCurLoc().getObject(trdx, trdy).id;
 				if ((objid != 0) && (objid != 666)) {
-					Utils.batch.draw(Utils.objects[objid], World.player.globalPos.x + (int) rcoords[i].x * TILESIZE,
-							World.player.globalPos.y + (int) rcoords[i].y * TILESIZE);
+					Utils.batch.draw(Utils.objects[objid], World.player.globalPos.x + (int) renderArea[i].x * TILESIZE,
+							World.player.globalPos.y + (int) renderArea[i].y * TILESIZE);
 				}
 				if (World.player.standingOnLoot(trdx, trdy)) {
 					Utils.batch.draw(Utils.objects[OBJECT_LOOT],
-							World.player.globalPos.x + (int) rcoords[i].x * TILESIZE,
-							World.player.globalPos.y + (int) rcoords[i].y * TILESIZE);
+							World.player.globalPos.x + (int) renderArea[i].x * TILESIZE,
+							World.player.globalPos.y + (int) renderArea[i].y * TILESIZE);
 				}
 
 				i++;
@@ -306,18 +305,18 @@ public class MadSand extends com.badlogic.gdx.Game {
 
 	void drawWorld() {
 		int i = 0;
-		while (i < rcoords.length) {
+		while (i < renderArea.length) {
 			Utils.batch.draw(
-					Utils.tile[world.getTileOrDefault(World.player.y + (int) rcoords[i].y,
-							World.player.x + (int) rcoords[i].x)],
-					World.player.globalPos.x + rcoords[i].x * 33, World.player.globalPos.y + rcoords[i].y * 33);
+					Utils.tile[world.getTileOrDefault(World.player.y + (int) renderArea[i].y,
+							World.player.x + (int) renderArea[i].x)],
+					World.player.globalPos.x + renderArea[i].x * 33, World.player.globalPos.y + renderArea[i].y * 33);
 			i++;
 		}
 		Utils.batch.draw(Utils.Splayer, World.player.globalPos.x, World.player.globalPos.y + stepy);
 		i = 0;
 	}
 
-	static void showDialog(final int type, String text, final int qid) {
+	static void showDialog(final int type, String text, final int qid) {	//TODO rework and remove this shit
 		boolean lot = false;
 		String toin = "";
 		if (text.indexOf("!@!") > -1) {
@@ -379,10 +378,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 		}
 	}
 
-	int countCoordFromWorld(int arg) {
-		return arg * MadSand.TILESIZE;
-	}
-
 	void drawPlayer() {
 		if (stepping) {
 			this.elapsedTime += Gdx.graphics.getDeltaTime();
@@ -420,25 +415,9 @@ public class MadSand extends com.badlogic.gdx.Game {
 		}
 	}
 
-	public static void createDirs() {
-		File saveloc = new File(SAVEDIR);
-		File maploc = new File(MAPDIR);
-		File curworld = new File(MadSand.MAPDIR + MadSand.WORLDNAME);
-
-		if (!saveloc.exists()) {
-			saveloc.mkdirs();
-		}
-		if (!maploc.exists()) {
-			maploc.mkdirs();
-		}
-		if (!curworld.exists())
-			curworld.mkdirs();
-	}
-
 	static int repeat = 1;
 	static int li;
 	static String oldarg = "";
-
 	public static void print(String arg) {
 		if (!oldarg.equals(arg)) {
 			repeat = 1;
