@@ -10,7 +10,7 @@ public class Player {
 
 	public int x = World.MAPSIZE / 2;
 	public int y = World.MAPSIZE / 2;
-	
+
 	public int fov;
 	public int maxFov, minFov;
 
@@ -66,8 +66,10 @@ public class Player {
 	}
 
 	public void checkHands(int id) {
-		if (inventory.getSameCell(id, 1) == -1)
+		if (inventory.getSameCell(id, 1) == -1) {
 			stats.hand = 0;
+			Gui.setHandDisplay(0);
+		}
 	}
 
 	public boolean dropItem(int id, int quantity) {
@@ -91,31 +93,6 @@ public class Player {
 					break;
 			}
 		}
-	}
-
-	void interact(final Direction direction) {
-		int id = MadSand.world.getCurLoc().getObject(x, y, stats.look).id;
-		if (id == 0)
-			return;
-		String action = ObjectProp.interactAction.get(id);
-		doAction();
-		if (action != "-1") {
-			BuildScript.execute(action);
-			return;
-		}
-		int item = MapObject.getAltItem(id, ItemProp.type.get(stats.hand).get());
-		MapObject obj = MadSand.world.getCurLoc().getObject(x, y, stats.look);
-		int mhp = ObjectProp.harvestHp.get(obj.id);
-		Skill skill = obj.skill;
-		boolean destroyed = obj.takeDamage(stats.skills.getLvl(skill));
-		if (item != -1 && destroyed) {
-			inventory.putItem(item);
-			increaseSkill(skill);
-		}
-		if (!destroyed)
-			MadSand.print("Harvesting from " + obj.name + " [ " + obj.harverstHp + " / " + mhp + " ]");
-		if (item == -1 && destroyed)
-			MadSand.print("You damaged " + obj.name);
 	}
 
 	public boolean isCollision(Direction direction, int flag) {
@@ -224,12 +201,37 @@ public class Player {
 	public boolean craftItem(int id) {
 		if (inventory.delItem(ItemProp.recipe.get(id))) {
 			increaseSkill(Skill.Crafting);
-			inventory.putItem(id);
+			inventory.putItem(id, stats.skills.getItemReward(Skill.Crafting));
 			Gui.drawOkDialog("Crafted " + ItemProp.name.get(id), Gui.craft);
 			return true;
 		}
 		Gui.drawOkDialog("Not enough resources to craft " + ItemProp.name.get(id), Gui.craft);
 		return false;
+	}
+
+	void interact(final Direction direction) {
+		int id = MadSand.world.getCurLoc().getObject(x, y, stats.look).id;
+		if (id == 0)
+			return;
+		String action = ObjectProp.interactAction.get(id);
+		doAction();
+		if (action != "-1") {
+			BuildScript.execute(action);
+			return;
+		}
+		int item = MapObject.getAltItem(id, ItemProp.type.get(stats.hand).get());
+		MapObject obj = MadSand.world.getCurLoc().getObject(x, y, stats.look);
+		int mhp = ObjectProp.harvestHp.get(obj.id);
+		Skill skill = obj.skill;
+		boolean destroyed = obj.takeDamage(stats.skills.getLvl(skill));
+		if (item != -1 && destroyed) {
+			inventory.putItem(item, stats.skills.getItemReward(skill));
+			increaseSkill(skill);
+		}
+		if (!destroyed)
+			MadSand.print("You hit a " + obj.name + " [ " + obj.harverstHp + " / " + mhp + " ]");
+		if (item == -1 && destroyed)
+			MadSand.print("You damaged " + obj.name);
 	}
 
 	public void useItem() {
@@ -261,9 +263,9 @@ public class Player {
 			int satAmt = Integer.parseInt(cont[1]);
 			heal(healAmt);
 			satiate(satAmt);
-
+			inventory.delItem(id);
 		}
-		if ((id == 9) && (World.player.inventory.getSameCell(9, 1) != -1)
+		if ((id == 9) && (World.player.inventory.getSameCell(9, 1) != -1) // TODO script this or make campfire craftable
 				&& (World.player.inventory.getSameCell(1, 5) != -1)) {
 			MadSand.print("You placed a campfire");
 			World.player.inventory.delItem(9);
@@ -279,7 +281,7 @@ public class Player {
 		if (Item.getType(id) == ItemType.Shield) {
 			// equip shield
 		}
-		if (Item.getType(id) == ItemType.Crop) { // crop
+		if (Item.getType(id) == ItemType.Crop) {
 			Pair coords = new Pair(x, y).addDirection(stats.look);
 			if (MadSand.world.getCurLoc().putCrop(coords.x, coords.y, id)) {
 				increaseSkill(Skill.Farming);
@@ -298,7 +300,7 @@ public class Player {
 			MadSand.world.getCurLoc().addTile(World.player.x, World.player.y, World.player.stats.look,
 					Item.getAltObject(id));
 		}
-
+		checkHands(id);
 	}
 
 	public void freeHands() {

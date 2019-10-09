@@ -5,7 +5,8 @@ import java.util.HashMap;
 import ru.bernarder.fallenrisefromdust.enums.Skill;
 
 public class SkillContainer extends HashMap<Skill, SkillValue> {
-	final int BONUS_DENOMINATOR = 100;
+	final int BONUS_DENOMINATOR = 25;		//skill lvl/this = bonus percent of something for some actions
+	final int ITEM_BONUS_DENOMINATOR = 5;	//level/this = quantity of bonus items from action
 	static HashMap<Skill, Tuple<Integer, Double>> reqList = new HashMap<Skill, Tuple<Integer, Double>>();
 
 	public SkillContainer() {
@@ -57,6 +58,18 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 
 	public int getLvl(Skill skill) {
 		return get(skill).lvl;
+	}
+
+	static final int REWARD_CHANCE = 10;
+
+	public int getItemReward(Skill skill) {
+		int rew = get(skill).lvl / ITEM_BONUS_DENOMINATOR;
+		if (rew == 0)
+			return 1;
+		if (Utils.random.nextInt(REWARD_CHANCE) == Utils.random.nextInt(REWARD_CHANCE))
+			return rew;
+		else
+			return 1;
 	}
 
 	public int getLvlReward(Skill skill, int baseVal) {

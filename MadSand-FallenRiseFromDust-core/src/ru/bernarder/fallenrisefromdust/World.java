@@ -190,6 +190,7 @@ public class World {
 	private static int PROB_DIVISOR = 2;
 
 	public void genDungeon() {
+		boolean force = true;
 		Utils.out("Generating dungeon!");
 		HashMap<String, Integer> dungeon = WorldGenProp.getBiomedungeon(biome);
 		int prob = dungeon.get(DUNGEON_PROBABILITY);
@@ -209,13 +210,13 @@ public class World {
 			while (iit < World.MAPSIZE) {
 				if (grid.get(iit, it) == 0.0f) {
 					getCurLoc(1).addObject(iit, it, 0);
-					getCurLoc(1).addTile(it, iit, 5);
+					getCurLoc(1).addTile(it, iit, 5, force);
 				}
 				if (grid.get(iit, it) == 1.0f)
 					getCurLoc(1).addObject(iit, it, 13);
 				if (grid.get(iit, it) == 0.5f) {
 					getCurLoc(1).addObject(iit, it, 0);
-					getCurLoc(1).addTile(it, iit, 12);
+					getCurLoc(1).addTile(it, iit, 12, force);
 				}
 
 				iit++;

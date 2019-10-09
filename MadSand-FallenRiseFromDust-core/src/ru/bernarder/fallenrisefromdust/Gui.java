@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
@@ -124,10 +125,10 @@ public class Gui {
 	static int ITEM_DISPLAY_SLOTS = 5;
 
 	public static void setHandDisplay(int id) {
-		Sprite img = Utils.cursor;
+		Drawable img = Utils.noEquip;
 		if (id != 0)
-			img = new Sprite(Utils.item[id]);
-		equip[ITEM_DISPLAY_HOLDING].setDrawable(new SpriteDrawable(img));
+			img = new TextureRegionDrawable(Utils.item[id]);
+		equip[ITEM_DISPLAY_HOLDING].setDrawable((Drawable) img);
 	}
 
 	static void refreshOverlay() {
@@ -305,7 +306,7 @@ public class Gui {
 		dialog.setMovable(true);
 		dialog.text(msg);
 		dialog.row();
-		final TextField nameField = new TextField("Johnny", Gui.skin);
+		final TextField nameField = new TextField("Player", Gui.skin);
 		setStatLabels();
 		dialog.add(new Label("Character name:", Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
 		dialog.row();
@@ -744,44 +745,56 @@ public class Gui {
 				}
 			}
 		});
-		Gui.exitButton = new TextButton("Exit to menu", Gui.skin);
-		Gui.craftButton = new TextButton("Crafting", Gui.skin);
-		TextButton back = new TextButton("Back", Gui.skin);
-		final TextButton newGameButton = new TextButton("New game", Gui.skin);
-		resumeButton = new TextButton("Resume game", Gui.skin);
+		exitButton = new TextButton("Exit to menu", skin);
+		craftButton = new TextButton("Crafting", skin);
+		TextButton back = new TextButton("Back", skin);
+		final TextButton newGameButton = new TextButton("New game", skin);
+		resumeButton = new TextButton("Resume game", skin);
 		resumeButton.setVisible(false);
-		TextButton settingsButton = new TextButton("Settings", Gui.skin);
-		TextButton exitButton = new TextButton("Exit", Gui.skin);
-		TextButton loadGame = new TextButton("Load game", Gui.skin);
+		TextButton settingsButton = new TextButton("Settings", skin);
+		TextButton exitButton = new TextButton("Exit", skin);
+		TextButton loadGame = new TextButton("Load game", skin);
 
-		Label title = new Label("MadSand: Fallen. Rise From Dust\n", Gui.skin);
+		Label title = new Label("MadSand: Fallen. Rise From Dust\n", skin);
 		title.setPosition(Gdx.graphics.getWidth() / 2 - title.getWidth() / 2.0F, Gdx.graphics.getHeight() / 2 + 100);
 
 		int cg = 0;
-		Gui.craftbtn = new TextButton[MadSand.CRAFTABLES];
+		craftbtn = new TextButton[MadSand.CRAFTABLES];
 
+		int perRow = 3;
 		while (cg < MadSand.CRAFTABLES) {
-			Gui.craftbtn[cg] = new TextButton(ItemProp.name.get(MadSand.craftableid[cg]), Gui.skin);
-			Gui.craftbl.add(Gui.craftbtn[cg]).width(250.0F);
-			Gui.craftbl.add(new Label(" " + Item.queryToName(ItemProp.recipe.get(MadSand.craftableid[cg])),
-					Gui.skin))/* .align(8) */;
-			Gui.craftbl.row();
+			craftbtn[cg] = new TextButton(ItemProp.name.get(MadSand.craftableid[cg]), skin);
+			craftbl.add(Gui.craftbtn[cg]).width(250.0F);
+			craftbl.add(new Label(" " + Item.queryToName(ItemProp.recipe.get(MadSand.craftableid[cg])),
+					skin))/* .align(8) */;
+			if ((cg + 1) % perRow == 0)
+				craftbl.row();
 			final int ssa = cg;
-			Gui.craftbtn[ssa].addListener(new ChangeListener() {
+			craftbtn[ssa].addListener(new ChangeListener() {
 				public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 					World.player.craftItem(MadSand.craftableid[ssa]);
 				}
 			});
 			cg++;
 		}
-
-		Gui.craftbl.add(back).width(250.0F);
-		Gui.scroll = new ScrollPane(Gui.craftbl);
-		Gui.scroll.setSize(1280.0F, 720.0F);
-		Gui.craft.addActor(Gui.scroll);
-		Gui.craftButton.setHeight(82.0F);
-		Gui.craftButton.align(16);
-		Gui.craftButton.setWidth(250.0F);
+		craftbl.row();
+		//craft.setDebugAll(true);
+		Table backTable = new Table();
+		backTable.align(Align.bottom);
+		backTable.add(back).fillY().expandY();
+		backTable.setWidth(Gdx.graphics.getWidth());
+		back.align(Align.center);
+		back.setOrigin(Align.center);
+		back.pad(10);
+		back.setWidth(250);
+		back.setHeight(50);
+		scroll = new ScrollPane(Gui.craftbl);
+		scroll.setSize(1280.0F, 720.0F);
+		craft.addActor(Gui.scroll);
+		craft.addActor(backTable);
+		craftButton.setHeight(82.0F);
+		craftButton.align(16);
+		craftButton.setWidth(250.0F);
 		ovtbl.row();
 		ovtbl.row();
 		ovtbl.add();

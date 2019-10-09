@@ -90,6 +90,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static int MAXMOBSONMAP = 35;
 	static int QUESTS = 0;
 
+	public static final int EQ_SLOTS = 5;
 	public static final int GUILABELS = 4;
 	public static int ENCOUNTERCHANCE = 10;
 	public static int[] COSMETICSPRITES = { 17 };
@@ -159,7 +160,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 		parameter.color = Color.BLUE;
 		Gui.font1 = generator.generateFont(parameter);
 		generator.dispose();
-		Gdx.graphics.setContinuousRendering(false);
+		Gdx.graphics.setContinuousRendering(true);
 		Utils.ubound = (World.worldCoord(World.MAPSIZE) - 33);
 		Utils.lbound = (World.worldCoord(World.MAPSIZE) - 33);
 		camera = new OrthographicCamera();
@@ -170,12 +171,11 @@ public class MadSand extends com.badlogic.gdx.Game {
 		world = new World(MadSand.WORLDSIZE);
 		World.player.globalPos.x = (World.player.x * TILESIZE);
 		World.player.globalPos.y = (World.player.y * TILESIZE);
-		Gui.equip = new Image[5];
-		Gui.equip[0] = new Image(new TextureRegionDrawable(new TextureRegion(Utils.placeholder)));
-		Gui.equip[1] = new Image(new TextureRegionDrawable(new TextureRegion(Utils.placeholder)));
-		Gui.equip[2] = new Image(new TextureRegionDrawable(new TextureRegion(Utils.placeholder)));
-		Gui.equip[3] = new Image(new TextureRegionDrawable(new TextureRegion(Utils.placeholder)));
-		Gui.equip[4] = new Image(new TextureRegionDrawable(new TextureRegion(Utils.placeholder)));
+		Gui.equip = new Image[EQ_SLOTS];
+		for (int i = 0; i < EQ_SLOTS; ++i) {
+			Gui.equip[i] = new Image();
+			Gui.equip[i].setDrawable(Utils.noEquip);
+		}
 		Gui.initmenu();
 		Gui.font.getData().markupEnabled = true;
 		Gui.font1.getData().markupEnabled = true;
@@ -233,10 +233,10 @@ public class MadSand extends com.badlogic.gdx.Game {
 			camera.position.y = 250.0F;
 		if (camera.position.x < 320.0F)
 			camera.position.x = 320.0F;
-		if (camera.position.x > (World.MAPSIZE * TILESIZE) + 100)
-			camera.position.x = (World.MAPSIZE * TILESIZE) + 100;
-		if (camera.position.y > (World.MAPSIZE * TILESIZE) + 100)
-			camera.position.y = (World.MAPSIZE * TILESIZE) + 100;
+		if (camera.position.x > (World.MAPSIZE * TILESIZE))
+			camera.position.x = (World.MAPSIZE * TILESIZE);
+		if (camera.position.y > (World.MAPSIZE * TILESIZE))
+			camera.position.y = (World.MAPSIZE * TILESIZE);
 		camera.viewportWidth = (Gdx.graphics.getWidth() / ZOOM);
 		camera.viewportHeight = (Gdx.graphics.getHeight() / ZOOM);
 		camera.update();
@@ -462,6 +462,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 		} else if (state.equals(GameState.INVENTORY)) {
 			try {
 				Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
+				Gdx.gl.glClear(16384);
 				Utils.batch.begin();
 				DrawGame();
 				Utils.batch.end();
@@ -537,6 +538,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 			Utils.batch.end();
 		} else if (state.equals(GameState.CRAFT)) {
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
+			Gdx.gl.glClear(16384);
 			Utils.batch.begin();
 			DrawGame();
 			Utils.batch.end();

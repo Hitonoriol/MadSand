@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
@@ -55,6 +57,7 @@ public class Utils {
 	static Texture dark;
 	static Texture curs;
 	static Texture placeholder;
+	static TextureRegionDrawable noEquip;
 	static Sprite cursor;
 	static Sprite Splayer;
 	Texture[] lgt = new Texture[7];
@@ -401,6 +404,7 @@ public class Utils {
 		dark = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/darkness.png"));
 		curs = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/cursor.png"));
 		placeholder = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/placeholder.png"));
+		noEquip = new TextureRegionDrawable(new TextureRegion(Utils.placeholder));
 		FileHandle pfhandle = Gdx.files.local(MadSand.SAVEDIR + "player/d1.png");
 		batch = new SpriteBatch();
 		dtex = new Texture(pfhandle);

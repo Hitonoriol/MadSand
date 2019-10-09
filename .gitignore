@@ -1,5 +1,4 @@
 MadSand-FallenRiseFromDust-desktop/MadSandOutput.txt
-MadSand_Saves/lastname.dat
 bin
 .settings
 .classpath
@@ -9,3 +8,4 @@ bin
 *.log
 MadSand-FallenRiseFromDust-desktop/MadSand_Saves/lastrend.dat
 MadSand-FallenRiseFromDust-desktop/MadSandCritical.log
+worlds/

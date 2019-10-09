@@ -28,8 +28,8 @@ public class Stats {
 	public int luck = 1; // LUCK
 	public int dexterity = 1; // DEX
 	public int intelligence = 1; // INT
-	public float stamina = 50.0F; // STAMINA*5
-	public float maxstamina = 50.0F;
+	public int stamina = 50; // STAMINA*5
+	public int maxstamina = 50;
 
 	public int respawnX = -1;
 	public int respawnY = -1;
@@ -65,7 +65,7 @@ public class Stats {
 			stamina = maxstamina;
 
 		if (stamina < 0)
-			stamina = 0F;
+			stamina = 0;
 
 		if (hp > mhp)
 			hp = mhp;
