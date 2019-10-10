@@ -369,4 +369,13 @@ public class Map {
 			mapCrops.remove(new Pair(coords));
 	}
 
+	boolean spawnNpc(int x, int y, int id) {
+		if (!correctCoords(coords.set(x, y)))
+			return false;
+		if (mapNpcs.get(coords) != null)
+			return false;
+		mapNpcs.put(coords, new Npc(id));
+		return true;
+	}
+
 }

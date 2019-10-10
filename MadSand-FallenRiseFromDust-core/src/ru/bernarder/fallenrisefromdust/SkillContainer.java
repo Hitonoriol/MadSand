@@ -13,7 +13,7 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 		Skill skill;
 		SkillValue skillVal;
 		Tuple<Integer, Double> rs;
-		Utils.loadSkillReqs();
+		Resource.loadSkillReqs();
 		for (int i = 0; i < Skill.len(); ++i) {
 			skill = Skill.get(i);
 			skillVal = new SkillValue();

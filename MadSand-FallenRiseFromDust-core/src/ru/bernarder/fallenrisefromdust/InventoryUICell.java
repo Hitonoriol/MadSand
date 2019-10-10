@@ -26,7 +26,7 @@ public class InventoryUICell {
 	Group cell;
 
 	public InventoryUICell(Item item) {
-		btn = new ImageButton(new SpriteDrawable(new Sprite(Utils.item[item.id])));
+		btn = new ImageButton(new SpriteDrawable(new Sprite(Resource.item[item.id])));
 		itemQuantityLabel = new Label(item.quantity + "", Gui.skin);
 
 		cell = new Group();

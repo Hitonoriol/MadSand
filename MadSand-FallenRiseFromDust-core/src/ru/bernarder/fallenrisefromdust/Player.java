@@ -1,10 +1,12 @@
 package ru.bernarder.fallenrisefromdust;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import ru.bernarder.fallenrisefromdust.enums.*;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
+import ru.bernarder.fallenrisefromdust.properties.TileProp;
 
 public class Player {
 
@@ -19,6 +21,13 @@ public class Player {
 	Inventory inventory;
 
 	public PairFloat globalPos = new PairFloat(x * MadSand.TILESIZE, y * MadSand.TILESIZE);
+
+	int movespeed = 2;
+	int stepy = MadSand.TILESIZE;
+	int stepx = MadSand.TILESIZE;
+
+	public boolean isMain = true;
+	private boolean stepping = false;
 
 	public Player(String name) {
 		this.name = name;
@@ -46,6 +55,14 @@ public class Player {
 				heal(amt);
 			}
 		};
+	}
+
+	public boolean isStepping() {
+		return stepping;
+	}
+
+	public void setStepping(boolean val) {
+		stepping = val;
 	}
 
 	void increaseSkill(Skill skill) {
@@ -350,5 +367,93 @@ public class Player {
 			}
 		}
 		World.player.updCoords();
+	}
+
+	public boolean VerifyPosition(Direction dir) {
+		boolean ret = false;
+		if (x >= World.MAPSIZE - 1 && (dir == Direction.RIGHT)) {
+			ret = true;
+		}
+		if (y >= World.MAPSIZE - 1 && (dir == Direction.UP)) {
+			ret = true;
+		}
+		if (x <= 1 && (dir == Direction.LEFT)) {
+			ret = true;
+		}
+		if (y <= 1 && (dir == Direction.DOWN)) {
+			ret = true;
+		}
+		return ret;
+	}
+
+	public void move(Direction dir) {
+		if ((!isCollision(dir, 0)) && (MadSand.dialogflag)) {
+			if ((dir == Direction.UP) && (!VerifyPosition(dir))) {
+				++y;
+				globalPos.y += MadSand.TILESIZE;
+			}
+			if ((dir == Direction.DOWN) && (!VerifyPosition(dir))) {
+				--y;
+				globalPos.y -= MadSand.TILESIZE;
+			}
+			if ((dir == Direction.LEFT) && (!VerifyPosition(dir))) {
+				--x;
+				globalPos.x -= MadSand.TILESIZE;
+			}
+			if ((dir == Direction.RIGHT) && (!VerifyPosition(dir))) {
+				++x;
+				globalPos.x += MadSand.TILESIZE;
+			}
+			if (x == World.MAPSIZE - 1 || y == World.MAPSIZE - 1 || x == World.BORDER || y == World.BORDER) {
+				MadSand.print("Press [GRAY]N[WHITE] to move to the next sector.");
+			}
+			stepping = true;
+		}
+	}
+
+	public void tileDmg() {
+		int tid = MadSand.world.getTileId(x, y);
+		int dmg = TileProp.damage.getOrDefault(tid, 0);
+		if (dmg > 0) {
+			MadSand.print("You took " + dmg + " damage from " + (TileProp.name.get(tid)));
+			damage(dmg);
+		}
+	}
+
+	public void turn(Direction dir) {
+		stats.look = dir;
+		if (!stepping) {
+			if (dir == Direction.UP) {
+				Resource.playerSprite = new Sprite(Resource.utex);
+			}
+			if (dir == Direction.DOWN) {
+				Resource.playerSprite = new Sprite(Resource.dtex);
+			}
+			if (dir == Direction.LEFT) {
+				Resource.playerSprite = new Sprite(Resource.ltex);
+			}
+			if (dir == Direction.RIGHT) {
+				Resource.playerSprite = new Sprite(Resource.rtex);
+			}
+		}
+	}
+
+	void walk(Direction dir) {
+		if (stepping)
+			return;
+		stats.look = dir;
+		turn(stats.look);
+		if (MadSand.world.getCurLoc().getObject(x, y, stats.look).id != 0 || VerifyPosition(stats.look))
+			return;
+		doAction(Stats.AP_WALK);
+		move(stats.look);
+		objectInFront();
+	}
+
+	public void objectInFront() {
+		int obj = MadSand.world.getObjID(x, y, stats.look);
+		if ((obj != 666) && (obj != 0)) {
+			MadSand.print("You see: " + ObjectProp.name.get(obj));
+		}
 	}
 }

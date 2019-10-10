@@ -407,6 +407,7 @@
       <object id="31">
          <name>Palm tree</name>
          <skill>Woodcutting</skill>
+         <lvl>2</lvl>
          <tough>11</tough>
          <harvesthp>4</harvesthp>
          <altitem id="0" inhand="0" item="8"/>
@@ -431,6 +432,7 @@
       <object id="34">
          <name>Dead tree</name>
          <skill>Woodcutting</skill>
+         <lvl>4</lvl>
          <tough>11</tough>
          <harvesthp>4</harvesthp>
          <altitem id="0" inhand="0" item="8"/>

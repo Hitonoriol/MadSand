@@ -399,7 +399,7 @@ public class World {
 	}
 
 	void tick() {
-		Utils.tileDmg();
+		player.tileDmg();
 		getCurLoc().update();
 		player.stats.perTickCheck();
 		++globalTick;

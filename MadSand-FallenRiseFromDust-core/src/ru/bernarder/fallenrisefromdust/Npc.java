@@ -4,9 +4,9 @@ import ru.bernarder.fallenrisefromdust.properties.NpcProp;
 
 public class Npc extends Player {
 	int id, qid;
-	String loot;
 
 	public Npc(int id) {
+		isMain = false;
 		this.id = id;
 		init();
 	}

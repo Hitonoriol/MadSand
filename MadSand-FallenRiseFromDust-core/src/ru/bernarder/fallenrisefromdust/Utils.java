@@ -3,24 +3,14 @@ package ru.bernarder.fallenrisefromdust;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
-import ru.bernarder.fallenrisefromdust.enums.ItemType;
-import ru.bernarder.fallenrisefromdust.enums.Skill;
-import ru.bernarder.fallenrisefromdust.properties.CropProp;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
-import ru.bernarder.fallenrisefromdust.properties.WorldGenProp;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -50,41 +40,18 @@ public class Utils {
 	public static boolean invent = false;
 	public static float pspeed = 33.0F;
 	static SpriteBatch batch;
-	static Texture dtex;
-	static Texture utex;
-	static Texture ltex;
-	static Texture rtex;
-	static Texture dark;
-	static Texture curs;
-	static Texture placeholder;
-	static TextureRegionDrawable noEquip;
-	static Sprite cursor;
-	static Sprite Splayer;
-	Texture[] lgt = new Texture[7];
-	public static Texture[] item;
-	static Texture[] objects;
-	static Texture[] tile;
-	static Texture[] npc;
 	static boolean admin = true;
-	static TextureRegion[] animdown = new TextureRegion[2];
-	static TextureRegion[][] tmpAnim;
-	static Texture animsheet;
-	static TextureRegion[] animup = new TextureRegion[2];
-	static TextureRegion[] animleft = new TextureRegion[2];
-	static TextureRegion[] animright = new TextureRegion[2];
-	static Animation<TextureRegion> uanim;
-	static Animation<TextureRegion> danim;
-	static Animation<TextureRegion> lanim;
-	static Texture mapcursor;
+	
 	public static Random random = new Random();
-	static Animation<TextureRegion> ranim;
 	static int selected;
 
-	static Document resdoc;
-	static Document questdoc;
-	static Document gendoc;
-	static Document skilldoc;
-
+	public static void init() {
+		MadSand.gameVrf = getSHA1(new File(MadSand.RESFILE));
+		out("Resfile hash: " + MadSand.gameVrf);
+		Resource.init();
+		batch = new SpriteBatch();
+	}
+	
 	public static Document XMLString(String xml) {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -226,221 +193,13 @@ public class Utils {
 		int j = 0;
 		String tmp = "";
 		while (!tmp.equals("-1")) {
-			tmp = getAttrValues(gendoc, "biome", str(biome), gname, str(j));
+			tmp = getAttrValues(Resource.gendoc, "biome", str(biome), gname, str(j));
 			if (tmp.equals("-1"))
 				break;
 			group.add(tmp);
 			++j;
 		}
 		return group;
-	}
-
-	public static void Initf() {
-		MadSand.gameVrf = getSHA1(new File(MadSand.RESFILE));
-		out("Resfile hash: " + MadSand.gameVrf);
-		resdoc = XMLString(GameSaver.getExternalNl(MadSand.RESFILE));
-		questdoc = XMLString(GameSaver.getExternalNl(MadSand.QUESTFILE));
-		gendoc = XMLString(GameSaver.getExternalNl(MadSand.GENFILE));
-		MadSand.QUESTS = countKeys(questdoc, "quest");
-		MadSand.quests = new int[MadSand.QUESTS][2];
-		mapcursor = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/cur.png"));
-		animsheet = new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/anim.png"));
-		tmpAnim = TextureRegion.split(animsheet, 35, 74);
-		animdown[0] = tmpAnim[0][0];
-		animdown[1] = tmpAnim[0][1];
-		animleft[0] = tmpAnim[1][0];
-		animleft[1] = tmpAnim[1][1];
-		animright[0] = tmpAnim[2][0];
-		animright[1] = tmpAnim[2][1];
-		animup[0] = tmpAnim[3][0];
-		animup[1] = tmpAnim[3][1];
-		uanim = new Animation<TextureRegion>(0.2F, animup);
-		danim = new Animation<TextureRegion>(0.2F, animdown);
-		lanim = new Animation<TextureRegion>(0.2F, animleft);
-		ranim = new Animation<TextureRegion>(0.2F, animright);
-		com.badlogic.gdx.graphics.Cursor customCursor = Gdx.graphics
-				.newCursor(new com.badlogic.gdx.graphics.Pixmap(Gdx.files.local(MadSand.SAVEDIR + "cursor.png")), 0, 0);
-		Gdx.graphics.setCursor(customCursor);
-		MadSand.LASTITEMID = countKeys(resdoc, "item");
-		MadSand.CROPS = countKeys(resdoc, "stages");
-
-		out(MadSand.CROPS + " crops");
-		MadSand.LASTOBJID = countKeys(resdoc, "object");
-		out(MadSand.LASTOBJID + " objects");
-		MadSand.LASTTILEID = countKeys(resdoc, "tile");
-		MadSand.NPCSPRITES = countKeys(resdoc, "npc");
-		MadSand.CRAFTABLES = countKeys(resdoc, "recipe");
-		MadSand.BIOMES = countKeys(gendoc, "biome");
-		out(MadSand.BIOMES + " biomes");
-		out(MadSand.CRAFTABLES + " craftable items");
-		out(MadSand.LASTTILEID + " tiles");
-		out(MadSand.NPCSPRITES + " npcs");
-		MadSand.craftableid = new int[MadSand.CRAFTABLES];
-		item = new Texture[MadSand.LASTITEMID + 1];
-		objects = new Texture[MadSand.LASTOBJID];
-		tile = new Texture[MadSand.LASTTILEID + 1];
-		npc = new Texture[MadSand.NPCSPRITES + 1];
-		String stgs, stglen;
-		String[] cont;
-		Vector<Integer> stages, slens;
-		int i = 0, cc = 0;
-		// Loading worldgen config
-		Vector<Integer> def;
-		Vector<String> group;
-		HashMap<String, Integer> lake;
-
-		Vector<String> objGroup;
-		Vector<String> ore = new Vector<String>();
-		String defT, defO;
-		HashMap<String, Integer> vdungeon;
-		out("Initializing worldgen...");
-		while (i < MadSand.BIOMES) {
-			def = new Vector<Integer>();
-			lake = new HashMap<String, Integer>();
-
-			WorldGenProp.name.add(getAttr(gendoc, "biome", str(i), "name"));
-			group = getGroup(i, "tile_group");
-			objGroup = getGroup(i, "object_group");
-
-			def.add(Integer.parseInt(getAttrValues(gendoc, "biome", str(i), "def_tile", str(-1))));
-			lake = nodeMapToHashMap(getNested(gendoc, "biome", str(i), "lake", str(-1)));
-
-			WorldGenProp.loadTileBlock(i, def, group, lake);
-			WorldGenProp.loadObjectBlock(i, objGroup);
-			defT = getAttrValues(gendoc, "biome", str(i), "cave_tile", str(-1));
-			defO = getAttrValues(gendoc, "biome", str(i), "cave_object", str(-1));
-			ore.add(getAttrValues(gendoc, "biome", str(i), "ore", str(-1)));
-			vdungeon = nodeMapToHashMap(getNested(gendoc, "biome", str(i), "dungeon", str(-1)));
-			WorldGenProp.loadUnderworldBlock(i, defT, defO, ore, vdungeon);
-			++i;
-		}
-		out("Done initializing WorldGen!");
-		i = 0;
-		// Loading everything about inventory items
-		// Craft recipes
-		while (i < MadSand.LASTITEMID) {
-			item[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "inv/" + i + ".png"));
-			if (!getKey(resdoc, "item", "" + i, "recipe").equals("-1")) {
-				MadSand.craftableid[cc] = i;
-				cc++;
-			}
-
-			// Crops
-			stgs = getKey(resdoc, "item", "" + i, "stages");
-			if (!stgs.equals("-1")) {
-				cont = stgs.split("\\,");
-				stages = new Vector<Integer>();
-				for (String stage : cont)
-					stages.add(Integer.parseInt(stage));
-				CropProp.stages.put(i, stages);
-				stglen = getKey(resdoc, "item", "" + i, "stages");
-				cont = stglen.split("\\,");
-				slens = new Vector<Integer>();
-				for (String slen : cont)
-					slens.add(Integer.parseInt(slen));
-				CropProp.stagelen.put(i, slens);
-			}
-
-			// Item properties
-			ItemProp.name.put(i, getKey(resdoc, "item", "" + i, "name"));
-			ItemProp.type.put(i, ItemType.get(Integer.parseInt(getKey(resdoc, "item", "" + i, "type"))));
-			ItemProp.altObject.put(i, Integer.parseInt(getKey(resdoc, "item", "" + i, "altobject")));
-			ItemProp.cost.put(i, Integer.parseInt(getKey(resdoc, "item", "" + i, "cost")));
-			ItemProp.craftable.put(i, Integer.parseInt(getKey(resdoc, "item", "" + i, "craftable")) != 0);
-			ItemProp.recipe.put(i, getKey(resdoc, "item", "" + i, "recipe"));
-			ItemProp.heal.put(i, getKey(resdoc, "item", "" + i, "heal"));
-			ItemProp.useAction.put(i, getKey(resdoc, "item", "" + i, "onuse"));
-			i++;
-		}
-		i = 0;
-
-		// Loading map objects
-		String skill;
-		while (i < MadSand.LASTOBJID) {
-			objects[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "obj/" + i + ".png"));
-			ObjectProp.name.put(i, getKey(resdoc, "object", str(i), "name"));
-			ObjectProp.hp.put(i, Integer.parseInt(getKey(resdoc, "object", str(i), "tough")));
-			ObjectProp.harvestHp.put(i, Integer.parseInt(getKey(resdoc, "object", str(i), "harvesthp")));
-			skill = getKey(resdoc, "object", str(i), "skill");
-			if (!skill.equals("-1"))
-				ObjectProp.skill.put(i, Skill.valueOf(skill));
-			ObjectProp.altitems.put(i, getAitem(i, "object"));
-
-			ObjectProp.vRendMasks.put(i, Integer.parseInt(getKey(resdoc, "object", str(i), "vmask")));
-			ObjectProp.hRendMasks.put(i, Integer.parseInt(getKey(resdoc, "object", str(i), "hmask")));
-			ObjectProp.interactAction.put(i, getKey(resdoc, "object", str(i), "oninteract"));
-			i++;
-		}
-		i = 0;
-
-		// Loading tiles
-		while (i < MadSand.LASTTILEID) {
-			tile[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "terrain/" + i + ".png"));
-			TileProp.name.put(i, getKey(resdoc, "tile", "" + i, "name"));
-			TileProp.damage.put(i, val(getKey(resdoc, "tile", "" + i, "damage")));
-			TileProp.altitems.put(i, getAitem(i, "tile"));
-			i++;
-		}
-		i = 0;
-
-		// Loading NPCs
-		while (i < MadSand.NPCSPRITES) {
-			npc[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "npc/" + i + ".png"));
-			getKey(resdoc, "npc", "" + i, "hp");
-			getKey(resdoc, "npc", "" + i, "maxhp");
-			getKey(resdoc, "npc", "" + i, "rewardexp");
-			getKey(resdoc, "npc", "" + i, "drop");
-			getKey(resdoc, "npc", "" + i, "name");
-			getKey(resdoc, "npc", "" + i, "atk");
-			getKey(resdoc, "npc", "" + i, "accuracy");
-			getKey(resdoc, "npc", "" + i, "friendly");
-			getKey(resdoc, "npc", "" + i, "fraction");
-			getKey(resdoc, "npc", "" + i, "spawnonce");
-			getKey(resdoc, "npc", "" + i, "qids");
-			i++;
-		}
-
-		// UI resource fuckery
-		dark = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/darkness.png"));
-		curs = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/cursor.png"));
-		placeholder = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/placeholder.png"));
-		noEquip = new TextureRegionDrawable(new TextureRegion(Utils.placeholder));
-		FileHandle pfhandle = Gdx.files.local(MadSand.SAVEDIR + "player/d1.png");
-		batch = new SpriteBatch();
-		dtex = new Texture(pfhandle);
-		pfhandle = Gdx.files.local(MadSand.SAVEDIR + "player/u1.png");
-		utex = new Texture(pfhandle);
-		pfhandle = Gdx.files.local(MadSand.SAVEDIR + "player/r1.png");
-		rtex = new Texture(pfhandle);
-		pfhandle = Gdx.files.local(MadSand.SAVEDIR + "player/l1.png");
-		ltex = new Texture(pfhandle);
-		cursor = new Sprite(curs);
-		Splayer = new Sprite(dtex);
-	}
-
-	static void loadSkillReqs() {
-		if (SkillContainer.reqList.size() > 0)
-			return;
-		skilldoc = XMLString(GameSaver.getExternalNl(MadSand.SKILLFILE));
-		int i = 0;
-		int skills = countKeys(skilldoc, "skill");
-		Skill skill;
-		String skillStr;
-		int req;
-		double mul;
-		while (i < skills) {
-			skillStr = getAttr(skilldoc, "skill", str(i), "name");
-			if (skillStr.equals("-1")) {
-				++i;
-				continue;
-			}
-			skill = Skill.valueOf(skillStr);
-			req = val(getKey(skilldoc, "skill", str(i), "required"));
-			mul = Double.parseDouble(getKey(skilldoc, "skill", str(i), "multiplier"));
-			out(skill + " " + req + " " + mul);
-			SkillContainer.reqList.put(skill, makeTuple(req, mul));
-			++i;
-		}
 	}
 
 	static HashMap<Integer, Vector<Integer>> getAitem(int id, String field) {
@@ -451,7 +210,7 @@ public class Utils {
 		StringTokenizer tok;
 		int hid;
 		while (hand != "-1") {
-			hand = getAttrValues(resdoc, field, str(id), "altitem", str(i));
+			hand = getAttrValues(Resource.resdoc, field, str(id), "altitem", str(i));
 			if (hand == "-1")
 				break;
 			Utils.out("altitem for " + field + " id " + id + ": " + hand);
@@ -489,7 +248,7 @@ public class Utils {
 
 	static void toggleInventory() {
 		if (invent) {
-			funcButtonsSet(false);
+			invBtnSetVisible(false);
 			Gdx.input.setInputProcessor(Gui.overlay);
 			MadSand.contextopened = false;
 			MadSand.state = GameState.GAME;
@@ -501,32 +260,25 @@ public class Utils {
 			Gui.gamecontext.setVisible(false);
 			MadSand.contextopened = false;
 			Gui.mousemenu.setVisible(false);
-			funcButtonsSet(true);
+			invBtnSetVisible(true);
 			Gdx.input.setInputProcessor(Gui.overlay);
 			MadSand.state = GameState.INVENTORY;
 			invent = true;
 		}
 	}
 
-	public static void InvKeyCheck() {
+	public static void invKeyCheck() {
 		if (Gdx.input.isKeyJustPressed(Keys.E)) {
 			toggleInventory();
 		}
 	}
 
-	public static void funcButtonsSet(boolean visible) {
+	public static void invBtnSetVisible(boolean visible) {
 		Gui.craftButton.setVisible(visible);
 		Gui.exitButton.setVisible(visible);
 	}
 
-	public static void isInFront() {
-		int obj = MadSand.world.getObjID(World.player.x, World.player.y, World.player.stats.look);
-		if ((obj != 666) && (obj != 0)) {
-			MadSand.print("You see: " + ObjectProp.name.get(obj));
-		}
-	}
-
-	public static void KeyCheck() {
+	public static void gameKeyCheck() {
 		if (Gdx.input.isKeyJustPressed(Keys.GRAVE)) {
 			Gui.inputField.setVisible(!Gui.inputField.isVisible());
 			Gui.overlay.setKeyboardFocus(Gui.inputField);
@@ -554,17 +306,17 @@ public class Utils {
 		if (Gdx.input.isKeyJustPressed(Keys.U)) {
 			World.player.useItem();
 		}
-		if (Gdx.input.isKeyJustPressed(Keys.UP) && (!MadSand.stepping)) {
-			turn(Direction.UP);
+		if (Gdx.input.isKeyJustPressed(Keys.UP) && (!World.player.isStepping())) {
+			World.player.turn(Direction.UP);
 		}
-		if (Gdx.input.isKeyJustPressed(Keys.DOWN) && (!MadSand.stepping)) {
-			turn(Direction.DOWN);
+		if (Gdx.input.isKeyJustPressed(Keys.DOWN) && (!World.player.isStepping())) {
+			World.player.turn(Direction.DOWN);
 		}
-		if (Gdx.input.isKeyJustPressed(Keys.LEFT) && (!MadSand.stepping)) {
-			turn(Direction.LEFT);
+		if (Gdx.input.isKeyJustPressed(Keys.LEFT) && (!World.player.isStepping())) {
+			World.player.turn(Direction.LEFT);
 		}
-		if (Gdx.input.isKeyJustPressed(Keys.RIGHT) && (!MadSand.stepping)) {
-			turn(Direction.RIGHT);
+		if (Gdx.input.isKeyJustPressed(Keys.RIGHT) && (!World.player.isStepping())) {
+			World.player.turn(Direction.RIGHT);
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.N) && MadSand.world.curxwpos != 0 && MadSand.world.curywpos != 0) {
 			if (World.player.x == World.MAPSIZE - 1 && World.player.stats.look == Direction.RIGHT)
@@ -616,117 +368,39 @@ public class Utils {
 		if ((Gdx.input.isKeyJustPressed(Keys.F)) && (World.player.stats.hand != 0)) {
 			World.player.freeHands();
 		}
-		if ((Gdx.input.isKeyPressed(Keys.A)) && (!MadSand.stepping)) {
-			walk(Direction.LEFT);
+		if ((Gdx.input.isKeyPressed(Keys.A))) {
+			World.player.walk(Direction.LEFT);
 		}
-		if ((Gdx.input.isKeyPressed(Keys.D)) && (!MadSand.stepping)) {
-			walk(Direction.RIGHT);
+		if ((Gdx.input.isKeyPressed(Keys.D))) {
+			World.player.walk(Direction.RIGHT);
 		}
-		if ((Gdx.input.isKeyPressed(Keys.W)) && (!MadSand.stepping)) {
-			walk(Direction.UP);
+		if ((Gdx.input.isKeyPressed(Keys.W))) {
+			World.player.walk(Direction.UP);
 		}
-		if ((Gdx.input.isKeyPressed(Keys.S)) && (!MadSand.stepping)) {
-			walk(Direction.DOWN);
+		if ((Gdx.input.isKeyPressed(Keys.S))) {
+			World.player.walk(Direction.DOWN);
 		}
-	}
-
-	static void walk(Direction dir) {
-		World.player.stats.look = dir;
-		turn(World.player.stats.look);
-		if (MadSand.world.getCurLoc().getObject(World.player.x, World.player.y, World.player.stats.look).id != 0
-				|| VerifyPosition(World.player.stats.look))
-			return;
-		World.player.doAction(Stats.AP_WALK);
-		move(World.player.stats.look);
-		isInFront();
+		if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
+			//rest
+		}
 	}
 
 	static void mouseMovement() {
-		if ((Gdx.input.isButtonPressed(0)) && (MadSand.state == GameState.GAME) && (!MadSand.stepping)
+		if ((Gdx.input.isButtonPressed(0)) && (MadSand.state == GameState.GAME) && (!World.player.isStepping())
 				&& (!MadSand.contextopened)) {
 			if (MadSand.wmx > World.player.x)
-				walk(Direction.RIGHT);
+				World.player.walk(Direction.RIGHT);
 			else if (MadSand.wmx < World.player.x)
-				walk(Direction.LEFT);
+				World.player.walk(Direction.LEFT);
 			else if (MadSand.wmy > World.player.y)
-				walk(Direction.UP);
+				World.player.walk(Direction.UP);
 			else if (MadSand.wmy < World.player.y)
-				walk(Direction.DOWN);
-		}
-	}
-
-	public static void turn(Direction dir) {
-		World.player.stats.look = dir;
-		if (!MadSand.stepping) {
-			if (dir == Direction.UP) {
-				Splayer = new Sprite(utex);
-			}
-			if (dir == Direction.DOWN) {
-				Splayer = new Sprite(dtex);
-			}
-			if (dir == Direction.LEFT) {
-				Splayer = new Sprite(ltex);
-			}
-			if (dir == Direction.RIGHT) {
-				Splayer = new Sprite(rtex);
-			}
+				World.player.walk(Direction.DOWN);
 		}
 	}
 
 	public static int rand(int min, int max) {
 		return Utils.random.nextInt((max - min) + 1) + min;
-	}
-
-	public static void tileDmg() {
-		int tid = MadSand.world.getTileId(World.player.x, World.player.y);
-		int dmg = TileProp.damage.getOrDefault(tid, 0);
-		if (dmg > 0) {
-			MadSand.print("You took " + dmg + " damage from " + (TileProp.name.get(tid)));
-			World.player.damage(dmg);
-		}
-	}
-
-	public static void move(Direction dir) {
-		if ((!World.player.isCollision(dir, 0)) && (MadSand.dialogflag)) {
-			if ((dir == Direction.UP) && (!VerifyPosition(dir))) {
-				World.player.y += 1;
-				World.player.globalPos.y += MadSand.TILESIZE;
-			}
-			if ((dir == Direction.DOWN) && (!VerifyPosition(dir))) {
-				World.player.y -= 1;
-				World.player.globalPos.y -= MadSand.TILESIZE;
-			}
-			if ((dir == Direction.LEFT) && (!VerifyPosition(dir))) {
-				World.player.x -= 1;
-				World.player.globalPos.x -= MadSand.TILESIZE;
-			}
-			if ((dir == Direction.RIGHT) && (!VerifyPosition(dir))) {
-				World.player.x += 1;
-				World.player.globalPos.x += MadSand.TILESIZE;
-			}
-			if (World.player.x == World.MAPSIZE - 1 || World.player.y == World.MAPSIZE - 1
-					|| World.player.x == World.BORDER || World.player.y == World.BORDER) {
-				MadSand.print("Press [GRAY]N[WHITE] to move to the next sector.");
-			}
-			MadSand.stepping = true;
-		}
-	}
-
-	public static boolean VerifyPosition(Direction dir) {
-		boolean ret = false;
-		if (World.player.x >= World.MAPSIZE - 1 && (dir == Direction.RIGHT)) {
-			ret = true;
-		}
-		if (World.player.y >= World.MAPSIZE - 1 && (dir == Direction.UP)) {
-			ret = true;
-		}
-		if (World.player.x <= 1 && (dir == Direction.LEFT)) {
-			ret = true;
-		}
-		if (World.player.y <= 1 && (dir == Direction.DOWN)) {
-			ret = true;
-		}
-		return ret;
 	}
 
 	public static Direction gotodir;
@@ -793,7 +467,7 @@ public class Utils {
 		MadSand.wmx = (int) Math.floor(MadSand.mouseinworld.x / 33.0F);
 		MadSand.wmy = (int) Math.floor(MadSand.mouseinworld.y / 33.0F);
 		Gui.mousemenu.addAction(
-				com.badlogic.gdx.scenes.scene2d.actions.Actions.moveTo(MadSand.mx + 60, MadSand.my - 70, 0.1F));
+				Actions.moveTo(MadSand.mx + 60, MadSand.my - 70, 0.1F));
 		try {
 			Gui.mouselabel[0].setText("World coords: " + MadSand.wmx + ", " + MadSand.wmy);
 			Gui.mouselabel[1].setText(

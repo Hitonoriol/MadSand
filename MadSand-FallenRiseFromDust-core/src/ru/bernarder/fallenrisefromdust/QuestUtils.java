@@ -23,12 +23,12 @@ public class QuestUtils {
 		int i = 0;
 		while (i < qu) {
 			questList[i][0] = "n";
-			questList[i][1] = Utils.getKey(Utils.resdoc, "quest", i + "", "starttext");
-			questList[i][2] = Utils.getKey(Utils.resdoc, "quest", i + "", "completedtext");
-			questList[i][3] = Utils.getKey(Utils.resdoc, "quest", i + "", "afterstarttext");
-			questList[i][4] = Utils.getKey(Utils.resdoc, "quest", i + "", "requirement");
-			questList[i][6] = Utils.getKey(Utils.resdoc, "quest", i + "", "repeatable");
-			questList[i][9] = Utils.getKey(Utils.resdoc, "quest", i + "", "forquest");
+			questList[i][1] = Utils.getKey(Resource.resdoc, "quest", i + "", "starttext");
+			questList[i][2] = Utils.getKey(Resource.resdoc, "quest", i + "", "completedtext");
+			questList[i][3] = Utils.getKey(Resource.resdoc, "quest", i + "", "afterstarttext");
+			questList[i][4] = Utils.getKey(Resource.resdoc, "quest", i + "", "requirement");
+			questList[i][6] = Utils.getKey(Resource.resdoc, "quest", i + "", "repeatable");
+			questList[i][9] = Utils.getKey(Resource.resdoc, "quest", i + "", "forquest");
 			i++;
 		}
 	}

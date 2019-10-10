@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -26,7 +25,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
@@ -40,7 +38,6 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.PrintWriter;
 import java.security.MessageDigest;
-import java.util.Random;
 
 public class Gui {
 	static final float DEFWIDTH = 250f;
@@ -125,9 +122,9 @@ public class Gui {
 	static int ITEM_DISPLAY_SLOTS = 5;
 
 	public static void setHandDisplay(int id) {
-		Drawable img = Utils.noEquip;
+		Drawable img = Resource.noEquip;
 		if (id != 0)
-			img = new TextureRegionDrawable(Utils.item[id]);
+			img = new TextureRegionDrawable(Resource.item[id]);
 		equip[ITEM_DISPLAY_HOLDING].setDrawable((Drawable) img);
 	}
 
@@ -931,20 +928,20 @@ public class Gui {
 	static Direction lookAtMouse() {
 		if (MadSand.wclickx > World.player.x) {
 			World.player.stats.look = Direction.RIGHT;
-			Utils.turn(World.player.stats.look);
-			Utils.isInFront();
+			World.player.turn(World.player.stats.look);
+			World.player.objectInFront();
 		} else if (MadSand.wclickx < World.player.x) {
 			World.player.stats.look = Direction.LEFT;
-			Utils.turn(World.player.stats.look);
-			Utils.isInFront();
+			World.player.turn(World.player.stats.look);
+			World.player.objectInFront();
 		} else if (MadSand.wclicky > World.player.y) {
 			World.player.stats.look = Direction.UP;
-			Utils.turn(World.player.stats.look);
-			Utils.isInFront();
+			World.player.turn(World.player.stats.look);
+			World.player.objectInFront();
 		} else if (MadSand.wclicky < World.player.y) {
 			World.player.stats.look = Direction.DOWN;
-			Utils.turn(World.player.stats.look);
-			Utils.isInFront();
+			World.player.turn(World.player.stats.look);
+			World.player.objectInFront();
 		}
 		return World.player.stats.look;
 	}
