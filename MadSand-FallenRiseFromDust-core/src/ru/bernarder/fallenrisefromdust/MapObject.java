@@ -10,7 +10,7 @@ import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
 
 public class MapObject {
-	int id, hp, harverstHp;
+	int id, hp, harverstHp, lvl;
 	Skill skill;
 	String name;
 
@@ -20,6 +20,7 @@ public class MapObject {
 		this.hp = ObjectProp.hp.getOrDefault(id, 1);
 		this.harverstHp = ObjectProp.harvestHp.get(id);
 		this.skill = ObjectProp.skill.getOrDefault(id, Skill.None);
+		this.lvl = ObjectProp.minLvl.get(id);
 	}
 
 	public MapObject() {

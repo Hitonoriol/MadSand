@@ -64,6 +64,10 @@ public class Inventory {
 		return i;
 	}
 
+	Item getItem(int cid) {
+		return items.get(cid);
+	}
+
 	void clear() {
 		items.clear();
 		curWeight = 0;

@@ -41,7 +41,7 @@ public class Utils {
 	public static float pspeed = 33.0F;
 	static SpriteBatch batch;
 	static boolean admin = true;
-	
+
 	public static Random random = new Random();
 	static int selected;
 
@@ -51,7 +51,7 @@ public class Utils {
 		Resource.init();
 		batch = new SpriteBatch();
 	}
-	
+
 	public static Document XMLString(String xml) {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -82,7 +82,7 @@ public class Utils {
 		}
 	}
 
-	static String getKey(Document doc, String list, String id, String element) {
+	static String getKey(Document doc, String list, String id, String element, String def) {
 		try {
 			doc.getDocumentElement().normalize();
 			NodeList nList = doc.getElementsByTagName(list);
@@ -95,10 +95,14 @@ public class Utils {
 					}
 				}
 			}
-			return "-1";
+			return def;
 		} catch (Exception e) {
-			return "-1";
+			return def;
 		}
+	}
+
+	static String getKey(Document doc, String list, String id, String element) {
+		return getKey(doc, list, id, element, "-1");
 	}
 
 	static String getAttr(Document doc, String list, String id, String attr) {
@@ -381,7 +385,7 @@ public class Utils {
 			World.player.walk(Direction.DOWN);
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
-			//rest
+			// rest
 		}
 	}
 
@@ -466,8 +470,7 @@ public class Utils {
 		MadSand.my = Gdx.graphics.getHeight() - Gdx.input.getY();
 		MadSand.wmx = (int) Math.floor(MadSand.mouseinworld.x / 33.0F);
 		MadSand.wmy = (int) Math.floor(MadSand.mouseinworld.y / 33.0F);
-		Gui.mousemenu.addAction(
-				Actions.moveTo(MadSand.mx + 60, MadSand.my - 70, 0.1F));
+		Gui.mousemenu.addAction(Actions.moveTo(MadSand.mx + 60, MadSand.my - 70, 0.1F));
 		try {
 			Gui.mouselabel[0].setText("World coords: " + MadSand.wmx + ", " + MadSand.wmy);
 			Gui.mouselabel[1].setText(

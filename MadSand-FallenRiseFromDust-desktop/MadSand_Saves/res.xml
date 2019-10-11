@@ -1239,7 +1239,7 @@
       <item id="3">
          <name>Stone axe</name>
          <dmg>2</dmg>
-         <hp>100</hp>
+         <hp>128</hp>
          <type>8</type>
          <cost>9</cost>
          <craftable>1</craftable>

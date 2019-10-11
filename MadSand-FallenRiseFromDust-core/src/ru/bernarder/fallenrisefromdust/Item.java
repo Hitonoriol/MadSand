@@ -8,6 +8,7 @@ import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 
 public class Item {
 	String name, recipe, heal;
+	int dmg, hp;
 	public int id;
 	public int quantity;
 	int altobject, cost;
@@ -64,13 +65,27 @@ public class Item {
 		return new HashCodeBuilder(14407, 7177).append(id).toHashCode();
 	}
 
+	boolean damage(int amt) {
+		hp -= amt;
+		if (hp <= 0) {
+			this.id = 0;
+			loadProperties();
+			return true;
+		}
+		return false;
+	}
+
+	boolean damage() {
+		return damage(1);
+	}
+
 	Item reinit(int id, int q) {
 		this.id = id;
 		this.quantity = q;
 		loadProperties();
 		return this;
 	}
-	
+
 	Item reinit() {
 		loadProperties();
 		return this;
@@ -83,10 +98,11 @@ public class Item {
 		this.type = ItemProp.type.get(id);
 		this.altobject = ItemProp.altObject.get(id);
 		this.cost = ItemProp.cost.get(id);
+		this.dmg = ItemProp.dmg.get(id);
+		this.hp = ItemProp.hp.get(id);
 		this.craftable = ItemProp.craftable.get(id);
 	}
 
-	
 	String getString() {
 		if (id == 0)
 			return EMPTY_QUERY;

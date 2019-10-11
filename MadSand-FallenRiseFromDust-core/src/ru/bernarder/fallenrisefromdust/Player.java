@@ -83,9 +83,20 @@ public class Player {
 	}
 
 	public void checkHands(int id) {
-		if (inventory.getSameCell(id, 1) == -1) {
+		int itemIdx = inventory.getSameCell(id);
+		if (itemIdx == -1) {
 			stats.hand = 0;
 			Gui.setHandDisplay(0);
+			return;
+		}
+	}
+
+	public void damageTool() {
+		if (ItemProp.type.get(stats.hand).isTool()) {
+			if (inventory.getItem(inventory.getSameCell(stats.hand)).damage()) {
+				MadSand.print("Your " + ItemProp.name.get(stats.hand) + " broke");
+				checkHands(stats.hand);
+			}
 		}
 	}
 
@@ -112,7 +123,7 @@ public class Player {
 		}
 	}
 
-	public boolean isCollision(Direction direction, int flag) {
+	public boolean colliding(Direction direction, int flag) {
 		boolean collision = false;
 		int oid = MadSand.world.getCurLoc().getObject(x, y, direction).id;
 		if (((flag == 0) && (oid == 12)) || (oid == 0) || (oid == 666)) {
@@ -220,6 +231,7 @@ public class Player {
 			increaseSkill(Skill.Crafting);
 			inventory.putItem(id, stats.skills.getItemReward(Skill.Crafting));
 			Gui.drawOkDialog("Crafted " + ItemProp.name.get(id), Gui.craft);
+			doAction(Stats.AP_MINOR);
 			return true;
 		}
 		Gui.drawOkDialog("Not enough resources to craft " + ItemProp.name.get(id), Gui.craft);
@@ -240,7 +252,16 @@ public class Player {
 		MapObject obj = MadSand.world.getCurLoc().getObject(x, y, stats.look);
 		int mhp = ObjectProp.harvestHp.get(obj.id);
 		Skill skill = obj.skill;
-		boolean destroyed = obj.takeDamage(stats.skills.getLvl(skill));
+		int curLvl = stats.skills.getLvl(skill);
+		damageTool();
+		if (curLvl < obj.lvl) {
+			MadSand.print("You are not experienced enough.");
+			MadSand.print(skill + " level required: " + obj.lvl);
+			MadSand.print("Your " + skill + ": " + curLvl);
+			return;
+		}
+
+		boolean destroyed = obj.takeDamage(stats.skills.getLvl(skill) + ItemProp.dmg.get(stats.hand));
 		if (item != -1 && destroyed) {
 			inventory.putItem(item, stats.skills.getItemReward(skill));
 			increaseSkill(skill);
@@ -256,6 +277,7 @@ public class Player {
 		int ptile = MadSand.world.getTileId(x, y);
 		int item = MapObject.getTileAltItem(ptile, ItemProp.type.get(stats.hand).get());
 		checkHands(id);
+		damageTool();
 		if (item != -1) {
 			MadSand.world.getCurLoc().delTile(x, y);
 			World.player.inventory.putItem(item);
@@ -387,7 +409,7 @@ public class Player {
 	}
 
 	public void move(Direction dir) {
-		if ((!isCollision(dir, 0)) && (MadSand.dialogflag)) {
+		if ((!colliding(dir, 0)) && (MadSand.dialogflag)) {
 			if ((dir == Direction.UP) && (!VerifyPosition(dir))) {
 				++y;
 				globalPos.y += MadSand.TILESIZE;

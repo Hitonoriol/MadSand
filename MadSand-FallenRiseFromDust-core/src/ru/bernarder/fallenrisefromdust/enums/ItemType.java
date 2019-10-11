@@ -21,4 +21,10 @@ public enum ItemType {
 			i = 0;
 		return values[i];
 	}
+
+	public boolean isTool() {
+		if (this != Hoe && this != Pickaxe && this != Shovel && this != Axe)
+			return false;
+		return true;
+	}
 }

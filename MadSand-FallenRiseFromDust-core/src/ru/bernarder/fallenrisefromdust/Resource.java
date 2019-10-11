@@ -165,6 +165,10 @@ public class Resource {
 			ItemProp.name.put(i, Utils.getKey(resdoc, "item", "" + i, "name"));
 			ItemProp.type.put(i, ItemType.get(Integer.parseInt(Utils.getKey(resdoc, "item", "" + i, "type"))));
 			ItemProp.altObject.put(i, Integer.parseInt(Utils.getKey(resdoc, "item", "" + i, "altobject")));
+			
+			ItemProp.dmg.put(i, Integer.parseInt(Utils.getKey(resdoc, "item", "" + i, "dmg", "0")));
+			
+			ItemProp.hp.put(i, Integer.parseInt(Utils.getKey(resdoc, "item", "" + i, "hp")));
 			ItemProp.cost.put(i, Integer.parseInt(Utils.getKey(resdoc, "item", "" + i, "cost")));
 			ItemProp.craftable.put(i, Integer.parseInt(Utils.getKey(resdoc, "item", "" + i, "craftable")) != 0);
 			ItemProp.recipe.put(i, Utils.getKey(resdoc, "item", "" + i, "recipe"));
@@ -185,7 +189,9 @@ public class Resource {
 			if (!skill.equals("-1"))
 				ObjectProp.skill.put(i, Skill.valueOf(skill));
 			ObjectProp.altitems.put(i, Utils.getAitem(i, "object"));
-
+			
+			ObjectProp.minLvl.put(i, Integer.parseInt(Utils.getKey(resdoc, "object", Utils.str(i), "lvl")));
+			
 			ObjectProp.vRendMasks.put(i, Integer.parseInt(Utils.getKey(resdoc, "object", Utils.str(i), "vmask")));
 			ObjectProp.hRendMasks.put(i, Integer.parseInt(Utils.getKey(resdoc, "object", Utils.str(i), "hmask")));
 			ObjectProp.interactAction.put(i, Utils.getKey(resdoc, "object", Utils.str(i), "oninteract"));
