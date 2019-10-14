@@ -75,7 +75,7 @@ public class BuildScript {
 			return coords.addDirection(World.player.stats.look).y;
 		case Value.VALUE_ALTITEM:
 			int id = MadSand.world.getCurLoc().getObject(World.player.x, World.player.y, World.player.stats.look).id;
-			return MapObject.getAltItem(id, World.player.stats.hand);
+			return MapObject.getAltItem(id, World.player.stats.hand.id);
 
 		default:
 			return 0;
@@ -120,7 +120,7 @@ public class BuildScript {
 			condition = (MadSand.world.getCurLoc().getObject(x, y, World.player.stats.look).id == sid);
 			break;
 		case inHandID:
-			condition = (World.player.stats.hand == sid);
+			condition = (World.player.stats.hand.id == sid);
 			break;
 		}
 		if (!condition && strict)
@@ -216,11 +216,6 @@ public class BuildScript {
 		case Token.PLAYER_HEAL:
 			int amount = arg.get(0);
 			World.player.heal(amount);
-			break;
-
-		case Token.PLAYER_HAND_SET:
-			id = arg.get(0);
-			World.player.stats.hand = id;
 			break;
 
 		case Token.PLAYER_GIVE:

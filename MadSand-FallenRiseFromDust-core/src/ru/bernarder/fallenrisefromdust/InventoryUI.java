@@ -67,6 +67,7 @@ public class InventoryUI {
 	}
 
 	void toggleVisible() {
+		
 		invScroll.setVisible(!invScroll.isVisible());
 	}
 

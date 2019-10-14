@@ -12,7 +12,7 @@ public class Stats {
 	final static int STARVE_DMG = 1;
 	final static int FOOD_HEAL = 3;
 
-	public int hand = 0;
+	public Item hand;
 
 	public int actionPtsMax = 5;
 	public int actionPts = actionPtsMax;

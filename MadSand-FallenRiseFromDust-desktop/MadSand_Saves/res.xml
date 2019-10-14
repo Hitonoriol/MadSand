@@ -1238,6 +1238,7 @@
       </item>
       <item id="3">
          <name>Stone axe</name>
+         <skill>Woodcutting</skill>
          <dmg>2</dmg>
          <hp>128</hp>
          <type>8</type>
@@ -1292,6 +1293,7 @@
       </item>
       <item id="11">
          <name>Stone pickaxe</name>
+         <skill>Mining</skill>
          <dmg>3</dmg>
          <hp>100</hp>
          <cost>10</cost>

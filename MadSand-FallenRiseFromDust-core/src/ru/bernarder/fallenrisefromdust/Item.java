@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import ru.bernarder.fallenrisefromdust.enums.ItemType;
+import ru.bernarder.fallenrisefromdust.enums.Skill;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 
 public class Item {
@@ -13,8 +14,11 @@ public class Item {
 	public int quantity;
 	int altobject, cost;
 	ItemType type = ItemType.Item;
+	Skill skill = Skill.None;
 	boolean craftable;
 	double weight;
+
+	final static Item nullItem = new Item();
 
 	final static String ITEM_DELIM = "/";
 	final static String BLOCK_DELIM = ":";
@@ -47,6 +51,29 @@ public class Item {
 		id = Integer.parseInt(blocks[0]);
 		quantity = Integer.parseInt(blocks[1]);
 		loadProperties();
+	}
+
+	public void clear() {
+		id = 0;
+		loadProperties();
+	}
+
+	public boolean damageTool(Skill skill) {
+		if (type.isTool())
+			return damage();
+		else
+			return false;
+	}
+
+	public boolean damageTool() {
+		return damageTool(Skill.None);
+	}
+
+	public int getSkillDamage(Skill skill) {
+		if (skill != this.skill)
+			return 1;
+		else
+			return dmg;
 	}
 
 	@Override
@@ -101,6 +128,7 @@ public class Item {
 		this.dmg = ItemProp.dmg.get(id);
 		this.hp = ItemProp.hp.get(id);
 		this.craftable = ItemProp.craftable.get(id);
+		this.skill = ItemProp.skill.get(id);
 	}
 
 	String getString() {

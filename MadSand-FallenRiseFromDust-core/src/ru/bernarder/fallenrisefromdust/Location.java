@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 
 public class Location extends HashMap<MapID, Map> {
+	public static int LAYERS = 2;
 	private static final long serialVersionUID = -4489829388439109446L;
 
 	final String LOOT_DELIM = "|";
@@ -61,6 +62,24 @@ public class Location extends HashMap<MapID, Map> {
 			stream.close();
 			ret = GameSaver.concat(ret, _loot, cropCount, _crops);
 			return ret;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	byte[] locationToBytes(int wx, int wy) {
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		byte[] layer;
+		long size;
+		try {
+			for (int i = 0; i < LAYERS; ++i) {
+				layer = sectorToBytes(wx, wy, i);
+				size = layer.length;
+				stream.write(GameSaver.encode8(size));
+				stream.write(layer);
+			}
+			return stream.toByteArray();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

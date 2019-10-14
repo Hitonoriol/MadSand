@@ -55,6 +55,7 @@ public class Player {
 				heal(amt);
 			}
 		};
+		stats.hand = new Item();
 	}
 
 	public boolean isStepping() {
@@ -85,18 +86,9 @@ public class Player {
 	public void checkHands(int id) {
 		int itemIdx = inventory.getSameCell(id);
 		if (itemIdx == -1) {
-			stats.hand = 0;
+			stats.hand = Item.nullItem;
 			Gui.setHandDisplay(0);
 			return;
-		}
-	}
-
-	public void damageTool() {
-		if (ItemProp.type.get(stats.hand).isTool()) {
-			if (inventory.getItem(inventory.getSameCell(stats.hand)).damage()) {
-				MadSand.print("Your " + ItemProp.name.get(stats.hand) + " broke");
-				checkHands(stats.hand);
-			}
 		}
 	}
 
@@ -248,12 +240,12 @@ public class Player {
 			BuildScript.execute(action);
 			return;
 		}
-		int item = MapObject.getAltItem(id, ItemProp.type.get(stats.hand).get());
+		int item = MapObject.getAltItem(id, ItemProp.type.get(stats.hand.id).get());
 		MapObject obj = MadSand.world.getCurLoc().getObject(x, y, stats.look);
 		int mhp = ObjectProp.harvestHp.get(obj.id);
 		Skill skill = obj.skill;
 		int curLvl = stats.skills.getLvl(skill);
-		damageTool();
+		inventory.damageTool(stats.hand, skill);
 		if (curLvl < obj.lvl) {
 			MadSand.print("You are not experienced enough.");
 			MadSand.print(skill + " level required: " + obj.lvl);
@@ -261,7 +253,7 @@ public class Player {
 			return;
 		}
 
-		boolean destroyed = obj.takeDamage(stats.skills.getLvl(skill) + ItemProp.dmg.get(stats.hand));
+		boolean destroyed = obj.takeDamage(stats.skills.getLvl(skill) + stats.hand.getSkillDamage(skill));
 		if (item != -1 && destroyed) {
 			inventory.putItem(item, stats.skills.getItemReward(skill));
 			increaseSkill(skill);
@@ -273,11 +265,11 @@ public class Player {
 	}
 
 	public void useItem() {
-		int id = stats.hand;
+		int id = stats.hand.id;
 		int ptile = MadSand.world.getTileId(x, y);
-		int item = MapObject.getTileAltItem(ptile, ItemProp.type.get(stats.hand).get());
+		int item = MapObject.getTileAltItem(ptile, stats.hand.type.get());
 		checkHands(id);
-		damageTool();
+		inventory.damageTool(stats.hand);
 		if (item != -1) {
 			MadSand.world.getCurLoc().delTile(x, y);
 			World.player.inventory.putItem(item);
@@ -343,9 +335,9 @@ public class Player {
 	}
 
 	public void freeHands() {
-		MadSand.print("You put your " + ItemProp.name.get(stats.hand) + " back to your inventory");
-		stats.hand = 0;
-		Gui.setHandDisplay(stats.hand);
+		MadSand.print("You put your " + stats.hand.name + " back to your inventory");
+		stats.hand = Item.nullItem;
+		Gui.setHandDisplay(stats.hand.id);
 	}
 
 	void updCoords() {

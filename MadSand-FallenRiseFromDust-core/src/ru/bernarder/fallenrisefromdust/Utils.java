@@ -369,7 +369,7 @@ public class Utils {
 		if ((Gdx.input.isKeyJustPressed(Keys.H)) && (tester)) {
 			World.player.damage(10);
 		}
-		if ((Gdx.input.isKeyJustPressed(Keys.F)) && (World.player.stats.hand != 0)) {
+		if ((Gdx.input.isKeyJustPressed(Keys.F)) && (World.player.stats.hand.id != 0)) {
 			World.player.freeHands();
 		}
 		if ((Gdx.input.isKeyPressed(Keys.A))) {

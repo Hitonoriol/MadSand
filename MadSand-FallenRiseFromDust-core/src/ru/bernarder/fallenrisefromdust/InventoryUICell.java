@@ -18,6 +18,7 @@ public class InventoryUICell {
 	private final int size = 80;
 	private ImageButton btn;
 	private Label itemQuantityLabel;
+	private Label toolHpLabel;
 	private Table invCellContextContainer;
 	private TextButton[] invCellContextMenu;
 
@@ -26,12 +27,19 @@ public class InventoryUICell {
 	Group cell;
 
 	public InventoryUICell(Item item) {
+		toolHpLabel = new Label("", Gui.skin);
 		btn = new ImageButton(new SpriteDrawable(new Sprite(Resource.item[item.id])));
 		itemQuantityLabel = new Label(item.quantity + "", Gui.skin);
+
+		if (item.type.isTool())
+			setHp(item.hp);
+
+		toolHpLabel.setPosition(itemQuantityLabel.getX() + size / 1.6f, itemQuantityLabel.getY()+6);
 
 		cell = new Group();
 		cell.addActor(btn);
 		cell.addActor(itemQuantityLabel);
+		cell.addActor(toolHpLabel);
 		cell.setSize(size, size);
 
 		invCellContextMenu = new TextButton[CONTEXT_BUTTONS];
@@ -53,7 +61,7 @@ public class InventoryUICell {
 
 		btn.addListener(new ClickListener(Buttons.LEFT) {
 			public void clicked(InputEvent event, float x, float y) {
-				World.player.stats.hand = item.id;
+				World.player.stats.hand = item;
 				Gui.setHandDisplay(item.id);
 				World.player.doAction();
 				Utils.toggleInventory();
@@ -79,5 +87,9 @@ public class InventoryUICell {
 
 	void setText(String str) {
 		itemQuantityLabel.setText(str);
+	}
+
+	void setHp(int hp) {
+		toolHpLabel.setText("[GREEN]" + hp);
 	}
 }

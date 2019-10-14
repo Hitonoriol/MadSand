@@ -142,7 +142,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		World.player.init();
 		Utils.init();
 		this.objn = new ItemProp();
 		Gui.createBasicSkin();
@@ -162,6 +161,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 		camera.update();
 		Gui.font = new BitmapFont();
 		world = new World(MadSand.WORLDSIZE);
+		World.player.init();
 		World.player.globalPos.x = (World.player.x * TILESIZE);
 		World.player.globalPos.y = (World.player.y * TILESIZE);
 		Gui.equip = new Image[EQ_SLOTS];

@@ -6,6 +6,8 @@ import java.util.Vector;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 
+import ru.bernarder.fallenrisefromdust.enums.Skill;
+
 public class Inventory {
 	public Vector<Item> items = new Vector<Item>();
 	public double curWeight, maxWeight;
@@ -28,10 +30,15 @@ public class Inventory {
 	}
 
 	void refreshContents() {
-		for (int i = 0; i < items.size(); ++i)
-			refreshItem(items.get(i).reinit());
+		Item item;
+		for (int i = 0; i < items.size(); ++i) {
+			item = items.get(i);
+			if (item.id == 0)
+				refreshRemoveItem(item);
+			else
+				refreshItem(item.reinit());
+		}
 		refreshWeight();
-
 	}
 
 	void refreshWeight() {
@@ -74,6 +81,8 @@ public class Inventory {
 	}
 
 	private void refreshRemoveItem(Item item) {
+		if (item.id == 0)
+			return;
 		if (itemUI.containsKey(item)) {
 			inventoryUI.setMass(curWeight, maxWeight);
 			Group rcell = itemUI.get(item).cell;
@@ -91,10 +100,14 @@ public class Inventory {
 	}
 
 	private void refreshItem(Item item) {
+		if (item.id == 0)
+			return;
 		inventoryUI.setMass(curWeight, maxWeight);
-		if (itemUI.containsKey(item))
+		if (itemUI.containsKey(item)) {
 			itemUI.get(item).setText(item.quantity + "");
-		else {
+			if (item.type.isTool())
+				itemUI.get(item).setHp(item.hp);
+		} else {
 			InventoryUICell cell = new InventoryUICell(item);
 			itemUI.put(item, cell);
 			inventoryUI.putNewItem(cell.cell);
@@ -102,11 +115,24 @@ public class Inventory {
 		}
 	}
 
+	void damageTool(Item item, Skill skill) {
+		if (!item.damageTool(skill))
+			refreshItem(item);
+		else
+			refreshRemoveItem(item);
+	}
+
+	void damageTool(Item item) {
+		damageTool(item, Skill.None);
+	}
+
 	boolean putItem(int id, int quantity, boolean silent) {
 		Item item = new Item(id, quantity);
 		Item updItem;
 		double newWeight = item.getWeight() + curWeight;
 		int existingIdx = getSameCell(id);
+		if (item.type.isTool())
+			existingIdx = -1;
 		if (newWeight <= maxWeight) {
 			if (existingIdx != -1) {
 				items.get(existingIdx).quantity += quantity;

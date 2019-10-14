@@ -167,6 +167,7 @@ public class Resource {
 			ItemProp.altObject.put(i, Integer.parseInt(Utils.getKey(resdoc, "item", "" + i, "altobject")));
 			
 			ItemProp.dmg.put(i, Integer.parseInt(Utils.getKey(resdoc, "item", "" + i, "dmg", "0")));
+			ItemProp.skill.put(i, Skill.valueOf(Utils.getKey(resdoc, "item", "" + i, "skill", "None")));
 			
 			ItemProp.hp.put(i, Integer.parseInt(Utils.getKey(resdoc, "item", "" + i, "hp")));
 			ItemProp.cost.put(i, Integer.parseInt(Utils.getKey(resdoc, "item", "" + i, "cost")));

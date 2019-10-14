@@ -133,7 +133,7 @@ public class Gui {
 		overlayStatLabels[1].setText("Level: " + World.player.stats.skills.getLvl(Skill.Level));
 		overlayStatLabels[2].setText("Experience: " + World.player.stats.skills.getExpString(Skill.Level));
 		overlayStatLabels[3].setText("Food: " + World.player.stats.food + " / " + World.player.stats.maxFood);
-		overlayStatLabels[4].setText("Hand: " + ItemProp.name.get(World.player.stats.hand));
+		overlayStatLabels[4].setText("Hand: " + World.player.stats.hand.name);
 	}
 
 	public static void showStatsWindow() {
@@ -775,7 +775,7 @@ public class Gui {
 			cg++;
 		}
 		craftbl.row();
-		//craft.setDebugAll(true);
+		// craft.setDebugAll(true);
 		Table backTable = new Table();
 		backTable.align(Align.bottom);
 		backTable.add(back).fillY().expandY();
