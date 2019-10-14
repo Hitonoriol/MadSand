@@ -251,9 +251,9 @@
       <object id="4">
          <name>Berry bush</name>
          <skill>Harvesting</skill>
-         <tough>5</tough>
+         <tough>7</tough>
          <harvesthp>2</harvesthp>
-         <altitem id="0" inhand="0" item="7,8" />
+         <altitem id="0" inhand="0" item="7,8,65,66" />
       </object>
       <object id="5">
          <name>---</name>
@@ -457,9 +457,9 @@
       <object id="37">
          <name>Bush</name>
          <skill>Harvesting</skill>
-         <tough>5</tough>
+         <tough>7</tough>
          <harvesthp>2</harvesthp>
-         <altitem id="0" inhand="0" item="8"/>
+         <altitem id="0" inhand="0" item="8,65,66" />
       </object>
       <object id="38">
       <skill>Woodcutting</skill>
@@ -478,7 +478,7 @@
          <tough>15</tough>
       </object>
       <object id="41">
-      <skill>Harvesting</skill>
+         <skill>Harvesting</skill>
          <name>Edible mushrooms</name>
          <altitem id="0" inhand="0" item="44"/>
          <tough>1</tough>
@@ -1589,6 +1589,7 @@
       </item>
       <item id="58">
          <name>Pint of beer</name>
+         <recipe>65/5:66/5</recipe>
          <type>7</type>
          <heal>5:20</heal>
          <cost>25</cost>
@@ -1620,6 +1621,14 @@
       <item id="64">
          <name>Executor's shield</name>
          <cost>231</cost>
+      </item>
+      <item id="65">
+         <name>Spicy leaf</name>
+         <cost>2</cost>
+      </item>
+      <item id="66">
+         <name>Sour leaf</name>
+         <cost>2</cost>
       </item>
       
    </items>

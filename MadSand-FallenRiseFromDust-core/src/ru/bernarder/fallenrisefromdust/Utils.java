@@ -440,7 +440,7 @@ public class Utils {
 		}
 		MadSand.print("Going to (" + MadSand.world.curxwpos + ", " + MadSand.world.curywpos + ")");
 		if (GameSaver.verifyNextSector(MadSand.world.curxwpos, MadSand.world.curywpos)) {
-			GameSaver.loadSector();
+			GameSaver.loadLocation();
 		} else {
 			MadSand.state = GameState.WORLDGEN;
 			if (MadSand.tonext) {

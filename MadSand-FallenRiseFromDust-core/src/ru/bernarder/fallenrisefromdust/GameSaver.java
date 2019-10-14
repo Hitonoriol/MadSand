@@ -119,7 +119,7 @@ public class GameSaver {
 
 	public static void saveWorld() {
 		GameSaver.createDirs();
-		if (saveSector() && saveChar())
+		if (saveLocation() && saveChar())
 			MadSand.print("Game saved!");
 		else
 			MadSand.print("Couldn't save the game. Check logs.");
@@ -142,7 +142,7 @@ public class GameSaver {
 		MadSand.world = new World();
 		if (!loadChar())
 			return false;
-		if (loadSector()) {
+		if (loadLocation()) {
 			MadSand.print("Loaded Game!");
 			return true;
 		} else
@@ -203,10 +203,10 @@ public class GameSaver {
 		}
 	}
 
-	public static boolean saveSector(int wx, int wy, int layer) {
+	public static boolean saveLocation(int wx, int wy) {
 		try {
 			OutputStream os = new FileOutputStream(getSectorFile(wx, wy));
-			os.write(MadSand.world.WorldLoc.sectorToBytes(wx, wy, layer));
+			os.write(MadSand.world.WorldLoc.locationToBytes(wx, wy));
 			os.close();
 			return true;
 		} catch (Exception e) {
@@ -215,15 +215,15 @@ public class GameSaver {
 		}
 	}
 
-	static boolean saveSector() {
-		return saveSector(MadSand.world.curxwpos, MadSand.world.curywpos, MadSand.world.curlayer);
+	public static boolean saveLocation() {
+		return saveLocation(MadSand.world.curxwpos, MadSand.world.curywpos);
 	}
 
-	public static boolean loadSector(int wx, int wy, int layer) {
+	public static boolean loadLocation(int wx, int wy) {
 		try {
 			Path fileLocation = Paths.get(getSectorFile(wx, wy).toURI());
 			byte[] data = Files.readAllBytes(fileLocation);
-			MadSand.world.WorldLoc.bytesToSector(data, wx, wy, layer);
+			MadSand.world.WorldLoc.bytesToLocation(data, wx, wy);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -231,15 +231,15 @@ public class GameSaver {
 		}
 	}
 
-	static boolean loadSector() {
-		return loadSector(MadSand.world.curxwpos, MadSand.world.curywpos, MadSand.world.curlayer);
+	public static boolean loadLocation() {
+		return loadLocation(MadSand.world.curxwpos, MadSand.world.curywpos);
 	}
 
 	public static void createDirs() {
 		File saveloc = new File(MadSand.SAVEDIR);
 		File maploc = new File(MadSand.MAPDIR);
 		File curworld = new File(MadSand.MAPDIR + MadSand.WORLDNAME);
-	
+
 		if (!saveloc.exists()) {
 			saveloc.mkdirs();
 		}

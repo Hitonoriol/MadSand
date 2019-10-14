@@ -1,5 +1,7 @@
 package ru.bernarder.fallenrisefromdust;
 
+import java.util.UUID;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -9,7 +11,8 @@ import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 
 public class Item {
 	String name, recipe, heal;
-	int dmg, hp;
+	int dmg;
+	public int hp = -1;
 	public int id;
 	public int quantity;
 	int altobject, cost;
@@ -17,6 +20,8 @@ public class Item {
 	Skill skill = Skill.None;
 	boolean craftable;
 	double weight;
+
+	public String uid = "";
 
 	final static Item nullItem = new Item();
 
@@ -84,22 +89,17 @@ public class Item {
 			return true;
 
 		Item rhs = (Item) obj;
-		return new EqualsBuilder().append(id, rhs.id).isEquals();
+		return new EqualsBuilder().append(id, rhs.id).append(uid, rhs.uid).isEquals();
 	}
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(14407, 7177).append(id).toHashCode();
+		return new HashCodeBuilder(14407, 7177).append(id).append(uid).toHashCode();
 	}
 
 	boolean damage(int amt) {
 		hp -= amt;
-		if (hp <= 0) {
-			this.id = 0;
-			loadProperties();
-			return true;
-		}
-		return false;
+		return (hp <= 0);
 	}
 
 	boolean damage() {
@@ -129,6 +129,9 @@ public class Item {
 		this.hp = ItemProp.hp.get(id);
 		this.craftable = ItemProp.craftable.get(id);
 		this.skill = ItemProp.skill.get(id);
+
+		if (type.isTool())
+			uid = UUID.randomUUID().toString();
 	}
 
 	String getString() {

@@ -31,12 +31,20 @@ public class Inventory {
 
 	void refreshContents() {
 		Item item;
+		int shp = -1;
 		for (int i = 0; i < items.size(); ++i) {
 			item = items.get(i);
+			if (item.hp != -1)
+				shp = item.hp;
+
+			item.reinit();
+
+			item.hp = shp;
+
 			if (item.id == 0)
 				refreshRemoveItem(item);
 			else
-				refreshItem(item.reinit());
+				refreshItem(item);
 		}
 		refreshWeight();
 	}
@@ -115,11 +123,14 @@ public class Inventory {
 		}
 	}
 
-	void damageTool(Item item, Skill skill) {
-		if (!item.damageTool(skill))
+	boolean damageTool(Item item, Skill skill) {
+		if (!item.damageTool(skill)) {
 			refreshItem(item);
-		else
+			return false;
+		} else {
 			refreshRemoveItem(item);
+			return true;
+		}
 	}
 
 	void damageTool(Item item) {
@@ -199,6 +210,17 @@ public class Inventory {
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		return false;
+	}
+
+	public boolean delItem(Item item) {
+		for (int i = items.size() - 1; i >= 0; --i) {
+			if (items.get(i).equals(item)) {
+				refreshRemoveItem(item);
+				items.remove(i);
+				return true;
+			}
 		}
 		return false;
 	}

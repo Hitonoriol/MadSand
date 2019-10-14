@@ -19,9 +19,10 @@ public class Location extends HashMap<MapID, Map> {
 			Map map = this.get(loc);
 			int xsz = map.getWidth();
 			int ysz = map.getHeight();
-			// header: width, height, biome
+			// header: width, height, default tile, biome
 			stream.write(GameSaver.encode2(xsz));
 			stream.write(GameSaver.encode2(ysz));
+			stream.write(GameSaver.encode2(map.getDefTile()));
 			stream.write(GameSaver.encode2(map.getBiome()));
 			MapObject obj = new MapObject();
 
@@ -86,16 +87,31 @@ public class Location extends HashMap<MapID, Map> {
 		}
 	}
 
+	void bytesToLocation(byte[] location, int wx, int wy) {
+		ByteArrayInputStream stream = new ByteArrayInputStream(location);
+		long layersz;
+		try {
+			for (int i = 0; i < LAYERS; ++i) {
+				layersz = GameSaver.decode8(stream.readNBytes(8));
+				bytesToSector(stream.readNBytes((int) layersz), wx, wy, i);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	void bytesToSector(byte[] sector, int wx, int wy, int layer) {
 		try {
 			ByteArrayInputStream stream = new ByteArrayInputStream(sector);
 			int xsz = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
 			int ysz = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
+			int defTile = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
 			int biome = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
 			MapID loc = new MapID(new Pair(wx, wy), layer);
 			Map map = new Map(xsz, ysz);
 			map.purge();
 			map.setBiome(biome);
+			map.setDefTile(defTile);
 			byte[] block = new byte[2];
 			for (int y = 0; y < ysz; ++y) {
 				for (int x = 0; x < xsz; ++x) {

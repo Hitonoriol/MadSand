@@ -214,6 +214,18 @@ public class Player {
 		return stats.actionPts;
 	}
 
+	void damageHeldTool(Skill objectSkill) {
+		if (inventory.damageTool(stats.hand, objectSkill)) {
+			MadSand.print("Your " + stats.hand.name + " broke");
+			inventory.delItem(stats.hand);
+			freeHands(true);
+		}
+	}
+
+	void damageHeldTool() {
+		damageHeldTool(Skill.None);
+	}
+
 	int doAction() {
 		return doAction(Stats.AP_MINOR);
 	}
@@ -245,7 +257,7 @@ public class Player {
 		int mhp = ObjectProp.harvestHp.get(obj.id);
 		Skill skill = obj.skill;
 		int curLvl = stats.skills.getLvl(skill);
-		inventory.damageTool(stats.hand, skill);
+		damageHeldTool(skill);
 		if (curLvl < obj.lvl) {
 			MadSand.print("You are not experienced enough.");
 			MadSand.print(skill + " level required: " + obj.lvl);
@@ -269,7 +281,7 @@ public class Player {
 		int ptile = MadSand.world.getTileId(x, y);
 		int item = MapObject.getTileAltItem(ptile, stats.hand.type.get());
 		checkHands(id);
-		inventory.damageTool(stats.hand);
+		damageHeldTool();
 		if (item != -1) {
 			MadSand.world.getCurLoc().delTile(x, y);
 			World.player.inventory.putItem(item);
@@ -334,10 +346,15 @@ public class Player {
 		checkHands(id);
 	}
 
-	public void freeHands() {
-		MadSand.print("You put your " + stats.hand.name + " back to your inventory");
+	public void freeHands(boolean silent) {
+		if (!silent)
+			MadSand.print("You put your " + stats.hand.name + " back to your inventory");
 		stats.hand = Item.nullItem;
 		Gui.setHandDisplay(stats.hand.id);
+	}
+
+	public void freeHands() {
+		freeHands(false);
 	}
 
 	void updCoords() {
@@ -374,7 +391,7 @@ public class Player {
 				wy = MadSand.world.curywpos = stats.respawnWY;
 				if (GameSaver.verifyNextSector(wx, wy)) {
 					MadSand.world.clearCurLoc();
-					GameSaver.loadSector();
+					GameSaver.loadLocation();
 				} else {
 					MadSand.world.Generate();
 				}
