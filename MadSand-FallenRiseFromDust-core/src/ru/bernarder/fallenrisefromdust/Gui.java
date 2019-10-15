@@ -577,6 +577,12 @@ public class Gui {
 
 	static final int OVSTAT_COUNT = 6;
 
+	static Label dieLabel;
+	
+	public static void setDeadText(String str) {
+		dieLabel.setText(str);
+	}
+	
 	static void initmenu() {
 		Gui.overlayStatLabels = new Label[OVSTAT_COUNT];
 
@@ -816,7 +822,7 @@ public class Gui {
 
 		TextButton RespawnButton = new TextButton("Respawn", Gui.skin);
 		Table tab = new Table();
-		Label dieLabel = new Label("You died", Gui.skin);
+		dieLabel = new Label("", Gui.skin);
 		dieLabel.setAlignment(Align.center);
 		tab.add(dieLabel).width(500.0F);
 		tab.row();

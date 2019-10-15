@@ -104,6 +104,8 @@ public class Player {
 	}
 
 	void pickUpLoot() {
+		if (stats.dead)
+			return;
 		Loot loot = MadSand.world.getCurLoc().getLoot(x, y);
 		if (loot != Map.nullLoot) {
 			for (int i = loot.contents.size() - 1; i >= 0; --i) {
@@ -126,6 +128,8 @@ public class Player {
 	}
 
 	boolean standingOnLoot(int x, int y) {
+		if (stats.dead)
+			return false;
 		if (MadSand.world.getCurLoc().getLoot(x, y).equals(Map.nullLoot))
 			return false;
 		else
@@ -171,7 +175,19 @@ public class Player {
 		}
 	}
 
+	private void dropInventory() {
+		Item item;
+		for (int i = inventory.items.size() - 1; i >= 0; --i) {
+			item = inventory.items.get(i);
+			MadSand.world.getCurLoc().putLoot(x, y, item);
+			inventory.delItem(item);
+		}
+	}
+
 	void die() {
+		stats.dead = true;
+		Gui.setDeadText("You died\nYou survived " + World.player.getSurvivedTime() + " ticks");
+		dropInventory();
 		Gui.darkness.setVisible(true);
 		Gdx.input.setInputProcessor(Gui.dead);
 		MadSand.state = GameState.DEAD;
@@ -369,6 +385,7 @@ public class Player {
 		stats.stamina = stats.maxstamina;
 		stats.dead = false;
 		this.init();
+		stats.spawnTime = MadSand.world.globalTick;
 
 		if (stats.respawnX == -1) {
 			x = Utils.rand(0, MadSand.world.getCurLoc().getWidth());
@@ -478,5 +495,9 @@ public class Player {
 		if ((obj != 666) && (obj != 0)) {
 			MadSand.print("You see: " + ObjectProp.name.get(obj));
 		}
+	}
+
+	public long getSurvivedTime() {
+		return MadSand.world.globalTick - stats.spawnTime;
 	}
 }

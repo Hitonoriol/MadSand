@@ -20,6 +20,8 @@ public class Stats {
 	public final int maxFood = 1000;
 	public final int satiatedVal = (int) (maxFood * 0.9);
 	public int food = maxFood;
+	
+	public long spawnTime = 0;
 
 	public int accur = 2; // ACCUR
 	public int hp = 200; // CONSTITUTION*10
@@ -50,7 +52,7 @@ public class Stats {
 
 	public String name;
 
-	boolean dead = false;
+	public boolean dead = false;
 
 	StatAction actions;
 

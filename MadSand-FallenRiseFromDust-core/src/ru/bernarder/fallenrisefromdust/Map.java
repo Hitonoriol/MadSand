@@ -311,6 +311,16 @@ public class Map {
 		}
 	}
 
+	void putLoot(int x, int y, Item item) {
+		if (correctCoords(coords.set(x, y))) {
+			if (mapLoot.get(coords) != null)
+				mapLoot.get(coords).add(item);
+			else
+				mapLoot.put(coords, new Loot(item));
+
+		}
+	}
+
 	void update() {
 		Pair coord = new Pair();
 		Crop newCrop;
