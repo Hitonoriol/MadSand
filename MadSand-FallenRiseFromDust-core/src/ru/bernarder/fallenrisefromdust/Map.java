@@ -15,6 +15,7 @@ public class Map {
 	private int biome = -1;
 	private int defTile = 0;
 
+	static final int COLLISION_MASK_ID = 666;
 	static Tile nullTile = new Tile(0);
 	static MapObject nullObject = new MapObject(0);
 	static Loot nullLoot = new Loot();

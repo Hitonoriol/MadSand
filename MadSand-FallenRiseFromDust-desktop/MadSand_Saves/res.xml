@@ -4,44 +4,44 @@
       <tile id="0">
          <name>Grass</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="1">
          <name>Grass with clay</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
          <altitem id="0" inhand="9" item="5" />
       </tile>
       <tile id="2">
          <name>Flint</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
          <altitem id="0" inhand="9" item="9" />
       </tile>
       <tile id="3">
          <name>Sandstone</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="4">
          <name>Sand</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="5">
          <name>Stone floor</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="6">
          <name>Hole in grass</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="7">
          <name>Lightened stone floor</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="8">
          <name>Water</name>
@@ -51,42 +51,42 @@
       <tile id="9">
          <name>Wooden floor</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="10">
          <name>Dirt</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="11">
          <name>Dirt</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="12">
          <name>Stone floor</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="13">
          <name>Stone floor</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="14">
          <name>Stone floor</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="15">
          <name>Plowed dirt</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="16">
          <name>Hole in sand</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="17">
          <name>Mad sand</name>
@@ -96,132 +96,132 @@
       <tile id="18">
          <name>Mixed brick floor</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="19">
          <name>Gray brick floor</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="20">
          <name>Snow</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="21">
          <name>Pile of snow</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="22">
          <name>Lava</name>
          <damage>20</damage>
-         <cover>0</cover>
+         <cover>1</cover>
       </tile>
       <tile id="23">
          <name>Dirt</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="24">
          <name>Dirt</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
        <tile id="25">
          <name>Gravel</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
        <tile id="26">
          <name>Stone floor</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="27">
          <name>Stone floor</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="28">
          <name>Stone floor</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="29">
          <name>Gravel</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="30">
          <name>Stone floor</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="31">
          <name>Brick floor</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="32">
          <name>Gravel</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="33">
          <name>Brick floor</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="34">
          <name>Brick floor</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="35">
          <name>Brick floor</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="36">
          <name>Stone plate</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="37">
          <name>Stone plate</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="38">
          <name>Stone plate</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="39">
          <name>Dust</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="40">
          <name>Dust</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="41">
          <name>Dust</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="42">
          <name>Dust</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
       <tile id="43">
          <name>Dust</name>
          <damage>0</damage>
-         <cover>0</cover>
+         
       </tile>
    </terrain>
    <objects>
@@ -250,6 +250,7 @@
       </object>
       <object id="4">
          <name>Berry bush</name>
+         <nocollide>1</nocollide>
          <skill>Harvesting</skill>
          <tough>7</tough>
          <harvesthp>2</harvesthp>
@@ -290,6 +291,7 @@
       </object>
       <object id="12">
          <name>Opened door</name>
+         <nocollide>1</nocollide>
          <tough>30</tough>
       </object>
       <object id="13">
@@ -302,6 +304,7 @@
       </object>
       <object id="14">
          <name>Trapdoor</name>
+         <nocollide>1</nocollide>
          <tough>30</tough>
       </object>
       <object id="15">
@@ -330,14 +333,17 @@
          <tough>30</tough>
       </object>
       <object id="19">
+         <nocollide>1</nocollide>
          <name>Cucumber sprout</name>
          <tough>5</tough>
       </object>
       <object id="20">
+      	 <nocollide>1</nocollide>
          <name>Cucumber seeds</name>
          <tough>5</tough>
       </object>
       <object id="21">
+         <nocollide>1</nocollide>
          <name>Cucumber bush</name>
          <skill>Harvesting</skill>
          <tough>5</tough>
@@ -361,6 +367,7 @@
          <altitem id="1" inhand="10" item="24"/>
       </object>
       <object id="24">
+         <nocollide>1</nocollide>
          <name>Tumbleweed</name>
          <tough>3</tough>
       </object>
@@ -456,6 +463,7 @@
       </object>
       <object id="37">
          <name>Bush</name>
+         <nocollide>1</nocollide>
          <skill>Harvesting</skill>
          <tough>7</tough>
          <harvesthp>2</harvesthp>
@@ -480,6 +488,7 @@
       <object id="41">
          <skill>Harvesting</skill>
          <name>Edible mushrooms</name>
+         <nocollide>1</nocollide>
          <altitem id="0" inhand="0" item="44"/>
          <tough>1</tough>
          <harvesthp>1</harvesthp>
@@ -492,101 +501,122 @@
          <harvesthp>1</harvesthp>
       </object>
       <object id="43">
+         <nocollide>1</nocollide>
          <name>Potato sprout</name>
          <tough>1</tough>
       </object>
       <object id="44">
+         <nocollide>1</nocollide>
          <name>Potato sprout</name>
          <tough>1</tough>
       </object>
       <object id="45">
+         <nocollide>1</nocollide>
          <name>Potato sprout</name>
          <tough>1</tough>
       </object>
       <object id="46">
-      <skill>Harvesting</skill>
+         <nocollide>1</nocollide>
+         <skill>Harvesting</skill>
          <name>Potato sprout</name>
          <altitem id="0" inhand="0" item="46"/>
          <tough>8</tough>
          <harvesthp>1</harvesthp>
       </object>
       <object id="47">
+         <nocollide>1</nocollide>
          <name>Carrot sprout</name>
          <tough>1</tough>
       </object>
       <object id="48">
+         <nocollide>1</nocollide>
          <name>Carrot sprout</name>
          <tough>1</tough>
       </object>
       <object id="49">
+         <nocollide>1</nocollide>
          <name>Carrot sprout</name>
          <tough>1</tough>
       </object>
       <object id="50">
-      <skill>Harvesting</skill>
+         <nocollide>1</nocollide>
+         <skill>Harvesting</skill>
          <name>Carrot sprout</name>
          <altitem id="0" inhand="0" item="47"/>
          <tough>8</tough>
          <harvesthp>1</harvesthp>
       </object>
       <object id="51">
+         <nocollide>1</nocollide>
          <name>Tomato sprout</name>
          <tough>1</tough>
       </object>
       <object id="52">
+         <nocollide>1</nocollide>
          <name>Tomato sprout</name>
          <tough>1</tough>
       </object>
       <object id="53">
+         <nocollide>1</nocollide>
          <name>Tomato sprout</name>
          <tough>1</tough>
       </object>
       <object id="54">
-      <skill>Harvesting</skill>
+         <nocollide>1</nocollide>
+         <skill>Harvesting</skill>
          <name>Tomato sprout</name>
          <altitem id="0" inhand="0" item="48"/>
          <tough>8</tough>
          <harvesthp>1</harvesthp>
       </object>
       <object id="55">
+         <nocollide>1</nocollide>
          <name>Pepper sprout</name>
          <tough>1</tough>
       </object>
       <object id="56">
+         <nocollide>1</nocollide>
          <name>Pepper sprout</name>
          <tough>1</tough>
       </object>
       <object id="57">
+         <nocollide>1</nocollide>
          <name>Pepper sprout</name>
          <tough>1</tough>
       </object>
       <object id="58">
-      <skill>Harvesting</skill>
+         <nocollide>1</nocollide>
+         <skill>Harvesting</skill>
          <name>Pepper sprout</name>
          <altitem id="0" inhand="0" item="49"/>
          <tough>8</tough>
          <harvesthp>1</harvesthp>
       </object>
       <object id="59">
+         <nocollide>1</nocollide>
          <name>Corn sprout</name>
          <tough>1</tough>
       </object>
       <object id="60">
+         <nocollide>1</nocollide>
          <name>Corn sprout</name>
          <tough>1</tough>
       </object>
       <object id="61">
+         <nocollide>1</nocollide>
          <name>Corn sprout</name>
          <tough>1</tough>
       </object>
       <object id="62">
-      <skill>Harvesting</skill>
+         <nocollide>1</nocollide>
+         <skill>Harvesting</skill>
          <name>Corn sprout</name>
          <altitem id="0" inhand="0" item="50"/>
          <tough>8</tough>
          <harvesthp>1</harvesthp>
       </object>
       <object id="63">
+         <nocollide>1</nocollide>
          <name>Cucumber sprout</name>
          <tough>1</tough>
       </object>

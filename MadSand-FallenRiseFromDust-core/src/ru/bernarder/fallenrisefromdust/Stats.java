@@ -30,6 +30,8 @@ public class Stats {
 	public int intelligence = 1; // INT
 	public int stamina = 50; // STAMINA*5
 	public int maxstamina = 50;
+	
+	public int air = 3;
 
 	public int respawnX = -1;
 	public int respawnY = -1;

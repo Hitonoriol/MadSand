@@ -250,6 +250,8 @@ public class MadSand extends com.badlogic.gdx.Game {
 	void DrawGame() {
 		try {
 			int i = 0;
+			if (World.player.isInBackground())
+				drawEntity(World.player);
 			while (i < renderArea.length) {
 				Utils.batch.draw(
 						Resource.tile[world.getTileOrDefault(World.player.x + (int) renderArea[i].x,
@@ -257,9 +259,6 @@ public class MadSand extends com.badlogic.gdx.Game {
 						World.player.globalPos.x + renderArea[i].x * TILESIZE,
 						World.player.globalPos.y + renderArea[i].y * TILESIZE);
 				i++;
-			}
-			if (Player.isCollisionMask(World.player.x, World.player.y)) {
-				drawEntity(World.player);
 			}
 			i = 0;
 			while (i < renderArea.length) {
@@ -284,9 +283,8 @@ public class MadSand extends com.badlogic.gdx.Game {
 
 				i++;
 			}
-			if (!Player.isCollisionMask(World.player.x, World.player.y)) {
+			if (!World.player.isInBackground())
 				drawEntity(World.player);
-			}
 			i = 0;
 			Utils.batch.draw(Resource.mapcursor, wmx * 33, wmy * 33);
 			Utils.batch.end();

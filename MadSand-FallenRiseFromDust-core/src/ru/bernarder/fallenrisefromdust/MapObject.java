@@ -26,6 +26,10 @@ public class MapObject {
 	public MapObject() {
 		this(0);
 	}
+	
+	boolean isCollisionMask() {
+		return (id == Map.COLLISION_MASK_ID);
+	}
 
 	void destroy() {
 		this.id = 0; // cleaned up later in map

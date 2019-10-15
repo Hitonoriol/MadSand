@@ -125,12 +125,10 @@ public class Player {
 		return collision;
 	}
 
-	public static boolean isCollisionMask(int x, int y) {
-		if (x < World.MAPSIZE && y < World.MAPSIZE) {
-			if (MadSand.world.getCurLoc().getObject(x, y).id == 666) {
-				return true;
-			}
-		}
+	public boolean isInBackground() {
+		Map loc = MadSand.world.getCurLoc();
+		if (loc.getObject(x, y).isCollisionMask() || loc.getTile(x, y).foreground)
+			return true;
 		return false;
 	}
 
