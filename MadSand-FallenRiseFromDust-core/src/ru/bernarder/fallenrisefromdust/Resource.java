@@ -168,6 +168,7 @@ public class Resource {
 			ObjectProp.altitems.put(i, Utils.getAitem(i, "object"));
 
 			ObjectProp.minLvl.put(i, Integer.parseInt(Utils.getKey(resdoc, "object", Utils.str(i), "lvl")));
+			ObjectProp.nocollide.put(i, Integer.parseInt(Utils.getKey(resdoc, "object", Utils.str(i), "nocollide")));
 
 			ObjectProp.vRendMasks.put(i, Integer.parseInt(Utils.getKey(resdoc, "object", Utils.str(i), "vmask")));
 			ObjectProp.hRendMasks.put(i, Integer.parseInt(Utils.getKey(resdoc, "object", Utils.str(i), "hmask")));

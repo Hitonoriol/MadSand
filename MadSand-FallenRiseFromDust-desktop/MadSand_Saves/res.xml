@@ -1,1665 +1,1666 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <res>
-   <terrain>
-      <tile id="0">
-         <name>Grass</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="1">
-         <name>Grass with clay</name>
-         <damage>0</damage>
-         
-         <altitem id="0" inhand="9" item="5" />
-      </tile>
-      <tile id="2">
-         <name>Flint</name>
-         <damage>0</damage>
-         
-         <altitem id="0" inhand="9" item="9" />
-      </tile>
-      <tile id="3">
-         <name>Sandstone</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="4">
-         <name>Sand</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="5">
-         <name>Stone floor</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="6">
-         <name>Hole in grass</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="7">
-         <name>Lightened stone floor</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="8">
-         <name>Water</name>
-         <damage>0</damage>
-         <cover>1</cover>
-      </tile>
-      <tile id="9">
-         <name>Wooden floor</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="10">
-         <name>Dirt</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="11">
-         <name>Dirt</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="12">
-         <name>Stone floor</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="13">
-         <name>Stone floor</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="14">
-         <name>Stone floor</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="15">
-         <name>Plowed dirt</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="16">
-         <name>Hole in sand</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="17">
-         <name>Mad sand</name>
-         <damage>2</damage>
-         <cover>1</cover>
-      </tile>
-      <tile id="18">
-         <name>Mixed brick floor</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="19">
-         <name>Gray brick floor</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="20">
-         <name>Snow</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="21">
-         <name>Pile of snow</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="22">
-         <name>Lava</name>
-         <damage>20</damage>
-         <cover>1</cover>
-      </tile>
-      <tile id="23">
-         <name>Dirt</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="24">
-         <name>Dirt</name>
-         <damage>0</damage>
-         
-      </tile>
-       <tile id="25">
-         <name>Gravel</name>
-         <damage>0</damage>
-         
-      </tile>
-       <tile id="26">
-         <name>Stone floor</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="27">
-         <name>Stone floor</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="28">
-         <name>Stone floor</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="29">
-         <name>Gravel</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="30">
-         <name>Stone floor</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="31">
-         <name>Brick floor</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="32">
-         <name>Gravel</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="33">
-         <name>Brick floor</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="34">
-         <name>Brick floor</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="35">
-         <name>Brick floor</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="36">
-         <name>Stone plate</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="37">
-         <name>Stone plate</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="38">
-         <name>Stone plate</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="39">
-         <name>Dust</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="40">
-         <name>Dust</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="41">
-         <name>Dust</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="42">
-         <name>Dust</name>
-         <damage>0</damage>
-         
-      </tile>
-      <tile id="43">
-         <name>Dust</name>
-         <damage>0</damage>
-         
-      </tile>
-   </terrain>
-   <objects>
-      <object id="0">
-         <name>Nothing</name>
-         <tough>999</tough>
-      </object>
-      <object id="1">
-         <name>Boulder</name>
-         <skill>Mining</skill>
-         <tough>11</tough>
-         <harvesthp>8</harvesthp>
-         <altitem id="0" inhand="0" item="2" />
-      </object>
-      <object id="2">
-         <name>Tree</name>
-         <skill>Woodcutting</skill>
-         <tough>11</tough>
-         <harvesthp>4</harvesthp>
-         <altitem id="0" inhand="0" item="8" />
-         <altitem id="1" inhand="8" item="1" />
-      </object>
-      <object id="3">
-         <name>Cake</name>
-         <tough>1</tough>
-      </object>
-      <object id="4">
-         <name>Berry bush</name>
-         <nocollide>1</nocollide>
-         <skill>Harvesting</skill>
-         <tough>7</tough>
-         <harvesthp>2</harvesthp>
-         <altitem id="0" inhand="0" item="7,8,65,66" />
-      </object>
-      <object id="5">
-         <name>---</name>
-         <tough>30</tough>
-      </object>
-      <object id="6">
-         <name>Campfire</name>
-         <skill>Survival</skill>
-         <tough>20</tough>
-      </object>
-      <object id="7">
-         <name>Chest</name>
-         <tough>30</tough>
-      </object>
-      <object id="8">
-         <name>Hewn rock</name>
-         <tough>30</tough>
-      </object>
-      <object id="9">
-         <name>Wooden planks</name>
-         <skill>Woodcutting</skill>
-         <tough>1</tough>
-         <harvesthp>10</harvesthp>
-         <altitem id="0" inhand="0" item="0"/>
-         <altitem id="1" inhand="8" item="1"/>
-      </object>
-      <object id="10">
-         <name>Cactus</name>
-         <tough>5</tough>
-      </object>
-      <object id="11">
-         <name>Closed door</name>
-         <tough>30</tough>
-      </object>
-      <object id="12">
-         <name>Opened door</name>
-         <nocollide>1</nocollide>
-         <tough>30</tough>
-      </object>
-      <object id="13">
-         <name>Rock</name>
-         <skill>Mining</skill>
-         <tough>1</tough>
-         <harvesthp>15</harvesthp>
-         <altitem id="0" inhand="0" item="0"/>
-         <altitem id="1" inhand="10" item="25"/>
-      </object>
-      <object id="14">
-         <name>Trapdoor</name>
-         <nocollide>1</nocollide>
-         <tough>30</tough>
-      </object>
-      <object id="15">
-         <name>Stone wall</name>
-         <tough>1</tough>
-         <harvesthp>15</harvesthp>
-         <altitem id="0" inhand="0" item="0"/>
-         <altitem id="1" inhand="10" item="32"/>
-      </object>
-      <object id="16">
-         <name>Stone wall</name>
-         <tough>1</tough>
-         <harvesthp>15</harvesthp>
-         <altitem id="0" inhand="0" item="0"/>
-         <altitem id="1" inhand="10" item="33"/>
-      </object>
-      <object id="17">
-         <name>Stone wall</name>
-         <tough>1</tough>
-         <harvesthp>15</harvesthp>
-         <altitem id="0" inhand="0" item="0"/>
-         <altitem id="1" inhand="10" item="34"/>
-      </object>
-      <object id="18">
-         <name>Sign</name>
-         <tough>30</tough>
-      </object>
-      <object id="19">
-         <nocollide>1</nocollide>
-         <name>Cucumber sprout</name>
-         <tough>5</tough>
-      </object>
-      <object id="20">
-      	 <nocollide>1</nocollide>
-         <name>Cucumber seeds</name>
-         <tough>5</tough>
-      </object>
-      <object id="21">
-         <nocollide>1</nocollide>
-         <name>Cucumber bush</name>
-         <skill>Harvesting</skill>
-         <tough>5</tough>
-         <harvesthp>1</harvesthp>
-         <altitem id="0" inhand="0" item="39"/>
-      </object>
-      <object id="22">
-         <name>Iron ore</name>
-         <skill>Mining</skill>
-         <tough>1</tough>
-         <harvesthp>15</harvesthp>
-         <altitem id="0" inhand="0" item="0"/>
-         <altitem id="1" inhand="10" item="23"/>
-      </object>
-      <object id="23">
-         <name>Gold ore</name>
-         <skill>Mining</skill>
-         <tough>1</tough>
-         <harvesthp>15</harvesthp>
-         <altitem id="0" inhand="0" item="0"/>
-         <altitem id="1" inhand="10" item="24"/>
-      </object>
-      <object id="24">
-         <nocollide>1</nocollide>
-         <name>Tumbleweed</name>
-         <tough>3</tough>
-      </object>
-      <object id="25">
-         <name>Coal</name>
-         <skill>Mining</skill>
-         <tough>1</tough>
-         <harvesthp>15</harvesthp>
-         <altitem id="0" inhand="0" item="0"/>
-         <altitem id="1" inhand="10" item="56"/>
-      </object>
-      <object id="26">
-         <name>Mixed brick wall</name>
-         <tough>30</tough>
-      </object>
-      <object id="27">
-         <name>Boulder</name>
-         <skill>Mining</skill>
-         <tough>6</tough>
-         <harvesthp>8</harvesthp>
-         <altitem id="0" inhand="0" item="2"/>
-      </object>
-      <object id="28">
-         <name>Boulder</name>
-         <skill>Mining</skill>
-         <tough>6</tough>
-         <harvesthp>8</harvesthp>
-         <altitem id="0" inhand="0" item="2"/>
-      </object>
-      <object id="29">
-         <name>Spruce tree</name>
-         <skill>Woodcutting</skill>
-         <tough>10</tough>
-         <altitem>1</altitem>
-      </object>
-      <object id="30">
-         <name>Tree</name>
-         <skill>Woodcutting</skill>
-         <tough>11</tough>
-         <harvesthp>4</harvesthp>
-         <altitem id="0" inhand="0" item="8"/>
-         <altitem id="1" inhand="8" item="1"/>
-      </object>
-      <object id="31">
-         <name>Palm tree</name>
-         <skill>Woodcutting</skill>
-         <lvl>2</lvl>
-         <tough>11</tough>
-         <harvesthp>4</harvesthp>
-         <altitem id="0" inhand="0" item="8"/>
-         <altitem id="1" inhand="8" item="1"/>
-      </object>
-      <object id="32">
-      <skill>Woodcutting</skill>
-         <name>Pine</name>
-         <tough>11</tough>
-         <harvesthp>4</harvesthp>
-         <altitem id="0" inhand="0" item="8"/>
-         <altitem id="1" inhand="8" item="1"/>
-      </object>
-      <object id="33">
-         <name>Stump</name>
-         <skill>Woodcutting</skill>
-         <tough>11</tough>
-         <harvesthp>4</harvesthp>
-         <altitem id="0" inhand="0" item="8"/>
-         <altitem id="1" inhand="8" item="1"/>
-      </object>
-      <object id="34">
-         <name>Dead tree</name>
-         <skill>Woodcutting</skill>
-         <lvl>4</lvl>
-         <tough>11</tough>
-         <harvesthp>4</harvesthp>
-         <altitem id="0" inhand="0" item="8"/>
-         <altitem id="1" inhand="8" item="1"/>
-      </object>
-      <object id="35">
-      <skill>Woodcutting</skill>
-         <name>Tree</name>
-         <tough>11</tough>
-         <harvesthp>4</harvesthp>
-         <altitem id="0" inhand="0" item="8"/>
-         <altitem id="1" inhand="8" item="1"/>
-      </object>
-      <object id="36">
-      <skill>Woodcutting</skill>
-         <name>Tree</name>
-         <tough>11</tough>
-         <harvesthp>4</harvesthp>
-         <altitem id="0" inhand="0" item="8"/>
-         <altitem id="1" inhand="8" item="1"/>
-      </object>
-      <object id="37">
-         <name>Bush</name>
-         <nocollide>1</nocollide>
-         <skill>Harvesting</skill>
-         <tough>7</tough>
-         <harvesthp>2</harvesthp>
-         <altitem id="0" inhand="0" item="8,65,66" />
-      </object>
-      <object id="38">
-      <skill>Woodcutting</skill>
-         <name>Spruce tree</name>
-         <tough>11</tough>
-         <harvesthp>4</harvesthp>
-         <altitem id="0" inhand="0" item="8"/>
-         <altitem id="1" inhand="8" item="1"/>
-      </object>
-      <object id="39">
-         <name>Cross</name>
-         <tough>30</tough>
-      </object>
-      <object id="40">
-         <name>Stalactite</name>
-         <tough>15</tough>
-      </object>
-      <object id="41">
-         <skill>Harvesting</skill>
-         <name>Edible mushrooms</name>
-         <nocollide>1</nocollide>
-         <altitem id="0" inhand="0" item="44"/>
-         <tough>1</tough>
-         <harvesthp>1</harvesthp>
-      </object>
-      <object id="42">
-      <skill>Harvesting</skill>
-         <name>Amanita</name>
-         <altitem id="0" inhand="0" item="45"/>
-         <tough>1</tough>
-         <harvesthp>1</harvesthp>
-      </object>
-      <object id="43">
-         <nocollide>1</nocollide>
-         <name>Potato sprout</name>
-         <tough>1</tough>
-      </object>
-      <object id="44">
-         <nocollide>1</nocollide>
-         <name>Potato sprout</name>
-         <tough>1</tough>
-      </object>
-      <object id="45">
-         <nocollide>1</nocollide>
-         <name>Potato sprout</name>
-         <tough>1</tough>
-      </object>
-      <object id="46">
-         <nocollide>1</nocollide>
-         <skill>Harvesting</skill>
-         <name>Potato sprout</name>
-         <altitem id="0" inhand="0" item="46"/>
-         <tough>8</tough>
-         <harvesthp>1</harvesthp>
-      </object>
-      <object id="47">
-         <nocollide>1</nocollide>
-         <name>Carrot sprout</name>
-         <tough>1</tough>
-      </object>
-      <object id="48">
-         <nocollide>1</nocollide>
-         <name>Carrot sprout</name>
-         <tough>1</tough>
-      </object>
-      <object id="49">
-         <nocollide>1</nocollide>
-         <name>Carrot sprout</name>
-         <tough>1</tough>
-      </object>
-      <object id="50">
-         <nocollide>1</nocollide>
-         <skill>Harvesting</skill>
-         <name>Carrot sprout</name>
-         <altitem id="0" inhand="0" item="47"/>
-         <tough>8</tough>
-         <harvesthp>1</harvesthp>
-      </object>
-      <object id="51">
-         <nocollide>1</nocollide>
-         <name>Tomato sprout</name>
-         <tough>1</tough>
-      </object>
-      <object id="52">
-         <nocollide>1</nocollide>
-         <name>Tomato sprout</name>
-         <tough>1</tough>
-      </object>
-      <object id="53">
-         <nocollide>1</nocollide>
-         <name>Tomato sprout</name>
-         <tough>1</tough>
-      </object>
-      <object id="54">
-         <nocollide>1</nocollide>
-         <skill>Harvesting</skill>
-         <name>Tomato sprout</name>
-         <altitem id="0" inhand="0" item="48"/>
-         <tough>8</tough>
-         <harvesthp>1</harvesthp>
-      </object>
-      <object id="55">
-         <nocollide>1</nocollide>
-         <name>Pepper sprout</name>
-         <tough>1</tough>
-      </object>
-      <object id="56">
-         <nocollide>1</nocollide>
-         <name>Pepper sprout</name>
-         <tough>1</tough>
-      </object>
-      <object id="57">
-         <nocollide>1</nocollide>
-         <name>Pepper sprout</name>
-         <tough>1</tough>
-      </object>
-      <object id="58">
-         <nocollide>1</nocollide>
-         <skill>Harvesting</skill>
-         <name>Pepper sprout</name>
-         <altitem id="0" inhand="0" item="49"/>
-         <tough>8</tough>
-         <harvesthp>1</harvesthp>
-      </object>
-      <object id="59">
-         <nocollide>1</nocollide>
-         <name>Corn sprout</name>
-         <tough>1</tough>
-      </object>
-      <object id="60">
-         <nocollide>1</nocollide>
-         <name>Corn sprout</name>
-         <tough>1</tough>
-      </object>
-      <object id="61">
-         <nocollide>1</nocollide>
-         <name>Corn sprout</name>
-         <tough>1</tough>
-      </object>
-      <object id="62">
-         <nocollide>1</nocollide>
-         <skill>Harvesting</skill>
-         <name>Corn sprout</name>
-         <altitem id="0" inhand="0" item="50"/>
-         <tough>8</tough>
-         <harvesthp>1</harvesthp>
-      </object>
-      <object id="63">
-         <nocollide>1</nocollide>
-         <name>Cucumber sprout</name>
-         <tough>1</tough>
-      </object>
-      <object id="64">
-         <name>Altar</name>
-         <tough>30</tough>
-      </object>
-      <object id="65">
-         <name>Campfire</name>
-         <tough>5</tough>
-      </object>
-      <object id="66">
-         <name>Fountain</name>
-         <tough>9</tough>
-      </object>
-      <object id="67">
-         <name>Furnace</name>
-         <tough>9</tough>
-      </object>
-      <object id="68">
-         <name>Treasure chest</name>
-         <tough>9</tough>
-      </object>
-      <object id="69">
-         <name>Opened treasure chest</name>
-         <tough>9</tough>
-      </object>
-      <object id="70">
-         <name>Pile of crates</name>
-         <tough>5</tough>
-      </object>
-      <object id="71">
-         <name>Keg</name>
-         <tough>3</tough>
-      </object>
-      <object id="72">
-         <name>Cooking place</name>
-         <tough>9</tough>
-      </object>
-      <object id="73">
-         <name>Alchemist table</name>
-         <tough>9</tough>
-      </object>
-      <object id="74">
-         <name>Alchemist table</name>
-         <tough>9</tough>
-      </object>
-      <object id="75">
-         <name>Alchemist table</name>
-         <tough>9</tough>
-      </object>
-      <object id="76">
-         <name>Signpost</name>
-         <tough>9</tough>
-      </object>
-      <object id="77">
-         <name>Signpost</name>
-         <tough>9</tough>
-      </object>
-      <object id="78">
-         <name>Signpost</name>
-         <tough>9</tough>
-      </object>
-      <object id="79">
-         <name>Sign</name>
-         <tough>9</tough>
-      </object>
-      <object id="80">
-         <name>Mountain</name>
-         <tough>9</tough>
-      </object>
-      <object id="81">
-         <name>Mountain</name>
-         <tough>9</tough>
-      </object>
-      <object id="82">
-         <name>Mine entrance</name>
-         <tough>9</tough>
-      </object>
-      <object id="83">
-         <name>Straw house</name>
-         <tough>50</tough>
-      </object>
-      <object id="84">
-         <name>Sandstone house</name>
-         <tough>50</tough>
-      </object>
-      <object id="85">
-         <name>House</name>
-         <tough>50</tough>
-      </object>
-      <object id="86">
-         <name>House</name>
-         <tough>50</tough>
-      </object>
-      <object id="87">
-         <name>Palace entrance</name>
-         <tough>50</tough>
-      </object>
-      <object id="88">
-         <name>Tombstone</name>
-         <tough>10</tough>
-      </object>
-      <object id="89">
-         <name>House</name>
-         <tough>50</tough>
-      </object>
-      <object id="90">
-         <name>Wheelbarrow</name>
-         <tough>15</tough>
-      </object>
-      <object id="91">
-         <name>Barrel</name>
-         <tough>15</tough>
-      </object>
-      <object id="92">
-         <name>Well</name>
-         <tough>15</tough>
-      </object>
-      <object id="93">
-         <name>Wooden crate</name>
-         <tough>15</tough>
-      </object>
-      <object id="94">
-         <name>Pile of wooden crates</name>
-         <tough>15</tough>
-      </object>
-      <object id="95">
-         <name>Barrel</name>
-         <tough>15</tough>
-      </object>
-      <object id="96">
-         <name>Bookshelf</name>
-         <tough>15</tough>
-      </object>
-      <object id="97">
-         <name>Pillar</name>
-         <tough>15</tough>
-      </object>
-      <object id="98">
-         <name>Sphinx</name>
-         <tough>15</tough>
-      </object>
-      <object id="99">
-         <name>Warrior statue</name>
-         <tough>25</tough>
-      </object>
-      <object id="100">
-         <name>Vending machine</name>
-         <tough>15</tough>
-      </object>
-      <object id="101">
-         <name>Brick wall</name>
-         <tough>25</tough>
-      </object>
-       <object id="102">
-         <name>Brick wall</name>
-         <tough>25</tough>
-      </object>
-       <object id="103">
-         <name>Wall</name>
-         <tough>25</tough>
-      </object>
-       <object id="104">
-         <name>Brick wall</name>
-         <tough>25</tough>
-      </object>
-       <object id="105">
-         <name>Brick wall</name>
-         <tough>25</tough>
-      </object>
-       <object id="106">
-         <name>Wall</name>
-         <tough>25</tough>
-      </object>
-       <object id="107">
-         <name>Stone wall</name>
-         <tough>25</tough>
-      </object>
-       <object id="108">
-         <name>Yellow wall</name>
-         <tough>25</tough>
-      </object>
-       <object id="109">
-         <name>Turquoise wall</name>
-         <tough>25</tough>
-      </object>
-      <object id="110">
-         <name>Turquoise wall</name>
-         <tough>25</tough>
-      </object>
-      <object id="111">
-         <name>Clay wall</name>
-         <tough>25</tough>
-      </object>
-      
-      
-   </objects>
-   <mobs>
-      <npc id="0">
-         <hp>0</hp>
-         <maxhp>0</maxhp>
-         <rewardexp>0</rewardexp>
-         <drop>nn</drop>
-         <name>Nothing</name>
-         <atk>0</atk>
-         <accuracy>0</accuracy>
-         <friendly>0</friendly>
-         <faction>Nobody</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="1">
-         <hp>30</hp>
-         <maxhp>30</maxhp>
-         <rewardexp>15</rewardexp>
-         <drop>nn</drop>
-         <name>Rookie marauder</name>
-         <atk>1</atk>
-         <accuracy>2</accuracy>
-         <friendly>1</friendly>
-         <faction>Marauders</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="2">
-         <hp>35</hp>
-         <maxhp>35</maxhp>
-         <rewardexp>10</rewardexp>
-         <drop>nn</drop>
-         <name>Troll</name>
-         <atk>1</atk>
-         <accuracy>2</accuracy>
-         <friendly>1</friendly>
-         <faction>Outlaws</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="3">
-         <hp>40</hp>
-         <maxhp>40</maxhp>
-         <rewardexp>32</rewardexp>
-         <drop>nn</drop>
-         <name>Goon</name>
-         <atk>4</atk>
-         <accuracy>5</accuracy>
-         <friendly>1</friendly>
-         <faction>Marauders</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="4">
-         <hp>42</hp>
-         <maxhp>42</maxhp>
-         <rewardexp>36</rewardexp>
-         <drop>:22/1</drop>
-         <name>Old pirate</name>
-         <atk>5</atk>
-         <accuracy>5</accuracy>
-         <friendly>1</friendly>
-         <faction>Marauders</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="5">
-         <hp>100</hp>
-         <maxhp>100</maxhp>
-         <rewardexp>36</rewardexp>
-         <drop>:21/1000</drop>
-         <name>Richard</name>
-         <atk>11</atk>
-         <accuracy>50</accuracy>
-         <friendly>1</friendly>
-         <faction>Partisans</faction>
-         <spawnonce>1</spawnonce>
-         <qids>0,1</qids>
-      </npc>
-      <npc id="6">
-         <hp>175</hp>
-         <maxhp>175</maxhp>
-         <rewardexp>50</rewardexp>
-         <drop>:21/100</drop>
-         <name>Orc</name>
-         <atk>20</atk>
-         <accuracy>25</accuracy>
-         <friendly>1</friendly>
-         <faction>Outlaws</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="7">
-         <hp>140</hp>
-         <maxhp>140</maxhp>
-         <rewardexp>30</rewardexp>
-         <drop>nn</drop>
-         <name>Old hunter</name>
-         <atk>18</atk>
-         <accuracy>20</accuracy>
-         <friendly>1</friendly>
-         <faction>Outlaws</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="8">
-         <hp>100</hp>
-         <maxhp>100</maxhp>
-         <rewardexp>36</rewardexp>
-         <drop>nn</drop>
-         <name>Shopkeeper</name>
-         <atk>11</atk>
-         <accuracy>50</accuracy>
-         <friendly>1</friendly>
-         <faction>Marauders</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="9">
-         <hp>160</hp>
-         <maxhp>160</maxhp>
-         <rewardexp>36</rewardexp>
-         <drop>nn</drop>
-         <name>Scout</name>
-         <atk>5</atk>
-         <accuracy>10</accuracy>
-         <friendly>1</friendly>
-         <faction>Partisans</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="10">
-         <hp>80</hp>
-         <maxhp>80</maxhp>
-         <rewardexp>36</rewardexp>
-         <drop>nn</drop>
-         <name>Alchemist</name>
-         <atk>5</atk>
-         <accuracy>5</accuracy>
-         <friendly>1</friendly>
-         <faction>Partisans</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="11">
-         <hp>300</hp>
-         <maxhp>300</maxhp>
-         <rewardexp>75</rewardexp>
-         <drop>nn</drop>
-         <name>Butcher</name>
-         <atk>35</atk>
-         <accuracy>5</accuracy>
-         <friendly>1</friendly>
-         <faction>Outlaws</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="12">
-         <hp>50</hp>
-         <maxhp>50</maxhp>
-         <rewardexp>10</rewardexp>
-         <drop>nn</drop>
-         <name>Elder</name>
-         <atk>5</atk>
-         <accuracy>1</accuracy>
-         <friendly>1</friendly>
-         <faction>Partisans</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="13">
-         <hp>100</hp>
-         <maxhp>100</maxhp>
-         <rewardexp>50</rewardexp>
-         <drop>nn</drop>
-         <name>Swen</name>
-         <atk>11</atk>
-         <accuracy>50</accuracy>
-         <friendly>1</friendly>
-         <faction>Marauders</faction>
-         <spawnonce>1</spawnonce>
-      </npc>
-      <npc id="14">
-         <hp>30</hp>
-         <maxhp>30</maxhp>
-         <rewardexp>6</rewardexp>
-         <drop>nn</drop>
-         <name>Rat</name>
-         <atk>1</atk>
-         <accuracy>5</accuracy>
-         <friendly>1</friendly>
-         <faction>Monsters</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="15">
-         <hp>39</hp>
-         <maxhp>39</maxhp>
-         <rewardexp>16</rewardexp>
-         <drop>nn</drop>
-         <name>Scorpion</name>
-         <atk>4</atk>
-         <accuracy>10</accuracy>
-         <friendly>1</friendly>
-         <faction>Monsters</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="16">
-         <hp>25</hp>
-         <maxhp>25</maxhp>
-         <rewardexp>11</rewardexp>
-         <drop>nn</drop>
-         <name>Cobra</name>
-         <atk>7</atk>
-         <accuracy>4</accuracy>
-         <friendly>1</friendly>
-         <faction>Monsters</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="17">
-         <hp>51</hp>
-         <maxhp>51</maxhp>
-         <rewardexp>27</rewardexp>
-         <drop>nn</drop>
-         <name>Giant turtle</name>
-         <atk>11</atk>
-         <accuracy>9</accuracy>
-         <friendly>1</friendly>
-         <faction>Monsters</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="18">
-         <hp>30</hp>
-         <maxhp>30</maxhp>
-         <rewardexp>6</rewardexp>
-         <drop>nn</drop>
-         <name>Salamander</name>
-         <atk>1</atk>
-         <accuracy>5</accuracy>
-         <friendly>1</friendly>
-         <faction>Monsters</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="19">
-         <hp>15</hp>
-         <maxhp>15</maxhp>
-         <rewardexp>3</rewardexp>
-         <drop>nn</drop>
-         <name>Bat</name>
-         <atk>2</atk>
-         <accuracy>15</accuracy>
-         <friendly>1</friendly>
-         <faction>Monsters</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="20">
-         <hp>43</hp>
-         <maxhp>43</maxhp>
-         <rewardexp>20</rewardexp>
-         <drop>nn</drop>
-         <name>Ghost</name>
-         <atk>10</atk>
-         <accuracy>5</accuracy>
-         <friendly>1</friendly>
-         <faction>Monsters</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="21">
-         <hp>10</hp>
-         <maxhp>10</maxhp>
-         <rewardexp>0</rewardexp>
-         <drop>nn</drop>
-         <name>Black cat</name>
-         <atk>1</atk>
-         <accuracy>1</accuracy>
-         <friendly>1</friendly>
-         <faction>Monsters</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="22">
-         <hp>10</hp>
-         <maxhp>10</maxhp>
-         <rewardexp>0</rewardexp>
-         <drop>nn</drop>
-         <name>Yellow cat</name>
-         <atk>1</atk>
-         <accuracy>1</accuracy>
-         <friendly>1</friendly>
-         <faction>Monsters</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="23">
-         <hp>10</hp>
-         <maxhp>10</maxhp>
-         <rewardexp>0</rewardexp>
-         <drop>nn</drop>
-         <name>White cat</name>
-         <atk>1</atk>
-         <accuracy>1</accuracy>
-         <friendly>1</friendly>
-         <faction>Monsters</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="24">
-         <hp>10</hp>
-         <maxhp>10</maxhp>
-         <rewardexp>0</rewardexp>
-         <drop>nn</drop>
-         <name>Orange stained cat</name>
-         <atk>1</atk>
-         <accuracy>1</accuracy>
-         <friendly>1</friendly>
-         <faction>Monsters</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="25">
-         <hp>10</hp>
-         <maxhp>10</maxhp>
-         <rewardexp>0</rewardexp>
-         <drop>nn</drop>
-         <name>Brown stained cat cat</name>
-         <atk>1</atk>
-         <accuracy>1</accuracy>
-         <friendly>1</friendly>
-         <faction>Monsters</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="26">
-         <hp>111</hp>
-         <maxhp>111</maxhp>
-         <rewardexp>100</rewardexp>
-         <drop>nn</drop>
-         <name>Besukyl the Demon</name>
-         <atk>13</atk>
-         <accuracy>25</accuracy>
-         <friendly>1</friendly>
-         <faction>Monsters</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="27">
-         <hp>26</hp>
-         <maxhp>26</maxhp>
-         <rewardexp>13</rewardexp>
-         <drop>nn</drop>
-         <name>Ghost</name>
-         <atk>4</atk>
-         <accuracy>5</accuracy>
-         <friendly>1</friendly>
-         <faction>Monsters</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="28">
-         <hp>30</hp>
-         <maxhp>30</maxhp>
-         <rewardexp>8</rewardexp>
-         <drop>nn</drop>
-         <name>Green mold</name>
-         <atk>1</atk>
-         <accuracy>1</accuracy>
-         <friendly>1</friendly>
-         <faction>Monsters</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="29">
-         <hp>46</hp>
-         <maxhp>46</maxhp>
-         <rewardexp>38</rewardexp>
-         <drop>nn</drop>
-         <name>Undead warrior</name>
-         <atk>11</atk>
-         <accuracy>10</accuracy>
-         <friendly>1</friendly>
-         <faction>Monsters</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="30">
-         <hp>30</hp>
-         <maxhp>30</maxhp>
-         <rewardexp>18</rewardexp>
-         <drop>nn</drop>
-         <name>Giant moth</name>
-         <atk>8</atk>
-         <accuracy>8</accuracy>
-         <friendly>1</friendly>
-         <faction>Monsters</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="31">
-         <hp>15</hp>
-         <maxhp>15</maxhp>
-         <rewardexp>4</rewardexp>
-         <drop>nn</drop>
-         <name>Babie giant moth</name>
-         <atk>4</atk>
-         <accuracy>5</accuracy>
-         <friendly>1</friendly>
-         <faction>Monsters</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="32">
-         <hp>38</hp>
-         <maxhp>38</maxhp>
-         <rewardexp>24</rewardexp>
-         <drop>nn</drop>
-         <name>Mutated turtle</name>
-         <atk>12</atk>
-         <accuracy>12</accuracy>
-         <friendly>1</friendly>
-         <faction>Monsters</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="33">
-         <hp>30</hp>
-         <maxhp>30</maxhp>
-         <rewardexp>8</rewardexp>
-         <drop>nn</drop>
-         <name>Yellow mold</name>
-         <atk>1</atk>
-         <accuracy>1</accuracy>
-         <friendly>1</friendly>
-         <faction>Monsters</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="34">
-         <hp>30</hp>
-         <maxhp>30</maxhp>
-         <rewardexp>8</rewardexp>
-         <drop>nn</drop>
-         <name>Red mold</name>
-         <atk>1</atk>
-         <accuracy>1</accuracy>
-         <friendly>1</friendly>
-         <faction>Monsters</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      <npc id="35">
-         <hp>15</hp>
-         <maxhp>15</maxhp>
-         <rewardexp>5</rewardexp>
-         <drop>nn</drop>
-         <name>Crow</name>
-         <atk>3</atk>
-         <accuracy>5</accuracy>
-         <friendly>1</friendly>
-         <faction>Monsters</faction>
-         <spawnonce>0</spawnonce>
-      </npc>
-      
-   </mobs>
-   <items>
-   	<item id="0">
-         <name>Nothing</name>
-         <cost>0</cost>
-      </item>
-      <item id="1">
-         <name>Wood</name>
-         <type>1</type>
-         <altobject>9</altobject>
-         <cost>3</cost>
-      </item>
-      <item id="2">
-         <name>Small rock</name>
-         <cost>3</cost>
-      </item>
-      <item id="3">
-         <name>Stone axe</name>
-         <skill>Woodcutting</skill>
-         <dmg>2</dmg>
-         <hp>128</hp>
-         <type>8</type>
-         <cost>9</cost>
-         <craftable>1</craftable>
-         <recipe>2/5:8/3</recipe>
-      </item>
-      <item id="4">
-         <name>Cake</name>
-         <type>7</type>
-         <heal>30:30</heal>
-         <cost>25</cost>
-         <craftable>1</craftable>
-         <recipe>7/25</recipe>
-      </item>
-      <item id="5">
-         <name>Clay</name>
-         <cost>3</cost>
-      </item>
-      <item id="6">
-         <name>Stone shovel</name>
-         <dmg>2</dmg>
-         <hp>100</hp>
-         <cost>10</cost>
-         <type>9</type>
-         <craftable>1</craftable>
-         <recipe>2/9:8/3</recipe>
-      </item>
-      <item id="7">
-         <name>Berry</name>
-         <type>7</type>
-         <heal>5:15</heal>
-         <cost>4</cost>
-      </item>
-      <item id="8">
-         <name>Stick</name>
-         <cost>4</cost>
-         <craftable>1</craftable>
-         <recipe>1/1</recipe>
-      </item>
-      <item id="9">
-         <name>Flint</name>
-         <cost>5</cost>
-      </item>
-      <item id="10">
-         <name>Hewn rock</name>
-         <type>1</type>
-         <altobject>8</altobject>
-         <cost>7</cost>
-         <craftable>1</craftable>
-         <recipe>25/1</recipe>
-      </item>
-      <item id="11">
-         <name>Stone pickaxe</name>
-         <skill>Mining</skill>
-         <dmg>3</dmg>
-         <hp>100</hp>
-         <cost>10</cost>
-         <type>10</type>
-         <craftable>1</craftable>
-         <recipe>2/13:8/7</recipe>
-      </item>
-      <item id="12">
-         <name>Stone sword</name>
-         <cost>11</cost>
-         <craftable>1</craftable>
-         <recipe>2/25:8/7</recipe>
-      </item>
-      <item id="13">
-         <name>Iron sword</name>
-         <cost>15</cost>
-         <craftable>1</craftable>
-         <recipe>23/15:8/10</recipe>
-      </item>
-      <item id="14">
-         <name>Iron helmet</name>
-         <type>4</type>
-         <cost>18</cost>
-         <craftable>1</craftable>
-         <recipe>23/25</recipe>
-      </item>
-      <item id="15">
-         <name>Iron shield</name>
-         <type>6</type>
-         <cost>18</cost>
-         <craftable>1</craftable>
-         <recipe>23/25</recipe>
-      </item>
-      <item id="16">
-         <name>Leather chestplate</name>
-         <type>5</type>
-         <cost>14</cost>
-         <craftable>1</craftable>
-         <recipe>22/15</recipe>
-      </item>
-      <item id="17">
-         <name>Iron chestplate</name>
-         <type>5</type>
-         <cost>18</cost>
-         <craftable>1</craftable>
-         <recipe>23/30</recipe>
-      </item>
-      <item id="18">
-         <name>Chainmail</name>
-         <type>5</type>
-         <cost>21</cost>
-         <craftable>1</craftable>
-         <recipe>23/37:8/3</recipe>
-      </item>
-      <item id="19">
-         <name>Tough iron chestplate</name>
-         <type>5</type>
-         <cost>34</cost>
-      </item>
-      <item id="20">
-         <name>Hardened steel sword</name>
-         <cost>30</cost>
-      </item>
-      <item id="21">
-         <name>Gold coin</name>
-         <cost>1</cost>
-      </item>
-      <item id="22">
-         <name>Leather</name>
-         <cost>5</cost>
-      </item>
-      <item id="23">
-         <name>Iron ore</name>
-         <cost>16</cost>
-      </item>
-      <item id="24">
-         <name>Gold ore</name>
-         <cost>30</cost>
-      </item>
-      <item id="25">
-         <name>Stone</name>
-         <type>1</type>
-         <altobject>13</altobject>
-         <cost>5</cost>
-      </item>
-      <item id="26">
-         <name>Trapdoor</name>
-         <type>1</type>
-         <altobject>14</altobject>
-         <cost>18</cost>
-         <craftable>1</craftable>
-         <recipe>1/25:8/10</recipe>
-      </item>
-      <item id="27">
-         <name>Wooden floor</name>
-         <type>2</type>
-         <altobject>9</altobject>
-         <cost>4</cost>
-         <craftable>1</craftable>
-         <recipe>1/1</recipe>
-      </item>
-      <item id="28">
-         <name>Ruby</name>
-         <cost>40</cost>
-      </item>
-      <item id="29">
-         <name>Sapphire</name>
-         <cost>63</cost>
-      </item>
-      <item id="30">
-         <name>Diamond</name>
-         <cost>100</cost>
-      </item>
-      <item id="31">
-         <name>Emerald</name>
-         <cost>42</cost>
-      </item>
-      <item id="32">
-         <name>Stone plate</name>
-         <type>1</type>
-         <altobject>15</altobject>
-         <cost>5</cost>
-      </item>
-      <item id="33">
-         <name>Stone plate</name>
-         <type>1</type>
-         <altobject>16</altobject>
-         <cost>5</cost>
-      </item>
-      <item id="34">
-         <name>Stone plate</name>
-         <type>1</type>
-         <altobject>17</altobject>
-         <cost>5</cost>
-      </item>
-      <item id="35">
-         <name>Stone floor</name>
-         <type>2</type>
-         <altobject>12</altobject>
-         <cost>5</cost>
-      </item>
-      <item id="36">
-         <name>Stone floor</name>
-         <type>2</type>
-         <altobject>13</altobject>
-         <cost>5</cost>
-      </item>
-      <item id="37">
-         <name>Stone floor</name>
-         <type>2</type>
-         <altobject>14</altobject>
-         <cost>5</cost>
-      </item>
-      <item id="38">
-         <name>Sign</name>
-         <type>1</type>
-         <altobject>18</altobject>
-         <cost>8</cost>
-         <craftable>1</craftable>
-         <recipe>1/15:8/5</recipe>
-      </item>
-      <item id="39">
-         <name>Cucumber</name>
-         <type>7</type>
-         <heal>3:8</heal>
-         <cost>3</cost>
-      </item>
-      <item id="40">
-         <name>Cucumber seed</name>
-         <altobject>20</altobject>
-         <type>3</type>
-         <stages>20,19,63,21</stages>
-         <stagelen>20,25,30,35</stagelen>
-         <cost>7</cost>
-      </item>
-      <item id="41">
-         <name>Stone hoe</name>
-         <dmg>2</dmg>
-         <hp>75</hp>
-         <cost>11</cost>
-         <craftable>1</craftable>
-         <recipe>2/13:8/5</recipe>
-         <type>11</type>
-         <onuse>!0 place_tile $player_x $player_y 15;= !15 You plowed the soil</onuse>
-      </item>
-      <item id="42">
-         <name>Mixed stone wall</name>
-         <type>1</type>
-         <altobject>26</altobject>
-         <cost>10</cost>
-         <craftable>1</craftable>
-         <recipe>5/3:2/3</recipe>
-      </item>
-      <item id="43">
-         <name>Brown stone floor</name>
-         <type>2</type>
-         <altobject>19</altobject>
-         <cost>3</cost>
-         <craftable>1</craftable>
-         <recipe>5/1</recipe>
-      </item>
-      <item id="44">
-         <name>Edible mushroom</name>
-         <type>7</type>
-         <heal>20:0</heal>
-         <cost>15</cost>
-      </item>
-      <item id="45">
-         <name>Amanita</name>
-         <type>7</type>
-         <heal>-18:-10</heal>
-         <cost>5</cost>
-      </item>
-      <item id="46">
-         <name>Potatoes</name>
-         <type>7</type>
-         <heal>6:25</heal>
-         <cost>13</cost>
-      </item>
-      <item id="47">
-         <name>Carrot</name>
-         <type>7</type>
-         <heal>10:11</heal>
-         <cost>21</cost>
-      </item>
-      <item id="48">
-         <name>Tomatoes</name>
-         <type>7</type>
-         <heal>5:10</heal>
-         <cost>21</cost>
-      </item>
-      <item id="49">
-         <name>Pepper</name>
-         <type>7</type>
-         <heal>9:10</heal>
-         <cost>15</cost>
-      </item>
-      <item id="50">
-         <name>Corn</name>
-         <type>7</type>
-         <heal>5:30</heal>
-         <cost>41</cost>
-      </item>
-      <item id="51">
-         <name>Potato seed</name>
-         <altobject>43</altobject>
-         <type>3</type>
-         <cost>41</cost>
-         <stages>43,44,45,46</stages>
-         <stagelen>20,25,30,35</stagelen>
-      </item>
-      <item id="52">
-         <name>Carrot seed</name>
-         <altobject>47</altobject>
-         <type>3</type>
-         <cost>41</cost>
-         <stages>47,48,49,50</stages>
-         <stagelen>20,25,30,35</stagelen>
-      </item>
-      <item id="53">
-         <name>Tomato seed</name>
-         <altobject>51</altobject>
-         <type>3</type>
-         <cost>41</cost>
-         <stages>51,52,53,54</stages>
-         <stagelen>20,25,30,35</stagelen>
-      </item>
-      <item id="54">
-         <name>Pepper seed</name>
-         <altobject>55</altobject>
-         <type>3</type>
-         <cost>41</cost>
-         <stages>55,56,57,58</stages>
-         <stagelen>20,25,30,35</stagelen>
-      </item>
-      <item id="55">
-         <name>Corn seed</name>
-         <altobject>59</altobject>
-         <type>3</type>
-         <cost>41</cost>
-         <stages>59,60,61,62</stages>
-         <stagelen>20,25,30,35</stagelen>
-      </item>
-      <item id="56">
-         <name>Coal</name>
-         <cost>4</cost>
-      </item>
-      <item id="57">
-         <name>Ham</name>
-         <type>7</type>
-         <heal>15:50</heal>
-         <cost>11</cost>
-      </item>
-      <item id="58">
-         <name>Pint of beer</name>
-         <recipe>65/5:66/5</recipe>
-         <type>7</type>
-         <heal>5:20</heal>
-         <cost>25</cost>
-      </item>
-      <item id="59">
-         <name>Chicken leg</name>
-         <cost>15</cost>
-         <type>7</type>
-         <heal>10:45</heal>
-      </item>
-      <item id="60">
-         <name>Healing potion</name>
-         <cost>20</cost>
-         <type>7</type>
-         <heal>25:0</heal>
-      </item>
-      <item id="61">
-         <name>Steel shield</name>
-         <cost>79</cost>
-      </item>
-      <item id="62">
-         <name>Golden shield</name>
-         <cost>110</cost>
-      </item>
-      <item id="63">
-         <name>Royal shield</name>
-         <cost>199</cost>
-      </item>
-      <item id="64">
-         <name>Executor's shield</name>
-         <cost>231</cost>
-      </item>
-      <item id="65">
-         <name>Spicy leaf</name>
-         <cost>2</cost>
-      </item>
-      <item id="66">
-         <name>Sour leaf</name>
-         <cost>2</cost>
-      </item>
-      
-   </items>
+	<terrain>
+		<tile id="0">
+			<name>Grass</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="1">
+			<name>Grass with clay</name>
+			<damage>0</damage>
+
+			<altitem id="0" inhand="9" item="5" />
+		</tile>
+		<tile id="2">
+			<name>Flint</name>
+			<damage>0</damage>
+
+			<altitem id="0" inhand="9" item="9" />
+		</tile>
+		<tile id="3">
+			<name>Sandstone</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="4">
+			<name>Sand</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="5">
+			<name>Stone floor</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="6">
+			<name>Hole in grass</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="7">
+			<name>Lightened stone floor</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="8">
+			<name>Water</name>
+			<damage>0</damage>
+			<cover>1</cover>
+		</tile>
+		<tile id="9">
+			<name>Wooden floor</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="10">
+			<name>Dirt</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="11">
+			<name>Dirt</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="12">
+			<name>Stone floor</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="13">
+			<name>Stone floor</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="14">
+			<name>Stone floor</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="15">
+			<name>Plowed dirt</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="16">
+			<name>Hole in sand</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="17">
+			<name>Mad sand</name>
+			<damage>2</damage>
+			<cover>1</cover>
+		</tile>
+		<tile id="18">
+			<name>Mixed brick floor</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="19">
+			<name>Gray brick floor</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="20">
+			<name>Snow</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="21">
+			<name>Pile of snow</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="22">
+			<name>Lava</name>
+			<damage>20</damage>
+			<cover>1</cover>
+		</tile>
+		<tile id="23">
+			<name>Dirt</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="24">
+			<name>Dirt</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="25">
+			<name>Gravel</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="26">
+			<name>Stone floor</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="27">
+			<name>Stone floor</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="28">
+			<name>Stone floor</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="29">
+			<name>Gravel</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="30">
+			<name>Stone floor</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="31">
+			<name>Brick floor</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="32">
+			<name>Gravel</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="33">
+			<name>Brick floor</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="34">
+			<name>Brick floor</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="35">
+			<name>Brick floor</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="36">
+			<name>Stone plate</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="37">
+			<name>Stone plate</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="38">
+			<name>Stone plate</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="39">
+			<name>Dust</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="40">
+			<name>Dust</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="41">
+			<name>Dust</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="42">
+			<name>Dust</name>
+			<damage>0</damage>
+
+		</tile>
+		<tile id="43">
+			<name>Dust</name>
+			<damage>0</damage>
+
+		</tile>
+	</terrain>
+	<objects>
+		<object id="0">
+			<name>Nothing</name>
+			<tough>999</tough>
+		</object>
+		<object id="1">
+			<name>Boulder</name>
+			<skill>Mining</skill>
+			<tough>11</tough>
+			<harvesthp>8</harvesthp>
+			<altitem id="0" inhand="0" item="2" />
+		</object>
+		<object id="2">
+			<name>Tree</name>
+			<skill>Woodcutting</skill>
+			<tough>11</tough>
+			<harvesthp>4</harvesthp>
+			<altitem id="0" inhand="0" item="8" />
+			<altitem id="1" inhand="8" item="1" />
+		</object>
+		<object id="3">
+			<name>Cake</name>
+			<tough>1</tough>
+		</object>
+		<object id="4">
+			<name>Berry bush</name>
+			<nocollide>1</nocollide>
+			<skill>Harvesting</skill>
+			<tough>7</tough>
+			<harvesthp>2</harvesthp>
+			<altitem id="0" inhand="0" item="7,8,65,66" />
+		</object>
+		<object id="5">
+			<name>---</name>
+			<tough>30</tough>
+		</object>
+		<object id="6">
+			<name>Campfire</name>
+			<skill>Survival</skill>
+			<tough>20</tough>
+		</object>
+		<object id="7">
+			<name>Chest</name>
+			<tough>30</tough>
+		</object>
+		<object id="8">
+			<name>Hewn rock</name>
+			<tough>30</tough>
+		</object>
+		<object id="9">
+			<name>Wooden planks</name>
+			<skill>Woodcutting</skill>
+			<tough>1</tough>
+			<harvesthp>10</harvesthp>
+			<altitem id="0" inhand="0" item="0" />
+			<altitem id="1" inhand="8" item="1" />
+		</object>
+		<object id="10">
+			<name>Cactus</name>
+			<tough>5</tough>
+		</object>
+		<object id="11">
+			<name>Closed door</name>
+			<tough>30</tough>
+		</object>
+		<object id="12">
+			<name>Opened door</name>
+			<nocollide>1</nocollide>
+			<tough>30</tough>
+		</object>
+		<object id="13">
+			<name>Rock</name>
+			<skill>Mining</skill>
+			<tough>1</tough>
+			<harvesthp>15</harvesthp>
+			<altitem id="0" inhand="0" item="0" />
+			<altitem id="1" inhand="10" item="25" />
+		</object>
+		<object id="14">
+			<name>Trapdoor</name>
+			<nocollide>1</nocollide>
+			<tough>30</tough>
+		</object>
+		<object id="15">
+			<name>Stone wall</name>
+			<tough>1</tough>
+			<harvesthp>15</harvesthp>
+			<altitem id="0" inhand="0" item="0" />
+			<altitem id="1" inhand="10" item="32" />
+		</object>
+		<object id="16">
+			<name>Stone wall</name>
+			<tough>1</tough>
+			<harvesthp>15</harvesthp>
+			<altitem id="0" inhand="0" item="0" />
+			<altitem id="1" inhand="10" item="33" />
+		</object>
+		<object id="17">
+			<name>Stone wall</name>
+			<tough>1</tough>
+			<harvesthp>15</harvesthp>
+			<altitem id="0" inhand="0" item="0" />
+			<altitem id="1" inhand="10" item="34" />
+		</object>
+		<object id="18">
+			<name>Sign</name>
+			<tough>30</tough>
+		</object>
+		<object id="19">
+			<nocollide>1</nocollide>
+			<name>Cucumber sprout</name>
+			<tough>5</tough>
+		</object>
+		<object id="20">
+			<nocollide>1</nocollide>
+			<name>Cucumber seeds</name>
+			<tough>5</tough>
+		</object>
+		<object id="21">
+			<nocollide>1</nocollide>
+			<name>Cucumber bush</name>
+			<skill>Harvesting</skill>
+			<tough>5</tough>
+			<harvesthp>1</harvesthp>
+			<altitem id="0" inhand="0" item="39" />
+		</object>
+		<object id="22">
+			<name>Iron ore</name>
+			<skill>Mining</skill>
+			<tough>1</tough>
+			<harvesthp>15</harvesthp>
+			<altitem id="0" inhand="0" item="0" />
+			<altitem id="1" inhand="10" item="23" />
+		</object>
+		<object id="23">
+			<name>Gold ore</name>
+			<skill>Mining</skill>
+			<tough>1</tough>
+			<harvesthp>15</harvesthp>
+			<altitem id="0" inhand="0" item="0" />
+			<altitem id="1" inhand="10" item="24" />
+		</object>
+		<object id="24">
+			<nocollide>1</nocollide>
+			<name>Tumbleweed</name>
+			<tough>3</tough>
+		</object>
+		<object id="25">
+			<name>Coal</name>
+			<skill>Mining</skill>
+			<tough>1</tough>
+			<harvesthp>15</harvesthp>
+			<altitem id="0" inhand="0" item="0" />
+			<altitem id="1" inhand="10" item="56" />
+		</object>
+		<object id="26">
+			<name>Mixed brick wall</name>
+			<tough>30</tough>
+		</object>
+		<object id="27">
+			<name>Boulder</name>
+			<skill>Mining</skill>
+			<tough>6</tough>
+			<harvesthp>8</harvesthp>
+			<altitem id="0" inhand="0" item="2" />
+		</object>
+		<object id="28">
+			<name>Boulder</name>
+			<skill>Mining</skill>
+			<tough>6</tough>
+			<harvesthp>8</harvesthp>
+			<altitem id="0" inhand="0" item="2" />
+		</object>
+		<object id="29">
+			<name>Spruce tree</name>
+			<skill>Woodcutting</skill>
+			<tough>10</tough>
+			<altitem>1</altitem>
+		</object>
+		<object id="30">
+			<name>Tree</name>
+			<skill>Woodcutting</skill>
+			<tough>11</tough>
+			<harvesthp>4</harvesthp>
+			<altitem id="0" inhand="0" item="8" />
+			<altitem id="1" inhand="8" item="1" />
+		</object>
+		<object id="31">
+			<name>Palm tree</name>
+			<skill>Woodcutting</skill>
+			<lvl>2</lvl>
+			<tough>11</tough>
+			<harvesthp>4</harvesthp>
+			<altitem id="0" inhand="0" item="8" />
+			<altitem id="1" inhand="8" item="1" />
+		</object>
+		<object id="32">
+			<skill>Woodcutting</skill>
+			<name>Pine</name>
+			<tough>11</tough>
+			<harvesthp>4</harvesthp>
+			<altitem id="0" inhand="0" item="8" />
+			<altitem id="1" inhand="8" item="1" />
+		</object>
+		<object id="33">
+			<name>Stump</name>
+			<skill>Woodcutting</skill>
+			<tough>11</tough>
+			<harvesthp>4</harvesthp>
+			<altitem id="0" inhand="0" item="8" />
+			<altitem id="1" inhand="8" item="1" />
+		</object>
+		<object id="34">
+			<name>Dead tree</name>
+			<skill>Woodcutting</skill>
+			<lvl>4</lvl>
+			<tough>11</tough>
+			<harvesthp>4</harvesthp>
+			<altitem id="0" inhand="0" item="8" />
+			<altitem id="1" inhand="8" item="1" />
+		</object>
+		<object id="35">
+			<skill>Woodcutting</skill>
+			<name>Tree</name>
+			<tough>11</tough>
+			<harvesthp>4</harvesthp>
+			<altitem id="0" inhand="0" item="8" />
+			<altitem id="1" inhand="8" item="1" />
+		</object>
+		<object id="36">
+			<skill>Woodcutting</skill>
+			<name>Tree</name>
+			<tough>11</tough>
+			<harvesthp>4</harvesthp>
+			<altitem id="0" inhand="0" item="8" />
+			<altitem id="1" inhand="8" item="1" />
+		</object>
+		<object id="37">
+			<name>Bush</name>
+			<nocollide>1</nocollide>
+			<skill>Harvesting</skill>
+			<tough>7</tough>
+			<harvesthp>2</harvesthp>
+			<altitem id="0" inhand="0" item="8,65,66" />
+		</object>
+		<object id="38">
+			<skill>Woodcutting</skill>
+			<name>Spruce tree</name>
+			<tough>11</tough>
+			<harvesthp>4</harvesthp>
+			<altitem id="0" inhand="0" item="8" />
+			<altitem id="1" inhand="8" item="1" />
+		</object>
+		<object id="39">
+			<name>Cross</name>
+			<tough>30</tough>
+		</object>
+		<object id="40">
+			<name>Stalactite</name>
+			<tough>15</tough>
+		</object>
+		<object id="41">
+			<skill>Harvesting</skill>
+			<name>Edible mushrooms</name>
+			<nocollide>1</nocollide>
+			<altitem id="0" inhand="0" item="44" />
+			<tough>1</tough>
+			<harvesthp>1</harvesthp>
+		</object>
+		<object id="42">
+			<skill>Harvesting</skill>
+			<name>Amanita</name>
+			<altitem id="0" inhand="0" item="45" />
+			<tough>1</tough>
+			<harvesthp>1</harvesthp>
+		</object>
+		<object id="43">
+			<nocollide>1</nocollide>
+			<name>Potato sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="44">
+			<nocollide>1</nocollide>
+			<name>Potato sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="45">
+			<nocollide>1</nocollide>
+			<name>Potato sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="46">
+			<nocollide>1</nocollide>
+			<skill>Harvesting</skill>
+			<name>Potato sprout</name>
+			<altitem id="0" inhand="0" item="46" />
+			<tough>8</tough>
+			<harvesthp>1</harvesthp>
+		</object>
+		<object id="47">
+			<nocollide>1</nocollide>
+			<name>Carrot sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="48">
+			<nocollide>1</nocollide>
+			<name>Carrot sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="49">
+			<nocollide>1</nocollide>
+			<name>Carrot sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="50">
+			<nocollide>1</nocollide>
+			<skill>Harvesting</skill>
+			<name>Carrot sprout</name>
+			<altitem id="0" inhand="0" item="47" />
+			<tough>8</tough>
+			<harvesthp>1</harvesthp>
+		</object>
+		<object id="51">
+			<nocollide>1</nocollide>
+			<name>Tomato sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="52">
+			<nocollide>1</nocollide>
+			<name>Tomato sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="53">
+			<nocollide>1</nocollide>
+			<name>Tomato sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="54">
+			<nocollide>1</nocollide>
+			<skill>Harvesting</skill>
+			<name>Tomato sprout</name>
+			<altitem id="0" inhand="0" item="48" />
+			<tough>8</tough>
+			<harvesthp>1</harvesthp>
+		</object>
+		<object id="55">
+			<nocollide>1</nocollide>
+			<name>Pepper sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="56">
+			<nocollide>1</nocollide>
+			<name>Pepper sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="57">
+			<nocollide>1</nocollide>
+			<name>Pepper sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="58">
+			<nocollide>1</nocollide>
+			<skill>Harvesting</skill>
+			<name>Pepper sprout</name>
+			<altitem id="0" inhand="0" item="49" />
+			<tough>8</tough>
+			<harvesthp>1</harvesthp>
+		</object>
+		<object id="59">
+			<nocollide>1</nocollide>
+			<name>Corn sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="60">
+			<nocollide>1</nocollide>
+			<name>Corn sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="61">
+			<nocollide>1</nocollide>
+			<name>Corn sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="62">
+			<nocollide>1</nocollide>
+			<skill>Harvesting</skill>
+			<name>Corn sprout</name>
+			<altitem id="0" inhand="0" item="50" />
+			<tough>8</tough>
+			<harvesthp>1</harvesthp>
+		</object>
+		<object id="63">
+			<nocollide>1</nocollide>
+			<name>Cucumber sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="64">
+			<name>Altar</name>
+			<tough>30</tough>
+		</object>
+		<object id="65">
+			<name>Campfire</name>
+			<tough>5</tough>
+		</object>
+		<object id="66">
+			<name>Fountain</name>
+			<tough>9</tough>
+		</object>
+		<object id="67">
+			<name>Furnace</name>
+			<tough>9</tough>
+		</object>
+		<object id="68">
+			<name>Treasure chest</name>
+			<tough>9</tough>
+		</object>
+		<object id="69">
+			<name>Opened treasure chest</name>
+			<tough>9</tough>
+		</object>
+		<object id="70">
+			<name>Pile of crates</name>
+			<tough>5</tough>
+		</object>
+		<object id="71">
+			<name>Keg</name>
+			<tough>3</tough>
+		</object>
+		<object id="72">
+			<name>Cooking place</name>
+			<tough>9</tough>
+		</object>
+		<object id="73">
+			<name>Alchemist table</name>
+			<tough>9</tough>
+		</object>
+		<object id="74">
+			<name>Alchemist table</name>
+			<tough>9</tough>
+		</object>
+		<object id="75">
+			<name>Alchemist table</name>
+			<tough>9</tough>
+		</object>
+		<object id="76">
+			<name>Signpost</name>
+			<tough>9</tough>
+		</object>
+		<object id="77">
+			<name>Signpost</name>
+			<tough>9</tough>
+		</object>
+		<object id="78">
+			<name>Signpost</name>
+			<tough>9</tough>
+		</object>
+		<object id="79">
+			<name>Sign</name>
+			<tough>9</tough>
+		</object>
+		<object id="80">
+			<name>Mountain</name>
+			<tough>9</tough>
+		</object>
+		<object id="81">
+			<name>Mountain</name>
+			<tough>9</tough>
+		</object>
+		<object id="82">
+			<name>Mine entrance</name>
+			<tough>9</tough>
+		</object>
+		<object id="83">
+			<name>Straw house</name>
+			<tough>50</tough>
+		</object>
+		<object id="84">
+			<name>Sandstone house</name>
+			<tough>50</tough>
+		</object>
+		<object id="85">
+			<name>House</name>
+			<tough>50</tough>
+		</object>
+		<object id="86">
+			<name>House</name>
+			<tough>50</tough>
+		</object>
+		<object id="87">
+			<name>Palace entrance</name>
+			<tough>50</tough>
+		</object>
+		<object id="88">
+			<name>Tombstone</name>
+			<tough>10</tough>
+		</object>
+		<object id="89">
+			<name>House</name>
+			<tough>50</tough>
+		</object>
+		<object id="90">
+			<name>Wheelbarrow</name>
+			<tough>15</tough>
+		</object>
+		<object id="91">
+			<name>Barrel</name>
+			<tough>15</tough>
+		</object>
+		<object id="92">
+			<name>Well</name>
+			<tough>15</tough>
+		</object>
+		<object id="93">
+			<name>Wooden crate</name>
+			<tough>15</tough>
+		</object>
+		<object id="94">
+			<name>Pile of wooden crates</name>
+			<tough>15</tough>
+		</object>
+		<object id="95">
+			<name>Barrel</name>
+			<tough>15</tough>
+		</object>
+		<object id="96">
+			<name>Bookshelf</name>
+			<tough>15</tough>
+		</object>
+		<object id="97">
+			<name>Pillar</name>
+			<tough>15</tough>
+		</object>
+		<object id="98">
+			<name>Sphinx</name>
+			<tough>15</tough>
+		</object>
+		<object id="99">
+			<name>Warrior statue</name>
+			<tough>25</tough>
+		</object>
+		<object id="100">
+			<name>Vending machine</name>
+			<tough>15</tough>
+		</object>
+		<object id="101">
+			<name>Brick wall</name>
+			<tough>25</tough>
+		</object>
+		<object id="102">
+			<name>Brick wall</name>
+			<tough>25</tough>
+		</object>
+		<object id="103">
+			<name>Wall</name>
+			<tough>25</tough>
+		</object>
+		<object id="104">
+			<name>Brick wall</name>
+			<tough>25</tough>
+		</object>
+		<object id="105">
+			<name>Brick wall</name>
+			<tough>25</tough>
+		</object>
+		<object id="106">
+			<name>Wall</name>
+			<tough>25</tough>
+		</object>
+		<object id="107">
+			<name>Stone wall</name>
+			<tough>25</tough>
+		</object>
+		<object id="108">
+			<name>Yellow wall</name>
+			<tough>25</tough>
+		</object>
+		<object id="109">
+			<name>Turquoise wall</name>
+			<tough>25</tough>
+		</object>
+		<object id="110">
+			<name>Turquoise wall</name>
+			<tough>25</tough>
+		</object>
+		<object id="111">
+			<name>Clay wall</name>
+			<tough>25</tough>
+		</object>
+
+
+	</objects>
+	<mobs>
+		<npc id="0">
+			<hp>0</hp>
+			<maxhp>0</maxhp>
+			<rewardexp>0</rewardexp>
+			<drop>nn</drop>
+			<name>Nothing</name>
+			<atk>0</atk>
+			<accuracy>0</accuracy>
+			<friendly>0</friendly>
+			<faction>Nobody</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="1">
+			<hp>30</hp>
+			<maxhp>30</maxhp>
+			<rewardexp>15</rewardexp>
+			<drop>nn</drop>
+			<name>Rookie marauder</name>
+			<atk>1</atk>
+			<accuracy>2</accuracy>
+			<friendly>1</friendly>
+			<faction>Marauders</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="2">
+			<hp>35</hp>
+			<maxhp>35</maxhp>
+			<rewardexp>10</rewardexp>
+			<drop>nn</drop>
+			<name>Troll</name>
+			<atk>1</atk>
+			<accuracy>2</accuracy>
+			<friendly>1</friendly>
+			<faction>Outlaws</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="3">
+			<hp>40</hp>
+			<maxhp>40</maxhp>
+			<rewardexp>32</rewardexp>
+			<drop>nn</drop>
+			<name>Goon</name>
+			<atk>4</atk>
+			<accuracy>5</accuracy>
+			<friendly>1</friendly>
+			<faction>Marauders</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="4">
+			<hp>42</hp>
+			<maxhp>42</maxhp>
+			<rewardexp>36</rewardexp>
+			<drop>:22/1</drop>
+			<name>Old pirate</name>
+			<atk>5</atk>
+			<accuracy>5</accuracy>
+			<friendly>1</friendly>
+			<faction>Marauders</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="5">
+			<hp>100</hp>
+			<maxhp>100</maxhp>
+			<rewardexp>36</rewardexp>
+			<drop>:21/1000</drop>
+			<name>Richard</name>
+			<atk>11</atk>
+			<accuracy>50</accuracy>
+			<friendly>1</friendly>
+			<faction>Partisans</faction>
+			<spawnonce>1</spawnonce>
+			<qids>0,1</qids>
+		</npc>
+		<npc id="6">
+			<hp>175</hp>
+			<maxhp>175</maxhp>
+			<rewardexp>50</rewardexp>
+			<drop>:21/100</drop>
+			<name>Orc</name>
+			<atk>20</atk>
+			<accuracy>25</accuracy>
+			<friendly>1</friendly>
+			<faction>Outlaws</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="7">
+			<hp>140</hp>
+			<maxhp>140</maxhp>
+			<rewardexp>30</rewardexp>
+			<drop>nn</drop>
+			<name>Old hunter</name>
+			<atk>18</atk>
+			<accuracy>20</accuracy>
+			<friendly>1</friendly>
+			<faction>Outlaws</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="8">
+			<hp>100</hp>
+			<maxhp>100</maxhp>
+			<rewardexp>36</rewardexp>
+			<drop>nn</drop>
+			<name>Shopkeeper</name>
+			<atk>11</atk>
+			<accuracy>50</accuracy>
+			<friendly>1</friendly>
+			<faction>Marauders</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="9">
+			<hp>160</hp>
+			<maxhp>160</maxhp>
+			<rewardexp>36</rewardexp>
+			<drop>nn</drop>
+			<name>Scout</name>
+			<atk>5</atk>
+			<accuracy>10</accuracy>
+			<friendly>1</friendly>
+			<faction>Partisans</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="10">
+			<hp>80</hp>
+			<maxhp>80</maxhp>
+			<rewardexp>36</rewardexp>
+			<drop>nn</drop>
+			<name>Alchemist</name>
+			<atk>5</atk>
+			<accuracy>5</accuracy>
+			<friendly>1</friendly>
+			<faction>Partisans</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="11">
+			<hp>300</hp>
+			<maxhp>300</maxhp>
+			<rewardexp>75</rewardexp>
+			<drop>nn</drop>
+			<name>Butcher</name>
+			<atk>35</atk>
+			<accuracy>5</accuracy>
+			<friendly>1</friendly>
+			<faction>Outlaws</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="12">
+			<hp>50</hp>
+			<maxhp>50</maxhp>
+			<rewardexp>10</rewardexp>
+			<drop>nn</drop>
+			<name>Elder</name>
+			<atk>5</atk>
+			<accuracy>1</accuracy>
+			<friendly>1</friendly>
+			<faction>Partisans</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="13">
+			<hp>100</hp>
+			<maxhp>100</maxhp>
+			<rewardexp>50</rewardexp>
+			<drop>nn</drop>
+			<name>Swen</name>
+			<atk>11</atk>
+			<accuracy>50</accuracy>
+			<friendly>1</friendly>
+			<faction>Marauders</faction>
+			<spawnonce>1</spawnonce>
+		</npc>
+		<npc id="14">
+			<hp>30</hp>
+			<maxhp>30</maxhp>
+			<rewardexp>6</rewardexp>
+			<drop>nn</drop>
+			<name>Rat</name>
+			<atk>1</atk>
+			<accuracy>5</accuracy>
+			<friendly>1</friendly>
+			<faction>Monsters</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="15">
+			<hp>39</hp>
+			<maxhp>39</maxhp>
+			<rewardexp>16</rewardexp>
+			<drop>nn</drop>
+			<name>Scorpion</name>
+			<atk>4</atk>
+			<accuracy>10</accuracy>
+			<friendly>1</friendly>
+			<faction>Monsters</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="16">
+			<hp>25</hp>
+			<maxhp>25</maxhp>
+			<rewardexp>11</rewardexp>
+			<drop>nn</drop>
+			<name>Cobra</name>
+			<atk>7</atk>
+			<accuracy>4</accuracy>
+			<friendly>1</friendly>
+			<faction>Monsters</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="17">
+			<hp>51</hp>
+			<maxhp>51</maxhp>
+			<rewardexp>27</rewardexp>
+			<drop>nn</drop>
+			<name>Giant turtle</name>
+			<atk>11</atk>
+			<accuracy>9</accuracy>
+			<friendly>1</friendly>
+			<faction>Monsters</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="18">
+			<hp>30</hp>
+			<maxhp>30</maxhp>
+			<rewardexp>6</rewardexp>
+			<drop>nn</drop>
+			<name>Salamander</name>
+			<atk>1</atk>
+			<accuracy>5</accuracy>
+			<friendly>1</friendly>
+			<faction>Monsters</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="19">
+			<hp>15</hp>
+			<maxhp>15</maxhp>
+			<rewardexp>3</rewardexp>
+			<drop>nn</drop>
+			<name>Bat</name>
+			<atk>2</atk>
+			<accuracy>15</accuracy>
+			<friendly>1</friendly>
+			<faction>Monsters</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="20">
+			<hp>43</hp>
+			<maxhp>43</maxhp>
+			<rewardexp>20</rewardexp>
+			<drop>nn</drop>
+			<name>Ghost</name>
+			<atk>10</atk>
+			<accuracy>5</accuracy>
+			<friendly>1</friendly>
+			<faction>Monsters</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="21">
+			<hp>10</hp>
+			<maxhp>10</maxhp>
+			<rewardexp>0</rewardexp>
+			<drop>nn</drop>
+			<name>Black cat</name>
+			<atk>1</atk>
+			<accuracy>1</accuracy>
+			<friendly>1</friendly>
+			<faction>Monsters</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="22">
+			<hp>10</hp>
+			<maxhp>10</maxhp>
+			<rewardexp>0</rewardexp>
+			<drop>nn</drop>
+			<name>Yellow cat</name>
+			<atk>1</atk>
+			<accuracy>1</accuracy>
+			<friendly>1</friendly>
+			<faction>Monsters</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="23">
+			<hp>10</hp>
+			<maxhp>10</maxhp>
+			<rewardexp>0</rewardexp>
+			<drop>nn</drop>
+			<name>White cat</name>
+			<atk>1</atk>
+			<accuracy>1</accuracy>
+			<friendly>1</friendly>
+			<faction>Monsters</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="24">
+			<hp>10</hp>
+			<maxhp>10</maxhp>
+			<rewardexp>0</rewardexp>
+			<drop>nn</drop>
+			<name>Orange stained cat</name>
+			<atk>1</atk>
+			<accuracy>1</accuracy>
+			<friendly>1</friendly>
+			<faction>Monsters</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="25">
+			<hp>10</hp>
+			<maxhp>10</maxhp>
+			<rewardexp>0</rewardexp>
+			<drop>nn</drop>
+			<name>Brown stained cat cat</name>
+			<atk>1</atk>
+			<accuracy>1</accuracy>
+			<friendly>1</friendly>
+			<faction>Monsters</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="26">
+			<hp>111</hp>
+			<maxhp>111</maxhp>
+			<rewardexp>100</rewardexp>
+			<drop>nn</drop>
+			<name>Besukyl the Demon</name>
+			<atk>13</atk>
+			<accuracy>25</accuracy>
+			<friendly>1</friendly>
+			<faction>Monsters</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="27">
+			<hp>26</hp>
+			<maxhp>26</maxhp>
+			<rewardexp>13</rewardexp>
+			<drop>nn</drop>
+			<name>Ghost</name>
+			<atk>4</atk>
+			<accuracy>5</accuracy>
+			<friendly>1</friendly>
+			<faction>Monsters</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="28">
+			<hp>30</hp>
+			<maxhp>30</maxhp>
+			<rewardexp>8</rewardexp>
+			<drop>nn</drop>
+			<name>Green mold</name>
+			<atk>1</atk>
+			<accuracy>1</accuracy>
+			<friendly>1</friendly>
+			<faction>Monsters</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="29">
+			<hp>46</hp>
+			<maxhp>46</maxhp>
+			<rewardexp>38</rewardexp>
+			<drop>nn</drop>
+			<name>Undead warrior</name>
+			<atk>11</atk>
+			<accuracy>10</accuracy>
+			<friendly>1</friendly>
+			<faction>Monsters</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="30">
+			<hp>30</hp>
+			<maxhp>30</maxhp>
+			<rewardexp>18</rewardexp>
+			<drop>nn</drop>
+			<name>Giant moth</name>
+			<atk>8</atk>
+			<accuracy>8</accuracy>
+			<friendly>1</friendly>
+			<faction>Monsters</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="31">
+			<hp>15</hp>
+			<maxhp>15</maxhp>
+			<rewardexp>4</rewardexp>
+			<drop>nn</drop>
+			<name>Babie giant moth</name>
+			<atk>4</atk>
+			<accuracy>5</accuracy>
+			<friendly>1</friendly>
+			<faction>Monsters</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="32">
+			<hp>38</hp>
+			<maxhp>38</maxhp>
+			<rewardexp>24</rewardexp>
+			<drop>nn</drop>
+			<name>Mutated turtle</name>
+			<atk>12</atk>
+			<accuracy>12</accuracy>
+			<friendly>1</friendly>
+			<faction>Monsters</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="33">
+			<hp>30</hp>
+			<maxhp>30</maxhp>
+			<rewardexp>8</rewardexp>
+			<drop>nn</drop>
+			<name>Yellow mold</name>
+			<atk>1</atk>
+			<accuracy>1</accuracy>
+			<friendly>1</friendly>
+			<faction>Monsters</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="34">
+			<hp>30</hp>
+			<maxhp>30</maxhp>
+			<rewardexp>8</rewardexp>
+			<drop>nn</drop>
+			<name>Red mold</name>
+			<atk>1</atk>
+			<accuracy>1</accuracy>
+			<friendly>1</friendly>
+			<faction>Monsters</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+		<npc id="35">
+			<hp>15</hp>
+			<maxhp>15</maxhp>
+			<rewardexp>5</rewardexp>
+			<drop>nn</drop>
+			<name>Crow</name>
+			<atk>3</atk>
+			<accuracy>5</accuracy>
+			<friendly>1</friendly>
+			<faction>Monsters</faction>
+			<spawnonce>0</spawnonce>
+		</npc>
+
+	</mobs>
+	<items>
+		<item id="0">
+			<name>Nothing</name>
+			<cost>0</cost>
+		</item>
+		<item id="1">
+			<name>Wood</name>
+			<type>1</type>
+			<altobject>9</altobject>
+			<cost>3</cost>
+		</item>
+		<item id="2">
+			<name>Small rock</name>
+			<cost>3</cost>
+		</item>
+		<item id="3">
+			<name>Stone axe</name>
+			<skill>Woodcutting</skill>
+			<dmg>2</dmg>
+			<hp>128</hp>
+			<type>8</type>
+			<cost>9</cost>
+			<craftable>1</craftable>
+			<recipe>2/5:8/3</recipe>
+		</item>
+		<item id="4">
+			<name>Cake</name>
+			<type>7</type>
+			<heal>30:30</heal>
+			<cost>25</cost>
+			<craftable>1</craftable>
+			<recipe>7/25</recipe>
+		</item>
+		<item id="5">
+			<name>Clay</name>
+			<cost>3</cost>
+		</item>
+		<item id="6">
+			<name>Stone shovel</name>
+			<dmg>2</dmg>
+			<hp>100</hp>
+			<cost>10</cost>
+			<type>9</type>
+			<craftable>1</craftable>
+			<recipe>2/9:8/3</recipe>
+		</item>
+		<item id="7">
+			<name>Berry</name>
+			<type>7</type>
+			<heal>5:15</heal>
+			<cost>4</cost>
+		</item>
+		<item id="8">
+			<name>Stick</name>
+			<cost>4</cost>
+			<craftable>1</craftable>
+			<recipe>1/1</recipe>
+		</item>
+		<item id="9">
+			<name>Flint</name>
+			<cost>5</cost>
+		</item>
+		<item id="10">
+			<name>Hewn rock</name>
+			<type>1</type>
+			<altobject>8</altobject>
+			<cost>7</cost>
+			<craftable>1</craftable>
+			<recipe>25/1</recipe>
+		</item>
+		<item id="11">
+			<name>Stone pickaxe</name>
+			<skill>Mining</skill>
+			<dmg>3</dmg>
+			<hp>100</hp>
+			<cost>10</cost>
+			<type>10</type>
+			<craftable>1</craftable>
+			<recipe>2/13:8/7</recipe>
+		</item>
+		<item id="12">
+			<name>Stone sword</name>
+			<cost>11</cost>
+			<craftable>1</craftable>
+			<recipe>2/25:8/7</recipe>
+		</item>
+		<item id="13">
+			<name>Iron sword</name>
+			<cost>15</cost>
+			<craftable>1</craftable>
+			<recipe>23/15:8/10</recipe>
+		</item>
+		<item id="14">
+			<name>Iron helmet</name>
+			<type>4</type>
+			<cost>18</cost>
+			<craftable>1</craftable>
+			<recipe>23/25</recipe>
+		</item>
+		<item id="15">
+			<name>Iron shield</name>
+			<type>6</type>
+			<cost>18</cost>
+			<craftable>1</craftable>
+			<recipe>23/25</recipe>
+		</item>
+		<item id="16">
+			<name>Leather chestplate</name>
+			<type>5</type>
+			<cost>14</cost>
+			<craftable>1</craftable>
+			<recipe>22/15</recipe>
+		</item>
+		<item id="17">
+			<name>Iron chestplate</name>
+			<type>5</type>
+			<cost>18</cost>
+			<craftable>1</craftable>
+			<recipe>23/30</recipe>
+		</item>
+		<item id="18">
+			<name>Chainmail</name>
+			<type>5</type>
+			<cost>21</cost>
+			<craftable>1</craftable>
+			<recipe>23/37:8/3</recipe>
+		</item>
+		<item id="19">
+			<name>Tough iron chestplate</name>
+			<type>5</type>
+			<cost>34</cost>
+		</item>
+		<item id="20">
+			<name>Hardened steel sword</name>
+			<cost>30</cost>
+		</item>
+		<item id="21">
+			<name>Gold coin</name>
+			<cost>1</cost>
+		</item>
+		<item id="22">
+			<name>Leather</name>
+			<cost>5</cost>
+		</item>
+		<item id="23">
+			<name>Iron ore</name>
+			<cost>16</cost>
+		</item>
+		<item id="24">
+			<name>Gold ore</name>
+			<cost>30</cost>
+		</item>
+		<item id="25">
+			<name>Stone</name>
+			<type>1</type>
+			<altobject>13</altobject>
+			<cost>5</cost>
+		</item>
+		<item id="26">
+			<name>Trapdoor</name>
+			<type>1</type>
+			<altobject>14</altobject>
+			<cost>18</cost>
+			<craftable>1</craftable>
+			<recipe>1/25:8/10</recipe>
+		</item>
+		<item id="27">
+			<name>Wooden floor</name>
+			<type>2</type>
+			<altobject>9</altobject>
+			<cost>4</cost>
+			<craftable>1</craftable>
+			<recipe>1/1</recipe>
+		</item>
+		<item id="28">
+			<name>Ruby</name>
+			<cost>40</cost>
+		</item>
+		<item id="29">
+			<name>Sapphire</name>
+			<cost>63</cost>
+		</item>
+		<item id="30">
+			<name>Diamond</name>
+			<cost>100</cost>
+		</item>
+		<item id="31">
+			<name>Emerald</name>
+			<cost>42</cost>
+		</item>
+		<item id="32">
+			<name>Stone plate</name>
+			<type>1</type>
+			<altobject>15</altobject>
+			<cost>5</cost>
+		</item>
+		<item id="33">
+			<name>Stone plate</name>
+			<type>1</type>
+			<altobject>16</altobject>
+			<cost>5</cost>
+		</item>
+		<item id="34">
+			<name>Stone plate</name>
+			<type>1</type>
+			<altobject>17</altobject>
+			<cost>5</cost>
+		</item>
+		<item id="35">
+			<name>Stone floor</name>
+			<type>2</type>
+			<altobject>12</altobject>
+			<cost>5</cost>
+		</item>
+		<item id="36">
+			<name>Stone floor</name>
+			<type>2</type>
+			<altobject>13</altobject>
+			<cost>5</cost>
+		</item>
+		<item id="37">
+			<name>Stone floor</name>
+			<type>2</type>
+			<altobject>14</altobject>
+			<cost>5</cost>
+		</item>
+		<item id="38">
+			<name>Sign</name>
+			<type>1</type>
+			<altobject>18</altobject>
+			<cost>8</cost>
+			<craftable>1</craftable>
+			<recipe>1/15:8/5</recipe>
+		</item>
+		<item id="39">
+			<name>Cucumber</name>
+			<type>7</type>
+			<heal>3:8</heal>
+			<cost>3</cost>
+		</item>
+		<item id="40">
+			<name>Cucumber seed</name>
+			<altobject>20</altobject>
+			<type>3</type>
+			<stages>20,19,63,21</stages>
+			<stagelen>20,25,30,35</stagelen>
+			<cost>7</cost>
+		</item>
+		<item id="41">
+			<name>Stone hoe</name>
+			<dmg>2</dmg>
+			<hp>75</hp>
+			<cost>11</cost>
+			<craftable>1</craftable>
+			<recipe>2/13:8/5</recipe>
+			<type>11</type>
+			<onuse>!0 place_tile $player_x $player_y 15;= !15 You plowed the soil
+			</onuse>
+		</item>
+		<item id="42">
+			<name>Mixed stone wall</name>
+			<type>1</type>
+			<altobject>26</altobject>
+			<cost>10</cost>
+			<craftable>1</craftable>
+			<recipe>5/3:2/3</recipe>
+		</item>
+		<item id="43">
+			<name>Brown stone floor</name>
+			<type>2</type>
+			<altobject>19</altobject>
+			<cost>3</cost>
+			<craftable>1</craftable>
+			<recipe>5/1</recipe>
+		</item>
+		<item id="44">
+			<name>Edible mushroom</name>
+			<type>7</type>
+			<heal>20:0</heal>
+			<cost>15</cost>
+		</item>
+		<item id="45">
+			<name>Amanita</name>
+			<type>7</type>
+			<heal>-18:-10</heal>
+			<cost>5</cost>
+		</item>
+		<item id="46">
+			<name>Potatoes</name>
+			<type>7</type>
+			<heal>6:25</heal>
+			<cost>13</cost>
+		</item>
+		<item id="47">
+			<name>Carrot</name>
+			<type>7</type>
+			<heal>10:11</heal>
+			<cost>21</cost>
+		</item>
+		<item id="48">
+			<name>Tomatoes</name>
+			<type>7</type>
+			<heal>5:10</heal>
+			<cost>21</cost>
+		</item>
+		<item id="49">
+			<name>Pepper</name>
+			<type>7</type>
+			<heal>9:10</heal>
+			<cost>15</cost>
+		</item>
+		<item id="50">
+			<name>Corn</name>
+			<type>7</type>
+			<heal>5:30</heal>
+			<cost>41</cost>
+		</item>
+		<item id="51">
+			<name>Potato seed</name>
+			<altobject>43</altobject>
+			<type>3</type>
+			<cost>41</cost>
+			<stages>43,44,45,46</stages>
+			<stagelen>20,25,30,35</stagelen>
+		</item>
+		<item id="52">
+			<name>Carrot seed</name>
+			<altobject>47</altobject>
+			<type>3</type>
+			<cost>41</cost>
+			<stages>47,48,49,50</stages>
+			<stagelen>20,25,30,35</stagelen>
+		</item>
+		<item id="53">
+			<name>Tomato seed</name>
+			<altobject>51</altobject>
+			<type>3</type>
+			<cost>41</cost>
+			<stages>51,52,53,54</stages>
+			<stagelen>20,25,30,35</stagelen>
+		</item>
+		<item id="54">
+			<name>Pepper seed</name>
+			<altobject>55</altobject>
+			<type>3</type>
+			<cost>41</cost>
+			<stages>55,56,57,58</stages>
+			<stagelen>20,25,30,35</stagelen>
+		</item>
+		<item id="55">
+			<name>Corn seed</name>
+			<altobject>59</altobject>
+			<type>3</type>
+			<cost>41</cost>
+			<stages>59,60,61,62</stages>
+			<stagelen>20,25,30,35</stagelen>
+		</item>
+		<item id="56">
+			<name>Coal</name>
+			<cost>4</cost>
+		</item>
+		<item id="57">
+			<name>Ham</name>
+			<type>7</type>
+			<heal>15:50</heal>
+			<cost>11</cost>
+		</item>
+		<item id="58">
+			<name>Pint of beer</name>
+			<recipe>65/5:66/5</recipe>
+			<type>7</type>
+			<heal>5:20</heal>
+			<cost>25</cost>
+		</item>
+		<item id="59">
+			<name>Chicken leg</name>
+			<cost>15</cost>
+			<type>7</type>
+			<heal>10:45</heal>
+		</item>
+		<item id="60">
+			<name>Healing potion</name>
+			<cost>20</cost>
+			<type>7</type>
+			<heal>25:0</heal>
+		</item>
+		<item id="61">
+			<name>Steel shield</name>
+			<cost>79</cost>
+		</item>
+		<item id="62">
+			<name>Golden shield</name>
+			<cost>110</cost>
+		</item>
+		<item id="63">
+			<name>Royal shield</name>
+			<cost>199</cost>
+		</item>
+		<item id="64">
+			<name>Executor's shield</name>
+			<cost>231</cost>
+		</item>
+		<item id="65">
+			<name>Spicy leaf</name>
+			<cost>2</cost>
+		</item>
+		<item id="66">
+			<name>Sour leaf</name>
+			<cost>2</cost>
+		</item>
+
+	</items>
 </res>

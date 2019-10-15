@@ -11,6 +11,7 @@ import ru.bernarder.fallenrisefromdust.properties.TileProp;
 
 public class MapObject {
 	int id, hp, harverstHp, lvl;
+	boolean nocollide = false;
 	Skill skill;
 	String name;
 
@@ -21,12 +22,13 @@ public class MapObject {
 		this.harverstHp = ObjectProp.harvestHp.get(id);
 		this.skill = ObjectProp.skill.getOrDefault(id, Skill.None);
 		this.lvl = ObjectProp.minLvl.get(id);
+		this.nocollide = (ObjectProp.nocollide.get(id) != -1);
 	}
 
 	public MapObject() {
 		this(0);
 	}
-	
+
 	boolean isCollisionMask() {
 		return (id == Map.COLLISION_MASK_ID);
 	}
@@ -57,7 +59,7 @@ public class MapObject {
 		this.verify();
 		return dmg;
 	}
-	
+
 	boolean takeDamage() {
 		return takeDamage(0);
 	}

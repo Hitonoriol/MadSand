@@ -115,21 +115,14 @@ public class Player {
 		}
 	}
 
-	public boolean colliding(Direction direction, int flag) {
-		boolean collision = false;
-		int oid = MadSand.world.getCurLoc().getObject(x, y, direction).id;
-		if (((flag == 0) && (oid == 12)) || (oid == 0) || (oid == 666)) {
-			collision = false;
-		} else
-			collision = true;
-		return collision;
+	public boolean colliding(Direction direction) {
+		MapObject obj = MadSand.world.getCurLoc().getObject(x, y, direction);
+		return !(obj.isCollisionMask() || obj.nocollide || obj.equals(Map.nullObject));
 	}
 
-	public boolean isInBackground() {
+	boolean isInBackground() {
 		Map loc = MadSand.world.getCurLoc();
-		if (loc.getObject(x, y).isCollisionMask() || loc.getTile(x, y).foreground)
-			return true;
-		return false;
+		return (loc.getObject(x, y).isCollisionMask() || loc.getTile(x, y).foreground);
 	}
 
 	boolean standingOnLoot(int x, int y) {
@@ -398,7 +391,7 @@ public class Player {
 		World.player.updCoords();
 	}
 
-	public boolean VerifyPosition(Direction dir) {
+	public boolean isOnMapBound(Direction dir) {
 		boolean ret = false;
 		if (x >= World.MAPSIZE - 1 && (dir == Direction.RIGHT)) {
 			ret = true;
@@ -416,20 +409,21 @@ public class Player {
 	}
 
 	public void move(Direction dir) {
-		if ((!colliding(dir, 0)) && (MadSand.dialogflag)) {
-			if ((dir == Direction.UP) && (!VerifyPosition(dir))) {
+		if ((!colliding(dir)) && (MadSand.dialogflag)) {
+			boolean onm = !isOnMapBound(dir);
+			if ((dir == Direction.UP) && (onm)) {
 				++y;
 				globalPos.y += MadSand.TILESIZE;
 			}
-			if ((dir == Direction.DOWN) && (!VerifyPosition(dir))) {
+			if ((dir == Direction.DOWN) && (onm)) {
 				--y;
 				globalPos.y -= MadSand.TILESIZE;
 			}
-			if ((dir == Direction.LEFT) && (!VerifyPosition(dir))) {
+			if ((dir == Direction.LEFT) && (onm)) {
 				--x;
 				globalPos.x -= MadSand.TILESIZE;
 			}
-			if ((dir == Direction.RIGHT) && (!VerifyPosition(dir))) {
+			if ((dir == Direction.RIGHT) && (onm)) {
 				++x;
 				globalPos.x += MadSand.TILESIZE;
 			}
@@ -472,7 +466,7 @@ public class Player {
 			return;
 		stats.look = dir;
 		turn(stats.look);
-		if (MadSand.world.getCurLoc().getObject(x, y, stats.look).id != 0 || VerifyPosition(stats.look))
+		if (colliding(stats.look) || isOnMapBound(stats.look))
 			return;
 		doAction(Stats.AP_WALK);
 		move(stats.look);

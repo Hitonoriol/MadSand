@@ -10,9 +10,7 @@ public class Tile {
 	public Tile(int id) {
 		this.id = id;
 		this.name = TileProp.name.get(id);
-
-		if (TileProp.cover.getOrDefault(id, -1) != -1)
-			foreground = true;
+		this.foreground = (TileProp.cover.getOrDefault(id, -1) != -1);
 	}
 
 	public Tile() {
