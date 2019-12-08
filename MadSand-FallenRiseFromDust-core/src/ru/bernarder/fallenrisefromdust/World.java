@@ -45,7 +45,7 @@ public class World {
 	}
 
 	int randBiome() {
-		return Utils.random.nextInt(MadSand.BIOMES);
+		return Utils.random.nextInt(MadSand.BIOMES - 1); //Biome numbers start from -1
 	}
 
 	HashMap<MapID, Map> _getLoc(int wx, int wy, int layer) {
@@ -118,7 +118,7 @@ public class World {
 	int biome;
 
 	public void Generate(int wx, int wy) {
-		Utils.out("WorldGen start!");
+		Utils.out("Generating new sector!");
 		if (!locExists(new MapID(new Pair(curxwpos, curywpos), 0)))
 			createBasicLoc(wx, wy);
 		try {
@@ -127,13 +127,14 @@ public class World {
 				biome = 0;
 			else
 				biome = randBiome();
+			Utils.out("Biome: " + biome);
 			getCurLoc().setBiome(biome);
 			genTerrain();
 			genObjByTemplate();
 			genUnderworld();
 			genDungeon();
 			curlayer = 0;
-			Utils.out("End of WorldGen!");
+			Utils.out("Done generating new sector!");
 		} catch (Exception e) {
 			Utils.out("Whoops, fatal error during worldgen... See MadSandCritical.log and/or MadSandErrors.log files.");
 			e.printStackTrace();

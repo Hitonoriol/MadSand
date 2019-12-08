@@ -103,7 +103,6 @@ public class Gui {
 		Gui.skin.add("default", spx);
 	}
 
-	public static ThreadedUtils tr;
 	static Dialog dialog;
 
 	static int ACCUR, CONSTITUTION, ATK, STAMINA, DEX, LUCK, INT;
@@ -137,7 +136,6 @@ public class Gui {
 	}
 
 	public static void showStatsWindow() {
-		Utils.out("showStats");
 		final Dialog statWindow = new Dialog("", Gui.skin);
 		statWindow.text(World.player.stats.name);
 		TextButton ok = new TextButton("Close", Gui.skin);
