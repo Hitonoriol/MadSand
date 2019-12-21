@@ -257,7 +257,7 @@ public class MadSand extends Game {
 				if (World.player.standingOnLoot(trdx, trdy))
 					Utils.batch.draw(Resources.objects[OBJECT_LOOT], trdx * TILESIZE, trdy * TILESIZE);
 
-				if (npc != null)
+				if (npc != Map.nullNpc)
 					drawEntity(npc);
 
 				i++;

@@ -37,7 +37,7 @@ public class BuildScript {
 				OBJECT_LINE = "object_line", TILE_LINE = "tile_line", PLAYER_GIVE = "player_give",
 				DAMAGE_OBJECT = "damage_object", PLAYER_HEAL = "player_heal", PLAYER_SATIATE = "player_satiate",
 				PLAYER_REMOVE_ITEM = "player_remove_item", PLAYER_HAND_SET = "player_hand_set",
-				PLAYER_KILL = "player_kill";
+				PLAYER_KILL = "player_kill", NPC_SPAWN = "npc_spawn";
 	}
 
 	public static void bLine(int x, int y, int dir, int id, int len, int head) {
@@ -139,6 +139,13 @@ public class BuildScript {
 				command = command.split(COMMAND_DELIMITER)[1];
 		}
 		switch (command) {
+		case Token.NPC_SPAWN:
+			x = arg.get(0);
+			y = arg.get(1);
+			id = arg.get(2);
+
+			MadSand.world.getCurLoc().putNpc(new Npc(id), x, y);
+			break;
 		case Token.PLACE_OBJECT:
 			x = arg.get(0);
 			y = arg.get(1);

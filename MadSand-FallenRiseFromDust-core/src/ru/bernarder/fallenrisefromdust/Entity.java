@@ -124,8 +124,11 @@ public abstract class Entity {
 	}
 
 	public boolean colliding(Direction direction) {
+		Pair coords = new Pair(x, y).addDirection(direction);
+		int nx = coords.x, ny = coords.y;
 		MapObject obj = MadSand.world.getCurLoc().getObject(x, y, direction);
-		return !(obj.isCollisionMask() || obj.nocollide || obj.equals(Map.nullObject));
+		Npc npc = MadSand.world.getCurLoc().getNpc(nx, ny);
+		return !(obj.isCollisionMask() || obj.nocollide || obj.equals(Map.nullObject) || npc != null);
 	}
 
 	boolean isInBackground() {
@@ -237,9 +240,13 @@ public abstract class Entity {
 	}
 
 	public void teleport(int x, int y) {
+		setGridCoords(x, y);
+		updCoords();
+	}
+
+	public void setGridCoords(int x, int y) {
 		this.x = x;
 		this.y = y;
-		updCoords();
 	}
 
 	public boolean isOnMapBound(Direction dir) {

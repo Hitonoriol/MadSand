@@ -157,6 +157,7 @@ public class Resources {
 			NpcProp.accuracy.put(i, Utils.val(XMLUtils.getKey(resdoc, "npc", si, "accuracy")));
 			NpcProp.faction.put(i, Faction.valueOf(XMLUtils.getKey(resdoc, "npc", si, "faction")));
 			NpcProp.qids.put(i, (XMLUtils.getKey(resdoc, "npc", si, "qids")));
+			NpcProp.name.put(i, (XMLUtils.getKey(resdoc, "npc", si, "name")));
 			NpcProp.spawnonce.put(i, Boolean.parseBoolean(XMLUtils.getKey(resdoc, "npc", si, "spawnonce")));
 			NpcProp.friendly.put(i, Boolean.parseBoolean(XMLUtils.getKey(resdoc, "npc", si, "friendly")));
 			i++;

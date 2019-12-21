@@ -290,18 +290,22 @@ public class Utils {
 	}
 
 	public static void updMouseCoords() {
+		Map loc = MadSand.world.getCurLoc();
+
 		MadSand.mx = Gdx.input.getX();
 		MadSand.my = Gdx.graphics.getHeight() - Gdx.input.getY();
-		MadSand.wmx = (int) Math.floor(MadSand.mouseinworld.x / 33.0F);
-		MadSand.wmy = (int) Math.floor(MadSand.mouseinworld.y / 33.0F);
+
+		MadSand.wmx = (int) Math.floor(MadSand.mouseinworld.x / MadSand.TILESIZE);
+		MadSand.wmy = (int) Math.floor(MadSand.mouseinworld.y / MadSand.TILESIZE);
+
 		Gui.mousemenu.addAction(Actions.moveTo(MadSand.mx + 60, MadSand.my - 70, 0.1F));
+
 		try {
 			Gui.mouselabel[0].setText("World coords: " + MadSand.wmx + ", " + MadSand.wmy);
-			Gui.mouselabel[1].setText(
-					"Tile: " + TileProp.name.get(MadSand.world.getCurLoc().getTile(MadSand.wmx, MadSand.wmy).id));
-			Gui.mouselabel[2].setText("Object: " + " ("
-					+ ObjectProp.name.get(MadSand.world.getCurLoc().getObject(MadSand.wmx, MadSand.wmy).id) + ")");
-			Gui.mouselabel[3].setText("Creature: " + " ()");
+			Gui.mouselabel[1].setText("Tile: " + TileProp.name.get(loc.getTile(MadSand.wmx, MadSand.wmy).id));
+			Gui.mouselabel[2]
+					.setText("Object: " + " (" + ObjectProp.name.get(loc.getObject(MadSand.wmx, MadSand.wmy).id) + ")");
+			Gui.mouselabel[3].setText("Creature: " + " (" + loc.getNpc(MadSand.wmx, MadSand.wmy).stats.name + ")");
 			Gui.mouselabel[4].setText("Global ticks: " + MadSand.world.globalTick + "\nWorld time: "
 					+ MadSand.world.worldtime + "\nPlayer position: (" + World.player.x + ", " + World.player.y + ")");
 		} catch (Exception e) {

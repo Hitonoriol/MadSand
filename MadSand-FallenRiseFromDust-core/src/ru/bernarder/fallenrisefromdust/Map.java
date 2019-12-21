@@ -20,6 +20,7 @@ public class Map {
 	static MapObject nullObject = new MapObject(0);
 	static Loot nullLoot = new Loot();
 	static Crop nullCrop = new Crop();
+	static Npc nullNpc = new Npc();
 
 	private HashMap<Pair, Tile> mapTiles;
 	private HashMap<Pair, MapObject> mapObjects;
@@ -385,37 +386,53 @@ public class Map {
 
 		if (!correctCoords(coords.set(x, y)))
 			return false;
-		if (mapNpcs.get(coords) != null)
+
+		if (getNpc(coords.x, coords.y) != nullNpc)
 			return false;
+
 		mapNpcs.put(coords, npc);
 		return true;
 	}
 
-	Npc getNpc(int x, int y) {
-		if (!correctCoords(coords.set(x, y)))
-			return null;
-		Npc npc = mapNpcs.get(coords);
-		if (npc != null)
-			return npc;
-		return null;
+	boolean putNpc(Npc npc, int x, int y) {
+		npc.teleport(x, y);
+		return moveNpc(npc, x, y);
 	}
 
-	boolean moveNpc(Npc npc, int x, int y) { // should be called by an npc before changing its own position. yeah, the
+	Npc getNpc(int x, int y) {
+		if (!correctCoords(coords.set(x, y)))
+			return nullNpc;
+
+		Npc npc = mapNpcs.get(coords);
+
+		if (npc != nullNpc && npc != null)
+			return npc;
+
+		return nullNpc;
+	}
+
+	boolean moveNpc(Npc npc, int x, int y) { // moves npc only on the grid(not on the screen) to process smooth
+												// movement;should be called by an npc before changing its own position.
+												// yeah, the
 												// system is fucky.
-		int xold = npc.x, yold = y;
+		if (npc.isStepping())
+			return false;
+		int xold = npc.x, yold = npc.y;
 		if (!correctCoords(coords.set(x, y)))
 			return false;
-		if (mapNpcs.get(coords) != null)
+		if (getNpc(coords.x, coords.y) != nullNpc)
 			return false;
+		npc.setGridCoords(x, y);
 		mapNpcs.put(coords, npc);
-		removeNpc(xold, yold);
+		if (!(xold == x && yold == y))
+			removeNpc(xold, yold);
 		return true;
 	}
 
 	boolean removeNpc(int x, int y) {
 		if (!correctCoords(coords.set(x, y)))
 			return false;
-		if (mapNpcs.get(coords) == null)
+		if (getNpc(coords.x, coords.y) == nullNpc)
 			return false;
 		mapNpcs.remove(coords);
 		return true;

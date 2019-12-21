@@ -1,5 +1,7 @@
 package ru.bernarder.fallenrisefromdust;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
@@ -19,8 +21,13 @@ public class Npc extends Entity {
 		setSprites(new Sprite(Resources.npc[id]));
 	}
 
+	public Npc() {
+		this(0);
+	}
+
 	void loadProperties() {
 		stats.roll();
+		stats.name = NpcProp.name.get(id);
 		stats.hp = NpcProp.hp.get(id);
 		stats.mhp = stats.hp;
 		stats.str = NpcProp.atk.get(id);
@@ -45,6 +52,17 @@ public class Npc extends Entity {
 		MadSand.world.getCurLoc().moveNpc(this, nx, ny);
 		teleport(nx, ny);
 		return true;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Npc))
+			return false;
+		if (obj == this)
+			return true;
+
+		Npc rhs = (Npc) obj;
+		return new EqualsBuilder().append(id, rhs.id).isEquals();
 	}
 
 }
