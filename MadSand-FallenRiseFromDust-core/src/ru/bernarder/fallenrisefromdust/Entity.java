@@ -1,13 +1,17 @@
 package ru.bernarder.fallenrisefromdust;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.Skill;
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
 
 public abstract class Entity {
+	@JsonIgnore
 	private Sprite upSpr, downSpr, leftSpr, rightSpr;
+
+	@JsonIgnore
 	private Sprite sprite;
 
 	public int x = World.MAPSIZE / 2;
@@ -37,7 +41,8 @@ public abstract class Entity {
 		this("");
 	}
 
-	public void setSprites(Sprite u, Sprite d, Sprite l, Sprite r) {
+	@JsonIgnore
+	void setSprites(Sprite u, Sprite d, Sprite l, Sprite r) {
 		upSpr = u;
 		downSpr = d;
 		leftSpr = l;
@@ -45,7 +50,8 @@ public abstract class Entity {
 		sprite = d;
 	}
 
-	public void setSprites(Sprite s) {
+	@JsonIgnore
+	void setSprites(Sprite s) {
 		setSprites(s, s, s, s);
 	}
 

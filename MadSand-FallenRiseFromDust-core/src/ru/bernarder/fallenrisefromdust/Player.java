@@ -1,6 +1,7 @@
 package ru.bernarder.fallenrisefromdust;
 
 import com.badlogic.gdx.Gdx;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ru.bernarder.fallenrisefromdust.enums.*;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
@@ -11,6 +12,7 @@ public class Player extends Entity {
 
 	public boolean isMain = true;
 
+	@JsonIgnore
 	public Player(String name) {
 		super(name);
 		super.setSprites(Resources.playerUpSpr, Resources.playerDownSpr, Resources.playerLeftSpr,
@@ -274,7 +276,7 @@ public class Player extends Entity {
 		}
 	}
 
-	public long getSurvivedTime() {
+	long getSurvivedTime() {
 		return MadSand.world.globalTick - stats.spawnTime;
 	}
 

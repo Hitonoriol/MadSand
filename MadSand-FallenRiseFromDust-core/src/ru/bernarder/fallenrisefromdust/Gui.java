@@ -457,7 +457,7 @@ public class Gui {
 		if (slots > MadSand.MAXSAVESLOTS)
 			slots = MadSand.MAXSAVESLOTS;
 		dialog = new Dialog(" ", Gui.skin);
-		final TextField worldtxt = new TextField("Save Slot #" + (++slots), Gui.skin);
+		final TextField worldtxt = new TextField("World #" + (++slots), Gui.skin);
 		dialog.text("New game");
 		TextButton okbtn = new TextButton("Proceed", Gui.skin);
 		TextButton nobtn = new TextButton("Cancel", Gui.skin);

@@ -5,12 +5,16 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 
 public class Location extends HashMap<MapID, Map> {
-	public static int LAYERS = 2;
 	private static final long serialVersionUID = -4489829388439109446L;
+
+	public static int layers = 2; // Default number of layers
+	public static int maxLayers = 40; // Maximum possible underground layer - 1; TODO implement dynamic dungeon
+										// generation when player descends further underground
 
 	final String LOOT_DELIM = "|";
 	final int CROP_BLOCK_LEN = 16;
 	final int BLOCK_SIZE = 2;
+	final int LONG_BLOCK_SIZE = 8;
 
 	byte[] sectorToBytes(int wx, int wy, int layer) {
 		try {
@@ -74,7 +78,8 @@ public class Location extends HashMap<MapID, Map> {
 		byte[] layer;
 		long size;
 		try {
-			for (int i = 0; i < LAYERS; ++i) {
+			stream.write(GameSaver.encode2(layers));
+			for (int i = 0; i < layers; ++i) {
 				layer = sectorToBytes(wx, wy, i);
 				size = layer.length;
 				stream.write(GameSaver.encode8(size));
@@ -91,8 +96,9 @@ public class Location extends HashMap<MapID, Map> {
 		ByteArrayInputStream stream = new ByteArrayInputStream(location);
 		long layersz;
 		try {
-			for (int i = 0; i < LAYERS; ++i) {
-				layersz = GameSaver.decode8(stream.readNBytes(8));
+			layers = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
+			for (int i = 0; i < layers; ++i) {
+				layersz = GameSaver.decode8(stream.readNBytes(LONG_BLOCK_SIZE));
 				bytesToSector(stream.readNBytes((int) layersz), wx, wy, i);
 			}
 		} catch (Exception e) {
@@ -112,7 +118,7 @@ public class Location extends HashMap<MapID, Map> {
 			map.purge();
 			map.setBiome(biome);
 			map.setDefTile(defTile);
-			byte[] block = new byte[2];
+			byte[] block = new byte[BLOCK_SIZE];
 			for (int y = 0; y < ysz; ++y) {
 				for (int x = 0; x < xsz; ++x) {
 					stream.read(block);
@@ -124,7 +130,7 @@ public class Location extends HashMap<MapID, Map> {
 				}
 			}
 			String loot;
-			byte[] _len = new byte[2];
+			byte[] _len = new byte[BLOCK_SIZE];
 			int len;
 			byte[] node;
 			for (int y = 0; y < ysz; ++y) {
@@ -137,16 +143,16 @@ public class Location extends HashMap<MapID, Map> {
 					Loot.addLootQ(loot, x, y, map);
 				}
 			}
-			int cropsCount = GameSaver.decode2(stream.readNBytes(2));
+			int cropsCount = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
 			int x, y, id, stage;
 			long ptime;
 			Crop crop;
 			for (int i = 0; i < cropsCount; ++i) {
-				x = GameSaver.decode2(stream.readNBytes(2));
-				y = GameSaver.decode2(stream.readNBytes(2));
-				id = GameSaver.decode2(stream.readNBytes(2));
-				ptime = GameSaver.decode8(stream.readNBytes(8));
-				stage = GameSaver.decode2(stream.readNBytes(2));
+				x = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
+				y = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
+				id = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
+				ptime = GameSaver.decode8(stream.readNBytes(LONG_BLOCK_SIZE));
+				stage = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
 				crop = new Crop(id, ptime, stage);
 				map.putCrop(x, y, crop);
 			}

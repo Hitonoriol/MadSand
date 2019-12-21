@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ru.bernarder.fallenrisefromdust.enums.Skill;
 
@@ -14,6 +15,8 @@ public class Inventory {
 	public double curWeight, maxWeight;
 
 	private HashMap<Item, InventoryUICell> itemUI = new HashMap<Item, InventoryUICell>();
+	
+	@JsonIgnore
 	InventoryUI inventoryUI = new InventoryUI();
 
 	public Inventory(float maxWeight) {

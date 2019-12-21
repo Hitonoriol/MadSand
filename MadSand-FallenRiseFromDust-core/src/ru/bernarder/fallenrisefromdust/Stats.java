@@ -80,7 +80,7 @@ public class Stats {
 		maxstamina = stamina;
 	}
 
-	public int getSum() {
+	int getSum() {
 		return str + constitution + accur + luck + dexterity + intelligence;
 	}
 

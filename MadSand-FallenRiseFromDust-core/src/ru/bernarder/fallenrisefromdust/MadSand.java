@@ -79,7 +79,7 @@ public class MadSand extends Game {
 	public static int BIOMES = 4;
 	public static int MAXMOBSONMAP = 35;
 	static int QUESTS = 0;
-	
+
 	public static final int GUILABELS = 4;
 	public static int ENCOUNTERCHANCE = 10;
 	public static int[] COSMETICSPRITES = { 17 };
@@ -108,7 +108,7 @@ public class MadSand extends Game {
 	public static int OREFIELDS = 10;
 	public static int OVERWORLD = 1;
 	public static int UNDERWORLD = 0;
-	public static int MAXSAVESLOTS = 11;
+	public static int MAXSAVESLOTS = 999;
 	public static int CROPS;
 	public static boolean tonext = false;
 	public static int tempwx, tempwy;
@@ -157,7 +157,7 @@ public class MadSand extends Game {
 		QuestUtils.init();
 		camera = new OrthographicCamera();
 		camera.update();
-		
+
 		world = new World(MadSand.WORLDSIZE);
 		World.player.updCoords();
 		world.Generate();
@@ -279,8 +279,7 @@ public class MadSand extends Game {
 	}
 
 	void drawBackground() {
-		int y;
-		int x = y = World.MAPSIZE / 2;
+		int x = World.player.x, y = World.player.y;
 		int i = 0;
 		while (i < renderArea.length) {
 			Utils.batch.draw(
