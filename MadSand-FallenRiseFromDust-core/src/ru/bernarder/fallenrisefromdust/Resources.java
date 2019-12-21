@@ -14,10 +14,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
+import ru.bernarder.fallenrisefromdust.enums.Faction;
 import ru.bernarder.fallenrisefromdust.enums.ItemType;
 import ru.bernarder.fallenrisefromdust.enums.Skill;
 import ru.bernarder.fallenrisefromdust.properties.CropProp;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
+import ru.bernarder.fallenrisefromdust.properties.NpcProp;
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
 import ru.bernarder.fallenrisefromdust.properties.WorldGenProp;
@@ -147,17 +149,16 @@ public class Resources {
 		while (i < MadSand.NPCSPRITES) {
 			npc[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "npc/" + i + ".png"));
 			si = Utils.str(i);
-			XMLUtils.getKey(resdoc, "npc", si, "hp");
-			XMLUtils.getKey(resdoc, "npc", si, "maxhp");
-			XMLUtils.getKey(resdoc, "npc", si, "rewardexp");
-			XMLUtils.getKey(resdoc, "npc", si, "drop");
-			XMLUtils.getKey(resdoc, "npc", si, "name");
-			XMLUtils.getKey(resdoc, "npc", si, "atk");
-			XMLUtils.getKey(resdoc, "npc", si, "accuracy");
-			XMLUtils.getKey(resdoc, "npc", si, "friendly");
-			XMLUtils.getKey(resdoc, "npc", si, "fraction");
-			XMLUtils.getKey(resdoc, "npc", si, "spawnonce");
-			XMLUtils.getKey(resdoc, "npc", si, "qids");
+			NpcProp.hp.put(i, Utils.val(XMLUtils.getKey(resdoc, "npc", si, "hp")));
+			NpcProp.maxhp.put(i, Utils.val(XMLUtils.getKey(resdoc, "npc", si, "maxhp")));
+			NpcProp.rewardexp.put(i, Utils.val(XMLUtils.getKey(resdoc, "npc", si, "rewardexp")));
+			NpcProp.drop.put(i, (XMLUtils.getKey(resdoc, "npc", si, "drop")));
+			NpcProp.atk.put(i, Utils.val(XMLUtils.getKey(resdoc, "npc", si, "atk")));
+			NpcProp.accuracy.put(i, Utils.val(XMLUtils.getKey(resdoc, "npc", si, "accuracy")));
+			NpcProp.faction.put(i, Faction.valueOf(XMLUtils.getKey(resdoc, "npc", si, "faction")));
+			NpcProp.qids.put(i, (XMLUtils.getKey(resdoc, "npc", si, "qids")));
+			NpcProp.spawnonce.put(i, Boolean.parseBoolean(XMLUtils.getKey(resdoc, "npc", si, "spawnonce")));
+			NpcProp.friendly.put(i, Boolean.parseBoolean(XMLUtils.getKey(resdoc, "npc", si, "friendly")));
 			i++;
 		}
 	}

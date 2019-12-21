@@ -1,7 +1,7 @@
 package ru.bernarder.fallenrisefromdust.enums;
 
 public enum Faction{
-	NONE(0), OUTLAW(1), PARTISAN(2);
+	None(0), Outlaws(1), Partisans(2), Monsters(3), Marauders(4);
 	
 	private final int val;
 

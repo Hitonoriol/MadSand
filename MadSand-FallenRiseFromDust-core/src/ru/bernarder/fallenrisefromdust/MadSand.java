@@ -154,7 +154,6 @@ public class MadSand extends Game {
 		Gui.createBasicSkin();
 		World.player = new Player();
 		Gui.initmenu();
-		QuestUtils.init();
 		camera = new OrthographicCamera();
 		camera.update();
 

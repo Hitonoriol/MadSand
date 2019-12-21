@@ -50,7 +50,7 @@ public class Loot {
 		return add(item.id, item.quantity);
 	}
 
-	private static int addLootQ(String temp, boolean inventory, int x, int y, Map map) { // Don't look here
+	private static int addLootQ(String temp, Inventory inventory, int x, int y, Map map) { // Don't look here
 		int i = 0;
 		if (temp.equals("n"))
 			return -1;
@@ -64,8 +64,8 @@ public class Loot {
 					attr = block[i].split("/");
 					id = Integer.parseInt(attr[0]);
 					q = Integer.parseInt(attr[1]);
-					if (inventory)
-						World.player.inventory.putItem(id, q, false);
+					if (inventory != null)
+						inventory.putItem(id, q, false);
 					else
 						map.putLoot(x, y, id, q);
 					i++;
@@ -80,12 +80,12 @@ public class Loot {
 		return 0;
 	}
 
-	static int addLootQ(String query) { // This static abomination adds items by query to inventory
-		return addLootQ(query, true, 0, 0, null);
+	static int addLootQ(String query, Inventory inventory) { // This static abomination adds items by query to inventory
+		return addLootQ(query, inventory, 0, 0, null);
 	}
 
 	static int addLootQ(String query, int x, int y, Map map) { // and this thing puts items to map by their query
-		return addLootQ(query, false, x, y, map);
+		return addLootQ(query, null, x, y, map);
 	}
 
 	public static boolean invExists(String sequence) {

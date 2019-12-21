@@ -825,7 +825,7 @@
 			<atk>0</atk>
 			<accuracy>0</accuracy>
 			<friendly>0</friendly>
-			<faction>Nobody</faction>
+			<faction>Monsters</faction>
 			<spawnonce>0</spawnonce>
 		</npc>
 		<npc id="1">
