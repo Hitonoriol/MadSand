@@ -10,8 +10,8 @@ import ru.bernarder.fallenrisefromdust.enums.Skill;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 
 public class Item {
-	private static int ITEM_NOLOAD = 0;
-	
+	public static final int NULL_ITEM = 0;
+
 	String name, recipe, heal;
 	int dmg;
 	public int hp = -1;
@@ -35,11 +35,11 @@ public class Item {
 		this.id = id;
 		this.weight = 0.5; // TODO: loadable property
 		this.quantity = 1;
-		loadProperties(id);
+		loadProperties();
 	}
 
 	public Item() {
-		this(0);
+		this(NULL_ITEM);
 	}
 
 	public Item(int id, int q) {
@@ -134,13 +134,6 @@ public class Item {
 
 		if (type.isTool())
 			uid = UUID.randomUUID().toString();
-	}
-	
-	private void loadProperties(int id) {
-		if (id == ITEM_NOLOAD)
-			return;
-		else
-			loadProperties();
 	}
 
 	String getString() {

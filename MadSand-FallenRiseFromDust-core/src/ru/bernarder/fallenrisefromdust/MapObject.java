@@ -10,6 +10,9 @@ import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
 
 public class MapObject {
+	public static final int NULL_OBJECT_ID = 0;
+	public static final int COLLISION_MASK_ID = 666;
+	
 	int id, hp, harverstHp, lvl;
 	boolean nocollide = false;
 	Skill skill;

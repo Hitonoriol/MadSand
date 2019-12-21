@@ -34,7 +34,7 @@ public class InventoryUICell {
 		if (item.type.isTool())
 			setHp(item.hp);
 
-		toolHpLabel.setPosition(itemQuantityLabel.getX() + size / 1.6f, itemQuantityLabel.getY()+6);
+		toolHpLabel.setPosition(itemQuantityLabel.getX() + size / 1.6f, itemQuantityLabel.getY() + 6);
 
 		cell = new Group();
 		cell.addActor(btn);
@@ -53,7 +53,7 @@ public class InventoryUICell {
 		invCellContextMenu[0].addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				invCellContextContainer.setVisible(false);
-				MadSand.contextopened = false;
+				Gui.contextMenuActive = false;
 				World.player.dropItem(item.id, item.quantity);
 			}
 
@@ -71,18 +71,26 @@ public class InventoryUICell {
 		btn.addListener(new ClickListener(Buttons.RIGHT) {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if (!invCellContextContainer.isVisible() && !MadSand.contextopened) {
+				if (!invCellContextContainer.isVisible() && !Gui.contextMenuActive) {
 					invCellContextContainer.setVisible(true);
 					MadSand.mx = Gdx.input.getX();
 					MadSand.my = Gdx.graphics.getHeight() - Gdx.input.getY();
 					invCellContextContainer.setPosition(MadSand.mx, MadSand.my);
-					MadSand.contextopened = true;
+					Gui.contextMenuActive = true;
 				} else {
 					invCellContextContainer.setVisible(false);
-					MadSand.contextopened = false;
+					Gui.contextMenuActive = false;
 				}
 			}
 		});
+	}
+
+	boolean contextActive() {
+		return invCellContextContainer.isVisible();
+	}
+
+	void hideContext() {
+		invCellContextContainer.setVisible(false);
 	}
 
 	void setText(String str) {

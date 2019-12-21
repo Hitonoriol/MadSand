@@ -2,6 +2,7 @@ package ru.bernarder.fallenrisefromdust;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -14,7 +15,6 @@ import ru.bernarder.fallenrisefromdust.properties.TileProp;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.StringReader;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -23,21 +23,8 @@ import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-
 public class Utils {
 	public static boolean tester = true;
-	public static int ubound;
-	public static int lbound;
-	public static boolean invent = false;
 	public static float pspeed = 33.0F;
 	static SpriteBatch batch;
 	static boolean admin = true;
@@ -52,160 +39,6 @@ public class Utils {
 		batch = new SpriteBatch();
 	}
 
-	public static Document XMLString(String xml) {
-		try {
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			InputSource is = new InputSource(new StringReader(xml));
-			return builder.parse(is);
-		} catch (Exception e) {
-			out("Oopsie (" + e.getMessage() + ")");
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	static int countKeys(Document doc, String list) {
-		try {
-			doc.getDocumentElement().normalize();
-			NodeList nList = doc.getElementsByTagName(list);
-			int temp, c = 0;
-			for (temp = 0; temp < nList.getLength(); temp++) {
-				Node nNode = nList.item(temp);
-				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-					c++;
-				}
-			}
-			return c;
-		} catch (Exception e) {
-			return -1;
-		}
-	}
-
-	static String getKey(Document doc, String list, String id, String element, String def) {
-		try {
-			doc.getDocumentElement().normalize();
-			NodeList nList = doc.getElementsByTagName(list);
-			for (int temp = 0; temp < nList.getLength(); temp++) {
-				Node nNode = nList.item(temp);
-				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-					Element eElement = (Element) nNode;
-					if (eElement.getAttribute("id").equals(id)) {
-						return eElement.getElementsByTagName(element).item(0).getTextContent();
-					}
-				}
-			}
-			return def;
-		} catch (Exception e) {
-			return def;
-		}
-	}
-
-	static String getKey(Document doc, String list, String id, String element) {
-		return getKey(doc, list, id, element, "-1");
-	}
-
-	static String getAttr(Document doc, String list, String id, String attr) {
-		try {
-			doc.getDocumentElement().normalize();
-			NodeList nList = doc.getElementsByTagName(list);
-			for (int temp = 0; temp < nList.getLength(); temp++) {
-				Node nNode = nList.item(temp);
-				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-					Element eElement = (Element) nNode;
-					if (eElement.getAttribute("id").equals(id) || !eElement.hasAttribute("id")) {
-						return eElement.getAttribute(attr);
-					}
-				}
-			}
-			return "-1";
-		} catch (Exception e) {
-			return "-1";
-		}
-	}
-
-	static String nodeMapDump(NamedNodeMap map) {
-		if (map == null)
-			return "-1";
-		String ret = "";
-		int len = map.getLength();
-		for (int i = 1; i < len; ++i) {
-			Node attr = map.item(i);
-			ret += attr.getNodeValue();
-			if (i < len - 1)
-				ret += ",";
-		}
-		if (ret.equals("")) {
-			out("nodemapdump oopsie");
-			return "-1";
-		}
-		// out("ret: " + ret);
-		return ret;
-	}
-
-	static HashMap<String, Integer> nodeMapToHashMap(NamedNodeMap map) {
-		HashMap<String, Integer> ret = new HashMap<String, Integer>();
-		if (map == null) {
-			ret.put("tid", -1);
-			return ret;
-		}
-		int len = map.getLength();
-		for (int i = 0; i < len; ++i) {
-			Node attr = map.item(i);
-			ret.put(attr.getNodeName(), val(attr.getNodeValue()));
-			// out(attr.getNodeName() + ": " + attr.getNodeValue());
-		}
-		return ret;
-	}
-
-	static NamedNodeMap getNested(Document doc, String list, String id, String name, String iid) {
-		try {
-			doc.getDocumentElement().normalize();
-			NodeList nList = doc.getElementsByTagName(list);
-			for (int temp = 0; temp < nList.getLength(); temp++) {
-				Node nNode = nList.item(temp);
-				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-					Element eElement = (Element) nNode;
-					if (eElement.getAttribute("id").equals(id)) {
-						NodeList cList = eElement.getChildNodes();
-						for (int pos = 0; pos < cList.getLength(); pos++) {
-							Node cNode = cList.item(pos);
-							if (cNode.getNodeType() == Node.ELEMENT_NODE) {
-								Element cElement = (Element) cNode;
-								if (cElement.getTagName().equals(name) && cElement.getAttribute("id").equals(iid)) {
-									return (cElement.getAttributes());
-								}
-							}
-						}
-					}
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-
-		}
-		return null;
-	}
-
-	static String getAttrValues(Document doc, String list, String id, String name, String iid) {
-		return nodeMapDump(getNested(doc, list, id, name, iid));
-	}
-
-	static Vector<String> getGroup(int biome, String gname) {
-		Vector<String> group = new Vector<String>();
-		int j = 0;
-		String tmp = "";
-		while (!tmp.equals("-1")) {
-			tmp = getAttrValues(Resources.gendoc, "biome", str(biome), gname, str(j));
-			if (tmp.equals("-1"))
-				break;
-			group.add(tmp);
-			++j;
-		}
-		return group;
-	}
-
 	static HashMap<Integer, Vector<Integer>> getAitem(int id, String field) {
 		int i = 0;
 		String hand = "";
@@ -214,7 +47,7 @@ public class Utils {
 		StringTokenizer tok;
 		int hid;
 		while (hand != "-1") {
-			hand = getAttrValues(Resources.resdoc, field, str(id), "altitem", str(i));
+			hand = XMLUtils.getAttrValues(Resources.resdoc, field, str(id), "altitem", str(i));
 			if (hand == "-1")
 				break;
 			block = new Vector<Integer>();
@@ -250,24 +83,10 @@ public class Utils {
 	}
 
 	static void toggleInventory() {
-		if (invent) {
-			invBtnSetVisible(false);
-			Gdx.input.setInputProcessor(Gui.overlay);
-			MadSand.contextopened = false;
-			MadSand.state = GameState.GAME;
-			Gui.mousemenu.setVisible(true);
-			World.player.inventory.inventoryUI.toggleVisible();
-			invent = false;
-		} else {
-			World.player.inventory.inventoryUI.toggleVisible();
-			Gui.gamecontext.setVisible(false);
-			MadSand.contextopened = false;
-			Gui.mousemenu.setVisible(false);
-			invBtnSetVisible(true);
-			Gdx.input.setInputProcessor(Gui.overlay);
-			MadSand.state = GameState.INVENTORY;
-			invent = true;
-		}
+		if (Gui.inventoryActive)
+			World.player.hideInventory();
+		else
+			World.player.showInventory();
 	}
 
 	public static void invKeyCheck() {
@@ -277,8 +96,8 @@ public class Utils {
 	}
 
 	public static void invBtnSetVisible(boolean visible) {
-		Gui.craftButton.setVisible(visible);
-		Gui.exitButton.setVisible(visible);
+		Gui.craftBtn.setVisible(visible);
+		Gui.exitToMenuBtn.setVisible(visible);
 	}
 
 	public static void gameKeyCheck() {
@@ -286,6 +105,8 @@ public class Utils {
 			Gui.inputField.setVisible(!Gui.inputField.isVisible());
 			Gui.overlay.setKeyboardFocus(Gui.inputField);
 		}
+		if (Gdx.input.isButtonPressed(Buttons.MIDDLE))
+			World.player.lookAtMouse();
 		if (Gdx.input.isKeyJustPressed(Keys.Q))
 			Gui.showStatsWindow();
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER))
@@ -340,10 +161,10 @@ public class Utils {
 		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.R)) && (tester)) {
 			MadSand.world.Generate();
 		}
-		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyPressed(Keys.DOWN)) && (tester)) {
+		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.DOWN)) && (tester)) {
 			MadSand.world.curlayer = 1;
 		}
-		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyPressed(Keys.UP)) && (tester)) {
+		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.UP)) && (tester)) {
 			MadSand.world.curlayer = 0;
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.F11)) {
@@ -355,7 +176,7 @@ public class Utils {
 				Gdx.graphics.setFullscreenMode(currentMode);
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
-			Gui.resumeButton.setVisible(true);
+			Gui.resumeBtn.setVisible(true);
 			Gdx.input.setInputProcessor(Gui.menu);
 			MadSand.state = GameState.NMENU;
 		}
@@ -390,7 +211,7 @@ public class Utils {
 
 	static void mouseMovement() {
 		if ((Gdx.input.isButtonPressed(0)) && (MadSand.state == GameState.GAME) && (!World.player.isStepping())
-				&& (!MadSand.contextopened)) {
+				&& (!Gui.contextMenuActive)) {
 			if (MadSand.wmx > World.player.x)
 				World.player.walk(Direction.RIGHT);
 			else if (MadSand.wmx < World.player.x)
@@ -444,7 +265,7 @@ public class Utils {
 			MadSand.state = GameState.WORLDGEN;
 			if (MadSand.tonext) {
 				if (Utils.rand(0, MadSand.ENCOUNTERCHANCE) == MadSand.ENCOUNTERCHANCE) {
-					//TODO Begin random encounter
+					// TODO Begin random encounter
 				} else
 					MadSand.world.Generate();
 			} else {
@@ -454,7 +275,7 @@ public class Utils {
 			MadSand.state = GameState.GAME;
 		}
 	}
-	
+
 	void randEncounter() {
 		try {
 			MadSand.world.curxwpos = MadSand.tempwx;
@@ -482,7 +303,7 @@ public class Utils {
 					+ ObjectProp.name.get(MadSand.world.getCurLoc().getObject(MadSand.wmx, MadSand.wmy).id) + ")");
 			Gui.mouselabel[3].setText("Creature: " + " ()");
 			Gui.mouselabel[4].setText("Global ticks: " + MadSand.world.globalTick + "\nWorld time: "
-					+ MadSand.world.worldtime + "\nPlayer position: (" + World.player.x + ", " + World.player.y);
+					+ MadSand.world.worldtime + "\nPlayer position: (" + World.player.x + ", " + World.player.y + ")");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

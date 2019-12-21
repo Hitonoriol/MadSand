@@ -1,28 +1,24 @@
 package ru.bernarder.fallenrisefromdust;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
-import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 
 import java.io.File;
 import java.io.PrintStream;
 
-public class MadSand extends com.badlogic.gdx.Game {
+public class MadSand extends Game {
 	public static String VER = "";
 	static int[][] quests;
 
@@ -36,10 +32,9 @@ public class MadSand extends com.badlogic.gdx.Game {
 	static int wclickx = 0;
 	static int wclicky = 0;
 
-	static boolean dontlisten = false;
 	static int dialogresult;
 	static int questid = 0;
-	static boolean dialogflag = true;
+	static boolean dialogClosed = true;
 	static Table dialog;
 	static Table maindialog;
 
@@ -84,8 +79,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static int BIOMES = 4;
 	public static int MAXMOBSONMAP = 35;
 	static int QUESTS = 0;
-
-	public static final int EQ_SLOTS = 5;
+	
 	public static final int GUILABELS = 4;
 	public static int ENCOUNTERCHANCE = 10;
 	public static int[] COSMETICSPRITES = { 17 };
@@ -102,17 +96,13 @@ public class MadSand extends com.badlogic.gdx.Game {
 	float percent = 0.0F;
 
 	public static float[][] rawWorld;
-	ItemProp objn;
 	static OrthographicCamera camera;
 
-	SpriteBatch invbatch;
-	OrthographicCamera invcamera;
 	private float elapsedTime;
 	static boolean charcrt = false;;
 	public static GameState state = GameState.LAUNCHER;
 	public static int wmx = 0;
 	public static int wmy = 0;
-	public static boolean contextopened = false;
 	public static int camxoffset = 17;
 	public static int camyoffset = 37;
 	public static int OREFIELDS = 10;
@@ -131,44 +121,45 @@ public class MadSand extends com.badlogic.gdx.Game {
 
 	static final int TEST_POINT = 50;
 
+	static void switchStage(GameState state, Stage stage) {
+
+		if (state != GameState.INVENTORY)
+			World.player.hideInventory();
+
+		if (Gui.contextMenuActive)
+			Gui.gamecontext.setVisible(false);
+
+		if (state == GameState.GAME)
+			Gui.mousemenu.setVisible(true);
+
+		if (state == GameState.INVENTORY)
+			World.player.showInventory();
+
+		Gdx.input.setInputProcessor(stage);
+		MadSand.state = state;
+	}
+
+	static void reset() {
+		switchStage(GameState.GAME, Gui.overlay);
+	}
+
 	public void create() {
+		Utils.out("Starting initialization!");
 		Gdx.graphics.setContinuousRendering(false);
 		setRenderRadius(DEFAULT_FOV);
-		Utils.out("Starting initialization!");
 		setRenderRadius();
 		Utils.out("Render area: " + renderArea.length);
 		setErrFile();
 		Utils.init();
-		World.player = new Player();
-		this.objn = new ItemProp();
 		Gui.createBasicSkin();
-		QuestUtils.init();
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.local(SAVEDIR + FONT_PATH));
-		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-		parameter.characters = FONT_CHARS;
-		parameter.size = 24;
-		parameter.color = Color.BLUE;
-		Gui.font1 = generator.generateFont(parameter);
-		generator.dispose();
-		Utils.ubound = (World.worldCoord(World.MAPSIZE) - 33);
-		Utils.lbound = (World.worldCoord(World.MAPSIZE) - 33);
-		camera = new OrthographicCamera();
-		this.invcamera = new OrthographicCamera();
-		this.invbatch = new SpriteBatch();
-		camera.update();
-		Gui.font = new BitmapFont();
-		world = new World(MadSand.WORLDSIZE);
-		World.player.globalPos.x = (World.player.x * TILESIZE);
-		World.player.globalPos.y = (World.player.y * TILESIZE);
-		Gui.equip = new Image[EQ_SLOTS];
-		for (int i = 0; i < EQ_SLOTS; ++i) {
-			Gui.equip[i] = new Image();
-			Gui.equip[i].setDrawable(Resources.noEquip);
-		}
+		World.player = new Player();
 		Gui.initmenu();
-		Gui.font.getData().markupEnabled = true;
-		Gui.font1.getData().markupEnabled = true;
-		World.player.initInventory();
+		QuestUtils.init();
+		camera = new OrthographicCamera();
+		camera.update();
+		
+		world = new World(MadSand.WORLDSIZE);
+		World.player.updCoords();
 		world.Generate();
 		Utils.out("End of initialization!");
 	}
@@ -220,7 +211,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 
 	public void updateCamToxy(float f, float y2) {
 		camera.position.set(f + camxoffset, y2 + camyoffset, 0.0F);
-		
+
 		camera.viewportWidth = (Gdx.graphics.getWidth() / ZOOM);
 		camera.viewportHeight = (Gdx.graphics.getHeight() / ZOOM);
 		camera.update();
@@ -234,48 +225,49 @@ public class MadSand extends com.badlogic.gdx.Game {
 		return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 	}
 
-	static int trdx, trdy;
-
 	void DrawGame() {
 		try {
+			Map curLoc;
+			int trdx, trdy;
+			Npc npc;
+			int objid;
 			int i = 0;
+			curLoc = world.getCurLoc();
+
 			if (World.player.isInBackground())
 				drawEntity(World.player);
+
 			while (i < renderArea.length) {
-				Utils.batch.draw(
-						Resources.tile[world.getTileOrDefault(World.player.x + (int) renderArea[i].x,
-								World.player.y + (int) renderArea[i].y)],
-						World.player.globalPos.x + renderArea[i].x * TILESIZE,
-						World.player.globalPos.y + renderArea[i].y * TILESIZE);
+				trdx = World.player.x + (int) renderArea[i].x;
+				trdy = World.player.y + (int) renderArea[i].y;
+				Utils.batch.draw(Resources.tile[world.getTileOrDefault(trdx, trdy)], trdx * TILESIZE, trdy * TILESIZE);
 				i++;
 			}
+
 			i = 0;
 			while (i < renderArea.length) {
 				trdx = World.player.x + (int) renderArea[i].x;
 				trdy = World.player.y + (int) renderArea[i].y;
-				/*
-				 * if (trdx < 0) trdx = 0; if (trdy < 0) trdy = 0; if (trdx >= World.MAPSIZE +
-				 * World.BORDER) trdx = World.MAPSIZE + World.BORDER; if (trdy >= World.MAPSIZE
-				 * + World.BORDER) trdy = World.MAPSIZE + World.BORDER;
-				 */
-				int objid = world.getCurLoc().getObject(trdx, trdy).id;
-				if ((objid != 0) && (objid != 666)) {
-					Utils.batch.draw(Resources.objects[objid],
-							World.player.globalPos.x + (int) renderArea[i].x * TILESIZE,
-							World.player.globalPos.y + (int) renderArea[i].y * TILESIZE);
-				}
-				if (World.player.standingOnLoot(trdx, trdy)) {
-					Utils.batch.draw(Resources.objects[OBJECT_LOOT],
-							World.player.globalPos.x + (int) renderArea[i].x * TILESIZE,
-							World.player.globalPos.y + (int) renderArea[i].y * TILESIZE);
-				}
+
+				npc = curLoc.getNpc(trdx, trdy);
+				objid = curLoc.getObject(trdx, trdy).id;
+
+				if ((objid != MapObject.NULL_OBJECT_ID) && (objid != MapObject.COLLISION_MASK_ID))
+					Utils.batch.draw(Resources.objects[objid], trdx * TILESIZE, trdy * TILESIZE);
+
+				if (World.player.standingOnLoot(trdx, trdy))
+					Utils.batch.draw(Resources.objects[OBJECT_LOOT], trdx * TILESIZE, trdy * TILESIZE);
+
+				if (npc != null)
+					drawEntity(npc);
 
 				i++;
 			}
+
 			if (!World.player.isInBackground())
 				drawEntity(World.player);
-			i = 0;
-			Utils.batch.draw(Resources.mapcursor, wmx * 33, wmy * 33);
+
+			Utils.batch.draw(Resources.mapcursor, wmx * TILESIZE, wmy * TILESIZE);
 			Utils.batch.end();
 			Gui.refreshOverlay();
 			Utils.batch.begin();
@@ -322,10 +314,10 @@ public class MadSand extends com.badlogic.gdx.Game {
 		Gui.refuseD.setText("Refuse");
 		Gui.mousemenu.setVisible(false);
 		Gui.gamecontext.setVisible(false);
-		contextopened = false;
+		Gui.contextMenuActive = false;
 		Gui.acceptD.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				MadSand.dialogflag = true;
+				MadSand.dialogClosed = true;
 				MadSand.state = GameState.GAME;
 				MadSand.dialogresult = 0;
 				MadSand.maindialog.setVisible(false);
@@ -336,14 +328,14 @@ public class MadSand extends com.badlogic.gdx.Game {
 		Gui.refuseD.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				MadSand.state = GameState.GAME;
-				MadSand.dialogflag = true;
+				MadSand.dialogClosed = true;
 				MadSand.dialogresult = 1;
 				MadSand.maindialog.setVisible(false);
 			}
 		});
 
 		if (type != -1) {
-			dialogflag = false;
+			dialogClosed = false;
 			maindialog.setVisible(true);
 			Gui.dialMSG.setText(text);
 			if (type == 1) {

@@ -2,6 +2,7 @@ package ru.bernarder.fallenrisefromdust;
 
 import java.util.HashMap;
 import java.util.Vector;
+import java.util.Map.Entry;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
@@ -120,6 +121,13 @@ public class Inventory {
 			itemUI.put(item, cell);
 			inventoryUI.putNewItem(cell.cell);
 			inventoryUI.refresh(itemUI.entrySet());
+		}
+	}
+
+	void clearContextMenus() {
+		for (Entry<Item, InventoryUICell> pair : itemUI.entrySet()) {
+			InventoryUICell cell = pair.getValue();
+			cell.hideContext();
 		}
 	}
 

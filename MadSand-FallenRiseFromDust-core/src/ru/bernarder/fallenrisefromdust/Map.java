@@ -30,7 +30,6 @@ public class Map {
 	Pair coords = new Pair(0, 0);
 
 	public Map(int xsz, int ysz) {
-		Utils.out("Creating map " + xsz + "x" + ysz);
 		this.xsz = xsz;
 		this.ysz = ysz;
 		purge();
@@ -380,12 +379,45 @@ public class Map {
 			mapCrops.remove(new Pair(coords));
 	}
 
-	boolean spawnNpc(int x, int y, int id) {
+	boolean putNpc(Npc npc) {
+		int x = npc.x;
+		int y = npc.y;
+
 		if (!correctCoords(coords.set(x, y)))
 			return false;
 		if (mapNpcs.get(coords) != null)
 			return false;
-		mapNpcs.put(coords, new Npc(id));
+		mapNpcs.put(coords, npc);
+		return true;
+	}
+
+	Npc getNpc(int x, int y) {
+		if (!correctCoords(coords.set(x, y)))
+			return null;
+		Npc npc = mapNpcs.get(coords);
+		if (npc != null)
+			return npc;
+		return null;
+	}
+
+	boolean moveNpc(Npc npc, int x, int y) { // should be called by an npc before changing its own position. yeah, the
+												// system is fucky.
+		int xold = npc.x, yold = y;
+		if (!correctCoords(coords.set(x, y)))
+			return false;
+		if (mapNpcs.get(coords) != null)
+			return false;
+		mapNpcs.put(coords, npc);
+		removeNpc(xold, yold);
+		return true;
+	}
+
+	boolean removeNpc(int x, int y) {
+		if (!correctCoords(coords.set(x, y)))
+			return false;
+		if (mapNpcs.get(coords) == null)
+			return false;
+		mapNpcs.remove(coords);
 		return true;
 	}
 

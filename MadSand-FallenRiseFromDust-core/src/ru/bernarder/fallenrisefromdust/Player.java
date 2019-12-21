@@ -13,7 +13,9 @@ public class Player extends Entity {
 
 	public Player(String name) {
 		super(name);
-		super.setSprites(Resources.playerUpSpr, Resources.playerDownSpr, Resources.playerLeftSpr, Resources.playerRightSpr);
+		super.setSprites(Resources.playerUpSpr, Resources.playerDownSpr, Resources.playerLeftSpr,
+				Resources.playerRightSpr);
+		initInventory();
 	}
 
 	public Player() {
@@ -174,7 +176,7 @@ public class Player extends Entity {
 	}
 
 	public void freeHands(boolean silent) {
-		if (!silent && isMain)
+		if (!silent && isMain && stats.hand.id != Item.NULL_ITEM)
 			MadSand.print("You put your " + stats.hand.name + " back to your inventory");
 		super.freeHands();
 		if (isMain)
@@ -219,14 +221,32 @@ public class Player extends Entity {
 		updCoords();
 	}
 
+	Direction lookAtMouse() {
+		Direction dir;
+
+		if (MadSand.wmx > x)
+			dir = Direction.RIGHT;
+		else if (MadSand.wmx < x)
+			dir = Direction.LEFT;
+		else if (MadSand.wmy > y)
+			dir = Direction.UP;
+		else
+			dir = Direction.DOWN;
+
+		turn(dir);
+		return dir;
+	}
+
 	@Override
-	public void move(Direction dir) {
-		if (!MadSand.dialogflag)
-			return;
-		super.move(dir);
+	public boolean move(Direction dir) {
+		if (!MadSand.dialogClosed)
+			return false;
+		if (!super.move(dir))
+			return false;
 		if (isMain && (x == World.MAPSIZE - 1 || y == World.MAPSIZE - 1 || x == World.BORDER || y == World.BORDER)) {
 			MadSand.print("Press [GRAY]N[WHITE] to move to the next sector.");
 		}
+		return true;
 	}
 
 	@Override
@@ -256,5 +276,27 @@ public class Player extends Entity {
 
 	public long getSurvivedTime() {
 		return MadSand.world.globalTick - stats.spawnTime;
+	}
+
+	void hideInventory() {
+		Utils.invBtnSetVisible(false);
+		Gdx.input.setInputProcessor(Gui.overlay);
+		Gui.contextMenuActive = false;
+		MadSand.state = GameState.GAME;
+		Gui.mousemenu.setVisible(true);
+		inventory.inventoryUI.hide();
+		Gui.inventoryActive = false;
+		inventory.clearContextMenus();
+	}
+
+	void showInventory() {
+		inventory.inventoryUI.toggleVisible();
+		Gui.gamecontext.setVisible(false);
+		Gui.contextMenuActive = false;
+		Gui.mousemenu.setVisible(false);
+		Utils.invBtnSetVisible(true);
+		Gdx.input.setInputProcessor(Gui.overlay);
+		MadSand.state = GameState.INVENTORY;
+		Gui.inventoryActive = true;
 	}
 }

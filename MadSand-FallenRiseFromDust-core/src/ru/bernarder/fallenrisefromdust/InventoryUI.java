@@ -50,6 +50,12 @@ public class InventoryUI {
 		Gui.overlay.addActor(invScroll);
 		stacks = 0;
 	}
+	
+	void remove() {
+		invContainer.remove();
+		invTable.remove();
+		invScroll.remove();
+	}
 
 	void refresh(Set<Entry<Item,InventoryUICell>> set) {
 		stacks = 0;
@@ -65,9 +71,12 @@ public class InventoryUI {
 			invTable.row();
 		invTable.add(cell);
 	}
+	
+	void hide() {
+		invScroll.setVisible(false);
+	}
 
 	void toggleVisible() {
-		
 		invScroll.setVisible(!invScroll.isVisible());
 	}
 

@@ -253,7 +253,7 @@ public abstract class Entity {
 		return ret;
 	}
 
-	public void move(Direction dir) {
+	public boolean move(Direction dir) {
 		if ((!colliding(dir))) {
 			boolean onm = !isOnMapBound(dir);
 			if ((dir == Direction.UP) && (onm)) {
@@ -273,7 +273,9 @@ public abstract class Entity {
 				globalPos.x += MadSand.TILESIZE;
 			}
 			stepping = true;
+			return true;
 		}
+		return false;
 	}
 
 	public int tileDmg() {
