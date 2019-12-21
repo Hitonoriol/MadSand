@@ -12,6 +12,10 @@ public class Stats {
 	final static int STARVE_DMG = 1;
 	final static int FOOD_HEAL = 3;
 
+	static final int STAT_MIN_SUM = 15;
+	static final int STAT_MAX_SUM = 25;
+	static final int STAT_RAND_MAX = 9;
+
 	public Item hand;
 
 	public int actionPtsMax = 5;
@@ -20,19 +24,20 @@ public class Stats {
 	public final int maxFood = 1000;
 	public final int satiatedVal = (int) (maxFood * 0.9);
 	public int food = maxFood;
-	
+
 	public long spawnTime = 0;
 
-	public int accur = 2; // ACCUR
-	public int hp = 200; // CONSTITUTION*10
-	public int mhp = 200;
+	public int accur = 2;
+	public int constitution;
+	public int hp;
+	public int mhp;
 	public int str = 3;// ATK
 	public int luck = 1; // LUCK
 	public int dexterity = 1; // DEX
 	public int intelligence = 1; // INT
 	public int stamina = 50; // STAMINA*5
 	public int maxstamina = 50;
-	
+
 	public int air = 3;
 
 	public int respawnX = -1;
@@ -55,6 +60,29 @@ public class Stats {
 	public boolean dead = false;
 
 	StatAction actions;
+
+	public void roll() {
+		int sum = 0;
+		while (sum < STAT_MIN_SUM || sum > STAT_MAX_SUM) {
+			str = Utils.rand(1, STAT_RAND_MAX);
+			constitution = Utils.rand(1, STAT_RAND_MAX);
+			accur = Utils.rand(1, STAT_RAND_MAX);
+			luck = Utils.rand(1, STAT_RAND_MAX);
+			dexterity = Utils.rand(1, STAT_RAND_MAX);
+			intelligence = Utils.rand(1, STAT_RAND_MAX);
+			sum = getSum();
+		}
+
+		hp = constitution * 10;
+		mhp = hp;
+
+		stamina = ((dexterity + constitution) / 2) * 5;
+		maxstamina = stamina;
+	}
+
+	public int getSum() {
+		return str + constitution + accur + luck + dexterity + intelligence;
+	}
 
 	public void check() {
 		skills.check();

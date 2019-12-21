@@ -3,6 +3,7 @@ package ru.bernarder.fallenrisefromdust;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -62,6 +63,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 	static final String PLAYERFILE = "/Player.mc";
 	static final String WORLDFILE = "/World.mw";
 	static final String INVFILE = "/PlayerInventory.mpi";
+	static final String ERRFILE = "MadSandCritical.log";
 
 	static int numlook = 0;
 
@@ -111,8 +113,8 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public static int wmx = 0;
 	public static int wmy = 0;
 	public static boolean contextopened = false;
-	public static int camxoffset;
-	public static int camyoffset;
+	public static int camxoffset = 17;
+	public static int camyoffset = 37;
 	public static int OREFIELDS = 10;
 	public static int OVERWORLD = 1;
 	public static int UNDERWORLD = 0;
@@ -132,17 +134,12 @@ public class MadSand extends com.badlogic.gdx.Game {
 	public void create() {
 		Gdx.graphics.setContinuousRendering(false);
 		setRenderRadius(DEFAULT_FOV);
-		World.player = new Player();
 		Utils.out("Starting initialization!");
 		setRenderRadius();
 		Utils.out("Render area: " + renderArea.length);
-		try {
-			PrintStream ge = new PrintStream(new File("MadSandCritical.log"));
-			System.setErr(ge);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		setErrFile();
 		Utils.init();
+		World.player = new Player();
 		this.objn = new ItemProp();
 		Gui.createBasicSkin();
 		QuestUtils.init();
@@ -161,13 +158,12 @@ public class MadSand extends com.badlogic.gdx.Game {
 		camera.update();
 		Gui.font = new BitmapFont();
 		world = new World(MadSand.WORLDSIZE);
-		World.player.init();
 		World.player.globalPos.x = (World.player.x * TILESIZE);
 		World.player.globalPos.y = (World.player.y * TILESIZE);
 		Gui.equip = new Image[EQ_SLOTS];
 		for (int i = 0; i < EQ_SLOTS; ++i) {
 			Gui.equip[i] = new Image();
-			Gui.equip[i].setDrawable(Resource.noEquip);
+			Gui.equip[i].setDrawable(Resources.noEquip);
 		}
 		Gui.initmenu();
 		Gui.font.getData().markupEnabled = true;
@@ -223,15 +219,8 @@ public class MadSand extends com.badlogic.gdx.Game {
 	}
 
 	public void updateCamToxy(float f, float y2) {
-		camera.position.set(f + 17.0F + camxoffset, y2 + 37.0F + camyoffset, 0.0F);
-		if (camera.position.y < 260.0F)
-			camera.position.y = 250.0F;
-		if (camera.position.x < 320.0F)
-			camera.position.x = 320.0F;
-		if (camera.position.x > (World.MAPSIZE * TILESIZE))
-			camera.position.x = (World.MAPSIZE * TILESIZE);
-		if (camera.position.y > (World.MAPSIZE * TILESIZE))
-			camera.position.y = (World.MAPSIZE * TILESIZE);
+		camera.position.set(f + camxoffset, y2 + camyoffset, 0.0F);
+		
 		camera.viewportWidth = (Gdx.graphics.getWidth() / ZOOM);
 		camera.viewportHeight = (Gdx.graphics.getHeight() / ZOOM);
 		camera.update();
@@ -254,7 +243,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 				drawEntity(World.player);
 			while (i < renderArea.length) {
 				Utils.batch.draw(
-						Resource.tile[world.getTileOrDefault(World.player.x + (int) renderArea[i].x,
+						Resources.tile[world.getTileOrDefault(World.player.x + (int) renderArea[i].x,
 								World.player.y + (int) renderArea[i].y)],
 						World.player.globalPos.x + renderArea[i].x * TILESIZE,
 						World.player.globalPos.y + renderArea[i].y * TILESIZE);
@@ -271,12 +260,12 @@ public class MadSand extends com.badlogic.gdx.Game {
 				 */
 				int objid = world.getCurLoc().getObject(trdx, trdy).id;
 				if ((objid != 0) && (objid != 666)) {
-					Utils.batch.draw(Resource.objects[objid],
+					Utils.batch.draw(Resources.objects[objid],
 							World.player.globalPos.x + (int) renderArea[i].x * TILESIZE,
 							World.player.globalPos.y + (int) renderArea[i].y * TILESIZE);
 				}
 				if (World.player.standingOnLoot(trdx, trdy)) {
-					Utils.batch.draw(Resource.objects[OBJECT_LOOT],
+					Utils.batch.draw(Resources.objects[OBJECT_LOOT],
 							World.player.globalPos.x + (int) renderArea[i].x * TILESIZE,
 							World.player.globalPos.y + (int) renderArea[i].y * TILESIZE);
 				}
@@ -286,7 +275,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 			if (!World.player.isInBackground())
 				drawEntity(World.player);
 			i = 0;
-			Utils.batch.draw(Resource.mapcursor, wmx * 33, wmy * 33);
+			Utils.batch.draw(Resources.mapcursor, wmx * 33, wmy * 33);
 			Utils.batch.end();
 			Gui.refreshOverlay();
 			Utils.batch.begin();
@@ -297,18 +286,16 @@ public class MadSand extends com.badlogic.gdx.Game {
 		}
 	}
 
-	void drawWorld() {
+	void drawBackground() {
+		int y;
+		int x = y = World.MAPSIZE / 2;
 		int i = 0;
 		while (i < renderArea.length) {
 			Utils.batch.draw(
-					Resource.tile[world.getTileOrDefault(World.player.y + (int) renderArea[i].y,
-							World.player.x + (int) renderArea[i].x)],
-					World.player.globalPos.x + renderArea[i].x * 33, World.player.globalPos.y + renderArea[i].y * 33);
+					Resources.tile[world.getTileOrDefault(x + (int) renderArea[i].x, y + (int) renderArea[i].y)],
+					x * TILESIZE + renderArea[i].x * TILESIZE, y * TILESIZE + renderArea[i].y * TILESIZE);
 			i++;
 		}
-		Utils.batch.draw(Resource.playerSprite, World.player.globalPos.x,
-				World.player.globalPos.y + World.player.stepy);
-		i = 0;
 	}
 
 	static void showDialog(final int type, String text, final int qid) { // TODO rework and remove this shit
@@ -373,45 +360,49 @@ public class MadSand extends com.badlogic.gdx.Game {
 		}
 	}
 
-	void drawEntity(Player entity) {
+	void drawEntity(Entity entity) {
 		if (entity.isStepping()) {
-			float camx, camy;
-			this.elapsedTime += Gdx.graphics.getDeltaTime();
-			if (entity.stats.look == Direction.RIGHT) {
-				Utils.batch.draw((TextureRegion) Resource.ranim.getKeyFrame(this.elapsedTime, true),
-						entity.globalPos.x - entity.stepx, entity.globalPos.y);
-				camx = entity.globalPos.x - entity.stepx;
-				camy = entity.globalPos.y;
-			} else if (entity.stats.look == Direction.LEFT) {
-				Utils.batch.draw((TextureRegion) Resource.lanim.getKeyFrame(this.elapsedTime, true),
-						entity.globalPos.x + entity.stepx, entity.globalPos.y);
-				camx = entity.globalPos.x + entity.stepx;
-				camy = entity.globalPos.y;
-			} else if (entity.stats.look == Direction.UP) {
-				Utils.batch.draw((TextureRegion) Resource.uanim.getKeyFrame(this.elapsedTime, true), entity.globalPos.x,
-						entity.globalPos.y - entity.stepy);
+			if (entity instanceof Player) {
+				float drawx, drawy;
+				Animation<TextureRegion> anim = null;
+				this.elapsedTime += Gdx.graphics.getDeltaTime();
 
-				camx = entity.globalPos.x;
-				camy = entity.globalPos.y - entity.stepy;
-			} else {
-				Utils.batch.draw((TextureRegion) Resource.danim.getKeyFrame(this.elapsedTime, true), entity.globalPos.x,
-						entity.globalPos.y + entity.stepy);
-				camx = entity.globalPos.x;
-				camy = entity.globalPos.y + entity.stepy;
+				drawx = entity.globalPos.x;
+				drawy = entity.globalPos.y;
+
+				if (entity.stats.look == Direction.RIGHT) {
+					anim = Resources.ranim;
+					drawx = entity.globalPos.x - entity.stepx;
+				} else if (entity.stats.look == Direction.LEFT) {
+					anim = Resources.lanim;
+					drawx = entity.globalPos.x + entity.stepx;
+				} else if (entity.stats.look == Direction.UP) {
+					anim = Resources.uanim;
+					drawy = entity.globalPos.y - entity.stepy;
+				} else {
+					anim = Resources.danim;
+					drawy = entity.globalPos.y + entity.stepy;
+				}
+
+				Utils.batch.draw((TextureRegion) anim.getKeyFrame(this.elapsedTime, true), drawx, drawy);
+
+				if (((Player) entity).isMain)
+					updateCamToxy(drawx, drawy);
 			}
 
-			if (entity.isMain)
-				updateCamToxy(camx, camy);
 			entity.stepx -= entity.movespeed;
 			entity.stepy -= entity.movespeed;
+
 			if (entity.stepx <= 1) {
 				entity.setStepping(false);
 				entity.stepx = TILESIZE;
 				entity.stepy = TILESIZE;
 			}
+
 		} else {
-			Utils.batch.draw(Resource.playerSprite, entity.globalPos.x, entity.globalPos.y);
-			updateCamToxy(entity.globalPos.x, entity.globalPos.y);
+			Utils.batch.draw(entity.getSprite(), entity.globalPos.x, entity.globalPos.y);
+			if ((entity instanceof Player) && ((Player) entity).isMain)
+				updateCamToxy(entity.globalPos.x, entity.globalPos.y);
 		}
 	}
 
@@ -495,7 +486,7 @@ public class MadSand extends com.badlogic.gdx.Game {
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);
 			Utils.batch.begin();
-			drawWorld();
+			drawBackground();
 			Utils.batch.end();
 			Gui.menu.act();
 			Gui.menu.draw();
@@ -504,21 +495,21 @@ public class MadSand extends com.badlogic.gdx.Game {
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);
 			updateCamToxy(World.player.globalPos.x, World.player.globalPos.y);
-			drawWorld();
+			drawBackground();
 			Gui.worldg.draw();
 			Utils.batch.end();
 		} else if (state.equals(GameState.LOAD)) {
 			Utils.batch.begin();
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);
-			drawWorld();
+			drawBackground();
 			Gui.loadg.draw();
 			Utils.batch.end();
 		} else if (state.equals(GameState.GOT)) {
 			Utils.batch.begin();
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);
-			drawWorld();
+			drawBackground();
 			Gui.gotodg.draw();
 			Utils.batch.end();
 		} else if (state.equals(GameState.DEAD)) {
@@ -568,5 +559,14 @@ public class MadSand extends com.badlogic.gdx.Game {
 	}
 
 	public void dispose() {
+	}
+
+	void setErrFile() {
+		try {
+			PrintStream ge = new PrintStream(new File(ERRFILE));
+			System.setErr(ge);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

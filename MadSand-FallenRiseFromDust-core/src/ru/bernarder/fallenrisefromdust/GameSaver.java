@@ -195,7 +195,6 @@ public class GameSaver {
 			MadSand.world.worldtime = w.worldtime;
 			MadSand.world.tick = w.tick;
 
-			World.player.init();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

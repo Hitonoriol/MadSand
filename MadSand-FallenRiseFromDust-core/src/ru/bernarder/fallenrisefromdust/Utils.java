@@ -48,7 +48,7 @@ public class Utils {
 	public static void init() {
 		MadSand.gameVrf = getSHA1(new File(MadSand.RESFILE));
 		out("Resfile hash: " + MadSand.gameVrf);
-		Resource.init();
+		Resources.init();
 		batch = new SpriteBatch();
 	}
 
@@ -197,7 +197,7 @@ public class Utils {
 		int j = 0;
 		String tmp = "";
 		while (!tmp.equals("-1")) {
-			tmp = getAttrValues(Resource.gendoc, "biome", str(biome), gname, str(j));
+			tmp = getAttrValues(Resources.gendoc, "biome", str(biome), gname, str(j));
 			if (tmp.equals("-1"))
 				break;
 			group.add(tmp);
@@ -214,10 +214,9 @@ public class Utils {
 		StringTokenizer tok;
 		int hid;
 		while (hand != "-1") {
-			hand = getAttrValues(Resource.resdoc, field, str(id), "altitem", str(i));
+			hand = getAttrValues(Resources.resdoc, field, str(id), "altitem", str(i));
 			if (hand == "-1")
 				break;
-			Utils.out("altitem for " + field + " id " + id + ": " + hand);
 			block = new Vector<Integer>();
 			tok = new StringTokenizer(hand, ",");
 			while (tok.hasMoreTokens()) {
@@ -445,16 +444,7 @@ public class Utils {
 			MadSand.state = GameState.WORLDGEN;
 			if (MadSand.tonext) {
 				if (Utils.rand(0, MadSand.ENCOUNTERCHANCE) == MadSand.ENCOUNTERCHANCE) {
-					try {
-						MadSand.world.curxwpos = MadSand.tempwx;
-						MadSand.world.curywpos = MadSand.tempwy;
-						MadSand.encounter = true;
-						MadSand.print("You came to a strange place...");
-						BuildScript.execute((GameSaver.getExternal("MadSand_Saves/scripts/encounter.msl")));
-					} catch (Exception e) {
-						e.printStackTrace();
-						Utils.out("Error on random encounter start: " + e.getMessage());
-					}
+					//TODO Begin random encounter
 				} else
 					MadSand.world.Generate();
 			} else {
@@ -462,6 +452,19 @@ public class Utils {
 			}
 			MadSand.tonext = false;
 			MadSand.state = GameState.GAME;
+		}
+	}
+	
+	void randEncounter() {
+		try {
+			MadSand.world.curxwpos = MadSand.tempwx;
+			MadSand.world.curywpos = MadSand.tempwy;
+			MadSand.encounter = true;
+			MadSand.print("You came to a strange place...");
+			BuildScript.execute((GameSaver.getExternal("MadSand_Saves/scripts/encounter.msl")));
+		} catch (Exception e) {
+			e.printStackTrace();
+			Utils.out("Error on random encounter start: " + e.getMessage());
 		}
 	}
 

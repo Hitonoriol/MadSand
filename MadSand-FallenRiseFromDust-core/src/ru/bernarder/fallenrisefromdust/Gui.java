@@ -105,25 +105,16 @@ public class Gui {
 
 	static Dialog dialog;
 
-	static int ACCUR, CONSTITUTION, ATK, STAMINA, DEX, LUCK, INT;
-	static final int STAT_SUM = 25;
-	static final int STAT_RAND_MAX = 4;
-
-	static Label CNT;
-	static Label STM;
-	static Label ATKl;
-	static Label ACC;
-	static Label IN;
-	static Label LK;
-	static Label DX;
+	static Label conStatLbl, strStatLbl, accStatLbl, intStatLbl, luckStatLbl, dexStatLbl, statSumLbl;
+	static Label hpStatLbl, staminaStatLbl;
 
 	static int ITEM_DISPLAY_HOLDING = 4;
 	static int ITEM_DISPLAY_SLOTS = 5;
 
 	public static void setHandDisplay(int id) {
-		Drawable img = Resource.noEquip;
+		Drawable img = Resources.noEquip;
 		if (id != 0)
-			img = new TextureRegionDrawable(Resource.item[id]);
+			img = new TextureRegionDrawable(Resources.item[id]);
 		equip[ITEM_DISPLAY_HOLDING].setDrawable((Drawable) img);
 	}
 
@@ -151,15 +142,7 @@ public class Gui {
 		statWindow.setBackground(bck);
 		statWindow.setMovable(true);
 		statWindow.add(new Label("", Gui.skin));
-		ATKl.setText("Strength: " + World.player.stats.str);
-		STM.setText("Stamina: " + World.player.stats.maxstamina / 10 + " (" + World.player.stats.stamina + "/"
-				+ World.player.stats.maxstamina + ")");
-		ACC.setText("Accuracy: " + World.player.stats.accur);
-		CNT.setText("Constitution: " + World.player.stats.mhp / 10 + " (" + World.player.stats.hp + "/"
-				+ World.player.stats.mhp + ")");
-		IN.setText("Intelligence: " + World.player.stats.intelligence);
-		LK.setText("Luck: " + World.player.stats.luck);
-		DX.setText("Dexterity: " + World.player.stats.dexterity);
+		refreshStatLabels();
 		statWindow.row();
 		statWindow.add(new Label(
 				"Level: " + World.player.stats.skills.getLvl(Skill.Level) + " ("
@@ -170,19 +153,19 @@ public class Gui {
 		statWindow.row();
 		statWindow.add(new Label("Stats:", Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
 		statWindow.row();
-		statWindow.add(CNT).width(Gdx.graphics.getWidth() / 4).row();
+		statWindow.add(hpStatLbl).width(Gdx.graphics.getWidth() / 4).row();
 		statWindow.row();
-		statWindow.add(STM).width(Gdx.graphics.getWidth() / 4).row();
+		statWindow.add(staminaStatLbl).width(Gdx.graphics.getWidth() / 4).row();
 		statWindow.row();
-		statWindow.add(ATKl).width(Gdx.graphics.getWidth() / 4).row();
+		statWindow.add(strStatLbl).width(Gdx.graphics.getWidth() / 4).row();
 		statWindow.row();
-		statWindow.add(ACC).width(Gdx.graphics.getWidth() / 4).row();
+		statWindow.add(accStatLbl).width(Gdx.graphics.getWidth() / 4).row();
 		statWindow.row();
-		statWindow.add(IN).width(Gdx.graphics.getWidth() / 4).row();
+		statWindow.add(intStatLbl).width(Gdx.graphics.getWidth() / 4).row();
 		statWindow.row();
-		statWindow.add(LK).width(Gdx.graphics.getWidth() / 4).row();
+		statWindow.add(luckStatLbl).width(Gdx.graphics.getWidth() / 4).row();
 		statWindow.row();
-		statWindow.add(DX).width(Gdx.graphics.getWidth() / 4).row();
+		statWindow.add(dexStatLbl).width(Gdx.graphics.getWidth() / 4).row();
 		statWindow.row();
 		statWindow.add(new Label("", Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
 		statWindow.row();
@@ -259,37 +242,23 @@ public class Gui {
 		dialog.show(stage);
 	}
 
-	static void setStats() {
-		World.player.stats.str = ATK;
-		World.player.stats.stamina = STAMINA * 5;
-		World.player.stats.maxstamina = STAMINA * 5;
-		World.player.stats.accur = ACCUR;
-		World.player.stats.hp = CONSTITUTION * 10;
-		World.player.stats.mhp = CONSTITUTION * 10;
-		World.player.stats.luck = LUCK;
-		World.player.stats.dexterity = DEX;
-		World.player.stats.intelligence = INT;
-	}
-
 	static void rollStats() {
-		ACCUR = Utils.rand(1, STAT_RAND_MAX);
-		CONSTITUTION = Utils.rand(1, STAT_RAND_MAX);
-		ATK = Utils.rand(1, STAT_RAND_MAX);
-		STAMINA = Utils.rand(1, STAT_RAND_MAX);
-		LUCK = Utils.rand(1, STAT_RAND_MAX);
-		INT = Utils.rand(1, STAT_RAND_MAX);
-		DEX = Utils.rand(1, STAT_RAND_MAX);
-		setStats();
+		World.player.stats.roll();
+		refreshStatLabels();
 	}
 
-	static void setStatLabels() {
-		ATKl.setText("Strength: " + ATK);
-		STM.setText("Stamina: " + STAMINA);
-		ACC.setText("Accuracy: " + ACCUR);
-		CNT.setText("Constitution: " + CONSTITUTION);
-		IN.setText("Intelligence: " + INT);
-		LK.setText("Luck: " + LUCK);
-		DX.setText("Dexterity: " + DEX);
+	static void refreshStatLabels() {
+		Stats s = World.player.stats;
+		strStatLbl.setText("Strength: " + s.str);
+		accStatLbl.setText("Accuracy: " + s.accur);
+		conStatLbl.setText("Constitution: " + s.constitution);
+		intStatLbl.setText("Intelligence: " + s.intelligence);
+		luckStatLbl.setText("Luck: " + s.luck);
+		dexStatLbl.setText("Dexterity: " + s.dexterity);
+		statSumLbl.setText("\nStat sum: " + s.getSum());
+
+		hpStatLbl.setText("HP: " + s.hp + "/" + s.mhp);
+		staminaStatLbl.setText("Stamina: " + s.stamina + "/" + s.maxstamina);
 	}
 
 	static void createCharDialog() {
@@ -302,25 +271,24 @@ public class Gui {
 		dialog.text(msg);
 		dialog.row();
 		final TextField nameField = new TextField("Player", Gui.skin);
-		setStatLabels();
+		refreshStatLabels();
 		dialog.add(new Label("Character name:", Gui.skin)).width(Gdx.graphics.getWidth() / 4).row();
 		dialog.row();
 		dialog.add(nameField).width(Gdx.graphics.getWidth() / 4).row();
 		dialog.row();
-		dialog.add(CNT).width(Gdx.graphics.getWidth() / 4).row();
+		dialog.add(conStatLbl).width(Gdx.graphics.getWidth() / 4).row();
 		dialog.row();
-		dialog.add(STM).width(Gdx.graphics.getWidth() / 4).row();
+		dialog.add(strStatLbl).width(Gdx.graphics.getWidth() / 4).row();
 		dialog.row();
-		dialog.add(ATKl).width(Gdx.graphics.getWidth() / 4).row();
+		dialog.add(accStatLbl).width(Gdx.graphics.getWidth() / 4).row();
 		dialog.row();
-		dialog.add(ACC).width(Gdx.graphics.getWidth() / 4).row();
+		dialog.add(intStatLbl).width(Gdx.graphics.getWidth() / 4).row();
 		dialog.row();
-		dialog.add(IN).width(Gdx.graphics.getWidth() / 4).row();
+		dialog.add(luckStatLbl).width(Gdx.graphics.getWidth() / 4).row();
 		dialog.row();
-		dialog.add(LK).width(Gdx.graphics.getWidth() / 4).row();
+		dialog.add(dexStatLbl).width(Gdx.graphics.getWidth() / 4).row();
 		dialog.row();
-		dialog.add(DX).width(Gdx.graphics.getWidth() / 4).row();
-		dialog.row();
+		dialog.add(statSumLbl).width(Gdx.graphics.getWidth() / 4).row();
 		TextButton rbtn = new TextButton("Reroll", Gui.skin);
 		TextButton cbtn = new TextButton("Create", Gui.skin);
 		dialog.add(rbtn).width(Gdx.graphics.getWidth() / 4).row();
@@ -331,7 +299,6 @@ public class Gui {
 				if (!nameField.getText().trim().equals("")) {
 					World.player.setName(nameField.getText());
 					MadSand.charcrt = false;
-					setStats();
 					World.player.reinit();
 					dialog.remove();
 				}
@@ -341,7 +308,6 @@ public class Gui {
 		rbtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				rollStats();
-				setStatLabels();
 			}
 
 		});
@@ -576,21 +542,24 @@ public class Gui {
 	static final int OVSTAT_COUNT = 6;
 
 	static Label dieLabel;
-	
+
 	public static void setDeadText(String str) {
 		dieLabel.setText(str);
 	}
-	
+
 	static void initmenu() {
 		Gui.overlayStatLabels = new Label[OVSTAT_COUNT];
 
-		CNT = new Label("Constitution: " + CONSTITUTION, Gui.skin);
-		STM = new Label("Stamina: " + STAMINA, Gui.skin);
-		ATKl = new Label("Strength: " + ATK, Gui.skin);
-		ACC = new Label("Accuracy: " + ACCUR, Gui.skin);
-		IN = new Label("Intelligence: " + INT, Gui.skin);
-		LK = new Label("Luck: " + LUCK, Gui.skin);
-		DX = new Label("Dexterity: " + DEX, Gui.skin);
+		conStatLbl = new Label("", Gui.skin);
+		strStatLbl = new Label("", Gui.skin);
+		accStatLbl = new Label("", Gui.skin);
+		intStatLbl = new Label("", Gui.skin);
+		luckStatLbl = new Label("", Gui.skin);
+		dexStatLbl = new Label("", Gui.skin);
+		statSumLbl = new Label("", Gui.skin);
+		hpStatLbl = new Label("", Gui.skin);
+		staminaStatLbl = new Label("", Gui.skin);
+		refreshStatLabels();
 
 		Gui.gamecontext = new Table(Gui.skin);
 		Gui.contextMenuBtn = new TextButton[5];

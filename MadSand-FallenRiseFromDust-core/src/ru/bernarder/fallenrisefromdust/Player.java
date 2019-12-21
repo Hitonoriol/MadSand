@@ -1,69 +1,23 @@
 package ru.bernarder.fallenrisefromdust;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import ru.bernarder.fallenrisefromdust.enums.*;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
 
-public class Player {
-
-	public int x = World.MAPSIZE / 2;
-	public int y = World.MAPSIZE / 2;
-
-	public int fov;
-	public int maxFov, minFov;
-
-	private String name;
-	public Stats stats = new Stats();
-	Inventory inventory;
-
-	public PairFloat globalPos = new PairFloat(x * MadSand.TILESIZE, y * MadSand.TILESIZE);
-
-	int movespeed = 2;
-	int stepy = MadSand.TILESIZE;
-	int stepx = MadSand.TILESIZE;
+public class Player extends Entity {
 
 	public boolean isMain = true;
-	private boolean stepping = false;
 
 	public Player(String name) {
-		this.name = name;
+		super(name);
+		super.setSprites(Resources.playerUpSpr, Resources.playerDownSpr, Resources.playerLeftSpr, Resources.playerRightSpr);
 	}
 
 	public Player() {
 		this("");
-	}
-
-	void init() {
-		stats.name = name;
-		stats.actions = new StatAction() {
-			@Override
-			public void _die() {
-				die();
-			}
-
-			@Override
-			public void _damage(int amt) {
-				damage(amt);
-			}
-
-			@Override
-			public void _heal(int amt) {
-				heal(amt);
-			}
-		};
-		stats.hand = new Item();
-	}
-
-	public boolean isStepping() {
-		return stepping;
-	}
-
-	public void setStepping(boolean val) {
-		stepping = val;
 	}
 
 	void increaseSkill(Skill skill) {
@@ -71,159 +25,29 @@ public class Player {
 		stats.skills.increaseSkill(Skill.Level);
 	}
 
-	void initInventory() {
-		inventory = new Inventory();
-	}
-
-	void setName(String name) {
-		stats.name = name;
-	}
-
-	void reinit() {
-		inventory = new Inventory(stats.str * Stats.STR_WEIGHT_MULTIPLIER);
-	}
-
 	public void checkHands(int id) {
 		int itemIdx = inventory.getSameCell(id);
 		if (itemIdx == -1) {
 			stats.hand = Item.nullItem;
-			Gui.setHandDisplay(0);
+			if (isMain)
+				Gui.setHandDisplay(0);
 			return;
 		}
 	}
 
-	public boolean dropItem(int id, int quantity) {
-		Utils.out("Item drop: " + id + " " + quantity);
-		if (inventory.getSameCell(id, quantity) == -1)
-			return false;
-		doAction();
-		inventory.delItem(id, quantity);
-		Pair coord = new Pair(x, y).addDirection(stats.look);
-		MadSand.world.getCurLoc().putLoot(coord.x, coord.y, id, quantity);
-		return true;
-	}
-
-	void pickUpLoot() {
-		if (stats.dead)
-			return;
-		Loot loot = MadSand.world.getCurLoc().getLoot(x, y);
-		if (loot != Map.nullLoot) {
-			for (int i = loot.contents.size() - 1; i >= 0; --i) {
-				if (inventory.putItem(loot.contents.get(i)))
-					loot.remove(i);
-				else
-					break;
-			}
-		}
-	}
-
-	public boolean colliding(Direction direction) {
-		MapObject obj = MadSand.world.getCurLoc().getObject(x, y, direction);
-		return !(obj.isCollisionMask() || obj.nocollide || obj.equals(Map.nullObject));
-	}
-
-	boolean isInBackground() {
-		Map loc = MadSand.world.getCurLoc();
-		return (loc.getObject(x, y).isCollisionMask() || loc.getTile(x, y).foreground);
-	}
-
-	boolean standingOnLoot(int x, int y) {
-		if (stats.dead)
-			return false;
-		if (MadSand.world.getCurLoc().getLoot(x, y).equals(Map.nullLoot))
-			return false;
-		else
-			return true;
-	}
-
-	boolean standingOnLoot() {
-		return standingOnLoot(x, y);
-	}
-
-	void skillBonusItems(int x, int y, String direction, int id) {
-		// Idk what's this thing
-	}
-
-	void damage(int to) {
-		stats.hp -= to;
-		stats.check();
-	}
-
-	void heal(int to) {
-		if (stats.hp + to < stats.mhp) {
-			stats.hp += stats.skills.getLvlReward(Skill.Survival, to);
-		} else {
-			stats.hp = stats.mhp;
-		}
-	}
-
-	void starve() {
-		--stats.food;
-		stats.check();
-	}
-
-	void satiate(int amt) {
-		stats.food += amt;
-		stats.check();
-	}
-
-	void increaseStamina(int to) {
-		if (stats.stamina + to < stats.maxstamina) {
-			stats.stamina += to;
-		} else {
-			stats.stamina = stats.maxstamina;
-		}
-	}
-
-	private void dropInventory() {
-		Item item;
-		for (int i = inventory.items.size() - 1; i >= 0; --i) {
-			item = inventory.items.get(i);
-			MadSand.world.getCurLoc().putLoot(x, y, item);
-			inventory.delItem(item);
-		}
-	}
-
+	@Override
 	void die() {
-		stats.dead = true;
-		Gui.setDeadText("You died\nYou survived " + World.player.getSurvivedTime() + " ticks");
-		dropInventory();
+		super.die();
+		Gui.setDeadText("You died\nYou survived " + getSurvivedTime() + " ticks");
 		Gui.darkness.setVisible(true);
 		Gdx.input.setInputProcessor(Gui.dead);
 		MadSand.state = GameState.DEAD;
 	}
 
-	int doAction(int ap) { // any action that uses AP
-		int tmp = stats.actionPts;
-		stats.actionPts -= ap;
-		int ticks = 0, absPts = Math.abs(stats.actionPts), absTmp = Math.abs(tmp);
-		if (stats.actionPts <= 0) {
-			ticks = (absPts / stats.actionPtsMax);
-			if (absPts < stats.actionPtsMax && stats.actionPts < 0)
-				ticks = 1;
-
-			if (absPts > stats.actionPtsMax)
-				++ticks;
-
-			if (absTmp < absPts)
-				stats.actionPts = stats.actionPtsMax - absTmp;
-			else
-				stats.actionPts = (absPts % tmp);
-
-			if (absPts > stats.actionPtsMax)
-				stats.actionPts = stats.actionPtsMax - stats.actionPts;
-		}
-		if (stats.actionPts == 0) {
-			stats.actionPts = stats.actionPtsMax;
-			++ticks;
-		}
-		MadSand.world.ticks(ticks);
-		return stats.actionPts;
-	}
-
 	void damageHeldTool(Skill objectSkill) {
 		if (inventory.damageTool(stats.hand, objectSkill)) {
-			MadSand.print("Your " + stats.hand.name + " broke");
+			if (isMain)
+				MadSand.print("Your " + stats.hand.name + " broke");
 			inventory.delItem(stats.hand);
 			freeHands(true);
 		}
@@ -233,19 +57,17 @@ public class Player {
 		damageHeldTool(Skill.None);
 	}
 
-	int doAction() {
-		return doAction(Stats.AP_MINOR);
-	}
-
 	public boolean craftItem(int id) {
 		if (inventory.delItem(ItemProp.recipe.get(id))) {
 			increaseSkill(Skill.Crafting);
 			inventory.putItem(id, stats.skills.getItemReward(Skill.Crafting));
-			Gui.drawOkDialog("Crafted " + ItemProp.name.get(id), Gui.craft);
+			if (isMain)
+				Gui.drawOkDialog("Crafted " + ItemProp.name.get(id), Gui.craft);
 			doAction(Stats.AP_MINOR);
 			return true;
 		}
-		Gui.drawOkDialog("Not enough resources to craft " + ItemProp.name.get(id), Gui.craft);
+		if (isMain)
+			Gui.drawOkDialog("Not enough resources to craft " + ItemProp.name.get(id), Gui.craft);
 		return false;
 	}
 
@@ -291,11 +113,11 @@ public class Player {
 		damageHeldTool();
 		if (item != -1) {
 			MadSand.world.getCurLoc().delTile(x, y);
-			World.player.inventory.putItem(item);
+			inventory.putItem(item);
 			increaseSkill(Skill.Digging);
 		}
 		String action = ItemProp.useAction.get(id);
-		World.player.doAction();
+		doAction();
 		if (action != "-1") {
 			BuildScript.execute(action);
 			return;
@@ -303,7 +125,7 @@ public class Player {
 		if ((ptile == 6) || (ptile == 16)) {
 			MadSand.print("You entered the dungeon.");
 			MadSand.world.curlayer += 1;
-			MadSand.world.delObj(World.player.x, World.player.y);
+			MadSand.world.delObj(x, y);
 		}
 		if (Item.getType(id) == ItemType.Consumable) {
 			increaseSkill(Skill.Survival);
@@ -315,12 +137,12 @@ public class Player {
 			satiate(satAmt);
 			inventory.delItem(id);
 		}
-		if ((id == 9) && (World.player.inventory.getSameCell(9, 1) != -1) // TODO script this or make campfire craftable
-				&& (World.player.inventory.getSameCell(1, 5) != -1)) {
+		if ((id == 9) && (inventory.getSameCell(9, 1) != -1) // TODO script this or make campfire craftable
+				&& (inventory.getSameCell(1, 5) != -1)) {
 			MadSand.print("You placed a campfire");
-			World.player.inventory.delItem(9);
-			World.player.inventory.delItem(1);
-			MadSand.world.getCurLoc().addObject(World.player.x, World.player.y, World.player.stats.look, 6);
+			inventory.delItem(9);
+			inventory.delItem(1);
+			MadSand.world.getCurLoc().addObject(x, y, stats.look, 6);
 		}
 		if (Item.getType(id) == ItemType.HeadArmor) {
 			// equip helmet
@@ -336,43 +158,32 @@ public class Player {
 			if (MadSand.world.getCurLoc().putCrop(coords.x, coords.y, id)) {
 				increaseSkill(Skill.Farming);
 				MadSand.print("You planted 1 " + new Item(id).name);
-				World.player.inventory.delItem(id);
+				inventory.delItem(id);
 			}
 
 		}
 		if (Item.getType(id) == ItemType.PlaceableObject) {
-			World.player.inventory.delItem(id);
-			MadSand.world.getCurLoc().addObject(World.player.x, World.player.y, World.player.stats.look,
-					Item.getAltObject(id));
+			inventory.delItem(id);
+			MadSand.world.getCurLoc().addObject(x, y, stats.look, Item.getAltObject(id));
 		}
 		if (Item.getType(id) == ItemType.PlaceableTile) {
-			World.player.inventory.delItem(id);
-			MadSand.world.getCurLoc().addTile(World.player.x, World.player.y, World.player.stats.look,
-					Item.getAltObject(id));
+			inventory.delItem(id);
+			MadSand.world.getCurLoc().addTile(x, y, stats.look, Item.getAltObject(id));
 		}
 		checkHands(id);
 	}
 
 	public void freeHands(boolean silent) {
-		if (!silent)
+		if (!silent && isMain)
 			MadSand.print("You put your " + stats.hand.name + " back to your inventory");
-		stats.hand = Item.nullItem;
-		Gui.setHandDisplay(stats.hand.id);
+		super.freeHands();
+		if (isMain)
+			Gui.setHandDisplay(stats.hand.id);
 	}
 
+	@Override
 	public void freeHands() {
-		freeHands(false);
-	}
-
-	void updCoords() {
-		World.player.globalPos.x = (x * MadSand.TILESIZE);
-		World.player.globalPos.y = (y * MadSand.TILESIZE);
-	}
-
-	public void teleport(int x, int y) {
-		this.x = x;
-		this.y = y;
-		updCoords();
+		this.freeHands(false);
 	}
 
 	public void respawn() {
@@ -384,7 +195,7 @@ public class Player {
 		stats.hp = stats.mhp;
 		stats.stamina = stats.maxstamina;
 		stats.dead = false;
-		this.init();
+		freeHands();
 		stats.spawnTime = MadSand.world.globalTick;
 
 		if (stats.respawnX == -1) {
@@ -405,89 +216,35 @@ public class Player {
 				}
 			}
 		}
-		World.player.updCoords();
+		updCoords();
 	}
 
-	public boolean isOnMapBound(Direction dir) {
-		boolean ret = false;
-		if (x >= World.MAPSIZE - 1 && (dir == Direction.RIGHT)) {
-			ret = true;
-		}
-		if (y >= World.MAPSIZE - 1 && (dir == Direction.UP)) {
-			ret = true;
-		}
-		if (x <= 1 && (dir == Direction.LEFT)) {
-			ret = true;
-		}
-		if (y <= 1 && (dir == Direction.DOWN)) {
-			ret = true;
-		}
-		return ret;
-	}
-
+	@Override
 	public void move(Direction dir) {
-		if ((!colliding(dir)) && (MadSand.dialogflag)) {
-			boolean onm = !isOnMapBound(dir);
-			if ((dir == Direction.UP) && (onm)) {
-				++y;
-				globalPos.y += MadSand.TILESIZE;
-			}
-			if ((dir == Direction.DOWN) && (onm)) {
-				--y;
-				globalPos.y -= MadSand.TILESIZE;
-			}
-			if ((dir == Direction.LEFT) && (onm)) {
-				--x;
-				globalPos.x -= MadSand.TILESIZE;
-			}
-			if ((dir == Direction.RIGHT) && (onm)) {
-				++x;
-				globalPos.x += MadSand.TILESIZE;
-			}
-			if (x == World.MAPSIZE - 1 || y == World.MAPSIZE - 1 || x == World.BORDER || y == World.BORDER) {
-				MadSand.print("Press [GRAY]N[WHITE] to move to the next sector.");
-			}
-			stepping = true;
+		if (!MadSand.dialogflag)
+			return;
+		super.move(dir);
+		if (isMain && (x == World.MAPSIZE - 1 || y == World.MAPSIZE - 1 || x == World.BORDER || y == World.BORDER)) {
+			MadSand.print("Press [GRAY]N[WHITE] to move to the next sector.");
 		}
 	}
 
-	public void tileDmg() {
-		int tid = MadSand.world.getTileId(x, y);
+	@Override
+	public int tileDmg() {
+		int tid = super.tileDmg();
 		int dmg = TileProp.damage.getOrDefault(tid, 0);
-		if (dmg > 0) {
+		if (dmg > 0 && isMain)
 			MadSand.print("You took " + dmg + " damage from " + (TileProp.name.get(tid)));
-			damage(dmg);
-		}
+		return tid;
 	}
 
-	public void turn(Direction dir) {
-		stats.look = dir;
-		if (!stepping) {
-			if (dir == Direction.UP) {
-				Resource.playerSprite = new Sprite(Resource.utex);
-			}
-			if (dir == Direction.DOWN) {
-				Resource.playerSprite = new Sprite(Resource.dtex);
-			}
-			if (dir == Direction.LEFT) {
-				Resource.playerSprite = new Sprite(Resource.ltex);
-			}
-			if (dir == Direction.RIGHT) {
-				Resource.playerSprite = new Sprite(Resource.rtex);
-			}
-		}
-	}
-
-	void walk(Direction dir) {
-		if (stepping)
-			return;
-		stats.look = dir;
-		turn(stats.look);
-		if (colliding(stats.look) || isOnMapBound(stats.look))
-			return;
-		doAction(Stats.AP_WALK);
-		move(stats.look);
-		objectInFront();
+	@Override
+	boolean walk(Direction dir) {
+		if (super.walk(dir)) {
+			objectInFront();
+			return true;
+		} else
+			return false;
 	}
 
 	public void objectInFront() {

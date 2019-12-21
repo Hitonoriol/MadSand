@@ -6,8 +6,8 @@ import java.util.Vector;
 import org.w3c.dom.Document;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Cursor;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -22,7 +22,10 @@ import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
 import ru.bernarder.fallenrisefromdust.properties.WorldGenProp;
 
-public class Resource {
+public class Resources {
+
+	static final int PLAYER_ANIM_WIDTH = 35;
+	static final int PLAYER_ANIM_HEIGHT = 74;
 
 	static Document resdoc;
 	static Document questdoc;
@@ -38,6 +41,8 @@ public class Resource {
 
 	static Texture animsheet;
 
+	static float playerAnimDuration = 0.2f;
+
 	static TextureRegion[] animup = new TextureRegion[2];
 	static TextureRegion[] animdown = new TextureRegion[2];
 	static TextureRegion[] animleft = new TextureRegion[2];
@@ -51,20 +56,30 @@ public class Resource {
 	static Texture placeholder;
 	static TextureRegionDrawable noEquip;
 
-	static Sprite playerSprite;
+	static Sprite playerRightSpr;
+	static Sprite playerLeftSpr;
+	static Sprite playerUpSpr;
+	static Sprite playerDownSpr;
 
-	static Texture rtex;
-	static Texture ltex;
-	static Texture utex;
-	static Texture dtex;
+	static final String XML_QUEST_NODE = "quest";
+	static final String XML_ITEM_NODE = "item";
+	static final String XML_CROP_STAGES_NODE = "stages";
+	static final String XML_OBJECT_NODE = "object";
+	static final String XML_TILE_NODE = "tile";
+	static final String XML_NPC_NODE = "npc";
+	static final String XML_RECIPE_NODE = "recipe";
+	static final String XML_BIOME_NODE = "biome";
 
 	public static void init() {
 		resdoc = Utils.XMLString(GameSaver.getExternalNl(MadSand.RESFILE));
 		questdoc = Utils.XMLString(GameSaver.getExternalNl(MadSand.QUESTFILE));
 		gendoc = Utils.XMLString(GameSaver.getExternalNl(MadSand.GENFILE));
+
 		mapcursor = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/cur.png"));
 		animsheet = new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/anim.png"));
-		tmpAnim = TextureRegion.split(animsheet, 35, 74);
+		
+		tmpAnim = TextureRegion.split(animsheet, PLAYER_ANIM_WIDTH, PLAYER_ANIM_HEIGHT);
+
 		animdown[0] = tmpAnim[0][0];
 		animdown[1] = tmpAnim[0][1];
 		animleft[0] = tmpAnim[1][0];
@@ -73,28 +88,37 @@ public class Resource {
 		animright[1] = tmpAnim[2][1];
 		animup[0] = tmpAnim[3][0];
 		animup[1] = tmpAnim[3][1];
-		uanim = new Animation<TextureRegion>(0.2F, animup);
-		danim = new Animation<TextureRegion>(0.2F, animdown);
-		lanim = new Animation<TextureRegion>(0.2F, animleft);
-		ranim = new Animation<TextureRegion>(0.2F, animright);
-		Cursor customCursor = Gdx.graphics
-				.newCursor(new com.badlogic.gdx.graphics.Pixmap(Gdx.files.local(MadSand.SAVEDIR + "cursor.png")), 0, 0);
-		Gdx.graphics.setCursor(customCursor);
-		MadSand.QUESTS = Utils.countKeys(questdoc, "quest");
+
+		uanim = new Animation<TextureRegion>(playerAnimDuration, animup);
+		danim = new Animation<TextureRegion>(playerAnimDuration, animdown);
+		lanim = new Animation<TextureRegion>(playerAnimDuration, animleft);
+		ranim = new Animation<TextureRegion>(playerAnimDuration, animright);
+
+		Cursor mouseCursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.local(MadSand.SAVEDIR + "cursor.png")), 0, 0);
+		Gdx.graphics.setCursor(mouseCursor);
+
+		MadSand.QUESTS = Utils.countKeys(questdoc, XML_QUEST_NODE); // TODO
 		MadSand.quests = new int[MadSand.QUESTS][2];
-		MadSand.LASTITEMID = Utils.countKeys(resdoc, "item");
-		MadSand.CROPS = Utils.countKeys(resdoc, "stages");
+
+		MadSand.LASTITEMID = Utils.countKeys(resdoc, XML_ITEM_NODE);
+		MadSand.CROPS = Utils.countKeys(resdoc, XML_CROP_STAGES_NODE);
+
 		Utils.out(MadSand.CROPS + " crops");
-		MadSand.LASTOBJID = Utils.countKeys(resdoc, "object");
+
+		MadSand.LASTOBJID = Utils.countKeys(resdoc, XML_OBJECT_NODE);
+
 		Utils.out(MadSand.LASTOBJID + " objects");
-		MadSand.LASTTILEID = Utils.countKeys(resdoc, "tile");
-		MadSand.NPCSPRITES = Utils.countKeys(resdoc, "npc");
-		MadSand.CRAFTABLES = Utils.countKeys(resdoc, "recipe");
-		MadSand.BIOMES = Utils.countKeys(gendoc, "biome");
+
+		MadSand.LASTTILEID = Utils.countKeys(resdoc, XML_TILE_NODE);
+		MadSand.NPCSPRITES = Utils.countKeys(resdoc, XML_NPC_NODE);
+		MadSand.CRAFTABLES = Utils.countKeys(resdoc, XML_RECIPE_NODE);
+		MadSand.BIOMES = Utils.countKeys(gendoc, XML_BIOME_NODE);
+
 		Utils.out(MadSand.BIOMES + " biomes");
 		Utils.out(MadSand.CRAFTABLES + " craftable items");
 		Utils.out(MadSand.LASTTILEID + " tiles");
 		Utils.out(MadSand.NPCSPRITES + " npcs");
+
 		MadSand.craftableid = new int[MadSand.CRAFTABLES];
 
 		item = new Texture[MadSand.LASTITEMID + 1];
@@ -110,15 +134,11 @@ public class Resource {
 
 		placeholder = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/placeholder.png"));
 		noEquip = new TextureRegionDrawable(new TextureRegion(placeholder));
-		FileHandle pfhandle = Gdx.files.local(MadSand.SAVEDIR + "player/d1.png");
-		dtex = new Texture(pfhandle);
-		pfhandle = Gdx.files.local(MadSand.SAVEDIR + "player/u1.png");
-		utex = new Texture(pfhandle);
-		pfhandle = Gdx.files.local(MadSand.SAVEDIR + "player/r1.png");
-		rtex = new Texture(pfhandle);
-		pfhandle = Gdx.files.local(MadSand.SAVEDIR + "player/l1.png");
-		ltex = new Texture(pfhandle);
-		playerSprite = new Sprite(dtex);
+
+		playerDownSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/d1.png")));
+		playerUpSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/u1.png")));
+		playerRightSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/r1.png")));
+		playerLeftSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/l1.png")));
 	}
 
 	private static void loadNpcs() {
@@ -279,7 +299,6 @@ public class Resource {
 			skill = Skill.valueOf(skillStr);
 			req = Utils.val(Utils.getKey(skilldoc, "skill", Utils.str(i), "required"));
 			mul = Double.parseDouble(Utils.getKey(skilldoc, "skill", Utils.str(i), "multiplier"));
-			Utils.out(skill + " " + req + " " + mul);
 			SkillContainer.reqList.put(skill, Utils.makeTuple(req, mul));
 			++i;
 		}

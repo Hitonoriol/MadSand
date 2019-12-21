@@ -28,7 +28,7 @@ public class InventoryUICell {
 
 	public InventoryUICell(Item item) {
 		toolHpLabel = new Label("", Gui.skin);
-		btn = new ImageButton(new SpriteDrawable(new Sprite(Resource.item[item.id])));
+		btn = new ImageButton(new SpriteDrawable(new Sprite(Resources.item[item.id])));
 		itemQuantityLabel = new Label(item.quantity + "", Gui.skin);
 
 		if (item.type.isTool())
