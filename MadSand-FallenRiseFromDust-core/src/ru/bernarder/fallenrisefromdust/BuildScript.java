@@ -9,16 +9,29 @@ import java.util.StringTokenizer;
 
 public class BuildScript {
 
-	/* [condition] [token] [value || constant]; */
-	final static char printID = '=';
-	final static char standingOnID = '!'; // !1 player_give @gold 100
-	final static char objInFrontID = '^';
-	final static char inHandID = '#';
-	final static char valueID = '$';
-	final static char itemStringID = '@';
-	final static char modeID = '*';
+	/*
+	 * Syntax:
+	 * 
+	 * [condition] [command] [variable || constant];
+	 * 
+	 */
+
 	final static String LINE_DELIMITER = ";";
 	final static String COMMAND_DELIMITER = " ";
+
+	public static class Prefix {
+		final static char VARIABLE = '$';
+		final static char ITEM_STRING = '@';
+		final static char MODE = '*';
+	}
+
+	public static class Condition {
+		final static char PRINT = '=';
+		final static char STANDING_ON = '!'; // !1 player_give @gold 100
+		final static char NO_CONDITION = '-';
+		final static char OBJECT_IN_FRONT = '^';
+		final static char IN_HAND = '#';
+	}
 
 	public static class Mode {
 		final static String NONSTRICT = "nonstrict", STRICT = "strict"; // strict = stop execution after the first
@@ -43,9 +56,9 @@ public class BuildScript {
 	public static void bLine(int x, int y, int dir, int id, int len, int head) {
 		int ii = 0;
 		while (ii < len) {
-			if (head == 0) {
+			if (head == 0)
 				MadSand.world.getCurLoc().addObject(x + ii * dir, y, id);
-			} else
+			else
 				MadSand.world.getCurLoc().addObject(x, y + ii * dir, id);
 			ii++;
 		}
@@ -54,9 +67,9 @@ public class BuildScript {
 	public static void tLine(int x, int y, int dir, int id, int len, int head) {
 		int ii = 0;
 		while (ii < len) {
-			if (head == 0) {
+			if (head == 0)
 				MadSand.world.getCurLoc().addTile(x + ii * dir, y, id, true);
-			} else
+			else
 				MadSand.world.getCurLoc().addTile(x, y + ii * dir, id, true);
 			ii++;
 		}
@@ -65,14 +78,19 @@ public class BuildScript {
 	static int getValue(String arg) {
 		Pair coords = new Pair(World.player.x, World.player.y);
 		switch (arg) {
+
 		case Value.VALUE_PLAYERX:
 			return coords.x;
+
 		case Value.VALUE_PLAYERY:
 			return coords.y;
+
 		case Value.VALUE_PLAYER_LOOK_X:
 			return coords.addDirection(World.player.stats.look).x;
+
 		case Value.VALUE_PLAYER_LOOK_Y:
 			return coords.addDirection(World.player.stats.look).y;
+
 		case Value.VALUE_ALTITEM:
 			int id = MadSand.world.getCurLoc().getObject(World.player.x, World.player.y, World.player.stats.look).id;
 			return MapObject.getAltItem(id, World.player.stats.hand.id);
@@ -84,26 +102,30 @@ public class BuildScript {
 
 	static int getItemID(String arg) {
 		for (Entry<Integer, String> entry : ItemProp.name.entrySet()) {
-			if (entry.getValue().equalsIgnoreCase(arg)) {
+			if (entry.getValue().equalsIgnoreCase(arg))
 				return entry.getKey();
-			}
 		}
 		return -1;
 	}
 
 	static int val(String arg) {
 		char id = arg.charAt(0);
-		if (id == valueID)
+
+		if (id == Prefix.VARIABLE)
 			return getValue(arg);
-		if (id == itemStringID)
+
+		if (id == Prefix.ITEM_STRING)
 			return getItemID(arg.substring(1));
+
 		return Integer.parseInt(arg);
 	}
 
 	static ArrayList<Integer> getAllArgs(StringTokenizer tokens) {
 		ArrayList<Integer> ret = new ArrayList<Integer>();
+
 		while (tokens.hasMoreTokens())
 			ret.add(val(tokens.nextToken()));
+
 		return ret;
 	}
 
@@ -113,16 +135,25 @@ public class BuildScript {
 		int y = World.player.y;
 		boolean condition = false;
 		switch (id) {
-		case standingOnID:
+
+		case Condition.NO_CONDITION:
+			condition = true;
+			break;
+
+		case Condition.STANDING_ON:
 			condition = (MadSand.world.getCurLoc().getTile(x, y).id == sid);
 			break;
-		case objInFrontID:
+
+		case Condition.OBJECT_IN_FRONT:
 			condition = (MadSand.world.getCurLoc().getObject(x, y, World.player.stats.look).id == sid);
 			break;
-		case inHandID:
+
+		case Condition.IN_HAND:
 			condition = (World.player.stats.hand.id == sid);
 			break;
+
 		}
+
 		if (!condition && strict)
 			stop = true;
 		return !condition;
@@ -144,12 +175,13 @@ public class BuildScript {
 			y = arg.get(1);
 			id = arg.get(2);
 
-			MadSand.world.getCurLoc().putNpc(new Npc(id), x, y);
+			MadSand.world.getCurLoc().putNpc(new Npc(id, x, y), x, y);
 			break;
 		case Token.PLACE_OBJECT:
 			x = arg.get(0);
 			y = arg.get(1);
 			id = arg.get(2);
+
 			MadSand.world.getCurLoc().addObject(x, y, id);
 			break;
 
@@ -157,6 +189,7 @@ public class BuildScript {
 			x = arg.get(0);
 			y = arg.get(1);
 			id = arg.get(2);
+
 			MadSand.world.putMapTile(x, y, id);
 			break;
 
@@ -184,6 +217,7 @@ public class BuildScript {
 			id = arg.get(3);
 			int len = arg.get(4);
 			int isVertical = arg.get(5);
+
 			bLine(x, y, dir, id, len, isVertical);
 			break;
 
@@ -207,12 +241,14 @@ public class BuildScript {
 			id = arg.get(3);
 			len = arg.get(4);
 			isVertical = arg.get(5);
+
 			bLine(x, y, dir, id, len, isVertical);
 			break;
 
 		case Token.REMOVE_OBJECT:
 			x = arg.get(0);
 			y = arg.get(1);
+
 			MadSand.world.getCurLoc().delObject(x, y);
 			break;
 
@@ -222,18 +258,21 @@ public class BuildScript {
 
 		case Token.PLAYER_HEAL:
 			int amount = arg.get(0);
+
 			World.player.heal(amount);
 			break;
 
 		case Token.PLAYER_GIVE:
 			id = arg.get(0);
 			int q = arg.get(1);
+
 			World.player.inventory.putItem(id, q);
 			break;
 
 		case Token.PLAYER_REMOVE_ITEM:
 			id = arg.get(0);
 			q = arg.get(1);
+
 			World.player.inventory.delItem(id, q);
 			break;
 
@@ -254,39 +293,49 @@ public class BuildScript {
 		StringTokenizer commandTokens;
 		String command;
 		String printCond;
-		String token;
+		String line;
 		char id;
 		try {
 			while (lineTokens.hasMoreTokens() && !stop) {
-				token = lineTokens.nextToken();
-				commandTokens = new StringTokenizer(token, COMMAND_DELIMITER);
+				line = lineTokens.nextToken();
+				commandTokens = new StringTokenizer(line, COMMAND_DELIMITER);
 				command = commandTokens.nextToken();
 				id = command.charAt(0);
 				switch (id) {
-				case printID:
+
+				case Condition.PRINT:
 					printCond = commandTokens.nextToken();
 					if (!conditionFalse(printCond.charAt(0), printCond + COMMAND_DELIMITER))
-						MadSand.print(token.substring(printCond.length() + command.length() + 2).trim());
+						MadSand.print(line.substring(printCond.length() + command.length() + 2).trim());
 					continue;
-				case modeID:
+
+				case Prefix.MODE:
 					switch (command.substring(1)) {
+
 					case Mode.NONSTRICT:
 						strict = false;
 						break;
+
 					case Mode.STRICT:
 						strict = true;
 						break;
+
 					}
 					break;
+
 				}
+
 				if (!Character.isLetter(id))
 					command += COMMAND_DELIMITER + commandTokens.nextToken();
+
 				execute(command, commandTokens);
 			}
+
 			if (stop)
 				stop = false;
+
 		} catch (Exception e) {
-			MadSand.print("An error has occured in script: " + e.getMessage());
+			MadSand.print("An error occured in script: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}

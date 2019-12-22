@@ -145,6 +145,7 @@ public class MadSand extends Game {
 
 	public void create() {
 		Utils.out("Starting initialization!");
+
 		Gdx.graphics.setContinuousRendering(false);
 		setRenderRadius(DEFAULT_FOV);
 		setRenderRadius();
@@ -160,6 +161,7 @@ public class MadSand extends Game {
 		world = new World(MadSand.WORLDSIZE);
 		World.player.updCoords();
 		world.Generate();
+
 		Utils.out("End of initialization!");
 	}
 
@@ -352,33 +354,39 @@ public class MadSand extends Game {
 
 	void drawEntity(Entity entity) {
 		if (entity.isStepping()) {
+			Direction dir = entity.stats.look;
+			float drawx, drawy;
+			drawx = entity.globalPos.x;
+			drawy = entity.globalPos.y;
+
+			if (dir == Direction.RIGHT)
+				drawx = entity.globalPos.x - entity.stepx;
+			else if (dir == Direction.LEFT)
+				drawx = entity.globalPos.x + entity.stepx;
+			else if (dir == Direction.UP)
+				drawy = entity.globalPos.y - entity.stepy;
+			else
+				drawy = entity.globalPos.y + entity.stepy;
+
 			if (entity instanceof Player) {
-				float drawx, drawy;
 				Animation<TextureRegion> anim = null;
 				this.elapsedTime += Gdx.graphics.getDeltaTime();
 
-				drawx = entity.globalPos.x;
-				drawy = entity.globalPos.y;
-
-				if (entity.stats.look == Direction.RIGHT) {
+				if (dir == Direction.RIGHT)
 					anim = Resources.ranim;
-					drawx = entity.globalPos.x - entity.stepx;
-				} else if (entity.stats.look == Direction.LEFT) {
+				else if (dir == Direction.LEFT)
 					anim = Resources.lanim;
-					drawx = entity.globalPos.x + entity.stepx;
-				} else if (entity.stats.look == Direction.UP) {
+				else if (dir == Direction.UP)
 					anim = Resources.uanim;
-					drawy = entity.globalPos.y - entity.stepy;
-				} else {
+				else
 					anim = Resources.danim;
-					drawy = entity.globalPos.y + entity.stepy;
-				}
 
 				Utils.batch.draw((TextureRegion) anim.getKeyFrame(this.elapsedTime, true), drawx, drawy);
 
 				if (((Player) entity).isMain)
 					updateCamToxy(drawx, drawy);
-			}
+			} else
+				Utils.batch.draw(entity.getSprite(), drawx, drawy);
 
 			entity.stepx -= entity.movespeed;
 			entity.stepy -= entity.movespeed;
@@ -391,6 +399,7 @@ public class MadSand extends Game {
 
 		} else {
 			Utils.batch.draw(entity.getSprite(), entity.globalPos.x, entity.globalPos.y);
+			
 			if ((entity instanceof Player) && ((Player) entity).isMain)
 				updateCamToxy(entity.globalPos.x, entity.globalPos.y);
 		}

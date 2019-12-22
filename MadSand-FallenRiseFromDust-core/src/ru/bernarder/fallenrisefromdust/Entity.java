@@ -25,7 +25,7 @@ public abstract class Entity {
 
 	public PairFloat globalPos = new PairFloat(x * MadSand.TILESIZE, y * MadSand.TILESIZE);
 
-	int movespeed = 2;
+	int movespeed = 2;	//on-screen move speed (for smooth movement)
 	int stepy = MadSand.TILESIZE;
 	int stepx = MadSand.TILESIZE;
 
@@ -126,9 +126,15 @@ public abstract class Entity {
 	public boolean colliding(Direction direction) {
 		Pair coords = new Pair(x, y).addDirection(direction);
 		int nx = coords.x, ny = coords.y;
-		MapObject obj = MadSand.world.getCurLoc().getObject(x, y, direction);
-		Npc npc = MadSand.world.getCurLoc().getNpc(nx, ny);
-		return !(obj.isCollisionMask() || obj.nocollide || obj.equals(Map.nullObject) || npc != null);
+		Map loc = MadSand.world.getCurLoc();
+
+		MapObject obj = loc.getObject(nx, ny);
+		Npc npc = loc.getNpc(nx, ny);
+
+		if (!npc.equals(Map.nullNpc))
+			return true;
+
+		return !(obj.isCollisionMask() || obj.nocollide || obj.equals(Map.nullObject));
 	}
 
 	boolean isInBackground() {

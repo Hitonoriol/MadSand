@@ -9,6 +9,7 @@ import ru.bernarder.fallenrisefromdust.enums.Skill;
 import ru.bernarder.fallenrisefromdust.properties.NpcProp;
 
 public class Npc extends Entity {
+	public static int NULL_NPC = 0;
 	public int id;
 	public String questList;
 	public boolean friendly;
@@ -18,11 +19,17 @@ public class Npc extends Entity {
 		super();
 		this.id = id;
 		loadProperties();
-		setSprites(new Sprite(Resources.npc[id]));
+		if (id != NULL_NPC)
+			setSprites(new Sprite(Resources.npc[id]));
+	}
+
+	public Npc(int id, int x, int y) {
+		this(id);
+		teleport(x, y);
 	}
 
 	public Npc() {
-		this(0);
+		this(NULL_NPC);
 	}
 
 	void loadProperties() {
@@ -44,13 +51,18 @@ public class Npc extends Entity {
 
 	@Override
 	public boolean move(Direction dir) { // just kill me
+		super.turn(dir);
+		if (isStepping())
+			return false;
 		int ox = this.x, oy = this.y;
 		if (!super.move(dir))
 			return false;
 		int nx = x, ny = y;
-		teleport(ox, oy);
-		MadSand.world.getCurLoc().moveNpc(this, nx, ny);
-		teleport(nx, ny);
+		setGridCoords(ox, oy);
+		MadSand.world.getCurLoc().moveNpc(this, nx, ny); // ykno, let's assume if npc moves, it means that it's in the
+															// same location as player, so... this should work always
+															// despite how ugly this shit looks
+		setGridCoords(nx, ny);
 		return true;
 	}
 

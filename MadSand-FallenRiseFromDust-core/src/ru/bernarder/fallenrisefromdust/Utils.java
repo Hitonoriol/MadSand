@@ -100,7 +100,16 @@ public class Utils {
 		Gui.exitToMenuBtn.setVisible(visible);
 	}
 
+	static Npc dummy;
+
 	public static void gameKeyCheck() {
+		if (Gdx.input.isKeyJustPressed(Keys.P)) {
+			if (dummy == null) {
+				dummy = new Npc(1, MadSand.wmx, MadSand.wmy);
+				MadSand.world.getCurLoc().putNpc(dummy);
+			} else
+				dummy.move(Direction.get(rand(0, 3)));
+		}
 		if (Gdx.input.isKeyJustPressed(Keys.GRAVE)) {
 			Gui.inputField.setVisible(!Gui.inputField.isVisible());
 			Gui.overlay.setKeyboardFocus(Gui.inputField);
@@ -290,13 +299,14 @@ public class Utils {
 	}
 
 	public static void updMouseCoords() {
-		Map loc = MadSand.world.getCurLoc();
-
 		MadSand.mx = Gdx.input.getX();
 		MadSand.my = Gdx.graphics.getHeight() - Gdx.input.getY();
 
 		MadSand.wmx = (int) Math.floor(MadSand.mouseinworld.x / MadSand.TILESIZE);
 		MadSand.wmy = (int) Math.floor(MadSand.mouseinworld.y / MadSand.TILESIZE);
+
+		Map loc = MadSand.world.getCurLoc();
+		Npc npc = loc.getNpc(MadSand.wmx, MadSand.wmy);
 
 		Gui.mousemenu.addAction(Actions.moveTo(MadSand.mx + 60, MadSand.my - 70, 0.1F));
 
@@ -305,7 +315,7 @@ public class Utils {
 			Gui.mouselabel[1].setText("Tile: " + TileProp.name.get(loc.getTile(MadSand.wmx, MadSand.wmy).id));
 			Gui.mouselabel[2]
 					.setText("Object: " + " (" + ObjectProp.name.get(loc.getObject(MadSand.wmx, MadSand.wmy).id) + ")");
-			Gui.mouselabel[3].setText("Creature: " + " (" + loc.getNpc(MadSand.wmx, MadSand.wmy).stats.name + ")");
+			Gui.mouselabel[3].setText("Creature: " + " (" + npc.stats.name + " " + npc.equals(Map.nullNpc) + ")");
 			Gui.mouselabel[4].setText("Global ticks: " + MadSand.world.globalTick + "\nWorld time: "
 					+ MadSand.world.worldtime + "\nPlayer position: (" + World.player.x + ", " + World.player.y + ")");
 		} catch (Exception e) {

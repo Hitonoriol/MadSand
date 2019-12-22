@@ -415,25 +415,34 @@ public class Map {
 												// movement;should be called by an npc before changing its own position.
 												// yeah, the
 												// system is fucky.
-		if (npc.isStepping())
-			return false;
 		int xold = npc.x, yold = npc.y;
+		Npc destNpc = getNpc(coords.x, coords.y);
+
 		if (!correctCoords(coords.set(x, y)))
 			return false;
-		if (getNpc(coords.x, coords.y) != nullNpc)
+
+		if (destNpc != nullNpc && destNpc != npc) {
+			Utils.out("Can't move npc to non-empty cell");
 			return false;
+		}
+
 		npc.setGridCoords(x, y);
 		mapNpcs.put(coords, npc);
+
 		if (!(xold == x && yold == y))
 			removeNpc(xold, yold);
+
 		return true;
 	}
 
 	boolean removeNpc(int x, int y) {
+
 		if (!correctCoords(coords.set(x, y)))
 			return false;
+
 		if (getNpc(coords.x, coords.y) == nullNpc)
 			return false;
+
 		mapNpcs.remove(coords);
 		return true;
 	}
