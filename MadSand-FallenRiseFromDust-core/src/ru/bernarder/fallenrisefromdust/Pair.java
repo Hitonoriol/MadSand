@@ -47,6 +47,19 @@ public class Pair {
 			return new Pair(1, 0);
 	}
 
+	public Direction toDirection() {
+		if (x == 0 && y == 1)
+			return Direction.UP;
+		else if (x == 0 && y == -1)
+			return Direction.DOWN;
+		else if (x == -1 && y == 0)
+			return Direction.LEFT;
+		else if (x == 1 && y == 0)
+			return Direction.RIGHT;
+		else
+			return null;
+	}
+
 	Pair addDirection(Direction dir) {
 		return this.add(directionToCoord(dir));
 	}

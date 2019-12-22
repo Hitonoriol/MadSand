@@ -25,7 +25,7 @@ public abstract class Entity {
 
 	public PairFloat globalPos = new PairFloat(x * MadSand.TILESIZE, y * MadSand.TILESIZE);
 
-	int movespeed = 2;	//on-screen move speed (for smooth movement)
+	int movespeed = 2; // on-screen move speed (for smooth movement)
 	int stepy = MadSand.TILESIZE;
 	int stepx = MadSand.TILESIZE;
 
@@ -228,12 +228,27 @@ public abstract class Entity {
 			stats.actionPts = stats.actionPtsMax;
 			++ticks;
 		}
-		MadSand.world.ticks(ticks);
 		return ticks;
 	}
 
+	boolean rest() {
+		if (++stats.actionPts >= stats.actionPtsMax) {
+			stats.actionPts = stats.actionPtsMax;
+			return true;
+		} else
+			return false;
+	}
+	
+	boolean canAct(int ap) {
+		return (ap <= stats.actionPts);
+	}
+	
+	int attack() {
+		return stats.str;
+	}
+
 	int doAction() {
-		return doAction(Stats.AP_MINOR);
+		return doAction(stats.AP_MINOR);
 	}
 
 	public void freeHands() {
@@ -330,8 +345,16 @@ public abstract class Entity {
 		turn(stats.look);
 		if (colliding(stats.look) || isOnMapBound(stats.look))
 			return false;
-		doAction(Stats.AP_WALK);
+		doAction(stats.AP_WALK);
 		move(stats.look);
 		return true;
+	}
+
+	void randMove() {
+		move(Direction.random());
+	}
+
+	int distanceTo(Entity entity) {
+		return (int) MadSand.calcDistance(x, y, entity.x, entity.y);
 	}
 }

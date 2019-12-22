@@ -1,6 +1,7 @@
 package ru.bernarder.fallenrisefromdust;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Vector;
 
 import com.github.czyzby.noise4j.map.Grid;
@@ -45,7 +46,7 @@ public class World {
 	}
 
 	int randBiome() {
-		return Utils.random.nextInt(MadSand.BIOMES - 1); //Biome numbers start from -1
+		return Utils.random.nextInt(MadSand.BIOMES - 1); // Biome numbers start from -1
 	}
 
 	HashMap<MapID, Map> _getLoc(int wx, int wy, int layer) {
@@ -399,10 +400,8 @@ public class World {
 		}
 	}
 
-	void tick() {
-		player.tileDmg();
+	private void tick() {
 		getCurLoc().update();
-		player.stats.perTickCheck();
 		++globalTick;
 		if (++tick >= ticksPerHour - 1) {
 			tick = 0;
@@ -411,7 +410,19 @@ public class World {
 	}
 
 	void ticks(int n) {
-		for (int i = n; i > 0; --i)
+		Map loc = getCurLoc();
+		Npc npc;
+		
+		player.tileDmg();
+		player.stats.perTickCheck();
+
+		for (int i = n; i > 0; --i) {
 			tick();
+		}
+
+		for (Entry<Pair, Npc> entry : loc.getNpcs().entrySet()) {
+			npc = entry.getValue();
+			npc.act();
+		}
 	}
 }

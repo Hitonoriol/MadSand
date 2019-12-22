@@ -6,8 +6,9 @@ import ru.bernarder.fallenrisefromdust.enums.Faction;
 public class Stats {
 	final static int STR_WEIGHT_MULTIPLIER = 25;
 
-	final static int AP_WALK = 5; // action points consumed by walking
-	final static int AP_MINOR = 1; // action points consumed by minor action
+	int AP_WALK = 5; // action points consumed by walking
+	int AP_ATTACK = 3;
+	int AP_MINOR = 1; // action points consumed by minor action
 
 	final static int STARVE_DMG = 1;
 	final static int FOOD_HEAL = 3;
@@ -60,6 +61,12 @@ public class Stats {
 	public boolean dead = false;
 
 	StatAction actions;
+	
+	public void calcActionCosts() {
+		//AP_MINOR = ;
+		//AP_WALK = ;
+		//AP_ATTACK = ;
+	}
 
 	public void roll() {
 		int sum = 0;

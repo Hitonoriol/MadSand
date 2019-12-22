@@ -67,7 +67,7 @@ public class Player extends Entity {
 			inventory.putItem(id, stats.skills.getItemReward(Skill.Crafting));
 			if (isMain)
 				Gui.drawOkDialog("Crafted " + ItemProp.name.get(id), Gui.craft);
-			doAction(Stats.AP_MINOR);
+			doAction(stats.AP_MINOR);
 			return true;
 		}
 		if (isMain)
@@ -249,6 +249,14 @@ public class Player extends Entity {
 			MadSand.print("Press [GRAY]N[WHITE] to move to the next sector.");
 		}
 		return true;
+	}
+
+	@Override
+	public int doAction(int ap) {
+		int ticks = super.doAction(ap);
+		MadSand.world.ticks(ticks); // committing our action and then letting everything catch up to time we've
+									// spent
+		return ticks;
 	}
 
 	@Override

@@ -5,15 +5,22 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
+import ru.bernarder.fallenrisefromdust.enums.NpcState;
 import ru.bernarder.fallenrisefromdust.enums.Skill;
 import ru.bernarder.fallenrisefromdust.properties.NpcProp;
 
 public class Npc extends Entity {
 	public static int NULL_NPC = 0;
+
 	public int id;
 	public String questList;
+
 	public boolean friendly;
 	public boolean spawnOnce;
+
+	public int attackDistance = 1;
+
+	public NpcState state = NpcState.Idle;
 
 	public Npc(int id) {
 		super();
@@ -75,6 +82,70 @@ public class Npc extends Entity {
 
 		Npc rhs = (Npc) obj;
 		return new EqualsBuilder().append(id, rhs.id).isEquals();
+	}
+
+	boolean attack(Direction dir) {
+		Pair coords = new Pair(x, y).addDirection(dir);
+		Player player = World.player;
+		if (!(player.x == coords.x && player.y == coords.y))
+			return false;
+		else {
+			player.damage(super.attack());
+			return true;
+		}
+	}
+
+	void act() {
+		Player player = World.player;
+		int ticksSpent = 0;
+		tileDmg();
+		stats.perTickCheck();
+		switch (state) {
+		case Still:
+			if (!friendly)
+				state = NpcState.FollowPlayer;
+			break;
+
+		case Idle:
+			if (canAct(stats.AP_WALK)) {
+				ticksSpent = doAction(stats.AP_WALK);
+				randMove();
+			} else
+				rest();
+			break;
+
+		case FollowPlayer:
+			int dist = distanceTo(player);
+			if (dist > attackDistance) {
+				int dx = player.x - x;
+				int dy = player.y - y;
+				Direction dir = null;
+
+				if (dx > 0)
+					dir = Direction.RIGHT;
+				else if (dx < 0)
+					dir = Direction.LEFT;
+
+				if (dy > 0)
+					dir = Direction.UP;
+				else if (dy < 0)
+					dir = Direction.DOWN;
+
+				if (canAct(stats.AP_WALK) && dir != null) {
+					ticksSpent = doAction(stats.AP_WALK);
+					move(dir);
+				} else
+					rest();
+				return;
+			}
+			if (stats.actionPts >= stats.AP_ATTACK) {
+				ticksSpent = doAction(stats.AP_ATTACK);
+				attack(stats.look);
+			} else
+				rest();
+			break;
+
+		}
 	}
 
 }

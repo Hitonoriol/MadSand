@@ -670,7 +670,7 @@ public class Gui {
 
 			}
 		});
-		Table logtbl = new Table(Gui.skin).align(10);
+		Table logtbl = new Table(Gui.skin).align(Align.topLeft);
 		logtbl.setFillParent(true);
 		int tpm = 0;
 		Gui.log = new Label[LOG_LENGTH];
@@ -696,6 +696,7 @@ public class Gui {
 		NinePatchDrawable background = new NinePatchDrawable(patch);
 		NinePatch ptc = new NinePatch(new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/darkness.png")), 3, 3, 3, 3);
 		bck = new NinePatchDrawable(ptc);
+		//logtbl.setBackground(bck);
 		MadSand.maindialog.setFillParent(true);
 		Gui.dialMSG = new Label("Test", Gui.skin);
 		Gui.dialMSG.setWrap(true);

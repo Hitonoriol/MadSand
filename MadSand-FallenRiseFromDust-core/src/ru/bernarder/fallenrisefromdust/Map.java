@@ -56,6 +56,10 @@ public class Map {
 		biome = val;
 	}
 
+	HashMap<Pair, Npc> getNpcs() {
+		return mapNpcs;
+	}
+
 	HashMap<Pair, Tile> getTiles() {
 		return mapTiles;
 	}
@@ -334,8 +338,7 @@ public class Map {
 					del.add(coord);
 
 				addObject(new Pair(coord), newCrop.objId);
-				// mapCrops.remove(new Pair(coord));
-				// mapCrops.put(new Pair(coord), newCrop);
+
 			}
 		}
 		for (int i = 0; i < del.size(); ++i)

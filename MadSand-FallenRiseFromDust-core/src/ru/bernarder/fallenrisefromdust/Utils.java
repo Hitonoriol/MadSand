@@ -103,13 +103,6 @@ public class Utils {
 	static Npc dummy;
 
 	public static void gameKeyCheck() {
-		if (Gdx.input.isKeyJustPressed(Keys.P)) {
-			if (dummy == null) {
-				dummy = new Npc(1, MadSand.wmx, MadSand.wmy);
-				MadSand.world.getCurLoc().putNpc(dummy);
-			} else
-				dummy.move(Direction.get(rand(0, 3)));
-		}
 		if (Gdx.input.isKeyJustPressed(Keys.GRAVE)) {
 			Gui.inputField.setVisible(!Gui.inputField.isVisible());
 			Gui.overlay.setKeyboardFocus(Gui.inputField);
