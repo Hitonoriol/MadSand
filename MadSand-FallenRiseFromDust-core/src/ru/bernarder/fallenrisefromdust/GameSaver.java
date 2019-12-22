@@ -186,6 +186,7 @@ public class GameSaver {
 			World.player.reinit();
 			World.player.inventory = MadSand.mapper.readValue(getExternal(ifl), Inventory.class);
 			World.player.inventory.refreshContents();
+			World.player.initStatActions();
 
 			World w;
 			w = MadSand.mapper.readValue(getExternal(wfl), World.class);

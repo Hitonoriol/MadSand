@@ -59,7 +59,7 @@ public abstract class Entity {
 		return sprite;
 	}
 
-	private void initStatActions() {
+	void initStatActions() {
 		stats.actions = new StatAction() {
 			@Override
 			public void _die() {

@@ -1274,6 +1274,7 @@
 			<type>8</type>
 			<cost>9</cost>
 			<craftable>1</craftable>
+			<craftreq>2,8</craftreq>
 			<recipe>2/5:8/3</recipe>
 		</item>
 		<item id="4">
@@ -1295,6 +1296,7 @@
 			<cost>10</cost>
 			<type>9</type>
 			<craftable>1</craftable>
+			<craftreq>2,8</craftreq>
 			<recipe>2/9:8/3</recipe>
 		</item>
 		<item id="7">
@@ -1307,6 +1309,7 @@
 			<name>Stick</name>
 			<cost>4</cost>
 			<craftable>1</craftable>
+			<craftreq>1</craftreq>
 			<recipe>1/1</recipe>
 		</item>
 		<item id="9">
@@ -1319,6 +1322,7 @@
 			<altobject>8</altobject>
 			<cost>7</cost>
 			<craftable>1</craftable>
+			<craftreq>2</craftreq>
 			<recipe>25/1</recipe>
 		</item>
 		<item id="11">
@@ -1329,12 +1333,14 @@
 			<cost>10</cost>
 			<type>10</type>
 			<craftable>1</craftable>
+			<craftreq>2,8</craftreq>
 			<recipe>2/13:8/7</recipe>
 		</item>
 		<item id="12">
 			<name>Stone sword</name>
 			<cost>11</cost>
 			<craftable>1</craftable>
+			<craftreq>2,8</craftreq>
 			<recipe>2/25:8/7</recipe>
 		</item>
 		<item id="13">
@@ -1415,6 +1421,7 @@
 			<altobject>14</altobject>
 			<cost>18</cost>
 			<craftable>1</craftable>
+			<craftreq>1,8</craftreq>
 			<recipe>1/25:8/10</recipe>
 		</item>
 		<item id="27">
@@ -1423,6 +1430,7 @@
 			<altobject>9</altobject>
 			<cost>4</cost>
 			<craftable>1</craftable>
+			<craftreq>1</craftreq>
 			<recipe>1/1</recipe>
 		</item>
 		<item id="28">

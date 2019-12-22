@@ -2,6 +2,7 @@ package ru.bernarder.fallenrisefromdust;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.HashMap;
 
 public class Location extends HashMap<MapID, Map> {
@@ -21,6 +22,10 @@ public class Location extends HashMap<MapID, Map> {
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			MapID loc = new MapID(new Pair(wx, wy), layer);
 			Map map = this.get(loc);
+			
+			String npf = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.NPCSFILE;
+			MadSand.mapper.writeValue(new File(npf), map.getNpcs());
+			
 			int xsz = map.getWidth();
 			int ysz = map.getHeight();
 			// header: width, height, default tile, biome
@@ -116,6 +121,12 @@ public class Location extends HashMap<MapID, Map> {
 			MapID loc = new MapID(new Pair(wx, wy), layer);
 			Map map = new Map(xsz, ysz);
 			map.purge();
+			
+			String npf = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.NPCSFILE;
+			HashMap<Pair, Npc> npcs = new HashMap<Pair, Npc>();
+			npcs = MadSand.mapper.readValue(GameSaver.getExternal(npf), HashMap.class);
+			map.setNpcs(npcs);
+			
 			map.setBiome(biome);
 			map.setDefTile(defTile);
 			byte[] block = new byte[BLOCK_SIZE];

@@ -60,6 +60,10 @@ public class Map {
 		return mapNpcs;
 	}
 
+	void setNpcs(HashMap<Pair, Npc> npcs) {
+		mapNpcs = npcs;
+	}
+
 	HashMap<Pair, Tile> getTiles() {
 		return mapTiles;
 	}

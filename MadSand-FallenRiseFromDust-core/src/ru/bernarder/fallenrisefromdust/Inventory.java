@@ -1,6 +1,9 @@
 package ru.bernarder.fallenrisefromdust;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Vector;
 import java.util.Map.Entry;
 
@@ -9,13 +12,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ru.bernarder.fallenrisefromdust.enums.Skill;
+import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 
 public class Inventory {
 	public Vector<Item> items = new Vector<Item>();
+
+	public Set<Integer> unlockedItems = new HashSet<Integer>(); // set of items player obtained at least once
+	public ArrayList<Integer> craftRecipes = new ArrayList<Integer>(); // list of items which recipes are available to
+																		// the player
+
 	public double curWeight, maxWeight;
 
 	private HashMap<Item, InventoryUICell> itemUI = new HashMap<Item, InventoryUICell>();
-	
+
 	@JsonIgnore
 	InventoryUI inventoryUI = new InventoryUI();
 
@@ -148,6 +157,19 @@ public class Inventory {
 		damageTool(item, Skill.None);
 	}
 
+	void addRecipe(int id) {
+		HashSet<Integer> reqs;
+		for (Entry<Integer, Vector<Integer>> entry : ItemProp.craftReq.entrySet()) {
+			reqs = new HashSet<Integer>(entry.getValue());
+			if (reqs.contains(-1))
+				continue;
+			
+			if (unlockedItems.contains(reqs)) {
+				
+			}
+		}
+	}
+
 	boolean putItem(int id, int quantity, boolean silent) {
 		Item item = new Item(id, quantity);
 		Item updItem;
@@ -169,6 +191,10 @@ public class Inventory {
 				MadSand.print("You got " + Item.queryToName(id + "/" + quantity));
 			Utils.out("ITEM PUT " + id + " " + quantity);
 			dump();
+
+			if (unlockedItems.add(id))
+				addRecipe(id);
+
 			return true;
 		}
 		return false;

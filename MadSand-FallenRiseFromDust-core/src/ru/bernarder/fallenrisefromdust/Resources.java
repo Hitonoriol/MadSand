@@ -79,7 +79,7 @@ public class Resources {
 
 		mapcursor = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/cur.png"));
 		animsheet = new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/anim.png"));
-		
+
 		tmpAnim = TextureRegion.split(animsheet, PLAYER_ANIM_WIDTH, PLAYER_ANIM_HEIGHT);
 
 		animdown[0] = tmpAnim[0][0];
@@ -241,6 +241,15 @@ public class Resources {
 			ItemProp.recipe.put(i, XMLUtils.getKey(resdoc, "item", "" + i, "recipe"));
 			ItemProp.heal.put(i, XMLUtils.getKey(resdoc, "item", "" + i, "heal"));
 			ItemProp.useAction.put(i, XMLUtils.getKey(resdoc, "item", "" + i, "onuse"));
+
+			String reqlist = XMLUtils.getKey(resdoc, "item", "" + i, "craftreq");
+			cont = reqlist.split("\\,");
+			Vector<Integer> reqs = new Vector<Integer>();
+			for (String req : cont)
+				reqs.add(Integer.parseInt(req));
+			if (!reqlist.contains(","))
+				reqs.add(Integer.parseInt(reqlist));
+			ItemProp.craftReq.put(i, reqs);
 			i++;
 		}
 	}
@@ -273,7 +282,8 @@ public class Resources {
 			defT = XMLUtils.getAttrValues(gendoc, "biome", Utils.str(i), "cave_tile", Utils.str(-1));
 			defO = XMLUtils.getAttrValues(gendoc, "biome", Utils.str(i), "cave_object", Utils.str(-1));
 			ore.add(XMLUtils.getAttrValues(gendoc, "biome", Utils.str(i), "ore", Utils.str(-1)));
-			vdungeon = XMLUtils.nodeMapToHashMap(XMLUtils.getNested(gendoc, "biome", Utils.str(i), "dungeon", Utils.str(-1)));
+			vdungeon = XMLUtils
+					.nodeMapToHashMap(XMLUtils.getNested(gendoc, "biome", Utils.str(i), "dungeon", Utils.str(-1)));
 			WorldGenProp.loadUnderworldBlock(i, defT, defO, ore, vdungeon);
 			++i;
 		}

@@ -335,7 +335,7 @@ public class BuildScript {
 				stop = false;
 
 		} catch (Exception e) {
-			MadSand.print("An error occured in script: " + e.getMessage());
+			MadSand.print("An error occured in script: " + e.getStackTrace());
 			e.printStackTrace();
 		}
 	}

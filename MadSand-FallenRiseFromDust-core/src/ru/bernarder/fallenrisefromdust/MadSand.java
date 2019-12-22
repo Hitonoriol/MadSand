@@ -56,6 +56,7 @@ public class MadSand extends Game {
 	static final String MAPDIR = SAVEDIR + "worlds/";
 	static final String SCRIPTDIR = SAVEDIR + "scripts";
 	static final String PLAYERFILE = "/Player.mc";
+	static final String NPCSFILE = "/NPCs.ms";
 	static final String WORLDFILE = "/World.mw";
 	static final String INVFILE = "/PlayerInventory.mpi";
 	static final String ERRFILE = "MadSandCritical.log";
@@ -85,8 +86,9 @@ public class MadSand extends Game {
 	public static int[] COSMETICSPRITES = { 17 };
 	public static int SEED = 100;
 	static int SPEED = 100;
-	static float ZOOM = 1.5F;
-	static final int DEFAULT_FOV = 13;
+	static final float DEFAULT_ZOOM = 1.5F;
+	static float ZOOM = DEFAULT_ZOOM;
+	static final int DEFAULT_FOV = 25;
 
 	static final String FONT_CHARS = "АБВГДЕЁЖЗИЙКЛМНОПРСТФХЦЧШЩЪЬЫЭЮЯабвгдеёжзийклмнопрстфхцчшщыъьэюяabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"'<>";
 	static final String FONT_PATH = "fonts/8bitoperator.ttf";
@@ -121,6 +123,12 @@ public class MadSand extends Game {
 
 	static final int TEST_POINT = 50;
 
+	static float mid = TILESIZE * (World.MAPSIZE / 2);
+	static float ymenu;
+	static float xmenu = ymenu = mid;
+	static float menuXStep = 1, menuYStep = -1;
+	static float menuOffset = 250;
+
 	static void switchStage(GameState state, Stage stage) {
 
 		if (state != GameState.INVENTORY)
@@ -146,7 +154,7 @@ public class MadSand extends Game {
 	public void create() {
 		Utils.out("Starting initialization!");
 
-		Gdx.graphics.setContinuousRendering(false);
+		// Gdx.graphics.setContinuousRendering(false);
 		setRenderRadius(DEFAULT_FOV);
 		setRenderRadius();
 		Utils.out("Render area: " + renderArea.length);
@@ -279,15 +287,31 @@ public class MadSand extends Game {
 		}
 	}
 
-	void drawBackground() {
-		int x = World.player.x, y = World.player.y;
-		int i = 0;
-		while (i < renderArea.length) {
-			Utils.batch.draw(
-					Resources.tile[world.getTileOrDefault(x + (int) renderArea[i].x, y + (int) renderArea[i].y)],
-					x * TILESIZE + renderArea[i].x * TILESIZE, y * TILESIZE + renderArea[i].y * TILESIZE);
-			i++;
-		}
+	float randSide() {
+		int m = 1;
+		if (Utils.random.nextBoolean())
+			m *= -1;
+		return (Utils.rand(0, 1) * Utils.random.nextFloat() + 1) * m;
+	}
+
+	void drawMenuBackground() {
+
+		if (xmenu > (mid + menuOffset))
+			menuXStep = randSide();
+
+		if (ymenu > (mid + menuOffset))
+			menuYStep = randSide();
+
+		if (xmenu < (mid - menuOffset))
+			menuXStep = randSide();
+
+		if (ymenu < (mid - menuOffset))
+			menuYStep = randSide();
+
+		ymenu += menuYStep;
+		xmenu += menuXStep;
+
+		DrawGame();
 	}
 
 	static void showDialog(final int type, String text, final int qid) { // TODO rework and remove this shit
@@ -383,7 +407,7 @@ public class MadSand extends Game {
 
 				Utils.batch.draw((TextureRegion) anim.getKeyFrame(this.elapsedTime, true), drawx, drawy);
 
-				if (((Player) entity).isMain)
+				if (((Player) entity).isMain && (state == GameState.GAME))
 					updateCamToxy(drawx, drawy);
 			} else
 				Utils.batch.draw(entity.getSprite(), drawx, drawy);
@@ -399,8 +423,8 @@ public class MadSand extends Game {
 
 		} else {
 			Utils.batch.draw(entity.getSprite(), entity.globalPos.x, entity.globalPos.y);
-			
-			if ((entity instanceof Player) && ((Player) entity).isMain)
+
+			if ((entity instanceof Player) && ((Player) entity).isMain && (state == GameState.GAME))
 				updateCamToxy(entity.globalPos.x, entity.globalPos.y);
 		}
 	}
@@ -477,15 +501,14 @@ public class MadSand extends Game {
 		} else if (state.equals(GameState.NMENU)) {
 			Gdx.gl.glClearColor(1.0F, 1.0F, 1.0F, 1.0F);
 			Gdx.gl.glClear(16384);
-			updateCamToxy(World.player.globalPos.x, World.player.globalPos.y);
-
+			updateCamToxy(xmenu, ymenu);
 			camera.viewportWidth = (Gdx.graphics.getWidth() / ZOOM);
 			camera.viewportHeight = (Gdx.graphics.getHeight() / ZOOM);
 			camera.update();
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);
 			Utils.batch.begin();
-			drawBackground();
+			drawMenuBackground();
 			Utils.batch.end();
 			Gui.menu.act();
 			Gui.menu.draw();
@@ -494,21 +517,21 @@ public class MadSand extends Game {
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);
 			updateCamToxy(World.player.globalPos.x, World.player.globalPos.y);
-			drawBackground();
+			drawMenuBackground();
 			Gui.worldg.draw();
 			Utils.batch.end();
 		} else if (state.equals(GameState.LOAD)) {
 			Utils.batch.begin();
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);
-			drawBackground();
+			drawMenuBackground();
 			Gui.loadg.draw();
 			Utils.batch.end();
 		} else if (state.equals(GameState.GOT)) {
 			Utils.batch.begin();
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);
-			drawBackground();
+			drawMenuBackground();
 			Gui.gotodg.draw();
 			Utils.batch.end();
 		} else if (state.equals(GameState.DEAD)) {

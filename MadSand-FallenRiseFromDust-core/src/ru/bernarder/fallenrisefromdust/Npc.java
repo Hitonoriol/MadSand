@@ -19,6 +19,7 @@ public class Npc extends Entity {
 	public boolean spawnOnce;
 
 	public int attackDistance = 1;
+	public boolean playerSpotted = false;
 
 	public NpcState state = NpcState.Idle;
 
@@ -100,10 +101,12 @@ public class Npc extends Entity {
 		int ticksSpent = 0;
 		tileDmg();
 		stats.perTickCheck();
+
+		if (!friendly)
+			state = NpcState.FollowPlayer;
+
 		switch (state) {
 		case Still:
-			if (!friendly)
-				state = NpcState.FollowPlayer;
 			break;
 
 		case Idle:
@@ -116,6 +119,13 @@ public class Npc extends Entity {
 
 		case FollowPlayer:
 			int dist = distanceTo(player);
+			
+			if (dist <= fov)
+				playerSpotted = true;
+			
+			if (!playerSpotted)
+				return;
+			
 			if (dist > attackDistance) {
 				int dx = player.x - x;
 				int dy = player.y - y;
@@ -138,11 +148,13 @@ public class Npc extends Entity {
 					rest();
 				return;
 			}
+			
 			if (stats.actionPts >= stats.AP_ATTACK) {
 				ticksSpent = doAction(stats.AP_ATTACK);
 				attack(stats.look);
 			} else
 				rest();
+			
 			break;
 
 		}

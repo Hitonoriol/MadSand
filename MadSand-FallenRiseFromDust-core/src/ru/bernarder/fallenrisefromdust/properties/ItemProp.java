@@ -1,6 +1,7 @@
 package ru.bernarder.fallenrisefromdust.properties;
 
 import java.util.HashMap;
+import java.util.Vector;
 
 import ru.bernarder.fallenrisefromdust.enums.ItemType;
 import ru.bernarder.fallenrisefromdust.enums.Skill;
@@ -20,4 +21,6 @@ public class ItemProp {
 	public static HashMap<Integer, String> recipe = new HashMap<Integer, String>();
 	public static HashMap<Integer, String> heal = new HashMap<Integer, String>();
 	public static HashMap<Integer, String> useAction = new HashMap<Integer, String>();
+	
+	public static HashMap<Integer, Vector<Integer>> craftReq = new HashMap<Integer, Vector<Integer>>();
 }

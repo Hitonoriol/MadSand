@@ -128,7 +128,7 @@ public class Gui {
 		Gui.skin.add("default", tx);
 		ScrollPane.ScrollPaneStyle spx = new ScrollPane.ScrollPaneStyle();
 		Gui.skin.add("default", spx);
-		
+
 		Gui.overlay = new Stage();
 	}
 
@@ -491,7 +491,8 @@ public class Gui {
 					}
 
 					MadSand.switchStage(GameState.GAME, Gui.overlay);
-					MadSand.world.Generate();
+					if (resumeBtn.isVisible())
+						MadSand.world.Generate();
 					// World.player.x = new Random().nextInt(World.MAPSIZE);
 					// World.player.y = new Random().nextInt(World.MAPSIZE);
 					World.player.updCoords();
@@ -499,6 +500,8 @@ public class Gui {
 					Gui.craftBtn.setVisible(false);
 					Gui.inventoryActive = false;
 					dialog.remove();
+					Gdx.graphics.setContinuousRendering(false);
+					MadSand.ZOOM = MadSand.DEFAULT_ZOOM;
 					Gui.createCharDialog();
 				}
 
@@ -574,13 +577,39 @@ public class Gui {
 		dieLabel.setText(str);
 	}
 
+	static void refreshCraftMenu() {
+		int i = 0;
+		craftbtn = new TextButton[MadSand.CRAFTABLES];
+
+		int perRow = 3;
+		while (i < MadSand.CRAFTABLES) {
+			craftbtn[i] = new TextButton(ItemProp.name.get(MadSand.craftableid[i]), skin);
+			craftbl.add(Gui.craftbtn[i]).width(250.0F);
+			craftbl.add(new Label(" " + Item.queryToName(ItemProp.recipe.get(MadSand.craftableid[i])), skin));
+			
+			if ((i + 1) % perRow == 0)
+				craftbl.row();
+			
+			final int j = i;
+			
+			craftbtn[j].addListener(new ChangeListener() {
+				public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+					World.player.craftItem(MadSand.craftableid[j]);
+				}
+			});
+			
+			i++;
+		}
+		craftbl.row();
+	}
+
 	static void initmenu() {
 		Gui.equip = new Image[EQ_SLOTS];
 		for (int i = 0; i < EQ_SLOTS; ++i) {
 			Gui.equip[i] = new Image();
 			Gui.equip[i].setDrawable(Resources.noEquip);
 		}
-		
+
 		Gui.overlayStatLabels = new Label[OVSTAT_COUNT];
 
 		statsLbl = new Label("Stats:", Gui.skin);
@@ -631,7 +660,7 @@ public class Gui {
 		Gui.contextMenuBtn[1].addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				World.player.lookAtMouse();
-				//TODO fight
+				// TODO fight
 			}
 		});
 		Gui.contextMenuBtn[2] = new TextButton("Turn", Gui.skin);
@@ -696,7 +725,7 @@ public class Gui {
 		NinePatchDrawable background = new NinePatchDrawable(patch);
 		NinePatch ptc = new NinePatch(new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/darkness.png")), 3, 3, 3, 3);
 		bck = new NinePatchDrawable(ptc);
-		//logtbl.setBackground(bck);
+		// logtbl.setBackground(bck);
 		MadSand.maindialog.setFillParent(true);
 		Gui.dialMSG = new Label("Test", Gui.skin);
 		Gui.dialMSG.setWrap(true);
@@ -763,26 +792,7 @@ public class Gui {
 		Label title = new Label("MadSand: Fallen. Rise From Dust\n", skin);
 		title.setPosition(Gdx.graphics.getWidth() / 2 - title.getWidth() / 2.0F, Gdx.graphics.getHeight() / 2 + 100);
 
-		int cg = 0;
-		craftbtn = new TextButton[MadSand.CRAFTABLES];
-
-		int perRow = 3;
-		while (cg < MadSand.CRAFTABLES) {
-			craftbtn[cg] = new TextButton(ItemProp.name.get(MadSand.craftableid[cg]), skin);
-			craftbl.add(Gui.craftbtn[cg]).width(250.0F);
-			craftbl.add(new Label(" " + Item.queryToName(ItemProp.recipe.get(MadSand.craftableid[cg])),
-					skin))/* .align(8) */;
-			if ((cg + 1) % perRow == 0)
-				craftbl.row();
-			final int ssa = cg;
-			craftbtn[ssa].addListener(new ChangeListener() {
-				public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-					World.player.craftItem(MadSand.craftableid[ssa]);
-				}
-			});
-			cg++;
-		}
-		craftbl.row();
+		refreshCraftMenu();
 		// craft.setDebugAll(true);
 		Table backTable = new Table();
 		backTable.align(Align.bottom);
@@ -942,8 +952,6 @@ public class Gui {
 		initWmenu();
 		Gdx.input.setInputProcessor(menu);
 	}
-
-
 
 	static BitmapFont createFont(int size) {
 		BitmapFont font = new BitmapFont();
