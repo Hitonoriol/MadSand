@@ -65,7 +65,7 @@ public class Loot {
 					id = Integer.parseInt(attr[0]);
 					q = Integer.parseInt(attr[1]);
 					if (inventory != null)
-						inventory.putItem(id, q, false);
+						inventory.putItem(id, q);
 					else
 						map.putLoot(x, y, id, q);
 					i++;

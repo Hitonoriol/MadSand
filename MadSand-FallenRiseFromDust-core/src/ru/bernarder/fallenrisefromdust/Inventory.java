@@ -1,9 +1,6 @@
 package ru.bernarder.fallenrisefromdust;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Vector;
 import java.util.Map.Entry;
 
@@ -12,14 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ru.bernarder.fallenrisefromdust.enums.Skill;
-import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 
 public class Inventory {
 	public Vector<Item> items = new Vector<Item>();
-
-	public Set<Integer> unlockedItems = new HashSet<Integer>(); // set of items player obtained at least once
-	public ArrayList<Integer> craftRecipes = new ArrayList<Integer>(); // list of items which recipes are available to
-																		// the player
 
 	public double curWeight, maxWeight;
 
@@ -157,29 +149,15 @@ public class Inventory {
 		damageTool(item, Skill.None);
 	}
 
-	void addRecipe(int id) {
-		HashSet<Integer> reqs;
-		for (Entry<Integer, Vector<Integer>> entry : ItemProp.craftReq.entrySet()) {
-			reqs = new HashSet<Integer>(entry.getValue());
-			if (reqs.contains(-1))
-				continue;
-			
-			if (unlockedItems.contains(reqs)) {
-				
-			}
-		}
-	}
-
-	boolean putItem(int id, int quantity, boolean silent) {
-		Item item = new Item(id, quantity);
+	boolean putItem(Item item) {	//don't use this directly, use Entity's addItem method
 		Item updItem;
 		double newWeight = item.getWeight() + curWeight;
-		int existingIdx = getSameCell(id);
+		int existingIdx = getSameCell(item.id);
 		if (item.type.isTool())
 			existingIdx = -1;
 		if (newWeight <= maxWeight) {
 			if (existingIdx != -1) {
-				items.get(existingIdx).quantity += quantity;
+				items.get(existingIdx).quantity += item.quantity;
 				updItem = items.get(existingIdx);
 			} else {
 				items.add(item);
@@ -187,29 +165,19 @@ public class Inventory {
 			}
 			refreshItem(updItem);
 			curWeight = newWeight;
-			if (!silent)
-				MadSand.print("You got " + Item.queryToName(id + "/" + quantity));
-			Utils.out("ITEM PUT " + id + " " + quantity);
-			dump();
-
-			if (unlockedItems.add(id))
-				addRecipe(id);
 
 			return true;
 		}
 		return false;
 	}
 
-	boolean putItem(int id, int q) {
-		return putItem(id, q, false);
-	}
-
 	boolean putItem(int id) {
-		return putItem(id, 1, false);
+		return putItem(id, 1);
 	}
 
-	boolean putItem(Item item) {
-		return putItem(item.id, item.quantity, false);
+	boolean putItem(int id, int quantity) {
+		Item item = new Item(id, quantity);
+		return putItem(item);
 	}
 
 	public boolean delItem(int id, int quantity) {

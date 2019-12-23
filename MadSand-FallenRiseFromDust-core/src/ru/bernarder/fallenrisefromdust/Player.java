@@ -1,7 +1,7 @@
 package ru.bernarder.fallenrisefromdust;
 
 import java.util.ArrayList;
-import java.util.Set;
+import java.util.HashSet;
 
 import com.badlogic.gdx.Gdx;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,6 +13,9 @@ import ru.bernarder.fallenrisefromdust.properties.TileProp;
 
 public class Player extends Entity {
 
+	public HashSet<Integer> unlockedItems = new HashSet<Integer>(); // set of items player obtained at least once
+	public ArrayList<Integer> craftRecipes = new ArrayList<Integer>(); // list of items which recipes are available to
+																		// the player
 	public boolean isMain = true;
 
 	@JsonIgnore
@@ -64,6 +67,17 @@ public class Player extends Entity {
 		damageHeldTool(Skill.None);
 	}
 
+	@Override
+	public boolean addItem(Item item) {
+		if (super.addItem(item)) {
+			MadSand.print("You got " + Item.queryToName(item.id + "/" + item.quantity));
+			Utils.out("Got item id: " + item.id + "; quantity: " + item.quantity);
+			Utils.out("For the first time: " + unlockedItems.add(item.id));
+			return true;
+		} else
+			return false;
+	}
+
 	public boolean craftItem(int id) {
 		if (inventory.delItem(ItemProp.recipe.get(id))) {
 			increaseSkill(Skill.Crafting);
@@ -103,7 +117,7 @@ public class Player extends Entity {
 
 		boolean destroyed = obj.takeDamage(stats.skills.getLvl(skill) + stats.hand.getSkillDamage(skill));
 		if (item != -1 && destroyed) {
-			inventory.putItem(item, stats.skills.getItemReward(skill));
+			addItem(item, stats.skills.getItemReward(skill));
 			increaseSkill(skill);
 		}
 		if (!destroyed)
@@ -252,6 +266,14 @@ public class Player extends Entity {
 			MadSand.print("Press [GRAY]N[WHITE] to move to the next sector.");
 		}
 		return true;
+	}
+
+	@Override
+	public boolean rest() {
+		boolean ret = super.rest();
+		if (ret)
+			MadSand.world.ticks(1);
+		return ret;
 	}
 
 	@Override

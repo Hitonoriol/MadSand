@@ -105,6 +105,9 @@ public class Npc extends Entity {
 		if (!friendly)
 			state = NpcState.FollowPlayer;
 
+		Utils.out(stats.name + " acting. State: " + state);
+		Utils.out("Player spotted: " + playerSpotted);
+
 		switch (state) {
 		case Still:
 			break;
@@ -119,42 +122,46 @@ public class Npc extends Entity {
 
 		case FollowPlayer:
 			int dist = distanceTo(player);
-			
+			Utils.out("Distance to player: " + dist);
+
 			if (dist <= fov)
 				playerSpotted = true;
-			
+
 			if (!playerSpotted)
 				return;
-			
+
+			int dx = player.x - x;
+			int dy = player.y - y;
+			Direction dir = null;
+
+			if (dx > 0)
+				dir = Direction.RIGHT;
+			else if (dx < 0)
+				dir = Direction.LEFT;
+
+			if (dy > 0)
+				dir = Direction.UP;
+			else if (dy < 0)
+				dir = Direction.DOWN;
+
 			if (dist > attackDistance) {
-				int dx = player.x - x;
-				int dy = player.y - y;
-				Direction dir = null;
-
-				if (dx > 0)
-					dir = Direction.RIGHT;
-				else if (dx < 0)
-					dir = Direction.LEFT;
-
-				if (dy > 0)
-					dir = Direction.UP;
-				else if (dy < 0)
-					dir = Direction.DOWN;
-
 				if (canAct(stats.AP_WALK) && dir != null) {
 					ticksSpent = doAction(stats.AP_WALK);
+					Utils.out("Ticks spent walking: " + ticksSpent);
 					move(dir);
 				} else
 					rest();
 				return;
 			}
-			
+
 			if (stats.actionPts >= stats.AP_ATTACK) {
+				turn(dir);
 				ticksSpent = doAction(stats.AP_ATTACK);
+				Utils.out("Ticks spent attacking: " + ticksSpent);
 				attack(stats.look);
 			} else
 				rest();
-			
+
 			break;
 
 		}

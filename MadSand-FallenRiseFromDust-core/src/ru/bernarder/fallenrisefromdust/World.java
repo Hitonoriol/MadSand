@@ -401,25 +401,26 @@ public class World {
 	}
 
 	private void tick() {
+		player.stats.perTickCheck();
+		player.tileDmg();
 		getCurLoc().update();
 		++globalTick;
+		
 		if (++tick >= ticksPerHour - 1) {
 			tick = 0;
 			hourTick();
 		}
+		
 	}
 
 	void ticks(int n) {
-		Map loc = getCurLoc();
-		Npc npc;
-		
-		player.tileDmg();
-		player.stats.perTickCheck();
-
 		for (int i = n; i > 0; --i) {
 			tick();
 		}
-
+		
+		Map loc = getCurLoc();
+		Npc npc;
+		
 		for (Entry<Pair, Npc> entry : loc.getNpcs().entrySet()) {
 			npc = entry.getValue();
 			npc.act();

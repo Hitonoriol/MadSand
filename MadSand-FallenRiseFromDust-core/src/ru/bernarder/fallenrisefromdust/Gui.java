@@ -37,6 +37,9 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.PrintWriter;
 import java.security.MessageDigest;
+import java.util.HashSet;
+import java.util.Vector;
+import java.util.Map.Entry;
 
 public class Gui {
 	static final float DEFWIDTH = 250f;
@@ -577,30 +580,85 @@ public class Gui {
 		dieLabel.setText(str);
 	}
 
-	static void refreshCraftMenu() {
-		int i = 0;
-		craftbtn = new TextButton[MadSand.CRAFTABLES];
+	static void refreshCraftMenu() { // TODO
+		Utils.out("Refreshing craft menu...");
+		craftbl.remove();
+		craftbl = new Table();
+		HashSet<Integer> reqs;
+		Player player = World.player;
 
-		int perRow = 3;
-		while (i < MadSand.CRAFTABLES) {
-			craftbtn[i] = new TextButton(ItemProp.name.get(MadSand.craftableid[i]), skin);
+		for (Entry<Integer, Vector<Integer>> entry : ItemProp.craftReq.entrySet()) {
+			reqs = new HashSet<Integer>(entry.getValue());
+			HashSet<Integer> all = new HashSet<Integer>(player.unlockedItems);
+			int id = entry.getKey();
+
+			if (reqs.contains(-1))
+				continue;
+
+			all.retainAll(reqs);
+
+			if (all.equals(reqs) && !player.craftRecipes.contains(id)) {
+				Utils.out("New recipe id: " + id + " unlocked! Adding to the list...");
+				player.craftRecipes.add(id);
+			}
+		}
+		int craftSz = player.craftRecipes.size();
+		Utils.out("Total unlocked recipes: " + craftSz + " out of " + MadSand.CRAFTABLES);
+
+		if (craftSz == 0) {
+			craftbl.add(new Label("You don't know any craft recipes.", skin));
+			Utils.out("No unlocked recipes.");
+		}
+
+		craftbtn = new TextButton[craftSz];
+
+		int i = 0;
+		int perRow = 3, id;
+		while (i < craftSz) {
+			id = player.craftRecipes.get(i);
+			craftbtn[i] = new TextButton(ItemProp.name.get(id), skin);
 			craftbl.add(Gui.craftbtn[i]).width(250.0F);
-			craftbl.add(new Label(" " + Item.queryToName(ItemProp.recipe.get(MadSand.craftableid[i])), skin));
-			
+			craftbl.add(new Label(" " + Item.queryToName(ItemProp.recipe.get(id)), skin));
+
 			if ((i + 1) % perRow == 0)
 				craftbl.row();
-			
-			final int j = i;
-			
+
+			final int j = i, fid = id;
+			Utils.out("Creating a button for item " + j + " craft recipe...");
+
 			craftbtn[j].addListener(new ChangeListener() {
 				public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-					World.player.craftItem(MadSand.craftableid[j]);
+					World.player.craftItem(fid);
 				}
 			});
-			
+
 			i++;
 		}
 		craftbl.row();
+		
+		scroll = new ScrollPane(Gui.craftbl);
+		scroll.setSize(1280.0F, 720.0F);
+		craft.addActor(Gui.scroll);
+		
+		Table backTable = new Table();
+		TextButton backBtn = new TextButton("Back", skin);
+		
+		backTable.align(Align.bottom);
+		backTable.add(backBtn).fillY().expandY();
+		backTable.setWidth(Gdx.graphics.getWidth());
+		backBtn.align(Align.center);
+		backBtn.setOrigin(Align.center);
+		backBtn.pad(10);
+		backBtn.setWidth(250);
+		backBtn.setHeight(50);
+		
+		backBtn.addListener(new ChangeListener() {
+			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+				MadSand.switchStage(GameState.INVENTORY, Gui.overlay);
+			}
+		});
+		
+		craft.addActor(backTable);
 	}
 
 	static void initmenu() {
@@ -781,7 +839,6 @@ public class Gui {
 		});
 		exitToMenuBtn = new TextButton("Exit to menu", skin);
 		craftBtn = new TextButton("Crafting", skin);
-		TextButton backBtn = new TextButton("Back", skin);
 		final TextButton newGameBtn = new TextButton("New game", skin);
 		resumeBtn = new TextButton("Resume game", skin);
 		resumeBtn.setVisible(false);
@@ -794,19 +851,6 @@ public class Gui {
 
 		refreshCraftMenu();
 		// craft.setDebugAll(true);
-		Table backTable = new Table();
-		backTable.align(Align.bottom);
-		backTable.add(backBtn).fillY().expandY();
-		backTable.setWidth(Gdx.graphics.getWidth());
-		backBtn.align(Align.center);
-		backBtn.setOrigin(Align.center);
-		backBtn.pad(10);
-		backBtn.setWidth(250);
-		backBtn.setHeight(50);
-		scroll = new ScrollPane(Gui.craftbl);
-		scroll.setSize(1280.0F, 720.0F);
-		craft.addActor(Gui.scroll);
-		craft.addActor(backTable);
 		craftBtn.setHeight(82.0F);
 		craftBtn.align(16);
 		craftBtn.setWidth(250.0F);
@@ -914,6 +958,7 @@ public class Gui {
 		resumeBtn.addListener(new ChangeListener() {
 
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+				Gdx.graphics.setContinuousRendering(false);
 				MadSand.state = GameState.GAME;
 				Gdx.input.setInputProcessor(Gui.overlay);
 			}
@@ -930,6 +975,7 @@ public class Gui {
 
 		craftBtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+				refreshCraftMenu();
 				Gui.craft.setScrollFocus(Gui.scroll);
 				MadSand.switchStage(GameState.CRAFT, Gui.craft);
 			}
@@ -939,12 +985,6 @@ public class Gui {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				Gui.resumeBtn.setVisible(true);
 				MadSand.switchStage(GameState.NMENU, Gui.menu);
-			}
-		});
-
-		backBtn.addListener(new ChangeListener() {
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				MadSand.switchStage(GameState.INVENTORY, Gui.overlay);
 			}
 		});
 

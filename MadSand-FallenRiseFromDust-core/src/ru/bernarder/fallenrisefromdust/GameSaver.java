@@ -83,8 +83,8 @@ public class GameSaver {
 	static String SECTOR_DELIM = "!";
 
 	static File getSectorFile(int wx, int wy) {
-		return new File(
-				MadSand.MAPDIR + MadSand.WORLDNAME + "/sector" + SECTOR_DELIM + wx + SECTOR_DELIM + wy + ".mws");
+		return new File(MadSand.MAPDIR + MadSand.WORLDNAME + "/sector" + SECTOR_DELIM + wx + SECTOR_DELIM + wy
+				+ MadSand.SAVE_EXT);
 	}
 
 	public static String getExternal(String name) {
@@ -115,6 +115,11 @@ public class GameSaver {
 			e.printStackTrace();
 			return "";
 		}
+	}
+
+	public static String getNpcFile(int wx, int wy, int layer) {
+		return MadSand.MAPDIR + MadSand.WORLDNAME + "/" + MadSand.NPCSFILE + wx + SECTOR_DELIM + wy + SECTOR_DELIM
+				+ layer + SECTOR_DELIM + MadSand.SAVE_EXT;
 	}
 
 	public static void saveWorld() {

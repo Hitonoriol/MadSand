@@ -22,12 +22,6 @@ public class MadSand extends Game {
 	public static String VER = "";
 	static int[][] quests;
 
-	static double PartisanRep = 0.0D;
-	static double OutlawRep = 0.0D;
-	static double MarauderRep = 0.0D;
-
-	static String gameVrf;
-
 	static Vector3 mouseinworld = new Vector3(0.0F, 0.0F, 0.0F);
 	static int wclickx = 0;
 	static int wclicky = 0;
@@ -48,6 +42,8 @@ public class MadSand extends Game {
 
 	static int renderradius;
 
+	static final String SAVE_EXT = ".msf";
+
 	static final String SAVEDIR = "MadSand_Saves/";
 	static String QUESTFILE = SAVEDIR + "quests.xml";
 	static String GENFILE = SAVEDIR + "worldgen.xml";
@@ -55,10 +51,10 @@ public class MadSand extends Game {
 	static String SKILLFILE = SAVEDIR + "defskills.xml";
 	static final String MAPDIR = SAVEDIR + "worlds/";
 	static final String SCRIPTDIR = SAVEDIR + "scripts";
-	static final String PLAYERFILE = "/Player.mc";
-	static final String NPCSFILE = "/NPCs.ms";
-	static final String WORLDFILE = "/World.mw";
-	static final String INVFILE = "/PlayerInventory.mpi";
+	static final String PLAYERFILE = "/Player" + SAVE_EXT;
+	static final String NPCSFILE = "NPCs";
+	static final String WORLDFILE = "/World" + SAVE_EXT;
+	static final String INVFILE = "/PlayerInventory" + SAVE_EXT;
 	static final String ERRFILE = "MadSandCritical.log";
 
 	static int numlook = 0;
@@ -499,6 +495,8 @@ public class MadSand extends Game {
 			Gui.overlay.act();
 			Gui.overlay.draw();
 		} else if (state.equals(GameState.NMENU)) {
+			if (!Gdx.graphics.isContinuousRendering())
+				Gdx.graphics.setContinuousRendering(true);
 			Gdx.gl.glClearColor(1.0F, 1.0F, 1.0F, 1.0F);
 			Gdx.gl.glClear(16384);
 			updateCamToxy(xmenu, ymenu);

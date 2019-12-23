@@ -13,9 +13,6 @@ import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -33,8 +30,6 @@ public class Utils {
 	static int selected;
 
 	public static void init() {
-		MadSand.gameVrf = getSHA1(new File(MadSand.RESFILE));
-		out("Resfile hash: " + MadSand.gameVrf);
 		Resources.init();
 		batch = new SpriteBatch();
 	}
@@ -207,7 +202,7 @@ public class Utils {
 			World.player.walk(Direction.DOWN);
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
-			// rest
+			World.player.rest();
 		}
 	}
 
@@ -327,35 +322,6 @@ public class Utils {
 	public static void outnonl(String arg) {
 		if (tester) {
 			System.out.print(arg);
-		}
-	}
-
-	static String getSHA1(File file) {
-		try {
-			MessageDigest digest = MessageDigest.getInstance("SHA-1");
-			FileInputStream fis = new FileInputStream(file);
-			byte[] byteArray = new byte[1024];
-			int bytesCount = 0;
-			while ((bytesCount = fis.read(byteArray)) != -1) {
-				digest.update(byteArray, 0, bytesCount);
-			}
-			;
-			fis.close();
-			byte[] bytes = digest.digest();
-			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < bytes.length; i++) {
-				sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
-			}
-			return sb.toString();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "";
-		}
-	}
-
-	public void checkMsgKeys() {
-		if (Gdx.input.isKeyJustPressed(Keys.ENTER)) {
-			MadSand.state = GameState.GAME;
 		}
 	}
 

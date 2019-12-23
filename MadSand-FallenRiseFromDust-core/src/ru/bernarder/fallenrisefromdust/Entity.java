@@ -17,7 +17,7 @@ public abstract class Entity {
 	public int x = World.MAPSIZE / 2;
 	public int y = World.MAPSIZE / 2;
 
-	public int fov;
+	public int fov = 15;
 	public int maxFov, minFov;
 
 	public Stats stats;
@@ -97,6 +97,15 @@ public abstract class Entity {
 
 	void reinit() {
 		inventory = new Inventory(stats.str * Stats.STR_WEIGHT_MULTIPLIER);
+	}
+
+	public boolean addItem(Item item) {
+		return inventory.putItem(item);
+	}
+
+	public boolean addItem(int id, int quantity) {
+		Item item = new Item(id, quantity);
+		return addItem(item);
 	}
 
 	public boolean dropItem(int id, int quantity) {
@@ -238,11 +247,11 @@ public abstract class Entity {
 		} else
 			return false;
 	}
-	
+
 	boolean canAct(int ap) {
 		return (ap <= stats.actionPts);
 	}
-	
+
 	int attack() {
 		return stats.str;
 	}

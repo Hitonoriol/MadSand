@@ -68,7 +68,6 @@ public class MapObject {
 	}
 
 	private static int getAltItem(int id, int hand, HashMap<Integer, HashMap<Integer, Vector<Integer>>> container) {
-		Utils.out("Getting altitem for obj " + id + "hand: " + hand);
 		HashMap<Integer, Vector<Integer>> items = container.get(id);
 		if (!items.containsKey(hand))
 			hand = 0;
