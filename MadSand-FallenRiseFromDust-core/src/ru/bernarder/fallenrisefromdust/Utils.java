@@ -103,7 +103,7 @@ public class Utils {
 			Gui.overlay.setKeyboardFocus(Gui.inputField);
 		}
 		if (Gdx.input.isButtonPressed(Buttons.MIDDLE))
-			World.player.lookAtMouse();
+			World.player.lookAtMouse(MadSand.wmx, MadSand.wmy);
 		if (Gdx.input.isKeyJustPressed(Keys.Q))
 			Gui.showStatsWindow();
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER))
@@ -174,6 +174,8 @@ public class Utils {
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
 			Gui.resumeBtn.setVisible(true);
+			MadSand.xmid = MadSand.xmenu = World.player.globalPos.x;
+			MadSand.ymid = MadSand.ymenu = World.player.globalPos.y;
 			Gdx.input.setInputProcessor(Gui.menu);
 			MadSand.state = GameState.NMENU;
 		}
@@ -317,6 +319,11 @@ public class Utils {
 			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 			System.out.print("[" + sdf.format(cal.getTime()) + "] " + arg + "\n");
 		}
+	}
+
+	public static void die() {
+		out("Oopsie! Seems like a some fatal error occured. Check " + MadSand.ERRFILE + " for details. Exiting...");
+		System.exit(-1);
 	}
 
 	public static void outnonl(String arg) {

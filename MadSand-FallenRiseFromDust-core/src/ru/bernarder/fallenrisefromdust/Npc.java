@@ -28,7 +28,11 @@ public class Npc extends Entity {
 		this.id = id;
 		loadProperties();
 		if (id != NULL_NPC)
-			setSprites(new Sprite(Resources.npc[id]));
+			loadSprite();
+	}
+	
+	public void loadSprite() {
+		setSprites(new Sprite(Resources.npc[id]));
 	}
 
 	public Npc(int id, int x, int y) {

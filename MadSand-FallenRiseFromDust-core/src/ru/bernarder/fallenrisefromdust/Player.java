@@ -240,14 +240,14 @@ public class Player extends Entity {
 		updCoords();
 	}
 
-	Direction lookAtMouse() {
+	Direction lookAtMouse(int x, int y) {
 		Direction dir;
 
-		if (MadSand.wmx > x)
+		if (x > this.x)
 			dir = Direction.RIGHT;
-		else if (MadSand.wmx < x)
+		else if (x < this.x)
 			dir = Direction.LEFT;
-		else if (MadSand.wmy > y)
+		else if (y > this.y)
 			dir = Direction.UP;
 		else
 			dir = Direction.DOWN;

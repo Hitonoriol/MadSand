@@ -37,7 +37,6 @@ public class MadSand extends Game {
 
 	static final int OBJECT_LOOT = 7;
 	static final int TILESIZE = 33;
-	public static int OBJLEVELS = 2;
 	static final int WORLDSIZE = 10;
 
 	static int renderradius;
@@ -72,8 +71,8 @@ public class MadSand extends Game {
 	public static int LASTOBJID;
 	public static int NPCSPRITES;
 	public static int LASTTILEID;
-	public static int OREFIELDCOUNT = 5;
-	public static int BIOMES = 4;
+	public static int OREFIELDCOUNT;
+	public static int BIOMES;
 	public static int MAXMOBSONMAP = 35;
 	static int QUESTS = 0;
 
@@ -84,7 +83,7 @@ public class MadSand extends Game {
 	static int SPEED = 100;
 	static final float DEFAULT_ZOOM = 1.5F;
 	static float ZOOM = DEFAULT_ZOOM;
-	static final int DEFAULT_FOV = 25;
+	static final int DEFAULT_FOV = 16;
 
 	static final String FONT_CHARS = "АБВГДЕЁЖЗИЙКЛМНОПРСТФХЦЧШЩЪЬЫЭЮЯабвгдеёжзийклмнопрстфхцчшщыъьэюяabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"'<>";
 	static final String FONT_PATH = "fonts/8bitoperator.ttf";
@@ -112,16 +111,17 @@ public class MadSand extends Game {
 	public static int tempwx, tempwy;
 	public static boolean encounter = false;
 
-	static PairFloat[] renderArea;
+	private static PairFloat[] renderArea;
 	static ObjectMapper mapper = new ObjectMapper();
 
 	public static World world;
 
-	static final int TEST_POINT = 50;
+	private static final int TEST_POINT = 50;
 
-	static float mid = TILESIZE * (World.MAPSIZE / 2);
+	static float ymid;
+	static float xmid = ymid = TILESIZE * (World.MAPSIZE / 2);
 	static float ymenu;
-	static float xmenu = ymenu = mid;
+	static float xmenu = ymenu = xmid;
 	static float menuXStep = 1, menuYStep = -1;
 	static float menuOffset = 250;
 
@@ -292,16 +292,16 @@ public class MadSand extends Game {
 
 	void drawMenuBackground() {
 
-		if (xmenu > (mid + menuOffset))
+		if (xmenu > (xmid + menuOffset))
 			menuXStep = randSide();
 
-		if (ymenu > (mid + menuOffset))
+		if (ymenu > (ymid + menuOffset))
 			menuYStep = randSide();
 
-		if (xmenu < (mid - menuOffset))
+		if (xmenu < (xmid - menuOffset))
 			menuXStep = randSide();
 
-		if (ymenu < (mid - menuOffset))
+		if (ymenu < (ymid - menuOffset))
 			menuYStep = randSide();
 
 		ymenu += menuYStep;
@@ -449,14 +449,13 @@ public class MadSand extends Game {
 
 	public void render() {
 		if (state.equals(GameState.GAME)) {
-			if (started) {
+			if (started)
 				started = false;
-			}
 			mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
 			camera.unproject(mouseinworld);
 			Gdx.input.setInputProcessor(Gui.overlay);
 			Utils.checkFocus();
-			if (Gui.overlay.getKeyboardFocus() != Gui.inputField && !charcrt) {
+			if (Gui.overlay.getKeyboardFocus() != Gui.inputField && !charcrt && !Gui.contextMenuActive) {
 				Utils.updMouseCoords();
 				Utils.mouseMovement();
 				Utils.gameKeyCheck();

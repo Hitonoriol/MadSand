@@ -566,10 +566,11 @@ public class Gui {
 	static void getVersion() {
 		String ver = "MadSandData/version.dat";
 		if (!GameSaver.getExternal(ver).equals(""))
-			MadSand.VER = "[GREEN]b-" + (GameSaver.getExternal(ver));
+			MadSand.VER = "\n[GREEN]b-" + (GameSaver.getExternal(ver));
 		else
-			MadSand.VER = "[GREEN]Version file not found";
+			MadSand.VER = "\n[GREEN]Version file not found";
 		verlbl = new Label(MadSand.VER, Gui.skin);
+		verlbl.setAlignment(Align.center);
 	}
 
 	static final int OVSTAT_COUNT = 6;
@@ -635,14 +636,14 @@ public class Gui {
 			i++;
 		}
 		craftbl.row();
-		
+
 		scroll = new ScrollPane(Gui.craftbl);
 		scroll.setSize(1280.0F, 720.0F);
 		craft.addActor(Gui.scroll);
-		
+
 		Table backTable = new Table();
 		TextButton backBtn = new TextButton("Back", skin);
-		
+
 		backTable.align(Align.bottom);
 		backTable.add(backBtn).fillY().expandY();
 		backTable.setWidth(Gdx.graphics.getWidth());
@@ -651,13 +652,13 @@ public class Gui {
 		backBtn.pad(10);
 		backBtn.setWidth(250);
 		backBtn.setHeight(50);
-		
+
 		backBtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				MadSand.switchStage(GameState.INVENTORY, Gui.overlay);
 			}
 		});
-		
+
 		craft.addActor(backTable);
 	}
 
@@ -693,7 +694,7 @@ public class Gui {
 		Gui.contextMenuBtn[0] = new TextButton("Interact", Gui.skin);
 		Gui.contextMenuBtn[0].addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				World.player.lookAtMouse();
+				World.player.lookAtMouse(MadSand.wclickx, MadSand.wclicky);
 				World.player.interact(World.player.stats.look);
 			}
 
@@ -717,14 +718,14 @@ public class Gui {
 		Gui.contextMenuBtn[1] = new TextButton("Fight", Gui.skin);
 		Gui.contextMenuBtn[1].addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				World.player.lookAtMouse();
+				World.player.lookAtMouse(MadSand.wmx, MadSand.wmy);
 				// TODO fight
 			}
 		});
 		Gui.contextMenuBtn[2] = new TextButton("Turn", Gui.skin);
 		Gui.contextMenuBtn[2].addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				World.player.lookAtMouse();
+				World.player.lookAtMouse(MadSand.wmx, MadSand.wmy);
 			}
 		});
 

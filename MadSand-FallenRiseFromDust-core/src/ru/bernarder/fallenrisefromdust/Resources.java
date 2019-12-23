@@ -73,9 +73,9 @@ public class Resources {
 	static final String XML_BIOME_NODE = "biome";
 
 	public static void init() {
-		resdoc = XMLUtils.XMLString(GameSaver.getExternalNl(MadSand.RESFILE));
-		questdoc = XMLUtils.XMLString(GameSaver.getExternalNl(MadSand.QUESTFILE));
-		gendoc = XMLUtils.XMLString(GameSaver.getExternalNl(MadSand.GENFILE));
+		resdoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.RESFILE));
+		questdoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.QUESTFILE));
+		gendoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.GENFILE));
 
 		mapcursor = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/cur.png"));
 		animsheet = new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/anim.png"));
@@ -295,7 +295,7 @@ public class Resources {
 	static void loadSkillReqs() {
 		if (SkillContainer.reqList.size() > 0)
 			return;
-		skilldoc = XMLUtils.XMLString(GameSaver.getExternalNl(MadSand.SKILLFILE));
+		skilldoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.SKILLFILE));
 		int i = 0;
 		int skills = XMLUtils.countKeys(skilldoc, "skill");
 		Skill skill;

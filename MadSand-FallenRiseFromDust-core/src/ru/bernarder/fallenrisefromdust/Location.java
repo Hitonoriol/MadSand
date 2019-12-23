@@ -3,7 +3,10 @@ package ru.bernarder.fallenrisefromdust;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+
+import com.fasterxml.jackson.core.type.TypeReference;
 
 public class Location extends HashMap<MapID, Map> {
 	private static final long serialVersionUID = -4489829388439109446L;
@@ -22,9 +25,13 @@ public class Location extends HashMap<MapID, Map> {
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			MapID loc = new MapID(new Pair(wx, wy), layer);
 			Map map = this.get(loc);
+			ArrayList<Npc> npcs = new ArrayList<Npc>();
+			for (Entry<Pair, Npc> entry : map.getNpcs().entrySet()) {
+				npcs.add(entry.getValue());
+			}
 
 			String npf = GameSaver.getNpcFile(wx, wy, layer);
-			MadSand.mapper.writeValue(new File(npf), map.getNpcs());
+			MadSand.mapper.writeValue(new File(npf), npcs);
 
 			int xsz = map.getWidth();
 			int ysz = map.getHeight();
@@ -74,6 +81,7 @@ public class Location extends HashMap<MapID, Map> {
 			return ret;
 		} catch (Exception e) {
 			e.printStackTrace();
+			Utils.die();
 			return null;
 		}
 	}
@@ -123,9 +131,15 @@ public class Location extends HashMap<MapID, Map> {
 			map.purge();
 
 			String npf = GameSaver.getNpcFile(wx, wy, layer);
-			HashMap<Pair, Npc> npcs = new HashMap<Pair, Npc>();
-			npcs = MadSand.mapper.readValue(GameSaver.getExternal(npf), HashMap.class);
-			map.setNpcs(npcs);
+			ArrayList<Npc> npcs = new ArrayList<Npc>();
+			npcs = MadSand.mapper.readValue(GameSaver.getExternal(npf), new TypeReference<ArrayList<Npc>>() {
+			});
+
+			for (Npc npc : npcs) {
+				npc.loadSprite();
+				npc.initStatActions();
+				map.putNpc(npc);
+			}
 
 			map.setBiome(biome);
 			map.setDefTile(defTile);
@@ -174,6 +188,7 @@ public class Location extends HashMap<MapID, Map> {
 			this.put(loc, map);
 		} catch (Exception e) {
 			e.printStackTrace();
+			Utils.die();
 		}
 	}
 }

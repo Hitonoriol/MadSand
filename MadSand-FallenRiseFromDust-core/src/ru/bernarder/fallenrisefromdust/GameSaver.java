@@ -13,15 +13,7 @@ import java.nio.file.Paths;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
 
 public class GameSaver {
-
-	Thread saver = new Thread(new Runnable() {
-		@SuppressWarnings("deprecation")
-		public void run() {
-			MadSand.print("World is saving... Don't quit the game!");
-			GameSaver.saveWorld();
-			GameSaver.this.saver.stop();
-		}
-	});
+	static String SECTOR_DELIM = "!";
 
 	static byte[] concat(byte[]... arrays) {
 		int totalLength = 0;
@@ -76,31 +68,11 @@ public class GameSaver {
 			pw.print(text);
 			pw.close();
 		} catch (Exception e) {
-
-		}
-	}
-
-	static String SECTOR_DELIM = "!";
-
-	static File getSectorFile(int wx, int wy) {
-		return new File(MadSand.MAPDIR + MadSand.WORLDNAME + "/sector" + SECTOR_DELIM + wx + SECTOR_DELIM + wy
-				+ MadSand.SAVE_EXT);
-	}
-
-	public static String getExternal(String name) {
-		try {
-			File file = new File(name);
-			BufferedReader br = new BufferedReader(new FileReader(file));
-			String line1 = br.readLine();
-			br.close();
-			return line1;
-		} catch (Exception e) {
 			e.printStackTrace();
-			return "";
 		}
 	}
-
-	public static String getExternalNl(String name) {
+	
+	public static String getExternal(String name) {
 		try {
 			File file = new File(name);
 			BufferedReader br = new BufferedReader(new FileReader(file));
@@ -110,11 +82,15 @@ public class GameSaver {
 				lk = lk + l;
 			}
 			br.close();
-			return lk;
+			return lk.trim();
 		} catch (Exception e) {
-			e.printStackTrace();
 			return "";
 		}
+	}
+
+	static File getSectorFile(int wx, int wy) {
+		return new File(MadSand.MAPDIR + MadSand.WORLDNAME + "/sector" + SECTOR_DELIM + wx + SECTOR_DELIM + wy
+				+ MadSand.SAVE_EXT);
 	}
 
 	public static String getNpcFile(int wx, int wy, int layer) {
