@@ -139,7 +139,7 @@ public class Utils {
 		if (Gdx.input.isKeyJustPressed(Keys.RIGHT) && (!World.player.isStepping())) {
 			World.player.turn(Direction.RIGHT);
 		}
-		if (Gdx.input.isKeyJustPressed(Keys.N) && MadSand.world.curxwpos != 0 && MadSand.world.curywpos != 0) {
+		if (Gdx.input.isKeyJustPressed(Keys.N) && MadSand.world.curlayer == World.LAYER_OVERWORLD) {
 			if (World.player.x == World.MAPSIZE - 1 && World.player.stats.look == Direction.RIGHT)
 				gotoSector(World.player.stats.look);
 			if (World.player.y == World.MAPSIZE - 1 && World.player.stats.look == Direction.UP)
@@ -232,10 +232,6 @@ public class Utils {
 		GameSaver.saveWorld();
 		gotodir = dir;
 		MadSand.state = GameState.GOT;
-		MadSand.tempwx = MadSand.world.curxwpos;
-		MadSand.tempwy = MadSand.world.curywpos;
-		MadSand.tonext = true;
-		MadSand.encounter = false;
 
 		if ((Utils.gotodir == Direction.LEFT)) {
 			MadSand.world.curxwpos -= 1;
@@ -262,29 +258,12 @@ public class Utils {
 			GameSaver.loadLocation();
 		} else {
 			MadSand.state = GameState.WORLDGEN;
-			if (MadSand.tonext) {
-				if (Utils.rand(0, MadSand.ENCOUNTERCHANCE) == MadSand.ENCOUNTERCHANCE) {
-					// TODO Begin random encounter
-				} else
-					MadSand.world.Generate();
-			} else {
-				MadSand.world.Generate();
-			}
-			MadSand.tonext = false;
+			/*
+			 * if (Utils.rand(0, MadSand.ENCOUNTERCHANCE) == MadSand.ENCOUNTERCHANCE) TODO
+			 * Begin random encounter
+			 */
+			MadSand.world.Generate();
 			MadSand.state = GameState.GAME;
-		}
-	}
-
-	void randEncounter() {
-		try {
-			MadSand.world.curxwpos = MadSand.tempwx;
-			MadSand.world.curywpos = MadSand.tempwy;
-			MadSand.encounter = true;
-			MadSand.print("You came to a strange place...");
-			BuildScript.execute((GameSaver.getExternal("MadSand_Saves/scripts/encounter.msl")));
-		} catch (Exception e) {
-			e.printStackTrace();
-			Utils.out("Error on random encounter start: " + e.getMessage());
 		}
 	}
 
@@ -298,14 +277,13 @@ public class Utils {
 		Map loc = MadSand.world.getCurLoc();
 		Npc npc = loc.getNpc(MadSand.wmx, MadSand.wmy);
 
-		Gui.mousemenu.addAction(Actions.moveTo(MadSand.mx + 60, MadSand.my - 70, 0.1F));
+		Gui.mousemenu.addAction(Actions.moveTo(MadSand.mx + 65, MadSand.my - 70, 0.1F));
 
 		try {
-			Gui.mouselabel[0].setText("World coords: " + MadSand.wmx + ", " + MadSand.wmy);
+			Gui.mouselabel[0].setText("Looking at (" + MadSand.wmx + ", " + MadSand.wmy + ")");
 			Gui.mouselabel[1].setText("Tile: " + TileProp.name.get(loc.getTile(MadSand.wmx, MadSand.wmy).id));
-			Gui.mouselabel[2]
-					.setText("Object: " + " (" + ObjectProp.name.get(loc.getObject(MadSand.wmx, MadSand.wmy).id) + ")");
-			Gui.mouselabel[3].setText("Creature: " + " (" + npc.stats.name + " " + npc.equals(Map.nullNpc) + ")");
+			Gui.mouselabel[2].setText("Object: " + ObjectProp.name.get(loc.getObject(MadSand.wmx, MadSand.wmy).id));
+			Gui.mouselabel[3].setText("Creature: " + " " + npc.stats.name);
 			Gui.mouselabel[4].setText("Global ticks: " + MadSand.world.globalTick + "\nWorld time: "
 					+ MadSand.world.worldtime + "\nPlayer position: (" + World.player.x + ", " + World.player.y + ")");
 		} catch (Exception e) {

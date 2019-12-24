@@ -262,7 +262,8 @@ public class Player extends Entity {
 			return false;
 		if (!super.move(dir))
 			return false;
-		if (isMain && (x == World.MAPSIZE - 1 || y == World.MAPSIZE - 1 || x == World.BORDER || y == World.BORDER)) {
+		if (isMain && (MadSand.world.curlayer == World.LAYER_OVERWORLD)
+				&& (x == World.MAPSIZE - 1 || y == World.MAPSIZE - 1 || x == World.BORDER || y == World.BORDER)) {
 			MadSand.print("Press [GRAY]N[WHITE] to move to the next sector.");
 		}
 		return true;

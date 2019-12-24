@@ -85,6 +85,7 @@ public class Gui {
 	
 	static NinePatchDrawable darkBackground;
 	static NinePatchDrawable darkBackgroundSizeable;
+	static NinePatchDrawable dialogBackground;
 
 	public static void createBasicSkin() { // TODO: Remove this shit and move skin to json for fucks sake
 		font = createFont(16);
@@ -800,7 +801,7 @@ public class Gui {
 		Table ovtbl = new Table(Gui.skin).align(18);
 
 		NinePatch patch = new NinePatch(new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/bg.png")), 3, 3, 3, 3);
-		NinePatchDrawable background = new NinePatchDrawable(patch);
+		dialogBackground = new NinePatchDrawable(patch);
 
 		// logtbl.setBackground(bck);
 		Gui.dialMSG = new Label("Test", Gui.skin);

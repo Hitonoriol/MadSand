@@ -20,6 +20,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 public class InventoryUICell {
 	private final int size = 80;
 	private int CONTEXT_BUTTONS = 1;
+	
+	private static final float CONTEXT_BTN_WIDTH = 100F;
+	private static final float CONTEXT_BTN_HEIGHT = 30F;
+	
+	private float TOOLTIP_WIDTH = 200F;
+	private float TOOLTIP_HEIGHT = 50F;
 
 	private Table tooltipTbl;
 	private Label itemInfoLbl;
@@ -61,7 +67,7 @@ public class InventoryUICell {
 		invCellContextMenu[0] = new TextButton("Drop", Gui.skin);
 
 		invCellContextContainer = new Table(Gui.skin);
-		invCellContextContainer.add(invCellContextMenu[0]).width(100.0F).height(50.0F).row();
+		invCellContextContainer.add(invCellContextMenu[0]).width(CONTEXT_BTN_WIDTH).height(CONTEXT_BTN_HEIGHT).row();
 		invCellContextContainer.setVisible(false);
 		Gui.overlay.addActor(invCellContextContainer);
 
@@ -84,7 +90,7 @@ public class InventoryUICell {
 			}
 		});
 
-		itemBtn.addListener(new ClickListener(Buttons.LEFT) {
+		cell.addListener(new ClickListener(Buttons.LEFT) {
 			public void clicked(InputEvent event, float x, float y) {
 				World.player.stats.hand = item;
 				Gui.setHandDisplay(item.id);
@@ -96,18 +102,18 @@ public class InventoryUICell {
 		tooltipTbl = new Table();
 		itemInfoLbl = new Label(item.getInfoString(), Gui.skin);
 
-		tooltipTbl.add(itemInfoLbl).width(250);
+		tooltipTbl.add(itemInfoLbl).width(TOOLTIP_WIDTH);
 		tooltipTbl.row();
 
 		tooltipTbl.setBackground(Gui.darkBackgroundSizeable);
-		tooltipTbl.setSize(200, 50);
+		tooltipTbl.setSize(TOOLTIP_WIDTH, TOOLTIP_HEIGHT);
 
 		tooltip = new Tooltip<Table>(tooltipTbl);
 		tooltip.setInstant(true);
 
 		cell.addListener(tooltip);
 
-		itemBtn.addListener(new ClickListener(Buttons.RIGHT) {
+		cell.addListener(new ClickListener(Buttons.RIGHT) {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				if (!invCellContextContainer.isVisible() && !Gui.contextMenuActive) {

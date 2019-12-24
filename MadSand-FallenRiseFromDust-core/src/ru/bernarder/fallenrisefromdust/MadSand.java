@@ -99,9 +99,6 @@ public class MadSand extends Game {
 	public static int UNDERWORLD = 0;
 	public static int MAXSAVESLOTS = 999;
 	public static int CROPS;
-	public static boolean tonext = false;
-	public static int tempwx, tempwy;
-	public static boolean encounter = false;
 
 	private static PairFloat[] renderArea;
 	static ObjectMapper mapper = new ObjectMapper();
