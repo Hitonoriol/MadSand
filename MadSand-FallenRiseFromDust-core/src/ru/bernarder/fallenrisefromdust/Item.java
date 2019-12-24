@@ -65,6 +65,14 @@ public class Item {
 		loadProperties();
 	}
 
+	String getInfoString() {
+		String info = "";
+		info += "Item: " + name + "\n";
+		info += "Weight: " + weight + " kg" + "\n";
+		info += "Cost: " + cost + "$";
+		return info;
+	}
+
 	public boolean damageTool(Skill skill) {
 		if (type.isTool())
 			return damage();

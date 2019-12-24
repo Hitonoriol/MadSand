@@ -164,10 +164,6 @@ public abstract class Entity {
 		return standingOnLoot(x, y);
 	}
 
-	void skillBonusItems(int x, int y, String direction, int id) {
-		// Idk what's this thing
-	}
-
 	void damage(int to) {
 		stats.hp -= to;
 		stats.check();

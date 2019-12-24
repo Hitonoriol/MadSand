@@ -32,7 +32,7 @@ public class InventoryUI {
 		invTable = new Table();
 		invTable.row();
 		//invTable.setDebug(true);
-		invTable.setBackground(Gui.bck);
+		invTable.setBackground(Gui.darkBackground);
 		invTable.align(Align.topLeft);
 		header = new Label("[0/0 kg]", Gui.skin);
 		invContainer.add(header).pad(10).fillY().align(Align.center);

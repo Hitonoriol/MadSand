@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -81,12 +82,17 @@ public class Gui {
 
 	static BitmapFont font;
 	static BitmapFont fontBig;
+	
+	static NinePatchDrawable darkBackground;
+	static NinePatchDrawable darkBackgroundSizeable;
 
-	public static void createBasicSkin() {
+	public static void createBasicSkin() { // TODO: Remove this shit and move skin to json for fucks sake
 		font = createFont(16);
 		fontBig = createFont(24);
+		
 		Gui.skin = new Skin();
 		Gui.skin.add("default", font);
+		
 		Pixmap pixmap = new Pixmap(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 12, Pixmap.Format.RGB888);
 		pixmap.setColor(Color.WHITE);
 		pixmap.fill();
@@ -94,10 +100,12 @@ public class Gui {
 
 		Slider.SliderStyle slst = new Slider.SliderStyle();
 		slst.background = Gui.skin.newDrawable("background", Color.DARK_GRAY);
+		
 		Drawable knob = Gui.skin.newDrawable("background", Color.GRAY);
 		knob.setMinWidth(20);
 		slst.knob = knob;
 		Gui.skin.add("default-horizontal", slst);
+		
 		TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
 		textButtonStyle.up = Gui.skin.newDrawable("background", Color.GRAY);
 		textButtonStyle.down = Gui.skin.newDrawable("background", Color.DARK_GRAY);
@@ -105,18 +113,22 @@ public class Gui {
 		textButtonStyle.font = Gui.skin.getFont("default");
 		textButtonStyle.disabled = Gui.skin.newDrawable("background", Color.BLACK);
 		Gui.skin.add("default", textButtonStyle);
+		
 		Label.LabelStyle labelStyle = new Label.LabelStyle();
 		labelStyle.font = font;
 		labelStyle.fontColor = Color.WHITE;
 		Gui.skin.add("default", labelStyle);
+		
 		transparency = new NinePatchDrawable(
 				new NinePatch(new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/transparency.png"))));
+		
 		Window.WindowStyle ws = new Window.WindowStyle();
 		ws.background = Gui.skin.newDrawable("background", Color.LIGHT_GRAY);
 		ws.stageBackground = transparency;
 		ws.titleFontColor = Color.BLUE;
 		ws.titleFont = font;
 		Gui.skin.add("default", ws);
+		
 		TextField.TextFieldStyle tx = new TextField.TextFieldStyle();
 		tx.font = font;
 		tx.fontColor = Color.WHITE;
@@ -127,8 +139,22 @@ public class Gui {
 		tx.cursor.setMinWidth(1.0F);
 		tx.cursor.setMinHeight(tx.background.getMinHeight());
 		Gui.skin.add("default", tx);
+		
 		ScrollPane.ScrollPaneStyle spx = new ScrollPane.ScrollPaneStyle();
 		Gui.skin.add("default", spx);
+		
+		NinePatch ptc = new NinePatch(new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/darkness.png")), 3, 3, 3, 3);
+		darkBackground = new NinePatchDrawable(ptc);
+		
+		darkBackgroundSizeable = new NinePatchDrawable(ptc);
+		darkBackgroundSizeable.setMinHeight(0);
+		darkBackgroundSizeable.setMinWidth(0);
+		
+		
+		TextTooltip.TextTooltipStyle txtool = new TextTooltip.TextTooltipStyle();
+		txtool.background = darkBackground;
+		txtool.label = labelStyle;
+		Gui.skin.add("default", txtool);
 
 		Gui.overlay = new Stage();
 	}
@@ -170,7 +196,7 @@ public class Gui {
 			}
 
 		});
-		statWindow.setBackground(bck);
+		statWindow.setBackground(darkBackground);
 		statWindow.setMovable(true);
 		statWindow.add(new Label("", Gui.skin));
 		refreshStatLabels();
@@ -223,7 +249,6 @@ public class Gui {
 	static Stage loadg;
 	static Stage gotodg;
 	static Label wlbl;
-	static NinePatchDrawable bck;
 
 	static void initWmenu() {
 		worldg = new Stage();
@@ -420,8 +445,7 @@ public class Gui {
 					MadSand.WORLDNAME = sa;
 					if (GameSaver.loadWorld(sa)) {
 						MadSand.state = GameState.GAME;
-					} else
-						drawOkDialog("Unable to load world " + sa, menu);
+					}
 
 				}
 			});
@@ -492,7 +516,7 @@ public class Gui {
 					}
 
 					MadSand.switchStage(GameState.GAME, Gui.overlay);
-					if (resumeBtn.isVisible())
+					if (!MadSand.justStarted)
 						MadSand.world.Generate();
 					// World.player.x = new Random().nextInt(World.MAPSIZE);
 					// World.player.y = new Random().nextInt(World.MAPSIZE);
@@ -774,10 +798,10 @@ public class Gui {
 		Gui.inputField.setVisible(false);
 		tpm = 0;
 		Table ovtbl = new Table(Gui.skin).align(18);
+
 		NinePatch patch = new NinePatch(new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/bg.png")), 3, 3, 3, 3);
 		NinePatchDrawable background = new NinePatchDrawable(patch);
-		NinePatch ptc = new NinePatch(new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/darkness.png")), 3, 3, 3, 3);
-		bck = new NinePatchDrawable(ptc);
+
 		// logtbl.setBackground(bck);
 		Gui.dialMSG = new Label("Test", Gui.skin);
 		Gui.dialMSG.setWrap(true);
@@ -794,7 +818,7 @@ public class Gui {
 		}
 		Gui.overlay.addActor(ovstatTbl);
 		Gui.darkness = new Table();
-		Gui.darkness.setBackground(bck);
+		Gui.darkness.setBackground(darkBackground);
 		Gui.darkness.setFillParent(true);
 		Gui.darkness.setVisible(false);
 		Gui.overlay.addActor(Gui.darkness);
@@ -878,7 +902,7 @@ public class Gui {
 
 		Table menuTbl = new Table();
 		menuTbl.setFillParent(true);
-		menuTbl.setBackground(bck);
+		menuTbl.setBackground(darkBackground);
 		menuTbl.add(new Label("MadSand: Fallen. Rise From Dust\n", Gui.skin));
 		menuTbl.row();
 		menuTbl.add(resumeBtn).width(DEFWIDTH);

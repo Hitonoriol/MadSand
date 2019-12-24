@@ -17,7 +17,6 @@ import java.io.PrintStream;
 
 public class MadSand extends Game {
 	public static String VER = "";
-	static int[][] quests;
 
 	static Vector3 mouseinworld = new Vector3(0.0F, 0.0F, 0.0F);
 	static int wclickx = 0;
@@ -81,7 +80,7 @@ public class MadSand extends Game {
 	static final String FONT_CHARS = "АБВГДЕЁЖЗИЙКЛМНОПРСТФХЦЧШЩЪЬЫЭЮЯабвгдеёжзийклмнопрстфхцчшщыъьэюяabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"'<>";
 	static final String FONT_PATH = "fonts/8bitoperator.ttf";
 
-	boolean started = true;
+	static boolean justStarted = true;	//flag for some once-per-launch actions
 	static int rendered = 2;
 	float percent = 0.0F;
 
@@ -378,8 +377,8 @@ public class MadSand extends Game {
 
 	public void render() {
 		if (state.equals(GameState.GAME)) {
-			if (started)
-				started = false;
+			if (justStarted)
+				justStarted = false;
 			mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
 			camera.unproject(mouseinworld);
 			Gdx.input.setInputProcessor(Gui.overlay);

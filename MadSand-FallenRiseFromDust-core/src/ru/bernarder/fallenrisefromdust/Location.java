@@ -3,6 +3,7 @@ package ru.bernarder.fallenrisefromdust;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -91,6 +92,7 @@ public class Location extends HashMap<MapID, Map> {
 		byte[] layer;
 		long size;
 		try {
+			stream.write(GameSaver.encode8(GameSaver.saveFormatVersion));
 			stream.write(GameSaver.encode2(layers));
 			for (int i = 0; i < layers; ++i) {
 				layer = sectorToBytes(wx, wy, i);
@@ -105,18 +107,22 @@ public class Location extends HashMap<MapID, Map> {
 		}
 	}
 
-	void bytesToLocation(byte[] location, int wx, int wy) {
+	void bytesToLocation(byte[] location, int wx, int wy) throws Exception {
 		ByteArrayInputStream stream = new ByteArrayInputStream(location);
 		long layersz;
-		try {
-			layers = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
-			for (int i = 0; i < layers; ++i) {
-				layersz = GameSaver.decode8(stream.readNBytes(LONG_BLOCK_SIZE));
-				bytesToSector(stream.readNBytes((int) layersz), wx, wy, i);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		long saveVersion;
+
+		saveVersion = GameSaver.decode8(stream.readNBytes(LONG_BLOCK_SIZE));
+		if (saveVersion != GameSaver.saveFormatVersion) {
+			throw (new Exception());
 		}
+
+		layers = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
+		for (int i = 0; i < layers; ++i) {
+			layersz = GameSaver.decode8(stream.readNBytes(LONG_BLOCK_SIZE));
+			bytesToSector(stream.readNBytes((int) layersz), wx, wy, i);
+		}
+
 	}
 
 	void bytesToSector(byte[] sector, int wx, int wy, int layer) {

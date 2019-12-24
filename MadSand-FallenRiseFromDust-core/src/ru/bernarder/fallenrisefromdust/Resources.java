@@ -101,7 +101,6 @@ public class Resources {
 		Gdx.graphics.setCursor(mouseCursor);
 
 		MadSand.QUESTS = XMLUtils.countKeys(questdoc, XML_QUEST_NODE); // TODO
-		MadSand.quests = new int[MadSand.QUESTS][2];
 
 		MadSand.LASTITEMID = XMLUtils.countKeys(resdoc, XML_ITEM_NODE);
 		MadSand.CROPS = XMLUtils.countKeys(resdoc, XML_CROP_STAGES_NODE);

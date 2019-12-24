@@ -6,29 +6,41 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Tooltip;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
 public class InventoryUICell {
 	private final int size = 80;
-	private ImageButton btn;
+	private int CONTEXT_BUTTONS = 1;
+
+	private Table tooltipTbl;
+	private Label itemInfoLbl;
+	private Tooltip<Table> tooltip;
+
+	private ImageButton itemBtn; // button with item image
+
 	private Label itemQuantityLabel;
 	private Label toolHpLabel;
-	private Table invCellContextContainer;
+
+	private Table invCellContextContainer; // RMB context menu container and buttons
 	private TextButton[] invCellContextMenu;
 
-	private final int CONTEXT_BUTTONS = 1;
+	private Image highlight; // for mouseover highlighting of items
 
 	Group cell;
 
 	public InventoryUICell(Item item) {
+		highlight = new Image(Resources.noEquip);
 		toolHpLabel = new Label("", Gui.skin);
-		btn = new ImageButton(new SpriteDrawable(new Sprite(Resources.item[item.id])));
+		itemBtn = new ImageButton(new SpriteDrawable(new Sprite(Resources.item[item.id])));
 		itemQuantityLabel = new Label(item.quantity + "", Gui.skin);
 
 		if (item.type.isTool())
@@ -37,10 +49,13 @@ public class InventoryUICell {
 		toolHpLabel.setPosition(itemQuantityLabel.getX() + size / 1.6f, itemQuantityLabel.getY() + 6);
 
 		cell = new Group();
-		cell.addActor(btn);
+		cell.addActor(itemBtn);
 		cell.addActor(itemQuantityLabel);
 		cell.addActor(toolHpLabel);
+		cell.addActor(highlight);
 		cell.setSize(size, size);
+
+		highlight.setVisible(false);
 
 		invCellContextMenu = new TextButton[CONTEXT_BUTTONS];
 		invCellContextMenu[0] = new TextButton("Drop", Gui.skin);
@@ -59,7 +74,17 @@ public class InventoryUICell {
 
 		});
 
-		btn.addListener(new ClickListener(Buttons.LEFT) {
+		cell.addListener(new InputListener() {
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+				highlight.setVisible(true);
+			}
+
+			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+				highlight.setVisible(false);
+			}
+		});
+
+		itemBtn.addListener(new ClickListener(Buttons.LEFT) {
 			public void clicked(InputEvent event, float x, float y) {
 				World.player.stats.hand = item;
 				Gui.setHandDisplay(item.id);
@@ -68,7 +93,21 @@ public class InventoryUICell {
 			}
 		});
 
-		btn.addListener(new ClickListener(Buttons.RIGHT) {
+		tooltipTbl = new Table();
+		itemInfoLbl = new Label(item.getInfoString(), Gui.skin);
+
+		tooltipTbl.add(itemInfoLbl).width(250);
+		tooltipTbl.row();
+
+		tooltipTbl.setBackground(Gui.darkBackgroundSizeable);
+		tooltipTbl.setSize(200, 50);
+
+		tooltip = new Tooltip<Table>(tooltipTbl);
+		tooltip.setInstant(true);
+
+		cell.addListener(tooltip);
+
+		itemBtn.addListener(new ClickListener(Buttons.RIGHT) {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				if (!invCellContextContainer.isVisible() && !Gui.contextMenuActive) {

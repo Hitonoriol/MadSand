@@ -14,6 +14,7 @@ import ru.bernarder.fallenrisefromdust.enums.GameState;
 
 public class GameSaver {
 	static String SECTOR_DELIM = "!";
+	final static long saveFormatVersion = 1;
 
 	static byte[] concat(byte[]... arrays) {
 		int totalLength = 0;
@@ -71,7 +72,7 @@ public class GameSaver {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static String getExternal(String name) {
 		try {
 			File file = new File(name);
@@ -109,25 +110,32 @@ public class GameSaver {
 	public static boolean loadWorld(String filename) {
 		MadSand.WORLDNAME = filename;
 		File f = new File(MadSand.MAPDIR + filename);
-		Utils.out("Loading " + f.getAbsolutePath() + " Exists: " + f.exists() + " isDirectory: " + f.isDirectory());
+
 		if (!f.exists()) {
-			MadSand.print("Unable to load world");
-			MadSand.state = GameState.NMENU;
+			MadSand.switchStage(GameState.NMENU, Gui.menu);
+			Gui.drawOkDialog("Couldn't to load this world", Gui.menu);
 			return false;
 		}
+
 		if (!f.isDirectory()) {
-			MadSand.print("Unable to load world");
-			MadSand.state = GameState.NMENU;
+			MadSand.switchStage(GameState.NMENU, Gui.menu);
+			Gui.drawOkDialog("Couldn't to load this world", Gui.menu);
 			return false;
 		}
+
 		MadSand.world = new World();
+
 		if (!loadChar())
 			return false;
 		if (loadLocation()) {
 			MadSand.print("Loaded Game!");
 			return true;
-		} else
+		} else {
+			MadSand.switchStage(GameState.NMENU, Gui.menu);
+			Gui.drawOkDialog("Couldn't to load this world. \nMaybe it was saved in older/newer version of the game or some files are corrupted.", Gui.menu);
+			MadSand.justStarted = false;
 			return false;
+		}
 
 	}
 
