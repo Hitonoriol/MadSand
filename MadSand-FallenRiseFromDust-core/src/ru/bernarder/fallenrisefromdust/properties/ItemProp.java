@@ -8,7 +8,7 @@ import ru.bernarder.fallenrisefromdust.enums.Skill;
 
 public class ItemProp {
 	public static HashMap<Integer, String> name = new HashMap<Integer, String>();
-	public static HashMap<Integer, Integer> weight = new HashMap<Integer, Integer>();
+	public static HashMap<Integer, Float> weight = new HashMap<Integer, Float>();
 	public static HashMap<Integer, Integer> dmg = new HashMap<Integer, Integer>();
 	
 	public static HashMap<Integer, Skill> skill = new HashMap<Integer, Skill>();

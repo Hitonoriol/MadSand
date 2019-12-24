@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import ru.bernarder.fallenrisefromdust.enums.Faction;
 import ru.bernarder.fallenrisefromdust.enums.ItemType;
+import ru.bernarder.fallenrisefromdust.enums.NpcType;
 import ru.bernarder.fallenrisefromdust.enums.Skill;
 import ru.bernarder.fallenrisefromdust.properties.CropProp;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
@@ -145,7 +146,7 @@ public class Resources {
 
 	private static void loadNpcs() {
 		int i = 0;
-		String si;
+		String si, type;
 		while (i < MadSand.NPCSPRITES) {
 			npc[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "npc/" + i + ".png"));
 			si = Utils.str(i);
@@ -156,6 +157,10 @@ public class Resources {
 			NpcProp.atk.put(i, Utils.val(XMLUtils.getKey(resdoc, "npc", si, "atk")));
 			NpcProp.accuracy.put(i, Utils.val(XMLUtils.getKey(resdoc, "npc", si, "accuracy")));
 			NpcProp.faction.put(i, Faction.valueOf(XMLUtils.getKey(resdoc, "npc", si, "faction")));
+			type = XMLUtils.getKey(resdoc, "npc", si, "type");
+			if (type == "-1")
+				type = NpcType.Regular.toString();
+			NpcProp.type.put(i, NpcType.valueOf(type));
 			NpcProp.qids.put(i, (XMLUtils.getKey(resdoc, "npc", si, "qids")));
 			NpcProp.name.put(i, (XMLUtils.getKey(resdoc, "npc", si, "name")));
 			NpcProp.spawnonce.put(i, Boolean.parseBoolean(XMLUtils.getKey(resdoc, "npc", si, "spawnonce")));
@@ -228,6 +233,7 @@ public class Resources {
 			}
 
 			// Item properties
+			ItemProp.weight.put(i, Float.parseFloat(XMLUtils.getKey(resdoc, "item", "" + i, "weight")));
 			ItemProp.name.put(i, XMLUtils.getKey(resdoc, "item", "" + i, "name"));
 			ItemProp.type.put(i, ItemType.get(Integer.parseInt(XMLUtils.getKey(resdoc, "item", "" + i, "type"))));
 			ItemProp.altObject.put(i, Integer.parseInt(XMLUtils.getKey(resdoc, "item", "" + i, "altobject")));

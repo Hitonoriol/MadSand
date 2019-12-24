@@ -76,8 +76,6 @@ public class Gui {
 	static TextButton[] craftbtn;
 	public static TextButton exitToMenuBtn;
 	public static TextButton craftBtn;
-	static TextButton acceptD;
-	static TextButton refuseD;
 	static TextButton[] contextMenuBtn;
 	static TextButton resumeBtn;
 
@@ -776,24 +774,13 @@ public class Gui {
 		Gui.inputField.setVisible(false);
 		tpm = 0;
 		Table ovtbl = new Table(Gui.skin).align(18);
-		MadSand.dialog = new Table(Gui.skin).align(1);
-		Gui.acceptD = new TextButton("Accept", Gui.skin);
-		Gui.refuseD = new TextButton("Refuse", Gui.skin);
-		MadSand.maindialog = new Table(Gui.skin).align(4);
 		NinePatch patch = new NinePatch(new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/bg.png")), 3, 3, 3, 3);
 		NinePatchDrawable background = new NinePatchDrawable(patch);
 		NinePatch ptc = new NinePatch(new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/darkness.png")), 3, 3, 3, 3);
 		bck = new NinePatchDrawable(ptc);
 		// logtbl.setBackground(bck);
-		MadSand.maindialog.setFillParent(true);
 		Gui.dialMSG = new Label("Test", Gui.skin);
 		Gui.dialMSG.setWrap(true);
-		MadSand.dialog.setBackground(background);
-		MadSand.dialog.add(Gui.dialMSG).width(500.0F).height(200.0F);
-		MadSand.dialog.row();
-		MadSand.dialog.add(Gui.acceptD).width(500.0F).height(50.0F);
-		MadSand.dialog.row();
-		MadSand.dialog.add(Gui.refuseD).width(500.0F).height(50.0F);
 		Table ovstatTbl = new Table();
 		ovtbl.setFillParent(true);
 		ovstatTbl.setFillParent(true);
@@ -806,17 +793,13 @@ public class Gui {
 			count++;
 		}
 		Gui.overlay.addActor(ovstatTbl);
-		ScrollPane dsp = new ScrollPane(MadSand.dialog, Gui.skin);
 		Gui.darkness = new Table();
 		Gui.darkness.setBackground(bck);
 		Gui.darkness.setFillParent(true);
 		Gui.darkness.setVisible(false);
-		MadSand.maindialog.add(dsp);
-		MadSand.maindialog.setVisible(false);
 		Gui.overlay.addActor(Gui.darkness);
 
 		Gui.overlay.addActor(ovtbl);
-		Gui.overlay.addActor(MadSand.maindialog);
 		Gui.overlay.addActor(logtbl);
 		Gui.overlay.addActor(Gui.mousemenu);
 		Gui.overlay.addActor(Gui.gamecontext);
@@ -929,23 +912,6 @@ public class Gui {
 				Utils.out("Bye!");
 				System.exit(0);
 			}
-		});
-
-		Gui.acceptD.addListener(new ChangeListener() { // TODO remove this ass shit
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				MadSand.dialogClosed = true;
-				MadSand.dialogresult = 0;
-				MadSand.maindialog.setVisible(false);
-			}
-		});
-
-		Gui.refuseD.addListener(new ChangeListener() { // TODO same
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				MadSand.dialogClosed = true;
-				MadSand.dialogresult = 1;
-				MadSand.maindialog.setVisible(false);
-			}
-
 		});
 
 		newGameBtn.addListener(new ChangeListener() {

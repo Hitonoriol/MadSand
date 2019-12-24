@@ -11,6 +11,7 @@ import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 
 public class Item {
 	public static final int NULL_ITEM = 0;
+	private static final float DEFAULT_WEIGHT = 0.5f;
 
 	String name, recipe, heal;
 	int dmg;
@@ -21,7 +22,7 @@ public class Item {
 	ItemType type = ItemType.Item;
 	Skill skill = Skill.None;
 	boolean craftable;
-	double weight;
+	double weight = 0;
 
 	public String uid = "";
 
@@ -33,7 +34,6 @@ public class Item {
 
 	public Item(int id) {
 		this.id = id;
-		this.weight = 0.5; // TODO: loadable property
 		this.quantity = 1;
 		loadProperties();
 	}
@@ -122,6 +122,7 @@ public class Item {
 
 	private void loadProperties() {
 		this.name = ItemProp.name.get(id);
+		this.weight = ItemProp.weight.getOrDefault(id, DEFAULT_WEIGHT);
 		this.recipe = ItemProp.recipe.get(id);
 		this.heal = ItemProp.heal.get(id);
 		this.type = ItemProp.type.get(id);
@@ -131,6 +132,9 @@ public class Item {
 		this.hp = ItemProp.hp.get(id);
 		this.craftable = ItemProp.craftable.get(id);
 		this.skill = ItemProp.skill.get(id);
+
+		if (weight <= 0)
+			weight = DEFAULT_WEIGHT;
 
 		if (type.isTool())
 			uid = UUID.randomUUID().toString();

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.NpcState;
+import ru.bernarder.fallenrisefromdust.enums.NpcType;
 import ru.bernarder.fallenrisefromdust.enums.Skill;
 import ru.bernarder.fallenrisefromdust.properties.NpcProp;
 
@@ -22,6 +23,7 @@ public class Npc extends Entity {
 	public boolean playerSpotted = false;
 
 	public NpcState state = NpcState.Idle;
+	public NpcType type = NpcType.Regular;
 
 	public Npc(int id) {
 		super();

@@ -6,10 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ru.bernarder.fallenrisefromdust.enums.Direction;
@@ -26,11 +23,7 @@ public class MadSand extends Game {
 	static int wclickx = 0;
 	static int wclicky = 0;
 
-	static int dialogresult;
-	static int questid = 0;
 	static boolean dialogClosed = true;
-	static Table dialog;
-	static Table maindialog;
 
 	static int mx = 0;
 	static int my = 0;
@@ -122,7 +115,7 @@ public class MadSand extends Game {
 	static float xmid = ymid = TILESIZE * (World.MAPSIZE / 2);
 	static float ymenu;
 	static float xmenu = ymenu = xmid;
-	static float menuXStep = 1, menuYStep = -1;
+	static float menuXStep = 0.8f, menuYStep = 0f;
 	static float menuOffset = 250;
 
 	static void switchStage(GameState state, Stage stage) {
@@ -283,93 +276,29 @@ public class MadSand extends Game {
 		}
 	}
 
-	float randSide() {
-		int m = 1;
-		if (Utils.random.nextBoolean())
-			m *= -1;
-		return (Utils.rand(0, 1) * Utils.random.nextFloat() + 1) * m;
+	float randSide(float n) {
+		float ret = (float) -(n);
+		return ret;
 	}
 
 	void drawMenuBackground() {
 
 		if (xmenu > (xmid + menuOffset))
-			menuXStep = randSide();
+			menuXStep = randSide(menuXStep);
 
 		if (ymenu > (ymid + menuOffset))
-			menuYStep = randSide();
+			menuYStep = randSide(menuYStep);
 
 		if (xmenu < (xmid - menuOffset))
-			menuXStep = randSide();
+			menuXStep = randSide(menuXStep);
 
 		if (ymenu < (ymid - menuOffset))
-			menuYStep = randSide();
+			menuYStep = randSide(menuYStep);
 
 		ymenu += menuYStep;
 		xmenu += menuXStep;
 
 		DrawGame();
-	}
-
-	static void showDialog(final int type, String text, final int qid) { // TODO rework and remove this shit
-		boolean lot = false;
-		String toin = "";
-		if (text.indexOf("!@!") > -1) {
-			lot = true;
-			String[] brtext = text.split("\\!\\@\\!");
-			text = brtext[0];
-			int i = 1;
-			while (i < brtext.length) {
-				int tmp56_54 = i;
-				String[] tmp56_52 = brtext;
-				toin = toin + (tmp56_52[tmp56_54] = tmp56_52[tmp56_54] + "!@!");
-				i++;
-			}
-		}
-		if (toin.indexOf("!@!") == -1) {
-			lot = false;
-		}
-		final boolean lott = lot;
-		final String ads = toin;
-		Gui.acceptD.setText("Accept");
-		Gui.refuseD.setText("Refuse");
-		Gui.mousemenu.setVisible(false);
-		Gui.gamecontext.setVisible(false);
-		Gui.contextMenuActive = false;
-		Gui.acceptD.addListener(new ChangeListener() {
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				MadSand.dialogClosed = true;
-				MadSand.state = GameState.GAME;
-				MadSand.dialogresult = 0;
-				MadSand.maindialog.setVisible(false);
-				if (lott)
-					MadSand.showDialog(type, ads, qid);
-			}
-		});
-		Gui.refuseD.addListener(new ChangeListener() {
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				MadSand.state = GameState.GAME;
-				MadSand.dialogClosed = true;
-				MadSand.dialogresult = 1;
-				MadSand.maindialog.setVisible(false);
-			}
-		});
-
-		if (type != -1) {
-			dialogClosed = false;
-			maindialog.setVisible(true);
-			Gui.dialMSG.setText(text);
-			if (type == 1) {
-				Gui.acceptD.setVisible(true);
-				Gui.refuseD.setVisible(false);
-			}
-			if (type == 2) {
-				Gui.acceptD.setVisible(true);
-				Gui.refuseD.setVisible(true);
-			}
-			questid = qid;
-		} else {
-			maindialog.setVisible(false);
-		}
 	}
 
 	void drawEntity(Entity entity) {
@@ -556,10 +485,6 @@ public class MadSand extends Game {
 			Gui.craft.act();
 			Gui.craft.draw();
 		}
-	}
-
-	static void showMsg(String text) {
-		showDialog(1, text, 0);
 	}
 
 	public static void setWorldName(String arg) {
