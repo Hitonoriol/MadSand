@@ -8,6 +8,12 @@ import java.util.HashMap;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import ru.bernarder.fallenrisefromdust.entities.Npc;
+import ru.bernarder.fallenrisefromdust.map.Crop;
+import ru.bernarder.fallenrisefromdust.map.Loot;
+import ru.bernarder.fallenrisefromdust.map.Map;
+import ru.bernarder.fallenrisefromdust.map.MapObject;
+
 public class Location extends HashMap<MapID, Map> {
 	private static final long serialVersionUID = -4489829388439109446L;
 

@@ -1,10 +1,21 @@
-package ru.bernarder.fallenrisefromdust;
+package ru.bernarder.fallenrisefromdust.entities;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import ru.bernarder.fallenrisefromdust.MadSand;
+import ru.bernarder.fallenrisefromdust.Pair;
+import ru.bernarder.fallenrisefromdust.PairFloat;
+import ru.bernarder.fallenrisefromdust.StatAction;
+import ru.bernarder.fallenrisefromdust.Stats;
+import ru.bernarder.fallenrisefromdust.World;
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.Skill;
+import ru.bernarder.fallenrisefromdust.inventory.Inventory;
+import ru.bernarder.fallenrisefromdust.inventory.Item;
+import ru.bernarder.fallenrisefromdust.map.Loot;
+import ru.bernarder.fallenrisefromdust.map.Map;
+import ru.bernarder.fallenrisefromdust.map.MapObject;
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
 
 public abstract class Entity {
@@ -21,13 +32,17 @@ public abstract class Entity {
 	public int maxFov, minFov;
 
 	public Stats stats;
-	Inventory inventory;
+	
+	public Inventory inventory;
 
 	public PairFloat globalPos = new PairFloat(x * MadSand.TILESIZE, y * MadSand.TILESIZE);
 
-	int movespeed = 2; // on-screen move speed (for smooth movement)
-	int stepy = MadSand.TILESIZE;
-	int stepx = MadSand.TILESIZE;
+	@JsonIgnore
+	public int movespeed = 2; // on-screen move speed (for smooth movement)
+	@JsonIgnore
+	public int stepy = MadSand.TILESIZE;
+	@JsonIgnore
+	public int stepx = MadSand.TILESIZE;
 
 	boolean stepping = false;
 
@@ -59,7 +74,7 @@ public abstract class Entity {
 		return sprite;
 	}
 
-	void initStatActions() {
+	public void initStatActions() {
 		stats.actions = new StatAction() {
 			@Override
 			public void _die() {
@@ -91,11 +106,12 @@ public abstract class Entity {
 		inventory = new Inventory();
 	}
 
-	void setName(String name) {
+	@JsonIgnore
+	public void setName(String name) {
 		stats.name = name;
 	}
 
-	void reinit() {
+	public void reinit() {
 		inventory = new Inventory(stats.str * Stats.STR_WEIGHT_MULTIPLIER);
 	}
 
@@ -118,7 +134,7 @@ public abstract class Entity {
 		return true;
 	}
 
-	void pickUpLoot() {
+	public void pickUpLoot() {
 		if (stats.dead)
 			return;
 		Loot loot = MadSand.world.getCurLoc().getLoot(x, y);
@@ -146,12 +162,13 @@ public abstract class Entity {
 		return !(obj.isCollisionMask() || obj.nocollide || obj.equals(Map.nullObject));
 	}
 
-	boolean isInBackground() {
+	@JsonIgnore
+	public boolean isInBackground() {
 		Map loc = MadSand.world.getCurLoc();
 		return (loc.getObject(x, y).isCollisionMask() || loc.getTile(x, y).foreground);
 	}
 
-	boolean standingOnLoot(int x, int y) {
+	public boolean standingOnLoot(int x, int y) {
 		if (stats.dead)
 			return false;
 		if (MadSand.world.getCurLoc().getLoot(x, y).equals(Map.nullLoot))
@@ -164,12 +181,12 @@ public abstract class Entity {
 		return standingOnLoot(x, y);
 	}
 
-	void damage(int to) {
+	public void damage(int to) {
 		stats.hp -= to;
 		stats.check();
 	}
 
-	void heal(int to) {
+	public void heal(int to) {
 		if (stats.hp + to < stats.mhp) {
 			stats.hp += stats.skills.getLvlReward(Skill.Survival, to);
 		} else {
@@ -252,7 +269,7 @@ public abstract class Entity {
 		return stats.str;
 	}
 
-	int doAction() {
+	public int doAction() {
 		return doAction(stats.AP_MINOR);
 	}
 
@@ -260,7 +277,7 @@ public abstract class Entity {
 		stats.hand = Item.nullItem;
 	}
 
-	void updCoords() {
+	public void updCoords() {
 		globalPos.x = (x * MadSand.TILESIZE);
 		globalPos.y = (y * MadSand.TILESIZE);
 	}

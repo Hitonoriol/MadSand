@@ -9,8 +9,13 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ru.bernarder.fallenrisefromdust.entities.Entity;
+import ru.bernarder.fallenrisefromdust.entities.Npc;
+import ru.bernarder.fallenrisefromdust.entities.Player;
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
+import ru.bernarder.fallenrisefromdust.map.Map;
+import ru.bernarder.fallenrisefromdust.map.MapObject;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -22,13 +27,13 @@ public class MadSand extends Game {
 	static int wclickx = 0;
 	static int wclicky = 0;
 
-	static boolean dialogClosed = true;
+	public static boolean dialogClosed = true;
 
-	static int mx = 0;
-	static int my = 0;
+	public static int mx = 0;
+	public static int my = 0;
 
 	static final int OBJECT_LOOT = 7;
-	static final int TILESIZE = 33;
+	public static final int TILESIZE = 33;
 	static final int WORLDSIZE = 10;
 
 	static int renderradius;

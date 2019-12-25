@@ -1,7 +1,8 @@
-package ru.bernarder.fallenrisefromdust;
+package ru.bernarder.fallenrisefromdust.map;
 
 import java.util.Vector;
 
+import ru.bernarder.fallenrisefromdust.MadSand;
 import ru.bernarder.fallenrisefromdust.properties.CropProp;
 
 public class Crop {
@@ -10,7 +11,8 @@ public class Crop {
 	Vector<Integer> stagelen;
 	public int curStage = 0;
 	public long plantTime;
-	int id, objId;
+	public int id;
+	int objId;
 
 	public Crop(int id, long plantTime) {
 		this.id = id;

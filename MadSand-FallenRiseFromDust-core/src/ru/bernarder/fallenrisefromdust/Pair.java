@@ -6,7 +6,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 
 public class Pair {
-	int x, y;
+	public int x;
+	public int y;
 
 	public Pair(int x, int y) {
 		set(x, y);
@@ -20,7 +21,7 @@ public class Pair {
 		this(0, 0);
 	}
 
-	Pair set(int x, int y) {
+	public Pair set(int x, int y) {
 		this.x = x;
 		this.y = y;
 		return this;
@@ -60,7 +61,7 @@ public class Pair {
 			return null;
 	}
 
-	Pair addDirection(Direction dir) {
+	public Pair addDirection(Direction dir) {
 		return this.add(directionToCoord(dir));
 	}
 

@@ -1,13 +1,19 @@
-package ru.bernarder.fallenrisefromdust;
+package ru.bernarder.fallenrisefromdust.entities;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
+import ru.bernarder.fallenrisefromdust.MadSand;
+import ru.bernarder.fallenrisefromdust.Pair;
+import ru.bernarder.fallenrisefromdust.Resources;
+import ru.bernarder.fallenrisefromdust.Utils;
+import ru.bernarder.fallenrisefromdust.World;
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.NpcState;
 import ru.bernarder.fallenrisefromdust.enums.NpcType;
 import ru.bernarder.fallenrisefromdust.enums.Skill;
+import ru.bernarder.fallenrisefromdust.map.Loot;
 import ru.bernarder.fallenrisefromdust.properties.NpcProp;
 
 public class Npc extends Entity {
@@ -102,7 +108,7 @@ public class Npc extends Entity {
 		}
 	}
 
-	void act() {
+	public void act() {
 		Player player = World.player;
 		int ticksSpent = 0;
 		tileDmg();

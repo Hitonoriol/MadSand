@@ -1,10 +1,15 @@
-package ru.bernarder.fallenrisefromdust;
+package ru.bernarder.fallenrisefromdust.map;
 
 import java.util.Vector;
 
+import ru.bernarder.fallenrisefromdust.Utils;
+import ru.bernarder.fallenrisefromdust.World;
+import ru.bernarder.fallenrisefromdust.inventory.Inventory;
+import ru.bernarder.fallenrisefromdust.inventory.Item;
+
 public class Loot {
 	int nodes = 0;
-	Vector<Item> contents = new Vector<Item>();
+	public Vector<Item> contents = new Vector<Item>();
 
 	public Loot(Item cont) {
 		add(cont);
@@ -14,7 +19,7 @@ public class Loot {
 		this(new Item());
 	}
 
-	String getContents() {
+	public String getContents() {
 		String ret = "";
 		for (Item item : contents) {
 			ret += item.getString() + Item.BLOCK_DELIM;
@@ -80,11 +85,11 @@ public class Loot {
 		return 0;
 	}
 
-	static int addLootQ(String query, Inventory inventory) { // This static abomination adds items by query to inventory
+	public static int addLootQ(String query, Inventory inventory) { // This static abomination adds items by query to inventory
 		return addLootQ(query, inventory, 0, 0, null);
 	}
 
-	static int addLootQ(String query, int x, int y, Map map) { // and this thing puts items to map by their query
+	public static int addLootQ(String query, int x, int y, Map map) { // and this thing puts items to map by their query
 		return addLootQ(query, null, x, y, map);
 	}
 

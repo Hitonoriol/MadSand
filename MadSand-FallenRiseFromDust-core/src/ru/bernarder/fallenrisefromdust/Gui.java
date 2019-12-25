@@ -29,8 +29,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
+import ru.bernarder.fallenrisefromdust.entities.Player;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
 import ru.bernarder.fallenrisefromdust.enums.Skill;
+import ru.bernarder.fallenrisefromdust.inventory.Item;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 
 import java.io.BufferedReader;
@@ -52,9 +54,9 @@ public class Gui {
 
 	static Image[] equip;
 
-	static Table darkness;
-	static Table gamecontext;
-	static Table mousemenu;
+	public static Table darkness;
+	public static Table gamecontext;
+	public static Table mousemenu;
 	static Table craftbl;
 
 	static ScrollPane scroll;
@@ -66,13 +68,13 @@ public class Gui {
 	public static Label verlbl;
 
 	static Stage menu;
-	static Stage dead;
-	static Stage craft;
-	static Stage overlay;
+	public static Stage dead;
+	public static Stage craft;
+	public static Stage overlay;
 
 	static TextField inputField;
 
-	static Skin skin;
+	public static Skin skin;
 
 	static TextButton[] craftbtn;
 	public static TextButton exitToMenuBtn;
@@ -83,8 +85,8 @@ public class Gui {
 	static BitmapFont font;
 	static BitmapFont fontBig;
 	
-	static NinePatchDrawable darkBackground;
-	static NinePatchDrawable darkBackgroundSizeable;
+	public static NinePatchDrawable darkBackground;
+	public static NinePatchDrawable darkBackgroundSizeable;
 	static NinePatchDrawable dialogBackground;
 
 	public static void createBasicSkin() { // TODO: Remove this shit and move skin to json for fucks sake
@@ -277,7 +279,7 @@ public class Gui {
 		gotodg.addActor(gototbl);
 	}
 
-	static void drawOkDialog(String msg, Stage stage) {
+	public static void drawOkDialog(String msg, Stage stage) {
 		final Dialog dialog = new Dialog(" ", Gui.skin);
 		int linesToSkip = 2;
 		dialog.text(msg).pad(25);

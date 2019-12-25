@@ -1,9 +1,11 @@
-package ru.bernarder.fallenrisefromdust;
+package ru.bernarder.fallenrisefromdust.inventory;
 
 import java.util.UUID;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ru.bernarder.fallenrisefromdust.enums.ItemType;
 import ru.bernarder.fallenrisefromdust.enums.Skill;
@@ -13,24 +15,26 @@ public class Item {
 	public static final int NULL_ITEM = 0;
 	private static final float DEFAULT_WEIGHT = 0.5f;
 
-	String name, recipe, heal;
+	public String name;
+	String recipe;
+	String heal;
 	int dmg;
 	public int hp = -1;
 	public int id;
 	public int quantity;
 	int altobject, cost;
-	ItemType type = ItemType.Item;
+	public ItemType type = ItemType.Item;
 	Skill skill = Skill.None;
 	boolean craftable;
 	double weight = 0;
 
 	public String uid = "";
 
-	final static Item nullItem = new Item();
+	public final static Item nullItem = new Item();
 
 	final static String ITEM_DELIM = "/";
-	final static String BLOCK_DELIM = ":";
-	final static String EMPTY_QUERY = "n";
+	public final static String BLOCK_DELIM = ":";
+	public final static String EMPTY_QUERY = "n";
 
 	public Item(int id) {
 		this.id = id;
@@ -148,7 +152,8 @@ public class Item {
 			uid = UUID.randomUUID().toString();
 	}
 
-	String getString() {
+	@JsonIgnore
+	public String getString() {
 		if (id == 0)
 			return EMPTY_QUERY;
 		else
@@ -161,7 +166,7 @@ public class Item {
 
 	// Static functions for general item related needs:
 
-	static String queryToName(String query) { // item query format: id1/quantity1:id2/quantity2:...
+	public static String queryToName(String query) { // item query format: id1/quantity1:id2/quantity2:...
 		int i = 0;
 		String ret = "";
 		if (!query.contains(BLOCK_DELIM))
@@ -181,11 +186,11 @@ public class Item {
 		return "";
 	}
 
-	static ItemType getType(int id) {
+	public static ItemType getType(int id) {
 		return ItemProp.type.get(id);
 	}
 
-	static int getAltObject(int id) {
+	public static int getAltObject(int id) {
 		return ItemProp.altObject.get(id);
 	}
 }

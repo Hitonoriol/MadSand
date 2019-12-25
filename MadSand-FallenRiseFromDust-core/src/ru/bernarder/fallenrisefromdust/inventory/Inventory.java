@@ -1,4 +1,4 @@
-package ru.bernarder.fallenrisefromdust;
+package ru.bernarder.fallenrisefromdust.inventory;
 
 import java.util.HashMap;
 import java.util.Vector;
@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import ru.bernarder.fallenrisefromdust.Utils;
 import ru.bernarder.fallenrisefromdust.enums.Skill;
 
 public class Inventory {
@@ -18,7 +19,7 @@ public class Inventory {
 	private HashMap<Item, InventoryUICell> itemUI = new HashMap<Item, InventoryUICell>();
 
 	@JsonIgnore
-	InventoryUI inventoryUI = new InventoryUI();
+	public InventoryUI inventoryUI = new InventoryUI();
 
 	public Inventory(float maxWeight) {
 		setMaxWeight(maxWeight);
@@ -29,12 +30,12 @@ public class Inventory {
 		maxWeight = 0;
 	}
 
-	void setMaxWeight(float val) {
+	public void setMaxWeight(float val) {
 		maxWeight = val;
 		inventoryUI.setMass(curWeight, maxWeight);
 	}
 
-	void refreshContents() {
+	public void refreshContents() {
 		Item item;
 		int shp = -1;
 		for (int i = 0; i < items.size(); ++i) {
@@ -69,11 +70,11 @@ public class Inventory {
 		}
 	}
 
-	int getSameCell(int id) {
+	public int getSameCell(int id) {
 		return items.indexOf(new Item(id));
 	}
 
-	int getSameCell(int id, int q) { // find q or more items
+	public int getSameCell(int id, int q) { // find q or more items
 		int i = getSameCell(id);
 		if (i != -1) {
 			if (items.get(i).quantity < q) {
@@ -128,14 +129,14 @@ public class Inventory {
 		}
 	}
 
-	void clearContextMenus() {
+	public void clearContextMenus() {
 		for (Entry<Item, InventoryUICell> pair : itemUI.entrySet()) {
 			InventoryUICell cell = pair.getValue();
 			cell.hideContext();
 		}
 	}
 
-	boolean damageTool(Item item, Skill skill) {
+	public boolean damageTool(Item item, Skill skill) {
 		if (!item.damageTool(skill)) {
 			refreshItem(item);
 			return false;
@@ -149,7 +150,7 @@ public class Inventory {
 		damageTool(item, Skill.None);
 	}
 
-	boolean putItem(Item item) {	//don't use this directly, use Entity's addItem method
+	public boolean putItem(Item item) { // don't use this directly, use Entity's addItem method
 		Item updItem;
 		double newWeight = item.getWeight() + curWeight;
 		int existingIdx = getSameCell(item.id);
@@ -171,11 +172,11 @@ public class Inventory {
 		return false;
 	}
 
-	boolean putItem(int id) {
+	public boolean putItem(int id) {
 		return putItem(id, 1);
 	}
 
-	boolean putItem(int id, int quantity) {
+	public boolean putItem(int id, int quantity) {
 		Item item = new Item(id, quantity);
 		return putItem(item);
 	}

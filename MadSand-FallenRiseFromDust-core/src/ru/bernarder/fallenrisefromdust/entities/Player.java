@@ -1,4 +1,4 @@
-package ru.bernarder.fallenrisefromdust;
+package ru.bernarder.fallenrisefromdust.entities;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -6,7 +6,17 @@ import java.util.HashSet;
 import com.badlogic.gdx.Gdx;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import ru.bernarder.fallenrisefromdust.BuildScript;
+import ru.bernarder.fallenrisefromdust.GameSaver;
+import ru.bernarder.fallenrisefromdust.Gui;
+import ru.bernarder.fallenrisefromdust.MadSand;
+import ru.bernarder.fallenrisefromdust.Pair;
+import ru.bernarder.fallenrisefromdust.Resources;
+import ru.bernarder.fallenrisefromdust.Utils;
+import ru.bernarder.fallenrisefromdust.World;
 import ru.bernarder.fallenrisefromdust.enums.*;
+import ru.bernarder.fallenrisefromdust.inventory.Item;
+import ru.bernarder.fallenrisefromdust.map.MapObject;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
@@ -92,7 +102,7 @@ public class Player extends Entity {
 		return false;
 	}
 
-	void interact(final Direction direction) {
+	public void interact(final Direction direction) {
 		int id = MadSand.world.getCurLoc().getObject(x, y, stats.look).id;
 		if (id == 0)
 			return;
@@ -240,7 +250,7 @@ public class Player extends Entity {
 		updCoords();
 	}
 
-	Direction lookAtMouse(int x, int y) {
+	public Direction lookAtMouse(int x, int y) {
 		Direction dir;
 
 		if (x > this.x)
@@ -295,6 +305,7 @@ public class Player extends Entity {
 	}
 
 	@Override
+	public
 	boolean walk(Direction dir) {
 		if (super.walk(dir)) {
 			objectInFront();
@@ -314,7 +325,7 @@ public class Player extends Entity {
 		return MadSand.world.globalTick - stats.spawnTime;
 	}
 
-	void hideInventory() {
+	public void hideInventory() {
 		Utils.invBtnSetVisible(false);
 		Gdx.input.setInputProcessor(Gui.overlay);
 		Gui.contextMenuActive = false;
@@ -325,7 +336,7 @@ public class Player extends Entity {
 		inventory.clearContextMenus();
 	}
 
-	void showInventory() {
+	public void showInventory() {
 		inventory.inventoryUI.toggleVisible();
 		Gui.gamecontext.setVisible(false);
 		Gui.contextMenuActive = false;

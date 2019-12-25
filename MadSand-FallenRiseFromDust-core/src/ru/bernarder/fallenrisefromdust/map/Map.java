@@ -1,10 +1,16 @@
-package ru.bernarder.fallenrisefromdust;
+package ru.bernarder.fallenrisefromdust.map;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Vector;
 
+import ru.bernarder.fallenrisefromdust.MadSand;
+import ru.bernarder.fallenrisefromdust.Pair;
+import ru.bernarder.fallenrisefromdust.Utils;
+import ru.bernarder.fallenrisefromdust.World;
+import ru.bernarder.fallenrisefromdust.entities.Npc;
 import ru.bernarder.fallenrisefromdust.enums.Direction;
+import ru.bernarder.fallenrisefromdust.inventory.Item;
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 
 public class Map {
@@ -17,10 +23,10 @@ public class Map {
 
 	static final int COLLISION_MASK_ID = 666;
 	static Tile nullTile = new Tile(0);
-	static MapObject nullObject = new MapObject(0);
-	static Loot nullLoot = new Loot();
-	static Crop nullCrop = new Crop();
-	static Npc nullNpc = new Npc();
+	public static MapObject nullObject = new MapObject(0);
+	public static Loot nullLoot = new Loot();
+	public static Crop nullCrop = new Crop();
+	public static Npc nullNpc = new Npc();
 
 	private HashMap<Pair, Tile> mapTiles;
 	private HashMap<Pair, MapObject> mapObjects;
@@ -36,11 +42,11 @@ public class Map {
 		purge();
 	}
 
-	void setDefTile(int tile) {
+	public void setDefTile(int tile) {
 		defTile = tile;
 	}
 
-	int getDefTile() {
+	public int getDefTile() {
 		return defTile;
 	}
 
@@ -48,15 +54,15 @@ public class Map {
 		this(0, 0);
 	}
 
-	int getBiome() {
+	public int getBiome() {
 		return biome;
 	}
 
-	void setBiome(int val) {
+	public void setBiome(int val) {
 		biome = val;
 	}
 
-	HashMap<Pair, Npc> getNpcs() {
+	public HashMap<Pair, Npc> getNpcs() {
 		return mapNpcs;
 	}
 
@@ -85,15 +91,15 @@ public class Map {
 		this.ysz = ysz;
 	}
 
-	int getWidth() {
+	public int getWidth() {
 		return xsz;
 	}
 
-	int getHeight() {
+	public int getHeight() {
 		return ysz;
 	}
 
-	Map purge() {
+	public Map purge() {
 		mapTiles = new HashMap<Pair, Tile>();
 		mapObjects = new HashMap<Pair, MapObject>();
 		mapLoot = new HashMap<Pair, Loot>();
@@ -106,7 +112,7 @@ public class Map {
 		this.addTile(x, y, dir, id);
 	}
 
-	Map fillTile(int id) {
+	public Map fillTile(int id) {
 		int i = 0, ii = 0;
 		while (i <= xsz) {
 			while (ii <= ysz) {
@@ -119,7 +125,7 @@ public class Map {
 		return this;
 	}
 
-	Map fillObject(int id) {
+	public Map fillObject(int id) {
 		int i = 0, ii = 0;
 		while (i <= xsz) {
 			while (ii <= ysz) {
@@ -139,7 +145,7 @@ public class Map {
 			return false;
 	}
 
-	boolean addTile(int x, int y, int id, boolean force) {
+	public boolean addTile(int x, int y, int id, boolean force) {
 		if (correctCoords(coords.set(x, y))) {
 			if (mapTiles.containsKey(coords) && force)
 				mapTiles.remove(coords);
@@ -149,16 +155,16 @@ public class Map {
 			return false;
 	}
 
-	void delTile(int x, int y) {
+	public void delTile(int x, int y) {
 		mapTiles.remove(coords.set(x, y));
 		mapTiles.put(coords, new Tile(defTile));
 	}
 
-	boolean addTile(int x, int y, int id) {
+	public boolean addTile(int x, int y, int id) {
 		return addTile(x, y, id, false);
 	}
 
-	boolean addTile(int x, int y, Direction dir, int id) {
+	public boolean addTile(int x, int y, Direction dir, int id) {
 		if (correctCoords(coords.set(x, y))) {
 			coords.addDirection(dir);
 			addTile(coords.x, coords.y, id, false);
@@ -167,7 +173,7 @@ public class Map {
 			return false;
 	}
 
-	Tile getTile(int x, int y) {
+	public Tile getTile(int x, int y) {
 		try {
 			if (correctCoords(coords.set(x, y))) {
 				Tile ret = mapTiles.get(coords);
@@ -210,12 +216,12 @@ public class Map {
 		}
 	}
 
-	void delObject(int x, int y) {
+	public void delObject(int x, int y) {
 		if (correctCoords(coords.set(x, y)))
 			mapObjects.remove(coords);
 	}
 
-	boolean addObject(int x, int y, int id) {
+	public boolean addObject(int x, int y, int id) {
 		if (correctCoords(coords.set(x, y))) {
 			if (mapObjects.containsKey(coords))
 				mapObjects.remove(coords);
@@ -230,17 +236,17 @@ public class Map {
 		return addObject(coord.x, coord.y, id);
 	}
 
-	boolean dmgObjInDir(int x, int y, Direction direction) {
+	public boolean dmgObjInDir(int x, int y, Direction direction) {
 		coords.set(x, y).addDirection(direction);
 		return mapObjects.get(coords).takeDamage();
 	}
 
-	boolean addObject(int x, int y, Direction dir, int id) {
+	public boolean addObject(int x, int y, Direction dir, int id) {
 		coords.set(x, y).addDirection(dir);
 		return addObject(coords.x, coords.y, id);
 	}
 
-	MapObject getObject(int x, int y) {
+	public MapObject getObject(int x, int y) {
 		if (correctCoords(coords.set(x, y))) {
 			MapObject ret = mapObjects.get(coords);
 			if (ret != null) {
@@ -268,17 +274,17 @@ public class Map {
 		addObject(x, y, id);
 	}
 
-	void randPlaceObject(Vector<Integer> id, int range) {
+	public void randPlaceObject(Vector<Integer> id, int range) {
 		randPlaceObject(id.get(Utils.random.nextInt(range)));
 	}
 
-	void randPlaceTile(int id) {
+	public void randPlaceTile(int id) {
 		int x = Utils.random.nextInt(this.xsz);
 		int y = Utils.random.nextInt(this.ysz);
 		addTile(x, y, id, true);
 	}
 
-	MapObject getObject(int x, int y, Direction dir) {
+	public MapObject getObject(int x, int y, Direction dir) {
 		if (correctCoords(coords.set(x, y))) {
 			coords.addDirection(dir);
 			return getObject(coords.x, coords.y);
@@ -286,7 +292,7 @@ public class Map {
 			return nullObject;
 	}
 
-	Loot getLoot(int x, int y) {
+	public Loot getLoot(int x, int y) {
 		if (correctCoords(coords.set(x, y))) {
 			Loot ret = mapLoot.get(coords.set(x, y));
 			if (ret != null) {
@@ -306,7 +312,7 @@ public class Map {
 			mapLoot.remove(coords);
 	}
 
-	void putLoot(int x, int y, int id, int q) {
+	public void putLoot(int x, int y, int id, int q) {
 		if (correctCoords(coords.set(x, y))) {
 			Utils.out("Adding loot id " + id + " q " + q + "|" + x + "," + y);
 			if (mapLoot.get(coords) != null) {
@@ -319,7 +325,7 @@ public class Map {
 		}
 	}
 
-	void putLoot(int x, int y, Item item) {
+	public void putLoot(int x, int y, Item item) {
 		if (correctCoords(coords.set(x, y))) {
 			if (mapLoot.get(coords) != null)
 				mapLoot.get(coords).add(item);
@@ -329,7 +335,7 @@ public class Map {
 		}
 	}
 
-	void update() {
+	public void update() {
 		Pair coord = new Pair();
 		Crop newCrop;
 		Vector<Pair> del = new Vector<Pair>();
@@ -349,7 +355,7 @@ public class Map {
 			mapCrops.remove(del.get(i));
 	}
 
-	boolean putCrop(int x, int y, int id) { // item id
+	public boolean putCrop(int x, int y, int id) { // item id
 		if (!correctCoords(coords.set(x, y)))
 			return false;
 		if (objectExists(x, y))
@@ -363,7 +369,7 @@ public class Map {
 		return true;
 	}
 
-	boolean putCrop(int x, int y, Crop crop) {
+	public boolean putCrop(int x, int y, Crop crop) {
 		if (!correctCoords(coords.set(x, y)))
 			return false;
 		if (getTile(x, y).id != PLOWED_SOIL)
@@ -373,7 +379,7 @@ public class Map {
 		return true;
 	}
 
-	Crop getCrop(int x, int y) {
+	public Crop getCrop(int x, int y) {
 		if (correctCoords(coords.set(x, y))) {
 			Crop ret = mapCrops.get(new Pair(coords));
 			if (ret != null)
@@ -387,7 +393,7 @@ public class Map {
 			mapCrops.remove(new Pair(coords));
 	}
 
-	boolean putNpc(Npc npc) {
+	public boolean putNpc(Npc npc) {
 		int x = npc.x;
 		int y = npc.y;
 
@@ -401,12 +407,12 @@ public class Map {
 		return true;
 	}
 
-	boolean putNpc(Npc npc, int x, int y) {
+	public boolean putNpc(Npc npc, int x, int y) {
 		npc.teleport(x, y);
 		return moveNpc(npc, x, y);
 	}
 
-	Npc getNpc(int x, int y) {
+	public Npc getNpc(int x, int y) {
 		if (!correctCoords(coords.set(x, y)))
 			return nullNpc;
 
@@ -418,7 +424,7 @@ public class Map {
 		return nullNpc;
 	}
 
-	boolean moveNpc(Npc npc, int x, int y) { // moves npc only on the grid(not on the screen) to process smooth
+	public boolean moveNpc(Npc npc, int x, int y) { // moves npc only on the grid(not on the screen) to process smooth
 												// movement;should be called by an npc before changing its own position.
 												// yeah, the
 												// system is fucky.

@@ -1,14 +1,17 @@
 package ru.bernarder.fallenrisefromdust;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.Faction;
+import ru.bernarder.fallenrisefromdust.inventory.Item;
 
 public class Stats {
-	final static int STR_WEIGHT_MULTIPLIER = 25;
+	public final static int STR_WEIGHT_MULTIPLIER = 25;
 
-	int AP_WALK = 5; // action points consumed by walking
-	int AP_ATTACK = 3;
-	int AP_MINOR = 1; // action points consumed by minor action
+	public int AP_WALK = 5; // action points consumed by walking
+	public int AP_ATTACK = 3;
+	public int AP_MINOR = 1; // action points consumed by minor action
 
 	final static int STARVE_DMG = 1;
 	final static int FOOD_HEAL = 3;
@@ -60,7 +63,8 @@ public class Stats {
 
 	public boolean dead = false;
 
-	StatAction actions;
+	@JsonIgnore
+	public StatAction actions;
 	
 	public void calcActionCosts() {
 		//AP_MINOR = ;

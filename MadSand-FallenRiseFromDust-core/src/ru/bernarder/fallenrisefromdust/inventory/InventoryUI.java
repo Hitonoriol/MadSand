@@ -1,4 +1,4 @@
-package ru.bernarder.fallenrisefromdust;
+package ru.bernarder.fallenrisefromdust.inventory;
 
 import java.util.Map.Entry;
 import java.util.Set;
@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
+
+import ru.bernarder.fallenrisefromdust.Gui;
 
 public class InventoryUI {
 	ScrollPane invScroll;
@@ -72,11 +74,11 @@ public class InventoryUI {
 		invTable.add(cell);
 	}
 	
-	void hide() {
+	public void hide() {
 		invScroll.setVisible(false);
 	}
 
-	void toggleVisible() {
+	public void toggleVisible() {
 		invScroll.setVisible(!invScroll.isVisible());
 	}
 

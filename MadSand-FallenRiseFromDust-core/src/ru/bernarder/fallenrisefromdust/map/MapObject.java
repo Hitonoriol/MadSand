@@ -1,10 +1,11 @@
-package ru.bernarder.fallenrisefromdust;
+package ru.bernarder.fallenrisefromdust.map;
 
 import java.util.HashMap;
 import java.util.Vector;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
+import ru.bernarder.fallenrisefromdust.Utils;
 import ru.bernarder.fallenrisefromdust.enums.Skill;
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
@@ -13,10 +14,13 @@ public class MapObject {
 	public static final int NULL_OBJECT_ID = 0;
 	public static final int COLLISION_MASK_ID = 666;
 	
-	int id, hp, harverstHp, lvl;
-	boolean nocollide = false;
-	Skill skill;
-	String name;
+	public int id;
+	public int hp;
+	public int harverstHp;
+	public int lvl;
+	public boolean nocollide = false;
+	public Skill skill;
+	public String name;
 
 	public MapObject(int id) {
 		this.id = id;
@@ -32,7 +36,7 @@ public class MapObject {
 		this(0);
 	}
 
-	boolean isCollisionMask() {
+	public boolean isCollisionMask() {
 		return (id == Map.COLLISION_MASK_ID);
 	}
 
@@ -49,7 +53,7 @@ public class MapObject {
 		}
 	}
 
-	boolean takeDamage(int amt) {
+	public boolean takeDamage(int amt) {
 		if (amt <= 0)
 			amt = 1;
 		boolean dmg = false;
@@ -77,11 +81,11 @@ public class MapObject {
 		return aitems.get(Utils.random.nextInt(aitems.size()));
 	}
 
-	static int getAltItem(int id, int hand) {
+	public static int getAltItem(int id, int hand) {
 		return getAltItem(id, hand, ObjectProp.altitems);
 	}
 
-	static int getTileAltItem(int id, int hand) {
+	public static int getTileAltItem(int id, int hand) {
 		return getAltItem(id, hand, TileProp.altitems);
 	}
 

@@ -4,12 +4,16 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Vector;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.czyzby.noise4j.map.Grid;
 import com.github.czyzby.noise4j.map.generator.noise.NoiseGenerator;
 import com.github.czyzby.noise4j.map.generator.room.dungeon.DungeonGenerator;
 import com.github.czyzby.noise4j.map.generator.util.Generators;
 
+import ru.bernarder.fallenrisefromdust.entities.Npc;
+import ru.bernarder.fallenrisefromdust.entities.Player;
 import ru.bernarder.fallenrisefromdust.enums.Direction;
+import ru.bernarder.fallenrisefromdust.map.Map;
 import ru.bernarder.fallenrisefromdust.properties.WorldGenProp;
 
 public class World {
@@ -18,13 +22,13 @@ public class World {
 	public int curywpos = 5; // current location's global coordinates
 	public int curxwpos = 5;
 	public int curlayer = 0; // current layer: layer>0 = underworld | layer<0 overworld
-	static final int BORDER = 1;// map border(old shit, not really useful anymore)
-	static int MAPSIZE = 100; // default location size
+	public static final int BORDER = 1;// map border(old shit, not really useful anymore)
+	public static int MAPSIZE = 100; // default location size
 
-	static final int LAYER_OVERWORLD = 0;
+	public static final int LAYER_OVERWORLD = 0;
 	static final int LAYER_UNDERWORLD = 1;
 
-	static Player player;
+	public static Player player;
 	Location WorldLoc;
 
 	public int worldtime = 12; // time (00 - 23)
@@ -79,7 +83,8 @@ public class World {
 		return getLoc(new Pair(x, y), layer, 0);
 	}
 
-	Map getCurLoc() {
+	@JsonIgnore
+	public Map getCurLoc() {
 		return getLoc(curxwpos, curywpos, curlayer);
 	}
 
@@ -200,7 +205,7 @@ public class World {
 			Utils.out("Nope... Not feeling like generating your sheet");
 			return;
 		}
-		final Grid grid = new Grid(World.MAPSIZE);
+		final Grid grid = new Grid(World.MAPSIZE);	//TODO rework
 		final DungeonGenerator dungeonGenerator = new DungeonGenerator();
 		dungeonGenerator.setRoomGenerationAttempts(World.MAPSIZE);
 		dungeonGenerator.setMaxRoomSize(dungeon.get(DUNGEON_MAXROOMSIZE));
@@ -291,7 +296,7 @@ public class World {
 		}
 	}
 
-	int getTileId(int x, int y) {
+	public int getTileId(int x, int y) {
 		return getCurLoc().getTile(x, y).id;
 	}
 
@@ -299,7 +304,7 @@ public class World {
 		return getCurLoc().getObject(x, y).id;
 	}
 
-	int getObjID(int x, int y, Direction dir) {
+	public int getObjID(int x, int y, Direction dir) {
 		return getCurLoc().getObject(x, y, dir).id;
 	}
 
@@ -315,7 +320,7 @@ public class World {
 		getCurLoc().addObject(x, y, id);
 	}
 
-	void delObj(int x, int y) {
+	public void delObj(int x, int y) {
 		addObj(x, y, 0);
 	}
 
@@ -413,7 +418,7 @@ public class World {
 		
 	}
 
-	void ticks(int n) {
+	public void ticks(int n) {
 		for (int i = n; i > 0; --i) {
 			tick();
 		}

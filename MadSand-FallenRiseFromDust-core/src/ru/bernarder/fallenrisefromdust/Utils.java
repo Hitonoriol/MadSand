@@ -7,8 +7,10 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
+import ru.bernarder.fallenrisefromdust.entities.Npc;
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
+import ru.bernarder.fallenrisefromdust.map.Map;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
@@ -25,8 +27,10 @@ public class Utils {
 	public static float pspeed = 33.0F;
 	static SpriteBatch batch;
 	static boolean admin = true;
-
-	public static Random random = new Random();
+	
+	static long seed = new Random().nextLong();
+	public static Random random = new Random(seed);
+	
 	static int selected;
 
 	public static void init() {
@@ -77,7 +81,7 @@ public class Utils {
 		return ItemProp.name.get(id);
 	}
 
-	static void toggleInventory() {
+	public static void toggleInventory() {
 		if (Gui.inventoryActive)
 			World.player.hideInventory();
 		else

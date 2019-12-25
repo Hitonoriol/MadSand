@@ -1,11 +1,11 @@
-package ru.bernarder.fallenrisefromdust;
+package ru.bernarder.fallenrisefromdust.map;
 
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
 
 public class Tile {
-	int id;
+	public int id;
 	String name;
-	boolean foreground = false;
+	public boolean foreground = false;
 
 	public Tile(int id) {
 		this.id = id;

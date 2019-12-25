@@ -35,10 +35,10 @@ public class Resources {
 	static Document gendoc;
 	static Document skilldoc;
 
-	static Texture[] item;
+	public static Texture[] item;
 	static Texture[] objects;
 	static Texture[] tile;
-	static Texture[] npc;
+	public static Texture[] npc;
 
 	static TextureRegion[][] tmpAnim;
 
@@ -57,12 +57,12 @@ public class Resources {
 	static Animation<TextureRegion> ranim;
 
 	static Texture placeholder;
-	static TextureRegionDrawable noEquip;
+	public static TextureRegionDrawable noEquip;
 
-	static Sprite playerRightSpr;
-	static Sprite playerLeftSpr;
-	static Sprite playerUpSpr;
-	static Sprite playerDownSpr;
+	public static Sprite playerRightSpr;
+	public static Sprite playerLeftSpr;
+	public static Sprite playerUpSpr;
+	public static Sprite playerDownSpr;
 
 	static final String XML_QUEST_NODE = "quest";
 	static final String XML_ITEM_NODE = "item";

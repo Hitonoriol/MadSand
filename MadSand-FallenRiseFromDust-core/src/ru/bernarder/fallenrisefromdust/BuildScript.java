@@ -3,6 +3,8 @@ package ru.bernarder.fallenrisefromdust;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 
+import ru.bernarder.fallenrisefromdust.entities.Npc;
+import ru.bernarder.fallenrisefromdust.map.MapObject;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 
 import java.util.StringTokenizer;
