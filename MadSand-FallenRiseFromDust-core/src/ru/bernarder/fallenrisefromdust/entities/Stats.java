@@ -1,10 +1,11 @@
-package ru.bernarder.fallenrisefromdust;
+package ru.bernarder.fallenrisefromdust.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import ru.bernarder.fallenrisefromdust.Utils;
+import ru.bernarder.fallenrisefromdust.entities.inventory.Item;
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.Faction;
-import ru.bernarder.fallenrisefromdust.inventory.Item;
 
 public class Stats {
 	public final static int STR_WEIGHT_MULTIPLIER = 25;
@@ -91,7 +92,8 @@ public class Stats {
 		maxstamina = stamina;
 	}
 
-	int getSum() {
+	@JsonIgnore
+	public int getSum() {
 		return str + constitution + accur + luck + dexterity + intelligence;
 	}
 

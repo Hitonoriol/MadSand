@@ -1,4 +1,4 @@
-package ru.bernarder.fallenrisefromdust;
+package ru.bernarder.fallenrisefromdust.entities;
 
 public class SkillValue {
 	final static double DEFAULT_MULTIPLIER = 1.4;

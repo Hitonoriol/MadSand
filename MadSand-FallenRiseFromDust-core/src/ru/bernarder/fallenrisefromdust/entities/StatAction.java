@@ -1,4 +1,4 @@
-package ru.bernarder.fallenrisefromdust;
+package ru.bernarder.fallenrisefromdust.entities;
 
 public interface StatAction {
 	public void _die();

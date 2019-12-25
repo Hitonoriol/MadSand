@@ -3,9 +3,9 @@ package ru.bernarder.fallenrisefromdust.map;
 import java.util.Vector;
 
 import ru.bernarder.fallenrisefromdust.Utils;
-import ru.bernarder.fallenrisefromdust.World;
-import ru.bernarder.fallenrisefromdust.inventory.Inventory;
-import ru.bernarder.fallenrisefromdust.inventory.Item;
+import ru.bernarder.fallenrisefromdust.entities.inventory.Inventory;
+import ru.bernarder.fallenrisefromdust.entities.inventory.Item;
+import ru.bernarder.fallenrisefromdust.world.World;
 
 public class Loot {
 	int nodes = 0;

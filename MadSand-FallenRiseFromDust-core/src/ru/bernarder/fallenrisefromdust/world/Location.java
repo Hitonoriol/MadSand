@@ -1,4 +1,4 @@
-package ru.bernarder.fallenrisefromdust;
+package ru.bernarder.fallenrisefromdust.world;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -8,6 +8,10 @@ import java.util.HashMap;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import ru.bernarder.fallenrisefromdust.GameSaver;
+import ru.bernarder.fallenrisefromdust.MadSand;
+import ru.bernarder.fallenrisefromdust.Utils;
+import ru.bernarder.fallenrisefromdust.containers.Pair;
 import ru.bernarder.fallenrisefromdust.entities.Npc;
 import ru.bernarder.fallenrisefromdust.map.Crop;
 import ru.bernarder.fallenrisefromdust.map.Loot;
@@ -92,7 +96,7 @@ public class Location extends HashMap<MapID, Map> {
 		}
 	}
 
-	byte[] locationToBytes(int wx, int wy) {
+	public byte[] locationToBytes(int wx, int wy) {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		byte[] layer;
 		long size;
@@ -112,7 +116,7 @@ public class Location extends HashMap<MapID, Map> {
 		}
 	}
 
-	void bytesToLocation(byte[] location, int wx, int wy) throws Exception {
+	public void bytesToLocation(byte[] location, int wx, int wy) throws Exception {
 		ByteArrayInputStream stream = new ByteArrayInputStream(location);
 		long layersz;
 		long saveVersion;

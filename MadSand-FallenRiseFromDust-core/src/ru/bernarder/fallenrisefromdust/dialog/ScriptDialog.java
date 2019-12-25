@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import ru.bernarder.fallenrisefromdust.BuildScript;
 import ru.bernarder.fallenrisefromdust.Gui;
-import ru.bernarder.fallenrisefromdust.Tuple;
+import ru.bernarder.fallenrisefromdust.containers.Tuple;
 
 public class ScriptDialog {
 	private GameDialog dialog;

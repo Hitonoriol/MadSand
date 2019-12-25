@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import ru.bernarder.fallenrisefromdust.Gui;
-import ru.bernarder.fallenrisefromdust.Tuple;
+import ru.bernarder.fallenrisefromdust.containers.Tuple;
 
 public class GameDialog extends Dialog {
 	public static final float WIDTH = Gdx.graphics.getWidth() / 4;

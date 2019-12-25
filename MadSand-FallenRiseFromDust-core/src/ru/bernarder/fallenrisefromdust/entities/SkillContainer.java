@@ -1,13 +1,17 @@
-package ru.bernarder.fallenrisefromdust;
+package ru.bernarder.fallenrisefromdust.entities;
 
 import java.util.HashMap;
 
+import ru.bernarder.fallenrisefromdust.MadSand;
+import ru.bernarder.fallenrisefromdust.Resources;
+import ru.bernarder.fallenrisefromdust.Utils;
+import ru.bernarder.fallenrisefromdust.containers.Tuple;
 import ru.bernarder.fallenrisefromdust.enums.Skill;
 
 public class SkillContainer extends HashMap<Skill, SkillValue> {
 	final int BONUS_DENOMINATOR = 25; // skill lvl/this = bonus percent of something for some actions
 	final int ITEM_BONUS_DENOMINATOR = 5; // level/this = quantity of bonus items from action
-	static HashMap<Skill, Tuple<Integer, Double>> reqList = new HashMap<Skill, Tuple<Integer, Double>>();
+	public static HashMap<Skill, Tuple<Integer, Double>> reqList = new HashMap<Skill, Tuple<Integer, Double>>();
 
 	public SkillContainer() {
 		Skill skill;

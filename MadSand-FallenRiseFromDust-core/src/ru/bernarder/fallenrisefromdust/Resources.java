@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
+import ru.bernarder.fallenrisefromdust.entities.SkillContainer;
 import ru.bernarder.fallenrisefromdust.enums.Faction;
 import ru.bernarder.fallenrisefromdust.enums.ItemType;
 import ru.bernarder.fallenrisefromdust.enums.NpcType;
@@ -297,7 +298,7 @@ public class Resources {
 
 	static Texture mapcursor;
 
-	static void loadSkillReqs() {
+	public static void loadSkillReqs() {
 		if (SkillContainer.reqList.size() > 0)
 			return;
 		skilldoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.SKILLFILE));

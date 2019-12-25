@@ -30,10 +30,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
 import ru.bernarder.fallenrisefromdust.entities.Player;
+import ru.bernarder.fallenrisefromdust.entities.Stats;
+import ru.bernarder.fallenrisefromdust.entities.inventory.Item;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
 import ru.bernarder.fallenrisefromdust.enums.Skill;
-import ru.bernarder.fallenrisefromdust.inventory.Item;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
+import ru.bernarder.fallenrisefromdust.world.World;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -456,7 +458,7 @@ public class Gui {
 		}
 		TextButton cbtn = new TextButton("Cancel", Gui.skin);
 		if (slots == 0)
-			ldialog.add(new TextButton("No game sessions to load", Gui.skin)).width(defLblWidth).row();
+			ldialog.add(new TextButton("No worlds to load", Gui.skin)).width(defLblWidth).row();
 		ldialog.add(cbtn).width(defLblWidth).row();
 		ldialog.add(new Label("\n", Gui.skin)).width(defLblWidth).row();
 		cbtn.addListener(new ChangeListener() {
@@ -543,7 +545,7 @@ public class Gui {
 		});
 		dialog.row();
 		dialog.add(new Label("\n\n", Gui.skin)).width(Gdx.graphics.getWidth() / 2).row();
-		dialog.add(new Label("\n\nSession name:\n", Gui.skin)).width(Gdx.graphics.getWidth() / 2).row();
+		dialog.add(new Label("\n\nWorld name:\n", Gui.skin)).width(Gdx.graphics.getWidth() / 2).row();
 		dialog.add(worldtxt).width(Gdx.graphics.getWidth() / 2).row();
 		dialog.add(okbtn).width(Gdx.graphics.getWidth() / 2).row();
 		dialog.add(nobtn).width(Gdx.graphics.getWidth() / 2).row();

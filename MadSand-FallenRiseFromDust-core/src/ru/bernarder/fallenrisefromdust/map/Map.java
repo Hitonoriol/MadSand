@@ -5,13 +5,13 @@ import java.util.Map.Entry;
 import java.util.Vector;
 
 import ru.bernarder.fallenrisefromdust.MadSand;
-import ru.bernarder.fallenrisefromdust.Pair;
 import ru.bernarder.fallenrisefromdust.Utils;
-import ru.bernarder.fallenrisefromdust.World;
+import ru.bernarder.fallenrisefromdust.containers.Pair;
 import ru.bernarder.fallenrisefromdust.entities.Npc;
+import ru.bernarder.fallenrisefromdust.entities.inventory.Item;
 import ru.bernarder.fallenrisefromdust.enums.Direction;
-import ru.bernarder.fallenrisefromdust.inventory.Item;
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
+import ru.bernarder.fallenrisefromdust.world.World;
 
 public class Map {
 	private int xsz, ysz;

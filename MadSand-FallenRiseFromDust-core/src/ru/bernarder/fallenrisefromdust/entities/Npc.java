@@ -5,16 +5,16 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import ru.bernarder.fallenrisefromdust.MadSand;
-import ru.bernarder.fallenrisefromdust.Pair;
 import ru.bernarder.fallenrisefromdust.Resources;
 import ru.bernarder.fallenrisefromdust.Utils;
-import ru.bernarder.fallenrisefromdust.World;
+import ru.bernarder.fallenrisefromdust.containers.Pair;
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.NpcState;
 import ru.bernarder.fallenrisefromdust.enums.NpcType;
 import ru.bernarder.fallenrisefromdust.enums.Skill;
 import ru.bernarder.fallenrisefromdust.map.Loot;
 import ru.bernarder.fallenrisefromdust.properties.NpcProp;
+import ru.bernarder.fallenrisefromdust.world.World;
 
 public class Npc extends Entity {
 	public static int NULL_NPC = 0;

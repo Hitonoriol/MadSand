@@ -4,19 +4,17 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ru.bernarder.fallenrisefromdust.MadSand;
-import ru.bernarder.fallenrisefromdust.Pair;
-import ru.bernarder.fallenrisefromdust.PairFloat;
-import ru.bernarder.fallenrisefromdust.StatAction;
-import ru.bernarder.fallenrisefromdust.Stats;
-import ru.bernarder.fallenrisefromdust.World;
+import ru.bernarder.fallenrisefromdust.containers.Pair;
+import ru.bernarder.fallenrisefromdust.containers.PairFloat;
+import ru.bernarder.fallenrisefromdust.entities.inventory.Inventory;
+import ru.bernarder.fallenrisefromdust.entities.inventory.Item;
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.Skill;
-import ru.bernarder.fallenrisefromdust.inventory.Inventory;
-import ru.bernarder.fallenrisefromdust.inventory.Item;
 import ru.bernarder.fallenrisefromdust.map.Loot;
 import ru.bernarder.fallenrisefromdust.map.Map;
 import ru.bernarder.fallenrisefromdust.map.MapObject;
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
+import ru.bernarder.fallenrisefromdust.world.World;
 
 public abstract class Entity {
 	@JsonIgnore

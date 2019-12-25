@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ru.bernarder.fallenrisefromdust.containers.PairFloat;
 import ru.bernarder.fallenrisefromdust.entities.Entity;
 import ru.bernarder.fallenrisefromdust.entities.Npc;
 import ru.bernarder.fallenrisefromdust.entities.Player;
@@ -16,6 +17,7 @@ import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
 import ru.bernarder.fallenrisefromdust.map.Map;
 import ru.bernarder.fallenrisefromdust.map.MapObject;
+import ru.bernarder.fallenrisefromdust.world.World;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -106,7 +108,7 @@ public class MadSand extends Game {
 	public static int CROPS;
 
 	private static PairFloat[] renderArea;
-	static ObjectMapper mapper = new ObjectMapper();
+	public static ObjectMapper mapper = new ObjectMapper();
 
 	public static World world;
 

@@ -1,11 +1,13 @@
-package ru.bernarder.fallenrisefromdust;
+package ru.bernarder.fallenrisefromdust.world;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import ru.bernarder.fallenrisefromdust.containers.Pair;
+
 public class MapID {
-	Pair worldxy;
-	int layer, id;
+	public Pair worldxy;
+	public int layer, id;
 
 	public MapID(Pair coords, int layer, int id) {
 		this.worldxy = coords;

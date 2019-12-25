@@ -1,4 +1,4 @@
-package ru.bernarder.fallenrisefromdust.inventory;
+package ru.bernarder.fallenrisefromdust.entities.inventory;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
@@ -21,7 +21,7 @@ import ru.bernarder.fallenrisefromdust.Gui;
 import ru.bernarder.fallenrisefromdust.MadSand;
 import ru.bernarder.fallenrisefromdust.Resources;
 import ru.bernarder.fallenrisefromdust.Utils;
-import ru.bernarder.fallenrisefromdust.World;
+import ru.bernarder.fallenrisefromdust.world.World;
 
 public class InventoryUICell {
 	private final int size = 80;

@@ -10,22 +10,29 @@ import ru.bernarder.fallenrisefromdust.BuildScript;
 import ru.bernarder.fallenrisefromdust.GameSaver;
 import ru.bernarder.fallenrisefromdust.Gui;
 import ru.bernarder.fallenrisefromdust.MadSand;
-import ru.bernarder.fallenrisefromdust.Pair;
 import ru.bernarder.fallenrisefromdust.Resources;
 import ru.bernarder.fallenrisefromdust.Utils;
-import ru.bernarder.fallenrisefromdust.World;
+import ru.bernarder.fallenrisefromdust.containers.Pair;
+import ru.bernarder.fallenrisefromdust.entities.inventory.Item;
 import ru.bernarder.fallenrisefromdust.enums.*;
-import ru.bernarder.fallenrisefromdust.inventory.Item;
 import ru.bernarder.fallenrisefromdust.map.MapObject;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
+import ru.bernarder.fallenrisefromdust.world.World;
 
 public class Player extends Entity {
 
 	public HashSet<Integer> unlockedItems = new HashSet<Integer>(); // set of items player obtained at least once
 	public ArrayList<Integer> craftRecipes = new ArrayList<Integer>(); // list of items which recipes are available to
 																		// the player
+
+	public HashSet<Integer> completedQuests = new HashSet<Integer>(); // sets of completed quests and the ones in
+																		// progress. all the quests are already loaded
+																		// in QuestList.quests, so we only need to store
+																		// the ids
+	public HashSet<Integer> questsInProgress = new HashSet<Integer>();
+
 	public boolean isMain = true;
 
 	@JsonIgnore
@@ -305,8 +312,7 @@ public class Player extends Entity {
 	}
 
 	@Override
-	public
-	boolean walk(Direction dir) {
+	public boolean walk(Direction dir) {
 		if (super.walk(dir)) {
 			objectInFront();
 			return true;

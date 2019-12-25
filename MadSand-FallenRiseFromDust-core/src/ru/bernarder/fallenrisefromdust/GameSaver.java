@@ -11,14 +11,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import ru.bernarder.fallenrisefromdust.entities.Player;
+import ru.bernarder.fallenrisefromdust.entities.inventory.Inventory;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
-import ru.bernarder.fallenrisefromdust.inventory.Inventory;
+import ru.bernarder.fallenrisefromdust.world.World;
 
 public class GameSaver {
 	static String SECTOR_DELIM = "!";
-	final static long saveFormatVersion = 1;
+	public final static long saveFormatVersion = 1;
 
-	static byte[] concat(byte[]... arrays) {
+	public static byte[] concat(byte[]... arrays) {
 		int totalLength = 0;
 		for (int i = 0; i < arrays.length; i++) {
 			totalLength += arrays[i].length;
@@ -53,14 +54,14 @@ public class GameSaver {
 		return result;
 	}
 
-	static byte[] encode2(int val) {
+	public static byte[] encode2(int val) {
 		byte data[] = new byte[2];
 		data[1] = (byte) (val & 0xFF);
 		data[0] = (byte) ((val >> 8) & 0xFF);
 		return data;
 	}
 
-	static int decode2(byte[] bytes) {
+	public static int decode2(byte[] bytes) {
 		return (bytes[0] << 8) | (bytes[1] & 0xFF);
 	}
 

@@ -1,4 +1,4 @@
-package ru.bernarder.fallenrisefromdust;
+package ru.bernarder.fallenrisefromdust.world;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -10,6 +10,10 @@ import com.github.czyzby.noise4j.map.generator.noise.NoiseGenerator;
 import com.github.czyzby.noise4j.map.generator.room.dungeon.DungeonGenerator;
 import com.github.czyzby.noise4j.map.generator.util.Generators;
 
+import ru.bernarder.fallenrisefromdust.Gui;
+import ru.bernarder.fallenrisefromdust.MadSand;
+import ru.bernarder.fallenrisefromdust.Utils;
+import ru.bernarder.fallenrisefromdust.containers.Pair;
 import ru.bernarder.fallenrisefromdust.entities.Npc;
 import ru.bernarder.fallenrisefromdust.entities.Player;
 import ru.bernarder.fallenrisefromdust.enums.Direction;
@@ -29,7 +33,9 @@ public class World {
 	static final int LAYER_UNDERWORLD = 1;
 
 	public static Player player;
-	Location WorldLoc;
+	
+	@JsonIgnore
+	public Location WorldLoc;
 
 	public int worldtime = 12; // time (00 - 23)
 	int ticksPerHour = 100; // ticks per one hourTick() trigger
@@ -308,7 +314,7 @@ public class World {
 		return getCurLoc().getObject(x, y, dir).id;
 	}
 
-	void putMapTile(int x, int y, int id) {
+	public void putMapTile(int x, int y, int id) {
 		getCurLoc().addTile(x, y, id);
 	}
 

@@ -1,4 +1,4 @@
-package ru.bernarder.fallenrisefromdust.inventory;
+package ru.bernarder.fallenrisefromdust.entities.inventory;
 
 import java.util.Map.Entry;
 import java.util.Set;

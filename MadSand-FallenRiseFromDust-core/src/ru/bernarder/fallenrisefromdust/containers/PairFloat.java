@@ -1,4 +1,4 @@
-package ru.bernarder.fallenrisefromdust;
+package ru.bernarder.fallenrisefromdust.containers;
 
 public class PairFloat { // jus a container for them float coords
 	public float x, y;

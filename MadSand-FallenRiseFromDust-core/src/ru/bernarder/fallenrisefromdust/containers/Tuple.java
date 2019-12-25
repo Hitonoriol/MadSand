@@ -1,4 +1,4 @@
-package ru.bernarder.fallenrisefromdust;
+package ru.bernarder.fallenrisefromdust.containers;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -7,7 +7,7 @@ public class Tuple<T1, T2> {
 	public T1 l;
 	public T2 r;
 
-	Tuple(T1 l, T2 r) {
+	public Tuple(T1 l, T2 r) {
 		set(l, r);
 	}
 
