@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ru.bernarder.fallenrisefromdust.containers.PairFloat;
+import ru.bernarder.fallenrisefromdust.dialog.GameDialog;
 import ru.bernarder.fallenrisefromdust.entities.Entity;
 import ru.bernarder.fallenrisefromdust.entities.Npc;
 import ru.bernarder.fallenrisefromdust.entities.Player;
@@ -62,7 +63,7 @@ public class MadSand extends Game {
 	static float GUISTART = 20.0F;
 	static boolean renderc = false;
 
-	static String WORLDNAME = "Save Slot #1";
+	static String WORLDNAME = "";
 
 	public static int[] craftableid;
 	public static int CRAFTABLES = 0;
@@ -87,7 +88,7 @@ public class MadSand extends Game {
 	static final String FONT_CHARS = "АБВГДЕЁЖЗИЙКЛМНОПРСТФХЦЧШЩЪЬЫЭЮЯабвгдеёжзийклмнопрстфхцчшщыъьэюяabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"'<>";
 	static final String FONT_PATH = "fonts/8bitoperator.ttf";
 
-	static boolean justStarted = true;	//flag for some once-per-launch actions
+	static boolean justStarted = true; // flag for some once-per-launch actions
 	static int rendered = 2;
 	float percent = 0.0F;
 
@@ -163,6 +164,8 @@ public class MadSand extends Game {
 		world.Generate();
 
 		Utils.out("End of initialization!");
+
+		GameDialog.generateDialogChain("#This is a title#foo[Button text]=>bar", Gui.menu).show();
 	}
 
 	static int countRcells() {
@@ -386,7 +389,7 @@ public class MadSand extends Game {
 			mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
 			camera.unproject(mouseinworld);
 			Gdx.input.setInputProcessor(Gui.overlay);
-			Utils.checkFocus();
+			Utils.checkConsoleFocus();
 			if (Gui.overlay.getKeyboardFocus() != Gui.inputField && !charcrt && !Gui.contextMenuActive) {
 				Utils.updMouseCoords();
 				Utils.mouseMovement();

@@ -887,6 +887,7 @@
 			<friendly>1</friendly>
 			<faction>Partisans</faction>
 			<spawnonce>1</spawnonce>
+			<type>QuestMaster</type>
 			<qids>0,1</qids>
 		</npc>
 		<npc id="6">
@@ -923,6 +924,7 @@
 			<accuracy>50</accuracy>
 			<friendly>1</friendly>
 			<faction>Marauders</faction>
+			<type>Trader</type>
 			<spawnonce>0</spawnonce>
 		</npc>
 		<npc id="9">

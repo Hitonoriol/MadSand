@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Map.Entry;
 
 import ru.bernarder.fallenrisefromdust.containers.Pair;
+import ru.bernarder.fallenrisefromdust.dialog.GameDialog;
 import ru.bernarder.fallenrisefromdust.entities.Npc;
 import ru.bernarder.fallenrisefromdust.map.MapObject;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
@@ -54,7 +55,7 @@ public class BuildScript {
 				OBJECT_LINE = "object_line", TILE_LINE = "tile_line", PLAYER_GIVE = "player_give",
 				DAMAGE_OBJECT = "damage_object", PLAYER_HEAL = "player_heal", PLAYER_SATIATE = "player_satiate",
 				PLAYER_REMOVE_ITEM = "player_remove_item", PLAYER_HAND_SET = "player_hand_set",
-				PLAYER_KILL = "player_kill", NPC_SPAWN = "npc_spawn";
+				PLAYER_KILL = "player_kill", NPC_SPAWN = "npc_spawn", CHAIN_DIALOG = "chain_dialog";
 	}
 
 	public static void bLine(int x, int y, int dir, int id, int len, int head) {
@@ -327,6 +328,12 @@ public class BuildScript {
 					}
 					break;
 
+				}
+
+				if (command == Token.CHAIN_DIALOG) {
+					String text = line.substring(command.length());
+					GameDialog.generateDialogChain(text, Gui.overlay).show();
+					continue;
 				}
 
 				if (!Character.isLetter(id))

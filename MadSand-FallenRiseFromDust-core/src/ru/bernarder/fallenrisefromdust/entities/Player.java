@@ -32,6 +32,8 @@ public class Player extends Entity {
 																		// in QuestList.quests, so we only need to store
 																		// the ids
 	public HashSet<Integer> questsInProgress = new HashSet<Integer>();
+	
+	public HashSet<Integer> knownNpcs = new HashSet<Integer>();
 
 	public boolean isMain = true;
 
@@ -45,6 +47,10 @@ public class Player extends Entity {
 
 	public Player() {
 		this("");
+	}
+	
+	public boolean knowsNpc(int id) {
+		return knownNpcs.contains(id);
 	}
 
 	void increaseSkill(Skill skill) {

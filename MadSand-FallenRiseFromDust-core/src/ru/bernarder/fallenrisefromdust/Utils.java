@@ -7,11 +7,11 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
-import ru.bernarder.fallenrisefromdust.containers.Tuple;
 import ru.bernarder.fallenrisefromdust.entities.Npc;
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
 import ru.bernarder.fallenrisefromdust.map.Map;
+import ru.bernarder.fallenrisefromdust.map.MapObject;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
@@ -25,14 +25,14 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 public class Utils {
-	public static boolean tester = true;
+	public static boolean debugMode = true;
 	public static float pspeed = 33.0F;
 	static SpriteBatch batch;
 	static boolean admin = true;
-	
+
 	static long seed = new Random().nextLong();
 	public static Random random = new Random(seed);
-	
+
 	static int selected;
 
 	public static void init() {
@@ -61,14 +61,6 @@ public class Utils {
 			++i;
 		}
 		return ret;
-	}
-
-	public static Tuple<Integer, String> makeTuple(int key, String val) {
-		return new Tuple<Integer, String>(key, val);
-	}
-
-	public static Tuple<Integer, Double> makeTuple(int key, double val) {
-		return new Tuple<Integer, Double>(key, val);
 	}
 
 	public static String str(int val) {
@@ -158,16 +150,16 @@ public class Utils {
 
 		}
 
-		if ((Gdx.input.isKeyJustPressed(Keys.Y)) && (tester)) {
+		if ((Gdx.input.isKeyJustPressed(Keys.Y)) && (debugMode)) {
 			World.player.teleport(MadSand.wmx, MadSand.wmy);
 		}
-		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.R)) && (tester)) {
+		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.R)) && (debugMode)) {
 			MadSand.world.Generate();
 		}
-		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.DOWN)) && (tester)) {
+		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.DOWN)) && (debugMode)) {
 			MadSand.world.curlayer = 1;
 		}
-		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.UP)) && (tester)) {
+		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.UP)) && (debugMode)) {
 			MadSand.world.curlayer = 0;
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.F11)) {
@@ -185,13 +177,13 @@ public class Utils {
 			Gdx.input.setInputProcessor(Gui.menu);
 			MadSand.state = GameState.NMENU;
 		}
-		if ((Gdx.input.isKeyJustPressed(Keys.G)) && (tester)) {
+		if ((Gdx.input.isKeyJustPressed(Keys.G)) && (debugMode)) {
 			GameSaver.saveWorld();
 		}
-		if ((Gdx.input.isKeyJustPressed(Keys.L)) && (tester)) {
+		if ((Gdx.input.isKeyJustPressed(Keys.L)) && (debugMode)) {
 			GameSaver.loadWorld(MadSand.WORLDNAME);
 		}
-		if ((Gdx.input.isKeyJustPressed(Keys.H)) && (tester)) {
+		if ((Gdx.input.isKeyJustPressed(Keys.H)) && (debugMode)) {
 			World.player.damage(10);
 		}
 		if ((Gdx.input.isKeyJustPressed(Keys.F)) && (World.player.stats.hand.id != 0)) {
@@ -209,22 +201,18 @@ public class Utils {
 		if ((Gdx.input.isKeyPressed(Keys.S))) {
 			World.player.walk(Direction.DOWN);
 		}
+		if (Gdx.input.isKeyJustPressed(Keys.Z))
+			debugMode = !debugMode;
 		if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
 			World.player.rest();
 		}
 	}
 
 	static void mouseMovement() {
-		if ((Gdx.input.isButtonPressed(0)) && (MadSand.state == GameState.GAME) && (!World.player.isStepping())
+		if ((Gdx.input.isButtonPressed(Buttons.LEFT)) && (MadSand.state == GameState.GAME) && (!World.player.isStepping())
 				&& (!Gui.contextMenuActive)) {
-			if (MadSand.wmx > World.player.x)
-				World.player.walk(Direction.RIGHT);
-			else if (MadSand.wmx < World.player.x)
-				World.player.walk(Direction.LEFT);
-			else if (MadSand.wmy > World.player.y)
-				World.player.walk(Direction.UP);
-			else if (MadSand.wmy < World.player.y)
-				World.player.walk(Direction.DOWN);
+			World.player.lookAtMouse(MadSand.wmx, MadSand.wmy);
+			World.player.walk(World.player.stats.look);
 		}
 	}
 
@@ -282,42 +270,48 @@ public class Utils {
 
 		Map loc = MadSand.world.getCurLoc();
 		Npc npc = loc.getNpc(MadSand.wmx, MadSand.wmy);
+		MapObject object = loc.getObject(MadSand.wmx, MadSand.wmy);
+		String info = "";
 
 		Gui.mousemenu.addAction(Actions.moveTo(MadSand.mx + 65, MadSand.my - 70, 0.1F));
 
-		try {
-			Gui.mouselabel[0].setText("Looking at (" + MadSand.wmx + ", " + MadSand.wmy + ")");
-			Gui.mouselabel[1].setText("Tile: " + TileProp.name.get(loc.getTile(MadSand.wmx, MadSand.wmy).id));
-			Gui.mouselabel[2].setText("Object: " + ObjectProp.name.get(loc.getObject(MadSand.wmx, MadSand.wmy).id));
-			Gui.mouselabel[3].setText("Creature: " + " " + npc.stats.name);
-			Gui.mouselabel[4].setText("Global ticks: " + MadSand.world.globalTick + "\nWorld time: "
-					+ MadSand.world.worldtime + "\nPlayer position: (" + World.player.x + ", " + World.player.y + ")");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		info += ("Looking at (" + MadSand.wmx + ", " + MadSand.wmy + ")") + Gui.LINEBREAK;
+		info += ("Tile: " + TileProp.name.get(loc.getTile(MadSand.wmx, MadSand.wmy).id)) + Gui.LINEBREAK;
+
+		if (object != Map.nullObject)
+			info += ("Object: " + ObjectProp.name.get(object.id)) + Gui.LINEBREAK;
+		if (npc != Map.nullNpc)
+			info += ("Creature: " + " " + npc.stats.name) + Gui.LINEBREAK;
+
+		if (debugMode)
+			info += ("Global ticks: " + MadSand.world.globalTick + "\nWorld time: " + MadSand.world.worldtime
+					+ "\nPlayer position: (" + World.player.x + ", " + World.player.y + ")");
+
+		Gui.mouselabel.setText(info);
 	}
 
 	public static void out(String arg) {
-		if (tester) {
+		if (debugMode) {
 			Calendar cal = Calendar.getInstance();
 			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 			System.out.print("[" + sdf.format(cal.getTime()) + "] " + arg + "\n");
 		}
 	}
 
-	public static void die() {
-		out("Seems like some fatal error occured. Check " + MadSand.ERRFILE + " for details. Exiting...");
+	public static void die(String... msg) {
+		out("Seems like some fatal error occured. Check " + MadSand.ERRFILE + " for details.");
+		if (msg.length > 0) {
+			for (String m : msg) {
+				out(m);
+			}
+		}
 		System.exit(-1);
 	}
 
-	public static void outnonl(String arg) {
-		if (tester) {
-			System.out.print(arg);
-		}
-	}
-
-	public static void checkFocus() {
-		if ((Gdx.input.isKeyJustPressed(Keys.ENTER)) && (Gui.overlay.getKeyboardFocus() == Gui.inputField) && tester) {
+	public static void checkConsoleFocus() {
+		if (!debugMode)
+			return;
+		if ((Gdx.input.isKeyJustPressed(Keys.ENTER)) && (Gui.overlay.getKeyboardFocus() == Gui.inputField)) {
 			String cmd = Gui.inputField.getText().trim();
 			try {
 				BuildScript.execute(cmd);

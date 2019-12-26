@@ -22,20 +22,24 @@ import ru.bernarder.fallenrisefromdust.properties.WorldGenProp;
 
 public class World {
 	Map nullLoc = new Map(0, 0);
-	private int xsz, ysz; // max world size, not really used anywhere
-	public int curywpos = 5; // current location's global coordinates
+	private Pair coords = new Pair();
+	private int xsz, ysz; // max world size, not really used anywhere (still)
+	
+	public int curywpos = 5; // global coords of current sector
 	public int curxwpos = 5;
-	public int curlayer = 0; // current layer: layer>0 = underworld | layer<0 overworld
-	public static final int BORDER = 1;// map border(old shit, not really useful anymore)
+	
+	public int curlayer = 0; // current layer: layer > 0 - underworld | layer == 0  - overworld
+	
+	public static final int BORDER = 1;// map border (old shit, not really useful anymore, but i'm too afraid to delete it)
 	public static int MAPSIZE = 100; // default location size
 
 	public static final int LAYER_OVERWORLD = 0;
 	static final int LAYER_UNDERWORLD = 1;
 
 	public static Player player;
-	
+
 	@JsonIgnore
-	public Location WorldLoc;
+	public Location WorldLoc; // container for all the maps and layers
 
 	public int worldtime = 12; // time (00 - 23)
 	int ticksPerHour = 100; // ticks per one hourTick() trigger
@@ -47,7 +51,7 @@ public class World {
 		this.ysz = sz;
 		WorldLoc = new Location();
 		if (!createBasicLoc(new Pair(curxwpos, curywpos), MAPSIZE, MAPSIZE))
-			System.exit(-1);
+			Utils.die("World constructor fucked up");
 	}
 
 	public World() {
@@ -86,7 +90,7 @@ public class World {
 	}
 
 	Map getLoc(int x, int y, int layer) {
-		return getLoc(new Pair(x, y), layer, 0);
+		return getLoc(coords.set(x, y), layer, 0);
 	}
 
 	@JsonIgnore
@@ -131,7 +135,7 @@ public class World {
 
 	public void Generate(int wx, int wy) {
 		Utils.out("Generating new sector!");
-		if (!locExists(new MapID(new Pair(curxwpos, curywpos), 0)))
+		if (!locExists(new MapID(coords.set(curxwpos, curywpos), 0)))
 			createBasicLoc(wx, wy);
 		try {
 			clearCurLoc();
@@ -211,7 +215,7 @@ public class World {
 			Utils.out("Nope... Not feeling like generating your sheet");
 			return;
 		}
-		final Grid grid = new Grid(World.MAPSIZE);	//TODO rework
+		final Grid grid = new Grid(World.MAPSIZE); // TODO rework
 		final DungeonGenerator dungeonGenerator = new DungeonGenerator();
 		dungeonGenerator.setRoomGenerationAttempts(World.MAPSIZE);
 		dungeonGenerator.setMaxRoomSize(dungeon.get(DUNGEON_MAXROOMSIZE));
@@ -416,22 +420,22 @@ public class World {
 		player.tileDmg();
 		getCurLoc().update();
 		++globalTick;
-		
+
 		if (++tick >= ticksPerHour - 1) {
 			tick = 0;
 			hourTick();
 		}
-		
+
 	}
 
 	public void ticks(int n) {
 		for (int i = n; i > 0; --i) {
 			tick();
 		}
-		
+
 		Map loc = getCurLoc();
 		Npc npc;
-		
+
 		for (Entry<Pair, Npc> entry : loc.getNpcs().entrySet()) {
 			npc = entry.getValue();
 			npc.act();

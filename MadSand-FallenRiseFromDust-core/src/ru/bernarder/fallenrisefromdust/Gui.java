@@ -47,6 +47,7 @@ import java.util.Vector;
 import java.util.Map.Entry;
 
 public class Gui {
+	public static final String LINEBREAK = "\n";
 	static final float DEFWIDTH = 250f;
 	static final int LOG_LENGTH = 20;
 	public static final int EQ_SLOTS = 5;
@@ -65,7 +66,7 @@ public class Gui {
 
 	static Label[] overlayStatLabels;
 	static Label[] log;
-	static Label[] mouselabel;
+	static Label mouselabel;
 	static Label dialMSG;
 	public static Label verlbl;
 
@@ -85,19 +86,21 @@ public class Gui {
 	static TextButton resumeBtn;
 
 	static BitmapFont font;
+	static BitmapFont fontMedium;
 	static BitmapFont fontBig;
-	
+
 	public static NinePatchDrawable darkBackground;
 	public static NinePatchDrawable darkBackgroundSizeable;
-	static NinePatchDrawable dialogBackground;
+	public static NinePatchDrawable dialogBackground;
 
 	public static void createBasicSkin() { // TODO: Remove this shit and move skin to json for fucks sake
 		font = createFont(16);
+		fontMedium = createFont(20);
 		fontBig = createFont(24);
-		
+
 		Gui.skin = new Skin();
 		Gui.skin.add("default", font);
-		
+
 		Pixmap pixmap = new Pixmap(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 12, Pixmap.Format.RGB888);
 		pixmap.setColor(Color.WHITE);
 		pixmap.fill();
@@ -105,12 +108,12 @@ public class Gui {
 
 		Slider.SliderStyle slst = new Slider.SliderStyle();
 		slst.background = Gui.skin.newDrawable("background", Color.DARK_GRAY);
-		
+
 		Drawable knob = Gui.skin.newDrawable("background", Color.GRAY);
 		knob.setMinWidth(20);
 		slst.knob = knob;
 		Gui.skin.add("default-horizontal", slst);
-		
+
 		TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
 		textButtonStyle.up = Gui.skin.newDrawable("background", Color.GRAY);
 		textButtonStyle.down = Gui.skin.newDrawable("background", Color.DARK_GRAY);
@@ -118,22 +121,26 @@ public class Gui {
 		textButtonStyle.font = Gui.skin.getFont("default");
 		textButtonStyle.disabled = Gui.skin.newDrawable("background", Color.BLACK);
 		Gui.skin.add("default", textButtonStyle);
-		
+
 		Label.LabelStyle labelStyle = new Label.LabelStyle();
 		labelStyle.font = font;
 		labelStyle.fontColor = Color.WHITE;
 		Gui.skin.add("default", labelStyle);
-		
+
 		transparency = new NinePatchDrawable(
 				new NinePatch(new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/transparency.png"))));
-		
+
 		Window.WindowStyle ws = new Window.WindowStyle();
-		ws.background = Gui.skin.newDrawable("background", Color.LIGHT_GRAY);
+		NinePatch patch = new NinePatch(new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/bg.png")));
+		dialogBackground = new NinePatchDrawable(patch);
+		dialogBackground.setMinHeight(50);
+		dialogBackground.setMinWidth(100);
+		ws.background = Gui.skin.newDrawable("background", Color.LIGHT_GRAY);;
 		ws.stageBackground = transparency;
-		ws.titleFontColor = Color.BLUE;
-		ws.titleFont = font;
+		ws.titleFontColor = Color.WHITE;
+		ws.titleFont = fontMedium;
 		Gui.skin.add("default", ws);
-		
+
 		TextField.TextFieldStyle tx = new TextField.TextFieldStyle();
 		tx.font = font;
 		tx.fontColor = Color.WHITE;
@@ -144,18 +151,17 @@ public class Gui {
 		tx.cursor.setMinWidth(1.0F);
 		tx.cursor.setMinHeight(tx.background.getMinHeight());
 		Gui.skin.add("default", tx);
-		
+
 		ScrollPane.ScrollPaneStyle spx = new ScrollPane.ScrollPaneStyle();
 		Gui.skin.add("default", spx);
-		
+
 		NinePatch ptc = new NinePatch(new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/darkness.png")), 3, 3, 3, 3);
 		darkBackground = new NinePatchDrawable(ptc);
-		
+
 		darkBackgroundSizeable = new NinePatchDrawable(ptc);
 		darkBackgroundSizeable.setMinHeight(0);
 		darkBackgroundSizeable.setMinWidth(0);
-		
-		
+
 		TextTooltip.TextTooltipStyle txtool = new TextTooltip.TextTooltipStyle();
 		txtool.background = darkBackground;
 		txtool.label = labelStyle;
@@ -716,7 +722,7 @@ public class Gui {
 		Gui.contextMenuBtn = new TextButton[5];
 		Gui.mousemenu = new Table(Gui.skin);
 		Gui.mousemenu.setVisible(true);
-		Gui.mouselabel = new Label[5];
+		Gui.mouselabel = new Label("", Gui.skin);
 		int cc = 0;
 		Gui.contextMenuBtn[0] = new TextButton("Interact", Gui.skin);
 		Gui.contextMenuBtn[0].addListener(new ChangeListener() {
@@ -764,12 +770,10 @@ public class Gui {
 		Gui.gamecontext.setVisible(false);
 
 		cc = 0;
-		while (cc < 5) {
-			Gui.mouselabel[cc] = new Label("!", Gui.skin);
-			Gui.mousemenu.add(Gui.mouselabel[cc]).width(100.0F);
-			Gui.mousemenu.row();
-			cc++;
-		}
+
+		Gui.mousemenu.add(mouselabel).width(100.0F);
+		Gui.mousemenu.row();
+
 		Gui.menu = new Stage();
 		Gui.craft = new Stage();
 		Gui.craftbl = new Table();
@@ -803,9 +807,6 @@ public class Gui {
 		Gui.inputField.setVisible(false);
 		tpm = 0;
 		Table ovtbl = new Table(Gui.skin).align(18);
-
-		NinePatch patch = new NinePatch(new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/bg.png")), 3, 3, 3, 3);
-		dialogBackground = new NinePatchDrawable(patch);
 
 		// logtbl.setBackground(bck);
 		Gui.dialMSG = new Label("Test", Gui.skin);
