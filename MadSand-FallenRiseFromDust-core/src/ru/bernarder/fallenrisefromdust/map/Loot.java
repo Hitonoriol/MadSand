@@ -5,7 +5,6 @@ import java.util.Vector;
 import ru.bernarder.fallenrisefromdust.Utils;
 import ru.bernarder.fallenrisefromdust.entities.inventory.Inventory;
 import ru.bernarder.fallenrisefromdust.entities.inventory.Item;
-import ru.bernarder.fallenrisefromdust.world.World;
 
 public class Loot {
 	int nodes = 0;
@@ -55,28 +54,29 @@ public class Loot {
 		return add(item.id, item.quantity);
 	}
 
-	private static int addLootQ(String temp, Inventory inventory, int x, int y, Map map) { // Don't look here
+	public static int addLootQ(String temp, Inventory inventory, int x, int y, Map map) { // Don't look here
 		int i = 0;
 		if (temp.equals("n"))
 			return -1;
+		if (temp.indexOf(":") == -1)
+			temp += ":";
 		Utils.out("Loot Cell contents: " + temp);
 		try {
 			String[] block = temp.split(":");
 			String[] attr = new String[0];
 			int id, q;
-			if (!temp.equals("n")) {
-				while (i < block.length) {
-					attr = block[i].split("/");
-					id = Integer.parseInt(attr[0]);
-					q = Integer.parseInt(attr[1]);
-					if (inventory != null)
-						inventory.putItem(id, q);
-					else
-						map.putLoot(x, y, id, q);
-					i++;
-				}
-				return Integer.parseInt(attr[0]);
+
+			while (i < block.length) {
+				attr = block[i].split("/");
+				id = Integer.parseInt(attr[0]);
+				q = Integer.parseInt(attr[1]);
+				if (inventory != null)
+					inventory.putItem(id, q);
+				else
+					map.putLoot(x, y, id, q);
+				i++;
 			}
+			
 			return 0;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -85,29 +85,7 @@ public class Loot {
 		return 0;
 	}
 
-	public static int addLootQ(String query, Inventory inventory) { // This static abomination adds items by query to inventory
-		return addLootQ(query, inventory, 0, 0, null);
-	}
-
 	public static int addLootQ(String query, int x, int y, Map map) { // and this thing puts items to map by their query
 		return addLootQ(query, null, x, y, map);
-	}
-
-	public static boolean invExists(String sequence) {
-		int i = 0;
-		String temp = sequence;
-		String[] block = temp.split(":");
-		String[] attr = new String[0];
-		int id = 0;
-		int q = 0;
-		while (i < block.length) {
-			attr = block[i].split("/");
-			id = Integer.parseInt(attr[0]);
-			q = Integer.parseInt(attr[1]);
-			if (World.player.inventory.getSameCell(id, q) == -1)
-				return false;
-			i++;
-		}
-		return true;
 	}
 }

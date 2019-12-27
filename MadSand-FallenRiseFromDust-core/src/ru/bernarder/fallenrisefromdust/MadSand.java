@@ -127,7 +127,7 @@ public class MadSand extends Game {
 		if (state != GameState.INVENTORY)
 			World.player.hideInventory();
 
-		if (Gui.contextMenuActive)
+		if (Gui.gameUnfocused)
 			Gui.gamecontext.setVisible(false);
 
 		if (state == GameState.GAME)
@@ -165,7 +165,11 @@ public class MadSand extends Game {
 
 		Utils.out("End of initialization!");
 
-		GameDialog.generateDialogChain("#This is a title#foo[Button text]=>bar", Gui.menu).show();
+		// Test stuff:
+		world.getCurLoc().spawnNpc(5, 55, 55);
+		GameDialog.generateDialogChain(
+				"#This is a title#Hello, stranger. This is a dummy dialog. And this is some random gibberish to test how long text looks like.[Button text]",
+				Gui.menu).show();
 	}
 
 	static int countRcells() {
@@ -390,7 +394,7 @@ public class MadSand extends Game {
 			camera.unproject(mouseinworld);
 			Gdx.input.setInputProcessor(Gui.overlay);
 			Utils.checkConsoleFocus();
-			if (Gui.overlay.getKeyboardFocus() != Gui.inputField && !charcrt && !Gui.contextMenuActive) {
+			if (Gui.overlay.getKeyboardFocus() != Gui.inputField && !charcrt && !Gui.gameUnfocused) {
 				Utils.updMouseCoords();
 				Utils.mouseMovement();
 				Utils.gameKeyCheck();

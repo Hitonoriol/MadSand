@@ -209,8 +209,8 @@ public class Utils {
 	}
 
 	static void mouseMovement() {
-		if ((Gdx.input.isButtonPressed(Buttons.LEFT)) && (MadSand.state == GameState.GAME) && (!World.player.isStepping())
-				&& (!Gui.contextMenuActive)) {
+		if ((Gdx.input.isButtonPressed(Buttons.LEFT)) && (MadSand.state == GameState.GAME)
+				&& (!World.player.isStepping()) && (!Gui.gameUnfocused)) {
 			World.player.lookAtMouse(MadSand.wmx, MadSand.wmy);
 			World.player.walk(World.player.stats.look);
 		}
@@ -267,6 +267,9 @@ public class Utils {
 
 		MadSand.wmx = (int) Math.floor(MadSand.mouseinworld.x / MadSand.TILESIZE);
 		MadSand.wmy = (int) Math.floor(MadSand.mouseinworld.y / MadSand.TILESIZE);
+
+		if (Gui.gameUnfocused)
+			return;
 
 		Map loc = MadSand.world.getCurLoc();
 		Npc npc = loc.getNpc(MadSand.wmx, MadSand.wmy);

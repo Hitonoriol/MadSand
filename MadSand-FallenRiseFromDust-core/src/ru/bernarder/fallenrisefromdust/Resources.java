@@ -154,16 +154,16 @@ public class Resources {
 		while (i < MadSand.QUESTS) {
 			quest = new Quest(i);
 			si = Utils.str(i);
-			quest.startMsg = XMLUtils.getKey(resdoc, "quest", si, "start");
-			quest.endMsg = XMLUtils.getKey(resdoc, "quest", si, "complete");
-			quest.reqMsg = XMLUtils.getKey(resdoc, "quest", si, "requirement_str");
-			quest.reqItems = XMLUtils.getKey(resdoc, "quest", si, "requirement");
-			quest.giveItems = XMLUtils.getKey(resdoc, "quest", si, "give_items");
-			quest.removeOnCompletion = XMLUtils.getKey(resdoc, "quest", si, "remove_on_completion");
-			quest.repeatable = Boolean.parseBoolean(XMLUtils.getKey(resdoc, "quest", si, "repeatable"));
-			quest.next = Utils.val(XMLUtils.getKey(resdoc, "quest", si, "next"));
-			quest.rewardItems = XMLUtils.getKey(resdoc, "quest", si, "reward");
-			quest.exp = Utils.val(XMLUtils.getKey(resdoc, "quest", si, "reward_exp"));
+			quest.startMsg = XMLUtils.getKey(questdoc, "quest", si, "start");
+			quest.endMsg = XMLUtils.getKey(questdoc, "quest", si, "complete");
+			quest.reqMsg = XMLUtils.getKey(questdoc, "quest", si, "requirement_str");
+			quest.reqItems = XMLUtils.getKey(questdoc, "quest", si, "requirement");
+			quest.giveItems = XMLUtils.getKey(questdoc, "quest", si, "give_items");
+			quest.removeOnCompletion = XMLUtils.getKey(questdoc, "quest", si, "remove_on_completion");
+			quest.repeatable = Boolean.parseBoolean(XMLUtils.getKey(questdoc, "quest", si, "repeatable"));
+			quest.next = Utils.val(XMLUtils.getKey(questdoc, "quest", si, "next"));
+			quest.rewardItems = XMLUtils.getKey(questdoc, "quest", si, "reward");
+			quest.exp = Utils.val(XMLUtils.getKey(questdoc, "quest", si, "reward_exp"));
 
 			QuestList.quests.put(i, quest);
 			++i;

@@ -1,25 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
    <quests>
       <quest id="0">
-         <start>Oh, hello there...=>Uhm...I haven't seen you here before, who are you?=>Well, to be honest, it doesn't matter. Not in this place.=>My name is... uhm... Dick, but I don't really like it. Call me Richard.=>You seem lost... You know what? If you can prove you can be of any use, then we'll talk.=>Can you please bring me some wood for the campfire? Here's an axe, it'll help you.</start>
-         <complete>Thanks a lot, stranger.=>I'd like to know your name now...=>Nice to meet you, {PLAYER}!=>Hm... Okay. I'll take my axe back. If you want some job or a good story, just ask!</complete>
-         <requirement>:1/15</requirement>
-         <give_items>:3/1</give_items>
-         <remove_on_completion>:3/1</remove_on_completion>
-         <repeatable>0</repeatable>
+         <start>
+	         #Stranger# Oh, hello there...=>
+	         #Stranger# Uhm... I haven't seen you here before, who are you?=>
+	         #Stranger# Well, to be honest, it doesn't matter. Not in this place.=>
+	         #Richard# My name is... uhm... Dick, but I don't really like it. Call me Richard.=>
+	         #Richard# You seem lost... You know what? If you can prove you can be of any use, then we'll talk.=>
+	         #Richard# Can you please bring me some wood for the campfire? Here's an axe, it'll help you.=>
+	         #Richard# Return to me when you get 15 wood pieces.
+         </start>
+         <complete>
+	         #Richard# Thanks a lot, stranger.=>
+	         #Richard# I'd like to know your name now...=>
+	         #Richard# Nice to meet you, {PLAYER}!=>
+	         #Richard# Hm... Okay. You can take my axe as a reward. It's old anyways. If you want some job or a good story, just ask!
+         </complete>
+         <requirement>1/15</requirement>
+         <give_items>3/1</give_items>
+         <remove_on_completion>n</remove_on_completion>
+         <repeatable>False</repeatable>
          <next>1</next>
-         <reward></reward>
+         <reward>n</reward>
          <reward_exp>20</reward_exp>
-         <requirement_str>Please, give me 35 wood pieces.</requirement_str>
+         <requirement_str>
+         	#Richard# Please, give me 15 wood pieces.
+         </requirement_str>
       </quest>
       <quest id="1">
-         <start>Hello, {PLAYER}!=>You know, our camp gets raided by Marauders pretty frequently. But now that you appeared out of nowhere, I've got a strange feeling that we have a chance against them!=>Go kill 10 rookie marauders</start>
-         <complete>Thank you, hero! Take your reward and return to me when you are ready for the next task.</complete>
-         <requirement>:22/10</requirement>
-         <give_items>:2/5</give_items>
-         <reward></reward>
+         <start>
+	         #Richard# Hello, {PLAYER}!=>
+	         #Richard# You know, our camp gets raided by Marauders pretty frequently. But now that you appeared out of nowhere, I've got a strange feeling that we have a chance against them!=>
+	         #Richard# Go kill 10 rookie marauders to scare them off. Then we'll begin to plan something bigger.
+         </start>
+         <complete>
+         	#Richard# Thank you, hero! Take your reward and return to me when you are ready for the next task.
+         </complete>
+         <requirement>22/10</requirement>
+         <give_items>2/5</give_items>
+         <reward>n</reward>
          <reward_exp>50</reward_exp>
-         <repeatable>0</repeatable>
-         <requirement_str>Kill 10 marauders and give me 10 leather pieces you get from them.</requirement_str>
+         <repeatable>False</repeatable>
+         <requirement_str>
+         	#Richard# Kill 10 marauders and give me 10 leather pieces you get from them.
+         </requirement_str>
       </quest>
    </quests>

@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ru.bernarder.fallenrisefromdust.Utils;
 import ru.bernarder.fallenrisefromdust.enums.Skill;
+import ru.bernarder.fallenrisefromdust.map.Loot;
 
 public class Inventory {
 	public Vector<Item> items = new Vector<Item>();
@@ -70,6 +71,10 @@ public class Inventory {
 		}
 	}
 
+	public int getSameCell(Item item) {
+		return items.indexOf(item);
+	}
+
 	public int getSameCell(int id) {
 		return items.indexOf(new Item(id));
 	}
@@ -101,6 +106,7 @@ public class Inventory {
 			inventoryUI.setMass(curWeight, maxWeight);
 			Group rcell = itemUI.get(item).cell;
 			Cell<Group> cell = inventoryUI.invTable.getCell(rcell);
+			clearContextMenus();
 			rcell.remove();
 			// remove cell from table
 			inventoryUI.invTable.getCells().removeValue(cell, true);
@@ -108,6 +114,7 @@ public class Inventory {
 			// itemUI.get(item).cell.remove();
 			itemUI.remove(item);
 			inventoryUI.stacks -= 1;
+
 			inventoryUI.refresh(itemUI.entrySet());
 			Utils.out("Removed item stacks: " + inventoryUI.stacks);
 		}
@@ -233,5 +240,28 @@ public class Inventory {
 
 	public boolean delItem(int id) {
 		return delItem(id, 1);
+	}
+
+	public boolean itemsExist(String sequence) {
+		int i = 0;
+		if (sequence.indexOf(":") == -1)
+			sequence += ":";
+		String[] block = sequence.split(":");
+		String[] attr = new String[0];
+		int id = 0;
+		int q = 0;
+		while (i < block.length) {
+			attr = block[i].split("/");
+			id = Integer.parseInt(attr[0]);
+			q = Integer.parseInt(attr[1]);
+			if (getSameCell(id, q) == -1)
+				return false;
+			i++;
+		}
+		return true;
+	}
+
+	public int putItem(String query) {
+		return Loot.addLootQ(query, this, 0, 0, null); // Don't ask about this, this is a long story
 	}
 }

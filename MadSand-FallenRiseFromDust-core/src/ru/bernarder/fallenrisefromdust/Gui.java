@@ -614,7 +614,10 @@ public class Gui {
 		dieLabel.setText(str);
 	}
 
-	static void refreshCraftMenu() { // TODO
+	private static float CRAFT_BTN_WIDTH = 250;
+	private static float CRAFT_ENTRY_PADDING = 30;
+	
+	static void refreshCraftMenu() {
 		Utils.out("Refreshing craft menu...");
 		craftbl.remove();
 		craftbl = new Table();
@@ -651,8 +654,8 @@ public class Gui {
 		while (i < craftSz) {
 			id = player.craftRecipes.get(i);
 			craftbtn[i] = new TextButton(ItemProp.name.get(id), skin);
-			craftbl.add(Gui.craftbtn[i]).width(250.0F);
-			craftbl.add(new Label(" " + Item.queryToName(ItemProp.recipe.get(id)), skin));
+			craftbl.add(Gui.craftbtn[i]).width(CRAFT_BTN_WIDTH);
+			craftbl.add(new Label(" " + Item.queryToName(ItemProp.recipe.get(id)), skin)).padRight(CRAFT_ENTRY_PADDING);
 
 			if ((i + 1) % perRow == 0)
 				craftbl.row();
@@ -670,8 +673,9 @@ public class Gui {
 		}
 		craftbl.row();
 
+		craftbl.setBackground(Gui.darkBackgroundSizeable);
 		scroll = new ScrollPane(Gui.craftbl);
-		scroll.setSize(1280.0F, 720.0F);
+		scroll.setSize(MadSand.XDEF, MadSand.YDEF);
 		craft.addActor(Gui.scroll);
 
 		Table backTable = new Table();
@@ -842,11 +846,11 @@ public class Gui {
 						Gui.gamecontext.setPosition(MadSand.mx + 50, MadSand.my - 30);
 						MadSand.wclickx = MadSand.wmx;
 						MadSand.wclicky = MadSand.wmy;
-						contextMenuActive = true;
+						gameUnfocused = true;
 					} else {
 						Gui.mousemenu.setVisible(true);
 						Gui.gamecontext.setVisible(false);
-						contextMenuActive = false;
+						gameUnfocused = false;
 					}
 				}
 			}
@@ -1006,7 +1010,7 @@ public class Gui {
 		return font;
 	}
 
-	public static boolean contextMenuActive = false;
+	public static boolean gameUnfocused = false;
 	public static boolean inventoryActive = false;
 
 }

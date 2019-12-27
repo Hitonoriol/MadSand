@@ -10,18 +10,23 @@ import ru.bernarder.fallenrisefromdust.BuildScript;
 import ru.bernarder.fallenrisefromdust.GameSaver;
 import ru.bernarder.fallenrisefromdust.Gui;
 import ru.bernarder.fallenrisefromdust.MadSand;
+import ru.bernarder.fallenrisefromdust.Quest;
 import ru.bernarder.fallenrisefromdust.Resources;
 import ru.bernarder.fallenrisefromdust.Utils;
 import ru.bernarder.fallenrisefromdust.containers.Pair;
+import ru.bernarder.fallenrisefromdust.dialog.GameDialog;
 import ru.bernarder.fallenrisefromdust.entities.inventory.Item;
 import ru.bernarder.fallenrisefromdust.enums.*;
+import ru.bernarder.fallenrisefromdust.map.Map;
 import ru.bernarder.fallenrisefromdust.map.MapObject;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
+import ru.bernarder.fallenrisefromdust.properties.QuestList;
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
 import ru.bernarder.fallenrisefromdust.world.World;
 
 public class Player extends Entity {
+	private Pair coords = new Pair();
 
 	public HashSet<Integer> unlockedItems = new HashSet<Integer>(); // set of items player obtained at least once
 	public ArrayList<Integer> craftRecipes = new ArrayList<Integer>(); // list of items which recipes are available to
@@ -32,7 +37,7 @@ public class Player extends Entity {
 																		// in QuestList.quests, so we only need to store
 																		// the ids
 	public HashSet<Integer> questsInProgress = new HashSet<Integer>();
-	
+
 	public HashSet<Integer> knownNpcs = new HashSet<Integer>();
 
 	public boolean isMain = true;
@@ -48,7 +53,7 @@ public class Player extends Entity {
 	public Player() {
 		this("");
 	}
-	
+
 	public boolean knowsNpc(int id) {
 		return knownNpcs.contains(id);
 	}
@@ -115,8 +120,88 @@ public class Player extends Entity {
 		return false;
 	}
 
+	public boolean isQuestInProgress(int id) {
+		return questsInProgress.contains(id);
+	}
+
+	public boolean isQuestCompleted(int id) {
+		return completedQuests.contains(id);
+	}
+
+	private void startQuest(Quest quest) {
+		inventory.putItem(quest.giveItems);
+		questsInProgress.add(quest.id);
+		GameDialog.generateDialogChain(quest.startMsg, Gui.overlay).show();
+	}
+
+	private void completeQuest(Quest quest) {
+		MadSand.print("You completed a quest!");
+		inventory.delItem(quest.reqItems);
+		inventory.delItem(quest.removeOnCompletion);
+		inventory.putItem(quest.rewardItems);
+		stats.skills.increaseSkill(Skill.Level, quest.exp);
+		MadSand.print("You got " + quest.exp + " EXP!");
+		if (!quest.repeatable)
+			completedQuests.add(quest.id);
+		questsInProgress.remove(quest.id);
+		GameDialog.generateDialogChain(quest.endMsg, Gui.overlay).show();
+	}
+
+	public void processQuest(int id) {
+		Quest quest = QuestList.quests.get(id);
+		if (isQuestInProgress(id)) {
+			if (inventory.itemsExist(quest.reqItems))
+				completeQuest(quest);
+			else
+				GameDialog.generateDialogChain(quest.reqMsg, Gui.overlay).show();
+		} else
+			startQuest(quest);
+	}
+
+	public int getAvailableQuest(ArrayList<Integer> quests) { // search NPC's quest list for {not yet started / not
+																// finished / repeatable} quests
+		for (int qid : quests) {
+			if (isQuestInProgress(qid) || !isQuestCompleted(qid))
+				return qid;
+		}
+		return QuestList.NO_QUESTS_STATUS;
+	}
+
+	public void interact(Npc npc) {
+		String name = npc.stats.name;
+		Utils.out("Interacting with NPC " + name + " type: " + npc.type.toString());
+		switch (npc.type) {
+		case Regular:
+			MadSand.print("Doesn't seem like " + name + " wants to talk.");
+			return;
+		case QuestMaster:
+			int qid = getAvailableQuest(npc.questList);
+			Utils.out("Got quest id: " + qid);
+			npc.pause();
+			if (qid == QuestList.NO_QUESTS_STATUS)
+				MadSand.print(name + " has no more tasks for you.");
+			else
+				processQuest(qid);
+			break;
+
+		default:
+			break;
+
+		}
+		doAction(stats.AP_MINOR);
+	}
+
 	public void interact(final Direction direction) {
-		int id = MadSand.world.getCurLoc().getObject(x, y, stats.look).id;
+		coords.set(x, y).addDirection(direction);
+
+		Map loc = MadSand.world.getCurLoc();
+		Npc npc = loc.getNpc(coords.x, coords.y);
+		if (npc != Map.nullNpc) {
+			interact(npc);
+			return;
+		}
+		int id = loc.getObject(coords.x, coords.y).id;
+
 		if (id == 0)
 			return;
 		String action = ObjectProp.interactAction.get(id);
@@ -147,6 +232,14 @@ public class Player extends Entity {
 			MadSand.print("You hit a " + obj.name + " [ " + obj.harverstHp + " / " + mhp + " ]");
 		if (item == -1 && destroyed)
 			MadSand.print("You damaged " + obj.name);
+	}
+
+	public void useItem(Item item) {
+		if (inventory.getSameCell(item) == -1)
+			return;
+		stats.hand = item;
+		Gui.setHandDisplay(item.id);
+		useItem();
 	}
 
 	public void useItem() {
@@ -340,7 +433,7 @@ public class Player extends Entity {
 	public void hideInventory() {
 		Utils.invBtnSetVisible(false);
 		Gdx.input.setInputProcessor(Gui.overlay);
-		Gui.contextMenuActive = false;
+		Gui.gameUnfocused = false;
 		MadSand.state = GameState.GAME;
 		Gui.mousemenu.setVisible(true);
 		inventory.inventoryUI.hide();
@@ -351,7 +444,7 @@ public class Player extends Entity {
 	public void showInventory() {
 		inventory.inventoryUI.toggleVisible();
 		Gui.gamecontext.setVisible(false);
-		Gui.contextMenuActive = false;
+		Gui.gameUnfocused = false;
 		Gui.mousemenu.setVisible(false);
 		Utils.invBtnSetVisible(true);
 		Gdx.input.setInputProcessor(Gui.overlay);

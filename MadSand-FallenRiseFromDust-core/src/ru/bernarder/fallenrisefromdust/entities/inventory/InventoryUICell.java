@@ -21,15 +21,15 @@ import ru.bernarder.fallenrisefromdust.Gui;
 import ru.bernarder.fallenrisefromdust.MadSand;
 import ru.bernarder.fallenrisefromdust.Resources;
 import ru.bernarder.fallenrisefromdust.Utils;
+import ru.bernarder.fallenrisefromdust.enums.ItemType;
 import ru.bernarder.fallenrisefromdust.world.World;
 
 public class InventoryUICell {
 	private final int size = 80;
-	private int CONTEXT_BUTTONS = 1;
-	
+
 	private static final float CONTEXT_BTN_WIDTH = 100F;
 	private static final float CONTEXT_BTN_HEIGHT = 30F;
-	
+
 	private float TOOLTIP_WIDTH = 200F;
 	private float TOOLTIP_HEIGHT = 50F;
 
@@ -43,7 +43,9 @@ public class InventoryUICell {
 	private Label toolHpLabel;
 
 	private Table invCellContextContainer; // RMB context menu container and buttons
-	private TextButton[] invCellContextMenu;
+
+	private TextButton dropBtn;
+	private TextButton useBtn;
 
 	private Image highlight; // for mouseover highlighting of items
 
@@ -69,22 +71,33 @@ public class InventoryUICell {
 
 		highlight.setVisible(false);
 
-		invCellContextMenu = new TextButton[CONTEXT_BUTTONS];
-		invCellContextMenu[0] = new TextButton("Drop", Gui.skin);
+		dropBtn = new TextButton("Drop", Gui.skin);
 
 		invCellContextContainer = new Table(Gui.skin);
-		invCellContextContainer.add(invCellContextMenu[0]).width(CONTEXT_BTN_WIDTH).height(CONTEXT_BTN_HEIGHT).row();
+		invCellContextContainer.add(dropBtn).width(CONTEXT_BTN_WIDTH).height(CONTEXT_BTN_HEIGHT).row();
 		invCellContextContainer.setVisible(false);
 		Gui.overlay.addActor(invCellContextContainer);
 
-		invCellContextMenu[0].addListener(new ChangeListener() {
+		dropBtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				invCellContextContainer.setVisible(false);
-				Gui.contextMenuActive = false;
+				Gui.gameUnfocused = false;
 				World.player.dropItem(item.id, item.quantity);
 			}
 
 		});
+
+		if (item.type == ItemType.Consumable || item.type == ItemType.PlaceableObject
+				|| item.type == ItemType.PlaceableTile) {
+			useBtn = new TextButton("Use", Gui.skin);
+			useBtn.addListener(new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					World.player.useItem(item);
+				}
+			});
+			invCellContextContainer.add(useBtn).width(CONTEXT_BTN_WIDTH).height(CONTEXT_BTN_HEIGHT).row();
+		}
 
 		cell.addListener(new InputListener() {
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -122,15 +135,15 @@ public class InventoryUICell {
 		cell.addListener(new ClickListener(Buttons.RIGHT) {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if (!invCellContextContainer.isVisible() && !Gui.contextMenuActive) {
+				if (!invCellContextContainer.isVisible() && !Gui.gameUnfocused) {
 					invCellContextContainer.setVisible(true);
 					MadSand.mx = Gdx.input.getX();
 					MadSand.my = Gdx.graphics.getHeight() - Gdx.input.getY();
-					invCellContextContainer.setPosition(MadSand.mx, MadSand.my);
-					Gui.contextMenuActive = true;
+					invCellContextContainer.setPosition(MadSand.mx + CONTEXT_BTN_WIDTH / 1.75f, MadSand.my);
+					Gui.gameUnfocused = true;
 				} else {
 					invCellContextContainer.setVisible(false);
-					Gui.contextMenuActive = false;
+					Gui.gameUnfocused = false;
 				}
 			}
 		});
@@ -141,6 +154,7 @@ public class InventoryUICell {
 	}
 
 	void hideContext() {
+		Gui.gameUnfocused = false;
 		invCellContextContainer.setVisible(false);
 	}
 

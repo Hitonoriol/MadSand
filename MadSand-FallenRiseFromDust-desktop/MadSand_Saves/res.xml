@@ -824,9 +824,9 @@
 			<name>Nothing</name>
 			<atk>0</atk>
 			<accuracy>0</accuracy>
-			<friendly>0</friendly>
+			<friendly>True</friendly>
 			<faction>Monsters</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="1">
 			<hp>30</hp>
@@ -836,9 +836,9 @@
 			<name>Rookie marauder</name>
 			<atk>1</atk>
 			<accuracy>2</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Marauders</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="2">
 			<hp>35</hp>
@@ -848,9 +848,9 @@
 			<name>Troll</name>
 			<atk>1</atk>
 			<accuracy>2</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Outlaws</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="3">
 			<hp>40</hp>
@@ -860,9 +860,9 @@
 			<name>Goon</name>
 			<atk>4</atk>
 			<accuracy>5</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Marauders</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="4">
 			<hp>42</hp>
@@ -872,9 +872,9 @@
 			<name>Old pirate</name>
 			<atk>5</atk>
 			<accuracy>5</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Marauders</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="5">
 			<hp>100</hp>
@@ -884,9 +884,9 @@
 			<name>Richard</name>
 			<atk>11</atk>
 			<accuracy>50</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Partisans</faction>
-			<spawnonce>1</spawnonce>
+			<spawnonce>True</spawnonce>
 			<type>QuestMaster</type>
 			<qids>0,1</qids>
 		</npc>
@@ -898,9 +898,9 @@
 			<name>Orc</name>
 			<atk>20</atk>
 			<accuracy>25</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Outlaws</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="7">
 			<hp>140</hp>
@@ -910,9 +910,9 @@
 			<name>Old hunter</name>
 			<atk>18</atk>
 			<accuracy>20</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Outlaws</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="8">
 			<hp>100</hp>
@@ -922,10 +922,10 @@
 			<name>Shopkeeper</name>
 			<atk>11</atk>
 			<accuracy>50</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Marauders</faction>
 			<type>Trader</type>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="9">
 			<hp>160</hp>
@@ -935,9 +935,9 @@
 			<name>Scout</name>
 			<atk>5</atk>
 			<accuracy>10</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Partisans</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="10">
 			<hp>80</hp>
@@ -947,9 +947,9 @@
 			<name>Alchemist</name>
 			<atk>5</atk>
 			<accuracy>5</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Partisans</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="11">
 			<hp>300</hp>
@@ -959,9 +959,9 @@
 			<name>Butcher</name>
 			<atk>35</atk>
 			<accuracy>5</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Outlaws</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="12">
 			<hp>50</hp>
@@ -971,9 +971,9 @@
 			<name>Elder</name>
 			<atk>5</atk>
 			<accuracy>1</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Partisans</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="13">
 			<hp>100</hp>
@@ -983,7 +983,7 @@
 			<name>Swen</name>
 			<atk>11</atk>
 			<accuracy>50</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Marauders</faction>
 			<spawnonce>1</spawnonce>
 		</npc>
@@ -995,9 +995,9 @@
 			<name>Rat</name>
 			<atk>1</atk>
 			<accuracy>5</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Monsters</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="15">
 			<hp>39</hp>
@@ -1007,9 +1007,9 @@
 			<name>Scorpion</name>
 			<atk>4</atk>
 			<accuracy>10</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Monsters</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="16">
 			<hp>25</hp>
@@ -1019,9 +1019,9 @@
 			<name>Cobra</name>
 			<atk>7</atk>
 			<accuracy>4</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Monsters</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="17">
 			<hp>51</hp>
@@ -1031,9 +1031,9 @@
 			<name>Giant turtle</name>
 			<atk>11</atk>
 			<accuracy>9</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Monsters</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="18">
 			<hp>30</hp>
@@ -1043,9 +1043,9 @@
 			<name>Salamander</name>
 			<atk>1</atk>
 			<accuracy>5</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Monsters</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="19">
 			<hp>15</hp>
@@ -1055,9 +1055,9 @@
 			<name>Bat</name>
 			<atk>2</atk>
 			<accuracy>15</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Monsters</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="20">
 			<hp>43</hp>
@@ -1067,9 +1067,9 @@
 			<name>Ghost</name>
 			<atk>10</atk>
 			<accuracy>5</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Monsters</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="21">
 			<hp>10</hp>
@@ -1079,9 +1079,9 @@
 			<name>Black cat</name>
 			<atk>1</atk>
 			<accuracy>1</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Monsters</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="22">
 			<hp>10</hp>
@@ -1091,9 +1091,9 @@
 			<name>Yellow cat</name>
 			<atk>1</atk>
 			<accuracy>1</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Monsters</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="23">
 			<hp>10</hp>
@@ -1103,9 +1103,9 @@
 			<name>White cat</name>
 			<atk>1</atk>
 			<accuracy>1</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Monsters</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="24">
 			<hp>10</hp>
@@ -1115,9 +1115,9 @@
 			<name>Orange stained cat</name>
 			<atk>1</atk>
 			<accuracy>1</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Monsters</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="25">
 			<hp>10</hp>
@@ -1127,9 +1127,9 @@
 			<name>Brown stained cat cat</name>
 			<atk>1</atk>
 			<accuracy>1</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Monsters</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="26">
 			<hp>111</hp>
@@ -1139,9 +1139,9 @@
 			<name>Besukyl the Demon</name>
 			<atk>13</atk>
 			<accuracy>25</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Monsters</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="27">
 			<hp>26</hp>
@@ -1151,9 +1151,9 @@
 			<name>Ghost</name>
 			<atk>4</atk>
 			<accuracy>5</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Monsters</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="28">
 			<hp>30</hp>
@@ -1163,9 +1163,9 @@
 			<name>Green mold</name>
 			<atk>1</atk>
 			<accuracy>1</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Monsters</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="29">
 			<hp>46</hp>
@@ -1175,9 +1175,9 @@
 			<name>Undead warrior</name>
 			<atk>11</atk>
 			<accuracy>10</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Monsters</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="30">
 			<hp>30</hp>
@@ -1187,9 +1187,9 @@
 			<name>Giant moth</name>
 			<atk>8</atk>
 			<accuracy>8</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Monsters</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="31">
 			<hp>15</hp>
@@ -1199,9 +1199,9 @@
 			<name>Babie giant moth</name>
 			<atk>4</atk>
 			<accuracy>5</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Monsters</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="32">
 			<hp>38</hp>
@@ -1211,9 +1211,9 @@
 			<name>Mutated turtle</name>
 			<atk>12</atk>
 			<accuracy>12</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Monsters</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="33">
 			<hp>30</hp>
@@ -1223,9 +1223,9 @@
 			<name>Yellow mold</name>
 			<atk>1</atk>
 			<accuracy>1</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Monsters</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="34">
 			<hp>30</hp>
@@ -1235,9 +1235,9 @@
 			<name>Red mold</name>
 			<atk>1</atk>
 			<accuracy>1</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Monsters</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="35">
 			<hp>15</hp>
@@ -1247,9 +1247,9 @@
 			<name>Crow</name>
 			<atk>3</atk>
 			<accuracy>5</accuracy>
-			<friendly>1</friendly>
+			<friendly>True</friendly>
 			<faction>Monsters</faction>
-			<spawnonce>0</spawnonce>
+			<spawnonce>False</spawnonce>
 		</npc>
 
 	</mobs>
@@ -1286,6 +1286,7 @@
 			<cost>25</cost>
 			<craftable>1</craftable>
 			<recipe>7/25</recipe>
+			<craftreq>7</craftreq>
 		</item>
 		<item id="5">
 			<name>Clay</name>
@@ -1516,6 +1517,7 @@
 			<cost>11</cost>
 			<craftable>1</craftable>
 			<recipe>2/13:8/5</recipe>
+			<craftreq>2,8</craftreq>
 			<type>11</type>
 			<onuse>!0 place_tile $player_x $player_y 15;= !15 You plowed the soil
 			</onuse>
@@ -1631,6 +1633,7 @@
 		<item id="58">
 			<name>Pint of beer</name>
 			<recipe>65/5:66/5</recipe>
+			<craftreq>65,66</craftreq>
 			<type>7</type>
 			<heal>5:20</heal>
 			<cost>25</cost>

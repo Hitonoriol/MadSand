@@ -393,6 +393,18 @@ public class Map {
 			mapCrops.remove(new Pair(coords));
 	}
 
+	public boolean spawnNpc(int id, int x, int y) {
+		if (!correctCoords(coords.set(x, y)))
+			return false;
+
+		if (getNpc(coords.x, coords.y) != nullNpc)
+			return false;
+
+		Npc npc = new Npc(id, x, y);
+
+		return putNpc(npc);
+	}
+
 	public boolean putNpc(Npc npc) {
 		int x = npc.x;
 		int y = npc.y;
@@ -425,9 +437,9 @@ public class Map {
 	}
 
 	public boolean moveNpc(Npc npc, int x, int y) { // moves npc only on the grid(not on the screen) to process smooth
-												// movement;should be called by an npc before changing its own position.
-												// yeah, the
-												// system is fucky.
+		// movement;should be called by an npc before changing its own position.
+		// yeah, the
+		// system is fucky.
 		int xold = npc.x, yold = npc.y;
 		Npc destNpc = getNpc(coords.x, coords.y);
 

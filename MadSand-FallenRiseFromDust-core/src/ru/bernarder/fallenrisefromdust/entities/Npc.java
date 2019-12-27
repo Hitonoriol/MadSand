@@ -1,5 +1,8 @@
 package ru.bernarder.fallenrisefromdust.entities;
 
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -12,7 +15,6 @@ import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.NpcState;
 import ru.bernarder.fallenrisefromdust.enums.NpcType;
 import ru.bernarder.fallenrisefromdust.enums.Skill;
-import ru.bernarder.fallenrisefromdust.map.Loot;
 import ru.bernarder.fallenrisefromdust.properties.NpcProp;
 import ru.bernarder.fallenrisefromdust.world.World;
 
@@ -20,10 +22,11 @@ public class Npc extends Entity {
 	public static int NULL_NPC = 0;
 
 	public int id;
-	public String questList;
+	public ArrayList<Integer> questList = new ArrayList<Integer>();
 
 	public boolean friendly;
 	public boolean spawnOnce;
+	private boolean pauseFlag = false;
 
 	public int attackDistance = 1;
 	public boolean playerSpotted = false;
@@ -38,7 +41,7 @@ public class Npc extends Entity {
 		if (id != NULL_NPC)
 			loadSprite();
 	}
-	
+
 	public void loadSprite() {
 		setSprites(new Sprite(Resources.npc[id]));
 	}
@@ -52,6 +55,14 @@ public class Npc extends Entity {
 		this(NULL_NPC);
 	}
 
+	public void pause() {
+		pauseFlag = true;
+	}
+	
+	public void unPause() {
+		pauseFlag = false;
+	}
+
 	void loadProperties() {
 		stats.roll();
 		stats.name = NpcProp.name.get(id);
@@ -63,10 +74,16 @@ public class Npc extends Entity {
 		stats.faction = NpcProp.faction.get(id);
 		initInventory();
 		inventory.setMaxWeight(stats.str * 10);
-		Loot.addLootQ(NpcProp.drop.get(id), inventory);
-		questList = NpcProp.qids.get(id);
+		inventory.putItem(NpcProp.drop.get(id));
+
+		String list = NpcProp.qids.get(id);
+		StringTokenizer qTok = new StringTokenizer(list, ",");
+		while (qTok.hasMoreTokens())
+			questList.add(Utils.val(qTok.nextToken()));
+
 		friendly = NpcProp.friendly.get(id);
 		spawnOnce = NpcProp.spawnonce.get(id);
+		type = NpcProp.type.get(id);
 	}
 
 	@Override
@@ -114,6 +131,11 @@ public class Npc extends Entity {
 		tileDmg();
 		stats.perTickCheck();
 
+		if (pauseFlag) {
+			unPause();
+			return;
+		}
+
 		if (!friendly)
 			state = NpcState.FollowPlayer;
 
@@ -125,7 +147,7 @@ public class Npc extends Entity {
 			break;
 
 		case Idle:
-			if (canAct(stats.AP_WALK)) {
+			if (canAct(stats.AP_WALK) && Utils.random.nextBoolean()) {
 				ticksSpent = doAction(stats.AP_WALK);
 				randMove();
 			} else

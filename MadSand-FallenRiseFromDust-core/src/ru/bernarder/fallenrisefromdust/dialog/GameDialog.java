@@ -43,6 +43,7 @@ public class GameDialog extends Dialog {
 		row();
 		textLbl = new Label(text, Gui.skin);
 		textLbl.setAlignment(Align.topLeft);
+		textLbl.setWrap(true);
 		add(textLbl).width(WIDTH).height(HEIGHT).pad(PADDING).padTop(TEXT_YPADDING).row();
 		this.stage = stage;
 		if (replies.length > 0)
@@ -60,12 +61,26 @@ public class GameDialog extends Dialog {
 		addOkButton(okText);
 	}
 
+	@Override
+	public boolean remove() {
+		boolean ret = super.remove();
+		Gui.gameUnfocused = false;
+		return ret;
+	}
+	
+	@Override
+	public Dialog show (Stage stage) {
+		Dialog ret = super.show(stage);
+		Gui.gameUnfocused = true;
+		return ret;
+	}
+
 	public void chainReply(String btnText, GameDialog nextDialog) {
 		TextButton nextBtn = new TextButton(btnText, Gui.skin);
 		nextBtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				nextDialog.show(stage);
 				remove();
+				nextDialog.show(stage);
 			}
 		});
 		addButton(nextBtn);
@@ -86,6 +101,7 @@ public class GameDialog extends Dialog {
 	}
 
 	public void show() {
+		Gui.gameUnfocused = true;
 		show(stage);
 	}
 

@@ -59,6 +59,11 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 		++get(skill).exp;
 		return check(skill);
 	}
+	
+	public boolean increaseSkill(Skill skill, int amt) {
+		get(skill).exp += amt;
+		return check(skill);
+	}
 
 	public int getLvl(Skill skill) {
 		return get(skill).lvl;
