@@ -868,7 +868,7 @@
 			<hp>42</hp>
 			<maxhp>42</maxhp>
 			<rewardexp>36</rewardexp>
-			<drop>:22/1</drop>
+			<drop>22/1</drop>
 			<name>Old pirate</name>
 			<atk>5</atk>
 			<accuracy>5</accuracy>
@@ -880,7 +880,7 @@
 			<hp>100</hp>
 			<maxhp>100</maxhp>
 			<rewardexp>36</rewardexp>
-			<drop>:21/1000</drop>
+			<drop>21/1000</drop>
 			<name>Richard</name>
 			<atk>11</atk>
 			<accuracy>50</accuracy>
@@ -894,7 +894,7 @@
 			<hp>175</hp>
 			<maxhp>175</maxhp>
 			<rewardexp>50</rewardexp>
-			<drop>:21/100</drop>
+			<drop>21/100</drop>
 			<name>Orc</name>
 			<atk>20</atk>
 			<accuracy>25</accuracy>

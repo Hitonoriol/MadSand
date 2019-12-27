@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ru.bernarder.fallenrisefromdust.containers.PairFloat;
-import ru.bernarder.fallenrisefromdust.dialog.GameDialog;
 import ru.bernarder.fallenrisefromdust.entities.Entity;
 import ru.bernarder.fallenrisefromdust.entities.Npc;
 import ru.bernarder.fallenrisefromdust.entities.Player;
@@ -46,6 +45,7 @@ public class MadSand extends Game {
 	static final String SAVEDIR = "MadSand_Saves/";
 	static String QUESTFILE = SAVEDIR + "quests.xml";
 	static String GENFILE = SAVEDIR + "worldgen.xml";
+	static String TUTORIALFILE = SAVEDIR + "tutorial.xml";
 	static String RESFILE = SAVEDIR + "res.xml";
 	static String SKILLFILE = SAVEDIR + "defskills.xml";
 	static final String MAPDIR = SAVEDIR + "worlds/";
@@ -167,9 +167,6 @@ public class MadSand extends Game {
 
 		// Test stuff:
 		world.getCurLoc().spawnNpc(5, 55, 55);
-		GameDialog.generateDialogChain(
-				"#This is a title#Hello, stranger. This is a dummy dialog. And this is some random gibberish to test how long text looks like.[Button text]",
-				Gui.menu).show();
 	}
 
 	static int countRcells() {
@@ -388,8 +385,13 @@ public class MadSand extends Game {
 
 	public void render() {
 		if (state.equals(GameState.GAME)) {
-			if (justStarted)
+			if (!Gui.gameUnfocused && World.player.isNewlyCreated()) {
+				World.player.displayTutorial();
 				justStarted = false;
+			}
+			if (justStarted) {
+					justStarted = false;
+			}
 			mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
 			camera.unproject(mouseinworld);
 			Gdx.input.setInputProcessor(Gui.overlay);

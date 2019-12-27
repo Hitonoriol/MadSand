@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.Align;
 
 import ru.bernarder.fallenrisefromdust.Gui;
 import ru.bernarder.fallenrisefromdust.containers.Tuple;
+import ru.bernarder.fallenrisefromdust.world.World;
 
 public class GameDialog extends Dialog {
 	public static final float BTN_WIDTH = Gdx.graphics.getWidth() / 4;
@@ -41,7 +42,7 @@ public class GameDialog extends Dialog {
 		titleTbl.padTop(TITLE_YPADDING).padLeft(TITLE_XPADDING);
 
 		row();
-		textLbl = new Label(text, Gui.skin);
+		textLbl = new Label(replaceDialogConstants(text), Gui.skin);
 		textLbl.setAlignment(Align.topLeft);
 		textLbl.setWrap(true);
 		add(textLbl).width(WIDTH).height(HEIGHT).pad(PADDING).padTop(TEXT_YPADDING).row();
@@ -67,9 +68,9 @@ public class GameDialog extends Dialog {
 		Gui.gameUnfocused = false;
 		return ret;
 	}
-	
+
 	@Override
-	public Dialog show (Stage stage) {
+	public Dialog show(Stage stage) {
 		Dialog ret = super.show(stage);
 		Gui.gameUnfocused = true;
 		return ret;
@@ -105,10 +106,19 @@ public class GameDialog extends Dialog {
 		show(stage);
 	}
 
+	public String replaceDialogConstants(String text) {
+		text = text.replace(DIALOG_PLAYER_NAME_CONSTANT, World.player.stats.name);
+		text = text.replace(DIALOG_LINEBREAK_CONSTANT, "\n");
+		return text;
+	}
+
 	public static final String DEFAULT_BTN_TEXT = "Proceed";
 	public static final String DEFAULT_TITLE_TEXT = "";
 
 	public static final String DIALOG_TEXT_DELIMITER = "=>";
+
+	public static final String DIALOG_PLAYER_NAME_CONSTANT = "{PLAYER}";
+	public static final String DIALOG_LINEBREAK_CONSTANT = "{br}";
 
 	public static final String DIALOG_TITLE_REGEX = "\\#(.*?)\\#";
 	public static final String DIALOG_BUTTON_REGEX = "\\[(.*?)\\]";

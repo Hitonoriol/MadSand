@@ -23,6 +23,7 @@ import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 import ru.bernarder.fallenrisefromdust.properties.QuestList;
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
+import ru.bernarder.fallenrisefromdust.properties.Tutorial;
 import ru.bernarder.fallenrisefromdust.world.World;
 
 public class Player extends Entity {
@@ -40,6 +41,8 @@ public class Player extends Entity {
 
 	public HashSet<Integer> knownNpcs = new HashSet<Integer>();
 
+	public int tutorialPos = -1;
+
 	public boolean isMain = true;
 
 	@JsonIgnore
@@ -52,6 +55,20 @@ public class Player extends Entity {
 
 	public Player() {
 		this("");
+	}
+
+	@JsonIgnore
+	public boolean isNewlyCreated() {
+		if (tutorialPos == -1) {
+			++tutorialPos;
+			return true;
+		}
+		return false;
+	}
+
+	public void displayTutorial() {
+		GameDialog.generateDialogChain(Tutorial.strings.get(tutorialPos), Gui.overlay).show();
+		++tutorialPos;
 	}
 
 	public boolean knowsNpc(int id) {

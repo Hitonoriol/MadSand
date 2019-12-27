@@ -26,6 +26,7 @@ import ru.bernarder.fallenrisefromdust.properties.NpcProp;
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 import ru.bernarder.fallenrisefromdust.properties.QuestList;
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
+import ru.bernarder.fallenrisefromdust.properties.Tutorial;
 import ru.bernarder.fallenrisefromdust.properties.WorldGenProp;
 
 public class Resources {
@@ -37,6 +38,7 @@ public class Resources {
 	static Document questdoc;
 	static Document gendoc;
 	static Document skilldoc;
+	static Document tutorialdoc;
 
 	public static Texture[] item;
 	static Texture[] objects;
@@ -80,6 +82,7 @@ public class Resources {
 		resdoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.RESFILE));
 		questdoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.QUESTFILE));
 		gendoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.GENFILE));
+		tutorialdoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.TUTORIALFILE));
 
 		mapcursor = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/cur.png"));
 		animsheet = new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/anim.png"));
@@ -103,7 +106,7 @@ public class Resources {
 		Cursor mouseCursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.local(MadSand.SAVEDIR + "cursor.png")), 0, 0);
 		Gdx.graphics.setCursor(mouseCursor);
 
-		MadSand.QUESTS = XMLUtils.countKeys(questdoc, XML_QUEST_NODE); // TODO
+		MadSand.QUESTS = XMLUtils.countKeys(questdoc, XML_QUEST_NODE);
 
 		MadSand.LASTITEMID = XMLUtils.countKeys(resdoc, XML_ITEM_NODE);
 		MadSand.CROPS = XMLUtils.countKeys(resdoc, XML_CROP_STAGES_NODE);
@@ -137,6 +140,7 @@ public class Resources {
 		loadMapTiles();
 		loadQuests();
 		loadNpcs();
+		loadTutorial();
 
 		placeholder = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/placeholder.png"));
 		noEquip = new TextureRegionDrawable(new TextureRegion(placeholder));
@@ -145,6 +149,17 @@ public class Resources {
 		playerUpSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/u1.png")));
 		playerRightSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/r1.png")));
 		playerLeftSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/l1.png")));
+	}
+
+	private static void loadTutorial() {
+		int i = 0;
+		String si;
+		int tips = XMLUtils.countKeys(tutorialdoc, "tip");
+		while (i < tips) {
+			si = Utils.str(i);
+			Tutorial.strings.add(XMLUtils.getKey(tutorialdoc, "tip", si, "text"));
+			++i;
+		}
 	}
 
 	private static void loadQuests() {

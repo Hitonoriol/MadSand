@@ -328,6 +328,7 @@ public class Gui {
 	}
 
 	static void createCharDialog() {
+		gameUnfocused = true;
 		rollStats();
 		MadSand.charcrt = true;
 
@@ -367,6 +368,7 @@ public class Gui {
 					MadSand.charcrt = false;
 					World.player.reinit();
 					dialog.remove();
+					gameUnfocused = false;
 				}
 			}
 
