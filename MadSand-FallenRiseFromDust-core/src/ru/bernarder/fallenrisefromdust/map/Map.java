@@ -436,6 +436,10 @@ public class Map {
 		return nullNpc;
 	}
 
+	public Npc getNpc(Pair coords) {
+		return getNpc(coords.x, coords.y);
+	}
+
 	public boolean moveNpc(Npc npc, int x, int y) { // moves npc only on the grid(not on the screen) to process smooth
 		// movement;should be called by an npc before changing its own position.
 		// yeah, the

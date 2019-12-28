@@ -112,6 +112,10 @@ public abstract class Entity {
 	public void reinit() {
 		inventory = new Inventory(stats.str * Stats.STR_WEIGHT_MULTIPLIER);
 	}
+	
+	boolean attack(Direction dir) {
+		return false;
+	}
 
 	public boolean addItem(Item item) {
 		return inventory.putItem(item);
@@ -138,7 +142,7 @@ public abstract class Entity {
 		Loot loot = MadSand.world.getCurLoc().getLoot(x, y);
 		if (loot != Map.nullLoot) {
 			for (int i = loot.contents.size() - 1; i >= 0; --i) {
-				if (inventory.putItem(loot.contents.get(i)))
+				if (addItem(loot.contents.get(i)))
 					loot.remove(i);
 				else
 					break;
@@ -261,10 +265,6 @@ public abstract class Entity {
 
 	boolean canAct(int ap) {
 		return (ap <= stats.actionPts);
-	}
-
-	int attack() {
-		return stats.str;
 	}
 
 	public int doAction() {

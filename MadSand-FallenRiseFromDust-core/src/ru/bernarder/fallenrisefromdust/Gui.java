@@ -754,11 +754,11 @@ public class Gui {
 			}
 
 		});
-		Gui.contextMenuBtn[1] = new TextButton("Fight", Gui.skin);
+		Gui.contextMenuBtn[1] = new TextButton("Attack", Gui.skin);
 		Gui.contextMenuBtn[1].addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				World.player.lookAtMouse(MadSand.wmx, MadSand.wmy);
-				// TODO fight
+				World.player.attack();
 			}
 		});
 		Gui.contextMenuBtn[2] = new TextButton("Turn", Gui.skin);

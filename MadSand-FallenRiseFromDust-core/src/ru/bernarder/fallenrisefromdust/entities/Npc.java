@@ -58,7 +58,7 @@ public class Npc extends Entity {
 	public void pause() {
 		pauseFlag = true;
 	}
-	
+
 	public void unPause() {
 		pauseFlag = false;
 	}
@@ -120,7 +120,10 @@ public class Npc extends Entity {
 		if (!(player.x == coords.x && player.y == coords.y))
 			return false;
 		else {
-			player.damage(super.attack());
+			int atk = stats.calcAttack();
+			if (atk == 0)
+				MadSand.print(stats.name + " misses!");
+			player.damage(atk);
 			return true;
 		}
 	}

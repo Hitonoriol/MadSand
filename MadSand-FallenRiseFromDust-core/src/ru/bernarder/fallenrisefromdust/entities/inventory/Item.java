@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import ru.bernarder.fallenrisefromdust.Gui;
 import ru.bernarder.fallenrisefromdust.enums.ItemType;
 import ru.bernarder.fallenrisefromdust.enums.Skill;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
@@ -27,6 +28,10 @@ public class Item {
 	Skill skill = Skill.None;
 	boolean craftable;
 	double weight = 0;
+
+	int lvl; // level of item (only for weapons/armor)
+
+	public EquipStats equipStats;
 
 	public String uid = "";
 
@@ -71,9 +76,13 @@ public class Item {
 
 	String getInfoString() {
 		String info = "";
-		info += "Item: " + name + "\n";
-		info += "Weight: " + weight + " kg" + "\n";
+		info += "Item: " + name + Gui.LINEBREAK;
+		info += "Weight: " + weight + " kg" + Gui.LINEBREAK;
 		info += "Cost: " + cost + "$";
+		if (type.isArmor() || type.isWeapon()) {
+			info += Gui.LINEBREAK;
+			info += equipStats.getString();
+		}
 		return info;
 	}
 
@@ -148,8 +157,16 @@ public class Item {
 		if (weight <= 0)
 			weight = DEFAULT_WEIGHT;
 
-		if (type.isTool())
+		if (type.isUnique())
 			uid = UUID.randomUUID().toString();
+
+		if (type.isWeapon() || type.isArmor()) {
+			this.lvl = ItemProp.lvl.get(id);
+			equipStats = new EquipStats(lvl);
+		}
+
+		if (type.isWeapon())
+			equipStats.strength = ItemProp.str.get(id);
 	}
 
 	@JsonIgnore

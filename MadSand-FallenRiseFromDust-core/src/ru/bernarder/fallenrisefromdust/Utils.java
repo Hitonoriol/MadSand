@@ -126,16 +126,16 @@ public class Utils {
 			World.player.useItem();
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.UP) && (!World.player.isStepping())) {
-			World.player.turn(Direction.UP);
+			World.player.attack(Direction.UP);
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.DOWN) && (!World.player.isStepping())) {
-			World.player.turn(Direction.DOWN);
+			World.player.attack(Direction.DOWN);
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.LEFT) && (!World.player.isStepping())) {
-			World.player.turn(Direction.LEFT);
+			World.player.attack(Direction.LEFT);
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.RIGHT) && (!World.player.isStepping())) {
-			World.player.turn(Direction.RIGHT);
+			World.player.attack(Direction.RIGHT);
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.N) && MadSand.world.curlayer == World.LAYER_OVERWORLD) {
 			if (World.player.x == World.MAPSIZE - 1 && World.player.stats.look == Direction.RIGHT)

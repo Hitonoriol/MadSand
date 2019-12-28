@@ -249,6 +249,7 @@ public class Resources {
 		String stgs, stglen;
 		String[] cont;
 		Vector<Integer> stages, slens;
+		ItemType type;
 		int i = 0, cc = 0;
 		while (i < MadSand.LASTITEMID) {
 			item[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "inv/" + i + ".png"));
@@ -276,7 +277,14 @@ public class Resources {
 			// Item properties
 			ItemProp.weight.put(i, Float.parseFloat(XMLUtils.getKey(resdoc, "item", "" + i, "weight")));
 			ItemProp.name.put(i, XMLUtils.getKey(resdoc, "item", "" + i, "name"));
-			ItemProp.type.put(i, ItemType.get(Integer.parseInt(XMLUtils.getKey(resdoc, "item", "" + i, "type"))));
+
+			type = ItemType.get(Integer.parseInt(XMLUtils.getKey(resdoc, "item", "" + i, "type")));
+			ItemProp.type.put(i, type);
+			if (type.isArmor() || type.isWeapon())
+				ItemProp.lvl.put(i, Utils.val(XMLUtils.getKey(resdoc, "item", "" + i, "lvl")));
+			if (type.isWeapon())
+				ItemProp.str.put(i, Utils.val(XMLUtils.getKey(resdoc, "item", "" + i, "strength")));
+
 			ItemProp.altObject.put(i, Integer.parseInt(XMLUtils.getKey(resdoc, "item", "" + i, "altobject")));
 
 			ItemProp.dmg.put(i, Integer.parseInt(XMLUtils.getKey(resdoc, "item", "" + i, "dmg", "0")));

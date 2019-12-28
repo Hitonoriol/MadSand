@@ -271,7 +271,7 @@ public class BuildScript {
 			id = arg.get(0);
 			int q = arg.get(1);
 
-			World.player.inventory.putItem(id, q);
+			World.player.addItem(id, q);
 			break;
 
 		case Token.PLAYER_REMOVE_ITEM:

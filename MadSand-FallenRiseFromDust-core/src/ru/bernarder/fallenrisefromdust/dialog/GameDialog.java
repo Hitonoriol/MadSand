@@ -66,6 +66,7 @@ public class GameDialog extends Dialog {
 	public boolean remove() {
 		boolean ret = super.remove();
 		Gui.gameUnfocused = false;
+		Gui.mousemenu.setVisible(true);
 		return ret;
 	}
 
@@ -73,6 +74,7 @@ public class GameDialog extends Dialog {
 	public Dialog show(Stage stage) {
 		Dialog ret = super.show(stage);
 		Gui.gameUnfocused = true;
+		Gui.mousemenu.setVisible(false);
 		return ret;
 	}
 

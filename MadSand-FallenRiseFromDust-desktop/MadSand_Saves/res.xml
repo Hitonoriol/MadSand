@@ -1345,6 +1345,9 @@
 			<craftable>1</craftable>
 			<craftreq>2,8</craftreq>
 			<recipe>2/25:8/7</recipe>
+			<type>12</type>
+			<lvl>1</lvl>
+			<strength>2</strength>
 		</item>
 		<item id="13">
 			<name>Iron sword</name>
@@ -1358,6 +1361,9 @@
 			<cost>18</cost>
 			<craftable>1</craftable>
 			<recipe>23/25</recipe>
+			<craftreq>23</craftreq>
+			<type>4</type>
+			<lvl>1</lvl>
 		</item>
 		<item id="15">
 			<name>Iron shield</name>
@@ -1365,6 +1371,9 @@
 			<cost>18</cost>
 			<craftable>1</craftable>
 			<recipe>23/25</recipe>
+			<craftreq>23</craftreq>
+			<type>6</type>
+			<lvl>1</lvl>
 		</item>
 		<item id="16">
 			<name>Leather chestplate</name>
@@ -1372,6 +1381,8 @@
 			<cost>14</cost>
 			<craftable>1</craftable>
 			<recipe>22/15</recipe>
+			<type>5</type>
+			<lvl>1</lvl>
 		</item>
 		<item id="17">
 			<name>Iron chestplate</name>

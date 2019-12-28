@@ -22,6 +22,9 @@ public class Stats {
 	static final int STAT_RAND_MAX = 9;
 
 	public Item hand;
+	public Item headEquip;
+	public Item chestEquip;
+	public Item legsEquip;
 
 	public int actionPtsMax = 5;
 	public int actionPts = actionPtsMax;
@@ -66,11 +69,11 @@ public class Stats {
 
 	@JsonIgnore
 	public StatAction actions;
-	
+
 	public void calcActionCosts() {
-		//AP_MINOR = ;
-		//AP_WALK = ;
-		//AP_ATTACK = ;
+		// AP_MINOR = ;
+		// AP_WALK = ;
+		// AP_ATTACK = ;
 	}
 
 	public void roll() {
@@ -130,5 +133,23 @@ public class Stats {
 
 		if (food >= satiatedVal)
 			actions._heal(FOOD_HEAL);
+	}
+	
+	public boolean attackMissed() {
+		return (Utils.rand(0, accur) == accur);
+	}
+	
+	public int calcAttack() {
+		if (attackMissed())
+			return 0;
+		
+		int weaponStr;
+		if (!hand.type.isWeapon())
+			weaponStr = 0;
+		else weaponStr = hand.equipStats.strength;
+		
+		int atk = (str + weaponStr);
+		
+		return atk;
 	}
 }

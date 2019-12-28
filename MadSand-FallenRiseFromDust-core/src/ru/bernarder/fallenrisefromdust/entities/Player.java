@@ -91,6 +91,31 @@ public class Player extends Entity {
 	}
 
 	@Override
+	public boolean attack(Direction dir) {
+		turn(dir);
+		Npc npc = MadSand.world.getCurLoc().getNpc(coords.set(x, y).addDirection(dir));
+		if (npc == Map.nullNpc)
+			return false;
+		else {
+			int atk = stats.calcAttack();
+			if (atk == 0)
+				MadSand.print("You miss " + npc.stats.name);
+			else {
+				MadSand.print("You deal " + atk + " damage to " + npc.stats.name);
+				npc.damage(atk);
+				if (npc.friendly)
+					npc.friendly = false;
+			}
+			doAction(stats.AP_ATTACK);
+			return true;
+		}
+	}
+
+	public boolean attack() {
+		return attack(stats.look);
+	}
+
+	@Override
 	void die() {
 		super.die();
 		Gui.setDeadText("You died\nYou survived " + getSurvivedTime() + " ticks");
