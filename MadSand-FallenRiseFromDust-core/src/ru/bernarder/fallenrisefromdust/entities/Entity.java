@@ -30,7 +30,7 @@ public abstract class Entity {
 	public int maxFov, minFov;
 
 	public Stats stats;
-	
+
 	public Inventory inventory;
 
 	public PairFloat globalPos = new PairFloat(x * MadSand.TILESIZE, y * MadSand.TILESIZE);
@@ -110,9 +110,9 @@ public abstract class Entity {
 	}
 
 	public void reinit() {
-		inventory = new Inventory(stats.str * Stats.STR_WEIGHT_MULTIPLIER);
+		inventory = new Inventory(stats.strength * Stats.STR_WEIGHT_MULTIPLIER);
 	}
-	
+
 	boolean attack(Direction dir) {
 		return false;
 	}
@@ -253,6 +253,10 @@ public abstract class Entity {
 			++ticks;
 		}
 		return ticks;
+	}
+
+	boolean equip(Item item) {
+		return stats.equip(item);
 	}
 
 	boolean rest() {

@@ -29,6 +29,7 @@ public class InventoryUICell {
 
 	private static final float CONTEXT_BTN_WIDTH = 100F;
 	private static final float CONTEXT_BTN_HEIGHT = 30F;
+	public static final float CONTEXT_W_DENOMINATOR = 1.75f;
 
 	private float TOOLTIP_WIDTH = 200F;
 	private float TOOLTIP_HEIGHT = 50F;
@@ -46,6 +47,7 @@ public class InventoryUICell {
 
 	private TextButton dropBtn;
 	private TextButton useBtn;
+	private TextButton equipBtn;
 
 	private Image highlight; // for mouseover highlighting of items
 
@@ -74,14 +76,13 @@ public class InventoryUICell {
 		dropBtn = new TextButton("Drop", Gui.skin);
 
 		invCellContextContainer = new Table(Gui.skin);
-		invCellContextContainer.add(dropBtn).width(CONTEXT_BTN_WIDTH).height(CONTEXT_BTN_HEIGHT).row();
+		addContextBtn(dropBtn);
 		invCellContextContainer.setVisible(false);
 		Gui.overlay.addActor(invCellContextContainer);
 
 		dropBtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				invCellContextContainer.setVisible(false);
-				Gui.gameUnfocused = false;
+				hideContext();
 				World.player.dropItem(item.id, item.quantity);
 			}
 
@@ -94,9 +95,23 @@ public class InventoryUICell {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
 					World.player.useItem(item);
+					closeContextMenu();
 				}
 			});
-			invCellContextContainer.add(useBtn).width(CONTEXT_BTN_WIDTH).height(CONTEXT_BTN_HEIGHT).row();
+			addContextBtn(useBtn);
+		}
+
+		if (item.type.isArmor()) {
+			equipBtn = new TextButton("Equip", Gui.skin);
+			equipBtn.addListener(new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					World.player.equip(item);
+					World.player.freeHands(true);
+					closeContextMenu();
+				}
+			});
+			addContextBtn(equipBtn);
 		}
 
 		cell.addListener(new InputListener() {
@@ -112,6 +127,7 @@ public class InventoryUICell {
 		cell.addListener(new ClickListener(Buttons.LEFT) {
 			public void clicked(InputEvent event, float x, float y) {
 				World.player.stats.hand = item;
+				MadSand.print("You take " + item.name + " to your hand");
 				Gui.setHandDisplay(item.id);
 				World.player.doAction();
 				Utils.toggleInventory();
@@ -139,7 +155,8 @@ public class InventoryUICell {
 					invCellContextContainer.setVisible(true);
 					MadSand.mx = Gdx.input.getX();
 					MadSand.my = Gdx.graphics.getHeight() - Gdx.input.getY();
-					invCellContextContainer.setPosition(MadSand.mx + CONTEXT_BTN_WIDTH / 1.75f, MadSand.my);
+					invCellContextContainer.setPosition(MadSand.mx + CONTEXT_BTN_WIDTH / CONTEXT_W_DENOMINATOR,
+							MadSand.my);
 					Gui.gameUnfocused = true;
 				} else {
 					invCellContextContainer.setVisible(false);
@@ -149,13 +166,21 @@ public class InventoryUICell {
 		});
 	}
 
+	private void closeContextMenu() {
+		invCellContextContainer.setVisible(false);
+	}
+
+	private void addContextBtn(TextButton btn) {
+		invCellContextContainer.add(btn).width(CONTEXT_BTN_WIDTH).height(CONTEXT_BTN_HEIGHT).row();
+	}
+
 	boolean contextActive() {
 		return invCellContextContainer.isVisible();
 	}
 
 	void hideContext() {
 		Gui.gameUnfocused = false;
-		invCellContextContainer.setVisible(false);
+		closeContextMenu();
 	}
 
 	void setText(String str) {

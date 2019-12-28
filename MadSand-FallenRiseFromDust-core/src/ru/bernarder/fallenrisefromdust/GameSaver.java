@@ -135,7 +135,9 @@ public class GameSaver {
 			return true;
 		} else {
 			MadSand.switchStage(GameState.NMENU, Gui.menu);
-			Gui.drawOkDialog("Couldn't to load this world. \nMaybe it was saved in older/newer version of the game or some files are corrupted.", Gui.menu);
+			Gui.drawOkDialog(
+					"Couldn't to load this world. \nMaybe it was saved in older/newer version of the game or some files are corrupted.",
+					Gui.menu);
 			MadSand.justStarted = false;
 			return false;
 		}
@@ -187,6 +189,9 @@ public class GameSaver {
 			MadSand.world.curlayer = w.curlayer;
 			MadSand.world.worldtime = w.worldtime;
 			MadSand.world.tick = w.tick;
+
+			Gui.refreshEquipDisplay();
+			Gui.setHandDisplay(World.player.stats.hand.id);
 
 			return true;
 		} catch (Exception e) {

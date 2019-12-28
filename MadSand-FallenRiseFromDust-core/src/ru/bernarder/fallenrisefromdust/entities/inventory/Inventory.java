@@ -171,8 +171,8 @@ public class Inventory {
 				items.add(item);
 				updItem = item;
 			}
-			refreshItem(updItem);
 			curWeight = newWeight;
+			refreshItem(updItem);
 
 			return true;
 		}

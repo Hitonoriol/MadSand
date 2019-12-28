@@ -1,0 +1,591 @@
+	<objects>
+		<object id="0">
+			<name>Nothing</name>
+			<tough>999</tough>
+		</object>
+		<object id="1">
+			<name>Boulder</name>
+			<skill>Mining</skill>
+			<tough>11</tough>
+			<harvesthp>8</harvesthp>
+			<altitem id="0" inhand="0" item="2" />
+		</object>
+		<object id="2">
+			<name>Tree</name>
+			<skill>Woodcutting</skill>
+			<tough>11</tough>
+			<harvesthp>4</harvesthp>
+			<altitem id="0" inhand="0" item="8" />
+			<altitem id="1" inhand="8" item="1" />
+		</object>
+		<object id="3">
+			<name>Cake</name>
+			<tough>1</tough>
+		</object>
+		<object id="4">
+			<name>Berry bush</name>
+			<nocollide>1</nocollide>
+			<skill>Harvesting</skill>
+			<tough>7</tough>
+			<harvesthp>2</harvesthp>
+			<altitem id="0" inhand="0" item="7,8,65,66" />
+		</object>
+		<object id="5">
+			<name>---</name>
+			<tough>30</tough>
+		</object>
+		<object id="6">
+			<name>Campfire</name>
+			<skill>Survival</skill>
+			<tough>20</tough>
+		</object>
+		<object id="7">
+			<name>Chest</name>
+			<tough>30</tough>
+		</object>
+		<object id="8">
+			<name>Hewn rock</name>
+			<tough>30</tough>
+		</object>
+		<object id="9">
+			<name>Wooden planks</name>
+			<skill>Woodcutting</skill>
+			<tough>1</tough>
+			<harvesthp>10</harvesthp>
+			<altitem id="0" inhand="0" item="0" />
+			<altitem id="1" inhand="8" item="1" />
+		</object>
+		<object id="10">
+			<name>Cactus</name>
+			<tough>5</tough>
+		</object>
+		<object id="11">
+			<name>Closed door</name>
+			<tough>30</tough>
+		</object>
+		<object id="12">
+			<name>Opened door</name>
+			<nocollide>1</nocollide>
+			<tough>30</tough>
+		</object>
+		<object id="13">
+			<name>Rock</name>
+			<skill>Mining</skill>
+			<tough>1</tough>
+			<harvesthp>15</harvesthp>
+			<altitem id="0" inhand="0" item="0" />
+			<altitem id="1" inhand="10" item="25" />
+		</object>
+		<object id="14">
+			<name>Trapdoor</name>
+			<nocollide>1</nocollide>
+			<tough>30</tough>
+		</object>
+		<object id="15">
+			<name>Stone wall</name>
+			<tough>1</tough>
+			<harvesthp>15</harvesthp>
+			<altitem id="0" inhand="0" item="0" />
+			<altitem id="1" inhand="10" item="32" />
+		</object>
+		<object id="16">
+			<name>Stone wall</name>
+			<tough>1</tough>
+			<harvesthp>15</harvesthp>
+			<altitem id="0" inhand="0" item="0" />
+			<altitem id="1" inhand="10" item="33" />
+		</object>
+		<object id="17">
+			<name>Stone wall</name>
+			<tough>1</tough>
+			<harvesthp>15</harvesthp>
+			<altitem id="0" inhand="0" item="0" />
+			<altitem id="1" inhand="10" item="34" />
+		</object>
+		<object id="18">
+			<name>Sign</name>
+			<tough>30</tough>
+		</object>
+		<object id="19">
+			<nocollide>1</nocollide>
+			<name>Cucumber sprout</name>
+			<tough>5</tough>
+		</object>
+		<object id="20">
+			<nocollide>1</nocollide>
+			<name>Cucumber seeds</name>
+			<tough>5</tough>
+		</object>
+		<object id="21">
+			<nocollide>1</nocollide>
+			<name>Cucumber bush</name>
+			<skill>Harvesting</skill>
+			<tough>5</tough>
+			<harvesthp>1</harvesthp>
+			<altitem id="0" inhand="0" item="39" />
+		</object>
+		<object id="22">
+			<name>Iron ore</name>
+			<skill>Mining</skill>
+			<tough>1</tough>
+			<harvesthp>15</harvesthp>
+			<altitem id="0" inhand="0" item="0" />
+			<altitem id="1" inhand="10" item="23" />
+		</object>
+		<object id="23">
+			<name>Gold ore</name>
+			<skill>Mining</skill>
+			<tough>1</tough>
+			<harvesthp>15</harvesthp>
+			<altitem id="0" inhand="0" item="0" />
+			<altitem id="1" inhand="10" item="24" />
+		</object>
+		<object id="24">
+			<nocollide>1</nocollide>
+			<name>Tumbleweed</name>
+			<tough>3</tough>
+		</object>
+		<object id="25">
+			<name>Coal</name>
+			<skill>Mining</skill>
+			<tough>1</tough>
+			<harvesthp>15</harvesthp>
+			<altitem id="0" inhand="0" item="0" />
+			<altitem id="1" inhand="10" item="56" />
+		</object>
+		<object id="26">
+			<name>Mixed brick wall</name>
+			<tough>30</tough>
+		</object>
+		<object id="27">
+			<name>Boulder</name>
+			<skill>Mining</skill>
+			<tough>6</tough>
+			<harvesthp>8</harvesthp>
+			<altitem id="0" inhand="0" item="2" />
+		</object>
+		<object id="28">
+			<name>Boulder</name>
+			<skill>Mining</skill>
+			<tough>6</tough>
+			<harvesthp>8</harvesthp>
+			<altitem id="0" inhand="0" item="2" />
+		</object>
+		<object id="29">
+			<name>Spruce tree</name>
+			<skill>Woodcutting</skill>
+			<tough>10</tough>
+			<altitem>1</altitem>
+		</object>
+		<object id="30">
+			<name>Tree</name>
+			<skill>Woodcutting</skill>
+			<tough>11</tough>
+			<harvesthp>4</harvesthp>
+			<altitem id="0" inhand="0" item="8" />
+			<altitem id="1" inhand="8" item="1" />
+		</object>
+		<object id="31">
+			<name>Palm tree</name>
+			<skill>Woodcutting</skill>
+			<lvl>2</lvl>
+			<tough>11</tough>
+			<harvesthp>4</harvesthp>
+			<altitem id="0" inhand="0" item="8" />
+			<altitem id="1" inhand="8" item="1" />
+		</object>
+		<object id="32">
+			<skill>Woodcutting</skill>
+			<name>Pine</name>
+			<tough>11</tough>
+			<harvesthp>4</harvesthp>
+			<altitem id="0" inhand="0" item="8" />
+			<altitem id="1" inhand="8" item="1" />
+		</object>
+		<object id="33">
+			<name>Stump</name>
+			<skill>Woodcutting</skill>
+			<tough>11</tough>
+			<harvesthp>4</harvesthp>
+			<altitem id="0" inhand="0" item="8" />
+			<altitem id="1" inhand="8" item="1" />
+		</object>
+		<object id="34">
+			<name>Dead tree</name>
+			<skill>Woodcutting</skill>
+			<lvl>4</lvl>
+			<tough>11</tough>
+			<harvesthp>4</harvesthp>
+			<altitem id="0" inhand="0" item="8" />
+			<altitem id="1" inhand="8" item="1" />
+		</object>
+		<object id="35">
+			<skill>Woodcutting</skill>
+			<name>Tree</name>
+			<tough>11</tough>
+			<harvesthp>4</harvesthp>
+			<altitem id="0" inhand="0" item="8" />
+			<altitem id="1" inhand="8" item="1" />
+		</object>
+		<object id="36">
+			<skill>Woodcutting</skill>
+			<name>Tree</name>
+			<tough>11</tough>
+			<harvesthp>4</harvesthp>
+			<altitem id="0" inhand="0" item="8" />
+			<altitem id="1" inhand="8" item="1" />
+		</object>
+		<object id="37">
+			<name>Bush</name>
+			<nocollide>1</nocollide>
+			<skill>Harvesting</skill>
+			<tough>7</tough>
+			<harvesthp>2</harvesthp>
+			<altitem id="0" inhand="0" item="8,65,66" />
+		</object>
+		<object id="38">
+			<skill>Woodcutting</skill>
+			<name>Spruce tree</name>
+			<tough>11</tough>
+			<harvesthp>4</harvesthp>
+			<altitem id="0" inhand="0" item="8" />
+			<altitem id="1" inhand="8" item="1" />
+		</object>
+		<object id="39">
+			<name>Cross</name>
+			<tough>30</tough>
+		</object>
+		<object id="40">
+			<name>Stalactite</name>
+			<tough>15</tough>
+		</object>
+		<object id="41">
+			<skill>Harvesting</skill>
+			<name>Edible mushrooms</name>
+			<nocollide>1</nocollide>
+			<altitem id="0" inhand="0" item="44" />
+			<tough>1</tough>
+			<harvesthp>1</harvesthp>
+		</object>
+		<object id="42">
+			<skill>Harvesting</skill>
+			<name>Amanita</name>
+			<altitem id="0" inhand="0" item="45" />
+			<tough>1</tough>
+			<harvesthp>1</harvesthp>
+		</object>
+		<object id="43">
+			<nocollide>1</nocollide>
+			<name>Potato sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="44">
+			<nocollide>1</nocollide>
+			<name>Potato sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="45">
+			<nocollide>1</nocollide>
+			<name>Potato sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="46">
+			<nocollide>1</nocollide>
+			<skill>Harvesting</skill>
+			<name>Potato sprout</name>
+			<altitem id="0" inhand="0" item="46" />
+			<tough>8</tough>
+			<harvesthp>1</harvesthp>
+		</object>
+		<object id="47">
+			<nocollide>1</nocollide>
+			<name>Carrot sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="48">
+			<nocollide>1</nocollide>
+			<name>Carrot sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="49">
+			<nocollide>1</nocollide>
+			<name>Carrot sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="50">
+			<nocollide>1</nocollide>
+			<skill>Harvesting</skill>
+			<name>Carrot sprout</name>
+			<altitem id="0" inhand="0" item="47" />
+			<tough>8</tough>
+			<harvesthp>1</harvesthp>
+		</object>
+		<object id="51">
+			<nocollide>1</nocollide>
+			<name>Tomato sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="52">
+			<nocollide>1</nocollide>
+			<name>Tomato sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="53">
+			<nocollide>1</nocollide>
+			<name>Tomato sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="54">
+			<nocollide>1</nocollide>
+			<skill>Harvesting</skill>
+			<name>Tomato sprout</name>
+			<altitem id="0" inhand="0" item="48" />
+			<tough>8</tough>
+			<harvesthp>1</harvesthp>
+		</object>
+		<object id="55">
+			<nocollide>1</nocollide>
+			<name>Pepper sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="56">
+			<nocollide>1</nocollide>
+			<name>Pepper sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="57">
+			<nocollide>1</nocollide>
+			<name>Pepper sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="58">
+			<nocollide>1</nocollide>
+			<skill>Harvesting</skill>
+			<name>Pepper sprout</name>
+			<altitem id="0" inhand="0" item="49" />
+			<tough>8</tough>
+			<harvesthp>1</harvesthp>
+		</object>
+		<object id="59">
+			<nocollide>1</nocollide>
+			<name>Corn sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="60">
+			<nocollide>1</nocollide>
+			<name>Corn sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="61">
+			<nocollide>1</nocollide>
+			<name>Corn sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="62">
+			<nocollide>1</nocollide>
+			<skill>Harvesting</skill>
+			<name>Corn sprout</name>
+			<altitem id="0" inhand="0" item="50" />
+			<tough>8</tough>
+			<harvesthp>1</harvesthp>
+		</object>
+		<object id="63">
+			<nocollide>1</nocollide>
+			<name>Cucumber sprout</name>
+			<tough>1</tough>
+		</object>
+		<object id="64">
+			<name>Altar</name>
+			<tough>30</tough>
+		</object>
+		<object id="65">
+			<name>Campfire</name>
+			<tough>5</tough>
+		</object>
+		<object id="66">
+			<name>Fountain</name>
+			<tough>9</tough>
+		</object>
+		<object id="67">
+			<name>Furnace</name>
+			<tough>9</tough>
+		</object>
+		<object id="68">
+			<name>Treasure chest</name>
+			<tough>9</tough>
+		</object>
+		<object id="69">
+			<name>Opened treasure chest</name>
+			<tough>9</tough>
+		</object>
+		<object id="70">
+			<name>Pile of crates</name>
+			<tough>5</tough>
+		</object>
+		<object id="71">
+			<name>Keg</name>
+			<tough>3</tough>
+		</object>
+		<object id="72">
+			<name>Cooking place</name>
+			<tough>9</tough>
+		</object>
+		<object id="73">
+			<name>Alchemist table</name>
+			<tough>9</tough>
+		</object>
+		<object id="74">
+			<name>Alchemist table</name>
+			<tough>9</tough>
+		</object>
+		<object id="75">
+			<name>Alchemist table</name>
+			<tough>9</tough>
+		</object>
+		<object id="76">
+			<name>Signpost</name>
+			<tough>9</tough>
+		</object>
+		<object id="77">
+			<name>Signpost</name>
+			<tough>9</tough>
+		</object>
+		<object id="78">
+			<name>Signpost</name>
+			<tough>9</tough>
+		</object>
+		<object id="79">
+			<name>Sign</name>
+			<tough>9</tough>
+		</object>
+		<object id="80">
+			<name>Mountain</name>
+			<tough>9</tough>
+		</object>
+		<object id="81">
+			<name>Mountain</name>
+			<tough>9</tough>
+		</object>
+		<object id="82">
+			<name>Mine entrance</name>
+			<tough>9</tough>
+		</object>
+		<object id="83">
+			<name>Straw house</name>
+			<tough>50</tough>
+		</object>
+		<object id="84">
+			<name>Sandstone house</name>
+			<tough>50</tough>
+		</object>
+		<object id="85">
+			<name>House</name>
+			<tough>50</tough>
+		</object>
+		<object id="86">
+			<name>House</name>
+			<tough>50</tough>
+		</object>
+		<object id="87">
+			<name>Palace entrance</name>
+			<tough>50</tough>
+		</object>
+		<object id="88">
+			<name>Tombstone</name>
+			<tough>10</tough>
+		</object>
+		<object id="89">
+			<name>House</name>
+			<tough>50</tough>
+		</object>
+		<object id="90">
+			<name>Wheelbarrow</name>
+			<tough>15</tough>
+		</object>
+		<object id="91">
+			<name>Barrel</name>
+			<tough>15</tough>
+		</object>
+		<object id="92">
+			<name>Well</name>
+			<tough>15</tough>
+		</object>
+		<object id="93">
+			<name>Wooden crate</name>
+			<tough>15</tough>
+		</object>
+		<object id="94">
+			<name>Pile of wooden crates</name>
+			<tough>15</tough>
+		</object>
+		<object id="95">
+			<name>Barrel</name>
+			<tough>15</tough>
+		</object>
+		<object id="96">
+			<name>Bookshelf</name>
+			<tough>15</tough>
+		</object>
+		<object id="97">
+			<name>Pillar</name>
+			<tough>15</tough>
+		</object>
+		<object id="98">
+			<name>Sphinx</name>
+			<tough>15</tough>
+		</object>
+		<object id="99">
+			<name>Warrior statue</name>
+			<tough>25</tough>
+		</object>
+		<object id="100">
+			<name>Vending machine</name>
+			<tough>15</tough>
+		</object>
+		<object id="101">
+			<name>Brick wall</name>
+			<tough>25</tough>
+		</object>
+		<object id="102">
+			<name>Brick wall</name>
+			<tough>25</tough>
+		</object>
+		<object id="103">
+			<name>Wall</name>
+			<tough>25</tough>
+		</object>
+		<object id="104">
+			<name>Brick wall</name>
+			<tough>25</tough>
+		</object>
+		<object id="105">
+			<name>Brick wall</name>
+			<tough>25</tough>
+		</object>
+		<object id="106">
+			<name>Wall</name>
+			<tough>25</tough>
+		</object>
+		<object id="107">
+			<name>Stone wall</name>
+			<tough>25</tough>
+		</object>
+		<object id="108">
+			<name>Yellow wall</name>
+			<tough>25</tough>
+		</object>
+		<object id="109">
+			<name>Turquoise wall</name>
+			<tough>25</tough>
+		</object>
+		<object id="110">
+			<name>Turquoise wall</name>
+			<tough>25</tough>
+		</object>
+		<object id="111">
+			<name>Clay wall</name>
+			<tough>25</tough>
+		</object>
+
+
+	</objects>

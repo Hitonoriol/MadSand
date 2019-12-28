@@ -46,7 +46,12 @@ public class MadSand extends Game {
 	static String QUESTFILE = SAVEDIR + "quests.xml";
 	static String GENFILE = SAVEDIR + "worldgen.xml";
 	static String TUTORIALFILE = SAVEDIR + "tutorial.xml";
-	static String RESFILE = SAVEDIR + "res.xml";
+	
+	static String TILEFILE = SAVEDIR + "tiles.xml";
+	static String OBJECTFILE = SAVEDIR + "objects.xml";
+	static String NPCFILE = SAVEDIR + "npcs.xml";
+	static String ITEMSFILE = SAVEDIR + "items.xml";
+	
 	static String SKILLFILE = SAVEDIR + "defskills.xml";
 	static final String MAPDIR = SAVEDIR + "worlds/";
 	static final String SCRIPTDIR = SAVEDIR + "scripts";

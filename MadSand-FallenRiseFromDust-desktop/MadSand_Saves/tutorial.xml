@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <tutorial>
 	<tip id = "0">
 		<text>
@@ -12,6 +11,7 @@
 			#Controls#
 			* WASD or LMB click - walk around{br}
 			* Arrows or middle mouse button - turn around without moving{br}
+			* Arrows or "Attack" button in RMB menu - attack a creature (careful, they'll fight back){br}
 			* E - inventory{br}
 			* Q - player stats menu{br}
 			* Enter - interact with object/NPC{br}

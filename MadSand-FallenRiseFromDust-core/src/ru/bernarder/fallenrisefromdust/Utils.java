@@ -24,6 +24,8 @@ import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import org.w3c.dom.Document;
+
 public class Utils {
 	public static boolean debugMode = true;
 	public static float pspeed = 33.0F;
@@ -41,6 +43,11 @@ public class Utils {
 	}
 
 	static HashMap<Integer, Vector<Integer>> getAitem(int id, String field) {
+		Document doc = null;
+		if (field == Resources.XML_OBJECT_NODE)
+			doc = Resources.objectDoc;
+		else if (field == Resources.XML_TILE_NODE)
+			doc = Resources.tileDoc;
 		int i = 0;
 		String hand = "";
 		HashMap<Integer, Vector<Integer>> ret = new HashMap<Integer, Vector<Integer>>();
@@ -48,7 +55,7 @@ public class Utils {
 		StringTokenizer tok;
 		int hid;
 		while (hand != "-1") {
-			hand = XMLUtils.getAttrValues(Resources.resdoc, field, str(id), "altitem", str(i));
+			hand = XMLUtils.getAttrValues(doc, field, str(id), "altitem", str(i));
 			if (hand == "-1")
 				break;
 			block = new Vector<Integer>();

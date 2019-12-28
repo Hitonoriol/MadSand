@@ -91,6 +91,16 @@ public class Player extends Entity {
 	}
 
 	@Override
+	public boolean equip(Item item) {
+		boolean ret = super.equip(item);
+		if (ret) {
+			Gui.refreshEquipDisplay();
+			MadSand.print("You equip your " + item.name);
+		}
+		return ret;
+	}
+
+	@Override
 	public boolean attack(Direction dir) {
 		turn(dir);
 		Npc npc = MadSand.world.getCurLoc().getNpc(coords.set(x, y).addDirection(dir));
@@ -140,7 +150,7 @@ public class Player extends Entity {
 	@Override
 	public boolean addItem(Item item) {
 		if (super.addItem(item)) {
-			MadSand.print("You got " + Item.queryToName(item.id + "/" + item.quantity));
+			MadSand.print("You get " + Item.queryToName(item.id + "/" + item.quantity));
 			Utils.out("Got item id: " + item.id + "; quantity: " + item.quantity);
 			Utils.out("For the first time: " + unlockedItems.add(item.id));
 			return true;
@@ -182,7 +192,7 @@ public class Player extends Entity {
 		inventory.delItem(quest.removeOnCompletion);
 		inventory.putItem(quest.rewardItems);
 		stats.skills.increaseSkill(Skill.Level, quest.exp);
-		MadSand.print("You got " + quest.exp + " EXP!");
+		MadSand.print("You get " + quest.exp + " EXP!");
 		if (!quest.repeatable)
 			completedQuests.add(quest.id);
 		questsInProgress.remove(quest.id);
@@ -286,6 +296,8 @@ public class Player extends Entity {
 
 	public void useItem() {
 		int id = stats.hand.id;
+		if (equip(stats.hand))
+			return;
 		int ptile = MadSand.world.getTileId(x, y);
 		int item = MapObject.getTileAltItem(ptile, stats.hand.type.get());
 		checkHands(id);
@@ -322,15 +334,6 @@ public class Player extends Entity {
 			inventory.delItem(9);
 			inventory.delItem(1);
 			MadSand.world.getCurLoc().addObject(x, y, stats.look, 6);
-		}
-		if (Item.getType(id) == ItemType.HeadArmor) {
-			// equip helmet
-		}
-		if (Item.getType(id) == ItemType.ChestArmor) {
-			// equip chestplate
-		}
-		if (Item.getType(id) == ItemType.Shield) {
-			// equip shield
 		}
 		if (Item.getType(id) == ItemType.Crop) {
 			Pair coords = new Pair(x, y).addDirection(stats.look);

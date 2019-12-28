@@ -3,9 +3,11 @@ package ru.bernarder.fallenrisefromdust.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ru.bernarder.fallenrisefromdust.Utils;
+import ru.bernarder.fallenrisefromdust.entities.inventory.EquipStats;
 import ru.bernarder.fallenrisefromdust.entities.inventory.Item;
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.Faction;
+import ru.bernarder.fallenrisefromdust.enums.ItemType;
 
 public class Stats {
 	public final static int STR_WEIGHT_MULTIPLIER = 25;
@@ -18,13 +20,14 @@ public class Stats {
 	final static int FOOD_HEAL = 3;
 
 	static final int STAT_MIN_SUM = 15;
-	static final int STAT_MAX_SUM = 25;
+	static final int STAT_MAX_SUM = 22;
 	static final int STAT_RAND_MAX = 9;
 
 	public Item hand;
-	public Item headEquip;
-	public Item chestEquip;
-	public Item legsEquip;
+
+	public Item headEquip = Item.nullItem;
+	public Item chestEquip = Item.nullItem;
+	public Item legsEquip = Item.nullItem;
 
 	public int actionPtsMax = 5;
 	public int actionPts = actionPtsMax;
@@ -35,16 +38,17 @@ public class Stats {
 
 	public long spawnTime = 0;
 
-	public int accur = 2;
-	public int constitution;
 	public int hp;
 	public int mhp;
-	public int str = 3;// ATK
-	public int luck = 1; // LUCK
-	public int dexterity = 1; // DEX
-	public int intelligence = 1; // INT
-	public int stamina = 50; // STAMINA*5
+	public int stamina = 50;
 	public int maxstamina = 50;
+
+	public int accuracy = 2;
+	public int constitution;
+	public int strength = 3;
+	public int luck = 1;
+	public int dexterity = 1;
+	public int intelligence = 1;
 
 	public int air = 3;
 
@@ -70,18 +74,91 @@ public class Stats {
 	@JsonIgnore
 	public StatAction actions;
 
+	// public Stats(Entity owner)
+
+	public boolean equip(Item item) {
+		switch (item.type) {
+		case HeadArmor:
+			headEquip = item;
+			break;
+		case ChestArmor:
+			chestEquip = item;
+			break;
+		case LegArmor:
+			legsEquip = item;
+			break;
+
+		default:
+			return false;
+		}
+		applyBonus(item);
+		return true;
+	}
+
+	public boolean unequip(Item item) {
+		switch (item.type) {
+		case HeadArmor:
+			headEquip = Item.nullItem;
+			break;
+		case ChestArmor:
+			chestEquip = Item.nullItem;
+			break;
+		case LegArmor:
+			legsEquip = Item.nullItem;
+			break;
+
+		default:
+			return false;
+		}
+		removeBonus(item);
+		return true;
+	}
+
+	public void applyBonus(Item item) {
+		if (item.type == ItemType.HeadArmor && headEquip == item)
+			return;
+		if (item.type == ItemType.ChestArmor && chestEquip == item)
+			return;
+		if (item.type == ItemType.LegArmor && legsEquip == item)
+			return;
+
+		EquipStats bonus = item.equipStats;
+		constitution += bonus.constitution;
+		dexterity += bonus.dexterity;
+		strength += bonus.strength;
+		accuracy += bonus.accuracy;
+		intelligence += bonus.intelligence;
+	}
+
+	public void removeBonus(Item item) {
+		if (item.type == ItemType.HeadArmor && headEquip != item)
+			return;
+		if (item.type == ItemType.ChestArmor && chestEquip != item)
+			return;
+		if (item.type == ItemType.LegArmor && legsEquip != item)
+			return;
+
+		EquipStats bonus = item.equipStats;
+		constitution -= bonus.constitution;
+		dexterity -= bonus.dexterity;
+		strength -= bonus.strength;
+		accuracy -= bonus.accuracy;
+		intelligence -= bonus.intelligence;
+	}
+
 	public void calcActionCosts() {
 		// AP_MINOR = ;
 		// AP_WALK = ;
 		// AP_ATTACK = ;
+		// actionPtsMax = ;
 	}
 
 	public void roll() {
 		int sum = 0;
 		while (sum < STAT_MIN_SUM || sum > STAT_MAX_SUM) {
-			str = Utils.rand(1, STAT_RAND_MAX);
+			strength = Utils.rand(1, STAT_RAND_MAX);
 			constitution = Utils.rand(1, STAT_RAND_MAX);
-			accur = Utils.rand(1, STAT_RAND_MAX);
+			accuracy = Utils.rand(1, STAT_RAND_MAX);
 			luck = Utils.rand(1, STAT_RAND_MAX);
 			dexterity = Utils.rand(1, STAT_RAND_MAX);
 			intelligence = Utils.rand(1, STAT_RAND_MAX);
@@ -97,7 +174,7 @@ public class Stats {
 
 	@JsonIgnore
 	public int getSum() {
-		return str + constitution + accur + luck + dexterity + intelligence;
+		return strength + constitution + accuracy + luck + dexterity + intelligence;
 	}
 
 	public void check() {
@@ -134,22 +211,23 @@ public class Stats {
 		if (food >= satiatedVal)
 			actions._heal(FOOD_HEAL);
 	}
-	
+
 	public boolean attackMissed() {
-		return (Utils.rand(0, accur) == accur);
+		return (Utils.rand(0, accuracy) == accuracy);
 	}
-	
+
 	public int calcAttack() {
 		if (attackMissed())
 			return 0;
-		
+
 		int weaponStr;
 		if (!hand.type.isWeapon())
 			weaponStr = 0;
-		else weaponStr = hand.equipStats.strength;
-		
-		int atk = (str + weaponStr);
-		
+		else
+			weaponStr = hand.equipStats.strength;
+
+		int atk = (strength + weaponStr);
+
 		return atk;
 	}
 }

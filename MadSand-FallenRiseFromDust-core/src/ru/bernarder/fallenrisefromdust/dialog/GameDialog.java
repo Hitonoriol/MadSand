@@ -65,16 +65,14 @@ public class GameDialog extends Dialog {
 	@Override
 	public boolean remove() {
 		boolean ret = super.remove();
-		Gui.gameUnfocused = false;
-		Gui.mousemenu.setVisible(true);
+		Gui.gameUnfocused = Gui.dialogActive = false;
 		return ret;
 	}
 
 	@Override
 	public Dialog show(Stage stage) {
 		Dialog ret = super.show(stage);
-		Gui.gameUnfocused = true;
-		Gui.mousemenu.setVisible(false);
+		Gui.gameUnfocused = Gui.dialogActive = true;
 		return ret;
 	}
 
@@ -118,6 +116,9 @@ public class GameDialog extends Dialog {
 	public static final String DEFAULT_TITLE_TEXT = "";
 
 	public static final String DIALOG_TEXT_DELIMITER = "=>";
+	
+	public static final String DIALOG_BTN_SCRIPT_DELIMITER = "|";
+	public static final String DIALOG_BTN_TREE_REPLY_DELIMITER = "$";
 
 	public static final String DIALOG_PLAYER_NAME_CONSTANT = "{PLAYER}";
 	public static final String DIALOG_LINEBREAK_CONSTANT = "{br}";

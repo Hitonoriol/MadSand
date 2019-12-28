@@ -34,7 +34,11 @@ public class Resources {
 	static final int PLAYER_ANIM_WIDTH = 35;
 	static final int PLAYER_ANIM_HEIGHT = 74;
 
-	static Document resdoc;
+	static Document tileDoc;
+	static Document objectDoc;
+	static Document npcDoc;
+	static Document itemDoc;
+
 	static Document questdoc;
 	static Document gendoc;
 	static Document skilldoc;
@@ -79,7 +83,11 @@ public class Resources {
 	static final String XML_BIOME_NODE = "biome";
 
 	public static void init() {
-		resdoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.RESFILE));
+		tileDoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.TILEFILE));
+		objectDoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.OBJECTFILE));
+		npcDoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.NPCFILE));
+		itemDoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.ITEMSFILE));
+
 		questdoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.QUESTFILE));
 		gendoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.GENFILE));
 		tutorialdoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.TUTORIALFILE));
@@ -108,18 +116,18 @@ public class Resources {
 
 		MadSand.QUESTS = XMLUtils.countKeys(questdoc, XML_QUEST_NODE);
 
-		MadSand.LASTITEMID = XMLUtils.countKeys(resdoc, XML_ITEM_NODE);
-		MadSand.CROPS = XMLUtils.countKeys(resdoc, XML_CROP_STAGES_NODE);
+		MadSand.LASTITEMID = XMLUtils.countKeys(itemDoc, XML_ITEM_NODE);
+		MadSand.CROPS = XMLUtils.countKeys(objectDoc, XML_CROP_STAGES_NODE);
 
 		Utils.out(MadSand.CROPS + " crops");
 
-		MadSand.LASTOBJID = XMLUtils.countKeys(resdoc, XML_OBJECT_NODE);
+		MadSand.LASTOBJID = XMLUtils.countKeys(objectDoc, XML_OBJECT_NODE);
 
 		Utils.out(MadSand.LASTOBJID + " objects");
 
-		MadSand.LASTTILEID = XMLUtils.countKeys(resdoc, XML_TILE_NODE);
-		MadSand.NPCSPRITES = XMLUtils.countKeys(resdoc, XML_NPC_NODE);
-		MadSand.CRAFTABLES = XMLUtils.countKeys(resdoc, XML_RECIPE_NODE);
+		MadSand.LASTTILEID = XMLUtils.countKeys(tileDoc, XML_TILE_NODE);
+		MadSand.NPCSPRITES = XMLUtils.countKeys(npcDoc, XML_NPC_NODE);
+		MadSand.CRAFTABLES = XMLUtils.countKeys(itemDoc, XML_RECIPE_NODE);
 		MadSand.BIOMES = XMLUtils.countKeys(gendoc, XML_BIOME_NODE);
 
 		Utils.out(MadSand.BIOMES + " biomes");
@@ -169,16 +177,16 @@ public class Resources {
 		while (i < MadSand.QUESTS) {
 			quest = new Quest(i);
 			si = Utils.str(i);
-			quest.startMsg = XMLUtils.getKey(questdoc, "quest", si, "start");
-			quest.endMsg = XMLUtils.getKey(questdoc, "quest", si, "complete");
-			quest.reqMsg = XMLUtils.getKey(questdoc, "quest", si, "requirement_str");
-			quest.reqItems = XMLUtils.getKey(questdoc, "quest", si, "requirement");
-			quest.giveItems = XMLUtils.getKey(questdoc, "quest", si, "give_items");
-			quest.removeOnCompletion = XMLUtils.getKey(questdoc, "quest", si, "remove_on_completion");
-			quest.repeatable = Boolean.parseBoolean(XMLUtils.getKey(questdoc, "quest", si, "repeatable"));
-			quest.next = Utils.val(XMLUtils.getKey(questdoc, "quest", si, "next"));
-			quest.rewardItems = XMLUtils.getKey(questdoc, "quest", si, "reward");
-			quest.exp = Utils.val(XMLUtils.getKey(questdoc, "quest", si, "reward_exp"));
+			quest.startMsg = XMLUtils.getKey(questdoc, XML_QUEST_NODE, si, "start");
+			quest.endMsg = XMLUtils.getKey(questdoc, XML_QUEST_NODE, si, "complete");
+			quest.reqMsg = XMLUtils.getKey(questdoc, XML_QUEST_NODE, si, "requirement_str");
+			quest.reqItems = XMLUtils.getKey(questdoc, XML_QUEST_NODE, si, "requirement");
+			quest.giveItems = XMLUtils.getKey(questdoc, XML_QUEST_NODE, si, "give_items");
+			quest.removeOnCompletion = XMLUtils.getKey(questdoc, XML_QUEST_NODE, si, "remove_on_completion");
+			quest.repeatable = Boolean.parseBoolean(XMLUtils.getKey(questdoc, XML_QUEST_NODE, si, "repeatable"));
+			quest.next = Utils.val(XMLUtils.getKey(questdoc, XML_QUEST_NODE, si, "next"));
+			quest.rewardItems = XMLUtils.getKey(questdoc, XML_QUEST_NODE, si, "reward");
+			quest.exp = Utils.val(XMLUtils.getKey(questdoc, XML_QUEST_NODE, si, "reward_exp"));
 
 			QuestList.quests.put(i, quest);
 			++i;
@@ -191,21 +199,21 @@ public class Resources {
 		while (i < MadSand.NPCSPRITES) {
 			npc[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "npc/" + i + ".png"));
 			si = Utils.str(i);
-			NpcProp.hp.put(i, Utils.val(XMLUtils.getKey(resdoc, "npc", si, "hp")));
-			NpcProp.maxhp.put(i, Utils.val(XMLUtils.getKey(resdoc, "npc", si, "maxhp")));
-			NpcProp.rewardexp.put(i, Utils.val(XMLUtils.getKey(resdoc, "npc", si, "rewardexp")));
-			NpcProp.drop.put(i, (XMLUtils.getKey(resdoc, "npc", si, "drop")));
-			NpcProp.atk.put(i, Utils.val(XMLUtils.getKey(resdoc, "npc", si, "atk")));
-			NpcProp.accuracy.put(i, Utils.val(XMLUtils.getKey(resdoc, "npc", si, "accuracy")));
-			NpcProp.faction.put(i, Faction.valueOf(XMLUtils.getKey(resdoc, "npc", si, "faction")));
-			type = XMLUtils.getKey(resdoc, "npc", si, "type");
+			NpcProp.hp.put(i, Utils.val(XMLUtils.getKey(npcDoc, XML_NPC_NODE, si, "hp")));
+			NpcProp.maxhp.put(i, Utils.val(XMLUtils.getKey(npcDoc, XML_NPC_NODE, si, "maxhp")));
+			NpcProp.rewardexp.put(i, Utils.val(XMLUtils.getKey(npcDoc, XML_NPC_NODE, si, "rewardexp")));
+			NpcProp.drop.put(i, (XMLUtils.getKey(npcDoc, XML_NPC_NODE, si, "drop")));
+			NpcProp.atk.put(i, Utils.val(XMLUtils.getKey(npcDoc, XML_NPC_NODE, si, "atk")));
+			NpcProp.accuracy.put(i, Utils.val(XMLUtils.getKey(npcDoc, XML_NPC_NODE, si, "accuracy")));
+			NpcProp.faction.put(i, Faction.valueOf(XMLUtils.getKey(npcDoc, XML_NPC_NODE, si, "faction")));
+			type = XMLUtils.getKey(npcDoc, XML_NPC_NODE, si, "type");
 			if (type == "-1")
 				type = NpcType.Regular.toString();
 			NpcProp.type.put(i, NpcType.valueOf(type));
-			NpcProp.qids.put(i, (XMLUtils.getKey(resdoc, "npc", si, "qids")));
-			NpcProp.name.put(i, (XMLUtils.getKey(resdoc, "npc", si, "name")));
-			NpcProp.spawnonce.put(i, Boolean.parseBoolean(XMLUtils.getKey(resdoc, "npc", si, "spawnonce")));
-			NpcProp.friendly.put(i, Boolean.parseBoolean(XMLUtils.getKey(resdoc, "npc", si, "friendly")));
+			NpcProp.qids.put(i, (XMLUtils.getKey(npcDoc, XML_NPC_NODE, si, "qids")));
+			NpcProp.name.put(i, (XMLUtils.getKey(npcDoc, XML_NPC_NODE, si, "name")));
+			NpcProp.spawnonce.put(i, Boolean.parseBoolean(XMLUtils.getKey(npcDoc, XML_NPC_NODE, si, "spawnonce")));
+			NpcProp.friendly.put(i, Boolean.parseBoolean(XMLUtils.getKey(npcDoc, XML_NPC_NODE, si, "friendly")));
 			i++;
 		}
 	}
@@ -214,10 +222,10 @@ public class Resources {
 		int i = 0;
 		while (i < MadSand.LASTTILEID) {
 			tile[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "terrain/" + i + ".png"));
-			TileProp.name.put(i, XMLUtils.getKey(resdoc, "tile", "" + i, "name"));
-			TileProp.cover.put(i, Utils.val(XMLUtils.getKey(resdoc, "tile", "" + i, "cover")));
-			TileProp.damage.put(i, Utils.val(XMLUtils.getKey(resdoc, "tile", "" + i, "damage")));
-			TileProp.altitems.put(i, Utils.getAitem(i, "tile"));
+			TileProp.name.put(i, XMLUtils.getKey(tileDoc, XML_TILE_NODE, "" + i, "name"));
+			TileProp.cover.put(i, Utils.val(XMLUtils.getKey(tileDoc, XML_TILE_NODE, "" + i, "cover")));
+			TileProp.damage.put(i, Utils.val(XMLUtils.getKey(tileDoc, XML_TILE_NODE, "" + i, "damage")));
+			TileProp.altitems.put(i, Utils.getAitem(i, XML_TILE_NODE));
 			i++;
 		}
 	}
@@ -227,46 +235,52 @@ public class Resources {
 		int i = 0;
 		while (i < MadSand.LASTOBJID) {
 			objects[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "obj/" + i + ".png"));
-			ObjectProp.name.put(i, XMLUtils.getKey(resdoc, "object", Utils.str(i), "name"));
-			ObjectProp.hp.put(i, Integer.parseInt(XMLUtils.getKey(resdoc, "object", Utils.str(i), "tough")));
-			ObjectProp.harvestHp.put(i, Integer.parseInt(XMLUtils.getKey(resdoc, "object", Utils.str(i), "harvesthp")));
-			skill = XMLUtils.getKey(resdoc, "object", Utils.str(i), "skill");
+			ObjectProp.name.put(i, XMLUtils.getKey(objectDoc, XML_OBJECT_NODE, Utils.str(i), "name"));
+			ObjectProp.hp.put(i, Integer.parseInt(XMLUtils.getKey(objectDoc, XML_OBJECT_NODE, Utils.str(i), "tough")));
+			ObjectProp.harvestHp.put(i,
+					Integer.parseInt(XMLUtils.getKey(objectDoc, XML_OBJECT_NODE, Utils.str(i), "harvesthp")));
+			skill = XMLUtils.getKey(objectDoc, XML_OBJECT_NODE, Utils.str(i), "skill");
 			if (!skill.equals("-1"))
 				ObjectProp.skill.put(i, Skill.valueOf(skill));
-			ObjectProp.altitems.put(i, Utils.getAitem(i, "object"));
+			ObjectProp.altitems.put(i, Utils.getAitem(i, XML_OBJECT_NODE));
 
-			ObjectProp.minLvl.put(i, Integer.parseInt(XMLUtils.getKey(resdoc, "object", Utils.str(i), "lvl")));
-			ObjectProp.nocollide.put(i, Integer.parseInt(XMLUtils.getKey(resdoc, "object", Utils.str(i), "nocollide")));
+			ObjectProp.minLvl.put(i,
+					Integer.parseInt(XMLUtils.getKey(objectDoc, XML_OBJECT_NODE, Utils.str(i), "lvl")));
+			ObjectProp.nocollide.put(i,
+					Utils.val(XMLUtils.getKey(objectDoc, XML_OBJECT_NODE, Utils.str(i), "nocollide")));
 
-			ObjectProp.vRendMasks.put(i, Integer.parseInt(XMLUtils.getKey(resdoc, "object", Utils.str(i), "vmask")));
-			ObjectProp.hRendMasks.put(i, Integer.parseInt(XMLUtils.getKey(resdoc, "object", Utils.str(i), "hmask")));
-			ObjectProp.interactAction.put(i, XMLUtils.getKey(resdoc, "object", Utils.str(i), "oninteract"));
+			ObjectProp.vRendMasks.put(i,
+					Integer.parseInt(XMLUtils.getKey(objectDoc, XML_OBJECT_NODE, Utils.str(i), "vmask")));
+			ObjectProp.hRendMasks.put(i,
+					Integer.parseInt(XMLUtils.getKey(objectDoc, XML_OBJECT_NODE, Utils.str(i), "hmask")));
+			ObjectProp.interactAction.put(i, XMLUtils.getKey(objectDoc, XML_OBJECT_NODE, Utils.str(i), "oninteract"));
 			i++;
 		}
 	}
 
 	private static void loadItems() {
 		String stgs, stglen;
+		String typeStr;
 		String[] cont;
 		Vector<Integer> stages, slens;
 		ItemType type;
 		int i = 0, cc = 0;
 		while (i < MadSand.LASTITEMID) {
 			item[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "inv/" + i + ".png"));
-			if (!XMLUtils.getKey(resdoc, "item", "" + i, "recipe").equals("-1")) {
+			if (!XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, XML_RECIPE_NODE).equals("-1")) {
 				MadSand.craftableid[cc] = i;
 				cc++;
 			}
 
 			// Crops
-			stgs = XMLUtils.getKey(resdoc, "item", "" + i, "stages");
+			stgs = XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, XML_CROP_STAGES_NODE);
 			if (!stgs.equals("-1")) {
 				cont = stgs.split("\\,");
 				stages = new Vector<Integer>();
 				for (String stage : cont)
 					stages.add(Integer.parseInt(stage));
 				CropProp.stages.put(i, stages);
-				stglen = XMLUtils.getKey(resdoc, "item", "" + i, "stages");
+				stglen = XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, XML_CROP_STAGES_NODE);
 				cont = stglen.split("\\,");
 				slens = new Vector<Integer>();
 				for (String slen : cont)
@@ -275,29 +289,34 @@ public class Resources {
 			}
 
 			// Item properties
-			ItemProp.weight.put(i, Float.parseFloat(XMLUtils.getKey(resdoc, "item", "" + i, "weight")));
-			ItemProp.name.put(i, XMLUtils.getKey(resdoc, "item", "" + i, "name"));
+			ItemProp.weight.put(i, Float.parseFloat(XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "weight")));
+			ItemProp.name.put(i, XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "name"));
 
-			type = ItemType.get(Integer.parseInt(XMLUtils.getKey(resdoc, "item", "" + i, "type")));
+			typeStr = XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "type");
+			if (typeStr == "-1")
+				typeStr = ItemType.Item.toString();
+			type = ItemType.valueOf(typeStr);
 			ItemProp.type.put(i, type);
+
 			if (type.isArmor() || type.isWeapon())
-				ItemProp.lvl.put(i, Utils.val(XMLUtils.getKey(resdoc, "item", "" + i, "lvl")));
+				ItemProp.lvl.put(i, Utils.val(XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "lvl")));
 			if (type.isWeapon())
-				ItemProp.str.put(i, Utils.val(XMLUtils.getKey(resdoc, "item", "" + i, "strength")));
+				ItemProp.str.put(i, Utils.val(XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "strength")));
 
-			ItemProp.altObject.put(i, Integer.parseInt(XMLUtils.getKey(resdoc, "item", "" + i, "altobject")));
+			ItemProp.altObject.put(i, Integer.parseInt(XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "altobject")));
 
-			ItemProp.dmg.put(i, Integer.parseInt(XMLUtils.getKey(resdoc, "item", "" + i, "dmg", "0")));
-			ItemProp.skill.put(i, Skill.valueOf(XMLUtils.getKey(resdoc, "item", "" + i, "skill", "None")));
+			ItemProp.dmg.put(i, Integer.parseInt(XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "dmg", "0")));
+			ItemProp.skill.put(i, Skill.valueOf(XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "skill", "None")));
 
-			ItemProp.hp.put(i, Integer.parseInt(XMLUtils.getKey(resdoc, "item", "" + i, "hp")));
-			ItemProp.cost.put(i, Integer.parseInt(XMLUtils.getKey(resdoc, "item", "" + i, "cost")));
-			ItemProp.craftable.put(i, Integer.parseInt(XMLUtils.getKey(resdoc, "item", "" + i, "craftable")) != 0);
-			ItemProp.recipe.put(i, XMLUtils.getKey(resdoc, "item", "" + i, "recipe"));
-			ItemProp.heal.put(i, XMLUtils.getKey(resdoc, "item", "" + i, "heal"));
-			ItemProp.useAction.put(i, XMLUtils.getKey(resdoc, "item", "" + i, "onuse"));
+			ItemProp.hp.put(i, Integer.parseInt(XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "hp")));
+			ItemProp.cost.put(i, Integer.parseInt(XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "cost")));
+			ItemProp.craftable.put(i,
+					Integer.parseInt(XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "craftable")) != 0);
+			ItemProp.recipe.put(i, XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, XML_RECIPE_NODE));
+			ItemProp.heal.put(i, XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "heal"));
+			ItemProp.useAction.put(i, XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "onuse"));
 
-			String reqlist = XMLUtils.getKey(resdoc, "item", "" + i, "craftreq");
+			String reqlist = XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "craftreq");
 			cont = reqlist.split("\\,");
 			Vector<Integer> reqs = new Vector<Integer>();
 			for (String req : cont)
@@ -325,20 +344,22 @@ public class Resources {
 			def = new Vector<Integer>();
 			lake = new HashMap<String, Integer>();
 
-			WorldGenProp.name.add(XMLUtils.getAttr(gendoc, "biome", Utils.str(i), "name"));
+			WorldGenProp.name.add(XMLUtils.getAttr(gendoc, XML_BIOME_NODE, Utils.str(i), "name"));
 			group = XMLUtils.getGroup(i, "tile_group");
 			objGroup = XMLUtils.getGroup(i, "object_group");
 
-			def.add(Integer.parseInt(XMLUtils.getAttrValues(gendoc, "biome", Utils.str(i), "def_tile", Utils.str(-1))));
-			lake = XMLUtils.nodeMapToHashMap(XMLUtils.getNested(gendoc, "biome", Utils.str(i), "lake", Utils.str(-1)));
+			def.add(Integer
+					.parseInt(XMLUtils.getAttrValues(gendoc, XML_BIOME_NODE, Utils.str(i), "def_tile", Utils.str(-1))));
+			lake = XMLUtils
+					.nodeMapToHashMap(XMLUtils.getNested(gendoc, XML_BIOME_NODE, Utils.str(i), "lake", Utils.str(-1)));
 
 			WorldGenProp.loadTileBlock(i, def, group, lake);
 			WorldGenProp.loadObjectBlock(i, objGroup);
-			defT = XMLUtils.getAttrValues(gendoc, "biome", Utils.str(i), "cave_tile", Utils.str(-1));
-			defO = XMLUtils.getAttrValues(gendoc, "biome", Utils.str(i), "cave_object", Utils.str(-1));
-			ore.add(XMLUtils.getAttrValues(gendoc, "biome", Utils.str(i), "ore", Utils.str(-1)));
-			vdungeon = XMLUtils
-					.nodeMapToHashMap(XMLUtils.getNested(gendoc, "biome", Utils.str(i), "dungeon", Utils.str(-1)));
+			defT = XMLUtils.getAttrValues(gendoc, XML_BIOME_NODE, Utils.str(i), "cave_tile", Utils.str(-1));
+			defO = XMLUtils.getAttrValues(gendoc, XML_BIOME_NODE, Utils.str(i), "cave_object", Utils.str(-1));
+			ore.add(XMLUtils.getAttrValues(gendoc, XML_BIOME_NODE, Utils.str(i), "ore", Utils.str(-1)));
+			vdungeon = XMLUtils.nodeMapToHashMap(
+					XMLUtils.getNested(gendoc, XML_BIOME_NODE, Utils.str(i), "dungeon", Utils.str(-1)));
 			WorldGenProp.loadUnderworldBlock(i, defT, defO, ore, vdungeon);
 			++i;
 		}

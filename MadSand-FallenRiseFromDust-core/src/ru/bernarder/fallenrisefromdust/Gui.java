@@ -47,6 +47,10 @@ import java.util.Vector;
 import java.util.Map.Entry;
 
 public class Gui {
+	public static boolean gameUnfocused = false;
+	public static boolean inventoryActive = false;
+	public static boolean dialogActive = false;
+
 	public static final String LINEBREAK = "\n";
 	static final float DEFWIDTH = 250f;
 	static final int LOG_LENGTH = 20;
@@ -135,7 +139,8 @@ public class Gui {
 		dialogBackground = new NinePatchDrawable(patch);
 		dialogBackground.setMinHeight(50);
 		dialogBackground.setMinWidth(100);
-		ws.background = Gui.skin.newDrawable("background", Color.LIGHT_GRAY);;
+		ws.background = Gui.skin.newDrawable("background", Color.LIGHT_GRAY);
+		;
 		ws.stageBackground = transparency;
 		ws.titleFontColor = Color.WHITE;
 		ws.titleFont = fontMedium;
@@ -176,6 +181,10 @@ public class Gui {
 	static Label conStatLbl, strStatLbl, accStatLbl, intStatLbl, luckStatLbl, dexStatLbl, statSumLbl;
 	static Label hpStatLbl, staminaStatLbl;
 
+	static int ITEM_DISPLAY_HEAD = 0;
+	static int ITEM_DISPLAY_CHEST = 1;
+	static int ITEM_DISPLAY_LEGS = 2;
+	static int ITEM_DISPLAY_SHIELD = 3;
 	static int ITEM_DISPLAY_HOLDING = 4;
 	static int ITEM_DISPLAY_SLOTS = 5;
 
@@ -184,6 +193,26 @@ public class Gui {
 		if (id != 0)
 			img = new TextureRegionDrawable(Resources.item[id]);
 		equip[ITEM_DISPLAY_HOLDING].setDrawable((Drawable) img);
+	}
+
+	public static void refreshEquipDisplay() {
+		Stats stats = World.player.stats;
+		Drawable img = Resources.noEquip;
+
+		if (stats.headEquip != Item.nullItem)
+			img = new TextureRegionDrawable(Resources.item[stats.headEquip.id]);
+		equip[ITEM_DISPLAY_HEAD].setDrawable((Drawable) img);
+
+		img = Resources.noEquip;
+		if (stats.chestEquip != Item.nullItem)
+			img = new TextureRegionDrawable(Resources.item[stats.chestEquip.id]);
+		equip[ITEM_DISPLAY_CHEST].setDrawable((Drawable) img);
+
+		img = Resources.noEquip;
+		if (stats.legsEquip != Item.nullItem)
+			img = new TextureRegionDrawable(Resources.item[stats.legsEquip.id]);
+		equip[ITEM_DISPLAY_LEGS].setDrawable((Drawable) img);
+
 	}
 
 	static void refreshOverlay() {
@@ -315,8 +344,8 @@ public class Gui {
 
 	static void refreshStatLabels() {
 		Stats s = World.player.stats;
-		strStatLbl.setText("Strength: " + s.str);
-		accStatLbl.setText("Accuracy: " + s.accur);
+		strStatLbl.setText("Strength: " + s.strength);
+		accStatLbl.setText("Accuracy: " + s.accuracy);
 		conStatLbl.setText("Constitution: " + s.constitution);
 		intStatLbl.setText("Intelligence: " + s.intelligence);
 		luckStatLbl.setText("Luck: " + s.luck);
@@ -618,7 +647,7 @@ public class Gui {
 
 	private static float CRAFT_BTN_WIDTH = 250;
 	private static float CRAFT_ENTRY_PADDING = 30;
-	
+
 	static void refreshCraftMenu() {
 		Utils.out("Refreshing craft menu...");
 		craftbl.remove();
@@ -841,6 +870,8 @@ public class Gui {
 		Gui.overlay.addActor(Gui.gamecontext);
 		Gui.overlay.addListener(new ClickListener(1) {
 			public void clicked(InputEvent event, float x, float y) {
+				if (dialogActive)
+					return;
 				if (MadSand.state == GameState.GAME) {
 					if (Gui.mousemenu.isVisible()) {
 						Gui.mousemenu.setVisible(false);
@@ -1011,8 +1042,5 @@ public class Gui {
 		font.getData().markupEnabled = true;
 		return font;
 	}
-
-	public static boolean gameUnfocused = false;
-	public static boolean inventoryActive = false;
 
 }

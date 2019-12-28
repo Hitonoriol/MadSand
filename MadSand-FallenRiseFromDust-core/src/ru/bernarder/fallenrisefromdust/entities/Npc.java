@@ -68,12 +68,12 @@ public class Npc extends Entity {
 		stats.name = NpcProp.name.get(id);
 		stats.hp = NpcProp.hp.get(id);
 		stats.mhp = stats.hp;
-		stats.str = NpcProp.atk.get(id);
-		stats.accur = NpcProp.accuracy.get(id);
+		stats.strength = NpcProp.atk.get(id);
+		stats.accuracy = NpcProp.accuracy.get(id);
 		stats.skills.setExp(Skill.Level, NpcProp.rewardexp.get(id));
 		stats.faction = NpcProp.faction.get(id);
 		initInventory();
-		inventory.setMaxWeight(stats.str * 10);
+		inventory.setMaxWeight(stats.strength * 10);
 		inventory.putItem(NpcProp.drop.get(id));
 
 		String list = NpcProp.qids.get(id);
