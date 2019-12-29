@@ -23,7 +23,6 @@ import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 import ru.bernarder.fallenrisefromdust.properties.QuestList;
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
-import ru.bernarder.fallenrisefromdust.properties.Tutorial;
 import ru.bernarder.fallenrisefromdust.world.World;
 
 public class Player extends Entity {
@@ -41,7 +40,7 @@ public class Player extends Entity {
 
 	public HashSet<Integer> knownNpcs = new HashSet<Integer>();
 
-	public int tutorialPos = -1;
+	public boolean newlyCreated = true;
 
 	public boolean isMain = true;
 
@@ -57,18 +56,20 @@ public class Player extends Entity {
 		this("");
 	}
 
+	@Override
+	void initInventory() {
+		super.initInventory();
+		inventory.initUI();
+		inventory.refreshUITitle();
+	}
+
 	@JsonIgnore
 	public boolean isNewlyCreated() {
-		if (tutorialPos == -1) {
-			++tutorialPos;
+		if (newlyCreated) {
+			newlyCreated = false;
 			return true;
 		}
 		return false;
-	}
-
-	public void displayTutorial() {
-		GameDialog.generateDialogChain(Tutorial.strings.get(tutorialPos), Gui.overlay).show();
-		++tutorialPos;
 	}
 
 	public boolean knowsNpc(int id) {
@@ -102,6 +103,7 @@ public class Player extends Entity {
 
 	@Override
 	public boolean attack(Direction dir) {
+		boolean dead;
 		turn(dir);
 		Npc npc = MadSand.world.getCurLoc().getNpc(coords.set(x, y).addDirection(dir));
 		if (npc == Map.nullNpc)
@@ -112,12 +114,15 @@ public class Player extends Entity {
 				MadSand.print("You miss " + npc.stats.name);
 			else {
 				MadSand.print("You deal " + atk + " damage to " + npc.stats.name);
-				npc.damage(atk);
 				if (npc.friendly)
 					npc.friendly = false;
+				npc.damage(atk);
 			}
+			dead = npc.stats.dead;
+			if (dead && knownNpcs.add(npc.id))
+				MadSand.print("You now know more about " + npc.stats + "s");
 			doAction(stats.AP_ATTACK);
-			return true;
+			return dead;
 		}
 	}
 
@@ -221,6 +226,7 @@ public class Player extends Entity {
 
 	public void interact(Npc npc) {
 		String name = npc.stats.name;
+		Gui.closeGameContextMenu();
 		Utils.out("Interacting with NPC " + name + " type: " + npc.type.toString());
 		switch (npc.type) {
 		case Regular:
@@ -495,5 +501,12 @@ public class Player extends Entity {
 		Gdx.input.setInputProcessor(Gui.overlay);
 		MadSand.state = GameState.INVENTORY;
 		Gui.inventoryActive = true;
+	}
+
+	@Override
+	public void setEquipment(ArrayList<Integer> eq) { // For deserializer only
+		super.setEquipment(eq);
+		Gui.refreshEquipDisplay();
+		Gui.setHandDisplay(stats.hand.id);
 	}
 }

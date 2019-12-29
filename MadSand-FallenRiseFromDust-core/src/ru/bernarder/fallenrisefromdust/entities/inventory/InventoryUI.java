@@ -33,7 +33,7 @@ public class InventoryUI {
 		invContainer = new Table();
 		invTable = new Table();
 		invTable.row();
-		//invTable.setDebug(true);
+		// invTable.setDebug(true);
 		invTable.setBackground(Gui.darkBackground);
 		invTable.align(Align.topLeft);
 		header = new Label("[0/0 kg]", Gui.skin);
@@ -52,14 +52,14 @@ public class InventoryUI {
 		Gui.overlay.addActor(invScroll);
 		stacks = 0;
 	}
-	
+
 	void remove() {
 		invContainer.remove();
 		invTable.remove();
 		invScroll.remove();
 	}
 
-	void refresh(Set<Entry<Item,InventoryUICell>> set) {
+	void refresh(Set<Entry<Item, InventoryUICell>> set) {
 		stacks = 0;
 		invTable.clear();
 		for (Entry<Item, InventoryUICell> pair : set) {
@@ -73,7 +73,7 @@ public class InventoryUI {
 			invTable.row();
 		invTable.add(cell);
 	}
-	
+
 	public void hide() {
 		invScroll.setVisible(false);
 	}
@@ -87,7 +87,7 @@ public class InventoryUI {
 	}
 
 	void setMass(double curWeight, double maxWeight) {
-		setHeader("[" + curWeight + "/" + maxWeight + "] kg");
+		setHeader("[" + (Math.round(curWeight * 100) / 100.00) + "/" + maxWeight + "] kg");
 	}
 
 	void setHeader(String str) {

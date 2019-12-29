@@ -6,11 +6,14 @@ import java.util.StringTokenizer;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import ru.bernarder.fallenrisefromdust.Gui;
 import ru.bernarder.fallenrisefromdust.MadSand;
 import ru.bernarder.fallenrisefromdust.Resources;
 import ru.bernarder.fallenrisefromdust.Utils;
 import ru.bernarder.fallenrisefromdust.containers.Pair;
+import ru.bernarder.fallenrisefromdust.entities.inventory.Item;
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.NpcState;
 import ru.bernarder.fallenrisefromdust.enums.NpcType;
@@ -73,8 +76,18 @@ public class Npc extends Entity {
 		stats.skills.setExp(Skill.Level, NpcProp.rewardexp.get(id));
 		stats.faction = NpcProp.faction.get(id);
 		initInventory();
-		inventory.setMaxWeight(stats.strength * 10);
+		inventory.setMaxWeight(stats.calcMaxInventoryWeight());
 		inventory.putItem(NpcProp.drop.get(id));
+
+		int toRemove;
+		for (Item item : inventory.items) {
+			toRemove = Utils.rand(0, item.quantity);
+			Utils.out("Removing " + toRemove + " of " + item.name);
+			inventory.delItem(item.id, toRemove);
+		}
+
+		Utils.out(stats.name);
+		inventory.dump();
 
 		String list = NpcProp.qids.get(id);
 		StringTokenizer qTok = new StringTokenizer(list, ",");
@@ -142,9 +155,6 @@ public class Npc extends Entity {
 		if (!friendly)
 			state = NpcState.FollowPlayer;
 
-		Utils.out(stats.name + " acting. State: " + state);
-		Utils.out("Player spotted: " + playerSpotted);
-
 		switch (state) {
 		case Still:
 			break;
@@ -202,6 +212,41 @@ public class Npc extends Entity {
 			break;
 
 		}
+	}
+
+	private String HEALTH_STATE_FULL = "full";
+	private String HEALTH_STATE_75 = "couple of scratches";
+	private String HEALTH_STATE_50 = "slightly damaged";
+	private String HEALTH_STATE_25 = "severe injuries";
+	private String HEALTH_STATE_10 = "at death's door";
+
+	private float HEALTH_75 = 0.75f;
+	private float HEALTH_50 = 0.5f;
+	private float HEALTH_25 = 0.25f;
+	private float HEALTH_10 = 0.1f;
+
+	@JsonIgnore
+	public String getHealthState() {
+		float state = stats.hp / stats.mhp;
+		if (state > HEALTH_75)
+			return HEALTH_STATE_FULL;
+		else if (state > HEALTH_50)
+			return HEALTH_STATE_75;
+		else if (state > HEALTH_25)
+			return HEALTH_STATE_50;
+		else if (state > HEALTH_10)
+			return HEALTH_STATE_25;
+		else
+			return HEALTH_STATE_10;
+	}
+
+	@JsonIgnore
+	public String getInfoString() {
+		String ret = "";
+		ret += "Faction: " + stats.faction + Gui.LINEBREAK;
+		ret += "Health: " + getHealthState() + Gui.LINEBREAK;
+		ret += "Friendly: " + (friendly ? "yes" : "no") + Gui.LINEBREAK;
+		return ret;
 	}
 
 }

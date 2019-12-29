@@ -1,7 +1,11 @@
 package ru.bernarder.fallenrisefromdust.entities;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 import ru.bernarder.fallenrisefromdust.MadSand;
 import ru.bernarder.fallenrisefromdust.containers.Pair;
@@ -29,9 +33,8 @@ public abstract class Entity {
 	public int fov = 15;
 	public int maxFov, minFov;
 
-	public Stats stats;
-
 	public Inventory inventory;
+	public Stats stats;
 
 	public PairFloat globalPos = new PairFloat(x * MadSand.TILESIZE, y * MadSand.TILESIZE);
 
@@ -48,6 +51,7 @@ public abstract class Entity {
 		stats = new Stats();
 		stats.name = name;
 		initStatActions();
+		initInventory();
 	}
 
 	public Entity() {
@@ -73,7 +77,7 @@ public abstract class Entity {
 	}
 
 	public void initStatActions() {
-		stats.actions = new StatAction() {
+		stats.owner = new StatAction() {
 			@Override
 			public void _die() {
 				die();
@@ -88,8 +92,12 @@ public abstract class Entity {
 			public void _heal(int amt) {
 				heal(amt);
 			}
+
+			@Override
+			public Item _getItem(int id) {
+				return inventory.getItem(id);
+			}
 		};
-		stats.hand = new Item();
 	}
 
 	public boolean isStepping() {
@@ -110,7 +118,8 @@ public abstract class Entity {
 	}
 
 	public void reinit() {
-		inventory = new Inventory(stats.strength * Stats.STR_WEIGHT_MULTIPLIER);
+		initInventory();
+		inventory.setMaxWeight(stats.calcMaxInventoryWeight());
 	}
 
 	boolean attack(Direction dir) {
@@ -380,5 +389,32 @@ public abstract class Entity {
 
 	int distanceTo(Entity entity) {
 		return (int) MadSand.calcDistance(x, y, entity.x, entity.y);
+	}
+
+	@JsonGetter("Equipment")
+	public ArrayList<Integer> getEquipment() { // For serializer, don't touch this!
+		ArrayList<Integer> ret = new ArrayList<Integer>();
+		ret.add(stats.hand.id);
+		ret.add(stats.offHand.id);
+		ret.add(stats.headEquip.id);
+		ret.add(stats.chestEquip.id);
+		ret.add(stats.legsEquip.id);
+
+		return ret;
+	}
+
+	private int EQ_HAND = 0;
+	private int EQ_OFFHAND = 1;
+	private int EQ_HEAD = 2;
+	private int EQ_CHEST = 3;
+	private int EQ_LEGS = 4;
+
+	@JsonSetter("Equipment")
+	public void setEquipment(ArrayList<Integer> eq) { // For deserializer
+		stats.hand = inventory.getItem(eq.get(EQ_HAND));
+		stats.offHand = inventory.getItem(eq.get(EQ_OFFHAND));
+		stats.headEquip = inventory.getItem(eq.get(EQ_HEAD));
+		stats.chestEquip = inventory.getItem(eq.get(EQ_CHEST));
+		stats.legsEquip = inventory.getItem(eq.get(EQ_LEGS));
 	}
 }

@@ -415,6 +415,8 @@ public class Map {
 		if (getNpc(coords.x, coords.y) != nullNpc)
 			return false;
 
+		if (npc.spawnOnce)
+			World.player.knownNpcs.add(npc.id);
 		mapNpcs.put(coords, npc);
 		return true;
 	}
@@ -456,7 +458,7 @@ public class Map {
 		}
 
 		npc.setGridCoords(x, y);
-		mapNpcs.put(coords, npc);
+		putNpc(npc);
 
 		if (!(xold == x && yold == y))
 			removeNpc(xold, yold);

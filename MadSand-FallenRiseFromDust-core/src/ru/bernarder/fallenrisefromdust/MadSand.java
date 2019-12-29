@@ -17,6 +17,7 @@ import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
 import ru.bernarder.fallenrisefromdust.map.Map;
 import ru.bernarder.fallenrisefromdust.map.MapObject;
+import ru.bernarder.fallenrisefromdust.properties.Tutorial;
 import ru.bernarder.fallenrisefromdust.world.World;
 
 import java.io.File;
@@ -46,19 +47,18 @@ public class MadSand extends Game {
 	static String QUESTFILE = SAVEDIR + "quests.xml";
 	static String GENFILE = SAVEDIR + "worldgen.xml";
 	static String TUTORIALFILE = SAVEDIR + "tutorial.xml";
-	
+
 	static String TILEFILE = SAVEDIR + "tiles.xml";
 	static String OBJECTFILE = SAVEDIR + "objects.xml";
 	static String NPCFILE = SAVEDIR + "npcs.xml";
 	static String ITEMSFILE = SAVEDIR + "items.xml";
-	
+
 	static String SKILLFILE = SAVEDIR + "defskills.xml";
 	static final String MAPDIR = SAVEDIR + "worlds/";
 	static final String SCRIPTDIR = SAVEDIR + "scripts";
 	static final String PLAYERFILE = "/Player" + SAVE_EXT;
 	static final String NPCSFILE = "NPCs";
 	static final String WORLDFILE = "/World" + SAVE_EXT;
-	static final String INVFILE = "/PlayerInventory" + SAVE_EXT;
 	static final String ERRFILE = "MadSandCritical.log";
 
 	static int numlook = 0;
@@ -391,11 +391,11 @@ public class MadSand extends Game {
 	public void render() {
 		if (state.equals(GameState.GAME)) {
 			if (!Gui.gameUnfocused && World.player.isNewlyCreated()) {
-				World.player.displayTutorial();
+				Tutorial.show(Tutorial.GAME_START);
 				justStarted = false;
 			}
 			if (justStarted) {
-					justStarted = false;
+				justStarted = false;
 			}
 			mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
 			camera.unproject(mouseinworld);

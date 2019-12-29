@@ -17,10 +17,10 @@ public class Inventory {
 
 	public double curWeight, maxWeight;
 
-	private HashMap<Item, InventoryUICell> itemUI = new HashMap<Item, InventoryUICell>();
+	private HashMap<Item, InventoryUICell> itemUI;
 
 	@JsonIgnore
-	public InventoryUI inventoryUI = new InventoryUI();
+	public InventoryUI inventoryUI;
 
 	public Inventory(float maxWeight) {
 		setMaxWeight(maxWeight);
@@ -31,9 +31,19 @@ public class Inventory {
 		maxWeight = 0;
 	}
 
+	public void initUI() {
+		inventoryUI = new InventoryUI();
+		itemUI = new HashMap<Item, InventoryUICell>();
+	}
+
 	public void setMaxWeight(float val) {
 		maxWeight = val;
-		inventoryUI.setMass(curWeight, maxWeight);
+		refreshUITitle();
+	}
+
+	public void refreshUITitle() {
+		if (itemUI != null)
+			inventoryUI.setMass(curWeight, maxWeight);
 	}
 
 	public void refreshContents() {
@@ -61,9 +71,10 @@ public class Inventory {
 		for (Item item : items) {
 			curWeight += item.getWeight();
 		}
+		refreshUITitle();
 	}
 
-	void dump() {
+	public void dump() {
 		Utils.out("Inventory dump: ");
 		Utils.out("Weight: " + curWeight + " / " + maxWeight);
 		for (Item item : items) {
@@ -76,22 +87,33 @@ public class Inventory {
 	}
 
 	public int getSameCell(int id) {
-		return items.indexOf(new Item(id));
+		int pos = 0;
+		for (Item item : items) {
+			if (item.id == id)
+				return pos;
+			++pos;
+		}
+		return -1;
 	}
 
 	public int getSameCell(int id, int q) { // find q or more items
 		int i = getSameCell(id);
 		if (i != -1) {
-			if (items.get(i).quantity < q) {
-				Utils.out("getSameCell " + id + " " + q + " not found");
+			if (items.get(i).quantity < q)
 				return -1;
-			}
+			
 		}
 		return i;
 	}
 
-	Item getItem(int cid) {
-		return items.get(cid);
+	public Item getItem(int id) { // get item by its id, not the index
+		Item ret = Item.nullItem;
+		int pos = getSameCell(id);
+
+		if (pos != -1)
+			ret = items.get(pos);
+
+		return ret;
 	}
 
 	void clear() {
@@ -100,6 +122,8 @@ public class Inventory {
 	}
 
 	private void refreshRemoveItem(Item item) {
+		if (itemUI == null)
+			return;
 		if (item.id == 0)
 			return;
 		if (itemUI.containsKey(item)) {
@@ -121,6 +145,8 @@ public class Inventory {
 	}
 
 	private void refreshItem(Item item) {
+		if (itemUI == null)
+			return;
 		if (item.id == 0)
 			return;
 		inventoryUI.setMass(curWeight, maxWeight);
@@ -137,6 +163,8 @@ public class Inventory {
 	}
 
 	public void clearContextMenus() {
+		if (itemUI == null)
+			return;
 		for (Entry<Item, InventoryUICell> pair : itemUI.entrySet()) {
 			InventoryUICell cell = pair.getValue();
 			cell.hideContext();

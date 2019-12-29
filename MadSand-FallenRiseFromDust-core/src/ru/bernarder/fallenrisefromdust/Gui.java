@@ -29,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
+import ru.bernarder.fallenrisefromdust.dialog.GameDialog;
 import ru.bernarder.fallenrisefromdust.entities.Player;
 import ru.bernarder.fallenrisefromdust.entities.Stats;
 import ru.bernarder.fallenrisefromdust.entities.inventory.Item;
@@ -189,6 +190,7 @@ public class Gui {
 	static int ITEM_DISPLAY_SLOTS = 5;
 
 	public static void setHandDisplay(int id) {
+		Utils.out("Setting hand display to " + id);
 		Drawable img = Resources.noEquip;
 		if (id != 0)
 			img = new TextureRegionDrawable(Resources.item[id]);
@@ -362,13 +364,14 @@ public class Gui {
 		MadSand.charcrt = true;
 
 		String msg = "Character creation";
-		final Dialog dialog = new Dialog(" ", Gui.skin);
+		final GameDialog dialog = new GameDialog(overlay);
+		Label title = dialog.getTitleLabel();
+		title.setText(msg);
+		title.setAlignment(Align.center);
 		dialog.setMovable(true);
-		dialog.text(msg);
-		dialog.row();
 		final TextField nameField = new TextField("Player", Gui.skin);
 		refreshStatLabels();
-		dialog.add(new Label("Character name:", Gui.skin)).width(defLblWidth).row();
+		dialog.add(new Label("\nCharacter name:", Gui.skin)).width(defLblWidth).row();
 		dialog.row();
 		dialog.add(nameField).width(defLblWidth).row();
 		dialog.row();
@@ -874,15 +877,10 @@ public class Gui {
 					return;
 				if (MadSand.state == GameState.GAME) {
 					if (Gui.mousemenu.isVisible()) {
-						Gui.mousemenu.setVisible(false);
-						Gui.gamecontext.setVisible(true);
-						Gui.gamecontext.setPosition(MadSand.mx + 50, MadSand.my - 30);
-						MadSand.wclickx = MadSand.wmx;
-						MadSand.wclicky = MadSand.wmy;
+						openGameContextMenu();
 						gameUnfocused = true;
 					} else {
-						Gui.mousemenu.setVisible(true);
-						Gui.gamecontext.setVisible(false);
+						closeGameContextMenu();
 						gameUnfocused = false;
 					}
 				}
@@ -1025,6 +1023,19 @@ public class Gui {
 		initLaunchMenu();
 		initWmenu();
 		Gdx.input.setInputProcessor(menu);
+	}
+
+	public static void closeGameContextMenu() {
+		mousemenu.setVisible(true);
+		gamecontext.setVisible(false);
+	}
+
+	public static void openGameContextMenu() {
+		mousemenu.setVisible(false);
+		gamecontext.setVisible(true);
+		gamecontext.setPosition(MadSand.mx + 50, MadSand.my - 30);
+		MadSand.wclickx = MadSand.wmx;
+		MadSand.wclicky = MadSand.wmy;
 	}
 
 	static BitmapFont createFont(int size) {

@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -55,6 +56,14 @@ public class GameDialog extends Dialog {
 
 	public GameDialog(String text, Stage stage) {
 		this("", text, stage);
+	}
+
+	public GameDialog(Stage stage) {
+		this("", "", stage);
+		Cell<Label> cell = getCell(textLbl);
+		textLbl.remove();
+		getCells().removeValue(cell, true);
+		invalidate();
 	}
 
 	public GameDialog(String title, String text, Stage stage, String okText) {
@@ -116,7 +125,7 @@ public class GameDialog extends Dialog {
 	public static final String DEFAULT_TITLE_TEXT = "";
 
 	public static final String DIALOG_TEXT_DELIMITER = "=>";
-	
+
 	public static final String DIALOG_BTN_SCRIPT_DELIMITER = "|";
 	public static final String DIALOG_BTN_TREE_REPLY_DELIMITER = "$";
 

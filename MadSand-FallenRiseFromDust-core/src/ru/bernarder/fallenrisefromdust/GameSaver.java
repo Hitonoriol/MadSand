@@ -11,7 +11,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import ru.bernarder.fallenrisefromdust.entities.Player;
-import ru.bernarder.fallenrisefromdust.entities.inventory.Inventory;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
 import ru.bernarder.fallenrisefromdust.world.World;
 
@@ -156,9 +155,7 @@ public class GameSaver {
 		try {
 			String fl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.PLAYERFILE;
 			String wfl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.WORLDFILE;
-			String ifl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.INVFILE;
 			MadSand.mapper.writeValue(new File(fl), World.player);
-			MadSand.mapper.writeValue(new File(ifl), World.player.inventory);
 			MadSand.mapper.writeValue(new File(wfl), MadSand.world);
 			return true;
 		} catch (Exception e) {
@@ -169,16 +166,13 @@ public class GameSaver {
 
 	static boolean loadChar() {
 		try {
+			Utils.out("Loading character...");
 			String fl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.PLAYERFILE;
 			String wfl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.WORLDFILE;
-			String ifl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.INVFILE;
-
-			World.player.inventory = new Inventory();
 
 			World.player = MadSand.mapper.readValue(getExternal(fl), Player.class);
 
-			World.player.reinit();
-			World.player.inventory = MadSand.mapper.readValue(getExternal(ifl), Inventory.class);
+			World.player.inventory.initUI();
 			World.player.inventory.refreshContents();
 			World.player.initStatActions();
 
@@ -190,9 +184,7 @@ public class GameSaver {
 			MadSand.world.worldtime = w.worldtime;
 			MadSand.world.tick = w.tick;
 
-			Gui.refreshEquipDisplay();
-			Gui.setHandDisplay(World.player.stats.hand.id);
-
+			Utils.out("Done loading character.");
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

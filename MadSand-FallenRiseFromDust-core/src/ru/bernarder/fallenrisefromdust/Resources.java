@@ -161,11 +161,13 @@ public class Resources {
 
 	private static void loadTutorial() {
 		int i = 0;
-		String si;
+		String si, name, text;
 		int tips = XMLUtils.countKeys(tutorialdoc, "tip");
 		while (i < tips) {
 			si = Utils.str(i);
-			Tutorial.strings.add(XMLUtils.getKey(tutorialdoc, "tip", si, "text"));
+			name = XMLUtils.getKey(tutorialdoc, "tip", si, "name");
+			text = XMLUtils.getKey(tutorialdoc, "tip", si, "text");
+			Tutorial.strings.put(name, text);
 			++i;
 		}
 	}

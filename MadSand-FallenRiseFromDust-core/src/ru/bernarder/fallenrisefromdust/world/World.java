@@ -241,7 +241,7 @@ public class World {
 			iit = 0;
 			it++;
 		}
-		Utils.out("Done dungeon generating!");
+		Utils.out("Done generating dungeon!");
 	}
 
 	final int CAVE_TILE = 0;
@@ -282,7 +282,7 @@ public class World {
 			}
 			a--;
 		}
-		Utils.out("Underworld generated!");
+		Utils.out("Done generating underworld!");
 	}
 
 	public void genBiomeTerrain() {

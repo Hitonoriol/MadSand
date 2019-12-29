@@ -1,5 +1,6 @@
 <tutorial>
 	<tip id = "0">
+		<name>GameStart</name>
 		<text>
 			#Tutorial# Welcome to MadSand, {PLAYER}![What? How do you know my name?]=>
 			#Tutorial# This game is supposed to be an open-world survival roguelike, but it's in its early stage of development, so feel free to explore and provide feedback and suggestions about what you see in the game or what you want to see in future.[Mkaaay...]=>

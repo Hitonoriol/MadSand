@@ -10,30 +10,37 @@ import ru.bernarder.fallenrisefromdust.enums.Faction;
 import ru.bernarder.fallenrisefromdust.enums.ItemType;
 
 public class Stats {
-	public final static int STR_WEIGHT_MULTIPLIER = 25;
+	public final static int WEIGHT_MULTIPLIER = 5;
 
 	public int AP_WALK = 5; // action points consumed by walking
 	public int AP_ATTACK = 3;
 	public int AP_MINOR = 1; // action points consumed by minor action
 
 	final static int STARVE_DMG = 1;
-	final static int FOOD_HEAL = 3;
+	final static int FOOD_HEAL = 1;
 
 	static final int STAT_MIN_SUM = 15;
 	static final int STAT_MAX_SUM = 22;
 	static final int STAT_RAND_MAX = 9;
 
-	public Item hand;
+	@JsonIgnore
+	public Item hand = Item.nullItem;
+	@JsonIgnore
+	public Item offHand = Item.nullItem;
 
+	@JsonIgnore
 	public Item headEquip = Item.nullItem;
+	@JsonIgnore
 	public Item chestEquip = Item.nullItem;
+	@JsonIgnore
 	public Item legsEquip = Item.nullItem;
 
 	public int actionPtsMax = 5;
 	public int actionPts = actionPtsMax;
 
+	public float satiationFactor = 0.9f;
 	public final int maxFood = 1000;
-	public final int satiatedVal = (int) (maxFood * 0.9);
+	public final int satiatedVal = (int) (maxFood * satiationFactor);
 	public int food = maxFood;
 
 	public long spawnTime = 0;
@@ -72,7 +79,7 @@ public class Stats {
 	public boolean dead = false;
 
 	@JsonIgnore
-	public StatAction actions;
+	public StatAction owner;
 
 	// public Stats(Entity owner)
 
@@ -198,7 +205,7 @@ public class Stats {
 		if (hp <= 0) {
 			hp = 0;
 			dead = true;
-			actions._die();
+			owner._die();
 		}
 	}
 
@@ -206,10 +213,10 @@ public class Stats {
 		--food;
 
 		if (food <= 0)
-			actions._damage(STARVE_DMG);
+			owner._damage(STARVE_DMG);
 
 		if (food >= satiatedVal)
-			actions._heal(FOOD_HEAL);
+			owner._heal(FOOD_HEAL);
 	}
 
 	public boolean attackMissed() {
@@ -229,5 +236,9 @@ public class Stats {
 		int atk = (strength + weaponStr);
 
 		return atk;
+	}
+
+	public int calcMaxInventoryWeight() {
+		return (strength + dexterity) * WEIGHT_MULTIPLIER;
 	}
 }

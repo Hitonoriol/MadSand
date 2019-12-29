@@ -290,12 +290,18 @@ public class Utils {
 
 		if (object != Map.nullObject)
 			info += ("Object: " + ObjectProp.name.get(object.id)) + Gui.LINEBREAK;
-		if (npc != Map.nullNpc)
+		if (npc != Map.nullNpc) {
 			info += ("Creature: " + " " + npc.stats.name) + Gui.LINEBREAK;
+			if (World.player.knowsNpc(npc.id)) {
+				info += npc.getInfoString();
+			}
+		}
 
-		if (debugMode)
-			info += ("Global ticks: " + MadSand.world.globalTick + "\nWorld time: " + MadSand.world.worldtime
-					+ "\nPlayer position: (" + World.player.x + ", " + World.player.y + ")");
+		/*
+		 * if (debugMode) info += ("Global ticks: " + MadSand.world.globalTick +
+		 * "\nWorld time: " + MadSand.world.worldtime + "\nPlayer position: (" +
+		 * World.player.x + ", " + World.player.y + ")");
+		 */
 
 		Gui.mouselabel.setText(info);
 	}
