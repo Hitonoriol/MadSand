@@ -339,4 +339,8 @@ public class Utils {
 			Gui.overlay.unfocus(Gui.inputField);
 		}
 	}
+
+	public static int randPercent() {
+		return rand(1, 100);
+	}
 }

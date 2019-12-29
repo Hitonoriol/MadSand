@@ -48,7 +48,8 @@ public class Location extends HashMap<MapID, Map> {
 			// header: width, height, default tile, biome
 			stream.write(GameSaver.encode2(xsz));
 			stream.write(GameSaver.encode2(ysz));
-			stream.write(GameSaver.encode2(map.getDefTile()));
+			stream.write(GameSaver.encode2(map.defTile));
+			stream.write(GameSaver.encode2(map.defObject));
 			stream.write(GameSaver.encode2(map.getBiome()));
 			MapObject obj = new MapObject();
 
@@ -140,6 +141,7 @@ public class Location extends HashMap<MapID, Map> {
 			int xsz = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
 			int ysz = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
 			int defTile = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
+			int defObject = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
 			int biome = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
 			MapID loc = new MapID(new Pair(wx, wy), layer);
 			Map map = new Map(xsz, ysz);
@@ -157,7 +159,8 @@ public class Location extends HashMap<MapID, Map> {
 			}
 
 			map.setBiome(biome);
-			map.setDefTile(defTile);
+			map.defTile = defTile;
+			map.defObject = defObject;
 			byte[] block = new byte[BLOCK_SIZE];
 			for (int y = 0; y < ysz; ++y) {
 				for (int x = 0; x < xsz; ++x) {

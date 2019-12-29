@@ -16,7 +16,7 @@ import ru.bernarder.fallenrisefromdust.world.World;
 
 public class GameSaver {
 	static String SECTOR_DELIM = "!";
-	public final static long saveFormatVersion = 1;
+	public final static long saveFormatVersion = 2;
 
 	public static byte[] concat(byte[]... arrays) {
 		int totalLength = 0;
@@ -127,20 +127,26 @@ public class GameSaver {
 
 		MadSand.world = new World();
 
-		if (!loadChar())
+		if (!loadChar()) {
+			loadErrMsg();
 			return false;
+		}
 		if (loadLocation()) {
 			MadSand.print("Loaded Game!");
 			return true;
 		} else {
-			MadSand.switchStage(GameState.NMENU, Gui.menu);
-			Gui.drawOkDialog(
-					"Couldn't to load this world. \nMaybe it was saved in older/newer version of the game or some files are corrupted.",
-					Gui.menu);
-			MadSand.justStarted = false;
+			loadErrMsg();
 			return false;
 		}
 
+	}
+
+	public static void loadErrMsg() {
+		MadSand.switchStage(GameState.NMENU, Gui.menu);
+		Gui.drawOkDialog(
+				"Couldn't to load this world. \nMaybe it was saved in older/newer version of the game or some files are corrupted.",
+				Gui.menu);
+		MadSand.justStarted = false;
 	}
 
 	public static boolean verifyNextSector(int x, int y) {

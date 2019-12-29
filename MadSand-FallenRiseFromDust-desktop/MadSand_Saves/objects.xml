@@ -62,11 +62,19 @@
 		<object id="11">
 			<name>Closed door</name>
 			<tough>30</tough>
+			<oninteract>
+				remove_object $player_look_x $player_look_y;
+				place_object $player_look_x $player_look_y 12;
+			</oninteract>
 		</object>
 		<object id="12">
 			<name>Opened door</name>
 			<nocollide>1</nocollide>
 			<tough>30</tough>
+			<oninteract>
+				remove_object $player_look_x $player_look_y;
+				place_object $player_look_x $player_look_y 11;
+			</oninteract>
 		</object>
 		<object id="13">
 			<name>Rock</name>

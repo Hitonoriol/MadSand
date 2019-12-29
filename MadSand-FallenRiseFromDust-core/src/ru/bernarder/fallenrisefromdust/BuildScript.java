@@ -294,6 +294,7 @@ public class BuildScript {
 	public static void execute(String query) {
 		Utils.out(query);
 		query.replaceAll("\n", "");
+		query = query.trim();
 		StringTokenizer lineTokens = new StringTokenizer(query, LINE_DELIMITER);
 		StringTokenizer commandTokens;
 		String command;
@@ -302,9 +303,9 @@ public class BuildScript {
 		char id;
 		try {
 			while (lineTokens.hasMoreTokens() && !stop) {
-				line = lineTokens.nextToken();
+				line = lineTokens.nextToken().trim();
 				commandTokens = new StringTokenizer(line, COMMAND_DELIMITER);
-				command = commandTokens.nextToken();
+				command = commandTokens.nextToken().trim();
 				id = command.charAt(0);
 				switch (id) {
 

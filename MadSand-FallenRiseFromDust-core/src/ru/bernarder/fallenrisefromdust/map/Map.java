@@ -19,7 +19,8 @@ public class Map {
 	public static int PLOWED_SOIL = 15;
 
 	private int biome = -1;
-	private int defTile = 0;
+	public int defTile = 0;
+	public int defObject = 0;
 
 	static final int COLLISION_MASK_ID = 666;
 	static Tile nullTile = new Tile(0);
@@ -40,14 +41,6 @@ public class Map {
 		this.xsz = xsz;
 		this.ysz = ysz;
 		purge();
-	}
-
-	public void setDefTile(int tile) {
-		defTile = tile;
-	}
-
-	public int getDefTile() {
-		return defTile;
 	}
 
 	public Map() {
@@ -125,6 +118,10 @@ public class Map {
 		return this;
 	}
 
+	public Map fillTile() {
+		return fillTile(defTile);
+	}
+
 	public Map fillObject(int id) {
 		int i = 0, ii = 0;
 		while (i <= xsz) {
@@ -136,6 +133,10 @@ public class Map {
 			i++;
 		}
 		return this;
+	}
+
+	public Map fillObject() {
+		return fillObject(defObject);
 	}
 
 	private boolean correctCoords(Pair coords) {
