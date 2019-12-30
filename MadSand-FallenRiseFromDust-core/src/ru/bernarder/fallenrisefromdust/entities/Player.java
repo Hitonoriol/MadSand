@@ -58,9 +58,11 @@ public class Player extends Entity {
 	}
 
 	@Override
-	void setFov(int val) {
+	public void setFov(int val) {
 		super.setFov(val);
 		MadSand.setRenderRadius(val);
+		if (MadSand.world != null)
+			MadSand.world.updateLight();
 	}
 
 	@Override
@@ -470,8 +472,8 @@ public class Player extends Entity {
 
 	@Override
 	public boolean walk(Direction dir) {
-		MadSand.world.getCurLoc().updateLight(x, y, fov);
 		if (super.walk(dir)) {
+			MadSand.world.updateLight();
 			objectInFront();
 			return true;
 		} else

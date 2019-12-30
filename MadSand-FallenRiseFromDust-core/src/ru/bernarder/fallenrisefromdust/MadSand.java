@@ -237,59 +237,54 @@ public class MadSand extends Game {
 	}
 
 	void DrawGame() {
-		try {
-			Map loc = world.getCurLoc();
-			Npc npc;
-			Tile tile;
-			Player player = World.player;
-			int objid;
+		Map loc = world.getCurLoc();
+		Npc npc;
+		Tile tile;
+		Player player = World.player;
+		int objid;
 
-			int x, y;
-			int i = 0;
+		int x, y;
+		int xsz = loc.getWidth(), ysz = loc.getHeight();
+		int i = 0;
 
-			if (player.isInBackground())
-				drawEntity(player);
+		if (player.isInBackground())
+			drawEntity(player);
 
-			while (i < renderArea.length) {
-				x = World.player.x + (int) renderArea[i].x;
-				y = World.player.y + (int) renderArea[i].y;
+		while (i < renderArea.length) {
+			x = World.player.x + (int) renderArea[i].x;
+			y = World.player.y + (int) renderArea[i].y;
 
-				tile = loc.getTile(x, y);
-				
-				if (!tile.visible) {
-					++i;
-					continue;
-				}
+			tile = loc.getTile(x, y);
 
-				Utils.batch.draw(Resources.tile[world.getTileOrDefault(x, y)], x * TILESIZE, y * TILESIZE);
-
-				npc = loc.getNpc(x, y);
-				objid = loc.getObject(x, y).id;
-
-				if ((objid != MapObject.NULL_OBJECT_ID) && (objid != MapObject.COLLISION_MASK_ID))
-					Utils.batch.draw(Resources.objects[objid], x * TILESIZE, y * TILESIZE);
-
-				if (player.standingOnLoot(x, y))
-					Utils.batch.draw(Resources.objects[OBJECT_LOOT], x * TILESIZE, y * TILESIZE);
-
-				if (npc != Map.nullNpc)
-					drawEntity(npc);
-
-				i++;
+			if (!tile.visible || x > xsz || y > ysz || x < 0 || y < 0) {
+				++i;
+				continue;
 			}
 
-			if (!player.isInBackground())
-				drawEntity(player);
+			Utils.batch.draw(Resources.tile[world.getTileOrDefault(x, y)], x * TILESIZE, y * TILESIZE);
 
-			Utils.batch.draw(Resources.mapcursor, wmx * TILESIZE, wmy * TILESIZE);
-			Utils.batch.end();
-			Gui.refreshOverlay();
-			Utils.batch.begin();
+			npc = loc.getNpc(x, y);
+			objid = loc.getObject(x, y).id;
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			Utils.die("Render error");
+			if (npc != Map.nullNpc)
+				drawEntity(npc);
+
+			if ((objid != MapObject.NULL_OBJECT_ID) && (objid != MapObject.COLLISION_MASK_ID))
+				Utils.batch.draw(Resources.objects[objid], x * TILESIZE, y * TILESIZE);
+
+			if (player.standingOnLoot(x, y))
+				Utils.batch.draw(Resources.objects[OBJECT_LOOT], x * TILESIZE, y * TILESIZE);
+
+			++i;
 		}
+
+		if (!player.isInBackground())
+			drawEntity(player);
+
+		Utils.batch.draw(Resources.mapcursor, wmx * TILESIZE, wmy * TILESIZE);
+		Utils.batch.end();
+		Gui.refreshOverlay();
+		Utils.batch.begin();
 	}
 
 	float randSide(float n) {

@@ -24,6 +24,8 @@ public class Map {
 	public int defTile = 0;
 	public int defObject = 0;
 
+	public Pair spawnPoint = Pair.nullPair; // for dungeon levels only
+
 	static final int COLLISION_MASK_ID = 666;
 	static Tile nullTile = new Tile(0);
 	public static MapObject nullObject = new MapObject(0);
@@ -185,7 +187,7 @@ public class Map {
 				if (x * x + y * y > r * r)
 					continue;
 
-				if (wx + x < 0 || wx + x >= xsz || wy + y < 0 || wy + y >= ysz)
+				if (wx + x < 0 || wx + x > xsz || wy + y < 0 || wy + y > ysz)
 					continue;
 
 				tile = getTile(wx + x, wy + y);

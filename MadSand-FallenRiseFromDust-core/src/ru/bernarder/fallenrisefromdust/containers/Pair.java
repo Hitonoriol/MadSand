@@ -6,6 +6,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 
 public class Pair {
+	public static final Pair nullPair = new Pair(-1, -1);
+
 	public int x;
 	public int y;
 

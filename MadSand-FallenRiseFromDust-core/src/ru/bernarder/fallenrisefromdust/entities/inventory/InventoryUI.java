@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 
 import ru.bernarder.fallenrisefromdust.Gui;
+import ru.bernarder.fallenrisefromdust.Utils;
 
 public class InventoryUI {
 	ScrollPane invScroll;
@@ -87,7 +88,7 @@ public class InventoryUI {
 	}
 
 	void setMass(double curWeight, double maxWeight) {
-		setHeader("[" + (Math.round(curWeight * 100) / 100.00) + "/" + maxWeight + "] kg");
+		setHeader("[" + Utils.round(curWeight) + "/" + maxWeight + "] kg");
 	}
 
 	void setHeader(String str) {

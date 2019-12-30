@@ -21,9 +21,7 @@ import ru.bernarder.fallenrisefromdust.map.MapObject;
 public class Location extends HashMap<MapID, Map> {
 	private static final long serialVersionUID = -4489829388439109446L;
 
-	public static int layers = 2; // Default number of layers
-	public static int maxLayers = 40; // Maximum possible underground layer - 1; TODO implement dynamic dungeon
-										// generation when player descends further underground
+	public int layers = 2; // Default number of layers
 
 	final String LOOT_DELIM = "|";
 	final int CROP_BLOCK_LEN = 16;
@@ -48,6 +46,8 @@ public class Location extends HashMap<MapID, Map> {
 			// header: width, height, default tile, biome
 			stream.write(GameSaver.encode2(xsz));
 			stream.write(GameSaver.encode2(ysz));
+			stream.write(GameSaver.encode2(map.spawnPoint.x));
+			stream.write(GameSaver.encode2(map.spawnPoint.y));
 			stream.write(GameSaver.encode2(map.defTile));
 			stream.write(GameSaver.encode2(map.defObject));
 			stream.write(GameSaver.encode2(map.getBiome()));
@@ -140,12 +140,15 @@ public class Location extends HashMap<MapID, Map> {
 			ByteArrayInputStream stream = new ByteArrayInputStream(sector);
 			int xsz = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
 			int ysz = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
+			int spawnX = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
+			int spawnY = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
 			int defTile = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
 			int defObject = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
 			int biome = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
 			MapID loc = new MapID(new Pair(wx, wy), layer);
 			Map map = new Map(xsz, ysz);
 			map.purge();
+			map.spawnPoint = new Pair(spawnX, spawnY);
 
 			String npf = GameSaver.getNpcFile(wx, wy, layer);
 			ArrayList<Npc> npcs = new ArrayList<Npc>();

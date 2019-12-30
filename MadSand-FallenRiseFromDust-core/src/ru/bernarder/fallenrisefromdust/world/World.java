@@ -10,7 +10,7 @@ import com.github.czyzby.noise4j.map.generator.noise.NoiseGenerator;
 import com.github.czyzby.noise4j.map.generator.room.dungeon.DungeonGenerator;
 import com.github.czyzby.noise4j.map.generator.util.Generators;
 
-import ru.bernarder.fallenrisefromdust.Gui;
+import ru.bernarder.fallenrisefromdust.GameSaver;
 import ru.bernarder.fallenrisefromdust.MadSand;
 import ru.bernarder.fallenrisefromdust.Utils;
 import ru.bernarder.fallenrisefromdust.containers.Pair;
@@ -23,6 +23,8 @@ import ru.bernarder.fallenrisefromdust.properties.WorldGenProp;
 public class World {
 	Map nullLoc = new Map(0, 0);
 	public static final int DEFAULT_WORLDSIZE = 10;
+	public static final int DUNGEON_LAYER_MAX = 20;
+
 	private Pair coords = new Pair();
 	private int xsz, ysz; // max world size, not really used anywhere (still)
 
@@ -135,13 +137,18 @@ public class World {
 		return createBasicLoc(new Pair(wx, wy), MAPSIZE, MAPSIZE);
 	}
 
+	boolean createBasicLoc(int layer) {
+		return createLoc(new MapID(new Pair(curxwpos, curywpos), layer), new Map(MAPSIZE, MAPSIZE));
+	}
+
 	int biome;
 
-	public void Generate(int wx, int wy) {
-		Utils.out("Generating new sector!");
-		if (!locExists(new MapID(coords.set(curxwpos, curywpos), 0)))
-			createBasicLoc(wx, wy);
-		try {
+	public void Generate(int wx, int wy, int layer) {
+		int underworld = LAYER_BASE_UNDERWORLD;
+		if (layer == LAYER_OVERWORLD) {
+			Utils.out("Generating new sector!");
+			if (!locExists(new MapID(coords.set(curxwpos, curywpos), 0)))
+				createBasicLoc(wx, wy);
 			clearCurLoc();
 			if ((wx == 5) && (wy == 5))
 				biome = 0;
@@ -151,29 +158,110 @@ public class World {
 			getCurLoc().setBiome(biome);
 			genTerrain();
 			genObjByTemplate();
-			genUnderworld(LAYER_BASE_UNDERWORLD);
-			genDungeon(LAYER_BASE_UNDERWORLD);
-			curlayer = 0;
-			Utils.out("Done generating new sector!");
-		} catch (Exception e) {
-			Utils.out("Whoops, fatal error during worldgen... See MadSandCritical.log and/or MadSandErrors.log files.");
+			genUnderworld(underworld);
+		} else
+			underworld = layer;
+		genDungeon(underworld);
+		Utils.out("Done generating new sector!");
+	}
 
-			e.printStackTrace();
-		}
+	public void Generate(int layer) {
+		createBasicLoc(layer);
+		Generate(curxwpos, curywpos, layer);
+		updateLight();
 	}
 
 	public void Generate() {
-		Generate(curxwpos, curywpos);
-		getCurLoc().updateLight(player.x, player.y, player.fov);
+		Generate(curxwpos, curywpos, LAYER_OVERWORLD);
+		updateLight();
 	}
 
-	final String LAKE_TID = "tid";
-	final String LAKE_RADIUS = "radius";
-	final String LAKE_MODIFIER = "modifier";
-	final String LAKE_FROM = "from";
-	final String LAKE_TO = "to";
+	private void jumpToLocation(int x, int y, int layer) {
+		curxwpos = x;
+		curywpos = y;
+		curlayer = layer;
+	}
 
-	public void genTerrain() {
+	public boolean switchLocation(int x, int y, int layer) {
+		if (layer > DUNGEON_LAYER_MAX)
+			return false;
+
+		jumpToLocation(x, y, layer);
+		if (locExists(new MapID(coords.set(x, y), layer))) {
+			updateLight();
+			return true;
+		}
+		clearCurLoc();
+		if (GameSaver.verifyNextSector(x, y))
+			GameSaver.loadLocation();
+		else
+			Generate(layer);
+		player.updCoords();
+		updateLight();
+		return true;
+	}
+
+	public boolean switchLocation(Direction dir) {
+		if (curlayer != LAYER_OVERWORLD)
+			return false;
+		coords.set(curxwpos, curywpos).addDirection(dir);
+		MadSand.print("You travel to sector (" + coords.x + ", " + coords.y + ")");
+		if (!switchLocation(coords.x, coords.y, LAYER_OVERWORLD))
+			return false;
+		switch (dir) {
+		case UP:
+			player.y = 0;
+			break;
+		case DOWN:
+			player.y = MAPSIZE - 2;
+			break;
+		case LEFT:
+			player.x = MAPSIZE - 2;
+			break;
+		case RIGHT:
+			player.x = 0;
+			break;
+		}
+		player.updCoords();
+		updateLight();
+		return true;
+	}
+
+	public boolean switchLocation(int layer) {
+		return switchLocation(curxwpos, curywpos, layer);
+	}
+
+	public boolean descend() {
+		if (curlayer == DUNGEON_LAYER_MAX)
+			return false;
+		boolean ret = switchLocation(curlayer + 1);
+		if (curlayer > (WorldLoc.layers - 1))
+			++WorldLoc.layers;
+		Map loc = getCurLoc();
+		if (loc.spawnPoint != Pair.nullPair)
+			player.teleport(loc.spawnPoint.x, loc.spawnPoint.y);
+		MadSand.print("You descend to dungeon level " + curlayer);
+		return ret;
+	}
+
+	public boolean ascend() {
+		if (curlayer == LAYER_OVERWORLD)
+			return false;
+		boolean ret = switchLocation(curlayer - 1);
+		if (curlayer == LAYER_OVERWORLD)
+			MadSand.print("You get back to surface level");
+		else
+			MadSand.print("You get back to dungeon level " + curlayer);
+		return ret;
+	}
+
+	private final String LAKE_TID = "tid";
+	private final String LAKE_RADIUS = "radius";
+	private final String LAKE_MODIFIER = "modifier";
+	private final String LAKE_FROM = "from";
+	private final String LAKE_TO = "to";
+
+	private void genTerrain() {
 		Utils.out("Generating terrain!");
 		genBiomeTerrain();
 		HashMap<String, Integer> lake = WorldGenProp.getBiomeLake(biome);
@@ -221,15 +309,18 @@ public class World {
 	private static String DUNGEON_CORRIDOR_TILE = "corridor_tile";
 	private static String DUNGEON_DOOR = "door_object";
 
-	public void genDungeon(int layer) {
+	private void genDungeon(int layer) {
 		boolean force = true;
 		Utils.out("Generating dungeon!");
 		HashMap<String, Integer> dungeon = WorldGenProp.getBiomedungeon(biome);
 		int prob = dungeon.get(DUNGEON_PROBABILITY);
-		if (prob > 0 && Utils.randPercent() > prob) {
-			Utils.out("Nope... Probability to generate was " + prob + "%");
+		Utils.out("Probability: " + prob);
+
+		if (prob == 0)
 			return;
-		}
+		if (layer == LAYER_BASE_UNDERWORLD && Utils.randPercent() > prob)
+			return;
+
 		final Grid grid = new Grid(World.MAPSIZE);
 		final DungeonGenerator dungeonGenerator = new DungeonGenerator();
 		dungeonGenerator.setRoomGenerationAttempts(World.MAPSIZE);
@@ -262,6 +353,8 @@ public class World {
 				if (grid.get(x, y) == DUNGEON_ROOM_LEVEL) { // rooms
 					loc.delObject(x, y);
 					loc.addTile(x, y, roomTile, force);
+					if (loc.spawnPoint == Pair.nullPair)
+						loc.spawnPoint = new Pair(x, y);
 				}
 
 				if (isDoorway(grid, x, y, loc.getWidth(), loc.getHeight())) // door
@@ -297,7 +390,7 @@ public class World {
 	final int CAVE_TILE = 0;
 	final int CAVE_OBJECT = 1;
 
-	void genUnderworld(int layer) {
+	private void genUnderworld(int layer) {
 		Utils.out("Generating underworld...");
 		Vector<Integer> underworld = WorldGenProp.getBiomeUnderworld(biome);
 		int usz = underworld.size();
@@ -338,7 +431,7 @@ public class World {
 		Utils.out("Done generating underworld!");
 	}
 
-	public void genBiomeTerrain() {
+	private void genBiomeTerrain() {
 		Vector<Vector<Integer>> terrainBlock = WorldGenProp.getBiomeTiles(biome);
 		int def = terrainBlock.get(0).get(0); // getting default tile
 		getCurLoc().defTile = def;
@@ -396,26 +489,10 @@ public class World {
 	}
 
 	public void clearCurLoc() {
-		Map curLoc = getCurLoc().purge();
-		int xsz = curLoc.getWidth(), ysz = curLoc.getHeight();
-		biome = 0;
-		int i = 0;
-		int ii = 0;
-		while (i < ysz + World.BORDER) {
-			while (ii < xsz + World.BORDER) {
-				putMapTile(ii, i, 1, 5);
-				addObj(ii, i, 1, 13);
-				addObj(ii, i, 0);
-				putMapTile(ii, i, 0);
-				ii++;
-			}
-			i++;
-			ii = 0;
-		}
-		Utils.out("End of clearCurLoc!");
+		getCurLoc().purge();
 	}
 
-	void genObjByTemplate() {
+	private void genObjByTemplate() {
 		Utils.out("Generating biome objects!");
 		Vector<Vector<Integer>> object = WorldGenProp.getBiomeObjects(biome);
 		Vector<Integer> block;
@@ -455,15 +532,24 @@ public class World {
 		return ysz;
 	}
 
+	private static final int fovDelta = 5;
+	private static int TIME_FOV_DECREASE_START = 18;// hour when the fov begins to decrease
+	private static int TIME_FOV_DECREASE_END = TIME_FOV_DECREASE_START + fovDelta;
+	private static int TIME_FOV_INCREASE_START = 4;// hour when the fov begins to decrease
+	private static int TIME_FOV_INCREASE_END = TIME_FOV_INCREASE_START + fovDelta;
+
 	void hourTick() {
 		++worldtime;
-		if (MadSand.world.worldtime == 24)
-			MadSand.world.worldtime = 0;
-		if (((MadSand.world.worldtime >= 0) && (MadSand.world.worldtime <= 5))
-				|| ((MadSand.world.worldtime >= 21) && (MadSand.world.worldtime <= 23))) {
-			Gui.darkness.setVisible(true);
-		} else {
-			Gui.darkness.setVisible(false);
+
+		if (worldtime == 24)
+			worldtime = 0;
+
+		if (worldtime > TIME_FOV_DECREASE_START && worldtime <= TIME_FOV_DECREASE_END) {
+			player.setFov(player.fov - 1);
+		}
+
+		if (worldtime > TIME_FOV_INCREASE_START && worldtime <= TIME_FOV_INCREASE_END) {
+			player.setFov(player.fov + 1);
 		}
 	}
 
@@ -478,6 +564,10 @@ public class World {
 			hourTick();
 		}
 
+	}
+
+	public void updateLight() {
+		getCurLoc().updateLight(player.x, player.y, player.fov);
 	}
 
 	public void ticks(int n) {

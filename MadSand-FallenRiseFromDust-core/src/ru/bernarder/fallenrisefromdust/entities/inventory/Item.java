@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ru.bernarder.fallenrisefromdust.Gui;
+import ru.bernarder.fallenrisefromdust.Utils;
 import ru.bernarder.fallenrisefromdust.enums.ItemType;
 import ru.bernarder.fallenrisefromdust.enums.Skill;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
@@ -77,7 +78,7 @@ public class Item {
 	String getInfoString() {
 		String info = "";
 		info += "Item: " + name + Gui.LINEBREAK;
-		info += "Weight: " + weight + " kg" + Gui.LINEBREAK;
+		info += "Weight: " + Utils.round(weight) + " kg" + Gui.LINEBREAK;
 		info += "Cost: " + cost + "$";
 		if (type.isArmor() || type.isWeapon()) {
 			info += Gui.LINEBREAK;

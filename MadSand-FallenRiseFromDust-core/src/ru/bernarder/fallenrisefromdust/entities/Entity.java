@@ -57,7 +57,7 @@ public abstract class Entity {
 	public Entity() {
 		this("");
 	}
-	
+
 	@JsonIgnore
 	void setFov(int val) {
 		fov = val;
@@ -301,6 +301,7 @@ public abstract class Entity {
 	public void teleport(int x, int y) {
 		setGridCoords(x, y);
 		updCoords();
+		MadSand.world.updateLight();
 	}
 
 	public void setGridCoords(int x, int y) {

@@ -27,6 +27,7 @@
 		<cave_tile id="-1" tid="5" />
 		<cave_object id="-1" oid="13" />
 		<ore id="-1" ids="22,23" maxsize="10" zcount="10" />
+		<dungeon id="-1" probability="0" />
 	</biome>
 
 	<biome id="2" name="Cold plains">
@@ -36,6 +37,7 @@
 		<cave_tile id="-1" tid="5" />
 		<cave_object id="-1" oid="13" />
 		<ore id="-1" ids="22,23" maxsize="10" zcount="10" />
+		<dungeon id="-1" probability="0" />
 	</biome>
 
 	<biome id="3" name="Dead lands">
@@ -47,6 +49,7 @@
 		<cave_tile id="-1" tid="5" />
 		<cave_object id="-1" oid="13" />
 		<ore id="-1" ids="22,23" maxsize="10" zcount="10" />
+		<dungeon id="-1" probability="0" />
 	</biome>
 
 </worldgen>

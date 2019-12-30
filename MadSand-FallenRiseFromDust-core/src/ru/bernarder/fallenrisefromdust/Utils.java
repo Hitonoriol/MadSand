@@ -12,6 +12,7 @@ import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
 import ru.bernarder.fallenrisefromdust.map.Map;
 import ru.bernarder.fallenrisefromdust.map.MapObject;
+import ru.bernarder.fallenrisefromdust.map.Tile;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
@@ -164,10 +165,10 @@ public class Utils {
 			MadSand.world.Generate();
 		}
 		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.DOWN)) && (debugMode)) {
-			MadSand.world.curlayer = 1;
+			MadSand.world.descend();
 		}
 		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.UP)) && (debugMode)) {
-			MadSand.world.curlayer = 0;
+			MadSand.world.ascend();
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.F11)) {
 			Boolean fullScreen = Boolean.valueOf(Gdx.graphics.isFullscreen());
@@ -227,45 +228,11 @@ public class Utils {
 		return Utils.random.nextInt((max - min) + 1) + min;
 	}
 
-	public static Direction gotodir;
-
 	public static void gotoSector(Direction dir) {
 		GameSaver.saveWorld();
-		gotodir = dir;
 		MadSand.state = GameState.GOT;
-
-		if ((Utils.gotodir == Direction.LEFT)) {
-			MadSand.world.curxwpos -= 1;
-			World.player.x = World.MAPSIZE - 2;
-			World.player.updCoords();
-		}
-		if ((Utils.gotodir == Direction.RIGHT)) {
-			MadSand.world.curxwpos += 1;
-			World.player.x = 0;
-			World.player.updCoords();
-		}
-		if ((Utils.gotodir == Direction.DOWN)) {
-			MadSand.world.curywpos -= 1;
-			World.player.y = World.MAPSIZE - 2;
-			World.player.updCoords();
-		}
-		if ((Utils.gotodir == Direction.UP)) {
-			MadSand.world.curywpos += 1;
-			World.player.y = 0;
-			World.player.updCoords();
-		}
-		MadSand.print("Going to (" + MadSand.world.curxwpos + ", " + MadSand.world.curywpos + ")");
-		if (GameSaver.verifyNextSector(MadSand.world.curxwpos, MadSand.world.curywpos)) {
-			GameSaver.loadLocation();
-		} else {
-			MadSand.state = GameState.WORLDGEN;
-			/*
-			 * if (Utils.rand(0, MadSand.ENCOUNTERCHANCE) == MadSand.ENCOUNTERCHANCE) TODO
-			 * Begin random encounter
-			 */
-			MadSand.world.Generate();
-			MadSand.state = GameState.GAME;
-		}
+		MadSand.world.switchLocation(dir);
+		MadSand.state = GameState.GAME;
 	}
 
 	public static void updMouseCoords() {
@@ -280,13 +247,20 @@ public class Utils {
 
 		Map loc = MadSand.world.getCurLoc();
 		Npc npc = loc.getNpc(MadSand.wmx, MadSand.wmy);
+		Tile tile = loc.getTile(MadSand.wmx, MadSand.wmy);
 		MapObject object = loc.getObject(MadSand.wmx, MadSand.wmy);
 		String info = "";
 
 		Gui.mousemenu.addAction(Actions.moveTo(MadSand.mx + 65, MadSand.my - 70, 0.1F));
 
 		info += ("Looking at (" + MadSand.wmx + ", " + MadSand.wmy + ")") + Gui.LINEBREAK;
-		info += ("Tile: " + TileProp.name.get(loc.getTile(MadSand.wmx, MadSand.wmy).id)) + Gui.LINEBREAK;
+		if (!tile.visible) {
+			info += "You can't see anything there" + Gui.LINEBREAK;
+			Gui.mouselabel.setText(info);
+			return;
+		}
+
+		info += ("Tile: " + TileProp.name.get(tile.id)) + Gui.LINEBREAK;
 
 		if (object != Map.nullObject)
 			info += ("Object: " + ObjectProp.name.get(object.id)) + Gui.LINEBREAK;
@@ -338,6 +312,10 @@ public class Utils {
 			Gui.inputField.setText("");
 			Gui.overlay.unfocus(Gui.inputField);
 		}
+	}
+
+	public static double round(double curWeight) {
+		return (Math.round(curWeight * 100) / 100.00);
 	}
 
 	public static int randPercent() {
