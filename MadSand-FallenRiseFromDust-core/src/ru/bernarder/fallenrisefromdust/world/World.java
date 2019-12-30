@@ -164,6 +164,7 @@ public class World {
 
 	public void Generate() {
 		Generate(curxwpos, curywpos);
+		getCurLoc().updateLight(player.x, player.y, player.fov);
 	}
 
 	final String LAKE_TID = "tid";

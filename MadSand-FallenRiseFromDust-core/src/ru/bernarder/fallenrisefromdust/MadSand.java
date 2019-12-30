@@ -17,6 +17,7 @@ import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
 import ru.bernarder.fallenrisefromdust.map.Map;
 import ru.bernarder.fallenrisefromdust.map.MapObject;
+import ru.bernarder.fallenrisefromdust.map.Tile;
 import ru.bernarder.fallenrisefromdust.properties.Tutorial;
 import ru.bernarder.fallenrisefromdust.world.World;
 
@@ -88,7 +89,7 @@ public class MadSand extends Game {
 	static int SPEED = 100;
 	static final float DEFAULT_ZOOM = 1.5F;
 	static float ZOOM = DEFAULT_ZOOM;
-	static final int DEFAULT_FOV = 16;
+	static final int DEFAULT_FOV = 12;
 
 	static final String FONT_CHARS = "АБВГДЕЁЖЗИЙКЛМНОПРСТФХЦЧШЩЪЬЫЭЮЯабвгдеёжзийклмнопрстфхцчшщыъьэюяabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"'<>";
 	static final String FONT_PATH = "fonts/8bitoperator.ttf";
@@ -237,36 +238,39 @@ public class MadSand extends Game {
 
 	void DrawGame() {
 		try {
-			Map curLoc;
-			int trdx, trdy;
+			Map loc = world.getCurLoc();
 			Npc npc;
+			Tile tile;
+			Player player = World.player;
 			int objid;
+
+			int x, y;
 			int i = 0;
-			curLoc = world.getCurLoc();
 
-			if (World.player.isInBackground())
-				drawEntity(World.player);
+			if (player.isInBackground())
+				drawEntity(player);
 
 			while (i < renderArea.length) {
-				trdx = World.player.x + (int) renderArea[i].x;
-				trdy = World.player.y + (int) renderArea[i].y;
-				Utils.batch.draw(Resources.tile[world.getTileOrDefault(trdx, trdy)], trdx * TILESIZE, trdy * TILESIZE);
-				i++;
-			}
+				x = World.player.x + (int) renderArea[i].x;
+				y = World.player.y + (int) renderArea[i].y;
 
-			i = 0;
-			while (i < renderArea.length) {
-				trdx = World.player.x + (int) renderArea[i].x;
-				trdy = World.player.y + (int) renderArea[i].y;
+				tile = loc.getTile(x, y);
+				
+				if (!tile.visible) {
+					++i;
+					continue;
+				}
 
-				npc = curLoc.getNpc(trdx, trdy);
-				objid = curLoc.getObject(trdx, trdy).id;
+				Utils.batch.draw(Resources.tile[world.getTileOrDefault(x, y)], x * TILESIZE, y * TILESIZE);
+
+				npc = loc.getNpc(x, y);
+				objid = loc.getObject(x, y).id;
 
 				if ((objid != MapObject.NULL_OBJECT_ID) && (objid != MapObject.COLLISION_MASK_ID))
-					Utils.batch.draw(Resources.objects[objid], trdx * TILESIZE, trdy * TILESIZE);
+					Utils.batch.draw(Resources.objects[objid], x * TILESIZE, y * TILESIZE);
 
-				if (World.player.standingOnLoot(trdx, trdy))
-					Utils.batch.draw(Resources.objects[OBJECT_LOOT], trdx * TILESIZE, trdy * TILESIZE);
+				if (player.standingOnLoot(x, y))
+					Utils.batch.draw(Resources.objects[OBJECT_LOOT], x * TILESIZE, y * TILESIZE);
 
 				if (npc != Map.nullNpc)
 					drawEntity(npc);
@@ -274,17 +278,17 @@ public class MadSand extends Game {
 				i++;
 			}
 
-			if (!World.player.isInBackground())
-				drawEntity(World.player);
+			if (!player.isInBackground())
+				drawEntity(player);
 
 			Utils.batch.draw(Resources.mapcursor, wmx * TILESIZE, wmy * TILESIZE);
 			Utils.batch.end();
 			Gui.refreshOverlay();
 			Utils.batch.begin();
+
 		} catch (Exception e) {
 			e.printStackTrace();
-			Utils.out("Render error. See errorlog.");
-			System.exit(-1);
+			Utils.die("Render error");
 		}
 	}
 

@@ -5,7 +5,11 @@ import ru.bernarder.fallenrisefromdust.properties.TileProp;
 public class Tile {
 	public int id;
 	String name;
+	
 	public boolean foreground = false;
+	
+	public boolean known = false;
+	public boolean visible = true;
 
 	public Tile(int id) {
 		this.id = id;

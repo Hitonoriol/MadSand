@@ -1,11 +1,13 @@
 package ru.bernarder.fallenrisefromdust.map;
 
+import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Vector;
 
 import ru.bernarder.fallenrisefromdust.MadSand;
 import ru.bernarder.fallenrisefromdust.Utils;
+import ru.bernarder.fallenrisefromdust.containers.Line;
 import ru.bernarder.fallenrisefromdust.containers.Pair;
 import ru.bernarder.fallenrisefromdust.entities.Npc;
 import ru.bernarder.fallenrisefromdust.entities.inventory.Item;
@@ -172,6 +174,38 @@ public class Map {
 			return true;
 		} else
 			return false;
+	}
+
+	public void updateLight(int wx, int wy, int r) {
+		Tile tile;
+		MapObject object;
+		boolean blocksLight = false;
+		for (int x = -r; x < r; x++) {
+			for (int y = -r; y < r; y++) {
+				if (x * x + y * y > r * r)
+					continue;
+
+				if (wx + x < 0 || wx + x >= xsz || wy + y < 0 || wy + y >= ysz)
+					continue;
+
+				tile = getTile(wx + x, wy + y);
+
+				tile.visible = true;
+				blocksLight = false;
+
+				for (Point p : new Line(wx, wy, wx + x, wy + y)) {
+					tile = getTile(p.x, p.y);
+					object = getObject(p.x, p.y);
+
+					if (blocksLight)
+						tile.visible = false;
+
+					if (object != nullObject && !object.nocollide)
+						blocksLight = true;
+
+				}
+			}
+		}
 	}
 
 	public Tile getTile(int x, int y) {

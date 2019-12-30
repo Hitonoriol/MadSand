@@ -50,10 +50,17 @@ public class Player extends Entity {
 		super.setSprites(Resources.playerUpSpr, Resources.playerDownSpr, Resources.playerLeftSpr,
 				Resources.playerRightSpr);
 		initInventory();
+		setFov(fov);
 	}
 
 	public Player() {
 		this("");
+	}
+
+	@Override
+	void setFov(int val) {
+		super.setFov(val);
+		MadSand.setRenderRadius(val);
 	}
 
 	@Override
@@ -463,6 +470,7 @@ public class Player extends Entity {
 
 	@Override
 	public boolean walk(Direction dir) {
+		MadSand.world.getCurLoc().updateLight(x, y, fov);
 		if (super.walk(dir)) {
 			objectInFront();
 			return true;

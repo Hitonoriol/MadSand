@@ -57,6 +57,11 @@ public abstract class Entity {
 	public Entity() {
 		this("");
 	}
+	
+	@JsonIgnore
+	void setFov(int val) {
+		fov = val;
+	}
 
 	@JsonIgnore
 	void setSprites(Sprite u, Sprite d, Sprite l, Sprite r) {

@@ -37,7 +37,7 @@ public class Pair {
 		return add(new Pair(x, y));
 	}
 
-	private Pair directionToCoord(Direction arg) {
+	public static Pair directionToCoord(Direction arg) {
 		if (arg.equals(Direction.UP))
 			return new Pair(0, 1);
 		else if (arg.equals(Direction.DOWN))
@@ -59,6 +59,19 @@ public class Pair {
 			return Direction.RIGHT;
 		else
 			return null;
+	}
+
+	public static Direction getRelativeDirection(int originX, int originY, int cellX, int cellY) {
+		Direction ret = null;
+		if (originX > cellX)
+			ret = Direction.RIGHT;
+		else if (originX < cellX)
+			ret = Direction.LEFT;
+		else if (originY > cellY)
+			ret = Direction.UP;
+		else
+			ret = Direction.DOWN;
+		return ret;
 	}
 
 	public Pair addDirection(Direction dir) {
