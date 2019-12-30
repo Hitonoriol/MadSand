@@ -26,8 +26,11 @@
 			<damage>0</damage>
 		</tile>
 		<tile id="6">
-			<name>Hole in grass</name>
+			<name>Hole in the ground</name>
 			<damage>0</damage>
+			<oninteract>
+				dungeon_descend;
+			</oninteract>
 		</tile>
 		<tile id="7">
 			<name>Lightened stone floor</name>

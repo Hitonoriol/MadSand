@@ -71,7 +71,7 @@ public class Stats {
 
 	public SkillContainer skills = new SkillContainer();
 
-	public Faction faction;
+	public Faction faction = Faction.None;
 	public Direction look = Direction.DOWN;
 
 	public String name;

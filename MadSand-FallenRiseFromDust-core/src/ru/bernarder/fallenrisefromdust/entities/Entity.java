@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import ru.bernarder.fallenrisefromdust.Gui;
 import ru.bernarder.fallenrisefromdust.MadSand;
 import ru.bernarder.fallenrisefromdust.containers.Pair;
 import ru.bernarder.fallenrisefromdust.containers.PairFloat;
@@ -317,10 +318,10 @@ public abstract class Entity {
 		if (y >= World.MAPSIZE - 1 && (dir == Direction.UP)) {
 			ret = true;
 		}
-		if (x <= 1 && (dir == Direction.LEFT)) {
+		if (x < 1 && (dir == Direction.LEFT)) {
 			ret = true;
 		}
-		if (y <= 1 && (dir == Direction.DOWN)) {
+		if (y < 1 && (dir == Direction.DOWN)) {
 			ret = true;
 		}
 		return ret;
@@ -395,6 +396,40 @@ public abstract class Entity {
 
 	int distanceTo(Entity entity) {
 		return (int) MadSand.calcDistance(x, y, entity.x, entity.y);
+	}
+	
+	private String HEALTH_STATE_FULL = "full";
+	private String HEALTH_STATE_75 = "couple of scratches";
+	private String HEALTH_STATE_50 = "slightly damaged";
+	private String HEALTH_STATE_25 = "severe injuries";
+	private String HEALTH_STATE_10 = "at death's door";
+
+	private float HEALTH_75 = 0.75f;
+	private float HEALTH_50 = 0.5f;
+	private float HEALTH_25 = 0.25f;
+	private float HEALTH_10 = 0.1f;
+
+	@JsonIgnore
+	public String getHealthState() {
+		float state = stats.hp / stats.mhp;
+		if (state > HEALTH_75)
+			return HEALTH_STATE_FULL;
+		else if (state > HEALTH_50)
+			return HEALTH_STATE_75;
+		else if (state > HEALTH_25)
+			return HEALTH_STATE_50;
+		else if (state > HEALTH_10)
+			return HEALTH_STATE_25;
+		else
+			return HEALTH_STATE_10;
+	}
+
+	@JsonIgnore
+	public String getInfoString() {
+		String ret = "";
+		ret += "Faction: " + stats.faction + Gui.LINEBREAK;
+		ret += "Health: " + getHealthState() + Gui.LINEBREAK;
+		return ret;
 	}
 
 	@JsonGetter("Equipment")

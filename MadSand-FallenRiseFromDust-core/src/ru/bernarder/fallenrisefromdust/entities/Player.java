@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import com.badlogic.gdx.Gdx;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import ru.bernarder.fallenrisefromdust.BuildScript;
 import ru.bernarder.fallenrisefromdust.GameSaver;
@@ -40,6 +41,7 @@ public class Player extends Entity {
 
 	public HashSet<Integer> knownNpcs = new HashSet<Integer>();
 
+	@JsonProperty("newlyCreated")
 	public boolean newlyCreated = true;
 
 	public boolean isMain = true;
@@ -328,10 +330,10 @@ public class Player extends Entity {
 			BuildScript.execute(action);
 			return;
 		}
-		if ((ptile == 6) || (ptile == 16)) {
-			MadSand.print("You entered the dungeon.");
-			MadSand.world.curlayer += 1;
-			MadSand.world.delObj(x, y);
+		String tileAction = TileProp.oninteract.get(ptile);
+		if (tileAction != "-1") {
+			BuildScript.execute(tileAction);
+			return;
 		}
 		if (Item.getType(id) == ItemType.Consumable) {
 			increaseSkill(Skill.Survival);
@@ -433,6 +435,12 @@ public class Player extends Entity {
 	}
 
 	@Override
+	public void turn(Direction dir) {
+		super.turn(dir);
+		Gui.processActionMenu();
+	}
+
+	@Override
 	public boolean move(Direction dir) {
 		if (!MadSand.dialogClosed)
 			return false;
@@ -442,6 +450,7 @@ public class Player extends Entity {
 				&& (x == World.MAPSIZE - 1 || y == World.MAPSIZE - 1 || x == World.BORDER || y == World.BORDER)) {
 			MadSand.print("Press [GRAY]N[WHITE] to move to the next sector.");
 		}
+		Gui.processActionMenu();
 		return true;
 	}
 
@@ -475,6 +484,7 @@ public class Player extends Entity {
 		if (super.walk(dir)) {
 			MadSand.world.updateLight();
 			objectInFront();
+			Gui.processActionMenu();
 			return true;
 		} else
 			return false;

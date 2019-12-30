@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -29,13 +30,19 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
+import ru.bernarder.fallenrisefromdust.containers.Pair;
 import ru.bernarder.fallenrisefromdust.dialog.GameDialog;
+import ru.bernarder.fallenrisefromdust.entities.Npc;
 import ru.bernarder.fallenrisefromdust.entities.Player;
 import ru.bernarder.fallenrisefromdust.entities.Stats;
 import ru.bernarder.fallenrisefromdust.entities.inventory.Item;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
 import ru.bernarder.fallenrisefromdust.enums.Skill;
+import ru.bernarder.fallenrisefromdust.map.Map;
+import ru.bernarder.fallenrisefromdust.map.MapObject;
+import ru.bernarder.fallenrisefromdust.map.Tile;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
+import ru.bernarder.fallenrisefromdust.properties.TileProp;
 import ru.bernarder.fallenrisefromdust.world.World;
 
 import java.io.BufferedReader;
@@ -47,6 +54,10 @@ import java.util.HashSet;
 import java.util.Vector;
 import java.util.Map.Entry;
 
+/*
+ * If you opened this file by accident, immediately close it, i don't want to be responsible for consequences.
+ * This file can cause eye bleeding and sudden but very painful death. Beware.
+ */
 public class Gui {
 	public static boolean gameUnfocused = false;
 	public static boolean inventoryActive = false;
@@ -57,6 +68,7 @@ public class Gui {
 	static final int LOG_LENGTH = 20;
 	public static final int EQ_SLOTS = 5;
 	static float defLblWidth = Gdx.graphics.getWidth() / 4;
+	public static final float ACTION_TBL_YPOS = Gdx.graphics.getHeight() / 6f;
 
 	static NinePatchDrawable transparency;
 
@@ -65,7 +77,8 @@ public class Gui {
 	public static Table darkness;
 	public static Table gamecontext;
 	public static Table mousemenu;
-	static Table craftbl;
+	public static Table craftbl;
+	public static Table actionTbl;
 
 	static ScrollPane scroll;
 
@@ -90,9 +103,15 @@ public class Gui {
 	static TextButton[] contextMenuBtn;
 	static TextButton resumeBtn;
 
+	public static TextButton interactBtn;
+
 	static BitmapFont font;
 	static BitmapFont fontMedium;
 	static BitmapFont fontBig;
+
+	public static InputListener inGameBtnListener;
+	public static ChangeListener npcInteractListener;
+	public static ChangeListener objInteractListener;
 
 	public static NinePatchDrawable darkBackground;
 	public static NinePatchDrawable darkBackgroundSizeable;
@@ -756,9 +775,48 @@ public class Gui {
 		staminaStatLbl = new Label("", Gui.skin);
 		refreshStatLabels();
 
-		Gui.gamecontext = new Table(Gui.skin);
-		Gui.contextMenuBtn = new TextButton[5];
-		Gui.mousemenu = new Table(Gui.skin);
+		gamecontext = new Table(Gui.skin);
+		contextMenuBtn = new TextButton[5];
+		mousemenu = new Table(Gui.skin);
+		actionTbl = new Table(Gui.skin);
+
+		inGameBtnListener = new InputListener() {
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+				gameUnfocused = true;
+				mouselabel.setVisible(false);
+			}
+
+			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+				if (!dialogActive) {
+					gameUnfocused = false;
+					mouselabel.setVisible(true);
+				}
+			}
+		};
+
+		npcInteractListener = new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				World.player.interact(World.player.stats.look);
+				actionTbl.setVisible(false);
+			}
+		};
+
+		objInteractListener = new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				World.player.interact(World.player.stats.look);
+				gameUnfocused = true;
+				processActionMenu();
+			}
+		};
+
+		overlay.addActor(actionTbl);
+		interactBtn = new TextButton("", skin);
+		actionTbl.setVisible(false);
+		actionTbl.setPosition(horizontalCenter(actionTbl), ACTION_TBL_YPOS);
+		actionTbl.add(interactBtn).width(DEFWIDTH).row();
+
 		Gui.mousemenu.setVisible(true);
 		Gui.mouselabel = new Label("", Gui.skin);
 		int cc = 0;
@@ -1052,6 +1110,56 @@ public class Gui {
 		generator.dispose();
 		font.getData().markupEnabled = true;
 		return font;
+	}
+
+	public static float horizontalCenter(Actor actor) {
+		return (Gdx.graphics.getWidth() / 2) - actor.getWidth();
+	}
+
+	private static void activateInteractBtn(TextButton btn, String text, ChangeListener listener) {
+		actionTbl.setVisible(true);
+		btn.setVisible(true);
+		btn.setText(text);
+		btn.addListener(listener);
+	}
+
+	public static void processActionMenu() {
+		Map loc = MadSand.world.getCurLoc();
+		Player player = World.player;
+		Pair coords = new Pair(player.x, player.y);
+		Tile tile = loc.getTile(coords.x, coords.y);
+		coords.addDirection(player.stats.look);
+		MapObject object = loc.getObject(coords.x, coords.y);
+		Npc npc = loc.getNpc(coords.x, coords.y);
+		String tileAction = TileProp.oninteract.get(tile.id);
+
+		if (tileAction == "-1" && npc == Map.nullNpc && object == Map.nullObject) {
+			actionTbl.setVisible(false);
+			return;
+		}
+
+		actionTbl.removeActor(interactBtn);
+		interactBtn = new TextButton("", Gui.skin);
+		actionTbl.add(interactBtn).width(DEFWIDTH).row();
+		actionTbl.addListener(inGameBtnListener);
+
+		if (tile != Map.nullTile && tileAction != "-1") {
+			activateInteractBtn(interactBtn, "Interact with current tile", new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					Utils.out("interactBtn Click");
+					BuildScript.execute(tileAction);
+					interactBtn.removeListener(this);
+					actionTbl.setVisible(false);
+				}
+			});
+		} else if (npc != Map.nullNpc && !dialogActive)
+			activateInteractBtn(interactBtn, "Talk to " + npc.stats.name, npcInteractListener);
+		else if (object != Map.nullObject)
+			activateInteractBtn(interactBtn, "Interact with " + object.name, objInteractListener);
+		else {
+			actionTbl.setVisible(false);
+		}
 	}
 
 }

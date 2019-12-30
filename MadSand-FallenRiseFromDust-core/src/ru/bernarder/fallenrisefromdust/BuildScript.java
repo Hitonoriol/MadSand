@@ -55,7 +55,8 @@ public class BuildScript {
 				OBJECT_LINE = "object_line", TILE_LINE = "tile_line", PLAYER_GIVE = "player_give",
 				DAMAGE_OBJECT = "damage_object", PLAYER_HEAL = "player_heal", PLAYER_SATIATE = "player_satiate",
 				PLAYER_REMOVE_ITEM = "player_remove_item", PLAYER_HAND_SET = "player_hand_set",
-				PLAYER_KILL = "player_kill", NPC_SPAWN = "npc_spawn", CHAIN_DIALOG = "chain_dialog";
+				PLAYER_KILL = "player_kill", NPC_SPAWN = "npc_spawn", CHAIN_DIALOG = "chain_dialog",
+				DUNGEON_DESCEND = "dungeon_descend", DUNGEON_ASCEND = "dungeon_ascend";
 	}
 
 	public static void bLine(int x, int y, int dir, int id, int len, int head) {
@@ -175,6 +176,12 @@ public class BuildScript {
 				command = command.split(COMMAND_DELIMITER)[1];
 		}
 		switch (command) {
+		case Token.DUNGEON_DESCEND:
+			MadSand.world.descend();
+			break;
+		case Token.DUNGEON_ASCEND:
+			MadSand.world.ascend();
+			break;
 		case Token.NPC_SPAWN:
 			x = arg.get(0);
 			y = arg.get(1);
@@ -292,9 +299,9 @@ public class BuildScript {
 	static boolean strict = false;
 
 	public static void execute(String query) {
-		Utils.out(query);
 		query.replaceAll("\n", "");
 		query = query.trim();
+		Utils.out("Executing: {" + query + "}");
 		StringTokenizer lineTokens = new StringTokenizer(query, LINE_DELIMITER);
 		StringTokenizer commandTokens;
 		String command;

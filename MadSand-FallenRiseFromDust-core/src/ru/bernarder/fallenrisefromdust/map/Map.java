@@ -27,7 +27,7 @@ public class Map {
 	public Pair spawnPoint = Pair.nullPair; // for dungeon levels only
 
 	static final int COLLISION_MASK_ID = 666;
-	static Tile nullTile = new Tile(0);
+	public static Tile nullTile = new Tile(0);
 	public static MapObject nullObject = new MapObject(0);
 	public static Loot nullLoot = new Loot();
 	public static Crop nullCrop = new Crop();

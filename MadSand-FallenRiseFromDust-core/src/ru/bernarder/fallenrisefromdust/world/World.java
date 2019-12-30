@@ -439,13 +439,13 @@ public class World {
 		getCurLoc().fillTile();
 		int quantity, gsz;
 		Vector<Integer> group;
-		for (int i = 1; i < terrainBlock.size() - 1; ++i) {
+		for (int i = 1; i < terrainBlock.size(); ++i) {
 			group = terrainBlock.get(i);
 			gsz = group.size();
 			quantity = group.get(--gsz); // last value of every group is the total quantity of objects from group to
 											// generate
-			for (int j = 0; j < quantity - 1; ++j) {
-				getCurLoc().randPlaceTile(group.get(Utils.rand(0, gsz))); // we don't check whether there are tiles
+			for (int j = 0; j < quantity; ++j) {
+				getCurLoc().randPlaceTile(group.get(Utils.rand(0, gsz-1))); // we don't check whether there are tiles
 																			// already on rand()'d place, but who gives
 																			// a 5h17?
 			}
@@ -582,5 +582,10 @@ public class World {
 			npc = entry.getValue();
 			npc.act();
 		}
+	}
+
+	@JsonIgnore
+	public boolean isUnderGround() {
+		return curlayer != World.LAYER_OVERWORLD;
 	}
 }

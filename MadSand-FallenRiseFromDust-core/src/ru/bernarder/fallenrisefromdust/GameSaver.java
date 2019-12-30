@@ -132,6 +132,7 @@ public class GameSaver {
 			return false;
 		}
 		if (loadLocation()) {
+			MadSand.world.updateLight();
 			MadSand.print("Loaded Game!");
 			return true;
 		} else {

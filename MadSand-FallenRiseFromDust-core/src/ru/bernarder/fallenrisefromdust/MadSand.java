@@ -256,7 +256,7 @@ public class MadSand extends Game {
 
 			tile = loc.getTile(x, y);
 
-			if (!tile.visible || x > xsz || y > ysz || x < 0 || y < 0) {
+			if (!tile.visible || ((x > xsz || y > ysz || x < 0 || y < 0) && MadSand.world.isUnderGround())) {
 				++i;
 				continue;
 			}

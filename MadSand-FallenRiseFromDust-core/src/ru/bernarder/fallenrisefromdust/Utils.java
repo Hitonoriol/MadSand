@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 import ru.bernarder.fallenrisefromdust.entities.Npc;
+import ru.bernarder.fallenrisefromdust.entities.Player;
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
 import ru.bernarder.fallenrisefromdust.map.Map;
@@ -249,11 +250,18 @@ public class Utils {
 		Npc npc = loc.getNpc(MadSand.wmx, MadSand.wmy);
 		Tile tile = loc.getTile(MadSand.wmx, MadSand.wmy);
 		MapObject object = loc.getObject(MadSand.wmx, MadSand.wmy);
+		Player player = World.player;
 		String info = "";
 
 		Gui.mousemenu.addAction(Actions.moveTo(MadSand.mx + 65, MadSand.my - 70, 0.1F));
 
 		info += ("Looking at (" + MadSand.wmx + ", " + MadSand.wmy + ")") + Gui.LINEBREAK;
+		
+		if (MadSand.wmx == player.x && MadSand.wmy == player.y) {
+			info += "You look at yourself" + Gui.LINEBREAK;
+			info += player.getInfoString();
+		}
+		
 		if (!tile.visible) {
 			info += "You can't see anything there" + Gui.LINEBREAK;
 			Gui.mouselabel.setText(info);
@@ -265,7 +273,7 @@ public class Utils {
 		if (object != Map.nullObject)
 			info += ("Object: " + ObjectProp.name.get(object.id)) + Gui.LINEBREAK;
 		if (npc != Map.nullNpc) {
-			info += ("Creature: " + " " + npc.stats.name) + Gui.LINEBREAK;
+			info += ("You look at " + " " + npc.stats.name) + Gui.LINEBREAK;
 			if (World.player.knowsNpc(npc.id)) {
 				info += npc.getInfoString();
 			}

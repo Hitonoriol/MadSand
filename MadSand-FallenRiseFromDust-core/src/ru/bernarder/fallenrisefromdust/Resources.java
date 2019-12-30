@@ -228,6 +228,7 @@ public class Resources {
 			TileProp.cover.put(i, Utils.val(XMLUtils.getKey(tileDoc, XML_TILE_NODE, "" + i, "cover")));
 			TileProp.damage.put(i, Utils.val(XMLUtils.getKey(tileDoc, XML_TILE_NODE, "" + i, "damage")));
 			TileProp.altitems.put(i, Utils.getAitem(i, XML_TILE_NODE));
+			TileProp.oninteract.put(i, XMLUtils.getKey(tileDoc, XML_TILE_NODE, "" + i, "oninteract"));
 			i++;
 		}
 	}
