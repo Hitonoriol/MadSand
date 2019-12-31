@@ -148,7 +148,7 @@ public class GameSaver {
 				"Couldn't to load this world. \nMaybe it was saved in older/newer version of the game or some files are corrupted.",
 				Gui.menu);
 		if (MadSand.justStarted)
-			MadSand.world.Generate();
+			MadSand.world.generate();
 		// MadSand.justStarted = false;
 	}
 

@@ -167,7 +167,7 @@ public class MadSand extends Game {
 
 		world = new World(MadSand.WORLDSIZE);
 		World.player.updCoords();
-		world.Generate();
+		world.generate();
 
 		Utils.out("End of initialization!");
 
@@ -236,7 +236,7 @@ public class MadSand extends Game {
 		return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 	}
 
-	void DrawGame() {
+	void drawGame() {
 		Map loc = world.getCurLoc();
 		Npc npc;
 		Tile tile;
@@ -281,7 +281,8 @@ public class MadSand extends Game {
 		if (!player.isInBackground())
 			drawEntity(player);
 
-		Utils.batch.draw(Resources.mapcursor, wmx * TILESIZE, wmy * TILESIZE);
+		if (!Gui.gameUnfocused)
+			Utils.batch.draw(Resources.mapcursor, wmx * TILESIZE, wmy * TILESIZE);
 		Utils.batch.end();
 		Gui.refreshOverlay();
 		Utils.batch.begin();
@@ -309,7 +310,7 @@ public class MadSand extends Game {
 		ymenu += menuYStep;
 		xmenu += menuXStep;
 
-		DrawGame();
+		drawGame();
 	}
 
 	void drawEntity(Entity entity) {
@@ -410,7 +411,7 @@ public class MadSand extends Game {
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);
 			Utils.batch.begin();
-			DrawGame();
+			drawGame();
 			Gui.overlay.act();
 			Gui.overlay.draw();
 			Utils.batch.end();
@@ -419,7 +420,7 @@ public class MadSand extends Game {
 				Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 				Gdx.gl.glClear(16384);
 				Utils.batch.begin();
-				DrawGame();
+				drawGame();
 				Utils.batch.end();
 				mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
 				Utils.invKeyCheck();
@@ -434,7 +435,7 @@ public class MadSand extends Game {
 			// TODO: Trade menu
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Utils.batch.begin();
-			DrawGame();
+			drawGame();
 			Utils.batch.end();
 			Gui.overlay.act();
 			Gui.overlay.draw();
@@ -479,7 +480,7 @@ public class MadSand extends Game {
 		} else if (state.equals(GameState.DEAD)) {
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Utils.batch.begin();
-			DrawGame();
+			drawGame();
 			Utils.batch.end();
 			Gui.dead.act();
 			Gui.dead.draw();
@@ -490,13 +491,13 @@ public class MadSand extends Game {
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);
 			Utils.batch.begin();
-			DrawGame();
+			drawGame();
 			Utils.batch.end();
 		} else if (state.equals(GameState.CRAFT)) {
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);
 			Utils.batch.begin();
-			DrawGame();
+			drawGame();
 			Utils.batch.end();
 			Gui.craft.act();
 			Gui.craft.draw();

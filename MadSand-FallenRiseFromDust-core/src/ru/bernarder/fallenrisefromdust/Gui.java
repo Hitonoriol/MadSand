@@ -84,8 +84,7 @@ public class Gui {
 
 	static Label[] overlayStatLabels;
 	static Label[] log;
-	static Label mouselabel;
-	static Label dialMSG;
+	public static Label mouselabel;
 	public static Label verlbl;
 
 	static Stage menu;
@@ -581,7 +580,7 @@ public class Gui {
 
 					MadSand.switchStage(GameState.GAME, Gui.overlay);
 					if (!MadSand.justStarted)
-						MadSand.world.Generate();
+						MadSand.world.generate();
 					// World.player.x = new Random().nextInt(World.MAPSIZE);
 					// World.player.y = new Random().nextInt(World.MAPSIZE);
 					World.player.updCoords();
@@ -885,6 +884,8 @@ public class Gui {
 
 			}
 		});
+
+		// Setting up game log
 		Table logtbl = new Table(Gui.skin).align(Align.topLeft);
 		logtbl.setFillParent(true);
 		int tpm = 0;
@@ -895,18 +896,19 @@ public class Gui {
 			cxxc++;
 		}
 		while (tpm < LOG_LENGTH) {
-			logtbl.add(Gui.log[tpm]).width(200.0F);
+			Gui.log[tpm].setWrap(true);
+			logtbl.add(Gui.log[tpm]).width(DEFWIDTH + 50).pad(3);
 			logtbl.row();
 			tpm++;
 		}
 		logtbl.add(Gui.inputField).width(200).height(30);
 		Gui.inputField.setVisible(false);
+
 		tpm = 0;
 		Table ovtbl = new Table(Gui.skin).align(18);
 
 		// logtbl.setBackground(bck);
-		Gui.dialMSG = new Label("Test", Gui.skin);
-		Gui.dialMSG.setWrap(true);
+		// Overlay stat labels
 		Table ovstatTbl = new Table();
 		ovtbl.setFillParent(true);
 		ovstatTbl.setFillParent(true);

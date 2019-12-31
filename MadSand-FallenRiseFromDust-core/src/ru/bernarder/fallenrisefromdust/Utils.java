@@ -163,7 +163,7 @@ public class Utils {
 			World.player.teleport(MadSand.wmx, MadSand.wmy);
 		}
 		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.R)) && (debugMode)) {
-			MadSand.world.Generate();
+			MadSand.world.generate();
 		}
 		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.DOWN)) && (debugMode)) {
 			MadSand.world.descend();
@@ -256,12 +256,12 @@ public class Utils {
 		Gui.mousemenu.addAction(Actions.moveTo(MadSand.mx + 65, MadSand.my - 70, 0.1F));
 
 		info += ("Looking at (" + MadSand.wmx + ", " + MadSand.wmy + ")") + Gui.LINEBREAK;
-		
+
 		if (MadSand.wmx == player.x && MadSand.wmy == player.y) {
 			info += "You look at yourself" + Gui.LINEBREAK;
 			info += player.getInfoString();
 		}
-		
+
 		if (!tile.visible) {
 			info += "You can't see anything there" + Gui.LINEBREAK;
 			Gui.mouselabel.setText(info);
@@ -328,5 +328,13 @@ public class Utils {
 
 	public static int randPercent() {
 		return rand(1, 100);
+	}
+
+	public static int val(boolean bool) {
+		return bool ? 1 : 0;
+	}
+
+	public static boolean bool(int val) {
+		return (val == 1);
 	}
 }

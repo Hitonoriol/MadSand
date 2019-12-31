@@ -143,7 +143,7 @@ public class World {
 
 	int biome;
 
-	public void Generate(int wx, int wy, int layer) {
+	public void generate(int wx, int wy, int layer) {
 		int underworld = LAYER_BASE_UNDERWORLD;
 		if (layer == LAYER_OVERWORLD) {
 			Utils.out("Generating new sector!");
@@ -165,14 +165,14 @@ public class World {
 		Utils.out("Done generating new sector!");
 	}
 
-	public void Generate(int layer) {
+	public void generate(int layer) {
 		createBasicLoc(layer);
-		Generate(curxwpos, curywpos, layer);
+		generate(curxwpos, curywpos, layer);
 		updateLight();
 	}
 
-	public void Generate() {
-		Generate(curxwpos, curywpos, LAYER_OVERWORLD);
+	public void generate() {
+		generate(curxwpos, curywpos, LAYER_OVERWORLD);
 		updateLight();
 	}
 
@@ -195,7 +195,7 @@ public class World {
 		if (GameSaver.verifyNextSector(x, y))
 			GameSaver.loadLocation();
 		else
-			Generate(layer);
+			generate(layer);
 		player.updCoords();
 		updateLight();
 		return true;
@@ -314,12 +314,14 @@ public class World {
 		Utils.out("Generating dungeon!");
 		HashMap<String, Integer> dungeon = WorldGenProp.getBiomedungeon(biome);
 		int prob = dungeon.get(DUNGEON_PROBABILITY);
-		Utils.out("Probability: " + prob);
+		Utils.out("Probability: " + prob + "%");
 
 		if (prob == 0)
 			return;
-		if (layer == LAYER_BASE_UNDERWORLD && Utils.randPercent() > prob)
+		if (layer == LAYER_BASE_UNDERWORLD && Utils.randPercent() > prob) {
+			Utils.out("Well... Decided not to.");
 			return;
+		}
 
 		final Grid grid = new Grid(World.MAPSIZE);
 		final DungeonGenerator dungeonGenerator = new DungeonGenerator();
@@ -337,6 +339,8 @@ public class World {
 
 		int y = 0, x = 0;
 		Map loc = getCurLoc(layer);
+
+		loc.editable = false;
 
 		while (y < World.MAPSIZE) {
 			while (x < World.MAPSIZE) {
@@ -445,9 +449,10 @@ public class World {
 			quantity = group.get(--gsz); // last value of every group is the total quantity of objects from group to
 											// generate
 			for (int j = 0; j < quantity; ++j) {
-				getCurLoc().randPlaceTile(group.get(Utils.rand(0, gsz-1))); // we don't check whether there are tiles
-																			// already on rand()'d place, but who gives
-																			// a 5h17?
+				getCurLoc().randPlaceTile(group.get(Utils.rand(0, gsz - 1))); // we don't check whether there are tiles
+																				// already on rand()'d place, but who
+																				// gives
+																				// a 5h17?
 			}
 		}
 	}
@@ -551,6 +556,9 @@ public class World {
 		if (worldtime > TIME_FOV_INCREASE_START && worldtime <= TIME_FOV_INCREASE_END) {
 			player.setFov(player.fov + 1);
 		}
+
+		MadSand.print("Another hour passes...");
+		MadSand.print("(It's " + worldtime + ":00)");
 	}
 
 	private void tick() {

@@ -230,7 +230,6 @@ public class Inventory {
 				items.get(idx).quantity -= quantity;
 				refreshItem(items.get(idx));
 			}
-			dump();
 			return true;
 		}
 	}

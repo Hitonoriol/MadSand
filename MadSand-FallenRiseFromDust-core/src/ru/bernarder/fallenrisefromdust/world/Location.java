@@ -44,6 +44,7 @@ public class Location extends HashMap<MapID, Map> {
 			int xsz = map.getWidth();
 			int ysz = map.getHeight();
 			// header: width, height, default tile, biome
+			stream.write(GameSaver.encode2(Utils.val(map.editable)));
 			stream.write(GameSaver.encode2(xsz));
 			stream.write(GameSaver.encode2(ysz));
 			stream.write(GameSaver.encode2(map.spawnPoint.x));
@@ -138,6 +139,7 @@ public class Location extends HashMap<MapID, Map> {
 	void bytesToSector(byte[] sector, int wx, int wy, int layer) {
 		try {
 			ByteArrayInputStream stream = new ByteArrayInputStream(sector);
+			boolean editable = Utils.bool(GameSaver.decode2(stream.readNBytes(BLOCK_SIZE)));
 			int xsz = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
 			int ysz = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
 			int spawnX = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
@@ -148,6 +150,7 @@ public class Location extends HashMap<MapID, Map> {
 			MapID loc = new MapID(new Pair(wx, wy), layer);
 			Map map = new Map(xsz, ysz);
 			map.purge();
+			map.editable = editable;
 			map.spawnPoint = new Pair(spawnX, spawnY);
 
 			String npf = GameSaver.getNpcFile(wx, wy, layer);

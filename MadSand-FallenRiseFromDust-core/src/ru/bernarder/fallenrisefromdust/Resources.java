@@ -83,6 +83,7 @@ public class Resources {
 	static final String XML_BIOME_NODE = "biome";
 
 	public static void init() {
+		Utils.out("Loading resources...");
 		tileDoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.TILEFILE));
 		objectDoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.OBJECTFILE));
 		npcDoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.NPCFILE));
@@ -115,9 +116,10 @@ public class Resources {
 		Gdx.graphics.setCursor(mouseCursor);
 
 		MadSand.QUESTS = XMLUtils.countKeys(questdoc, XML_QUEST_NODE);
+		Utils.out(MadSand.QUESTS + " quests");
 
 		MadSand.LASTITEMID = XMLUtils.countKeys(itemDoc, XML_ITEM_NODE);
-		MadSand.CROPS = XMLUtils.countKeys(objectDoc, XML_CROP_STAGES_NODE);
+		MadSand.CROPS = XMLUtils.countKeys(itemDoc, XML_CROP_STAGES_NODE);
 
 		Utils.out(MadSand.CROPS + " crops");
 
@@ -157,6 +159,7 @@ public class Resources {
 		playerUpSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/u1.png")));
 		playerRightSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/r1.png")));
 		playerLeftSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/l1.png")));
+		Utils.out("Done loading resources.");
 	}
 
 	private static void loadTutorial() {

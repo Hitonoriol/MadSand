@@ -197,7 +197,11 @@ public class Player extends Entity {
 	}
 
 	private void startQuest(Quest quest) {
+		Utils.out("Trying to start quest id" + quest.id);
+		if (isQuestCompleted(quest.id))
+			return;
 		inventory.putItem(quest.giveItems);
+		MadSand.print("You get " + Item.queryToName(quest.giveItems));
 		questsInProgress.add(quest.id);
 		GameDialog.generateDialogChain(quest.startMsg, Gui.overlay).show();
 	}
@@ -216,8 +220,9 @@ public class Player extends Entity {
 	}
 
 	public void processQuest(int id) {
+		Utils.out("Processing quest " + id);
 		Quest quest = QuestList.quests.get(id);
-		if (isQuestInProgress(id)) {
+		if (isQuestInProgress(id) && !isQuestCompleted(id)) {
 			if (inventory.itemsExist(quest.reqItems))
 				completeQuest(quest);
 			else
@@ -229,8 +234,11 @@ public class Player extends Entity {
 	public int getAvailableQuest(ArrayList<Integer> quests) { // search NPC's quest list for {not yet started / not
 																// finished / repeatable} quests
 		for (int qid : quests) {
-			if (isQuestInProgress(qid) || !isQuestCompleted(qid))
+			Utils.out("quest " + qid + " inProgress: " + isQuestInProgress(qid) + " isCompleted: "
+					+ isQuestCompleted(qid));
+			if (isQuestInProgress(qid) || !isQuestCompleted(qid)) {
 				return qid;
+			}
 		}
 		return QuestList.NO_QUESTS_STATUS;
 	}
@@ -258,18 +266,20 @@ public class Player extends Entity {
 
 		}
 		doAction(stats.AP_MINOR);
+		Gui.processActionMenu();
 	}
 
 	public void interact(final Direction direction) {
 		coords.set(x, y).addDirection(direction);
 
 		Map loc = MadSand.world.getCurLoc();
+		MapObject obj = MadSand.world.getCurLoc().getObject(coords.x, coords.y);
 		Npc npc = loc.getNpc(coords.x, coords.y);
 		if (npc != Map.nullNpc) {
 			interact(npc);
 			return;
 		}
-		int id = loc.getObject(coords.x, coords.y).id;
+		int id = obj.id;
 
 		if (id == 0)
 			return;
@@ -279,8 +289,12 @@ public class Player extends Entity {
 			BuildScript.execute(action);
 			return;
 		}
+		if (!loc.editable) {
+			MadSand.print("You try to somehow interact with " + obj.name);
+			MadSand.print("But suddenly, you feel that it's protected by some mysterious force");
+			return;
+		}
 		int item = MapObject.getAltItem(id, ItemProp.type.get(stats.hand.id).get());
-		MapObject obj = MadSand.world.getCurLoc().getObject(x, y, stats.look);
 		int mhp = ObjectProp.harvestHp.get(obj.id);
 		Skill skill = obj.skill;
 		int curLvl = stats.skills.getLvl(skill);
@@ -301,6 +315,9 @@ public class Player extends Entity {
 			MadSand.print("You hit a " + obj.name + " [ " + obj.harverstHp + " / " + mhp + " ]");
 		if (item == -1 && destroyed)
 			MadSand.print("You damaged " + obj.name);
+
+		MadSand.world.updateLight();
+		Gui.processActionMenu();
 	}
 
 	public void useItem(Item item) {
@@ -411,7 +428,7 @@ public class Player extends Entity {
 					MadSand.world.clearCurLoc();
 					GameSaver.loadLocation();
 				} else {
-					MadSand.world.Generate();
+					MadSand.world.generate();
 				}
 			}
 		}
