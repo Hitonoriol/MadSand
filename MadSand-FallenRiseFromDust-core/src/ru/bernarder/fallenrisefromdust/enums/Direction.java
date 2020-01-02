@@ -3,25 +3,27 @@ package ru.bernarder.fallenrisefromdust.enums;
 import ru.bernarder.fallenrisefromdust.Utils;
 
 public enum Direction {
-	UP(1), DOWN(2), LEFT(3), RIGHT(4), UP_LEFT(5), UP_RIGHT(6), DOWN_LEFT(7), DOWN_RIGHT(8);
+	UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT;
 
-	private final int val;
-
-	private Direction(int val) {
-		this.val = val;
+	public boolean isBase() {
+		return !isDiagonal();
 	}
 
-	public int get() {
-		return val;
-	}
-
-	private static Direction[] values = Direction.values();
-
-	public static Direction get(int i) {
-		return values[i];
+	public boolean isDiagonal() {
+		return (this == UP_LEFT || this == UP_RIGHT || this == DOWN_LEFT || this == DOWN_RIGHT);
 	}
 
 	public static Direction random() {
-		return get(Utils.rand(0, 3));
+		int num = Utils.rand(0, 3);
+		switch (num) {
+		case 0:
+			return UP;
+		case 1:
+			return DOWN;
+		case 2:
+			return LEFT;
+		default:
+			return RIGHT;
+		}
 	}
 }

@@ -121,34 +121,34 @@ public class Gui {
 		fontMedium = createFont(20);
 		fontBig = createFont(24);
 
-		Gui.skin = new Skin();
-		Gui.skin.add("default", font);
+		skin = new Skin();
+		skin.add("default", font);
 
 		Pixmap pixmap = new Pixmap(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 12, Pixmap.Format.RGB888);
 		pixmap.setColor(Color.WHITE);
 		pixmap.fill();
-		Gui.skin.add("background", new Texture(pixmap));
+		skin.add("background", new Texture(pixmap));
 
 		Slider.SliderStyle slst = new Slider.SliderStyle();
-		slst.background = Gui.skin.newDrawable("background", Color.DARK_GRAY);
+		slst.background = skin.newDrawable("background", Color.DARK_GRAY);
 
-		Drawable knob = Gui.skin.newDrawable("background", Color.GRAY);
+		Drawable knob = skin.newDrawable("background", Color.GRAY);
 		knob.setMinWidth(20);
 		slst.knob = knob;
-		Gui.skin.add("default-horizontal", slst);
+		skin.add("default-horizontal", slst);
 
 		TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-		textButtonStyle.up = Gui.skin.newDrawable("background", Color.GRAY);
-		textButtonStyle.down = Gui.skin.newDrawable("background", Color.DARK_GRAY);
-		textButtonStyle.over = Gui.skin.newDrawable("background", Color.LIGHT_GRAY);
-		textButtonStyle.font = Gui.skin.getFont("default");
-		textButtonStyle.disabled = Gui.skin.newDrawable("background", Color.BLACK);
-		Gui.skin.add("default", textButtonStyle);
+		textButtonStyle.up = skin.newDrawable("background", Color.GRAY);
+		textButtonStyle.down = skin.newDrawable("background", Color.DARK_GRAY);
+		textButtonStyle.over = skin.newDrawable("background", Color.LIGHT_GRAY);
+		textButtonStyle.font = skin.getFont("default");
+		textButtonStyle.disabled = skin.newDrawable("background", Color.BLACK);
+		skin.add("default", textButtonStyle);
 
 		Label.LabelStyle labelStyle = new Label.LabelStyle();
 		labelStyle.font = font;
 		labelStyle.fontColor = Color.WHITE;
-		Gui.skin.add("default", labelStyle);
+		skin.add("default", labelStyle);
 
 		transparency = new NinePatchDrawable(
 				new NinePatch(new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/transparency.png"))));
@@ -158,26 +158,26 @@ public class Gui {
 		dialogBackground = new NinePatchDrawable(patch);
 		dialogBackground.setMinHeight(50);
 		dialogBackground.setMinWidth(100);
-		ws.background = Gui.skin.newDrawable("background", Color.LIGHT_GRAY);
+		ws.background = skin.newDrawable("background", Color.LIGHT_GRAY);
 		;
 		ws.stageBackground = transparency;
 		ws.titleFontColor = Color.WHITE;
 		ws.titleFont = fontMedium;
-		Gui.skin.add("default", ws);
+		skin.add("default", ws);
 
 		TextField.TextFieldStyle tx = new TextField.TextFieldStyle();
 		tx.font = font;
 		tx.fontColor = Color.WHITE;
-		tx.background = Gui.skin.newDrawable("background", Color.DARK_GRAY);
+		tx.background = skin.newDrawable("background", Color.DARK_GRAY);
 		tx.background.setMinHeight(35.0F);
-		tx.selection = Gui.skin.newDrawable("background", Color.LIGHT_GRAY);
-		tx.cursor = Gui.skin.newDrawable("background", Color.GRAY);
+		tx.selection = skin.newDrawable("background", Color.LIGHT_GRAY);
+		tx.cursor = skin.newDrawable("background", Color.GRAY);
 		tx.cursor.setMinWidth(1.0F);
 		tx.cursor.setMinHeight(tx.background.getMinHeight());
-		Gui.skin.add("default", tx);
+		skin.add("default", tx);
 
 		ScrollPane.ScrollPaneStyle spx = new ScrollPane.ScrollPaneStyle();
-		Gui.skin.add("default", spx);
+		skin.add("default", spx);
 
 		NinePatch ptc = new NinePatch(new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/darkness.png")), 3, 3, 3, 3);
 		darkBackground = new NinePatchDrawable(ptc);
@@ -189,9 +189,9 @@ public class Gui {
 		TextTooltip.TextTooltipStyle txtool = new TextTooltip.TextTooltipStyle();
 		txtool.background = darkBackground;
 		txtool.label = labelStyle;
-		Gui.skin.add("default", txtool);
+		skin.add("default", txtool);
 
-		Gui.overlay = new Stage();
+		overlay = new Stage();
 	}
 
 	static Dialog dialog;
@@ -244,13 +244,11 @@ public class Gui {
 	}
 
 	public static void showStatsWindow() {
-		final Dialog statWindow = new Dialog("", Gui.skin);
+		final Dialog statWindow = new Dialog("", skin);
 		statWindow.text(World.player.stats.name);
-		TextButton ok = new TextButton("Close", Gui.skin);
-		MadSand.charcrt = true;
+		TextButton ok = new TextButton("Close", skin);
 		ok.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				MadSand.charcrt = false;
 				statWindow.remove();
 				statWindow.clearActions();
 			}
@@ -258,13 +256,13 @@ public class Gui {
 		});
 		statWindow.setBackground(darkBackground);
 		statWindow.setMovable(true);
-		statWindow.add(new Label("", Gui.skin));
+		statWindow.add(new Label("", skin));
 		refreshStatLabels();
 		statWindow.row();
 		statWindow.add(new Label("Level: " + World.player.stats.skills.getLvl(Skill.Level) + " ("
-				+ World.player.stats.skills.getExpString(Skill.Level) + ")", Gui.skin));
+				+ World.player.stats.skills.getExpString(Skill.Level) + ")", skin));
 		statWindow.row();
-		statWindow.add(new Label("", Gui.skin)).width(defLblWidth).row();
+		statWindow.add(new Label("", skin)).width(defLblWidth).row();
 		statWindow.row();
 		statWindow.add(statsLbl).width(defLblWidth).row();
 		statWindow.row();
@@ -291,18 +289,18 @@ public class Gui {
 			skill = Skill.get(i);
 			if (skill == Skill.Level)
 				continue;
-			skillLbl = new Label(skill + ": " + World.player.stats.skills.getLvlString(skill), Gui.skin);
+			skillLbl = new Label(skill + ": " + World.player.stats.skills.getLvlString(skill), skin);
 			statWindow.add(skillLbl).width(defLblWidth).row();
 			statWindow.row();
 		}
 
 		statWindow.add(ok).width(defLblWidth).row();
-		statWindow.show(Gui.overlay);
+		statWindow.show(overlay);
 	}
 
 	static void initLaunchMenu() {
 		MadSand.state = GameState.NMENU;
-		Gdx.input.setInputProcessor(Gui.menu);
+		Gdx.input.setInputProcessor(menu);
 	}
 
 	static Stage worldg;
@@ -312,7 +310,7 @@ public class Gui {
 
 	static void initWmenu() {
 		worldg = new Stage();
-		wlbl = new Label("Generating your world...", Gui.skin);
+		wlbl = new Label("Generating your world...", skin);
 		wlbl.setAlignment(1);
 		Table tbl = new Table();
 		tbl.setFillParent(true);
@@ -320,7 +318,7 @@ public class Gui {
 		worldg.addActor(tbl);
 
 		loadg = new Stage();
-		Label wlbl = new Label("Loading...", Gui.skin);
+		Label wlbl = new Label("Loading...", skin);
 		wlbl.setAlignment(1);
 		Table tbl1 = new Table();
 		tbl1.setFillParent(true);
@@ -328,7 +326,7 @@ public class Gui {
 		loadg.addActor(tbl1);
 
 		gotodg = new Stage();
-		Label gotolbl = new Label("Saving current sector and going to the next one...", Gui.skin);
+		Label gotolbl = new Label("Saving current sector and going to the next one...", skin);
 		gotolbl.setAlignment(1);
 		Table gototbl = new Table();
 		gototbl.setFillParent(true);
@@ -337,7 +335,7 @@ public class Gui {
 	}
 
 	public static void drawOkDialog(String msg, Stage stage) {
-		final Dialog dialog = new Dialog(" ", Gui.skin);
+		final Dialog dialog = new Dialog(" ", skin);
 		int linesToSkip = 2;
 		dialog.text(msg).pad(25);
 		dialog.row();
@@ -345,7 +343,7 @@ public class Gui {
 			dialog.add(" ");
 			dialog.row();
 		}
-		TextButton cbtn = new TextButton("Ok", Gui.skin);
+		TextButton cbtn = new TextButton("Ok", skin);
 		cbtn.align(Align.center);
 		dialog.add(cbtn).width(defLblWidth).row();
 		cbtn.addListener(new ChangeListener() {
@@ -379,7 +377,6 @@ public class Gui {
 	static void createCharDialog() {
 		gameUnfocused = true;
 		rollStats();
-		MadSand.charcrt = true;
 
 		String msg = "Character creation";
 		final GameDialog dialog = new GameDialog(overlay);
@@ -387,9 +384,9 @@ public class Gui {
 		title.setText(msg);
 		title.setAlignment(Align.center);
 		dialog.setMovable(true);
-		final TextField nameField = new TextField("Player", Gui.skin);
+		final TextField nameField = new TextField("Player", skin);
 		refreshStatLabels();
-		dialog.add(new Label("\nCharacter name:", Gui.skin)).width(defLblWidth).row();
+		dialog.add(new Label("\nCharacter name:", skin)).width(defLblWidth).row();
 		dialog.row();
 		dialog.add(nameField).width(defLblWidth).row();
 		dialog.row();
@@ -406,8 +403,8 @@ public class Gui {
 		dialog.add(dexStatLbl).width(defLblWidth).row();
 		dialog.row();
 		dialog.add(statSumLbl).width(defLblWidth).row();
-		TextButton rbtn = new TextButton("Reroll", Gui.skin);
-		TextButton cbtn = new TextButton("Create", Gui.skin);
+		TextButton rbtn = new TextButton("Reroll", skin);
+		TextButton cbtn = new TextButton("Create", skin);
 		dialog.add(rbtn).width(defLblWidth).row();
 		dialog.row();
 		dialog.add(cbtn).width(defLblWidth).row();
@@ -415,7 +412,6 @@ public class Gui {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				if (!nameField.getText().trim().equals("")) {
 					World.player.setName(nameField.getText());
-					MadSand.charcrt = false;
 					World.player.reinit();
 					dialog.remove();
 					gameUnfocused = false;
@@ -429,24 +425,24 @@ public class Gui {
 			}
 
 		});
-		dialog.show(Gui.overlay);
+		dialog.show(overlay);
 	}
 
 	static void drawSettingsDialog() {
 		int radius = 12;
 
-		final Dialog dialog = new Dialog(" ", Gui.skin);
+		final Dialog dialog = new Dialog(" ", skin);
 		dialog.text("\nSettings");
 		dialog.row();
 		dialog.align(Align.center);
-		final Label renderv = new Label("", Gui.skin);
-		final Slider renderslide = new Slider(5, 125, 5, false, Gui.skin);
+		final Label renderv = new Label("", skin);
+		final Slider renderslide = new Slider(5, 125, 5, false, skin);
 		if (new File("MadSand_Saves/lastrend.dat").exists())
 			radius = (Integer.parseInt(getExternal("lastrend.dat")));
 		renderslide.setValue(radius);
 		renderv.setText("Render radius (" + (int) renderslide.getValue() + ")");
-		TextButton cbtn = new TextButton("Set", Gui.skin);
-		TextButton cancel = new TextButton("Cancel", Gui.skin);
+		TextButton cbtn = new TextButton("Set", skin);
+		TextButton cancel = new TextButton("Cancel", skin);
 
 		dialog.add(renderv).row();
 		dialog.add(renderslide).width(defLblWidth).row();
@@ -463,7 +459,7 @@ public class Gui {
 		cbtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				MadSand.setRenderRadius(Math.round(renderslide.getValue()));
-				Gui.saveToExternal("lastrend.dat", Math.round(renderslide.getValue()) + "");
+				saveToExternal("lastrend.dat", Math.round(renderslide.getValue()) + "");
 				// TODO
 				dialog.remove();
 			}
@@ -475,7 +471,7 @@ public class Gui {
 			}
 
 		});
-		dialog.show(Gui.menu);
+		dialog.show(menu);
 	}
 
 	static void loadWorldDialog() {
@@ -485,7 +481,7 @@ public class Gui {
 				return new File(current, name).isDirectory();
 			}
 		});
-		final Dialog ldialog = new Dialog(" ", Gui.skin);
+		final Dialog ldialog = new Dialog(" ", skin);
 		ldialog.text("\nLoad game:\n");
 		ldialog.row();
 		int i = 0;
@@ -500,7 +496,7 @@ public class Gui {
 
 		TextButton[] ldbtn = new TextButton[slots];
 		while (i < slots) {
-			ldbtn[i] = new TextButton(dirs[i], Gui.skin);
+			ldbtn[i] = new TextButton(dirs[i], skin);
 			ldialog.add(ldbtn[i]).width(Gdx.graphics.getWidth() / 2).row();
 			final String sa = dirs[i];
 			ldbtn[i].addListener(new ChangeListener() {
@@ -514,11 +510,11 @@ public class Gui {
 			});
 			i++;
 		}
-		TextButton cbtn = new TextButton("Cancel", Gui.skin);
+		TextButton cbtn = new TextButton("Cancel", skin);
 		if (slots == 0)
-			ldialog.add(new TextButton("No worlds to load", Gui.skin)).width(defLblWidth).row();
+			ldialog.add(new TextButton("No worlds to load", skin)).width(defLblWidth).row();
 		ldialog.add(cbtn).width(defLblWidth).row();
-		ldialog.add(new Label("\n", Gui.skin)).width(defLblWidth).row();
+		ldialog.add(new Label("\n", skin)).width(defLblWidth).row();
 		cbtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				ldialog.remove();
@@ -526,7 +522,7 @@ public class Gui {
 			}
 
 		});
-		ldialog.show(Gui.menu);
+		ldialog.show(menu);
 	}
 
 	static void createWorldDialog() {
@@ -544,11 +540,11 @@ public class Gui {
 		}
 		if (slots > MadSand.MAXSAVESLOTS)
 			slots = MadSand.MAXSAVESLOTS;
-		dialog = new Dialog(" ", Gui.skin);
-		final TextField worldtxt = new TextField("World #" + (++slots), Gui.skin);
+		dialog = new Dialog(" ", skin);
+		final TextField worldtxt = new TextField("World #" + (++slots), skin);
 		dialog.text("New game");
-		TextButton okbtn = new TextButton("Proceed", Gui.skin);
-		TextButton nobtn = new TextButton("Cancel", Gui.skin);
+		TextButton okbtn = new TextButton("Proceed", skin);
+		TextButton nobtn = new TextButton("Cancel", skin);
 		if (slots == MadSand.MAXSAVESLOTS) {
 			worldtxt.setText("No free slots left!");
 			worldtxt.setDisabled(true);
@@ -556,7 +552,7 @@ public class Gui {
 		}
 		nobtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				Gui.dialog.remove();
+				dialog.remove();
 			}
 
 		});
@@ -578,19 +574,19 @@ public class Gui {
 					} catch (Exception localException) {
 					}
 
-					MadSand.switchStage(GameState.GAME, Gui.overlay);
+					MadSand.switchStage(GameState.GAME, overlay);
 					if (!MadSand.justStarted)
 						MadSand.world.generate();
 					// World.player.x = new Random().nextInt(World.MAPSIZE);
 					// World.player.y = new Random().nextInt(World.MAPSIZE);
 					World.player.updCoords();
-					Gui.exitToMenuBtn.setVisible(false);
-					Gui.craftBtn.setVisible(false);
-					Gui.inventoryActive = false;
+					exitToMenuBtn.setVisible(false);
+					craftBtn.setVisible(false);
+					inventoryActive = false;
 					dialog.remove();
 					Gdx.graphics.setContinuousRendering(false);
 					MadSand.ZOOM = MadSand.DEFAULT_ZOOM;
-					Gui.createCharDialog();
+					createCharDialog();
 				}
 
 			}
@@ -602,13 +598,13 @@ public class Gui {
 
 		});
 		dialog.row();
-		dialog.add(new Label("\n\n", Gui.skin)).width(Gdx.graphics.getWidth() / 2).row();
-		dialog.add(new Label("\n\nWorld name:\n", Gui.skin)).width(Gdx.graphics.getWidth() / 2).row();
+		dialog.add(new Label("\n\n", skin)).width(Gdx.graphics.getWidth() / 2).row();
+		dialog.add(new Label("\n\nWorld name:\n", skin)).width(Gdx.graphics.getWidth() / 2).row();
 		dialog.add(worldtxt).width(Gdx.graphics.getWidth() / 2).row();
 		dialog.add(okbtn).width(Gdx.graphics.getWidth() / 2).row();
 		dialog.add(nobtn).width(Gdx.graphics.getWidth() / 2).row();
-		dialog.add(new Label("\n\n", Gui.skin)).width(Gdx.graphics.getWidth() / 2).row();
-		dialog.show(Gui.menu);
+		dialog.add(new Label("\n\n", skin)).width(Gdx.graphics.getWidth() / 2).row();
+		dialog.show(menu);
 	}
 
 	static String sha1(String input) {
@@ -654,7 +650,7 @@ public class Gui {
 			MadSand.VER = "\n[GREEN]b-" + (GameSaver.getExternal(ver));
 		else
 			MadSand.VER = "\n[GREEN]Version file not found";
-		verlbl = new Label(MadSand.VER, Gui.skin);
+		verlbl = new Label(MadSand.VER, skin);
 		verlbl.setAlignment(Align.center);
 	}
 
@@ -706,7 +702,7 @@ public class Gui {
 		while (i < craftSz) {
 			id = player.craftRecipes.get(i);
 			craftbtn[i] = new TextButton(ItemProp.name.get(id), skin);
-			craftbl.add(Gui.craftbtn[i]).width(CRAFT_BTN_WIDTH);
+			craftbl.add(craftbtn[i]).width(CRAFT_BTN_WIDTH);
 			craftbl.add(new Label(" " + Item.queryToName(ItemProp.recipe.get(id)), skin)).padRight(CRAFT_ENTRY_PADDING);
 
 			if ((i + 1) % perRow == 0)
@@ -725,10 +721,10 @@ public class Gui {
 		}
 		craftbl.row();
 
-		craftbl.setBackground(Gui.darkBackgroundSizeable);
-		scroll = new ScrollPane(Gui.craftbl);
+		craftbl.setBackground(darkBackgroundSizeable);
+		scroll = new ScrollPane(craftbl);
 		scroll.setSize(MadSand.XDEF, MadSand.YDEF);
-		craft.addActor(Gui.scroll);
+		craft.addActor(scroll);
 
 		Table backTable = new Table();
 		TextButton backBtn = new TextButton("Back", skin);
@@ -744,7 +740,7 @@ public class Gui {
 
 		backBtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				MadSand.switchStage(GameState.INVENTORY, Gui.overlay);
+				MadSand.switchStage(GameState.INVENTORY, overlay);
 			}
 		});
 
@@ -752,32 +748,32 @@ public class Gui {
 	}
 
 	static void initmenu() {
-		Gui.equip = new Image[EQ_SLOTS];
+		equip = new Image[EQ_SLOTS];
 		for (int i = 0; i < EQ_SLOTS; ++i) {
-			Gui.equip[i] = new Image();
-			Gui.equip[i].setDrawable(Resources.noEquip);
+			equip[i] = new Image();
+			equip[i].setDrawable(Resources.noEquip);
 		}
 
-		Gui.overlayStatLabels = new Label[OVSTAT_COUNT];
+		overlayStatLabels = new Label[OVSTAT_COUNT];
 
-		statsLbl = new Label("Stats:", Gui.skin);
-		skillsLbl = new Label("\nSkills:", Gui.skin);
+		statsLbl = new Label("Stats:", skin);
+		skillsLbl = new Label("\nSkills:", skin);
 
-		conStatLbl = new Label("", Gui.skin);
-		strStatLbl = new Label("", Gui.skin);
-		accStatLbl = new Label("", Gui.skin);
-		intStatLbl = new Label("", Gui.skin);
-		luckStatLbl = new Label("", Gui.skin);
-		dexStatLbl = new Label("", Gui.skin);
-		statSumLbl = new Label("", Gui.skin);
-		hpStatLbl = new Label("", Gui.skin);
-		staminaStatLbl = new Label("", Gui.skin);
+		conStatLbl = new Label("", skin);
+		strStatLbl = new Label("", skin);
+		accStatLbl = new Label("", skin);
+		intStatLbl = new Label("", skin);
+		luckStatLbl = new Label("", skin);
+		dexStatLbl = new Label("", skin);
+		statSumLbl = new Label("", skin);
+		hpStatLbl = new Label("", skin);
+		staminaStatLbl = new Label("", skin);
 		refreshStatLabels();
 
-		gamecontext = new Table(Gui.skin);
+		gamecontext = new Table(skin);
 		contextMenuBtn = new TextButton[5];
-		mousemenu = new Table(Gui.skin);
-		actionTbl = new Table(Gui.skin);
+		mousemenu = new Table(skin);
+		actionTbl = new Table(skin);
 
 		inGameBtnListener = new InputListener() {
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -816,96 +812,96 @@ public class Gui {
 		actionTbl.setPosition(horizontalCenter(actionTbl), ACTION_TBL_YPOS);
 		actionTbl.add(interactBtn).width(DEFWIDTH).row();
 
-		Gui.mousemenu.setVisible(true);
-		Gui.mouselabel = new Label("", Gui.skin);
+		mousemenu.setVisible(true);
+		mouselabel = new Label("", skin);
 		int cc = 0;
-		Gui.contextMenuBtn[0] = new TextButton("Interact", Gui.skin);
-		Gui.contextMenuBtn[0].addListener(new ChangeListener() {
+		contextMenuBtn[0] = new TextButton("Interact", skin);
+		contextMenuBtn[0].addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				World.player.lookAtMouse(MadSand.wclickx, MadSand.wclicky);
 				World.player.interact(World.player.stats.look);
 			}
 
 		});
-		Gui.contextMenuBtn[3] = new TextButton("Use item", Gui.skin);
-		Gui.contextMenuBtn[3].addListener(new ChangeListener() {
+		contextMenuBtn[3] = new TextButton("Use item", skin);
+		contextMenuBtn[3].addListener(new ChangeListener() {
 
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				World.player.useItem();
 			}
 
 		});
-		Gui.contextMenuBtn[4] = new TextButton("Free hands", Gui.skin);
-		Gui.contextMenuBtn[4].addListener(new ChangeListener() {
+		contextMenuBtn[4] = new TextButton("Free hands", skin);
+		contextMenuBtn[4].addListener(new ChangeListener() {
 
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				World.player.freeHands();
 			}
 
 		});
-		Gui.contextMenuBtn[1] = new TextButton("Attack", Gui.skin);
-		Gui.contextMenuBtn[1].addListener(new ChangeListener() {
+		contextMenuBtn[1] = new TextButton("Attack", skin);
+		contextMenuBtn[1].addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				World.player.lookAtMouse(MadSand.wmx, MadSand.wmy);
 				World.player.attack();
 			}
 		});
-		Gui.contextMenuBtn[2] = new TextButton("Turn", Gui.skin);
-		Gui.contextMenuBtn[2].addListener(new ChangeListener() {
+		contextMenuBtn[2] = new TextButton("Turn", skin);
+		contextMenuBtn[2].addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				World.player.lookAtMouse(MadSand.wmx, MadSand.wmy);
 			}
 		});
 
 		while (cc < 5) {
-			Gui.gamecontext.add(Gui.contextMenuBtn[cc]).width(100.0F).height(20.0F);
-			Gui.gamecontext.row();
+			gamecontext.add(contextMenuBtn[cc]).width(100.0F).height(20.0F);
+			gamecontext.row();
 			cc++;
 		}
-		Gui.gamecontext.setVisible(false);
+		gamecontext.setVisible(false);
 
 		cc = 0;
 
-		Gui.mousemenu.add(mouselabel).width(100.0F);
-		Gui.mousemenu.row();
+		mousemenu.add(mouselabel).width(100.0F);
+		mousemenu.row();
 
-		Gui.menu = new Stage();
-		Gui.craft = new Stage();
-		Gui.craftbl = new Table();
-		Gui.inputField = new TextField("", Gui.skin);
-		Gui.inputField.setMessageText("");
-		Gui.inputField.setFocusTraversal(true);
-		Gui.inputField.setTextFieldListener(new TextField.TextFieldListener() {
+		menu = new Stage();
+		craft = new Stage();
+		craftbl = new Table();
+		inputField = new TextField("", skin);
+		inputField.setMessageText("");
+		inputField.setFocusTraversal(true);
+		inputField.setTextFieldListener(new TextField.TextFieldListener() {
 			public void keyTyped(TextField textField, char key) {
 				if (key == Keys.ESCAPE) {
-					Gui.inputField.setText("");
-					Gui.overlay.unfocus(Gui.inputField);
+					inputField.setText("");
+					overlay.unfocus(inputField);
 				}
 
 			}
 		});
 
 		// Setting up game log
-		Table logtbl = new Table(Gui.skin).align(Align.topLeft);
+		Table logtbl = new Table(skin).align(Align.topLeft);
 		logtbl.setFillParent(true);
 		int tpm = 0;
-		Gui.log = new Label[LOG_LENGTH];
+		log = new Label[LOG_LENGTH];
 		int cxxc = 0;
 		while (cxxc < LOG_LENGTH) {
-			Gui.log[cxxc] = new Label(" ", Gui.skin);
+			log[cxxc] = new Label(" ", skin);
 			cxxc++;
 		}
 		while (tpm < LOG_LENGTH) {
-			Gui.log[tpm].setWrap(true);
-			logtbl.add(Gui.log[tpm]).width(DEFWIDTH + 50).pad(3);
+			log[tpm].setWrap(true);
+			logtbl.add(log[tpm]).width(DEFWIDTH + 50).pad(3);
 			logtbl.row();
 			tpm++;
 		}
-		logtbl.add(Gui.inputField).width(200).height(30);
-		Gui.inputField.setVisible(false);
+		logtbl.add(inputField).width(200).height(30);
+		inputField.setVisible(false);
 
 		tpm = 0;
-		Table ovtbl = new Table(Gui.skin).align(18);
+		Table ovtbl = new Table(skin).align(18);
 
 		// logtbl.setBackground(bck);
 		// Overlay stat labels
@@ -915,28 +911,28 @@ public class Gui {
 		ovstatTbl.align(Align.topRight);
 		int count = 0;
 		while (count < OVSTAT_COUNT) {
-			Gui.overlayStatLabels[count] = new Label(" ", skin);
-			Gui.overlayStatLabels[count].setWrap(false);
-			ovstatTbl.add(Gui.overlayStatLabels[count]).width(165);
+			overlayStatLabels[count] = new Label(" ", skin);
+			overlayStatLabels[count].setWrap(false);
+			ovstatTbl.add(overlayStatLabels[count]).width(165);
 			count++;
 		}
-		Gui.overlay.addActor(ovstatTbl);
-		Gui.darkness = new Table();
-		Gui.darkness.setBackground(darkBackground);
-		Gui.darkness.setFillParent(true);
-		Gui.darkness.setVisible(false);
-		Gui.overlay.addActor(Gui.darkness);
+		overlay.addActor(ovstatTbl);
+		darkness = new Table();
+		darkness.setBackground(darkBackground);
+		darkness.setFillParent(true);
+		darkness.setVisible(false);
+		overlay.addActor(darkness);
 
-		Gui.overlay.addActor(ovtbl);
-		Gui.overlay.addActor(logtbl);
-		Gui.overlay.addActor(Gui.mousemenu);
-		Gui.overlay.addActor(Gui.gamecontext);
-		Gui.overlay.addListener(new ClickListener(1) {
+		overlay.addActor(ovtbl);
+		overlay.addActor(logtbl);
+		overlay.addActor(mousemenu);
+		overlay.addActor(gamecontext);
+		overlay.addListener(new ClickListener(1) {
 			public void clicked(InputEvent event, float x, float y) {
 				if (dialogActive)
 					return;
 				if (MadSand.state == GameState.GAME) {
-					if (Gui.mousemenu.isVisible()) {
+					if (mousemenu.isVisible()) {
 						openGameContextMenu();
 						gameUnfocused = true;
 					} else {
@@ -968,43 +964,43 @@ public class Gui {
 		ovtbl.add();
 		ovtbl.add();
 		ovtbl.add();
-		ovtbl.add(Gui.craftBtn).width(200.0F).row();
-		Gui.craftBtn.setVisible(false);
+		ovtbl.add(craftBtn).width(200.0F).row();
+		craftBtn.setVisible(false);
 		ovtbl.add();
 		ovtbl.add();
 		ovtbl.add();
-		ovtbl.add(Gui.exitToMenuBtn).width(200.0F).row();
+		ovtbl.add(exitToMenuBtn).width(200.0F).row();
 		int aa = 0;
 		while (aa < ITEM_DISPLAY_SLOTS) {
 			ovtbl.add();
 			ovtbl.add();
 			ovtbl.add();
-			ovtbl.add(Gui.equip[aa]).width(80.0F).align(Align.right).row();
+			ovtbl.add(equip[aa]).width(80.0F).align(Align.right).row();
 			aa++;
 		}
 
-		Gui.exitToMenuBtn.setVisible(false);
+		exitToMenuBtn.setVisible(false);
 
-		TextButton respawnButton = new TextButton("Respawn", Gui.skin);
+		TextButton respawnButton = new TextButton("Respawn", skin);
 		Table tab = new Table();
-		dieLabel = new Label("", Gui.skin);
+		dieLabel = new Label("", skin);
 		dieLabel.setAlignment(Align.center);
 		tab.add(dieLabel).width(500.0F);
 		tab.row();
-		tab.add(new Label("", Gui.skin)).width(500.0F);
+		tab.add(new Label("", skin)).width(500.0F);
 		tab.row();
 		tab.add(respawnButton).width(500.0F).row();
-		Gui.dead = new Stage();
-		Gui.dead.addActor(darkness);
+		dead = new Stage();
+		dead.addActor(darkness);
 		tab.setFillParent(true);
-		Gui.dead.addActor(tab);
+		dead.addActor(tab);
 
 		getVersion();
 
 		Table menuTbl = new Table();
 		menuTbl.setFillParent(true);
 		menuTbl.setBackground(darkBackground);
-		menuTbl.add(new Label("MadSand: Fallen. Rise From Dust\n", Gui.skin));
+		menuTbl.add(new Label("MadSand: Fallen. Rise From Dust\n", skin));
 		menuTbl.row();
 		menuTbl.add(resumeBtn).width(DEFWIDTH);
 		menuTbl.row();
@@ -1017,7 +1013,7 @@ public class Gui {
 		menuTbl.add(exitBtn).width(DEFWIDTH);
 		menuTbl.row();
 		menuTbl.add(verlbl).width(DEFWIDTH);
-		Gui.menu.addActor(menuTbl);
+		menu.addActor(menuTbl);
 
 		respawnButton.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
@@ -1052,7 +1048,7 @@ public class Gui {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				Gdx.graphics.setContinuousRendering(false);
 				MadSand.state = GameState.GAME;
-				Gdx.input.setInputProcessor(Gui.overlay);
+				Gdx.input.setInputProcessor(overlay);
 			}
 
 		});
@@ -1068,15 +1064,15 @@ public class Gui {
 		craftBtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				refreshCraftMenu();
-				Gui.craft.setScrollFocus(Gui.scroll);
-				MadSand.switchStage(GameState.CRAFT, Gui.craft);
+				craft.setScrollFocus(scroll);
+				MadSand.switchStage(GameState.CRAFT, craft);
 			}
 		});
 
 		exitToMenuBtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				Gui.resumeBtn.setVisible(true);
-				MadSand.switchStage(GameState.NMENU, Gui.menu);
+				resumeBtn.setVisible(true);
+				MadSand.switchStage(GameState.NMENU, menu);
 			}
 		});
 
@@ -1141,7 +1137,7 @@ public class Gui {
 		}
 
 		actionTbl.removeActor(interactBtn);
-		interactBtn = new TextButton("", Gui.skin);
+		interactBtn = new TextButton("", skin);
 		actionTbl.add(interactBtn).width(DEFWIDTH).row();
 		actionTbl.addListener(inGameBtnListener);
 

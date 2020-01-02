@@ -221,6 +221,8 @@ public class World {
 		case RIGHT:
 			player.x = 0;
 			break;
+		default:
+			Utils.die("Can't switch location in dialonal direction, bruh");
 		}
 		player.updCoords();
 		updateLight();

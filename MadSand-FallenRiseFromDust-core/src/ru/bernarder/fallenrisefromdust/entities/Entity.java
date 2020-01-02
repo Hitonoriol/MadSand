@@ -1,5 +1,6 @@
 package ru.bernarder.fallenrisefromdust.entities;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import ru.bernarder.fallenrisefromdust.Gui;
 import ru.bernarder.fallenrisefromdust.MadSand;
+import ru.bernarder.fallenrisefromdust.containers.Line;
 import ru.bernarder.fallenrisefromdust.containers.Pair;
 import ru.bernarder.fallenrisefromdust.containers.PairFloat;
 import ru.bernarder.fallenrisefromdust.entities.inventory.Inventory;
@@ -328,21 +330,23 @@ public abstract class Entity {
 	}
 
 	public boolean move(Direction dir) {
+		if (dir.isDiagonal())
+			return false;
 		if ((!colliding(dir))) {
-			boolean onm = !isOnMapBound(dir);
-			if ((dir == Direction.UP) && (onm)) {
+			boolean canMove = !isOnMapBound(dir);
+			if ((dir == Direction.UP) && (canMove)) {
 				++y;
 				globalPos.y += MadSand.TILESIZE;
 			}
-			if ((dir == Direction.DOWN) && (onm)) {
+			if ((dir == Direction.DOWN) && (canMove)) {
 				--y;
 				globalPos.y -= MadSand.TILESIZE;
 			}
-			if ((dir == Direction.LEFT) && (onm)) {
+			if ((dir == Direction.LEFT) && (canMove)) {
 				--x;
 				globalPos.x -= MadSand.TILESIZE;
 			}
-			if ((dir == Direction.RIGHT) && (onm)) {
+			if ((dir == Direction.RIGHT) && (canMove)) {
 				++x;
 				globalPos.x += MadSand.TILESIZE;
 			}
@@ -362,7 +366,7 @@ public abstract class Entity {
 
 	public void turn(Direction dir) {
 		stats.look = dir;
-		if (!stepping) {
+		if (!stepping && dir.isBase()) {
 			if (dir == Direction.UP) {
 				sprite = upSpr;
 			}
@@ -379,6 +383,8 @@ public abstract class Entity {
 	}
 
 	boolean walk(Direction dir) {
+		if (dir.isDiagonal())
+			return false;
 		if (stepping)
 			return false;
 		stats.look = dir;
@@ -398,6 +404,23 @@ public abstract class Entity {
 		return (int) MadSand.calcDistance(x, y, entity.x, entity.y);
 	}
 	
+	public boolean canSee(Entity entity) {
+		int dist = distanceTo(entity);
+		Map loc = MadSand.world.getCurLoc();
+		boolean viewObstructed = false;
+
+		for (Point p : new Line(x, y, entity.x, entity.y))
+			if (loc.getObject(p.x, p.y) != Map.nullObject) {
+				viewObstructed = true;
+				break;
+			}
+
+		if ((dist <= fov) && !viewObstructed)
+			return true;
+
+		return false;
+	}
+
 	private String HEALTH_STATE_FULL = "full";
 	private String HEALTH_STATE_75 = "couple of scratches";
 	private String HEALTH_STATE_50 = "slightly damaged";

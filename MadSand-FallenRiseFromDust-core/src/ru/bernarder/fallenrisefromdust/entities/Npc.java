@@ -31,7 +31,7 @@ public class Npc extends Entity {
 	private boolean pauseFlag = false;
 
 	public int attackDistance = 1;
-	public boolean playerSpotted = false;
+	public boolean enemySpotted = false;
 
 	public NpcState state = NpcState.Idle;
 	public NpcType type = NpcType.Regular;
@@ -166,10 +166,13 @@ public class Npc extends Entity {
 			int dist = distanceTo(player);
 			Utils.out("Distance to player: " + dist);
 
-			if (dist <= fov)
-				playerSpotted = true;
+			if (!enemySpotted && canSee(player))
+				enemySpotted = true;
 
-			if (!playerSpotted)
+			if (enemySpotted && dist > fov)
+				enemySpotted = false;
+
+			if (!enemySpotted)
 				return;
 
 			int dx = player.x - x;

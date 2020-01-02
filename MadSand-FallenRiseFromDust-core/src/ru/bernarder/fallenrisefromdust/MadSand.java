@@ -102,7 +102,6 @@ public class MadSand extends Game {
 	static OrthographicCamera camera;
 
 	private float elapsedTime;
-	static boolean charcrt = false;;
 	public static GameState state = GameState.LAUNCHER;
 	public static int wmx = 0;
 	public static int wmy = 0;
@@ -401,7 +400,7 @@ public class MadSand extends Game {
 			camera.unproject(mouseinworld);
 			Gdx.input.setInputProcessor(Gui.overlay);
 			Utils.checkConsoleFocus();
-			if (Gui.overlay.getKeyboardFocus() != Gui.inputField && !charcrt && !Gui.gameUnfocused) {
+			if (Gui.overlay.getKeyboardFocus() != Gui.inputField && !Gui.gameUnfocused) {
 				Utils.updMouseCoords();
 				Utils.mouseMovement();
 				Utils.gameKeyCheck();

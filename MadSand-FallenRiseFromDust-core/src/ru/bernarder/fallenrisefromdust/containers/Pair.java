@@ -40,14 +40,34 @@ public class Pair {
 	}
 
 	public static Pair directionToCoord(Direction arg) {
-		if (arg.equals(Direction.UP))
-			return new Pair(0, 1);
-		else if (arg.equals(Direction.DOWN))
-			return new Pair(0, -1);
-		else if (arg.equals(Direction.LEFT))
-			return new Pair(-1, 0);
-		else
-			return new Pair(1, 0);
+		Pair ret = new Pair(0, 0);
+		switch (arg) {
+		case UP:
+			ret = new Pair(0, 1);
+			break;
+		case DOWN:
+			ret = new Pair(0, -1);
+			break;
+		case LEFT:
+			ret = new Pair(-1, 0);
+			break;
+		case RIGHT:
+			ret = new Pair(1, 0);
+			break;
+		case UP_LEFT:
+			ret = new Pair(-1, 1);
+			break;
+		case UP_RIGHT:
+			ret = new Pair(1, 1);
+			break;
+		case DOWN_LEFT:
+			ret = new Pair(-1, -1);
+			break;
+		case DOWN_RIGHT:
+			ret = new Pair(1, -1);
+			break;
+		}
+		return ret;
 	}
 
 	public Direction toDirection() {
