@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
 import ru.bernarder.fallenrisefromdust.Gui;
 import ru.bernarder.fallenrisefromdust.MadSand;
+import ru.bernarder.fallenrisefromdust.Mouse;
 import ru.bernarder.fallenrisefromdust.Resources;
 import ru.bernarder.fallenrisefromdust.Utils;
 import ru.bernarder.fallenrisefromdust.enums.ItemType;
@@ -153,10 +154,10 @@ public class InventoryUICell {
 			public void clicked(InputEvent event, float x, float y) {
 				if (!invCellContextContainer.isVisible() && !Gui.gameUnfocused) {
 					invCellContextContainer.setVisible(true);
-					MadSand.mx = Gdx.input.getX();
-					MadSand.my = Gdx.graphics.getHeight() - Gdx.input.getY();
-					invCellContextContainer.setPosition(MadSand.mx + CONTEXT_BTN_WIDTH / CONTEXT_W_DENOMINATOR,
-							MadSand.my);
+					Mouse.x = Gdx.input.getX();
+					Mouse.y = Gdx.graphics.getHeight() - Gdx.input.getY();
+					invCellContextContainer.setPosition(Mouse.x + CONTEXT_BTN_WIDTH / CONTEXT_W_DENOMINATOR,
+							Mouse.y);
 					Gui.gameUnfocused = true;
 				} else {
 					invCellContextContainer.setVisible(false);

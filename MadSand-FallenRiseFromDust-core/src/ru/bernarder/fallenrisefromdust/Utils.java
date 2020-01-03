@@ -5,18 +5,11 @@ import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 import ru.bernarder.fallenrisefromdust.entities.Npc;
-import ru.bernarder.fallenrisefromdust.entities.Player;
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
-import ru.bernarder.fallenrisefromdust.map.Map;
-import ru.bernarder.fallenrisefromdust.map.MapObject;
-import ru.bernarder.fallenrisefromdust.map.Tile;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
-import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
-import ru.bernarder.fallenrisefromdust.properties.TileProp;
 import ru.bernarder.fallenrisefromdust.world.World;
 
 import java.text.SimpleDateFormat;
@@ -110,7 +103,7 @@ public class Utils {
 			Gui.overlay.setKeyboardFocus(Gui.inputField);
 		}
 		if (Gdx.input.isButtonPressed(Buttons.MIDDLE))
-			World.player.lookAtMouse(MadSand.wmx, MadSand.wmy);
+			World.player.lookAtMouse(Mouse.wx, Mouse.wy);
 		if (Gdx.input.isKeyJustPressed(Keys.Q))
 			Gui.showStatsWindow();
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER))
@@ -160,7 +153,7 @@ public class Utils {
 		}
 
 		if ((Gdx.input.isKeyJustPressed(Keys.Y)) && (debugMode)) {
-			World.player.teleport(MadSand.wmx, MadSand.wmy);
+			World.player.teleport(Mouse.wx, Mouse.wy);
 		}
 		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.R)) && (debugMode)) {
 			MadSand.world.generate();
@@ -217,14 +210,6 @@ public class Utils {
 		}
 	}
 
-	static void mouseMovement() {
-		if ((Gdx.input.isButtonPressed(Buttons.LEFT)) && (MadSand.state == GameState.GAME)
-				&& (!World.player.isStepping()) && (!Gui.gameUnfocused)) {
-			World.player.lookAtMouse(MadSand.wmx, MadSand.wmy);
-			World.player.walk(World.player.stats.look);
-		}
-	}
-
 	public static int rand(int min, int max) {
 		return Utils.random.nextInt((max - min) + 1) + min;
 	}
@@ -234,58 +219,6 @@ public class Utils {
 		MadSand.state = GameState.GOT;
 		MadSand.world.switchLocation(dir);
 		MadSand.state = GameState.GAME;
-	}
-
-	public static void updMouseCoords() {
-		MadSand.mx = Gdx.input.getX();
-		MadSand.my = Gdx.graphics.getHeight() - Gdx.input.getY();
-
-		MadSand.wmx = (int) Math.floor(MadSand.mouseinworld.x / MadSand.TILESIZE);
-		MadSand.wmy = (int) Math.floor(MadSand.mouseinworld.y / MadSand.TILESIZE);
-
-		if (Gui.gameUnfocused)
-			return;
-
-		Map loc = MadSand.world.getCurLoc();
-		Npc npc = loc.getNpc(MadSand.wmx, MadSand.wmy);
-		Tile tile = loc.getTile(MadSand.wmx, MadSand.wmy);
-		MapObject object = loc.getObject(MadSand.wmx, MadSand.wmy);
-		Player player = World.player;
-		String info = "";
-
-		Gui.mousemenu.addAction(Actions.moveTo(MadSand.mx + 65, MadSand.my - 70, 0.1F));
-
-		info += ("Looking at (" + MadSand.wmx + ", " + MadSand.wmy + ")") + Gui.LINEBREAK;
-
-		if (MadSand.wmx == player.x && MadSand.wmy == player.y) {
-			info += "You look at yourself" + Gui.LINEBREAK;
-			info += player.getInfoString();
-		}
-
-		if (!tile.visible) {
-			info += "You can't see anything there" + Gui.LINEBREAK;
-			Gui.mouselabel.setText(info);
-			return;
-		}
-
-		info += ("Tile: " + TileProp.name.get(tile.id)) + Gui.LINEBREAK;
-
-		if (object != Map.nullObject)
-			info += ("Object: " + ObjectProp.name.get(object.id)) + Gui.LINEBREAK;
-		if (npc != Map.nullNpc) {
-			info += ("You look at " + " " + npc.stats.name) + Gui.LINEBREAK;
-			if (World.player.knowsNpc(npc.id)) {
-				info += npc.getInfoString();
-			}
-		}
-
-		/*
-		 * if (debugMode) info += ("Global ticks: " + MadSand.world.globalTick +
-		 * "\nWorld time: " + MadSand.world.worldtime + "\nPlayer position: (" +
-		 * World.player.x + ", " + World.player.y + ")");
-		 */
-
-		Gui.mouselabel.setText(info);
 	}
 
 	public static void out(String arg) {

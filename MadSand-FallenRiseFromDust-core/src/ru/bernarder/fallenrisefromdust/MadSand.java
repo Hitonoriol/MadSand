@@ -5,10 +5,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ru.bernarder.fallenrisefromdust.containers.Line;
 import ru.bernarder.fallenrisefromdust.containers.PairFloat;
 import ru.bernarder.fallenrisefromdust.entities.Entity;
 import ru.bernarder.fallenrisefromdust.entities.Npc;
@@ -26,15 +26,6 @@ import java.io.PrintStream;
 
 public class MadSand extends Game {
 	public static String VER = "";
-
-	static Vector3 mouseinworld = new Vector3(0.0F, 0.0F, 0.0F);
-	static int wclickx = 0;
-	static int wclicky = 0;
-
-	public static boolean dialogClosed = true;
-
-	public static int mx = 0;
-	public static int my = 0;
 
 	static final int OBJECT_LOOT = 7;
 	public static final int TILESIZE = 33;
@@ -62,70 +53,37 @@ public class MadSand extends Game {
 	static final String WORLDFILE = "/World" + SAVE_EXT;
 	static final String ERRFILE = "MadSandCritical.log";
 
-	static int numlook = 0;
-
 	static final int XDEF = 1280;
 	static final int YDEF = 720;
-	static float GUISTART = 20.0F;
-	static boolean renderc = false;
 
 	static String WORLDNAME = "";
 
-	public static int[] craftableid;
-	public static int CRAFTABLES = 0;
-	public static int LASTITEMID;
-	public static int LASTOBJID;
-	public static int NPCSPRITES;
-	public static int LASTTILEID;
-	public static int OREFIELDCOUNT;
-	public static int BIOMES;
-	public static int MAXMOBSONMAP = 35;
-	static int QUESTS = 0;
-
-	public static final int GUILABELS = 4;
-	public static int ENCOUNTERCHANCE = 10;
-	public static int[] COSMETICSPRITES = { 17 };
-	public static int SEED = 100;
-	static int SPEED = 100;
 	static final float DEFAULT_ZOOM = 1.5F;
 	static float ZOOM = DEFAULT_ZOOM;
 	static final int DEFAULT_FOV = 12;
 
-	static final String FONT_CHARS = "АБВГДЕЁЖЗИЙКЛМНОПРСТФХЦЧШЩЪЬЫЭЮЯабвгдеёжзийклмнопрстфхцчшщыъьэюяabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"'<>";
-	static final String FONT_PATH = "fonts/8bitoperator.ttf";
+	static boolean justStarted = true; // flag for once-per-launch actions
 
-	static boolean justStarted = true; // flag for some once-per-launch actions
-	static int rendered = 2;
-	float percent = 0.0F;
-
-	public static float[][] rawWorld;
 	static OrthographicCamera camera;
-
-	private float elapsedTime;
-	public static GameState state = GameState.LAUNCHER;
-	public static int wmx = 0;
-	public static int wmy = 0;
 	public static int camxoffset = 17;
 	public static int camyoffset = 37;
-	public static int OREFIELDS = 10;
-	public static int OVERWORLD = 1;
-	public static int UNDERWORLD = 0;
-	public static int MAXSAVESLOTS = 999;
-	public static int CROPS;
+	private float elapsedTime;// For player animation
 
-	private static PairFloat[] renderArea;
+	public static GameState state = GameState.LAUNCHER;
+	public static int MAXSAVESLOTS = 999;
 	public static ObjectMapper mapper = new ObjectMapper();
 
 	public static World world;
 
+	private static PairFloat[] renderArea;
 	private static final int TEST_POINT = 50;
 
 	static float ymid;
 	static float xmid = ymid = TILESIZE * (World.MAPSIZE / 2);
 	static float ymenu;
 	static float xmenu = ymenu = xmid;
-	static float menuXStep = 0.8f, menuYStep = 0f;
-	static float menuOffset = 250;
+	private static float menuXStep = 0.8f, menuYStep = 0f;
+	private static float menuOffset = 250;
 
 	static void switchStage(GameState state, Stage stage) {
 
@@ -179,7 +137,7 @@ public class MadSand extends Game {
 		int ii = 0, cl = 0;
 		while (i < World.MAPSIZE + World.BORDER) {
 			while (ii < World.MAPSIZE + World.BORDER) {
-				if (calcDistance(TEST_POINT * TILESIZE, TEST_POINT * TILESIZE, i * TILESIZE,
+				if (Line.calcDistance(TEST_POINT * TILESIZE, TEST_POINT * TILESIZE, i * TILESIZE,
 						ii * TILESIZE) <= renderradius) {
 					cl++;
 				}
@@ -196,7 +154,7 @@ public class MadSand extends Game {
 		int ii = 0, clc = 0;
 		while (i < World.MAPSIZE + World.BORDER) {
 			while (ii < World.MAPSIZE + World.BORDER) {
-				if (calcDistance(TEST_POINT * TILESIZE, TEST_POINT * TILESIZE, i * TILESIZE,
+				if (Line.calcDistance(TEST_POINT * TILESIZE, TEST_POINT * TILESIZE, i * TILESIZE,
 						ii * TILESIZE) <= renderradius) {
 					cl[clc] = new PairFloat(TEST_POINT - ii, TEST_POINT - i);
 					clc++;
@@ -226,13 +184,9 @@ public class MadSand extends Game {
 		camera.viewportHeight = (Gdx.graphics.getHeight() / ZOOM);
 		camera.update();
 
-		mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
-		camera.unproject(mouseinworld);
+		Mouse.mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
+		camera.unproject(Mouse.mouseinworld);
 		Utils.batch.setProjectionMatrix(camera.combined);
-	}
-
-	public static double calcDistance(int x1, int y1, int x2, int y2) {
-		return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 	}
 
 	void drawGame() {
@@ -281,7 +235,7 @@ public class MadSand extends Game {
 			drawEntity(player);
 
 		if (!Gui.gameUnfocused)
-			Utils.batch.draw(Resources.mapcursor, wmx * TILESIZE, wmy * TILESIZE);
+			Utils.batch.draw(Resources.mapcursor, Mouse.wx * TILESIZE, Mouse.wy * TILESIZE);
 		Utils.batch.end();
 		Gui.refreshOverlay();
 		Utils.batch.begin();
@@ -396,13 +350,13 @@ public class MadSand extends Game {
 			if (justStarted) {
 				justStarted = false;
 			}
-			mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
-			camera.unproject(mouseinworld);
+			Mouse.mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
+			camera.unproject(Mouse.mouseinworld);
 			Gdx.input.setInputProcessor(Gui.overlay);
 			Utils.checkConsoleFocus();
 			if (Gui.overlay.getKeyboardFocus() != Gui.inputField && !Gui.gameUnfocused) {
-				Utils.updMouseCoords();
-				Utils.mouseMovement();
+				Mouse.updCoords();
+				Mouse.mouseClickAction();
 				Utils.gameKeyCheck();
 				World.player.pickUpLoot();
 				Utils.invKeyCheck();
@@ -421,7 +375,7 @@ public class MadSand extends Game {
 				Utils.batch.begin();
 				drawGame();
 				Utils.batch.end();
-				mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
+				Mouse.mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
 				Utils.invKeyCheck();
 
 				Gui.overlay.act();

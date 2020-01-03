@@ -8,6 +8,7 @@ import ru.bernarder.fallenrisefromdust.dialog.GameDialog;
 import ru.bernarder.fallenrisefromdust.entities.Npc;
 import ru.bernarder.fallenrisefromdust.map.MapObject;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
+import ru.bernarder.fallenrisefromdust.properties.Tutorial;
 import ru.bernarder.fallenrisefromdust.world.World;
 
 import java.util.StringTokenizer;
@@ -56,7 +57,7 @@ public class BuildScript {
 				DAMAGE_OBJECT = "damage_object", PLAYER_HEAL = "player_heal", PLAYER_SATIATE = "player_satiate",
 				PLAYER_REMOVE_ITEM = "player_remove_item", PLAYER_HAND_SET = "player_hand_set",
 				PLAYER_KILL = "player_kill", NPC_SPAWN = "npc_spawn", CHAIN_DIALOG = "chain_dialog",
-				DUNGEON_DESCEND = "dungeon_descend", DUNGEON_ASCEND = "dungeon_ascend";
+				DUNGEON_DESCEND = "dungeon_descend", DUNGEON_ASCEND = "dungeon_ascend", TUTORIAL_SHOW = "tutorial_show";
 	}
 
 	public static void bLine(int x, int y, int dir, int id, int len, int head) {
@@ -341,6 +342,10 @@ public class BuildScript {
 				if (command == Token.CHAIN_DIALOG) {
 					String text = line.substring(command.length());
 					GameDialog.generateDialogChain(text, Gui.overlay).show();
+					continue;
+				} else if (command == Token.TUTORIAL_SHOW) {
+					String name = line.substring(command.length()).trim();
+					GameDialog.generateDialogChain(Tutorial.strings.get(name), Gui.overlay).show();
 					continue;
 				}
 

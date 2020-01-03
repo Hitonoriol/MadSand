@@ -401,7 +401,7 @@ public abstract class Entity {
 	}
 
 	int distanceTo(Entity entity) {
-		return (int) MadSand.calcDistance(x, y, entity.x, entity.y);
+		return (int) Line.calcDistance(x, y, entity.x, entity.y);
 	}
 	
 	public boolean canSee(Entity entity) {

@@ -61,4 +61,8 @@ public class Line implements Iterable<Point>{
 	public Iterator<Point> iterator() {
 		return points.iterator();
 	}
+
+	public static double calcDistance(int x1, int y1, int x2, int y2) {
+		return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+	}
 }

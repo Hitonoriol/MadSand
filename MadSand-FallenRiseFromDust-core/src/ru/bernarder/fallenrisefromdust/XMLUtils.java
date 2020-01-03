@@ -69,6 +69,10 @@ public class XMLUtils {
 		return getKey(doc, list, id, element, "-1");
 	}
 
+	static String getKey(Document doc, String list, int id, String element) {
+		return getKey(doc, list, Utils.str(id), element, "-1");
+	}
+
 	static String getAttr(Document doc, String list, String id, String attr) {
 		try {
 			doc.getDocumentElement().normalize();
@@ -147,7 +151,7 @@ public class XMLUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
-	
+
 		}
 		return null;
 	}

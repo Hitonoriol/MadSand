@@ -12,6 +12,7 @@ import com.github.czyzby.noise4j.map.generator.util.Generators;
 
 import ru.bernarder.fallenrisefromdust.GameSaver;
 import ru.bernarder.fallenrisefromdust.MadSand;
+import ru.bernarder.fallenrisefromdust.Resources;
 import ru.bernarder.fallenrisefromdust.Utils;
 import ru.bernarder.fallenrisefromdust.containers.Pair;
 import ru.bernarder.fallenrisefromdust.entities.Npc;
@@ -66,7 +67,7 @@ public class World {
 	}
 
 	int randBiome() {
-		return Utils.random.nextInt(MadSand.BIOMES - 1); // Biome numbers start from -1
+		return Utils.random.nextInt(Resources.BIOMES - 1); // Biome numbers start from -1
 	}
 
 	HashMap<MapID, Map> _getLoc(int wx, int wy, int layer) {
@@ -519,7 +520,7 @@ public class World {
 	public int getTileOrDefault(int x, int y) {
 		if (x >= 0 && y >= 0 && x < getCurLoc().getWidth() && y < getCurLoc().getHeight()) {
 			int tile = getCurLoc().getTile(x, y).id;
-			if (tile >= 0 && tile <= MadSand.LASTTILEID)
+			if (tile >= 0 && tile <= Resources.LASTTILEID)
 				return tile;
 			else
 				return getDefaultTile();

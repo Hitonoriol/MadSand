@@ -243,6 +243,10 @@ public class Player extends Entity {
 		return QuestList.NO_QUESTS_STATUS;
 	}
 
+	public void interact() {
+		interact(stats.look);
+	}
+
 	public void interact(Npc npc) {
 		String name = npc.stats.name;
 		Gui.closeGameContextMenu();
@@ -435,7 +439,7 @@ public class Player extends Entity {
 		updCoords();
 	}
 
-	public Direction lookAtMouse(int x, int y) {
+	public Direction lookAtMouse(int x, int y, boolean diagonal) {
 		Direction dir;
 
 		if (x > this.x)
@@ -447,8 +451,27 @@ public class Player extends Entity {
 		else
 			dir = Direction.DOWN;
 
-		turn(dir);
+		if (diagonal) {
+			if (dir == Direction.RIGHT && y > this.y)
+				dir = Direction.UP_RIGHT;
+
+			if (dir == Direction.RIGHT && y < this.y)
+				dir = Direction.DOWN_RIGHT;
+
+			if (dir == Direction.LEFT && y > this.y)
+				dir = Direction.UP_LEFT;
+
+			if (dir == Direction.LEFT && y < this.y)
+				dir = Direction.DOWN_LEFT;
+		}
+
+		if (stats.look != dir)
+			turn(dir);
 		return dir;
+	}
+
+	public Direction lookAtMouse(int x, int y) {
+		return lookAtMouse(x, y, false);
 	}
 
 	@Override
@@ -459,8 +482,6 @@ public class Player extends Entity {
 
 	@Override
 	public boolean move(Direction dir) {
-		if (!MadSand.dialogClosed)
-			return false;
 		if (!super.move(dir))
 			return false;
 		if (isMain && (MadSand.world.curlayer == World.LAYER_OVERWORLD)
@@ -474,8 +495,10 @@ public class Player extends Entity {
 	@Override
 	public boolean rest() {
 		boolean ret = super.rest();
+		MadSand.world.ticks(1);
+		MadSand.print("You rest for 1 turn");
 		if (ret)
-			MadSand.world.ticks(1);
+			MadSand.print("You feel well-rested");
 		return ret;
 	}
 

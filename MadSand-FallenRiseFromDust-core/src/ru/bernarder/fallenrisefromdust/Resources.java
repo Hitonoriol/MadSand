@@ -73,6 +73,16 @@ public class Resources {
 	public static Sprite playerUpSpr;
 	public static Sprite playerDownSpr;
 
+	public static int CRAFTABLES;
+	public static int LASTITEMID;
+	public static int LASTOBJID;
+	public static int NPCSPRITES;
+	public static int LASTTILEID;
+	public static int BIOMES;
+	public static int QUESTS;
+	public static int CROPS;
+	public static int[] craftableid;
+
 	static final String XML_QUEST_NODE = "quest";
 	static final String XML_ITEM_NODE = "item";
 	static final String XML_CROP_STAGES_NODE = "stages";
@@ -81,6 +91,20 @@ public class Resources {
 	static final String XML_NPC_NODE = "npc";
 	static final String XML_RECIPE_NODE = "recipe";
 	static final String XML_BIOME_NODE = "biome";
+	static final String XML_TUTORIAL_NODE = "tip";
+
+	static final String XML_TUTORIAL_NAME = "name";
+	static final String XML_TUTORIAL_TEXT = "text";
+
+	static final String XML_QUEST_START_MSG = "start";
+	static final String XML_QUEST_COMPLETE_MSG = "complete";
+	static final String XML_QUEST_REQUIREMENT_MSG = "requirement_str";
+	static final String XML_QUEST_REQUIRED_ITEMS = "requirement";
+	static final String XML_QUEST_ITEMS_GIVE_ON_START = "give_items";
+	static final String XML_QUEST_ITEMS_REMOVE_ON_COMPLETION = "remove_on_completion";
+	static final String XML_QUEST_IS_REPEATABLE = "repeatable";
+	static final String XML_QUEST_REWARD_ITEMS = "reward";
+	static final String XML_QUEST_REWARD_EXP = "reward_exp";
 
 	public static void init() {
 		Utils.out("Loading resources...");
@@ -115,34 +139,34 @@ public class Resources {
 		Cursor mouseCursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.local(MadSand.SAVEDIR + "cursor.png")), 0, 0);
 		Gdx.graphics.setCursor(mouseCursor);
 
-		MadSand.QUESTS = XMLUtils.countKeys(questdoc, XML_QUEST_NODE);
-		Utils.out(MadSand.QUESTS + " quests");
+		Resources.QUESTS = XMLUtils.countKeys(questdoc, XML_QUEST_NODE);
+		Utils.out(Resources.QUESTS + " quests");
 
-		MadSand.LASTITEMID = XMLUtils.countKeys(itemDoc, XML_ITEM_NODE);
-		MadSand.CROPS = XMLUtils.countKeys(itemDoc, XML_CROP_STAGES_NODE);
+		Resources.LASTITEMID = XMLUtils.countKeys(itemDoc, XML_ITEM_NODE);
+		Resources.CROPS = XMLUtils.countKeys(itemDoc, XML_CROP_STAGES_NODE);
 
-		Utils.out(MadSand.CROPS + " crops");
+		Utils.out(Resources.CROPS + " crops");
 
-		MadSand.LASTOBJID = XMLUtils.countKeys(objectDoc, XML_OBJECT_NODE);
+		Resources.LASTOBJID = XMLUtils.countKeys(objectDoc, XML_OBJECT_NODE);
 
-		Utils.out(MadSand.LASTOBJID + " objects");
+		Utils.out(Resources.LASTOBJID + " objects");
 
-		MadSand.LASTTILEID = XMLUtils.countKeys(tileDoc, XML_TILE_NODE);
-		MadSand.NPCSPRITES = XMLUtils.countKeys(npcDoc, XML_NPC_NODE);
-		MadSand.CRAFTABLES = XMLUtils.countKeys(itemDoc, XML_RECIPE_NODE);
-		MadSand.BIOMES = XMLUtils.countKeys(gendoc, XML_BIOME_NODE);
+		Resources.LASTTILEID = XMLUtils.countKeys(tileDoc, XML_TILE_NODE);
+		Resources.NPCSPRITES = XMLUtils.countKeys(npcDoc, XML_NPC_NODE);
+		Resources.CRAFTABLES = XMLUtils.countKeys(itemDoc, XML_RECIPE_NODE);
+		Resources.BIOMES = XMLUtils.countKeys(gendoc, XML_BIOME_NODE);
 
-		Utils.out(MadSand.BIOMES + " biomes");
-		Utils.out(MadSand.CRAFTABLES + " craftable items");
-		Utils.out(MadSand.LASTTILEID + " tiles");
-		Utils.out(MadSand.NPCSPRITES + " npcs");
+		Utils.out(Resources.BIOMES + " biomes");
+		Utils.out(Resources.CRAFTABLES + " craftable items");
+		Utils.out(Resources.LASTTILEID + " tiles");
+		Utils.out(Resources.NPCSPRITES + " npcs");
 
-		MadSand.craftableid = new int[MadSand.CRAFTABLES];
+		Resources.craftableid = new int[Resources.CRAFTABLES];
 
-		item = new Texture[MadSand.LASTITEMID + 1];
-		objects = new Texture[MadSand.LASTOBJID];
-		tile = new Texture[MadSand.LASTTILEID + 1];
-		npc = new Texture[MadSand.NPCSPRITES + 1];
+		item = new Texture[Resources.LASTITEMID + 1];
+		objects = new Texture[Resources.LASTOBJID];
+		tile = new Texture[Resources.LASTTILEID + 1];
+		npc = new Texture[Resources.NPCSPRITES + 1];
 
 		loadWorldGen();
 		loadItems();
@@ -165,11 +189,11 @@ public class Resources {
 	private static void loadTutorial() {
 		int i = 0;
 		String si, name, text;
-		int tips = XMLUtils.countKeys(tutorialdoc, "tip");
+		int tips = XMLUtils.countKeys(tutorialdoc, XML_TUTORIAL_NODE);
 		while (i < tips) {
 			si = Utils.str(i);
-			name = XMLUtils.getKey(tutorialdoc, "tip", si, "name");
-			text = XMLUtils.getKey(tutorialdoc, "tip", si, "text");
+			name = XMLUtils.getKey(tutorialdoc, XML_TUTORIAL_NODE, si, XML_TUTORIAL_NAME);
+			text = XMLUtils.getKey(tutorialdoc, XML_TUTORIAL_NODE, si, XML_TUTORIAL_TEXT);
 			Tutorial.strings.put(name, text);
 			++i;
 		}
@@ -177,21 +201,20 @@ public class Resources {
 
 	private static void loadQuests() {
 		int i = 0;
-		String si;
 		Quest quest;
-		while (i < MadSand.QUESTS) {
+		while (i < Resources.QUESTS) {
 			quest = new Quest(i);
-			si = Utils.str(i);
-			quest.startMsg = XMLUtils.getKey(questdoc, XML_QUEST_NODE, si, "start");
-			quest.endMsg = XMLUtils.getKey(questdoc, XML_QUEST_NODE, si, "complete");
-			quest.reqMsg = XMLUtils.getKey(questdoc, XML_QUEST_NODE, si, "requirement_str");
-			quest.reqItems = XMLUtils.getKey(questdoc, XML_QUEST_NODE, si, "requirement");
-			quest.giveItems = XMLUtils.getKey(questdoc, XML_QUEST_NODE, si, "give_items");
-			quest.removeOnCompletion = XMLUtils.getKey(questdoc, XML_QUEST_NODE, si, "remove_on_completion");
-			quest.repeatable = Boolean.parseBoolean(XMLUtils.getKey(questdoc, XML_QUEST_NODE, si, "repeatable"));
-			quest.next = Utils.val(XMLUtils.getKey(questdoc, XML_QUEST_NODE, si, "next"));
-			quest.rewardItems = XMLUtils.getKey(questdoc, XML_QUEST_NODE, si, "reward");
-			quest.exp = Utils.val(XMLUtils.getKey(questdoc, XML_QUEST_NODE, si, "reward_exp"));
+			quest.startMsg = XMLUtils.getKey(questdoc, XML_QUEST_NODE, i, XML_QUEST_START_MSG);
+			quest.endMsg = XMLUtils.getKey(questdoc, XML_QUEST_NODE, i, XML_QUEST_COMPLETE_MSG);
+			quest.reqMsg = XMLUtils.getKey(questdoc, XML_QUEST_NODE, i, XML_QUEST_REQUIREMENT_MSG);
+			quest.reqItems = XMLUtils.getKey(questdoc, XML_QUEST_NODE, i, XML_QUEST_REQUIRED_ITEMS);
+			quest.giveItems = XMLUtils.getKey(questdoc, XML_QUEST_NODE, i, XML_QUEST_ITEMS_GIVE_ON_START);
+			quest.removeOnCompletion = XMLUtils.getKey(questdoc, XML_QUEST_NODE, i,
+					XML_QUEST_ITEMS_REMOVE_ON_COMPLETION);
+			quest.repeatable = Boolean
+					.parseBoolean(XMLUtils.getKey(questdoc, XML_QUEST_NODE, i, XML_QUEST_IS_REPEATABLE));
+			quest.rewardItems = XMLUtils.getKey(questdoc, XML_QUEST_NODE, i, XML_QUEST_REWARD_ITEMS);
+			quest.exp = Utils.val(XMLUtils.getKey(questdoc, XML_QUEST_NODE, i, XML_QUEST_REWARD_EXP));
 
 			QuestList.quests.put(i, quest);
 			++i;
@@ -201,7 +224,7 @@ public class Resources {
 	private static void loadNpcs() {
 		int i = 0;
 		String si, type;
-		while (i < MadSand.NPCSPRITES) {
+		while (i < Resources.NPCSPRITES) {
 			npc[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "npc/" + i + ".png"));
 			si = Utils.str(i);
 			NpcProp.hp.put(i, Utils.val(XMLUtils.getKey(npcDoc, XML_NPC_NODE, si, "hp")));
@@ -225,7 +248,7 @@ public class Resources {
 
 	private static void loadMapTiles() {
 		int i = 0;
-		while (i < MadSand.LASTTILEID) {
+		while (i < Resources.LASTTILEID) {
 			tile[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "terrain/" + i + ".png"));
 			TileProp.name.put(i, XMLUtils.getKey(tileDoc, XML_TILE_NODE, "" + i, "name"));
 			TileProp.cover.put(i, Utils.val(XMLUtils.getKey(tileDoc, XML_TILE_NODE, "" + i, "cover")));
@@ -239,7 +262,7 @@ public class Resources {
 	private static void loadMapObjects() {
 		String skill;
 		int i = 0;
-		while (i < MadSand.LASTOBJID) {
+		while (i < Resources.LASTOBJID) {
 			objects[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "obj/" + i + ".png"));
 			ObjectProp.name.put(i, XMLUtils.getKey(objectDoc, XML_OBJECT_NODE, Utils.str(i), "name"));
 			ObjectProp.hp.put(i, Integer.parseInt(XMLUtils.getKey(objectDoc, XML_OBJECT_NODE, Utils.str(i), "tough")));
@@ -271,10 +294,10 @@ public class Resources {
 		Vector<Integer> stages, slens;
 		ItemType type;
 		int i = 0, cc = 0;
-		while (i < MadSand.LASTITEMID) {
+		while (i < Resources.LASTITEMID) {
 			item[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "inv/" + i + ".png"));
 			if (!XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, XML_RECIPE_NODE).equals("-1")) {
-				MadSand.craftableid[cc] = i;
+				Resources.craftableid[cc] = i;
 				cc++;
 			}
 
@@ -346,7 +369,7 @@ public class Resources {
 		String defT, defO;
 		HashMap<String, Integer> vdungeon;
 		Utils.out("Initializing worldgen...");
-		while (i < MadSand.BIOMES) {
+		while (i < Resources.BIOMES) {
 			def = new Vector<Integer>();
 			lake = new HashMap<String, Integer>();
 

@@ -1,6 +1,7 @@
 package ru.bernarder.fallenrisefromdust;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -688,7 +689,7 @@ public class Gui {
 			}
 		}
 		int craftSz = player.craftRecipes.size();
-		Utils.out("Total unlocked recipes: " + craftSz + " out of " + MadSand.CRAFTABLES);
+		Utils.out("Total unlocked recipes: " + craftSz + " out of " + Resources.CRAFTABLES);
 
 		if (craftSz == 0) {
 			craftbl.add(new Label("You don't know any craft recipes.", skin));
@@ -818,7 +819,7 @@ public class Gui {
 		contextMenuBtn[0] = new TextButton("Interact", skin);
 		contextMenuBtn[0].addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				World.player.lookAtMouse(MadSand.wclickx, MadSand.wclicky);
+				World.player.lookAtMouse(Mouse.wclickx, Mouse.wclicky);
 				World.player.interact(World.player.stats.look);
 			}
 
@@ -842,14 +843,14 @@ public class Gui {
 		contextMenuBtn[1] = new TextButton("Attack", skin);
 		contextMenuBtn[1].addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				World.player.lookAtMouse(MadSand.wmx, MadSand.wmy);
+				World.player.lookAtMouse(Mouse.wx, Mouse.wy);
 				World.player.attack();
 			}
 		});
 		contextMenuBtn[2] = new TextButton("Turn", skin);
 		contextMenuBtn[2].addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				World.player.lookAtMouse(MadSand.wmx, MadSand.wmy);
+				World.player.lookAtMouse(Mouse.wx, Mouse.wy);
 			}
 		});
 
@@ -927,7 +928,8 @@ public class Gui {
 		overlay.addActor(logtbl);
 		overlay.addActor(mousemenu);
 		overlay.addActor(gamecontext);
-		overlay.addListener(new ClickListener(1) {
+		
+		overlay.addListener(new ClickListener(Buttons.RIGHT) {
 			public void clicked(InputEvent event, float x, float y) {
 				if (dialogActive)
 					return;
@@ -940,6 +942,12 @@ public class Gui {
 						gameUnfocused = false;
 					}
 				}
+			}
+		});
+		
+		overlay.addListener(new ClickListener(Buttons.LEFT) {
+			public void clicked(InputEvent event, float x, float y) {
+				Mouse.justClicked = true;
 			}
 		});
 		exitToMenuBtn = new TextButton("Exit to menu", skin);
@@ -1089,17 +1097,16 @@ public class Gui {
 	public static void openGameContextMenu() {
 		mousemenu.setVisible(false);
 		gamecontext.setVisible(true);
-		gamecontext.setPosition(MadSand.mx + 50, MadSand.my - 30);
-		MadSand.wclickx = MadSand.wmx;
-		MadSand.wclicky = MadSand.wmy;
+		gamecontext.setPosition(Mouse.x + 50, Mouse.y - 30);
+		Mouse.wclickx = Mouse.wx;
+		Mouse.wclicky = Mouse.wy;
 	}
 
 	static BitmapFont createFont(int size) {
 		BitmapFont font = new BitmapFont();
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(
-				Gdx.files.local(MadSand.SAVEDIR + MadSand.FONT_PATH));
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.local(MadSand.SAVEDIR + Gui.FONT_PATH));
 		FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
-		param.characters = MadSand.FONT_CHARS;
+		param.characters = Gui.FONT_CHARS;
 		param.size = size;
 		param.color = Color.WHITE;
 		param.borderWidth = 0.9f;
@@ -1159,5 +1166,8 @@ public class Gui {
 			actionTbl.setVisible(false);
 		}
 	}
+
+	static final String FONT_CHARS = "АБВГДЕЁЖЗИЙКЛМНОПРСТФХЦЧШЩЪЬЫЭЮЯабвгдеёжзийклмнопрстфхцчшщыъьэюяabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"'<>";
+	static final String FONT_PATH = "fonts/8bitoperator.ttf";
 
 }
