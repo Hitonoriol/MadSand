@@ -24,6 +24,9 @@ public class Item {
 	public int hp = -1;
 	public int id;
 	public int quantity;
+
+	public int satiationAmount, healAmount; // for consumables
+
 	int altobject, cost;
 	public ItemType type = ItemType.Item;
 	Skill skill = Skill.None;
@@ -83,6 +86,11 @@ public class Item {
 		if (type.isArmor() || type.isWeapon()) {
 			info += Gui.LINEBREAK;
 			info += equipStats.getString();
+		}
+		if (type == ItemType.Consumable) {
+			info += Gui.LINEBREAK;
+			info += "Satiation: " + satiationAmount + Gui.LINEBREAK;
+			info += "Health: " + healAmount;
 		}
 		return info;
 	}
@@ -154,6 +162,12 @@ public class Item {
 		this.hp = ItemProp.hp.get(id);
 		this.craftable = ItemProp.craftable.get(id);
 		this.skill = ItemProp.skill.get(id);
+
+		if (type == ItemType.Consumable) {
+			String con[] = heal.split(Item.BLOCK_DELIM);
+			healAmount = Utils.val(con[0]);
+			satiationAmount = Utils.val(con[1]);
+		}
 
 		if (weight <= 0)
 			weight = DEFAULT_WEIGHT;

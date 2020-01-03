@@ -2,13 +2,13 @@ package ru.bernarder.fallenrisefromdust.map;
 
 import java.util.Vector;
 
-import ru.bernarder.fallenrisefromdust.Utils;
 import ru.bernarder.fallenrisefromdust.entities.inventory.Inventory;
 import ru.bernarder.fallenrisefromdust.entities.inventory.Item;
 
 public class Loot {
 	int nodes = 0;
 	public Vector<Item> contents = new Vector<Item>();
+	private String lootStr;
 
 	public Loot(Item cont) {
 		add(cont);
@@ -18,14 +18,33 @@ public class Loot {
 		this(new Item());
 	}
 
-	public String getContents() {
+	public String getInfo() {
+		return lootStr;
+	}
+
+	public String getContents() { // parsable string in format <id>/<quantity>:<id>/<quantity>:...
 		String ret = "";
 		for (Item item : contents) {
-			ret += item.getString() + Item.BLOCK_DELIM;
+			if (item != Item.nullItem)
+				ret += item.getString() + Item.BLOCK_DELIM;
 		}
 		if (ret == "")
 			return Item.EMPTY_ITEM_STRING;
 		return ret;
+	}
+
+	private void genInfo() { // generates human-readable contents of loot cell
+		String ret = "";
+		int i = 0, sz = contents.size();
+		for (Item item : contents) {
+			ret += item.quantity + " " + item.name;
+			if (i < sz - 1)
+				ret += ", ";
+			else
+				ret += " ";
+			++i;
+		}
+		lootStr = ret;
 	}
 
 	boolean isEmpty() {
@@ -38,25 +57,30 @@ public class Loot {
 	public Loot remove(int idx) {
 		contents.remove(idx);
 		--nodes;
+		genInfo();
 		return this;
 	}
 
 	public Loot add(int id, int q) {
 		if (id == 0)
 			return Map.nullLoot;
-		++nodes;
-		Utils.out("Loot add " + id + " " + q + " Nodes: " + nodes);
-		contents.add(new Item(id, q));
-		return this;
+
+		return add(new Item(id, q));
 	}
 
 	public Loot add(Item item) {
-		return add(item.id, item.quantity);
+		if (item == Item.nullItem)
+			return Map.nullLoot;
+
+		contents.add(item);
+		++nodes;
+		genInfo();
+		return this;
 	}
 
 	public static int addLootQ(String temp, Inventory inventory, int x, int y, Map map) { // Don't look here
 		int i = 0;
-		if (temp.equals(Item.EMPTY_ITEM_STRING))
+		if (temp.equals(Item.EMPTY_ITEM_STRING) || temp.equals(Item.EMPTY_ITEM_STRING + Item.BLOCK_DELIM))
 			return -1;
 		if (temp.indexOf(Item.BLOCK_DELIM) == -1)
 			temp += Item.BLOCK_DELIM;

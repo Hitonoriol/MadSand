@@ -30,7 +30,7 @@
 		<item id="4">
 			<name>Cake</name>
 			<type>Consumable</type>
-			<heal>30:30</heal>
+			<heal>10:30</heal>
 			<cost>25</cost>
 			<craftable>1</craftable>
 			<recipe>7/25</recipe>
@@ -56,7 +56,7 @@
 		<item id="7">
 			<name>Berry</name>
 			<type>Consumable</type>
-			<heal>5:15</heal>
+			<heal>1:10</heal>
 			<cost>1</cost>
 			<weight>0.05</weight>
 		</item>
@@ -112,6 +112,9 @@
 			<craftable>1</craftable>
 			<recipe>23/15:8/10</recipe>
 			<weight>1</weight>
+			<type>Weapon</type>
+			<lvl>2</lvl>
+			<strength>4</strength>
 		</item>
 		<item id="14">
 			<name>Iron helmet</name>
@@ -337,7 +340,7 @@
 		<item id="44">
 			<name>Edible mushroom</name>
 			<type>Consumable</type>
-			<heal>20:0</heal>
+			<heal>0:10</heal>
 			<cost>15</cost>
 			<weight>0.1</weight>
 		</item>

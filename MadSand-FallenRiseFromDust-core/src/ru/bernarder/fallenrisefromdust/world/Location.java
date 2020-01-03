@@ -30,20 +30,24 @@ public class Location extends HashMap<MapID, Map> {
 
 	byte[] sectorToBytes(int wx, int wy, int layer) {
 		try {
+			Utils.out("Saving sector " + wx + ", " + wy + " : " + layer);
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			MapID loc = new MapID(new Pair(wx, wy), layer);
 			Map map = this.get(loc);
 			ArrayList<Npc> npcs = new ArrayList<Npc>();
-			for (Entry<Pair, Npc> entry : map.getNpcs().entrySet()) {
-				npcs.add(entry.getValue());
-			}
+			HashMap<Pair, Npc> mapNpcs = map.getNpcs();
+			if (!mapNpcs.isEmpty())
+				for (Entry<Pair, Npc> entry : mapNpcs.entrySet()) {
+					npcs.add(entry.getValue());
+				}
 
 			String npf = GameSaver.getNpcFile(wx, wy, layer);
 			MadSand.mapper.writeValue(new File(npf), npcs);
 
 			int xsz = map.getWidth();
 			int ysz = map.getHeight();
-			// header: width, height, default tile, biome
+			// header: isEditable, width, height,spawnpoint(x, y) - for dungeon levels,
+			// default tile, default object, biome
 			stream.write(GameSaver.encode2(Utils.val(map.editable)));
 			stream.write(GameSaver.encode2(xsz));
 			stream.write(GameSaver.encode2(ysz));

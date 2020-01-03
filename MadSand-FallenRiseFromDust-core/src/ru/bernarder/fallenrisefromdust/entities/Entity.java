@@ -403,7 +403,7 @@ public abstract class Entity {
 	int distanceTo(Entity entity) {
 		return (int) Line.calcDistance(x, y, entity.x, entity.y);
 	}
-	
+
 	public boolean canSee(Entity entity) {
 		int dist = distanceTo(entity);
 		Map loc = MadSand.world.getCurLoc();

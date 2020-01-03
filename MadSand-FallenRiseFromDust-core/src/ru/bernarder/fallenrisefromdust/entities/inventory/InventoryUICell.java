@@ -96,7 +96,7 @@ public class InventoryUICell {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
 					World.player.useItem(item);
-					closeContextMenu();
+					hideContext();
 				}
 			});
 			addContextBtn(useBtn);
@@ -109,7 +109,7 @@ public class InventoryUICell {
 				public void changed(ChangeEvent event, Actor actor) {
 					World.player.equip(item);
 					World.player.freeHands(true);
-					closeContextMenu();
+					hideContext();
 				}
 			});
 			addContextBtn(equipBtn);

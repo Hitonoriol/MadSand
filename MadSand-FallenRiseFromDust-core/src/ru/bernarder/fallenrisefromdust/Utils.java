@@ -144,9 +144,9 @@ public class Utils {
 				gotoSector(World.player.stats.look);
 			if (World.player.y == World.MAPSIZE - 1 && World.player.stats.look == Direction.UP)
 				gotoSector(World.player.stats.look);
-			if (World.player.x == World.BORDER && World.player.stats.look == Direction.LEFT)
+			if (World.player.x < World.BORDER && World.player.stats.look == Direction.LEFT)
 				gotoSector(World.player.stats.look);
-			if (World.player.y == World.BORDER && World.player.stats.look == Direction.DOWN)
+			if (World.player.y < World.BORDER && World.player.stats.look == Direction.DOWN)
 				gotoSector(World.player.stats.look);
 			MadSand.world.curlayer = 0;
 

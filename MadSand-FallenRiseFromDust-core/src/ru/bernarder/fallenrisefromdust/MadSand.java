@@ -358,7 +358,6 @@ public class MadSand extends Game {
 				Mouse.updCoords();
 				Mouse.mouseClickAction();
 				Utils.gameKeyCheck();
-				World.player.pickUpLoot();
 				Utils.invKeyCheck();
 			}
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);

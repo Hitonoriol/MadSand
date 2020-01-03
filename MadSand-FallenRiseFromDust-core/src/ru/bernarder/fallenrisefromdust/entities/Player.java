@@ -18,6 +18,7 @@ import ru.bernarder.fallenrisefromdust.containers.Pair;
 import ru.bernarder.fallenrisefromdust.dialog.GameDialog;
 import ru.bernarder.fallenrisefromdust.entities.inventory.Item;
 import ru.bernarder.fallenrisefromdust.enums.*;
+import ru.bernarder.fallenrisefromdust.map.Loot;
 import ru.bernarder.fallenrisefromdust.map.Map;
 import ru.bernarder.fallenrisefromdust.map.MapObject;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
@@ -167,11 +168,12 @@ public class Player extends Entity {
 	public boolean addItem(Item item) {
 		if (super.addItem(item)) {
 			MadSand.print("You get " + Item.queryToName(item.id + "/" + item.quantity));
-			Utils.out("Got item id: " + item.id + "; quantity: " + item.quantity);
-			Utils.out("For the first time: " + unlockedItems.add(item.id));
+			unlockedItems.add(item.id);
 			return true;
-		} else
+		} else {
+			MadSand.print("You can't carry any more items.");
 			return false;
+		}
 	}
 
 	public boolean craftItem(int id) {
@@ -312,7 +314,11 @@ public class Player extends Entity {
 
 		boolean destroyed = obj.takeDamage(stats.skills.getLvl(skill) + stats.hand.getSkillDamage(skill));
 		if (item != -1 && destroyed) {
-			addItem(item, stats.skills.getItemReward(skill));
+			Item objLoot = new Item(item, stats.skills.getItemReward(skill));
+			boolean gotItem = addItem(objLoot);
+			if (!gotItem)
+				MadSand.world.getCurLoc().putLoot(x, y, objLoot);
+
 			increaseSkill(skill);
 		}
 		if (!destroyed)
@@ -358,7 +364,7 @@ public class Player extends Entity {
 		}
 		if (Item.getType(id) == ItemType.Consumable) {
 			increaseSkill(Skill.Survival);
-			MadSand.print("You ate one " + ItemProp.name.get(id));
+			MadSand.print("You eat " + ItemProp.name.get(id));
 			String cont[] = ItemProp.heal.get(id).split(":");
 			int healAmt = Integer.parseInt(cont[0]);
 			int satAmt = Integer.parseInt(cont[1]);
@@ -524,15 +530,23 @@ public class Player extends Entity {
 		if (super.walk(dir)) {
 			MadSand.world.updateLight();
 			objectInFront();
+			lootMsg();
 			Gui.processActionMenu();
 			return true;
 		} else
 			return false;
 	}
 
+	public void lootMsg() {
+		if (standingOnLoot()) {
+			Loot loot = MadSand.world.getCurLoc().getLoot(x, y);
+			MadSand.print("You see (" + loot.getInfo() + ") lying on the floor");
+		}
+	}
+
 	public void objectInFront() {
 		int obj = MadSand.world.getObjID(x, y, stats.look);
-		if ((obj != 666) && (obj != 0)) {
+		if ((obj != MapObject.COLLISION_MASK_ID) && (obj != MapObject.NULL_OBJECT_ID)) {
 			MadSand.print("You see: " + ObjectProp.name.get(obj));
 		}
 	}

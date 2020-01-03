@@ -29,7 +29,7 @@ public class Pair {
 		return this;
 	}
 
-	Pair add(Pair arg) {
+	public Pair add(Pair arg) {
 		this.x += arg.x;
 		this.y += arg.y;
 		return this;

@@ -9,6 +9,7 @@ import ru.bernarder.fallenrisefromdust.containers.Line;
 import ru.bernarder.fallenrisefromdust.entities.Npc;
 import ru.bernarder.fallenrisefromdust.entities.Player;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
+import ru.bernarder.fallenrisefromdust.map.Loot;
 import ru.bernarder.fallenrisefromdust.map.Map;
 import ru.bernarder.fallenrisefromdust.map.MapObject;
 import ru.bernarder.fallenrisefromdust.map.Tile;
@@ -32,6 +33,7 @@ public class Mouse {
 	public static Tile tile;
 	public static MapObject object;
 	public static Npc npc;
+	public static Loot loot;
 
 	public static boolean pointingAtObject = false; // flag that shows if mouse is pointing at object or npc or not
 	public static boolean justClicked = false;
@@ -50,6 +52,7 @@ public class Mouse {
 		npc = loc.getNpc(wx, wy);
 		tile = loc.getTile(wx, wy);
 		object = loc.getObject(wx, wy);
+		loot = loc.getLoot(wx, wy);
 
 		pointingAtObject = (npc != Map.nullNpc) || (object != Map.nullObject);
 
@@ -75,6 +78,11 @@ public class Mouse {
 		}
 
 		info += ("Tile: " + TileProp.name.get(tile.id)) + Gui.LINEBREAK;
+		
+		if (loot != Map.nullLoot) {
+			info += "On the ground: ";
+			info += loot.getInfo() + Gui.LINEBREAK;
+		}
 
 		if (object != Map.nullObject)
 			info += ("Object: " + ObjectProp.name.get(object.id)) + Gui.LINEBREAK;
@@ -109,7 +117,10 @@ public class Mouse {
 
 			World.player.lookAtMouse(wx, wy, diagonal);
 
-			if (rest) {
+			if (rest && loot != Map.nullLoot) {
+				World.player.pickUpLoot();
+				return;
+			} else if (rest) {
 				World.player.rest();
 				return;
 			}

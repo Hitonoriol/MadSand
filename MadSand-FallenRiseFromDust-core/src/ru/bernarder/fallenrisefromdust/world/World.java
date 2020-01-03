@@ -151,8 +151,10 @@ public class World {
 			if (!locExists(new MapID(coords.set(curxwpos, curywpos), 0)))
 				createBasicLoc(wx, wy);
 			clearCurLoc();
-			if ((wx == 5) && (wy == 5))
+			
+			if ((wx == 5) && (wy == 5))	//TODO: persistent locations
 				biome = 0;
+			
 			else
 				biome = randBiome();
 			Utils.out("Biome: " + biome);
@@ -167,7 +169,8 @@ public class World {
 	}
 
 	public void generate(int layer) {
-		createBasicLoc(layer);
+		if (layer != LAYER_OVERWORLD)
+			createBasicLoc(layer);
 		generate(curxwpos, curywpos, layer);
 		updateLight();
 	}
@@ -184,10 +187,12 @@ public class World {
 	}
 
 	public boolean switchLocation(int x, int y, int layer) {
+		Utils.out("Switching location to " + x + ", " + y + " layer " + layer);
 		if (layer > DUNGEON_LAYER_MAX)
 			return false;
 
 		jumpToLocation(x, y, layer);
+		Utils.out(curxwpos + " " + curywpos + " " + curlayer);
 		if (locExists(new MapID(coords.set(x, y), layer))) {
 			updateLight();
 			return true;
@@ -203,6 +208,7 @@ public class World {
 	}
 
 	public boolean switchLocation(Direction dir) {
+		Utils.out("Switch location in direction " + dir);
 		if (curlayer != LAYER_OVERWORLD)
 			return false;
 		coords.set(curxwpos, curywpos).addDirection(dir);
@@ -342,7 +348,6 @@ public class World {
 
 		int y = 0, x = 0;
 		Map loc = getCurLoc(layer);
-
 		loc.editable = false;
 
 		while (y < World.MAPSIZE) {
@@ -405,7 +410,7 @@ public class World {
 		int count = underworld.get(usz - 1);
 		int cdef = underworld.get(CAVE_TILE);
 		Map loc = getCurLoc(layer);
-
+		loc.purge();
 		loc.fillTile(cdef);
 		loc.defObject = underworld.get(CAVE_OBJECT);
 		loc.defTile = cdef;
@@ -497,6 +502,7 @@ public class World {
 	}
 
 	public void clearCurLoc() {
+		Utils.out("Clearing current sector...");
 		getCurLoc().purge();
 	}
 

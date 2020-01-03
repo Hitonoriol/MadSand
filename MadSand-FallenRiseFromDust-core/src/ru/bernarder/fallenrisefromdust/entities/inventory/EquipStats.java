@@ -57,7 +57,7 @@ public class EquipStats {
 		ret += "Dexterity: " + dexterity + Gui.LINEBREAK;
 		ret += "Strength: " + strength + Gui.LINEBREAK;
 		ret += "Accuracy: " + accuracy + Gui.LINEBREAK;
-		ret += "Intelligence: " + intelligence + Gui.LINEBREAK;
+		ret += "Intelligence: " + intelligence;
 		return ret;
 	}
 }
