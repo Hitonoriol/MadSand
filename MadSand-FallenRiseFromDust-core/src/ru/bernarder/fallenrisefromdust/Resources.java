@@ -294,6 +294,7 @@ public class Resources {
 		Vector<Integer> stages, slens;
 		ItemType type;
 		int i = 0, cc = 0;
+		boolean unlockable;
 		while (i < Resources.LASTITEMID) {
 			item[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "inv/" + i + ".png"));
 			if (!XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, XML_RECIPE_NODE).equals("-1")) {
@@ -339,20 +340,30 @@ public class Resources {
 
 			ItemProp.hp.put(i, Integer.parseInt(XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "hp")));
 			ItemProp.cost.put(i, Integer.parseInt(XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "cost")));
-			ItemProp.craftable.put(i,
-					Integer.parseInt(XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "craftable")) != 0);
+
+			unlockable = Boolean.parseBoolean(XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "unlockable", "true"));
+			ItemProp.unlockable.put(i, unlockable);
+
 			ItemProp.recipe.put(i, XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, XML_RECIPE_NODE));
 			ItemProp.heal.put(i, XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "heal"));
 			ItemProp.useAction.put(i, XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "onuse"));
 
-			String reqlist = XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "craftreq");
-			cont = reqlist.split("\\,");
-			Vector<Integer> reqs = new Vector<Integer>();
-			for (String req : cont)
-				reqs.add(Integer.parseInt(req));
-			if (!reqlist.contains(","))
-				reqs.add(Integer.parseInt(reqlist));
-			ItemProp.craftReq.put(i, reqs);
+			String reqlist = ItemProp.recipe.get(i);
+			String item[];
+			if (reqlist != "-1" && unlockable) {
+				if (!reqlist.contains(":"))
+					reqlist += ":";
+				cont = reqlist.split("\\:");
+				Vector<Integer> reqs = new Vector<Integer>();
+				for (String req : cont) {
+					if (req == "")
+						break;
+					item = req.split("\\/");
+					reqs.add(Integer.parseInt(item[0]));
+				}
+
+				ItemProp.craftReq.put(i, reqs);
+			}
 			i++;
 		}
 	}

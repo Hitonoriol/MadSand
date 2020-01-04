@@ -30,7 +30,7 @@ public class Item {
 	int altobject, cost;
 	public ItemType type = ItemType.Item;
 	Skill skill = Skill.None;
-	boolean craftable;
+	boolean unlockable;
 	double weight = 0;
 
 	int lvl; // level of item (only for weapons/armor)
@@ -80,18 +80,19 @@ public class Item {
 
 	String getInfoString() {
 		String info = "";
-		info += "Item: " + name + Gui.LINEBREAK;
-		info += "Weight: " + Utils.round(weight) + " kg" + Gui.LINEBREAK;
-		info += "Cost: " + cost + "$";
+		info += name + Gui.LINEBREAK;
+
 		if (type.isArmor() || type.isWeapon()) {
-			info += Gui.LINEBREAK;
 			info += equipStats.getString();
 		}
+
 		if (type == ItemType.Consumable) {
-			info += Gui.LINEBREAK;
 			info += "Satiation: " + satiationAmount + Gui.LINEBREAK;
-			info += "Health: " + healAmount;
+			info += "Health: " + healAmount + Gui.LINEBREAK;
 		}
+
+		info += "Weight: " + Utils.round(weight) + " kg" + Gui.LINEBREAK;
+		info += "Cost: " + cost + "$";
 		return info;
 	}
 
@@ -160,7 +161,7 @@ public class Item {
 		this.cost = ItemProp.cost.get(id);
 		this.dmg = ItemProp.dmg.get(id);
 		this.hp = ItemProp.hp.get(id);
-		this.craftable = ItemProp.craftable.get(id);
+		this.unlockable = ItemProp.unlockable.get(id);
 		this.skill = ItemProp.skill.get(id);
 
 		if (type == ItemType.Consumable) {

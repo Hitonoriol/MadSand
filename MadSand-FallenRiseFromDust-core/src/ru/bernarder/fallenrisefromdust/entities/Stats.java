@@ -19,7 +19,7 @@ public class Stats {
 	final static int STARVE_DMG = 1;
 	final static int FOOD_HEAL = 1;
 
-	static final int STAT_MIN_SUM = 15;
+	static final int STAT_MIN_SUM = 20;
 	static final int STAT_MAX_SUM = 22;
 	static final int STAT_RAND_MAX = 9;
 

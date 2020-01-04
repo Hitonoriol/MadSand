@@ -5,19 +5,20 @@
 			#Tutorial# Welcome to MadSand, {PLAYER}![What? How do you know my name?]=>
 			#Tutorial# This game is supposed to be an open-world survival roguelike, but it's in its early stage of development, so feel free to explore and provide feedback and suggestions about what you see in the game or what you want to see in future.[Mkaaay...]=>
 			#Tutorial# If I were you, I'd start from exploring and interacting with things. [Oh, ok]=>
-			#Tutorial# To interact with Object or NPC, approach it and press enter or right click it and choose "interact" option. [Understood]=>
-			#Tutorial# Via interaction with objects you can gather resources that are useful for crafting items.[Cool, I'll try it]=>
+			#Tutorial# To interact with Object or NPC, approach it and click it with LMB or right click it and choose "interact" option, or, for keyboard lovers - turn your character to it and press enter. [Understood]=>
+			#Tutorial# Via interaction with objects you can gather resources that are useful for crafting items. You'll have to gather all the needed components for a certain item to unlock a craft recipe for it.[Cool, I'll try it]=>
 			#Tutorial# And if you decide to interact with an NPC, you can talk to it or take a quest.=>
 			#Tutorial# And almost forgot, here are the controls:[Show 'em to me!]=>
 			#Controls#
 			* WASD or LMB click - walk around{br}
+			* LMB click on yourself - skip a turn and restore 1 action point{br}
 			* Arrows or middle mouse button - turn around without moving{br}
 			* Arrows or "Attack" button in RMB menu - attack a creature (careful, they'll fight back){br}
 			* E - inventory{br}
 			* Q - player stats menu{br}
-			* Enter - interact with object/NPC{br}
+			* Enter or LMB - interact with object/NPC{br}
 			* U - use consumable, placeable block or placeable tile (or a special tool, for example, hoe){br}
-			* G - save current world (I don't recommend doing it because save format changes every single build of the game due to constant updates making saves from day ago incompatible with current build.)
+			* G - save current world
 			[Woah, thanks!]
 		</text>
 	</tip>

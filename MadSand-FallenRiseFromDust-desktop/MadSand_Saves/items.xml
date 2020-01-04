@@ -22,8 +22,6 @@
 			<hp>128</hp>
 			<type>Axe</type>
 			<cost>9</cost>
-			<craftable>1</craftable>
-			<craftreq>2,8</craftreq>
 			<recipe>2/5:8/3</recipe>
 			<weight>0.7</weight>
 		</item>
@@ -32,9 +30,7 @@
 			<type>Consumable</type>
 			<heal>10:30</heal>
 			<cost>25</cost>
-			<craftable>1</craftable>
 			<recipe>7/25</recipe>
-			<craftreq>7</craftreq>
 			<weight>0.7</weight>
 		</item>
 		<item id="5">
@@ -48,8 +44,6 @@
 			<hp>100</hp>
 			<cost>10</cost>
 			<type>Shovel</type>
-			<craftable>1</craftable>
-			<craftreq>2,8</craftreq>
 			<recipe>2/9:8/3</recipe>
 			<weight>0.7</weight>
 		</item>
@@ -63,8 +57,6 @@
 		<item id="8">
 			<name>Stick</name>
 			<cost>4</cost>
-			<craftable>1</craftable>
-			<craftreq>1</craftreq>
 			<recipe>1/1</recipe>
 			<weight>0.2</weight>
 		</item>
@@ -78,8 +70,6 @@
 			<type>PlaceableObject</type>
 			<altobject>8</altobject>
 			<cost>7</cost>
-			<craftable>1</craftable>
-			<craftreq>2</craftreq>
 			<recipe>25/1</recipe>
 			<weight>1.5</weight>
 		</item>
@@ -90,16 +80,12 @@
 			<hp>100</hp>
 			<cost>10</cost>
 			<type>Pickaxe</type>
-			<craftable>1</craftable>
-			<craftreq>2,8</craftreq>
 			<recipe>2/13:8/7</recipe>
 			<weight>0.7</weight>
 		</item>
 		<item id="12">
 			<name>Stone sword</name>
 			<cost>11</cost>
-			<craftable>1</craftable>
-			<craftreq>2,8</craftreq>
 			<recipe>2/25:8/7</recipe>
 			<type>Weapon</type>
 			<lvl>1</lvl>
@@ -109,7 +95,6 @@
 		<item id="13">
 			<name>Iron sword</name>
 			<cost>15</cost>
-			<craftable>1</craftable>
 			<recipe>23/15:8/10</recipe>
 			<weight>1</weight>
 			<type>Weapon</type>
@@ -119,9 +104,7 @@
 		<item id="14">
 			<name>Iron helmet</name>
 			<cost>18</cost>
-			<craftable>1</craftable>
 			<recipe>23/25</recipe>
-			<craftreq>23</craftreq>
 			<type>HeadArmor</type>
 			<lvl>1</lvl>
 			<weight>1.1</weight>
@@ -130,9 +113,7 @@
 			<name>Iron shield</name>
 			<type>Shield</type>
 			<cost>18</cost>
-			<craftable>1</craftable>
 			<recipe>23/25</recipe>
-			<craftreq>23</craftreq>
 			<lvl>1</lvl>
 			<weight>1.1</weight>
 		</item>
@@ -140,7 +121,6 @@
 			<name>Leather chest armor</name>
 			<type>ChestArmor</type>
 			<cost>14</cost>
-			<craftable>1</craftable>
 			<recipe>22/15</recipe>
 			<lvl>1</lvl>
 			<weight>0.8</weight>
@@ -149,7 +129,6 @@
 			<name>Iron chestplate</name>
 			<type>ChestArmor</type>
 			<cost>18</cost>
-			<craftable>1</craftable>
 			<recipe>23/30</recipe>
 			<weight>1.4</weight>
 		</item>
@@ -157,7 +136,6 @@
 			<name>Chainmail</name>
 			<type>ChestArmor</type>
 			<cost>21</cost>
-			<craftable>1</craftable>
 			<recipe>23/37:8/3</recipe>
 			<weight>1.3</weight>
 		</item>
@@ -204,8 +182,6 @@
 			<type>PlaceableObject</type>
 			<altobject>14</altobject>
 			<cost>18</cost>
-			<craftable>1</craftable>
-			<craftreq>1,8</craftreq>
 			<recipe>1/25:8/10</recipe>
 			<weight>1</weight>
 		</item>
@@ -214,8 +190,6 @@
 			<type>PlaceableTile</type>
 			<altobject>9</altobject>
 			<cost>4</cost>
-			<craftable>1</craftable>
-			<craftreq>1</craftreq>
 			<recipe>1/1</recipe>
 			<weight>1</weight>
 		</item>
@@ -286,7 +260,6 @@
 			<type>PlaceableObject</type>
 			<altobject>18</altobject>
 			<cost>8</cost>
-			<craftable>1</craftable>
 			<recipe>1/15:8/5</recipe>
 			<weight>1</weight>
 		</item>
@@ -311,9 +284,7 @@
 			<dmg>2</dmg>
 			<hp>75</hp>
 			<cost>11</cost>
-			<craftable>1</craftable>
 			<recipe>2/13:8/5</recipe>
-			<craftreq>2,8</craftreq>
 			<type>Hoe</type>
 			<weight>0.8</weight>
 			<onuse>!0 place_tile $player_x $player_y 15;= !15 You plowed the soil
@@ -324,7 +295,6 @@
 			<type>PlaceableObject</type>
 			<altobject>26</altobject>
 			<cost>10</cost>
-			<craftable>1</craftable>
 			<recipe>5/3:2/3</recipe>
 			<weight>1</weight>
 		</item>
@@ -333,7 +303,6 @@
 			<type>PlaceableTile</type>
 			<altobject>19</altobject>
 			<cost>3</cost>
-			<craftable>1</craftable>
 			<recipe>5/1</recipe>
 			<weight>1</weight>
 		</item>
@@ -446,7 +415,6 @@
 		<item id="58">
 			<name>Pint of beer</name>
 			<recipe>65/5:66/5</recipe>
-			<craftreq>65,66</craftreq>
 			<type>Consumable</type>
 			<heal>5:20</heal>
 			<cost>25</cost>

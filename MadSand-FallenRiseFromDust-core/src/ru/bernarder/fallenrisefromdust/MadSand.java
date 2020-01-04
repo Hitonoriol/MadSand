@@ -341,6 +341,14 @@ public class MadSand extends Game {
 			Gui.log[li].setText(oldarg + " x" + (++repeat));
 	}
 
+	public static void print(String msg, String color) {
+		print(color + msg + "[]");
+	}
+
+	public static void notice(String msg) {
+		print("* " + msg, Gui.noticeMsgColor);
+	}
+
 	public void render() {
 		if (state.equals(GameState.GAME)) {
 			if (!Gui.gameUnfocused && World.player.isNewlyCreated()) {

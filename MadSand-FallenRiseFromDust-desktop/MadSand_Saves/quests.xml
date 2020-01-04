@@ -8,7 +8,7 @@
 	         #Richard# You seem lost... You know what? If you can prove you can be of any use, then we'll talk.=>
 	         #Richard# Can you please bring me some wood for the campfire? Here's an axe, it'll help you.=>
 	         #Richard# Return to me when you get 15 wood pieces.=>
-	         * You can gather wood by taking axe in your hands (open inventory with E key and left click the axe), approaching a tree and hitting enter a few times.=>
+	         * You can gather wood by taking axe in your hands (open inventory with E key and left click the axe), approaching a tree and hitting enter or clicking it a few times.=>
 	         * You can also interact with trees with your bare hands, then you'll get another kind of resource.
          </start>
          <complete>

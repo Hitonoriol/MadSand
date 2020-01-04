@@ -53,11 +53,16 @@ public class EquipStats {
 	@JsonIgnore
 	public String getString() {
 		String ret = "";
-		ret += "Constitution: " + constitution + Gui.LINEBREAK;
-		ret += "Dexterity: " + dexterity + Gui.LINEBREAK;
-		ret += "Strength: " + strength + Gui.LINEBREAK;
-		ret += "Accuracy: " + accuracy + Gui.LINEBREAK;
-		ret += "Intelligence: " + intelligence;
+		if (constitution != 0)
+			ret += "Constitution: " + constitution + Gui.LINEBREAK;
+		if (dexterity != 0)
+			ret += "Dexterity: " + dexterity + Gui.LINEBREAK;
+		if (strength != 0)
+			ret += "Strength: " + strength + Gui.LINEBREAK;
+		if (accuracy != 0)
+			ret += "Accuracy: " + accuracy + Gui.LINEBREAK;
+		if (intelligence != 0)
+			ret += "Intelligence: " + intelligence + Gui.LINEBREAK;
 		return ret;
 	}
 }

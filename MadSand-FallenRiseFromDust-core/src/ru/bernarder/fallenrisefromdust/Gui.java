@@ -43,6 +43,7 @@ import ru.bernarder.fallenrisefromdust.map.Map;
 import ru.bernarder.fallenrisefromdust.map.MapObject;
 import ru.bernarder.fallenrisefromdust.map.Tile;
 import ru.bernarder.fallenrisefromdust.properties.ItemProp;
+import ru.bernarder.fallenrisefromdust.properties.ObjectProp;
 import ru.bernarder.fallenrisefromdust.properties.TileProp;
 import ru.bernarder.fallenrisefromdust.world.World;
 
@@ -70,6 +71,8 @@ public class Gui {
 	public static final int EQ_SLOTS = 5;
 	static float defLblWidth = Gdx.graphics.getWidth() / 4;
 	public static final float ACTION_TBL_YPOS = Gdx.graphics.getHeight() / 6f;
+	
+	public static String noticeMsgColor = "[#16E1EA]";
 
 	static NinePatchDrawable transparency;
 
@@ -670,24 +673,8 @@ public class Gui {
 		Utils.out("Refreshing craft menu...");
 		craftbl.remove();
 		craftbl = new Table();
-		HashSet<Integer> reqs;
 		Player player = World.player;
-
-		for (Entry<Integer, Vector<Integer>> entry : ItemProp.craftReq.entrySet()) {
-			reqs = new HashSet<Integer>(entry.getValue());
-			HashSet<Integer> all = new HashSet<Integer>(player.unlockedItems);
-			int id = entry.getKey();
-
-			if (reqs.contains(-1))
-				continue;
-
-			all.retainAll(reqs);
-
-			if (all.equals(reqs) && !player.craftRecipes.contains(id)) {
-				Utils.out("New recipe id: " + id + " unlocked! Adding to the list...");
-				player.craftRecipes.add(id);
-			}
-		}
+		// player.refreshAvailableRecipes();
 		int craftSz = player.craftRecipes.size();
 		Utils.out("Total unlocked recipes: " + craftSz + " out of " + Resources.CRAFTABLES);
 
@@ -928,7 +915,7 @@ public class Gui {
 		overlay.addActor(logtbl);
 		overlay.addActor(mousemenu);
 		overlay.addActor(gamecontext);
-		
+
 		overlay.addListener(new ClickListener(Buttons.RIGHT) {
 			public void clicked(InputEvent event, float x, float y) {
 				if (dialogActive)
@@ -944,7 +931,7 @@ public class Gui {
 				}
 			}
 		});
-		
+
 		overlay.addListener(new ClickListener(Buttons.LEFT) {
 			public void clicked(InputEvent event, float x, float y) {
 				Mouse.justClicked = true;
@@ -1137,6 +1124,7 @@ public class Gui {
 		MapObject object = loc.getObject(coords.x, coords.y);
 		Npc npc = loc.getNpc(coords.x, coords.y);
 		String tileAction = TileProp.oninteract.get(tile.id);
+		String objAction = ObjectProp.interactAction.get(object.id);
 
 		if (tileAction == "-1" && npc == Map.nullNpc && object == Map.nullObject) {
 			actionTbl.setVisible(false);
@@ -1160,9 +1148,10 @@ public class Gui {
 			});
 		} else if (npc != Map.nullNpc && !dialogActive)
 			activateInteractBtn(interactBtn, "Talk to " + npc.stats.name, npcInteractListener);
-		else if (object != Map.nullObject)
+		else if (object != Map.nullObject && objAction != "-1")
 			activateInteractBtn(interactBtn, "Interact with " + object.name, objInteractListener);
 		else {
+			actionTbl.removeActor(interactBtn);
 			actionTbl.setVisible(false);
 		}
 	}

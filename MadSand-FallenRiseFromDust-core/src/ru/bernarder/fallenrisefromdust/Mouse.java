@@ -78,7 +78,7 @@ public class Mouse {
 		}
 
 		info += ("Tile: " + TileProp.name.get(tile.id)) + Gui.LINEBREAK;
-		
+
 		if (loot != Map.nullLoot) {
 			info += "On the ground: ";
 			info += loot.getInfo() + Gui.LINEBREAK;
@@ -112,7 +112,7 @@ public class Mouse {
 		if ((World.player.isStepping()) || (Gui.gameUnfocused))
 			return;
 
-		if (justClicked) {
+		if (justClicked && ((pointingAtObject && diagonal) || rest)) {
 			justClicked = false;
 
 			World.player.lookAtMouse(wx, wy, diagonal);
@@ -131,6 +131,7 @@ public class Mouse {
 			}
 
 		}
+		justClicked = false;
 
 		if (Gdx.input.isButtonPressed(Buttons.LEFT) && !(diagonal && pointingAtObject) && !rest) {
 			World.player.lookAtMouse(wx, wy);

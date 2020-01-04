@@ -2,6 +2,8 @@ package ru.bernarder.fallenrisefromdust.entities;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Vector;
+import java.util.Map.Entry;
 
 import com.badlogic.gdx.Gdx;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -160,6 +162,27 @@ public class Player extends Entity {
 		}
 	}
 
+	public void refreshAvailableRecipes() {
+		HashSet<Integer> reqs;
+
+		for (Entry<Integer, Vector<Integer>> entry : ItemProp.craftReq.entrySet()) {
+			reqs = new HashSet<Integer>(entry.getValue());
+			HashSet<Integer> all = new HashSet<Integer>(unlockedItems);
+			int id = entry.getKey();
+
+			if (reqs.contains(-1))
+				continue;
+
+			all.retainAll(reqs);
+
+			if (all.equals(reqs) && !craftRecipes.contains(id)) {
+				MadSand.notice("You figure out how to craft " + ItemProp.name.get(id) + "!");
+				Utils.out("New recipe id: " + id + " unlocked! Adding to the list...");
+				craftRecipes.add(id);
+			}
+		}
+	}
+
 	void damageHeldTool() {
 		damageHeldTool(Skill.None);
 	}
@@ -168,10 +191,11 @@ public class Player extends Entity {
 	public boolean addItem(Item item) {
 		if (super.addItem(item)) {
 			MadSand.print("You get " + Item.queryToName(item.id + "/" + item.quantity));
-			unlockedItems.add(item.id);
+			if (unlockedItems.add(item.id))
+				refreshAvailableRecipes();
 			return true;
 		} else {
-			MadSand.print("You can't carry any more items.");
+			MadSand.notice("You can't carry any more items.");
 			return false;
 		}
 	}
@@ -296,8 +320,8 @@ public class Player extends Entity {
 			return;
 		}
 		if (!loc.editable) {
-			MadSand.print("You try to somehow interact with " + obj.name);
-			MadSand.print("But suddenly, you feel that it's protected by some mysterious force");
+			MadSand.notice("You try to interact with " + obj.name + "..." + Gui.LINEBREAK
+					+ "But suddenly, you feel that it's protected by some mysterious force");
 			return;
 		}
 		int item = MapObject.getAltItem(id, ItemProp.type.get(stats.hand.id).get());
