@@ -190,7 +190,8 @@ public class Player extends Entity {
 	@Override
 	public boolean addItem(Item item) {
 		if (super.addItem(item)) {
-			MadSand.print("You get " + Item.queryToName(item.id + "/" + item.quantity));
+			if (item.name != "")
+				MadSand.print("You get " + item.quantity + " " + item.name);
 			if (unlockedItems.add(item.id))
 				refreshAvailableRecipes();
 			return true;
@@ -203,9 +204,13 @@ public class Player extends Entity {
 	public boolean craftItem(int id) {
 		if (inventory.delItem(ItemProp.recipe.get(id))) {
 			increaseSkill(Skill.Crafting);
-			inventory.putItem(id, stats.skills.getItemReward(Skill.Crafting));
-			if (isMain)
-				Gui.drawOkDialog("Crafted " + ItemProp.name.get(id), Gui.craft);
+			Item item = new Item(id, stats.skills.getItemReward(Skill.Crafting));
+			if (!inventory.putItem(item)) {
+				MadSand.world.getCurLoc().putLoot(x, y, item);
+				MadSand.notice("You can't carry any more items");
+			}
+			Gui.drawOkDialog("Crafted " + ItemProp.name.get(id), Gui.craft);
+			MadSand.notice("You craft " + ItemProp.name.get(id));
 			doAction(stats.AP_MINOR);
 			return true;
 		}
@@ -226,19 +231,19 @@ public class Player extends Entity {
 		Utils.out("Trying to start quest id" + quest.id);
 		if (isQuestCompleted(quest.id))
 			return;
-		inventory.putItem(quest.giveItems);
-		MadSand.print("You get " + Item.queryToName(quest.giveItems));
+		if (inventory.putItem(quest.giveItems) != -1)
+			MadSand.print("You get " + Item.queryToName(quest.giveItems));
 		questsInProgress.add(quest.id);
 		GameDialog.generateDialogChain(quest.startMsg, Gui.overlay).show();
 	}
 
 	private void completeQuest(Quest quest) {
-		MadSand.print("You completed a quest!");
+		MadSand.notice("You completed a quest!");
 		inventory.delItem(quest.reqItems);
 		inventory.delItem(quest.removeOnCompletion);
 		inventory.putItem(quest.rewardItems);
 		stats.skills.increaseSkill(Skill.Level, quest.exp);
-		MadSand.print("You get " + quest.exp + " EXP!");
+		MadSand.notice("You get " + quest.exp + " EXP!");
 		if (!quest.repeatable)
 			completedQuests.add(quest.id);
 		questsInProgress.remove(quest.id);
@@ -330,9 +335,8 @@ public class Player extends Entity {
 		int curLvl = stats.skills.getLvl(skill);
 		damageHeldTool(skill);
 		if (curLvl < obj.lvl) {
-			MadSand.print("You are not experienced enough.");
-			MadSand.print(skill + " level required: " + obj.lvl);
-			MadSand.print("Your " + skill + ": " + curLvl);
+			MadSand.notice("You are not experienced enough." + Gui.LINEBREAK + skill + " level required: " + obj.lvl
+					+ Gui.LINEBREAK + "Your " + skill + ": " + curLvl);
 			return;
 		}
 
@@ -372,7 +376,12 @@ public class Player extends Entity {
 		damageHeldTool();
 		if (item != -1) {
 			MadSand.world.getCurLoc().delTile(x, y);
-			inventory.putItem(item);
+			Item gotItem = new Item(item);
+			if (!inventory.putItem(gotItem)) {
+				MadSand.world.getCurLoc().putLoot(x, y, gotItem);
+				MadSand.notice("You can't carry any more items");
+			}
+			MadSand.notice("You dig " + gotItem.name + " from the ground");
 			increaseSkill(Skill.Digging);
 		}
 		String action = ItemProp.useAction.get(id);

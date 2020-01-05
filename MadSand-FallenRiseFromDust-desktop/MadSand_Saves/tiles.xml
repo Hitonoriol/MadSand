@@ -4,7 +4,7 @@
 			<damage>0</damage>
 		</tile>
 		<tile id="1">
-			<name>Grass with clay</name>
+			<name>Clay</name>
 			<damage>0</damage>
 			<altitem id="0" inhand="9" item="5" />
 		</tile>
@@ -33,7 +33,7 @@
 			</oninteract>
 		</tile>
 		<tile id="7">
-			<name>Lightened stone floor</name>
+			<name>Stone floor</name>
 			<damage>0</damage>
 		</tile>
 		<tile id="8">
@@ -104,7 +104,7 @@
 			<damage>0</damage>
 		</tile>
 		<tile id="24">
-			<name>Dirt</name>
+			<name>Burnt dirt</name>
 			<damage>0</damage>
 		</tile>
 		<tile id="25">

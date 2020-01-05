@@ -28,7 +28,7 @@
 			<skill>Harvesting</skill>
 			<tough>7</tough>
 			<harvesthp>2</harvesthp>
-			<altitem id="0" inhand="0" item="7,8,65,66" />
+			<altitem id="0" inhand="0" item="7,8,65,66,7" />
 		</object>
 		<object id="5">
 			<name>---</name>
@@ -151,6 +151,7 @@
 		<object id="24">
 			<nocollide>1</nocollide>
 			<name>Tumbleweed</name>
+			<altitem id="0" inhand="0" item="68,8" />
 			<tough>3</tough>
 		</object>
 		<object id="25">
@@ -183,7 +184,8 @@
 			<name>Spruce tree</name>
 			<skill>Woodcutting</skill>
 			<tough>10</tough>
-			<altitem>1</altitem>
+			<altitem id="0" inhand = "0" item="8" />
+			<altitem id="0" inhand = "8" item="1" />
 		</object>
 		<object id="30">
 			<name>Tree</name>
@@ -249,7 +251,7 @@
 			<skill>Harvesting</skill>
 			<tough>7</tough>
 			<harvesthp>2</harvesthp>
-			<altitem id="0" inhand="0" item="8,65,66" />
+			<altitem id="0" inhand="0" item="8,65,66,68" />
 		</object>
 		<object id="38">
 			<skill>Woodcutting</skill>
@@ -278,6 +280,7 @@
 		<object id="42">
 			<skill>Harvesting</skill>
 			<name>Amanita</name>
+			<nocollide>1</nocollide>
 			<altitem id="0" inhand="0" item="45" />
 			<tough>1</tough>
 			<harvesthp>1</harvesthp>

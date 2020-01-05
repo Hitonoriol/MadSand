@@ -50,7 +50,7 @@
 		<item id="7">
 			<name>Berry</name>
 			<type>Consumable</type>
-			<heal>1:10</heal>
+			<heal>1:20</heal>
 			<cost>1</cost>
 			<weight>0.05</weight>
 		</item>
@@ -76,8 +76,8 @@
 		<item id="11">
 			<name>Stone pickaxe</name>
 			<skill>Mining</skill>
-			<dmg>3</dmg>
-			<hp>100</hp>
+			<dmg>2</dmg>
+			<hp>128</hp>
 			<cost>10</cost>
 			<type>Pickaxe</type>
 			<recipe>2/13:8/7</recipe>
@@ -151,7 +151,7 @@
 			<weight>1.9</weight>
 		</item>
 		<item id="21">
-			<name>Gold coin</name>
+			<name>Coin</name>
 			<cost>1</cost>
 			<weight>0.01</weight>
 		</item>
@@ -266,7 +266,7 @@
 		<item id="39">
 			<name>Cucumber</name>
 			<type>Consumable</type>
-			<heal>3:8</heal>
+			<heal>3:15</heal>
 			<cost>3</cost>
 			<weight>0.15</weight>
 		</item>
@@ -276,6 +276,7 @@
 			<type>Crop</type>
 			<stages>20,19,63,21</stages>
 			<stagelen>20,25,30,35</stagelen>
+			<recipe>68/5</recipe>
 			<cost>7</cost>
 			<weight>0.05</weight>
 		</item>
@@ -309,7 +310,7 @@
 		<item id="44">
 			<name>Edible mushroom</name>
 			<type>Consumable</type>
-			<heal>0:10</heal>
+			<heal>0:25</heal>
 			<cost>15</cost>
 			<weight>0.1</weight>
 		</item>
@@ -330,21 +331,21 @@
 		<item id="47">
 			<name>Carrot</name>
 			<type>Consumable</type>
-			<heal>10:11</heal>
+			<heal>10:20</heal>
 			<cost>21</cost>
 			<weight>0.1</weight>
 		</item>
 		<item id="48">
 			<name>Tomatoes</name>
 			<type>Consumable</type>
-			<heal>5:10</heal>
+			<heal>5:20</heal>
 			<cost>21</cost>
 			<weight>0.1</weight>
 		</item>
 		<item id="49">
 			<name>Pepper</name>
 			<type>Consumable</type>
-			<heal>9:10</heal>
+			<heal>9:20</heal>
 			<cost>15</cost>
 			<weight>0.1</weight>
 		</item>
@@ -362,6 +363,7 @@
 			<cost>41</cost>
 			<stages>43,44,45,46</stages>
 			<stagelen>20,25,30,35</stagelen>
+			<recipe>68/5</recipe>
 			<weight>0.05</weight>
 		</item>
 		<item id="52">
@@ -371,6 +373,7 @@
 			<cost>41</cost>
 			<stages>47,48,49,50</stages>
 			<stagelen>20,25,30,35</stagelen>
+			<recipe>68/5</recipe>
 			<weight>0.05</weight>
 		</item>
 		<item id="53">
@@ -380,6 +383,7 @@
 			<cost>41</cost>
 			<stages>51,52,53,54</stages>
 			<stagelen>20,25,30,35</stagelen>
+			<recipe>68/5</recipe>
 			<weight>0.05</weight>
 		</item>
 		<item id="54">
@@ -389,6 +393,7 @@
 			<cost>41</cost>
 			<stages>55,56,57,58</stages>
 			<stagelen>20,25,30,35</stagelen>
+			<recipe>68/5</recipe>
 			<weight>0.05</weight>
 		</item>
 		<item id="55">
@@ -398,6 +403,7 @@
 			<cost>41</cost>
 			<stages>59,60,61,62</stages>
 			<stagelen>20,25,30,35</stagelen>
+			<recipe>68/5</recipe>
 			<weight>0.05</weight>
 		</item>
 		<item id="56">
@@ -416,7 +422,7 @@
 			<name>Pint of beer</name>
 			<recipe>65/5:66/5</recipe>
 			<type>Consumable</type>
-			<heal>5:20</heal>
+			<heal>-5:30</heal>
 			<cost>25</cost>
 			<weight>0.5</weight>
 		</item>
@@ -431,6 +437,7 @@
 			<name>Healing potion</name>
 			<cost>20</cost>
 			<type>Consumable</type>
+			<recipe>45/3:58/1</recipe>
 			<heal>25:0</heal>
 			<weight>0.2</weight>
 		</item>
@@ -464,5 +471,26 @@
 			<cost>1</cost>
 			<weight>0.01</weight>
 		</item>
-
+		<item id="67">
+			<name>Flint pickaxe</name>
+			<skill>Mining</skill>
+			<dmg>3</dmg>
+			<hp>200</hp>
+			<cost>10</cost>
+			<type>Pickaxe</type>
+			<recipe>9/12:8/7</recipe>
+			<weight>0.7</weight>
+		</item>
+		<item id="68">
+			<name>Plant fiber</name>
+			<cost>2</cost>
+			<weight>0.01</weight>
+			<recipe>8/2</recipe>
+		</item>
+		<item id="69">
+			<name>Plant thread</name>
+			<cost>2</cost>
+			<weight>0.01</weight>
+			<recipe>68/2</recipe>
+		</item>
 	</items>

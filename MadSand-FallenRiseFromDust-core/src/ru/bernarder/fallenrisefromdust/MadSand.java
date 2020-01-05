@@ -202,7 +202,7 @@ public class MadSand extends Game {
 
 		if (player.isInBackground())
 			drawEntity(player);
-
+		
 		while (i < renderArea.length) {
 			x = World.player.x + (int) renderArea[i].x;
 			y = World.player.y + (int) renderArea[i].y;
@@ -215,6 +215,21 @@ public class MadSand extends Game {
 			}
 
 			Utils.batch.draw(Resources.tile[world.getTileOrDefault(x, y)], x * TILESIZE, y * TILESIZE);
+			++i;
+		}
+
+		i = 0;
+		
+		while (i < renderArea.length) {
+			x = World.player.x + (int) renderArea[i].x;
+			y = World.player.y + (int) renderArea[i].y;
+
+			tile = loc.getTile(x, y);
+
+			if (!tile.visible || ((x > xsz || y > ysz || x < 0 || y < 0) && MadSand.world.isUnderGround())) {
+				++i;
+				continue;
+			}
 
 			npc = loc.getNpc(x, y);
 			objid = loc.getObject(x, y).id;

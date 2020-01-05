@@ -71,7 +71,7 @@
 			<faction>Partisans</faction>
 			<spawnonce>True</spawnonce>
 			<type>QuestMaster</type>
-			<qids>0,1</qids>
+			<qids>0,1,2</qids>
 		</npc>
 		<npc id="6">
 			<hp>175</hp>

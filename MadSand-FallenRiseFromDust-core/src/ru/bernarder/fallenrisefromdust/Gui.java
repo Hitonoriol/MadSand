@@ -38,6 +38,7 @@ import ru.bernarder.fallenrisefromdust.entities.Player;
 import ru.bernarder.fallenrisefromdust.entities.Stats;
 import ru.bernarder.fallenrisefromdust.entities.inventory.Item;
 import ru.bernarder.fallenrisefromdust.enums.GameState;
+import ru.bernarder.fallenrisefromdust.enums.ItemType;
 import ru.bernarder.fallenrisefromdust.enums.Skill;
 import ru.bernarder.fallenrisefromdust.map.Map;
 import ru.bernarder.fallenrisefromdust.map.MapObject;
@@ -52,9 +53,6 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.PrintWriter;
 import java.security.MessageDigest;
-import java.util.HashSet;
-import java.util.Vector;
-import java.util.Map.Entry;
 
 /*
  * If you opened this file by accident, immediately close it, i don't want to be responsible for consequences.
@@ -71,7 +69,7 @@ public class Gui {
 	public static final int EQ_SLOTS = 5;
 	static float defLblWidth = Gdx.graphics.getWidth() / 4;
 	public static final float ACTION_TBL_YPOS = Gdx.graphics.getHeight() / 6f;
-	
+
 	public static String noticeMsgColor = "[#16E1EA]";
 
 	static NinePatchDrawable transparency;
@@ -241,8 +239,8 @@ public class Gui {
 
 	static void refreshOverlay() {
 		overlayStatLabels[0].setText("HP: " + World.player.stats.hp + "/" + World.player.stats.mhp);
-		overlayStatLabels[1].setText("Level: " + World.player.stats.skills.getLvl(Skill.Level));
-		overlayStatLabels[2].setText("Experience: " + World.player.stats.skills.getExpString(Skill.Level));
+		overlayStatLabels[1].setText("LVL: " + World.player.stats.skills.getLvl(Skill.Level));
+		overlayStatLabels[2].setText("XP: " + World.player.stats.skills.getExpString(Skill.Level));
 		overlayStatLabels[3].setText("Food: " + World.player.stats.food + " / " + World.player.stats.maxFood);
 		overlayStatLabels[4].setText("Hand: " + World.player.stats.hand.name);
 	}
@@ -819,11 +817,12 @@ public class Gui {
 			}
 
 		});
-		contextMenuBtn[4] = new TextButton("Free hands", skin);
+		contextMenuBtn[4] = new TextButton("Put held item to backpack", skin);
 		contextMenuBtn[4].addListener(new ChangeListener() {
 
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				World.player.freeHands();
+				closeGameContextMenu();
 			}
 
 		});
@@ -842,7 +841,7 @@ public class Gui {
 		});
 
 		while (cc < 5) {
-			gamecontext.add(contextMenuBtn[cc]).width(100.0F).height(20.0F);
+			gamecontext.add(contextMenuBtn[cc]).width(DEFWIDTH).height(20.0F);
 			gamecontext.row();
 			cc++;
 		}
@@ -926,7 +925,6 @@ public class Gui {
 						gameUnfocused = true;
 					} else {
 						closeGameContextMenu();
-						gameUnfocused = false;
 					}
 				}
 			}
@@ -1079,9 +1077,12 @@ public class Gui {
 	public static void closeGameContextMenu() {
 		mousemenu.setVisible(true);
 		gamecontext.setVisible(false);
+		gameUnfocused = false;
 	}
 
+	private final static int CONTEXT_USE_BTN = 3;
 	public static void openGameContextMenu() {
+		contextMenuBtn[CONTEXT_USE_BTN].setText("Use " + World.player.stats.hand.name);
 		mousemenu.setVisible(false);
 		gamecontext.setVisible(true);
 		gamecontext.setPosition(Mouse.x + 50, Mouse.y - 30);
@@ -1117,16 +1118,20 @@ public class Gui {
 
 	public static void processActionMenu() {
 		Map loc = MadSand.world.getCurLoc();
+
 		Player player = World.player;
 		Pair coords = new Pair(player.x, player.y);
+
 		Tile tile = loc.getTile(coords.x, coords.y);
 		coords.addDirection(player.stats.look);
+
+		int tileItem = MapObject.getTileAltItem(tile.id, player.stats.hand.type.get());
 		MapObject object = loc.getObject(coords.x, coords.y);
 		Npc npc = loc.getNpc(coords.x, coords.y);
 		String tileAction = TileProp.oninteract.get(tile.id);
 		String objAction = ObjectProp.interactAction.get(object.id);
 
-		if (tileAction == "-1" && npc == Map.nullNpc && object == Map.nullObject) {
+		if (tileAction == "-1" && npc == Map.nullNpc && object == Map.nullObject && tileItem == -1) {
 			actionTbl.setVisible(false);
 			return;
 		}
@@ -1135,13 +1140,19 @@ public class Gui {
 		interactBtn = new TextButton("", skin);
 		actionTbl.add(interactBtn).width(DEFWIDTH).row();
 		actionTbl.addListener(inGameBtnListener);
+		boolean holdsShovel = player.stats.hand.type == ItemType.Shovel;
 
-		if (tile != Map.nullTile && tileAction != "-1") {
-			activateInteractBtn(interactBtn, "Interact with current tile", new ChangeListener() {
+		String tileMsg = "Interact with ";
+		if (tile != Map.nullTile && (tileAction != "-1" || (tileItem != -1 && holdsShovel))) {
+			if (tileItem != -1 && holdsShovel)
+				tileMsg = "Dig ";
+			activateInteractBtn(interactBtn, tileMsg + TileProp.name.get(tile.id), new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
-					Utils.out("interactBtn Click");
-					BuildScript.execute(tileAction);
+					if (!holdsShovel)
+						BuildScript.execute(tileAction);
+					else
+						player.useItem();
 					interactBtn.removeListener(this);
 					actionTbl.setVisible(false);
 				}

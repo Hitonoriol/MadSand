@@ -566,8 +566,8 @@ public class World {
 			player.setFov(player.fov + 1);
 		}
 
-		MadSand.print("Another hour passes...");
-		MadSand.print("(It's " + worldtime + ":00)");
+		MadSand.notice("Another hour passes...");
+		MadSand.notice("It's " + worldtime + ":00");
 	}
 
 	private void tick() {
