@@ -40,7 +40,7 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 	public boolean check(Skill skill, boolean verbose) {
 		boolean lvup = get(skill).check();
 		if (verbose && lvup)
-			MadSand.print(skill.toString() + " increased!");
+			MadSand.notice(skill.toString() + " increased!");
 		return lvup;
 	}
 
@@ -59,7 +59,7 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 		++get(skill).exp;
 		return check(skill);
 	}
-	
+
 	public boolean increaseSkill(Skill skill, int amt) {
 		get(skill).exp += amt;
 		return check(skill);
@@ -85,13 +85,13 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 		get(skill).exp = amt;
 	}
 
-	static final int REWARD_CHANCE = 10;
+	static final int REWARD_CHANCE = 90;
 
 	public int getItemReward(Skill skill) {
 		int rew = get(skill).lvl / ITEM_BONUS_DENOMINATOR;
 		if (rew == 0)
 			return 1;
-		if (Utils.random.nextInt(REWARD_CHANCE) == Utils.random.nextInt(REWARD_CHANCE))
+		if (Utils.randPercent() < REWARD_CHANCE)
 			return rew;
 		else
 			return 1;

@@ -245,9 +245,19 @@ public class Gui {
 		overlayStatLabels[4].setText("Hand: " + World.player.stats.hand.name);
 	}
 
+	private final static float headerLeftPadding = -45f;
+	private final static float headerBottomPadding = 5f;
+	private final static float headerScale = 1.11f;
+
 	public static void showStatsWindow() {
-		final Dialog statWindow = new Dialog("", skin);
-		statWindow.text(World.player.stats.name);
+		final GameDialog statWindow = new GameDialog(overlay);
+		Label nameLbl = new Label(World.player.stats.name, skin);
+		Label levelLbl = new Label("Level: " + World.player.stats.skills.getLvl(Skill.Level) + " ("
+				+ World.player.stats.skills.getExpString(Skill.Level) + ")", skin);
+
+		levelLbl.setFontScale(headerScale);
+		nameLbl.setFontScale(headerScale);
+		statWindow.add(nameLbl).row();
 		TextButton ok = new TextButton("Close", skin);
 		ok.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
@@ -261,12 +271,11 @@ public class Gui {
 		statWindow.add(new Label("", skin));
 		refreshStatLabels();
 		statWindow.row();
-		statWindow.add(new Label("Level: " + World.player.stats.skills.getLvl(Skill.Level) + " ("
-				+ World.player.stats.skills.getExpString(Skill.Level) + ")", skin));
+		statWindow.add(levelLbl);
 		statWindow.row();
 		statWindow.add(new Label("", skin)).width(defLblWidth).row();
 		statWindow.row();
-		statWindow.add(statsLbl).width(defLblWidth).row();
+		statWindow.add(statsLbl).width(defLblWidth).padLeft(headerLeftPadding).padBottom(headerBottomPadding).row();
 		statWindow.row();
 		statWindow.add(hpStatLbl).width(defLblWidth).row();
 		statWindow.row();
@@ -282,7 +291,7 @@ public class Gui {
 		statWindow.row();
 		statWindow.add(dexStatLbl).width(defLblWidth).row();
 		statWindow.row();
-		statWindow.add(skillsLbl).width(defLblWidth).row();
+		statWindow.add(skillsLbl).width(defLblWidth).padLeft(headerLeftPadding).padBottom(headerBottomPadding).row();
 		statWindow.row();
 		Skill skill;
 		Label skillLbl;
@@ -296,7 +305,7 @@ public class Gui {
 			statWindow.row();
 		}
 
-		statWindow.add(ok).width(defLblWidth).row();
+		statWindow.add(ok).width(defLblWidth).padTop(35).padBottom(5).row();
 		statWindow.show(overlay);
 	}
 
@@ -685,9 +694,16 @@ public class Gui {
 
 		int i = 0;
 		int perRow = 3, id;
+		int quantity;
+		String craftString;
 		while (i < craftSz) {
+			craftString = "";
 			id = player.craftRecipes.get(i);
-			craftbtn[i] = new TextButton(ItemProp.name.get(id), skin);
+			quantity = ItemProp.craftQuantity.get(id);
+			if (quantity > 1)
+				craftString = quantity + " ";
+			craftString += ItemProp.name.get(id);
+			craftbtn[i] = new TextButton(craftString, skin);
 			craftbl.add(craftbtn[i]).width(CRAFT_BTN_WIDTH);
 			craftbl.add(new Label(" " + Item.queryToName(ItemProp.recipe.get(id)), skin)).padRight(CRAFT_ENTRY_PADDING);
 
@@ -744,6 +760,8 @@ public class Gui {
 
 		statsLbl = new Label("Stats:", skin);
 		skillsLbl = new Label("\nSkills:", skin);
+		skillsLbl.setFontScale(headerScale);
+		statsLbl.setFontScale(headerScale);
 
 		conStatLbl = new Label("", skin);
 		strStatLbl = new Label("", skin);
@@ -1081,6 +1099,7 @@ public class Gui {
 	}
 
 	private final static int CONTEXT_USE_BTN = 3;
+
 	public static void openGameContextMenu() {
 		contextMenuBtn[CONTEXT_USE_BTN].setText("Use " + World.player.stats.hand.name);
 		mousemenu.setVisible(false);

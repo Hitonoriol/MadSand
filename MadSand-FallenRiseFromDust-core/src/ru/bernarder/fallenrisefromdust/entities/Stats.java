@@ -222,6 +222,10 @@ public class Stats {
 	public boolean attackMissed() {
 		return (Utils.rand(0, accuracy) == accuracy);
 	}
+	
+	public boolean luckRoll() {
+		return (Utils.rand(0, luck) != luck);
+	}
 
 	public int calcAttack() {
 		if (attackMissed())

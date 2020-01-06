@@ -204,13 +204,15 @@ public class Player extends Entity {
 	public boolean craftItem(int id) {
 		if (inventory.delItem(ItemProp.recipe.get(id))) {
 			increaseSkill(Skill.Crafting);
-			Item item = new Item(id, stats.skills.getItemReward(Skill.Crafting));
+			int quantity = ItemProp.craftQuantity.get(id);
+			int bonus = stats.skills.getItemReward(Skill.Crafting) - 1;
+			Item item = new Item(id, quantity + bonus);
 			if (!inventory.putItem(item)) {
 				MadSand.world.getCurLoc().putLoot(x, y, item);
 				MadSand.notice("You can't carry any more items");
 			}
-			Gui.drawOkDialog("Crafted " + ItemProp.name.get(id), Gui.craft);
-			MadSand.notice("You craft " + ItemProp.name.get(id));
+			Gui.drawOkDialog("Crafted " + quantity + " " + ItemProp.name.get(id) + " successfully!", Gui.craft);
+			MadSand.notice("You craft " + quantity + " " + ItemProp.name.get(id));
 			doAction(stats.AP_MINOR);
 			return true;
 		}
@@ -310,30 +312,38 @@ public class Player extends Entity {
 		Map loc = MadSand.world.getCurLoc();
 		MapObject obj = MadSand.world.getCurLoc().getObject(coords.x, coords.y);
 		Npc npc = loc.getNpc(coords.x, coords.y);
+
 		if (npc != Map.nullNpc) {
 			interact(npc);
 			return;
 		}
+
 		int id = obj.id;
 
 		if (id == 0)
 			return;
+
 		String action = ObjectProp.interactAction.get(id);
 		doAction();
+
 		if (action != "-1") {
 			BuildScript.execute(action);
 			return;
 		}
+
 		if (!loc.editable) {
 			MadSand.notice("You try to interact with " + obj.name + "..." + Gui.LINEBREAK
 					+ "But suddenly, you feel that it's protected by some mysterious force");
 			return;
 		}
+
 		int item = MapObject.getAltItem(id, ItemProp.type.get(stats.hand.id).get());
 		int mhp = ObjectProp.harvestHp.get(obj.id);
 		Skill skill = obj.skill;
 		int curLvl = stats.skills.getLvl(skill);
+
 		damageHeldTool(skill);
+
 		if (curLvl < obj.lvl) {
 			MadSand.notice("You are not experienced enough." + Gui.LINEBREAK + skill + " level required: " + obj.lvl
 					+ Gui.LINEBREAK + "Your " + skill + ": " + curLvl);
@@ -341,16 +351,28 @@ public class Player extends Entity {
 		}
 
 		boolean destroyed = obj.takeDamage(stats.skills.getLvl(skill) + stats.hand.getSkillDamage(skill));
-		if (item != -1 && destroyed) {
-			Item objLoot = new Item(item, stats.skills.getItemReward(skill));
-			boolean gotItem = addItem(objLoot);
-			if (!gotItem)
-				MadSand.world.getCurLoc().putLoot(x, y, objLoot);
+
+		if (item != -1 && destroyed) { // Succesfull interaction with item that drops something
+			int rewardCount = stats.skills.getItemReward(skill);
+			int rolls = stats.skills.getLvl(skill) + 1; // The higher the level of the skill, the more rolls of drop we
+														// make
+			if (!stats.luckRoll())
+				rolls = 1;
+
+			for (int i = 0; i < rolls; ++i) {
+				Item objLoot = new Item(item, rewardCount);
+				boolean gotItem = addItem(objLoot);
+				if (!gotItem)
+					MadSand.world.getCurLoc().putLoot(x, y, objLoot);
+				item = MapObject.getAltItem(id, ItemProp.type.get(stats.hand.id).get());
+			}
 
 			increaseSkill(skill);
 		}
+
 		if (!destroyed)
 			MadSand.print("You hit a " + obj.name + " [ " + obj.harverstHp + " / " + mhp + " ]");
+
 		if (item == -1 && destroyed)
 			MadSand.print("You damaged " + obj.name);
 

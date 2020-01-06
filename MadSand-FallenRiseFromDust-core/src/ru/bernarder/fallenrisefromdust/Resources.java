@@ -345,6 +345,8 @@ public class Resources {
 			ItemProp.unlockable.put(i, unlockable);
 
 			ItemProp.recipe.put(i, XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, XML_RECIPE_NODE));
+			ItemProp.craftQuantity.put(i,
+					Utils.val(XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "craft_quantity", "1")));
 			ItemProp.heal.put(i, XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "heal"));
 			ItemProp.useAction.put(i, XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "onuse"));
 

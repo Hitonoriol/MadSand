@@ -58,6 +58,7 @@
 			<name>Stick</name>
 			<cost>4</cost>
 			<recipe>1/1</recipe>
+			<craft_quantity>2</craft_quantity>
 			<weight>0.2</weight>
 		</item>
 		<item id="9">
