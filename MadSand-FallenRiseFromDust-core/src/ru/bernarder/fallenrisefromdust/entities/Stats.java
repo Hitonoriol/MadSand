@@ -211,7 +211,7 @@ public class Stats {
 	}
 
 	public void perTickCheck() {
-		if (skills.skillRoll(Skill.Survival))
+		if (!skills.skillRoll(Skill.Survival))
 			--food;
 
 		if (food <= 0)

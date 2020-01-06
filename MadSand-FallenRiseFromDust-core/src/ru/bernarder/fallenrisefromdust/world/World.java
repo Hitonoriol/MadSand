@@ -250,16 +250,20 @@ public class World {
 			++WorldLoc.layers;
 		Map loc = getCurLoc();
 		String place = null;
-		if (loc.spawnPoint != Pair.nullPair) { // this means we are in the dungeon
+		Utils.out("In cave : " + (loc.spawnPoint.equals(Pair.nullPair)));
+		int x = loc.spawnPoint.x, y = loc.spawnPoint.y; // idk what the fuck is wrong but Pair(-1,-1) != Pair(-1,-1)
+														// according to fucking java
+		int x1 = Pair.nullPair.x, y1 = Pair.nullPair.y;
+		if (x1 != x && y1 != y) { // this means we are in the dungeon
 			player.teleport(loc.spawnPoint.x, loc.spawnPoint.y);
 			place = "dungeon";
 		} else { // this means we are in the cave
 			delObj(player.x, player.y);
 			putMapTile(player.x, player.y, TILE_CAVE_EXIT);
+			Gui.processActionMenu();
 			place = "cave";
 		}
 		MadSand.print("You descend to " + place + " level " + curlayer);
-		Gui.processActionMenu();
 		return ret;
 	}
 

@@ -115,4 +115,9 @@ public class Pair {
 		Pair rhs = (Pair) obj;
 		return new EqualsBuilder().append(x, rhs.x).append(y, rhs.y).isEquals();
 	}
+
+	@Override
+	public String toString() {
+		return "(" + x + ", " + y + ")";
+	}
 }

@@ -1180,8 +1180,8 @@ public class Gui {
 						BuildScript.execute(tileAction);
 					else
 						player.useItem();
-					interactBtn.removeListener(this);
-					actionTbl.setVisible(false);
+					gameUnfocused = false;
+					mouselabel.setVisible(true);
 				}
 			});
 		} else if (npc != Map.nullNpc && !dialogActive)

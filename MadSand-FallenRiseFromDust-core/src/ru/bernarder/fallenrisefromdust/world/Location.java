@@ -156,6 +156,7 @@ public class Location extends HashMap<MapID, Map> {
 			map.purge();
 			map.editable = editable;
 			map.spawnPoint = new Pair(spawnX, spawnY);
+			Utils.out("Dungeon spawnpoint: " + map.spawnPoint);
 
 			String npf = GameSaver.getNpcFile(wx, wy, layer);
 			ArrayList<Npc> npcs = new ArrayList<Npc>();
