@@ -11,6 +11,7 @@ import com.github.czyzby.noise4j.map.generator.room.dungeon.DungeonGenerator;
 import com.github.czyzby.noise4j.map.generator.util.Generators;
 
 import ru.bernarder.fallenrisefromdust.GameSaver;
+import ru.bernarder.fallenrisefromdust.Gui;
 import ru.bernarder.fallenrisefromdust.MadSand;
 import ru.bernarder.fallenrisefromdust.Resources;
 import ru.bernarder.fallenrisefromdust.Utils;
@@ -25,6 +26,7 @@ public class World {
 	Map nullLoc = new Map(0, 0);
 	public static final int DEFAULT_WORLDSIZE = 10;
 	public static final int DUNGEON_LAYER_MAX = 20;
+	public static final int TILE_CAVE_EXIT = 25;
 
 	private Pair coords = new Pair();
 	private int xsz, ysz; // max world size, not really used anywhere (still)
@@ -151,10 +153,10 @@ public class World {
 			if (!locExists(new MapID(coords.set(curxwpos, curywpos), 0)))
 				createBasicLoc(wx, wy);
 			clearCurLoc();
-			
-			if ((wx == 5) && (wy == 5))	//TODO: persistent locations
+
+			if ((wx == 5) && (wy == 5)) // TODO: persistent locations
 				biome = 0;
-			
+
 			else
 				biome = randBiome();
 			Utils.out("Biome: " + biome);
@@ -247,9 +249,17 @@ public class World {
 		if (curlayer > (WorldLoc.layers - 1))
 			++WorldLoc.layers;
 		Map loc = getCurLoc();
-		if (loc.spawnPoint != Pair.nullPair)
+		String place = null;
+		if (loc.spawnPoint != Pair.nullPair) { // this means we are in the dungeon
 			player.teleport(loc.spawnPoint.x, loc.spawnPoint.y);
-		MadSand.print("You descend to dungeon level " + curlayer);
+			place = "dungeon";
+		} else { // this means we are in the cave
+			delObj(player.x, player.y);
+			putMapTile(player.x, player.y, TILE_CAVE_EXIT);
+			place = "cave";
+		}
+		MadSand.print("You descend to " + place + " level " + curlayer);
+		Gui.processActionMenu();
 		return ret;
 	}
 
@@ -261,6 +271,7 @@ public class World {
 			MadSand.print("You get back to surface level");
 		else
 			MadSand.print("You get back to dungeon level " + curlayer);
+		Gui.processActionMenu();
 		return ret;
 	}
 

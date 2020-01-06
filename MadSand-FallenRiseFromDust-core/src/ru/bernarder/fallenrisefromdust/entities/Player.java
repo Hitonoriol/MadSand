@@ -191,7 +191,7 @@ public class Player extends Entity {
 	public boolean addItem(Item item) {
 		if (super.addItem(item)) {
 			if (item.name != "")
-				MadSand.print("You get " + item.quantity + " " + item.name);
+				MadSand.notice("You get " + item.quantity + " " + item.name);
 			if (unlockedItems.add(item.id))
 				refreshAvailableRecipes();
 			return true;
@@ -443,7 +443,7 @@ public class Player extends Entity {
 			Pair coords = new Pair(x, y).addDirection(stats.look);
 			if (MadSand.world.getCurLoc().putCrop(coords.x, coords.y, id)) {
 				increaseSkill(Skill.Farming);
-				MadSand.print("You planted 1 " + new Item(id).name);
+				MadSand.print("You plant " + new Item(id).name);
 				inventory.delItem(id);
 			}
 

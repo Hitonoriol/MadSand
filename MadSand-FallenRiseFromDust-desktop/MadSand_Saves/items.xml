@@ -22,7 +22,7 @@
 			<hp>128</hp>
 			<type>Axe</type>
 			<cost>9</cost>
-			<recipe>2/5:8/3</recipe>
+			<recipe>2/7:8/5</recipe>
 			<weight>0.7</weight>
 		</item>
 		<item id="4">
@@ -44,7 +44,7 @@
 			<hp>100</hp>
 			<cost>10</cost>
 			<type>Shovel</type>
-			<recipe>2/9:8/3</recipe>
+			<recipe>2/7:8/5</recipe>
 			<weight>0.7</weight>
 		</item>
 		<item id="7">
@@ -81,13 +81,13 @@
 			<hp>128</hp>
 			<cost>10</cost>
 			<type>Pickaxe</type>
-			<recipe>2/13:8/7</recipe>
+			<recipe>2/7:8/5</recipe>
 			<weight>0.7</weight>
 		</item>
 		<item id="12">
 			<name>Stone sword</name>
 			<cost>11</cost>
-			<recipe>2/25:8/7</recipe>
+			<recipe>2/10:8/5</recipe>
 			<type>Weapon</type>
 			<lvl>1</lvl>
 			<strength>2</strength>
@@ -286,7 +286,7 @@
 			<dmg>2</dmg>
 			<hp>75</hp>
 			<cost>11</cost>
-			<recipe>2/13:8/5</recipe>
+			<recipe>2/7:8/5</recipe>
 			<type>Hoe</type>
 			<weight>0.8</weight>
 			<onuse>!0 place_tile $player_x $player_y 15;= !15 You plowed the soil

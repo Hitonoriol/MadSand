@@ -8,6 +8,7 @@ import ru.bernarder.fallenrisefromdust.entities.inventory.Item;
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.enums.Faction;
 import ru.bernarder.fallenrisefromdust.enums.ItemType;
+import ru.bernarder.fallenrisefromdust.enums.Skill;
 
 public class Stats {
 	public final static int WEIGHT_MULTIPLIER = 5;
@@ -210,7 +211,8 @@ public class Stats {
 	}
 
 	public void perTickCheck() {
-		--food;
+		if (skills.skillRoll(Skill.Survival))
+			--food;
 
 		if (food <= 0)
 			owner._damage(STARVE_DMG);

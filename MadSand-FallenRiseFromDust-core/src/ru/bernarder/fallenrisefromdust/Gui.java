@@ -1165,7 +1165,7 @@ public class Gui {
 
 		actionTbl.removeActor(interactBtn);
 		interactBtn = new TextButton("", skin);
-		actionTbl.add(interactBtn).width(DEFWIDTH).row();
+		actionTbl.add(interactBtn).width(DEFWIDTH + 50).row();
 		actionTbl.addListener(inGameBtnListener);
 		boolean holdsShovel = player.stats.hand.type == ItemType.Shovel;
 

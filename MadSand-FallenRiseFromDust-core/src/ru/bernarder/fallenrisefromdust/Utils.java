@@ -96,8 +96,8 @@ public class Utils {
 	}
 
 	static Npc dummy;
-	
-	public static void pollStatWindowKey() { 
+
+	public static void pollStatWindowKey() {
 		if (Gdx.input.isKeyJustPressed(Keys.Q))
 			Gui.showStatsWindow();
 	}
@@ -264,6 +264,10 @@ public class Utils {
 
 	public static int randPercent() {
 		return rand(1, 100);
+	}
+
+	public static boolean percentRoll(int percent) {
+		return ((randPercent() - 1) < percent);
 	}
 
 	public static int val(boolean bool) {

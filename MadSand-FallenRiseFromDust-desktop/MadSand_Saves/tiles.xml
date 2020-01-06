@@ -108,8 +108,11 @@
 			<damage>0</damage>
 		</tile>
 		<tile id="25">
-			<name>Gravel</name>
+			<name>Cave exit</name>
 			<damage>0</damage>
+			<oninteract>
+				dungeon_ascend;
+			</oninteract>
 		</tile>
 		<tile id="26">
 			<name>Stone floor</name>
