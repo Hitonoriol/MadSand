@@ -249,8 +249,16 @@ public class Gui {
 	private final static float headerBottomPadding = 5f;
 	private final static float headerScale = 1.11f;
 
+	public static GameDialog statWindow;
+
 	public static void showStatsWindow() {
-		final GameDialog statWindow = new GameDialog(overlay);
+		if (statWindow != null) {
+			statWindow.remove();
+			statWindow = null;
+			return;
+		}
+
+		statWindow = new GameDialog(overlay);
 		Label nameLbl = new Label(World.player.stats.name, skin);
 		Label levelLbl = new Label("Level: " + World.player.stats.skills.getLvl(Skill.Level) + " ("
 				+ World.player.stats.skills.getExpString(Skill.Level) + ")", skin);

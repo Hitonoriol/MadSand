@@ -349,6 +349,11 @@ public class Player extends Entity {
 					+ Gui.LINEBREAK + "Your " + skill + ": " + curLvl);
 			return;
 		}
+		
+		if (!stats.luckRoll()) {
+			MadSand.print("You fail to interact with " + obj.name);
+			return;
+		}
 
 		boolean destroyed = obj.takeDamage(stats.skills.getLvl(skill) + stats.hand.getSkillDamage(skill));
 

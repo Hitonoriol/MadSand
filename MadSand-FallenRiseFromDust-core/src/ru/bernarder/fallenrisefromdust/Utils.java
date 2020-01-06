@@ -96,6 +96,11 @@ public class Utils {
 	}
 
 	static Npc dummy;
+	
+	public static void pollStatWindowKey() { 
+		if (Gdx.input.isKeyJustPressed(Keys.Q))
+			Gui.showStatsWindow();
+	}
 
 	public static void gameKeyCheck() {
 		if (Gdx.input.isKeyJustPressed(Keys.GRAVE)) {
@@ -104,8 +109,6 @@ public class Utils {
 		}
 		if (Gdx.input.isButtonPressed(Buttons.MIDDLE))
 			World.player.lookAtMouse(Mouse.wx, Mouse.wy);
-		if (Gdx.input.isKeyJustPressed(Keys.Q))
-			Gui.showStatsWindow();
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER))
 			World.player.interact(World.player.stats.look);
 		if (Gdx.input.isKeyPressed(Keys.NUMPAD_3))
@@ -179,10 +182,10 @@ public class Utils {
 			Gdx.input.setInputProcessor(Gui.menu);
 			MadSand.state = GameState.NMENU;
 		}
-		if ((Gdx.input.isKeyJustPressed(Keys.G)) && (debugMode)) {
+		if ((Gdx.input.isKeyJustPressed(Keys.G))) {
 			GameSaver.saveWorld();
 		}
-		if ((Gdx.input.isKeyJustPressed(Keys.L)) && (debugMode)) {
+		if ((Gdx.input.isKeyJustPressed(Keys.L))) {
 			GameSaver.loadWorld(MadSand.WORLDNAME);
 		}
 		if ((Gdx.input.isKeyJustPressed(Keys.H)) && (debugMode)) {

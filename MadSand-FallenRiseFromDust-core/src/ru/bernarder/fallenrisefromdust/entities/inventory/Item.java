@@ -110,8 +110,12 @@ public class Item {
 	public int getSkillDamage(Skill skill) {
 		if (skill != this.skill)
 			return 1;
-		else
-			return dmg;
+		else {
+			int damage = dmg / Skill.SKILL_DMG_DENOMINATOR;
+			if (damage == 0)
+				damage = 1;
+			return damage;
+		}
 	}
 
 	@Override
