@@ -479,7 +479,7 @@
 			<hp>200</hp>
 			<cost>10</cost>
 			<type>Pickaxe</type>
-			<recipe>9/12:8/7</recipe>
+			<recipe>9/12:8/7:69/3</recipe>
 			<weight>0.7</weight>
 		</item>
 		<item id="68">
@@ -493,5 +493,36 @@
 			<cost>2</cost>
 			<weight>0.01</weight>
 			<recipe>68/2</recipe>
+		</item>
+		<item id="70">
+			<name>Sharp stone</name>
+			<cost>2</cost>
+			<weight>0.5</weight>
+			<recipe>2/2</recipe>
+		</item>
+		<item id="71">
+			<name>Sharp stick</name>
+			<cost>2</cost>
+			<weight>0.1</weight>
+			<recipe>2/1:8/1</recipe>
+		</item>
+		<item id="72">
+			<name>Iron ingot</name>
+			<cost>2</cost>
+			<weight>0.7</weight>
+		</item>
+		<item id="73">
+			<name>Gold ingot</name>
+			<cost>2</cost>
+			<weight>0.7</weight>
+		</item>
+		<item id="74">
+			<name>Spear</name>
+			<cost>11</cost>
+			<recipe>72/5:8/5</recipe>
+			<type>Weapon</type>
+			<lvl>2</lvl>
+			<strength>4</strength>
+			<weight>0.8</weight>
 		</item>
 	</items>
