@@ -403,7 +403,8 @@ public class Resources {
 			vdungeon = Utils.toValMap(XMLUtils
 					.nodeMapToHashMap(XMLUtils.getNested(gendoc, XML_BIOME_NODE, Utils.str(i), "dungeon", "-1")));
 			WorldGenProp.loadUnderworldBlock(i, defT, defO, ore, vdungeon);
-			WorldGenProp.dungeonContents = XMLUtils.nodeMapToHashMap(XMLUtils.getNested(gendoc, XML_BIOME_NODE, Utils.str(i), "dungeon_contents", "-1"));
+			WorldGenProp.dungeonContents.put(i, XMLUtils.nodeMapToHashMap(
+					XMLUtils.getNested(gendoc, XML_BIOME_NODE, Utils.str(i), "dungeon_contents", "-1")));
 			++i;
 		}
 		Utils.out("Done initializing WorldGen!");

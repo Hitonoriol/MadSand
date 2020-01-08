@@ -12,7 +12,7 @@ public class WorldGenProp {
 	private static HashMap<Integer, HashMap<String, Integer>> lake = new HashMap<Integer, HashMap<String, Integer>>();
 	private static HashMap<Integer, Vector<Integer>> underworld = new HashMap<Integer, Vector<Integer>>();
 	private static HashMap<Integer, HashMap<String, Integer>> dungeon = new HashMap<Integer, HashMap<String, Integer>>();
-	public static HashMap<String, String> dungeonContents = new HashMap<String, String>();
+	public static HashMap<Integer, HashMap<String, String>> dungeonContents = new HashMap<Integer, HashMap<String, String>>();
 
 	public static int getDefaultTile(int id) {
 		return tile.get(id).get(0).get(0);

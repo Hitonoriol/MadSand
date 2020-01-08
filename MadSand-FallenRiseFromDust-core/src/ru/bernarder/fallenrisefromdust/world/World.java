@@ -1,6 +1,8 @@
 package ru.bernarder.fallenrisefromdust.world;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Vector;
 
@@ -18,6 +20,7 @@ import ru.bernarder.fallenrisefromdust.Utils;
 import ru.bernarder.fallenrisefromdust.containers.Pair;
 import ru.bernarder.fallenrisefromdust.entities.Npc;
 import ru.bernarder.fallenrisefromdust.entities.Player;
+import ru.bernarder.fallenrisefromdust.entities.inventory.Item;
 import ru.bernarder.fallenrisefromdust.enums.Direction;
 import ru.bernarder.fallenrisefromdust.map.Map;
 import ru.bernarder.fallenrisefromdust.properties.WorldGenProp;
@@ -327,6 +330,13 @@ public class World {
 	private static String DUNGEON_MINROOMSIZE = "minroomsize";
 	private static String DUNGEON_TOLERANCE = "tolerance";
 
+	private static String DUNGEON_CONTENTS_MOBS = "mobs";
+	private static String DUNGEON_CONTENTS_LOOT = "loot";
+	private static String DUNGEON_CONTENTS_MOB_PROBABILITY = "mob_probability";
+	private static String DUNGEON_CONTENTS_MOB_CORRIDOR_PROBABILITY = "mob_corridor_probability";
+	private static String DUNGEON_CONTENTS_LOOT_PROBABILITY = "loot_probability";
+	private static String DUNGEON_CONTENTS_LOOT_CORRIDOR_PROBABILITY = "loot_corridor_probability";
+
 	private static String DUNGEON_WALL_OBJ = "wall_object";
 	private static String DUNGEON_WALL_TILE = "wall_tile";
 	private static String DUNGEON_ROOM_TILE = "room_tile";
@@ -337,6 +347,7 @@ public class World {
 		boolean force = true;
 		Utils.out("Generating dungeon!");
 		HashMap<String, Integer> dungeon = WorldGenProp.getBiomedungeon(biome);
+		HashMap<String, String> contents = WorldGenProp.dungeonContents.get(biome);
 		int prob = dungeon.get(DUNGEON_PROBABILITY);
 		Utils.out("Probability: " + prob + "%");
 
@@ -346,6 +357,13 @@ public class World {
 			Utils.out("Well... Decided not to.");
 			return;
 		}
+
+		ArrayList<Integer> mobs = Utils.parseList(contents.get(DUNGEON_CONTENTS_MOBS));
+		ArrayList<String> loot = Utils.parseList(contents.get(DUNGEON_CONTENTS_LOOT), Item.BLOCK_DELIM);
+		int mobProb = Utils.val(contents.get(DUNGEON_CONTENTS_MOB_PROBABILITY));
+		int mobCorridorProb = Utils.val(contents.get(DUNGEON_CONTENTS_MOB_CORRIDOR_PROBABILITY));
+		int lootProb = Utils.val(contents.get(DUNGEON_CONTENTS_LOOT_PROBABILITY));
+		int lootCorridorProb = Utils.val(contents.get(DUNGEON_CONTENTS_LOOT_CORRIDOR_PROBABILITY));
 
 		final Grid grid = new Grid(World.MAPSIZE);
 		final DungeonGenerator dungeonGenerator = new DungeonGenerator();
@@ -380,6 +398,10 @@ public class World {
 				if (grid.get(x, y) == DUNGEON_ROOM_LEVEL) { // rooms
 					loc.delObject(x, y);
 					loc.addTile(x, y, roomTile, force);
+
+					if (Utils.percentRoll(mobProb))
+						loc.spawnNpc(Utils.randElement(mobs), x, y);
+
 					if (loc.spawnPoint == Pair.nullPair)
 						loc.spawnPoint = new Pair(x, y);
 				}
@@ -608,12 +630,15 @@ public class World {
 		}
 
 		Map loc = getCurLoc();
-		Npc npc;
+		HashMap<Pair, Npc> npcs = loc.getNpcs();
+		ArrayList<Npc> queue = new ArrayList<Npc>();
 
-		for (Entry<Pair, Npc> entry : loc.getNpcs().entrySet()) {
-			npc = entry.getValue();
+		for (Entry<Pair, Npc> npc : npcs.entrySet())
+			queue.add(npc.getValue());
+
+		for (Npc npc : queue)
 			npc.act();
-		}
+
 	}
 
 	@JsonIgnore

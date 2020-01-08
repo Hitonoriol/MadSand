@@ -13,6 +13,7 @@ import ru.bernarder.fallenrisefromdust.properties.ItemProp;
 import ru.bernarder.fallenrisefromdust.world.World;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -265,6 +266,28 @@ public class Utils {
 			ret.put(str.getKey(), val(str.getValue()));
 		}
 		return ret;
+	}
+
+	public static ArrayList<Integer> parseList(String str) {
+		StringTokenizer list = new StringTokenizer(str, ",");
+		ArrayList<Integer> ret = new ArrayList<Integer>();
+		while (list.hasMoreTokens()) {
+			ret.add(val(list.nextToken()));
+		}
+		return ret;
+	}
+
+	public static ArrayList<String> parseList(String str, String delim) {
+		StringTokenizer list = new StringTokenizer(str, delim);
+		ArrayList<String> ret = new ArrayList<String>();
+		while (list.hasMoreTokens()) {
+			ret.add(list.nextToken().trim());
+		}
+		return ret;
+	}
+
+	public static int randElement(ArrayList<Integer> list) {
+		return list.get(rand(0, list.size() - 1));
 	}
 
 	public static double round(double curWeight) {

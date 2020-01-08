@@ -23,7 +23,7 @@ public class Map {
 	private int biome = -1;
 	public int defTile = 0;
 	public int defObject = 0;
-	
+
 	public boolean editable = true;
 
 	public Pair spawnPoint = Pair.nullPair; // for dungeon levels only

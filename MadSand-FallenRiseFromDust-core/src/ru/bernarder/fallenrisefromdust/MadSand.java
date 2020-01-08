@@ -202,7 +202,7 @@ public class MadSand extends Game {
 
 		if (player.isInBackground())
 			drawEntity(player);
-		
+
 		while (i < renderArea.length) {
 			x = World.player.x + (int) renderArea[i].x;
 			y = World.player.y + (int) renderArea[i].y;
@@ -219,7 +219,7 @@ public class MadSand extends Game {
 		}
 
 		i = 0;
-		
+
 		while (i < renderArea.length) {
 			x = World.player.x + (int) renderArea[i].x;
 			y = World.player.y + (int) renderArea[i].y;
@@ -232,10 +232,10 @@ public class MadSand extends Game {
 			}
 
 			npc = loc.getNpc(x, y);
-			objid = loc.getObject(x, y).id;
-
 			if (npc != Map.nullNpc)
 				drawEntity(npc);
+
+			objid = loc.getObject(x, y).id;
 
 			if ((objid != MapObject.NULL_OBJECT_ID) && (objid != MapObject.COLLISION_MASK_ID))
 				Utils.batch.draw(Resources.objects[objid], x * TILESIZE, y * TILESIZE);
