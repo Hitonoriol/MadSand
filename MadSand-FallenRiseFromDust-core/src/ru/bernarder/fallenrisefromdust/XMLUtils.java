@@ -111,17 +111,16 @@ public class XMLUtils {
 		return ret;
 	}
 
-	static HashMap<String, Integer> nodeMapToHashMap(NamedNodeMap map) {
-		HashMap<String, Integer> ret = new HashMap<String, Integer>();
+	static HashMap<String, String> nodeMapToHashMap(NamedNodeMap map) {
+		HashMap<String, String> ret = new HashMap<String, String>();
 		if (map == null) {
-			ret.put("tid", -1);
+			ret.put("tid", "-1");
 			return ret;
 		}
 		int len = map.getLength();
 		for (int i = 0; i < len; ++i) {
 			Node attr = map.item(i);
-			ret.put(attr.getNodeName(), Utils.val(attr.getNodeValue()));
-			// out(attr.getNodeName() + ": " + attr.getNodeValue());
+			ret.put(attr.getNodeName(), attr.getNodeValue());
 		}
 		return ret;
 	}

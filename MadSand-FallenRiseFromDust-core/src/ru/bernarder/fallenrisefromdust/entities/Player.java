@@ -573,6 +573,7 @@ public class Player extends Entity {
 		int ticks = super.doAction(ap);
 		MadSand.world.ticks(ticks); // committing our action and then letting everything catch up to time we've
 									// spent
+		Gui.refreshOverlay();
 		return ticks;
 	}
 

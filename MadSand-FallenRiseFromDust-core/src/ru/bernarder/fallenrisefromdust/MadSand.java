@@ -252,7 +252,6 @@ public class MadSand extends Game {
 		if (!Gui.gameUnfocused)
 			Utils.batch.draw(Resources.mapcursor, Mouse.wx * TILESIZE, Mouse.wy * TILESIZE);
 		Utils.batch.end();
-		Gui.refreshOverlay();
 		Utils.batch.begin();
 	}
 

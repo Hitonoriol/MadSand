@@ -18,11 +18,14 @@ public class Stats {
 	public int AP_MINOR = 1; // action points consumed by minor action
 
 	final static int STARVE_DMG = 1;
+	final static int STAMINA_DMG = 3;
 	final static int FOOD_HEAL = 1;
 
 	static final int STAT_MIN_SUM = 20;
 	static final int STAT_MAX_SUM = 22;
 	static final int STAT_RAND_MAX = 9;
+
+	static int STAMINA_INTERACT_COST = 5;
 
 	@JsonIgnore
 	public Item hand = Item.nullItem;
@@ -39,7 +42,7 @@ public class Stats {
 	public int actionPtsMax = 5;
 	public int actionPts = actionPtsMax;
 
-	public float satiationFactor = 0.9f;
+	public float satiationFactor = 0.95f;
 	public final int maxFood = 1000;
 	public final int satiatedVal = (int) (maxFood * satiationFactor);
 	public int food = maxFood;
@@ -48,8 +51,10 @@ public class Stats {
 
 	public int hp;
 	public int mhp;
-	public int stamina = 50;
-	public int maxstamina = 50;
+
+	public static final float staminaLow = 0.15f;
+	public int stamina;
+	public int maxstamina;
 
 	public int accuracy = 2;
 	public int constitution;
@@ -173,6 +178,10 @@ public class Stats {
 			sum = getSum();
 		}
 
+		calcVarStats();
+	}
+
+	public void calcVarStats() {
 		hp = constitution * 10;
 		mhp = hp;
 
@@ -211,6 +220,9 @@ public class Stats {
 	}
 
 	public void perTickCheck() {
+		if (stamina < maxstamina * staminaLow)
+			owner._damage(STAMINA_DMG);
+
 		if (!skills.skillRoll(Skill.Survival))
 			--food;
 
@@ -219,6 +231,10 @@ public class Stats {
 
 		if (food >= satiatedVal)
 			owner._heal(FOOD_HEAL);
+	}
+
+	public void interactStamina() {
+		stamina -= (STAMINA_INTERACT_COST);
 	}
 
 	public boolean attackMissed() {

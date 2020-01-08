@@ -392,17 +392,18 @@ public class Resources {
 
 			def.add(Integer
 					.parseInt(XMLUtils.getAttrValues(gendoc, XML_BIOME_NODE, Utils.str(i), "def_tile", Utils.str(-1))));
-			lake = XMLUtils
-					.nodeMapToHashMap(XMLUtils.getNested(gendoc, XML_BIOME_NODE, Utils.str(i), "lake", Utils.str(-1)));
+			lake = Utils.toValMap(
+					XMLUtils.nodeMapToHashMap(XMLUtils.getNested(gendoc, XML_BIOME_NODE, Utils.str(i), "lake", "-1")));
 
 			WorldGenProp.loadTileBlock(i, def, group, lake);
 			WorldGenProp.loadObjectBlock(i, objGroup);
 			defT = XMLUtils.getAttrValues(gendoc, XML_BIOME_NODE, Utils.str(i), "cave_tile", Utils.str(-1));
 			defO = XMLUtils.getAttrValues(gendoc, XML_BIOME_NODE, Utils.str(i), "cave_object", Utils.str(-1));
 			ore.add(XMLUtils.getAttrValues(gendoc, XML_BIOME_NODE, Utils.str(i), "ore", Utils.str(-1)));
-			vdungeon = XMLUtils.nodeMapToHashMap(
-					XMLUtils.getNested(gendoc, XML_BIOME_NODE, Utils.str(i), "dungeon", Utils.str(-1)));
+			vdungeon = Utils.toValMap(XMLUtils
+					.nodeMapToHashMap(XMLUtils.getNested(gendoc, XML_BIOME_NODE, Utils.str(i), "dungeon", "-1")));
 			WorldGenProp.loadUnderworldBlock(i, defT, defO, ore, vdungeon);
+			WorldGenProp.dungeonContents = XMLUtils.nodeMapToHashMap(XMLUtils.getNested(gendoc, XML_BIOME_NODE, Utils.str(i), "dungeon_contents", "-1"));
 			++i;
 		}
 		Utils.out("Done initializing WorldGen!");

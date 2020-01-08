@@ -237,7 +237,7 @@ public class Gui {
 
 	}
 
-	static void refreshOverlay() {
+	public static void refreshOverlay() {
 		overlayStatLabels[0].setText("HP: " + World.player.stats.hp + "/" + World.player.stats.mhp);
 		overlayStatLabels[1].setText("LVL: " + World.player.stats.skills.getLvl(Skill.Level));
 		overlayStatLabels[2].setText("XP: " + World.player.stats.skills.getExpString(Skill.Level));

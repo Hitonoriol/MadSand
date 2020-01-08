@@ -15,6 +15,7 @@ import ru.bernarder.fallenrisefromdust.world.World;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -256,6 +257,14 @@ public class Utils {
 			Gui.inputField.setText("");
 			Gui.overlay.unfocus(Gui.inputField);
 		}
+	}
+
+	public static HashMap<String, Integer> toValMap(HashMap<String, String> map) {
+		HashMap<String, Integer> ret = new HashMap<String, Integer>();
+		for (Entry<String, String> str : map.entrySet()) {
+			ret.put(str.getKey(), val(str.getValue()));
+		}
+		return ret;
 	}
 
 	public static double round(double curWeight) {
