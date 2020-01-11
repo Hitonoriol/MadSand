@@ -212,6 +212,13 @@ public class Npc extends Entity {
 		}
 	}
 
+	public String spottedMsg() {
+		if (enemySpotted)
+			return "Looks like " + stats.name + " spotted you";
+		else
+			return stats.name + " doesn't see you";
+	}
+
 	public String getInfoString() {
 		String ret = super.getInfoString();
 		ret += "Friendly: " + (friendly ? "yes" : "no") + Gui.LINEBREAK;

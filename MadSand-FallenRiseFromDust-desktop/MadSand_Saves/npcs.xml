@@ -171,26 +171,26 @@
 			<spawnonce>1</spawnonce>
 		</npc>
 		<npc id="14">
-			<hp>30</hp>
-			<maxhp>30</maxhp>
+			<hp>15</hp>
+			<maxhp>15</maxhp>
 			<rewardexp>6</rewardexp>
 			<drop>n</drop>
 			<name>Rat</name>
-			<atk>1</atk>
+			<atk>2</atk>
 			<accuracy>5</accuracy>
-			<friendly>True</friendly>
+			<friendly>False</friendly>
 			<faction>Monsters</faction>
 			<spawnonce>False</spawnonce>
 		</npc>
 		<npc id="15">
-			<hp>39</hp>
-			<maxhp>39</maxhp>
+			<hp>20</hp>
+			<maxhp>20</maxhp>
 			<rewardexp>16</rewardexp>
 			<drop>n</drop>
 			<name>Scorpion</name>
 			<atk>4</atk>
 			<accuracy>10</accuracy>
-			<friendly>True</friendly>
+			<friendly>False</friendly>
 			<faction>Monsters</faction>
 			<spawnonce>False</spawnonce>
 		</npc>
@@ -201,7 +201,7 @@
 			<drop>n</drop>
 			<name>Cobra</name>
 			<atk>7</atk>
-			<accuracy>4</accuracy>
+			<accuracy>9</accuracy>
 			<friendly>True</friendly>
 			<faction>Monsters</faction>
 			<spawnonce>False</spawnonce>

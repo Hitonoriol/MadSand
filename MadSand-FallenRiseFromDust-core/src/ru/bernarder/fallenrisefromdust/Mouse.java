@@ -92,6 +92,9 @@ public class Mouse {
 
 			if (World.player.knowsNpc(npc.id))
 				info += npc.getInfoString();
+			
+			if (!npc.friendly)
+				info += npc.spottedMsg();
 
 		}
 

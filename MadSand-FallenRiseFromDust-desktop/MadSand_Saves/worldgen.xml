@@ -17,6 +17,7 @@
 		<cave_object id="-1" oid="13" />
 		<ore id="-1" ids="22,23" maxsize="10" zcount="10" />
 		
+		<!-- Dungeon has 100% probability of generation in this biome: !-->
 		<dungeon id="-1" probability="100" maxroomsize="15" minroomsize="3" tolerance="10" wall_object="13" wall_tile="7" room_tile="12" corridor_tile="5" door_object="11"/>
 		<dungeon_contents id="-1" mobs="14,15" loot="1/10" mob_probability="5" loot_probability="3" mob_corridor_probability="1" loot_corridor_probability="1"/>
 	</biome>

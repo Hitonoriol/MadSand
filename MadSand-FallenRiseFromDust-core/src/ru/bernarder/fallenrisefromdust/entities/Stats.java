@@ -21,8 +21,8 @@ public class Stats {
 	final static int STAMINA_DMG = 3;
 	final static int FOOD_HEAL = 1;
 
-	static final int STAT_MIN_SUM = 20;
-	static final int STAT_MAX_SUM = 22;
+	int STAT_MIN_SUM = 20;
+	int STAT_MAX_SUM = 22;
 	static final int STAT_RAND_MAX = 9;
 
 	static int STAMINA_INTERACT_COST = 5;

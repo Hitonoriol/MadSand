@@ -2,7 +2,6 @@ package ru.bernarder.fallenrisefromdust.world;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Vector;
 
@@ -39,8 +38,7 @@ public class World {
 
 	public int curlayer = 0; // current layer: layer > 0 - underworld | layer == 0 - overworld
 
-	public static final int BORDER = 1;// map border (old shit, not really useful anymore, but i'm too afraid to delete
-										// it)
+	public static final int BORDER = 1;// map border - old shit, not really useful anymore
 	public static int MAPSIZE = 100; // default location size
 
 	public static final int LAYER_OVERWORLD = 0;
@@ -264,6 +262,7 @@ public class World {
 			delObj(player.x, player.y);
 			putMapTile(player.x, player.y, TILE_CAVE_EXIT);
 			Gui.processActionMenu();
+			updateLight();
 			place = "cave";
 		}
 		MadSand.print("You descend to " + place + " level " + curlayer);
