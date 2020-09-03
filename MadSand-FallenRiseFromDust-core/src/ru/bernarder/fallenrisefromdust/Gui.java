@@ -455,7 +455,7 @@ public class Gui {
 		dialog.row();
 		dialog.align(Align.center);
 		final Label renderv = new Label("", skin);
-		final Slider renderslide = new Slider(5, 125, 5, false, skin);
+		final Slider renderslide = new Slider(5, 100, 1, false, skin);
 		if (new File("MadSand_Saves/lastrend.dat").exists())
 			radius = (Integer.parseInt(getExternal("lastrend.dat")));
 		renderslide.setValue(radius);

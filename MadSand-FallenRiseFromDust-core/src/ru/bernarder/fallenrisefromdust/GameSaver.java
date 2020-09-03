@@ -16,7 +16,7 @@ import ru.bernarder.fallenrisefromdust.world.World;
 
 public class GameSaver {
 	static String SECTOR_DELIM = "!";
-	public final static long saveFormatVersion = 3;
+	public final static long saveFormatVersion = 4;
 
 	public static byte[] concat(byte[]... arrays) {
 		int totalLength = 0;
@@ -145,19 +145,16 @@ public class GameSaver {
 	public static void loadErrMsg() {
 		MadSand.switchStage(GameState.NMENU, Gui.menu);
 		Gui.drawOkDialog(
-				"Couldn't to load this world. \nMaybe it was saved in older/newer version of the game or some files are corrupted.",
+				"Couldn't to load this world. \n"
+						+ "Maybe it was saved in older/newer version of the game or some files are corrupted.\n"
+						+ "Check " + MadSand.ERRFILE + " for details.",
 				Gui.menu);
-		if (MadSand.justStarted)
-			MadSand.world.generate();
 		// MadSand.justStarted = false;
 	}
 
 	public static boolean verifyNextSector(int x, int y) {
-		File file = getSectorFile(x, y);
-		if (file.exists()) {
-			return true;
-		}
-		return false;
+		File sectorFile = getSectorFile(x, y);
+		return sectorFile.exists();
 	}
 
 	static boolean saveChar() {

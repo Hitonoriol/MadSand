@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import ru.bernarder.fallenrisefromdust.containers.Line;
 import ru.bernarder.fallenrisefromdust.containers.PairFloat;
@@ -36,7 +38,7 @@ public class MadSand extends Game {
 	static final String SAVE_EXT = ".msf";
 
 	static final String SAVEDIR = "MadSand_Saves/";
-	static String QUESTFILE = SAVEDIR + "quests.xml";
+	static String QUESTFILE = SAVEDIR + "quests.json";
 	static String GENFILE = SAVEDIR + "worldgen.xml";
 	static String TUTORIALFILE = SAVEDIR + "tutorial.xml";
 
@@ -70,8 +72,9 @@ public class MadSand extends Game {
 	private float elapsedTime;// For player animation
 
 	public static GameState state = GameState.LAUNCHER;
-	public static int MAXSAVESLOTS = 999;
-	public static ObjectMapper mapper = new ObjectMapper();
+	public static int MAXSAVESLOTS = 10;
+
+	public static ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 
 	public static World world;
 
@@ -111,6 +114,7 @@ public class MadSand extends Game {
 		Utils.out("Starting initialization!");
 
 		// Gdx.graphics.setContinuousRendering(false);
+		mapper.configure(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS.mappedFeature(), true);
 		setRenderRadius(DEFAULT_FOV);
 		setRenderRadius();
 		Utils.out("Render area: " + renderArea.length);
@@ -128,7 +132,7 @@ public class MadSand extends Game {
 
 		Utils.out("End of initialization!");
 
-		// Test stuff:
+		// TODO: move to BuildScript
 		world.getCurLoc().spawnNpc(5, 55, 55);
 	}
 
@@ -200,16 +204,21 @@ public class MadSand extends Game {
 		int xsz = loc.getWidth(), ysz = loc.getHeight();
 		int i = 0;
 
-		if (player.isInBackground())
+		if (player.isInBackground()) // Draw player under tiles & objeccts if he is currently in the background
 			drawEntity(player);
 
-		while (i < renderArea.length) {
+		while (i < renderArea.length) { // Render background tiles
 			x = World.player.x + (int) renderArea[i].x;
 			y = World.player.y + (int) renderArea[i].y;
 
 			tile = loc.getTile(x, y);
 
-			if (!tile.visible || ((x > xsz || y > ysz || x < 0 || y < 0) && MadSand.world.isUnderGround())) {
+			if (!tile.visible && !tile.visited) { //Don't render tiles which were never seen
+				++i;
+				continue;
+			}
+
+			if ((x > xsz || y > ysz || x < 0 || y < 0) && MadSand.world.isUnderGround()) {// Don't render default tile while underground
 				++i;
 				continue;
 			}
@@ -220,13 +229,22 @@ public class MadSand extends Game {
 
 		i = 0;
 
-		while (i < renderArea.length) {
+		while (i < renderArea.length) { // Render objects & entities
 			x = World.player.x + (int) renderArea[i].x;
 			y = World.player.y + (int) renderArea[i].y;
 
 			tile = loc.getTile(x, y);
 
-			if (!tile.visible || ((x > xsz || y > ysz || x < 0 || y < 0) && MadSand.world.isUnderGround())) {
+			if ((x > xsz || y > ysz || x < 0 || y < 0) && MadSand.world.isUnderGround()) {
+				++i;
+				continue;
+			}
+
+			if (!tile.visible && !tile.visited) { // Don't render objects/entities on tiles which were never seen by player
+				++i;
+				continue;
+			} else if (tile.visited && !tile.visible) { // Render visited & not currently visible tiles partially darkened
+				Utils.batch.draw(Resources.visitedMask, x * TILESIZE, y * TILESIZE);
 				++i;
 				continue;
 			}
@@ -251,6 +269,7 @@ public class MadSand extends Game {
 
 		if (!Gui.gameUnfocused)
 			Utils.batch.draw(Resources.mapcursor, Mouse.wx * TILESIZE, Mouse.wy * TILESIZE);
+
 		Utils.batch.end();
 		Utils.batch.begin();
 	}

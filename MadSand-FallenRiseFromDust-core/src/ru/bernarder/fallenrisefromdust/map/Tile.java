@@ -8,7 +8,7 @@ public class Tile {
 	
 	public boolean foreground = false;
 	
-	public boolean known = false;
+	public boolean visited = false;
 	public boolean visible = true;
 
 	public Tile(int id) {

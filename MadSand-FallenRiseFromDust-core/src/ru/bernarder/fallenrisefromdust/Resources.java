@@ -1,5 +1,7 @@
 package ru.bernarder.fallenrisefromdust;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -13,6 +15,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.fasterxml.jackson.databind.type.MapType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import ru.bernarder.fallenrisefromdust.containers.Tuple;
 import ru.bernarder.fallenrisefromdust.entities.SkillContainer;
@@ -39,7 +43,6 @@ public class Resources {
 	static Document npcDoc;
 	static Document itemDoc;
 
-	static Document questdoc;
 	static Document gendoc;
 	static Document skilldoc;
 	static Document tutorialdoc;
@@ -47,6 +50,7 @@ public class Resources {
 	public static Texture[] item;
 	static Texture[] objects;
 	static Texture[] tile;
+	static Texture visitedMask;
 	public static Texture[] npc;
 
 	static TextureRegion[][] tmpAnim;
@@ -83,7 +87,6 @@ public class Resources {
 	public static int CROPS;
 	public static int[] craftableid;
 
-	static final String XML_QUEST_NODE = "quest";
 	static final String XML_ITEM_NODE = "item";
 	static final String XML_CROP_STAGES_NODE = "stages";
 	static final String XML_OBJECT_NODE = "object";
@@ -96,16 +99,6 @@ public class Resources {
 	static final String XML_TUTORIAL_NAME = "name";
 	static final String XML_TUTORIAL_TEXT = "text";
 
-	static final String XML_QUEST_START_MSG = "start";
-	static final String XML_QUEST_COMPLETE_MSG = "complete";
-	static final String XML_QUEST_REQUIREMENT_MSG = "requirement_str";
-	static final String XML_QUEST_REQUIRED_ITEMS = "requirement";
-	static final String XML_QUEST_ITEMS_GIVE_ON_START = "give_items";
-	static final String XML_QUEST_ITEMS_REMOVE_ON_COMPLETION = "remove_on_completion";
-	static final String XML_QUEST_IS_REPEATABLE = "repeatable";
-	static final String XML_QUEST_REWARD_ITEMS = "reward";
-	static final String XML_QUEST_REWARD_EXP = "reward_exp";
-
 	public static void init() {
 		Utils.out("Loading resources...");
 		tileDoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.TILEFILE));
@@ -113,12 +106,12 @@ public class Resources {
 		npcDoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.NPCFILE));
 		itemDoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.ITEMSFILE));
 
-		questdoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.QUESTFILE));
 		gendoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.GENFILE));
 		tutorialdoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.TUTORIALFILE));
 
 		mapcursor = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/cur.png"));
 		animsheet = new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/anim.png"));
+		visitedMask = new Texture(Gdx.files.local(MadSand.SAVEDIR + "light/light_visited.png"));
 
 		tmpAnim = TextureRegion.split(animsheet, PLAYER_ANIM_WIDTH, PLAYER_ANIM_HEIGHT);
 
@@ -138,9 +131,6 @@ public class Resources {
 
 		Cursor mouseCursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.local(MadSand.SAVEDIR + "cursor.png")), 0, 0);
 		Gdx.graphics.setCursor(mouseCursor);
-
-		Resources.QUESTS = XMLUtils.countKeys(questdoc, XML_QUEST_NODE);
-		Utils.out(Resources.QUESTS + " quests");
 
 		Resources.LASTITEMID = XMLUtils.countKeys(itemDoc, XML_ITEM_NODE);
 		Resources.CROPS = XMLUtils.countKeys(itemDoc, XML_CROP_STAGES_NODE);
@@ -200,25 +190,16 @@ public class Resources {
 	}
 
 	private static void loadQuests() {
-		int i = 0;
-		Quest quest;
-		while (i < Resources.QUESTS) {
-			quest = new Quest(i);
-			quest.startMsg = XMLUtils.getKey(questdoc, XML_QUEST_NODE, i, XML_QUEST_START_MSG);
-			quest.endMsg = XMLUtils.getKey(questdoc, XML_QUEST_NODE, i, XML_QUEST_COMPLETE_MSG);
-			quest.reqMsg = XMLUtils.getKey(questdoc, XML_QUEST_NODE, i, XML_QUEST_REQUIREMENT_MSG);
-			quest.reqItems = XMLUtils.getKey(questdoc, XML_QUEST_NODE, i, XML_QUEST_REQUIRED_ITEMS);
-			quest.giveItems = XMLUtils.getKey(questdoc, XML_QUEST_NODE, i, XML_QUEST_ITEMS_GIVE_ON_START);
-			quest.removeOnCompletion = XMLUtils.getKey(questdoc, XML_QUEST_NODE, i,
-					XML_QUEST_ITEMS_REMOVE_ON_COMPLETION);
-			quest.repeatable = Boolean
-					.parseBoolean(XMLUtils.getKey(questdoc, XML_QUEST_NODE, i, XML_QUEST_IS_REPEATABLE));
-			quest.rewardItems = XMLUtils.getKey(questdoc, XML_QUEST_NODE, i, XML_QUEST_REWARD_ITEMS);
-			quest.exp = Utils.val(XMLUtils.getKey(questdoc, XML_QUEST_NODE, i, XML_QUEST_REWARD_EXP));
-
-			QuestList.quests.put(i, quest);
-			++i;
+		try {
+			TypeFactory typeFactory = MadSand.mapper.getTypeFactory();
+			MapType questMap = typeFactory.constructMapType(HashMap.class, Integer.class, Quest.class);
+			QuestList.quests = MadSand.mapper.readValue(new File(MadSand.QUESTFILE), questMap);
+			
+			Utils.out(QuestList.quests.size() + " quests");
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		
 	}
 
 	private static void loadNpcs() {

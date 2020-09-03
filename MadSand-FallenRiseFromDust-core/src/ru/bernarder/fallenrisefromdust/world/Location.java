@@ -66,15 +66,21 @@ public class Location extends HashMap<MapID, Map> {
 			int cropBlocks = 0;
 			for (int y = 0; y < ysz; ++y) {
 				for (int x = 0; x < xsz; ++x) {
+					// Save tiles
 					stream.write(GameSaver.encode2(map.getTile(x, y).id));
+					stream.write(GameSaver.encode2(map.getTile(x, y).visited ? 1 : 0));
+
+					// Save objects
 					obj = map.getObject(x, y);
 					stream.write(GameSaver.encode2(obj.id));
 					stream.write(GameSaver.encode2(obj.hp));
 
+					// Save loot
 					loot = map.getLoot(x, y).getContents();
 					lootStream.write(GameSaver.encode2(loot.length()));
 					lootStream.write(loot.getBytes());
 
+					// Save crops
 					crop = map.getCrop(x, y);
 					if (crop.id == Map.nullCrop.id)
 						continue;
@@ -89,10 +95,12 @@ public class Location extends HashMap<MapID, Map> {
 			byte[] cropCount = GameSaver.encode2(cropBlocks);
 			byte[] _crops = cropStream.toByteArray();
 			cropStream.close();
+
 			byte[] _loot = lootStream.toByteArray();
 			lootStream.close();
 			byte ret[] = stream.toByteArray();
 			stream.close();
+
 			ret = GameSaver.concat(ret, _loot, cropCount, _crops);
 			return ret;
 		} catch (Exception e) {
@@ -107,14 +115,18 @@ public class Location extends HashMap<MapID, Map> {
 		byte[] layer;
 		long size;
 		try {
+			//Header: format version, sector layer count
 			stream.write(GameSaver.encode8(GameSaver.saveFormatVersion));
 			stream.write(GameSaver.encode2(layers));
+
+			//Save all layers of sector
 			for (int i = 0; i < layers; ++i) {
 				layer = sectorToBytes(wx, wy, i);
 				size = layer.length;
 				stream.write(GameSaver.encode8(size));
 				stream.write(layer);
 			}
+
 			return stream.toByteArray();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -128,9 +140,8 @@ public class Location extends HashMap<MapID, Map> {
 		long saveVersion;
 
 		saveVersion = GameSaver.decode8(stream.readNBytes(LONG_BLOCK_SIZE));
-		if (saveVersion != GameSaver.saveFormatVersion) {
-			throw (new Exception());
-		}
+		if (saveVersion != GameSaver.saveFormatVersion)
+			throw (new Exception("Save version is too old / new!"));
 
 		layers = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
 		for (int i = 0; i < layers; ++i) {
@@ -143,6 +154,7 @@ public class Location extends HashMap<MapID, Map> {
 	void bytesToSector(byte[] sector, int wx, int wy, int layer) {
 		try {
 			ByteArrayInputStream stream = new ByteArrayInputStream(sector);
+			// Read header
 			boolean editable = Utils.bool(GameSaver.decode2(stream.readNBytes(BLOCK_SIZE)));
 			int xsz = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
 			int ysz = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
@@ -151,6 +163,7 @@ public class Location extends HashMap<MapID, Map> {
 			int defTile = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
 			int defObject = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
 			int biome = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
+
 			MapID loc = new MapID(new Pair(wx, wy), layer);
 			Map map = new Map(xsz, ysz);
 			map.purge();
@@ -158,6 +171,7 @@ public class Location extends HashMap<MapID, Map> {
 			map.spawnPoint = new Pair(spawnX, spawnY);
 			Utils.out("Dungeon spawnpoint: " + map.spawnPoint);
 
+			// Load NPCs
 			String npf = GameSaver.getNpcFile(wx, wy, layer);
 			ArrayList<Npc> npcs = new ArrayList<Npc>();
 			npcs = MadSand.mapper.readValue(GameSaver.getExternal(npf), new TypeReference<ArrayList<Npc>>() {
@@ -169,6 +183,7 @@ public class Location extends HashMap<MapID, Map> {
 				map.putNpc(npc);
 			}
 
+			// Load tiles & objects
 			map.setBiome(biome);
 			map.defTile = defTile;
 			map.defObject = defObject;
@@ -178,11 +193,15 @@ public class Location extends HashMap<MapID, Map> {
 					stream.read(block);
 					map.addTile(x, y, GameSaver.decode2(block), true);
 					stream.read(block);
+					map.getTile(x, y).visited = GameSaver.decode2(block) != 0;
+					stream.read(block);
 					map.addObject(x, y, GameSaver.decode2(block));
 					stream.read(block);
 					map.getObject(x, y).hp = GameSaver.decode2(block);
 				}
 			}
+
+			// Load loot
 			String loot;
 			byte[] _len = new byte[BLOCK_SIZE];
 			int len;
@@ -197,6 +216,8 @@ public class Location extends HashMap<MapID, Map> {
 					Loot.addLootQ(loot, x, y, map);
 				}
 			}
+
+			//Load crops
 			int cropsCount = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
 			int x, y, id, stage;
 			long ptime;
@@ -212,6 +233,8 @@ public class Location extends HashMap<MapID, Map> {
 			}
 
 			stream.close();
+
+			// Add self to Location list
 			if (this.containsKey(loc))
 				this.remove(loc);
 			this.put(loc, map);

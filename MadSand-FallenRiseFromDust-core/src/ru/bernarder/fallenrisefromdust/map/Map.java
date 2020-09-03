@@ -207,6 +207,8 @@ public class Map {
 					if (object != nullObject && !object.nocollide)
 						blocksLight = true;
 
+					if (!blocksLight)
+						tile.visited = true;
 				}
 			}
 		}

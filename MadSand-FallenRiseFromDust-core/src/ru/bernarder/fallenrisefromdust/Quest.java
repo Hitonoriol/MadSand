@@ -9,4 +9,8 @@ public class Quest {
 	public Quest(int id) {
 		this.id = id;
 	}
+
+	public Quest() {
+		this(0);
+	}
 }

@@ -37,9 +37,7 @@ public class Player extends Entity {
 																		// the player
 
 	public HashSet<Integer> completedQuests = new HashSet<Integer>(); // sets of completed quests and the ones in
-																		// progress. all the quests are already loaded
-																		// in QuestList.quests, so we only need to store
-																		// the ids
+																		// progress
 	public HashSet<Integer> questsInProgress = new HashSet<Integer>();
 
 	public HashSet<Integer> knownNpcs = new HashSet<Integer>();
@@ -349,7 +347,7 @@ public class Player extends Entity {
 					+ Gui.LINEBREAK + "Your " + skill + ": " + curLvl);
 			return;
 		}
-		
+
 		if (!stats.luckRoll()) {
 			MadSand.print("You fail to interact with " + obj.name);
 			return;
