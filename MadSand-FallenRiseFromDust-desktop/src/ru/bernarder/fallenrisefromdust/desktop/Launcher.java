@@ -6,7 +6,8 @@ import java.io.PrintStream;
 
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import ru.bernarder.fallenrisefromdust.MadSand;
+
+import hitonoriol.madsand.MadSand;
 
 public class Launcher {
 	public static void main(String[] args) throws Exception {

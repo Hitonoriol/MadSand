@@ -1,0 +1,1431 @@
+{
+	"0" : {
+		"hp" : 999,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Nothing"
+	},
+	"1" : {
+		"hp" : 11,
+		"harverstHp" : 8,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 2 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Mining",
+		"name" : "Boulder"
+	},
+	"2" : {
+		"hp" : 11,
+		"harverstHp" : 4,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 8 ],
+			"8" : [ 1 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Woodcutting",
+		"name" : "Tree"
+	},
+	"3" : {
+		"hp" : 1,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Cake"
+	},
+	"4" : {
+		"hp" : 7,
+		"harverstHp" : 2,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 7, 8, 65, 66, 7 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Harvesting",
+		"name" : "Berry bush"
+	},
+	"5" : {
+		"hp" : 30,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "---"
+	},
+	"6" : {
+		"hp" : 20,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "Survival",
+		"name" : "Campfire"
+	},
+	"7" : {
+		"hp" : 30,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Chest"
+	},
+	"8" : {
+		"hp" : 30,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Hewn rock"
+	},
+	"9" : {
+		"hp" : 1,
+		"harverstHp" : 10,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 0 ],
+			"8" : [ 1 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Woodcutting",
+		"name" : "Wooden planks"
+	},
+	"10" : {
+		"hp" : 5,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Cactus"
+	},
+	"11" : {
+		"hp" : 30,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "	remove_object $player_look_x $player_look_y;
+					place_object $player_look_x $player_look_y 12;
+		",
+		"skill" : "None",
+		"name" : "Closed door"
+	},
+	"12" : {
+		"hp" : 30,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "	remove_object $player_look_x $player_look_y;
+					place_object $player_look_x $player_look_y 11;
+		",
+		"skill" : "None",
+		"name" : "Opened door"
+	},
+	"13" : {
+		"hp" : 1,
+		"harverstHp" : 15,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 0 ],
+			"10" : [ 25 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Mining",
+		"name" : "Rock"
+	},
+	"14" : {
+		"hp" : 30,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Trapdoor"
+	},
+	"15" : {
+		"hp" : 1,
+		"harverstHp" : 15,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 0 ],
+			"10" : [ 32 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Stone wall"
+	},
+	"16" : {
+		"hp" : 1,
+		"harverstHp" : 15,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 0 ],
+			"10" : [ 33 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Stone wall"
+	},
+	"17" : {
+		"hp" : 1,
+		"harverstHp" : 15,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 0 ],
+			"10" : [ 34 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Stone wall"
+	},
+	"18" : {
+		"hp" : 30,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Sign"
+	},
+	"19" : {
+		"hp" : 5,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Cucumber sprout"
+	},
+	"20" : {
+		"hp" : 5,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Cucumber seeds"
+	},
+	"21" : {
+		"hp" : 5,
+		"harverstHp" : 1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 39 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Harvesting",
+		"name" : "Cucumber bush"
+	},
+	"22" : {
+		"hp" : 1,
+		"harverstHp" : 15,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 0 ],
+			"10" : [ 23 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Mining",
+		"name" : "Iron ore"
+	},
+	"23" : {
+		"hp" : 1,
+		"harverstHp" : 15,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 0 ],
+			"10" : [ 24 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Mining",
+		"name" : "Gold ore"
+	},
+	"24" : {
+		"hp" : 3,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 68, 8 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Tumbleweed"
+	},
+	"25" : {
+		"hp" : 1,
+		"harverstHp" : 15,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 0 ],
+			"10" : [ 56 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Mining",
+		"name" : "Coal"
+	},
+	"26" : {
+		"hp" : 30,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Mixed brick wall"
+	},
+	"27" : {
+		"hp" : 6,
+		"harverstHp" : 8,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 2 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Mining",
+		"name" : "Boulder"
+	},
+	"28" : {
+		"hp" : 6,
+		"harverstHp" : 8,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 2 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Mining",
+		"name" : "Boulder"
+	},
+	"29" : {
+		"hp" : 10,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 8 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Woodcutting",
+		"name" : "Spruce tree"
+	},
+	"30" : {
+		"hp" : 11,
+		"harverstHp" : 4,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 8 ],
+			"8" : [ 1 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Woodcutting",
+		"name" : "Tree"
+	},
+	"31" : {
+		"hp" : 11,
+		"harverstHp" : 4,
+		"lvl" : 2,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 8 ],
+			"8" : [ 1 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Woodcutting",
+		"name" : "Palm tree"
+	},
+	"32" : {
+		"hp" : 11,
+		"harverstHp" : 4,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 8 ],
+			"8" : [ 1 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Woodcutting",
+		"name" : "Pine"
+	},
+	"33" : {
+		"hp" : 11,
+		"harverstHp" : 4,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 8 ],
+			"8" : [ 1 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Woodcutting",
+		"name" : "Stump"
+	},
+	"34" : {
+		"hp" : 11,
+		"harverstHp" : 4,
+		"lvl" : 4,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 8 ],
+			"8" : [ 1 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Woodcutting",
+		"name" : "Dead tree"
+	},
+	"35" : {
+		"hp" : 11,
+		"harverstHp" : 4,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 8 ],
+			"8" : [ 1 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Woodcutting",
+		"name" : "Tree"
+	},
+	"36" : {
+		"hp" : 11,
+		"harverstHp" : 4,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 8 ],
+			"8" : [ 1 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Woodcutting",
+		"name" : "Tree"
+	},
+	"37" : {
+		"hp" : 7,
+		"harverstHp" : 2,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 8, 65, 66, 68 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Harvesting",
+		"name" : "Bush"
+	},
+	"38" : {
+		"hp" : 11,
+		"harverstHp" : 4,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 8 ],
+			"8" : [ 1 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Woodcutting",
+		"name" : "Spruce tree"
+	},
+	"39" : {
+		"hp" : 30,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Cross"
+	},
+	"40" : {
+		"hp" : 15,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Stalactite"
+	},
+	"41" : {
+		"hp" : 1,
+		"harverstHp" : 1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 44 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Harvesting",
+		"name" : "Edible mushrooms"
+	},
+	"42" : {
+		"hp" : 1,
+		"harverstHp" : 1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 45 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Harvesting",
+		"name" : "Amanita"
+	},
+	"43" : {
+		"hp" : 1,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Potato sprout"
+	},
+	"44" : {
+		"hp" : 1,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Potato sprout"
+	},
+	"45" : {
+		"hp" : 1,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Potato sprout"
+	},
+	"46" : {
+		"hp" : 8,
+		"harverstHp" : 1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 46 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Harvesting",
+		"name" : "Potato sprout"
+	},
+	"47" : {
+		"hp" : 1,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Carrot sprout"
+	},
+	"48" : {
+		"hp" : 1,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Carrot sprout"
+	},
+	"49" : {
+		"hp" : 1,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Carrot sprout"
+	},
+	"50" : {
+		"hp" : 8,
+		"harverstHp" : 1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 47 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Harvesting",
+		"name" : "Carrot sprout"
+	},
+	"51" : {
+		"hp" : 1,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Tomato sprout"
+	},
+	"52" : {
+		"hp" : 1,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Tomato sprout"
+	},
+	"53" : {
+		"hp" : 1,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Tomato sprout"
+	},
+	"54" : {
+		"hp" : 8,
+		"harverstHp" : 1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 48 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Harvesting",
+		"name" : "Tomato sprout"
+	},
+	"55" : {
+		"hp" : 1,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Pepper sprout"
+	},
+	"56" : {
+		"hp" : 1,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Pepper sprout"
+	},
+	"57" : {
+		"hp" : 1,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Pepper sprout"
+	},
+	"58" : {
+		"hp" : 8,
+		"harverstHp" : 1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 49 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Harvesting",
+		"name" : "Pepper sprout"
+	},
+	"59" : {
+		"hp" : 1,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Corn sprout"
+	},
+	"60" : {
+		"hp" : 1,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Corn sprout"
+	},
+	"61" : {
+		"hp" : 1,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Corn sprout"
+	},
+	"62" : {
+		"hp" : 8,
+		"harverstHp" : 1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"0" : [ 50 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Harvesting",
+		"name" : "Corn sprout"
+	},
+	"63" : {
+		"hp" : 1,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Cucumber sprout"
+	},
+	"64" : {
+		"hp" : 30,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Altar"
+	},
+	"65" : {
+		"hp" : 5,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Campfire"
+	},
+	"66" : {
+		"hp" : 9,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Fountain"
+	},
+	"67" : {
+		"hp" : 9,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Furnace"
+	},
+	"68" : {
+		"hp" : 9,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Treasure chest"
+	},
+	"69" : {
+		"hp" : 9,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Opened treasure chest"
+	},
+	"70" : {
+		"hp" : 5,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Pile of crates"
+	},
+	"71" : {
+		"hp" : 3,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Keg"
+	},
+	"72" : {
+		"hp" : 9,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Cooking place"
+	},
+	"73" : {
+		"hp" : 9,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Alchemist table"
+	},
+	"74" : {
+		"hp" : 9,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Alchemist table"
+	},
+	"75" : {
+		"hp" : 9,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Alchemist table"
+	},
+	"76" : {
+		"hp" : 9,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Signpost"
+	},
+	"77" : {
+		"hp" : 9,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Signpost"
+	},
+	"78" : {
+		"hp" : 9,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Signpost"
+	},
+	"79" : {
+		"hp" : 9,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Sign"
+	},
+	"80" : {
+		"hp" : 9,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Mountain"
+	},
+	"81" : {
+		"hp" : 9,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Mountain"
+	},
+	"82" : {
+		"hp" : 9,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Mine entrance"
+	},
+	"83" : {
+		"hp" : 50,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Straw house"
+	},
+	"84" : {
+		"hp" : 50,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Sandstone house"
+	},
+	"85" : {
+		"hp" : 50,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "House"
+	},
+	"86" : {
+		"hp" : 50,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "House"
+	},
+	"87" : {
+		"hp" : 50,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Palace entrance"
+	},
+	"88" : {
+		"hp" : 10,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Tombstone"
+	},
+	"89" : {
+		"hp" : 50,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "House"
+	},
+	"90" : {
+		"hp" : 15,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Wheelbarrow"
+	},
+	"91" : {
+		"hp" : 15,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Barrel"
+	},
+	"92" : {
+		"hp" : 15,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Well"
+	},
+	"93" : {
+		"hp" : 15,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Wooden crate"
+	},
+	"94" : {
+		"hp" : 15,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Pile of wooden crates"
+	},
+	"95" : {
+		"hp" : 15,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Barrel"
+	},
+	"96" : {
+		"hp" : 15,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Bookshelf"
+	},
+	"97" : {
+		"hp" : 15,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Pillar"
+	},
+	"98" : {
+		"hp" : 15,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Sphinx"
+	},
+	"99" : {
+		"hp" : 25,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Warrior statue"
+	},
+	"100" : {
+		"hp" : 15,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Vending machine"
+	},
+	"101" : {
+		"hp" : 25,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Brick wall"
+	},
+	"102" : {
+		"hp" : 25,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Brick wall"
+	},
+	"103" : {
+		"hp" : 25,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Wall"
+	},
+	"104" : {
+		"hp" : 25,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Brick wall"
+	},
+	"105" : {
+		"hp" : 25,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Brick wall"
+	},
+	"106" : {
+		"hp" : 25,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Wall"
+	},
+	"107" : {
+		"hp" : 25,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Stone wall"
+	},
+	"108" : {
+		"hp" : 25,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Yellow wall"
+	},
+	"109" : {
+		"hp" : 25,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Turquoise wall"
+	},
+	"110" : {
+		"hp" : 25,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Turquoise wall"
+	},
+	"111" : {
+		"hp" : 25,
+		"harverstHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Clay wall"
+	}
+}
