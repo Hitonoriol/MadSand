@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map.Entry;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+
 import java.util.Random;
 import java.util.StringTokenizer;
 
@@ -30,10 +33,14 @@ public class Utils {
 	public static Random random = new Random(seed);
 
 	static int selected;
-	
+
 	public static void init() {
-		Resources.init();
-		batch = new SpriteBatch();
+		try {
+			Resources.init();
+			batch = new SpriteBatch();
+		} catch (Exception e) {
+			die("Exception on init: " + ExceptionUtils.getStackTrace(e));
+		}
 	}
 
 	public static String str(int val) {

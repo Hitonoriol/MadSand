@@ -1,8 +1,7 @@
 {
 
 "0" : {
-		"id" : 0,
-		"exp" : 20,
+		"exp" : 25,
 
 		"startMsg" : "
 			#Stranger# Oh, hello there...=>
@@ -33,13 +32,12 @@
 },
 
 "1" : {
-	"id" : 1,
-	"exp" : 10,
+	"exp" : 35,
 
 	"startMsg" : "
 		#Richard# So, {PLAYER}, you liked using that axe, huh? [Uhh...]=>
 		#Richard# Guess what, I can show you how to make one yourself. You can even make other great tools that'll help you in this cruel world. [I'm interested]=>
-		#Richard# Well, let me remember... Ah! Bring me some small rocks. Maybe a dozen of them. You can find them near boulders. It won't be easy to gather them with your bare hands, but it's woth it, trust me!=>
+		#Richard# Well, let me remember... Ah! Bring me some small rocks. Maybe a dozen of them. You can find them near boulders. It won't be easy to gather them with your bare hands, but it's worth it, trust me!=>
 		* To gather small rocks, approach a boulder and interact with it.
 	",
 
@@ -62,8 +60,7 @@
 },
 
 "2" : {
-	"id" : 2,
-	"exp" : 10,
+	"exp" : 40,
 	"startMsg" : "
 		#Richard# Oi, {PLAYER}! I need your help again. [What do you need this time?]=>
 		#Richard# I need some clay to make myself new tableware because I broke every single dish when I was drunk yesterday... [I'm sorry for your... Uhm... Loss.]=>
@@ -92,7 +89,29 @@
 },
 
 "3" : {
-	"id" : 3,
+	"exp" : 80,
+	"startMsg" : "
+		#Richard# Hello, {PLAYER}!=>
+		#Richard# I think it's time for you to go to the dungeon.=>
+		#Richard# We have a pretty bad rodent infestation problem there, so why don't you kill 10 rats and bring me leather pieces you get from them?.[Hmm... Sure, why not?]=>
+		#Richard# But first, you must find an entrance to the dungeon.[Whoa, that sounds dangerous]=>
+		#Richard# To do this, take a walk around and see if you spot any holes in the ground... [And?]=>
+		#Richard# Once you've spotted a hole, you can carefully climb down to the dungeon. [Understood]=>
+		* To go underground, you have to stand on a \"hole in the ground\" tile and press \"use\" button or the on-screen pop-up button.
+	",
+
+	"endMsg" : "#Richard# Thank you, {PLAYER}! Take your reward and return to me when you are ready for the next task.",
+
+	"reqMsg" : "#Richard# Kill 10 rats and give me 10 leather pieces you get from them.",
+
+	"reqItems" : "22/10",
+	"giveItems" : "2/5",
+	"rewardItems" : "n",
+	"removeOnCompletion" : "-1",
+	"repeatable" : false
+},
+
+"4" : {
 	"exp" : 50,
 	"startMsg" : "
 		#Richard# Hello, {PLAYER}!=>

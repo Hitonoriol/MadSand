@@ -36,7 +36,7 @@ public class Inventory {
 		itemUI = new HashMap<Item, InventoryUICell>();
 	}
 
-	public void setMaxWeight(float val) {
+	public void setMaxWeight(double val) {
 		maxWeight = val;
 		refreshUITitle();
 	}

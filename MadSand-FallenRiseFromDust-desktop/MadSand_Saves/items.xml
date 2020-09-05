@@ -7,7 +7,7 @@
 			<name>Wood</name>
 			<type>PlaceableObject</type>
 			<altobject>9</altobject>
-			<weight>1</weight>
+			<weight>0.25</weight>
 			<cost>3</cost>
 		</item>
 		<item id="2">
@@ -154,7 +154,7 @@
 		<item id="21">
 			<name>Coin</name>
 			<cost>1</cost>
-			<weight>0.01</weight>
+			<weight>0</weight>
 		</item>
 		<item id="22">
 			<name>Leather</name>

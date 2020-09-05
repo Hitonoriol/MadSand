@@ -34,11 +34,9 @@ public class Player extends Entity {
 	private Pair coords = new Pair();
 
 	public HashSet<Integer> unlockedItems = new HashSet<Integer>(); // set of items player obtained at least once
-	public ArrayList<Integer> craftRecipes = new ArrayList<Integer>(); // list of items which recipes are available to
-																		// the player
+	public ArrayList<Integer> craftRecipes = new ArrayList<Integer>(); // list of items which recipes are available to the player
 
-	public HashSet<Integer> completedQuests = new HashSet<Integer>(); // sets of completed quests and the ones in
-																		// progress
+	public HashSet<Integer> completedQuests = new HashSet<Integer>(); // sets of completed quests and the ones in progress
 	public HashSet<Integer> questsInProgress = new HashSet<Integer>();
 
 	public HashSet<Integer> knownNpcs = new HashSet<Integer>();
@@ -337,7 +335,7 @@ public class Player extends Entity {
 		}
 
 		int item = MapObject.getAltItem(id, ItemProp.type.get(stats.hand.id).get());
-		int mhp = ObjectProp.getObject(obj.id).harverstHp;
+		int mhp = ObjectProp.getObject(obj.id).harvestHp;
 		Skill skill = obj.skill;
 		int curLvl = stats.skills.getLvl(skill);
 
@@ -375,7 +373,7 @@ public class Player extends Entity {
 		}
 
 		if (!destroyed)
-			MadSand.print("You hit a " + obj.name + " [ " + obj.harverstHp + " / " + mhp + " ]");
+			MadSand.print("You hit a " + obj.name + " [ " + obj.harvestHp + " / " + mhp + " ]");
 
 		if (item == -1 && destroyed)
 			MadSand.print("You damaged " + obj.name);

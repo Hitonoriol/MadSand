@@ -434,6 +434,7 @@ public class Gui {
 					World.player.reinit();
 					dialog.remove();
 					gameUnfocused = false;
+					refreshOverlay();
 				}
 			}
 
@@ -564,7 +565,7 @@ public class Gui {
 		dialog.text("New game");
 		TextButton okbtn = new TextButton("Proceed", skin);
 		TextButton nobtn = new TextButton("Cancel", skin);
-		if (slots == MadSand.MAXSAVESLOTS) {
+		if (slots >= MadSand.MAXSAVESLOTS) {
 			worldtxt.setText("No free slots left!");
 			worldtxt.setDisabled(true);
 			okbtn.setDisabled(true);

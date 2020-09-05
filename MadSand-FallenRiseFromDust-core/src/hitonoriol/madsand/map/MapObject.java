@@ -22,7 +22,7 @@ public class MapObject {
 	public int id;
 
 	public int hp;
-	public int harverstHp; // TODO: fix this fucking typo
+	public int harvestHp; // TODO: fix this fucking typo
 	public int lvl;
 	public boolean nocollide = false;
 	public int maskWidth = 0, maskHeight = 0; // Collision mask dimensions for objects larger than 1x1 cell
@@ -36,7 +36,7 @@ public class MapObject {
 		MapObject objectProp = ObjectProp.getObject(id);
 		this.name = objectProp.name;
 		this.hp = objectProp.hp;
-		this.harverstHp = objectProp.harverstHp;
+		this.harvestHp = objectProp.harvestHp;
 		this.skill = objectProp.skill;
 		this.lvl = objectProp.lvl;
 		this.nocollide = objectProp.nocollide;
@@ -71,10 +71,10 @@ public class MapObject {
 		if (amt <= 0)
 			amt = 1;
 		boolean dmg = false;
-		harverstHp -= amt;
-		if (harverstHp <= 0) {
+		harvestHp -= amt;
+		if (harvestHp <= 0) {
 			--this.hp;
-			harverstHp = ObjectProp.getObject(id).harverstHp;
+			harvestHp = ObjectProp.getObject(id).harvestHp;
 			dmg = true;
 		}
 		this.verify();

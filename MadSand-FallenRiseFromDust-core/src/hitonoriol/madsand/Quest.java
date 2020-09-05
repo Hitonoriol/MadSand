@@ -1,7 +1,12 @@
 package hitonoriol.madsand;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Quest {
-	public int id, exp;
+	@JsonIgnore
+	public int id;
+	
+	public int exp;
 	public String startMsg, endMsg, reqMsg;
 	public String reqItems, giveItems, rewardItems, removeOnCompletion;
 	public boolean repeatable;

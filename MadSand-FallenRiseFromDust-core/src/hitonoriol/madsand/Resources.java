@@ -1,7 +1,6 @@
 package hitonoriol.madsand;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Vector;
@@ -100,7 +99,7 @@ public class Resources {
 	static final String XML_TUTORIAL_NAME = "name";
 	static final String XML_TUTORIAL_TEXT = "text";
 
-	public static void init() {
+	public static void init() throws Exception {
 		Utils.out("Loading resources...");
 
 		npcDoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.NPCFILE));
@@ -182,15 +181,11 @@ public class Resources {
 		}
 	}
 
-	private static void loadQuests() {
-		try {
-			MapType questMap = MadSand.typeFactory.constructMapType(HashMap.class, Integer.class, Quest.class);
-			QuestList.quests = MadSand.mapper.readValue(new File(MadSand.QUESTFILE), questMap);
+	private static void loadQuests() throws Exception {
+		MapType questMap = MadSand.typeFactory.constructMapType(HashMap.class, Integer.class, Quest.class);
+		QuestList.quests = MadSand.mapper.readValue(new File(MadSand.QUESTFILE), questMap);
 
-			Utils.out(QuestList.quests.size() + " quests");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		Utils.out(QuestList.quests.size() + " quests");
 
 	}
 
@@ -219,46 +214,36 @@ public class Resources {
 		}
 	}
 
-	private static void loadMapTiles() {
-		try {
-			MapType tileMap = MadSand.typeFactory.constructMapType(HashMap.class, Integer.class, Tile.class);
-			TileProp.tiles = MadSand.mapper.readValue(new File(MadSand.TILEFILE), tileMap);
+	private static void loadMapTiles() throws Exception {
+		MapType tileMap = MadSand.typeFactory.constructMapType(HashMap.class, Integer.class, Tile.class);
+		TileProp.tiles = MadSand.mapper.readValue(new File(MadSand.TILEFILE), tileMap);
 
-			LASTTILEID = TileProp.tiles.size();
-			tile = new Texture[LASTTILEID + 1];
-			Utils.out(LASTTILEID + " tiles");
+		LASTTILEID = TileProp.tiles.size();
+		tile = new Texture[LASTTILEID + 1];
+		Utils.out(LASTTILEID + " tiles");
 
-			// Load tile textures
-			int i;
-			for (Entry<Integer, Tile> tileEntry : TileProp.tiles.entrySet()) {
-				i = tileEntry.getKey();
-				tile[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "terrain/" + i + ".png"));
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		// Load tile textures
+		int i;
+		for (Entry<Integer, Tile> tileEntry : TileProp.tiles.entrySet()) {
+			i = tileEntry.getKey();
+			tile[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "terrain/" + i + ".png"));
 		}
 	}
 
-	private static void loadMapObjects() {
+	private static void loadMapObjects() throws Exception {
+		MapType objectMap = MadSand.typeFactory.constructMapType(HashMap.class, Integer.class, MapObject.class);
+		ObjectProp.objects = MadSand.mapper.readValue(new File(MadSand.OBJECTFILE), objectMap);
 
-		try {
-			MapType objectMap = MadSand.typeFactory.constructMapType(HashMap.class, Integer.class, MapObject.class);
-			ObjectProp.objects = MadSand.mapper.readValue(new File(MadSand.OBJECTFILE), objectMap);
+		LASTOBJID = ObjectProp.objects.size();
+		objects = new Texture[LASTOBJID + 1];
+		Utils.out(LASTOBJID + " map objects");
 
-			LASTOBJID = ObjectProp.objects.size();
-			objects = new Texture[LASTOBJID + 1];
-			Utils.out(LASTOBJID + " map objects");
-
-			// Load object textures
-			int i;
-			for (Entry<Integer, MapObject> objectEntry : ObjectProp.objects.entrySet()) {
-				i = objectEntry.getKey();
-				objects[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "obj/" + i + ".png"));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		// Load object textures
+		int i;
+		for (Entry<Integer, MapObject> objectEntry : ObjectProp.objects.entrySet()) {
+			i = objectEntry.getKey();
+			objects[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "obj/" + i + ".png"));
 		}
-
 	}
 
 	private static void loadItems() {
