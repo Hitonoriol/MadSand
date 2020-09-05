@@ -1,3 +1,4 @@
-local current_map = world:getCurLoc()
+local map = world:getCurLoc();
 
-current_map:spawnNpc(5, 55, 55)
+map:spawnNpc(5, 55, 55);
+utils:print("Welcome to MadSand!");

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import hitonoriol.madsand.BuildScript;
 import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Quest;
 import hitonoriol.madsand.Resources;
@@ -40,6 +41,7 @@ public class Player extends Entity {
 	public HashSet<Integer> questsInProgress = new HashSet<Integer>();
 
 	public HashSet<Integer> knownNpcs = new HashSet<Integer>();
+	public HashSet<String> luaActions = new HashSet<>();	//Set for one-time lua actions
 
 	@JsonProperty("newlyCreated")
 	public boolean newlyCreated = true;
@@ -568,9 +570,9 @@ public class Player extends Entity {
 	@Override
 	public int doAction(int ap) {
 		int ticks = super.doAction(ap);
-		MadSand.world.ticks(ticks); // committing our action and then letting everything catch up to time we've
-									// spent
+		MadSand.world.ticks(ticks); // committing our action and then letting everything catch up to time we've spent
 		Gui.refreshOverlay();
+		LuaUtils.execute(LuaUtils.onAction);
 		return ticks;
 	}
 
@@ -611,6 +613,14 @@ public class Player extends Entity {
 
 	long getSurvivedTime() {
 		return MadSand.world.globalTick - stats.spawnTime;
+	}
+	
+	public void registerLuaAction(String name) {
+		luaActions.add(name);
+	}
+	
+	public boolean luaActionDone(String name) {
+		return luaActions.contains(name);
 	}
 
 	public void hideInventory() {

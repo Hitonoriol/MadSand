@@ -1,3 +1,3 @@
-local current_map = world:getCurLoc()
+local current_map = world:getCurLoc();
 
-current_map:purge()
+current_map:purge();

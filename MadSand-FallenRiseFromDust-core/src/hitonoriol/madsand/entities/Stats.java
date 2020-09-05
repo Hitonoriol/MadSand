@@ -22,8 +22,9 @@ public class Stats {
 	final static int FOOD_HEAL = 1;
 
 	int STAT_MIN_SUM = 20;
-	int STAT_MAX_SUM = 22;
-	static final int STAT_RAND_MAX = 9;
+	int STAT_MAX_SUM = 24;
+	static final int STAT_RAND_MAX = 8;
+	static final int STAT_RAND_MIN = 3;
 
 	static int STAMINA_INTERACT_COST = 5;
 
@@ -169,12 +170,12 @@ public class Stats {
 	public void roll() {
 		int sum = 0;
 		while (sum < STAT_MIN_SUM || sum > STAT_MAX_SUM) {
-			strength = Utils.rand(1, STAT_RAND_MAX);
-			constitution = Utils.rand(1, STAT_RAND_MAX);
-			accuracy = Utils.rand(1, STAT_RAND_MAX);
-			luck = Utils.rand(1, STAT_RAND_MAX);
-			dexterity = Utils.rand(1, STAT_RAND_MAX);
-			intelligence = Utils.rand(1, STAT_RAND_MAX);
+			strength = Utils.rand(STAT_RAND_MIN, STAT_RAND_MAX);
+			constitution = Utils.rand(STAT_RAND_MIN, STAT_RAND_MAX);
+			accuracy = Utils.rand(STAT_RAND_MIN, STAT_RAND_MAX);
+			luck = Utils.rand(STAT_RAND_MIN, STAT_RAND_MAX);
+			dexterity = Utils.rand(STAT_RAND_MIN, STAT_RAND_MAX);
+			intelligence = Utils.rand(STAT_RAND_MIN, STAT_RAND_MAX);
 			sum = getSum();
 		}
 

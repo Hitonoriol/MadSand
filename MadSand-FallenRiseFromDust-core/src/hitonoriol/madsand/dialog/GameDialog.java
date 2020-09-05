@@ -140,8 +140,8 @@ public class GameDialog extends Dialog {
 	public static Pattern buttonPattern = Pattern.compile(DIALOG_BUTTON_REGEX);
 
 	/*
-	 * Chain dialog generator Syntax: #Title# Dialog text [Button text] => Next Text
-	 * => ....
+	 * Chain dialog generator Syntax:
+	 * #Title# Dialog text [Button text] => Next Text => ....
 	 */
 
 	public static Tuple<String, String> getDialogParams(String text) {

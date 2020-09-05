@@ -1,0 +1,1 @@
+tutorial:show("GameStart")

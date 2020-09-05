@@ -44,7 +44,6 @@ public class Resources {
 
 	static Document gendoc;
 	static Document skilldoc;
-	static Document tutorialdoc;
 
 	public static Texture[] item;
 	static Texture[] objects;
@@ -106,7 +105,6 @@ public class Resources {
 		itemDoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.ITEMSFILE));
 
 		gendoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.GENFILE));
-		tutorialdoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.TUTORIALFILE));
 
 		mapcursor = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/cur.png"));
 		animsheet = new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/anim.png"));
@@ -168,17 +166,9 @@ public class Resources {
 		Utils.out("Done loading resources.");
 	}
 
-	private static void loadTutorial() {
-		int i = 0;
-		String si, name, text;
-		int tips = XMLUtils.countKeys(tutorialdoc, XML_TUTORIAL_NODE);
-		while (i < tips) {
-			si = Utils.str(i);
-			name = XMLUtils.getKey(tutorialdoc, XML_TUTORIAL_NODE, si, XML_TUTORIAL_NAME);
-			text = XMLUtils.getKey(tutorialdoc, XML_TUTORIAL_NODE, si, XML_TUTORIAL_TEXT);
-			Tutorial.strings.put(name, text);
-			++i;
-		}
+	private static void loadTutorial() throws Exception {
+		MapType tutorialMap = MadSand.typeFactory.constructMapType(HashMap.class, String.class, String.class);
+		Tutorial.strings = MadSand.mapper.readValue(new File(MadSand.TUTORIALFILE), tutorialMap);
 	}
 
 	private static void loadQuests() throws Exception {

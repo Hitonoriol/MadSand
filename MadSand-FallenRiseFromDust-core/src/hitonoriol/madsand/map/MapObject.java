@@ -22,7 +22,7 @@ public class MapObject {
 	public int id;
 
 	public int hp;
-	public int harvestHp; // TODO: fix this fucking typo
+	public int harvestHp;
 	public int lvl;
 	public boolean nocollide = false;
 	public int maskWidth = 0, maskHeight = 0; // Collision mask dimensions for objects larger than 1x1 cell

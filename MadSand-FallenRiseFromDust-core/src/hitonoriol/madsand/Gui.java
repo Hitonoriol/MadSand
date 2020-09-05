@@ -435,6 +435,7 @@ public class Gui {
 					dialog.remove();
 					gameUnfocused = false;
 					refreshOverlay();
+					LuaUtils.executeScript(LuaUtils.onCreationScript);
 				}
 			}
 

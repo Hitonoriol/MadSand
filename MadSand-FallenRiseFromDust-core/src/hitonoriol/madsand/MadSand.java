@@ -21,7 +21,6 @@ import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.map.Tile;
-import hitonoriol.madsand.properties.Tutorial;
 import hitonoriol.madsand.world.World;
 
 import java.io.File;
@@ -41,7 +40,7 @@ public class MadSand extends Game {
 	static final String SAVEDIR = "MadSand_Saves/";
 	static String QUESTFILE = SAVEDIR + "quests.json";
 	static String GENFILE = SAVEDIR + "worldgen.xml";
-	static String TUTORIALFILE = SAVEDIR + "tutorial.xml";
+	static String TUTORIALFILE = SAVEDIR + "tutorial.json";
 
 	static String TILEFILE = SAVEDIR + "tiles.json";
 	static String OBJECTFILE = SAVEDIR + "objects.json";
@@ -385,13 +384,10 @@ public class MadSand extends Game {
 
 	public void render() {
 		if (state.equals(GameState.GAME)) {
-			if (!Gui.gameUnfocused && World.player.isNewlyCreated()) {
-				Tutorial.show(Tutorial.GAME_START);
+
+			if (justStarted) 
 				justStarted = false;
-			}
-			if (justStarted) {
-				justStarted = false;
-			}
+			
 			Mouse.mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
 			camera.unproject(Mouse.mouseinworld);
 			Gdx.input.setInputProcessor(Gui.overlay);

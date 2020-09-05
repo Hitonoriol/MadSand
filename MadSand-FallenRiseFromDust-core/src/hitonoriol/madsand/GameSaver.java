@@ -75,20 +75,26 @@ public class GameSaver {
 		}
 	}
 
-	public static String getExternal(String name) {
+	public static String getExternal(String name, boolean withNewline) {
 		try {
 			File file = new File(name);
 			BufferedReader br = new BufferedReader(new FileReader(file));
 			String lk = "";
 			String l;
 			while ((l = br.readLine()) != null) {
-				lk = lk + l;
+				lk += l;
+				if (withNewline)
+					lk += System.lineSeparator();
 			}
 			br.close();
 			return lk.trim();
 		} catch (Exception e) {
 			return "";
 		}
+	}
+
+	public static String getExternal(String name) {
+		return getExternal(name, false);
 	}
 
 	static File getSectorFile(int wx, int wy) {
