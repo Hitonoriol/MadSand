@@ -289,7 +289,15 @@
 			<recipe>2/7:8/5</recipe>
 			<type>Hoe</type>
 			<weight>0.8</weight>
-			<onuse>!0 place_tile $player_x $player_y 15;= !15 You plowed the soil
+			<onuse>
+			local player = world.player;
+			local tile = world:getTileId(player.x, player.y);
+			print("Current tile: " .. tile);
+			if tile == 0 then 
+				utils:placeTile(player.x, player.y, 15);
+				utils:print("You plowed the soil");
+				print("Plowing at" .. player.x .. " " .. player.y);
+			end
 			</onuse>
 		</item>
 		<item id="42">

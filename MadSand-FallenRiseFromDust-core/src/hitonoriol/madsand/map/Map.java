@@ -155,7 +155,7 @@ public class Map {
 
 	public boolean addTile(int x, int y, int id, boolean force) {
 		if (correctCoords(coords.set(x, y))) {
-			if (mapTiles.containsKey(coords) && force)
+			if (force)
 				mapTiles.remove(coords);
 			mapTiles.put(coords, new Tile(id));
 			return true;
@@ -217,20 +217,13 @@ public class Map {
 	}
 
 	public Tile getTile(int x, int y) {
-		try {
-			if (correctCoords(coords.set(x, y))) {
-				Tile ret = mapTiles.get(coords);
-				if (ret == null)
-					ret = nullTile;
-				return ret;
-			} else
-				return nullTile;
-		} catch (Exception e) {
-			Utils.out("gettile error " + e.getMessage());
-			e.printStackTrace();
+		if (correctCoords(coords.set(x, y))) {
+			Tile ret = mapTiles.get(coords);
+			if (ret == null)
+				ret = nullTile;
+			return ret;
+		} else
 			return nullTile;
-
-		}
 	}
 
 	Tile getTile(int x, int y, Direction dir) {

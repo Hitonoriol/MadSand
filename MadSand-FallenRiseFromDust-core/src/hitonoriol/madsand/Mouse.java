@@ -78,20 +78,20 @@ public class Mouse {
 
 		info += ("Tile: " + TileProp.getName(tile.id)) + Gui.LINEBREAK;
 
-		if (loot != Map.nullLoot) {
+		if (!loot.equals(Map.nullLoot)) {
 			info += "On the ground: ";
 			info += loot.getInfo() + Gui.LINEBREAK;
 		}
 
-		if (object != Map.nullObject)
+		if (!object.equals(Map.nullObject))
 			info += ("Object: " + object.name) + Gui.LINEBREAK;
 
-		if (npc != Map.nullNpc) {
+		if (!npc.equals(Map.nullNpc)) {
 			info += ("You look at " + " " + npc.stats.name) + Gui.LINEBREAK;
 
 			if (World.player.knowsNpc(npc.id))
 				info += npc.getInfoString();
-			
+
 			if (!npc.friendly)
 				info += npc.spottedMsg();
 

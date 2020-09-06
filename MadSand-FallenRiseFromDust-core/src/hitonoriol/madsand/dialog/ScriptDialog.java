@@ -5,8 +5,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
-import hitonoriol.madsand.BuildScript;
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.containers.Tuple;
 
 public class ScriptDialog {
@@ -37,7 +37,7 @@ public class ScriptDialog {
 
 			responseButton.addListener(new ChangeListener() {
 				public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-					BuildScript.execute(onClick);
+					LuaUtils.execute(onClick);
 					dialog.remove();
 				}
 			});

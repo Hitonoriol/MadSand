@@ -9,7 +9,6 @@ import com.badlogic.gdx.Gdx;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import hitonoriol.madsand.BuildScript;
 import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.LuaUtils;
@@ -326,7 +325,7 @@ public class Player extends Entity {
 		doAction();
 
 		if (!action.equals(Resources.emptyField)) {
-			BuildScript.execute(action);
+			LuaUtils.execute(action);
 			return;
 		}
 
@@ -412,13 +411,13 @@ public class Player extends Entity {
 		}
 		String action = ItemProp.useAction.get(id);
 		doAction();
-		if (action != "-1") {
-			BuildScript.execute(action);
+		if (!action.equals(Resources.emptyField)) {
+			LuaUtils.execute(action);
 			return;
 		}
 		String tileAction = TileProp.getOnInteract(ptile);
-		if (tileAction != "-1") {
-			BuildScript.execute(tileAction);
+		if (!tileAction.equals(Resources.emptyField)) {
+			LuaUtils.execute(tileAction);
 			return;
 		}
 		if (Item.getType(id) == ItemType.Consumable) {

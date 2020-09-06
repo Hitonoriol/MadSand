@@ -149,8 +149,10 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : null,
-		"onInteract" : "	remove_object $player_look_x $player_look_y;
-					place_object $player_look_x $player_look_y 12;
+		"onInteract" : "
+			local player_look = world.player:lookingAt();
+			world:delObj(player_look.x, player_look.y);
+			world:addObj(player_look.x, player_look.y, 12);
 		",
 		"skill" : "None",
 		"name" : "Closed door"
@@ -163,8 +165,10 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : null,
-		"onInteract" : "	remove_object $player_look_x $player_look_y;
-					place_object $player_look_x $player_look_y 11;
+		"onInteract" : "
+			local player_look = world.player:lookingAt();
+			world:delObj(player_look.x, player_look.y);
+			world:addObj(player_look.x, player_look.y, 11);
 		",
 		"skill" : "None",
 		"name" : "Opened door"

@@ -235,7 +235,7 @@ public class Utils {
 		if ((Gdx.input.isKeyJustPressed(Keys.ENTER)) && (Gui.overlay.getKeyboardFocus() == Gui.inputField)) {
 			String cmd = Gui.inputField.getText().trim();
 			try {
-				BuildScript.execute(cmd);
+				LuaUtils.execute(cmd);
 				Gui.inputField.setVisible(!Gui.inputField.isVisible());
 			} catch (Exception e) {
 				MadSand.print("Syntax error");

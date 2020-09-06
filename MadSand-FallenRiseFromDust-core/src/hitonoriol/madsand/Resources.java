@@ -215,7 +215,7 @@ public class Resources {
 		Utils.out(LASTTILEID + " tiles");
 
 		// Load tile textures
-		int i;
+		int i = 0;
 		for (Entry<Integer, Tile> tileEntry : TileProp.tiles.entrySet()) {
 			i = tileEntry.getKey();
 			tile[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "terrain/" + i + ".png"));

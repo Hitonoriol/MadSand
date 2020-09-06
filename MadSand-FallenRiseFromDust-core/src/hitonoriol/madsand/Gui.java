@@ -40,6 +40,7 @@ import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.enums.ItemType;
 import hitonoriol.madsand.enums.Skill;
+import hitonoriol.madsand.gui.AutoFocusScrollPane;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.map.Tile;
@@ -734,7 +735,7 @@ public class Gui {
 		craftbl.row();
 
 		craftbl.setBackground(darkBackgroundSizeable);
-		scroll = new ScrollPane(craftbl);
+		scroll = new AutoFocusScrollPane(craftbl);
 		scroll.setSize(MadSand.XDEF, MadSand.YDEF);
 		craft.addActor(scroll);
 
@@ -1190,7 +1191,7 @@ public class Gui {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
 					if (!holdsShovel)
-						BuildScript.execute(tileAction);
+						LuaUtils.execute(tileAction);
 					else
 						player.useItem();
 					gameUnfocused = false;
