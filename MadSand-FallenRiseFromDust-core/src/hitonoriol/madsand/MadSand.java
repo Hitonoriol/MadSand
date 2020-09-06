@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.fasterxml.jackson.core.json.JsonReadFeature;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.type.TypeFactory;
@@ -46,6 +47,7 @@ public class MadSand extends Game {
 	static String OBJECTFILE = SAVEDIR + "objects.json";
 	static String NPCFILE = SAVEDIR + "npcs.xml";
 	static String ITEMSFILE = SAVEDIR + "items.xml";
+	public static String GLOBALSFILE = SAVEDIR + "globals.json";
 
 	static String SKILLFILE = SAVEDIR + "defskills.xml";
 	static final String MAPDIR = SAVEDIR + "worlds/";
@@ -89,7 +91,7 @@ public class MadSand extends Game {
 	private static float menuXStep = 0.8f, menuYStep = 0f;
 	private static float menuOffset = 250;
 
-	static void switchStage(GameState state, Stage stage) {
+	public static void switchStage(GameState state, Stage stage) {
 
 		if (state != GameState.INVENTORY)
 			World.player.hideInventory();
@@ -116,6 +118,8 @@ public class MadSand extends Game {
 
 		// Gdx.graphics.setContinuousRendering(false);
 		mapper.configure(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS.mappedFeature(), true);
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		
 		setRenderRadius(DEFAULT_FOV);
 		setRenderRadius();
 		Utils.out("Render area: " + renderArea.length);
@@ -407,7 +411,6 @@ public class MadSand extends Game {
 			Gui.overlay.draw();
 			Utils.batch.end();
 		} else if (state.equals(GameState.INVENTORY)) {
-			try {
 				Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 				Gdx.gl.glClear(16384);
 				Utils.batch.begin();
@@ -418,18 +421,19 @@ public class MadSand extends Game {
 
 				Gui.overlay.act();
 				Gui.overlay.draw();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 
-		} else if (state.equals(GameState.BUY)) {
-			// TODO: Trade menu
+		} else if (state.equals(GameState.TRADE)) {
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
+			Gdx.gl.glClear(16384);
 			Utils.batch.begin();
 			drawGame();
 			Utils.batch.end();
+			
+			Mouse.mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
+
 			Gui.overlay.act();
 			Gui.overlay.draw();
+			
 		} else if (state.equals(GameState.NMENU)) {
 			if (!Gdx.graphics.isContinuousRendering())
 				Gdx.graphics.setContinuousRendering(true);

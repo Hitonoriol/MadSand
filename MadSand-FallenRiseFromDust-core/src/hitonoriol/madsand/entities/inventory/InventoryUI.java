@@ -35,14 +35,19 @@ public class InventoryUI {
 		invTable = new Table();
 		invTable.row();
 		// invTable.setDebug(true);
+		
 		invTable.setBackground(Gui.darkBackground);
 		invTable.align(Align.topLeft);
+		
 		header = new Label("[0/0 kg]", Gui.skin);
+		
 		invContainer.add(header).pad(10).fillY().align(Align.center);
 		invContainer.row();
 		invContainer.add(invTable);
+		
 		invScroll = new ScrollPane(invContainer);
 		invScroll.setVisible(false);
+		
 		invTable.setWidth(WIDTH);
 		invScroll.setHeight(HEIGHT);
 		invScroll.setWidth(WIDTH + OFFSET);
@@ -64,7 +69,7 @@ public class InventoryUI {
 		stacks = 0;
 		invTable.clear();
 		for (Entry<Item, InventoryUICell> pair : set) {
-			putNewItem(pair.getValue().cell);
+			putNewItem(pair.getValue());
 		}
 	}
 

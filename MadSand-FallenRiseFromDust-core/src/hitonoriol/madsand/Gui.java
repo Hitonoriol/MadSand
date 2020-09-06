@@ -1138,6 +1138,11 @@ public class Gui {
 		return (Gdx.graphics.getWidth() / 2) - actor.getWidth();
 	}
 
+	public static void hideActionBtn() {
+		actionTbl.removeActor(interactBtn);
+		actionTbl.setVisible(false);
+	}
+
 	private static void activateInteractBtn(TextButton btn, String text, ChangeListener listener) {
 		actionTbl.setVisible(true);
 		btn.setVisible(true);
@@ -1199,10 +1204,8 @@ public class Gui {
 		else if (!object.equals(Map.nullObject) && !objAction.equals(Resources.emptyField)) // Map object interaction button
 			activateInteractBtn(interactBtn, "Interact with " + object.name, objInteractListener);
 
-		else {
-			actionTbl.removeActor(interactBtn);
-			actionTbl.setVisible(false);
-		}
+		else
+			hideActionBtn();
 	}
 
 	static final String FONT_CHARS = "�?БВГДЕ�?ЖЗИЙКЛМ�?ОПРСТФХЦЧШЩЪЬЫЭЮЯабвгдеёжзийклмнопр�?тфхцчшщыъь�?ю�?abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"'<>";

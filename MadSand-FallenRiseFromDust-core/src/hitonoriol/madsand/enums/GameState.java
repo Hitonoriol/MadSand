@@ -1,6 +1,6 @@
 package hitonoriol.madsand.enums;
 
 public enum GameState {
-	GAME, INVENTORY, BUY, NMENU, LAUNCHER, WORLDGEN, LOAD,
+	GAME, INVENTORY, TRADE, NMENU, LAUNCHER, WORLDGEN, LOAD,
 	GOT, DEAD, MSG, CRAFT
 }

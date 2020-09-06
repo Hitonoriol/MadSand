@@ -54,7 +54,7 @@ public class Npc extends Entity {
 	}
 
 	public Npc() {
-		this(NULL_NPC);
+		id = NULL_NPC;
 	}
 
 	public void pause() {

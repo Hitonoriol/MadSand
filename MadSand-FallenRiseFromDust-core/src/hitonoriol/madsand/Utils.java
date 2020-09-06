@@ -7,6 +7,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import hitonoriol.madsand.entities.Npc;
+import hitonoriol.madsand.entities.inventory.trade.TradeInventoryUI;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.properties.ItemProp;
@@ -135,6 +136,14 @@ public class Utils {
 
 		if ((Gdx.input.isKeyJustPressed(Keys.Y)) && (debugMode)) {
 			World.player.teleport(Mouse.wx, Mouse.wy);
+		}
+		if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT) && Gdx.input.isKeyJustPressed(Keys.T)) {
+			Utils.out("Trade test");
+			Npc npc = MadSand.world.getCurLoc().getNpc(World.player.lookingAt());
+			Utils.out("Looking at npc: " + npc.id);
+			npc.inventory.putItem(rand(1, Resources.LASTITEMID), rand(1, 10));
+			new TradeInventoryUI(npc.inventory,
+					World.player.inventory).show();
 		}
 		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.R)) && (debugMode)) {
 			MadSand.world.generate();

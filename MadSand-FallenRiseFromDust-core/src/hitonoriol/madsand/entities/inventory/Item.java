@@ -15,7 +15,7 @@ import hitonoriol.madsand.properties.ItemProp;
 
 public class Item {
 	public static final int NULL_ITEM = 0;
-	private static final float DEFAULT_WEIGHT = 0.5f;
+	private static final float DEFAULT_WEIGHT = 0.25f;
 
 	public String name;
 	String recipe;
@@ -78,6 +78,11 @@ public class Item {
 		loadProperties();
 	}
 
+	@JsonIgnore
+	public int getPrice() {
+		return ItemProp.cost.get(id);
+	}
+
 	String getInfoString() {
 		String info = "";
 		info += name + Gui.LINEBREAK;
@@ -116,22 +121,6 @@ public class Item {
 				damage = 1;
 			return damage;
 		}
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Item))
-			return false;
-		if (obj == this)
-			return true;
-
-		Item rhs = (Item) obj;
-		return new EqualsBuilder().append(id, rhs.id).append(uid, rhs.uid).isEquals();
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder(14407, 7177).append(id).append(uid).toHashCode();
 	}
 
 	boolean damage(int amt) {
@@ -199,6 +188,26 @@ public class Item {
 
 	double getWeight() {
 		return weight * quantity;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Item))
+			return false;
+		if (obj == this)
+			return true;
+
+		Item rhs = (Item) obj;
+		return new EqualsBuilder().append(id, rhs.id).append(uid, rhs.uid).isEquals();
+	}
+
+	public boolean equals(int id) {
+		return id == this.id;
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(14407, 7177).append(id).append(uid).toHashCode();
 	}
 
 	// Static functions for general item related needs:

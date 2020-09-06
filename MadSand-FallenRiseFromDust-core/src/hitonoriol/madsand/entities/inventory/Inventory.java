@@ -128,7 +128,7 @@ public class Inventory {
 			return;
 		if (itemUI.containsKey(item)) {
 			inventoryUI.setMass(curWeight, maxWeight);
-			Group rcell = itemUI.get(item).cell;
+			Group rcell = itemUI.get(item);
 			Cell<Group> cell = inventoryUI.invTable.getCell(rcell);
 			clearContextMenus();
 			rcell.remove();
@@ -157,7 +157,7 @@ public class Inventory {
 		} else {
 			InventoryUICell cell = new InventoryUICell(item);
 			itemUI.put(item, cell);
-			inventoryUI.putNewItem(cell.cell);
+			inventoryUI.putNewItem(cell);
 			inventoryUI.refresh(itemUI.entrySet());
 		}
 	}

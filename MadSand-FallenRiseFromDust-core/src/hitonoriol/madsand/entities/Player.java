@@ -41,7 +41,7 @@ public class Player extends Entity {
 	public HashSet<Integer> questsInProgress = new HashSet<Integer>();
 
 	public HashSet<Integer> knownNpcs = new HashSet<Integer>();
-	public HashSet<String> luaActions = new HashSet<>();	//Set for one-time lua actions
+	public HashSet<String> luaActions = new HashSet<>(); //Set for one-time lua actions
 
 	@JsonProperty("newlyCreated")
 	public boolean newlyCreated = true;
@@ -535,6 +535,10 @@ public class Player extends Entity {
 		return dir;
 	}
 
+	public Pair lookingAt() {
+		return coords.set(x, y).addDirection(stats.look);
+	}
+
 	public Direction lookAtMouse(int x, int y) {
 		return lookAtMouse(x, y, false);
 	}
@@ -614,11 +618,11 @@ public class Player extends Entity {
 	long getSurvivedTime() {
 		return MadSand.world.globalTick - stats.spawnTime;
 	}
-	
+
 	public void registerLuaAction(String name) {
 		luaActions.add(name);
 	}
-	
+
 	public boolean luaActionDone(String name) {
 		return luaActions.contains(name);
 	}

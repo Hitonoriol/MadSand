@@ -25,7 +25,7 @@ import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.enums.ItemType;
 import hitonoriol.madsand.world.World;
 
-public class InventoryUICell {
+public class InventoryUICell extends Group{
 	private final int size = 80;
 
 	private static final float CONTEXT_BTN_WIDTH = 100F;
@@ -52,9 +52,8 @@ public class InventoryUICell {
 
 	private Image highlight; // for mouseover highlighting of items
 
-	Group cell;
-
 	public InventoryUICell(Item item) {
+		super();
 		highlight = new Image(Resources.noEquip);
 		toolHpLabel = new Label("", Gui.skin);
 		itemBtn = new ImageButton(new SpriteDrawable(new Sprite(Resources.item[item.id])));
@@ -65,18 +64,71 @@ public class InventoryUICell {
 
 		toolHpLabel.setPosition(itemQuantityLabel.getX() + size / 1.6f, itemQuantityLabel.getY() + 6);
 
-		cell = new Group();
-		cell.addActor(itemBtn);
-		cell.addActor(itemQuantityLabel);
-		cell.addActor(toolHpLabel);
-		cell.addActor(highlight);
-		cell.setSize(size, size);
+		super.addActor(itemBtn);
+		super.addActor(itemQuantityLabel);
+		super.addActor(toolHpLabel);
+		super.addActor(highlight);
+		super.setSize(size, size);
 
 		highlight.setVisible(false);
 
-		dropBtn = new TextButton("Drop", Gui.skin);
+		initContextMenu(item);
 
+		this.addListener(new InputListener() {
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+				highlight.setVisible(true);
+			}
+
+			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+				highlight.setVisible(false);
+			}
+		});
+
+		this.addListener(new ClickListener(Buttons.LEFT) {
+			public void clicked(InputEvent event, float x, float y) {
+				World.player.stats.hand = item;
+				MadSand.print("You take " + item.name + " to your hand");
+				Gui.setHandDisplay(item.id);
+				World.player.doAction();
+				Utils.toggleInventory();
+			}
+		});
+
+		tooltipTbl = new Table();
+		itemInfoLbl = new Label(item.getInfoString(), Gui.skin);
+
+		tooltipTbl.add(itemInfoLbl).width(TOOLTIP_WIDTH);
+		tooltipTbl.row();
+
+		tooltipTbl.setBackground(Gui.darkBackgroundSizeable);
+		tooltipTbl.setSize(TOOLTIP_WIDTH, TOOLTIP_HEIGHT);
+
+		tooltip = new Tooltip<Table>(tooltipTbl);
+		tooltip.setInstant(true);
+
+		this.addListener(tooltip);
+
+		this.addListener(new ClickListener(Buttons.RIGHT) {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				if (!invCellContextContainer.isVisible() && !Gui.gameUnfocused) {
+					invCellContextContainer.setVisible(true);
+					Mouse.x = Gdx.input.getX();
+					Mouse.y = Gdx.graphics.getHeight() - Gdx.input.getY();
+					invCellContextContainer.setPosition(Mouse.x + CONTEXT_BTN_WIDTH / CONTEXT_W_DENOMINATOR,
+							Mouse.y);
+					Gui.gameUnfocused = true;
+				} else {
+					invCellContextContainer.setVisible(false);
+					Gui.gameUnfocused = false;
+				}
+			}
+		});
+	}
+	
+	private void initContextMenu(Item item) {
 		invCellContextContainer = new Table(Gui.skin);
+		dropBtn = new TextButton("Drop", Gui.skin);
 		addContextBtn(dropBtn);
 		invCellContextContainer.setVisible(false);
 		Gui.overlay.addActor(invCellContextContainer);
@@ -114,57 +166,6 @@ public class InventoryUICell {
 			});
 			addContextBtn(equipBtn);
 		}
-
-		cell.addListener(new InputListener() {
-			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-				highlight.setVisible(true);
-			}
-
-			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-				highlight.setVisible(false);
-			}
-		});
-
-		cell.addListener(new ClickListener(Buttons.LEFT) {
-			public void clicked(InputEvent event, float x, float y) {
-				World.player.stats.hand = item;
-				MadSand.print("You take " + item.name + " to your hand");
-				Gui.setHandDisplay(item.id);
-				World.player.doAction();
-				Utils.toggleInventory();
-			}
-		});
-
-		tooltipTbl = new Table();
-		itemInfoLbl = new Label(item.getInfoString(), Gui.skin);
-
-		tooltipTbl.add(itemInfoLbl).width(TOOLTIP_WIDTH);
-		tooltipTbl.row();
-
-		tooltipTbl.setBackground(Gui.darkBackgroundSizeable);
-		tooltipTbl.setSize(TOOLTIP_WIDTH, TOOLTIP_HEIGHT);
-
-		tooltip = new Tooltip<Table>(tooltipTbl);
-		tooltip.setInstant(true);
-
-		cell.addListener(tooltip);
-
-		cell.addListener(new ClickListener(Buttons.RIGHT) {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				if (!invCellContextContainer.isVisible() && !Gui.gameUnfocused) {
-					invCellContextContainer.setVisible(true);
-					Mouse.x = Gdx.input.getX();
-					Mouse.y = Gdx.graphics.getHeight() - Gdx.input.getY();
-					invCellContextContainer.setPosition(Mouse.x + CONTEXT_BTN_WIDTH / CONTEXT_W_DENOMINATOR,
-							Mouse.y);
-					Gui.gameUnfocused = true;
-				} else {
-					invCellContextContainer.setVisible(false);
-					Gui.gameUnfocused = false;
-				}
-			}
-		});
 	}
 
 	private void closeContextMenu() {

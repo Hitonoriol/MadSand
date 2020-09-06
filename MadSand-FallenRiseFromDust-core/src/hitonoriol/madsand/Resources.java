@@ -26,6 +26,7 @@ import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.properties.CropProp;
+import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.properties.ObjectProp;
@@ -155,6 +156,7 @@ public class Resources {
 		loadQuests();
 		loadNpcs();
 		loadTutorial();
+		Globals.loadGlobals();
 
 		placeholder = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/placeholder.png"));
 		noEquip = new TextureRegionDrawable(new TextureRegion(placeholder));

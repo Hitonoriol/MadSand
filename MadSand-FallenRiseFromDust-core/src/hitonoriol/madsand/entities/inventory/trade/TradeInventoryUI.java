@@ -1,6 +1,135 @@
 package hitonoriol.madsand.entities.inventory.trade;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
+
+import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.entities.inventory.Inventory;
+import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.enums.GameState;
+import hitonoriol.madsand.gui.AutoFocusScrollPane;
+
 //TODO: Two scrollpanes with imagetext btns: left pane - sell from player inventory, right - buy
 public class TradeInventoryUI {
+	private AutoFocusScrollPane sellPane, buyPane;
+	private Table sellTable, buyTable;
+	private Table tradeUITable;
+	private Table containerTable;
+	private Label header;
+	private Label sellHeader, buyHeader;
+	private TextButton exitBtn;
 
+	TradeInventory playerSell, traderSell; //Same as w\ the panes
+
+	private final float WIDTH = 800;
+	private final float HEIGHT = 500;
+	private final float OFFSET = 25;
+
+	public TradeInventoryUI(Inventory traderInventory, Inventory playerInventory) {
+		traderSell = new TradeInventory(traderInventory, playerInventory); //Buy from trader
+		playerSell = new TradeInventory(playerInventory, traderInventory); //Sell to trader
+
+		sellHeader = new Label("Sell", Gui.skin);
+		buyHeader = new Label("Buy", Gui.skin);
+		sellHeader.setAlignment(Align.center);
+		buyHeader.setAlignment(Align.center);
+		header = new Label("Trade", Gui.skin);
+
+		containerTable = new Table();
+		tradeUITable = new Table();
+		tradeUITable.setDebug(true, true);
+
+		tradeUITable.setSize(WIDTH, HEIGHT);
+		sellTable = new Table();
+		buyTable = new Table();
+		sellTable.setHeight(HEIGHT);
+		buyTable.setHeight(HEIGHT);
+
+		exitBtn = new TextButton("Done", Gui.skin);
+
+		containerTable.setBackground(Gui.darkBackground);
+		containerTable.align(Align.topLeft);
+
+		sellPane = new AutoFocusScrollPane(sellTable);
+		buyPane = new AutoFocusScrollPane(buyTable);
+		setPaneParams(sellPane);
+		setPaneParams(buyPane);
+
+		header.setFontScale(1.5f);
+
+		containerTable.add(header).align(Align.center).row();
+
+		tradeUITable.add(sellHeader).pad(10).width(WIDTH / 2 - OFFSET).align(Align.center);
+		tradeUITable.add(buyHeader).pad(10).width(WIDTH / 2 - OFFSET).align(Align.center);
+		tradeUITable.row();
+		tradeUITable.add(sellPane).prefHeight(HEIGHT).align(Align.topLeft);
+		tradeUITable.add(buyPane).prefHeight(HEIGHT).align(Align.topRight);
+		tradeUITable.row();
+
+		containerTable.setSize(WIDTH, HEIGHT);
+		containerTable.setPosition(Gdx.graphics.getWidth() / 2 - WIDTH / 2, Gdx.graphics.getHeight() / 2 - HEIGHT / 2);
+
+		containerTable.add(tradeUITable).row();
+		containerTable.add(exitBtn).align(Align.bottom).row();
+		containerTable.setVisible(false);
+
+		Gui.overlay.addActor(containerTable);
+
+		exitBtn.addListener(new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				remove();
+				MadSand.switchStage(GameState.GAME, Gui.overlay);
+			}
+		});
+	}
+
+	private void setPaneParams(ScrollPane pane) {
+		pane.setWidth(WIDTH / 2);
+		pane.setHeight(HEIGHT);
+		pane.setScrollingDisabled(true, false);
+	}
+
+	public void show() {
+		Gui.hideActionBtn();
+		refresh();
+		containerTable.setVisible(true);
+		MadSand.switchStage(GameState.TRADE, Gui.overlay);
+	}
+
+	public void refresh() {
+		Inventory playerInventory = playerSell.getSeller();
+		Inventory traderInventory = playerSell.getBuyer();
+
+		sellTable.clear();
+		buyTable.clear();
+
+		refresh(sellTable, playerInventory, Align.topLeft);
+		refresh(buyTable, traderInventory, Align.topRight);
+	}
+
+	private void refresh(Table table, Inventory inventory, int align) {
+		for (Item item : inventory.items) {
+			Utils.out("Refreshing tradeInventoryUI: adding item id" + item.id + " quantity:" + item.quantity);
+			table.add(new TradeInventoryButton(item)).align(align).row();
+			table.add().row();
+		}
+	}
+
+	public void remove() {
+		containerTable.remove();
+	}
+
+	public void toggleVisible() {
+		containerTable.setVisible(!containerTable.isVisible());
+	}
 }

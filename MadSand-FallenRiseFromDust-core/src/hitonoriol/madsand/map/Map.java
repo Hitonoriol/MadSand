@@ -442,7 +442,7 @@ public class Map {
 		if (!correctCoords(coords.set(x, y)))
 			return false;
 
-		if (getNpc(coords.x, coords.y) != nullNpc)
+		if (!getNpc(coords.x, coords.y).equals(nullNpc))
 			return false;
 
 		Npc npc = new Npc(id, x, y);
@@ -457,7 +457,7 @@ public class Map {
 		if (!correctCoords(coords.set(x, y)))
 			return false;
 
-		if (getNpc(coords.x, coords.y) != nullNpc)
+		if (!getNpc(coords.x, coords.y).equals(nullNpc))
 			return false;
 
 		if (npc.spawnOnce)
@@ -477,7 +477,10 @@ public class Map {
 
 		Npc npc = mapNpcs.get(coords);
 
-		if (npc != nullNpc && npc != null)
+		if (npc == null)
+			return nullNpc;
+
+		if (!npc.equals(nullNpc))
 			return npc;
 
 		return nullNpc;
