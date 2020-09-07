@@ -142,8 +142,7 @@ public class Utils {
 			Npc npc = MadSand.world.getCurLoc().getNpc(World.player.lookingAt());
 			Utils.out("Looking at npc: " + npc.id);
 			npc.inventory.putItem(rand(1, Resources.LASTITEMID), rand(1, 10));
-			new TradeInventoryUI(npc.inventory,
-					World.player.inventory).show();
+			World.player.tradeWithNPC(World.player.stats.look);
 		}
 		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.R)) && (debugMode)) {
 			MadSand.world.generate();

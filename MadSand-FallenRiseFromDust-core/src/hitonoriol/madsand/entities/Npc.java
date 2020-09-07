@@ -26,6 +26,7 @@ public class Npc extends Entity {
 	public int id;
 	public ArrayList<Integer> questList = new ArrayList<Integer>();
 
+	public boolean canTrade = false;
 	public boolean friendly;
 	public boolean spawnOnce;
 	private boolean pauseFlag = false;

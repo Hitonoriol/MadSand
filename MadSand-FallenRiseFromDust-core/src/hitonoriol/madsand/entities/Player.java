@@ -19,6 +19,7 @@ import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.entities.inventory.trade.TradeInventoryUI;
 import hitonoriol.madsand.enums.*;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
@@ -302,6 +303,14 @@ public class Player extends Entity {
 		}
 		doAction(stats.AP_MINOR);
 		Gui.processActionMenu();
+	}
+	
+	public void tradeWithNPC(Direction direction) {
+		coords.set(x, y).addDirection(direction);
+		Npc npc = MadSand.world.getCurLoc().getNpc(coords);
+		if (!npc.canTrade)
+			return;
+		new TradeInventoryUI(npc.inventory, inventory).show();
 	}
 
 	public void interact(final Direction direction) {

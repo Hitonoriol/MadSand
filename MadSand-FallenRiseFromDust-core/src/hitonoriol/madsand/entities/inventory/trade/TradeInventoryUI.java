@@ -45,7 +45,8 @@ public class TradeInventoryUI {
 
 		containerTable = new Table();
 		tradeUITable = new Table();
-		tradeUITable.setDebug(true, true);
+		
+		//tradeUITable.setDebug(true, true);
 
 		tradeUITable.setSize(WIDTH, HEIGHT);
 		sellTable = new Table();

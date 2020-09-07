@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import hitonoriol.madsand.world.worldgen.WorldGenPreset;
+
 public class WorldGenProp {
 	public static Vector<String> name = new Vector<String>();
 
@@ -13,6 +15,8 @@ public class WorldGenProp {
 	private static HashMap<Integer, Vector<Integer>> underworld = new HashMap<Integer, Vector<Integer>>();
 	private static HashMap<Integer, HashMap<String, Integer>> dungeon = new HashMap<Integer, HashMap<String, Integer>>();
 	public static HashMap<Integer, HashMap<String, String>> dungeonContents = new HashMap<Integer, HashMap<String, String>>();
+	
+	public static HashMap<Integer, WorldGenPreset> biomes = new HashMap<>();
 
 	public static int getDefaultTile(int id) {
 		return tile.get(id).get(0).get(0);
