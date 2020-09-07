@@ -1,0 +1,536 @@
+	<items>
+		<item id="0">
+			<name>Nothing</name>
+			<cost>0</cost>
+		</item>
+		<item id="1">
+			<name>Wood</name>
+			<type>PlaceableObject</type>
+			<altobject>9</altobject>
+			<weight>0.25</weight>
+			<cost>3</cost>
+		</item>
+		<item id="2">
+			<name>Small rock</name>
+			<weight>0.6</weight>
+			<cost>3</cost>
+		</item>
+		<item id="3">
+			<name>Stone axe</name>
+			<skill>Woodcutting</skill>
+			<dmg>2</dmg>
+			<hp>128</hp>
+			<type>Axe</type>
+			<cost>9</cost>
+			<recipe>2/7:8/5</recipe>
+			<weight>0.7</weight>
+		</item>
+		<item id="4">
+			<name>Cake</name>
+			<type>Consumable</type>
+			<heal>10:30</heal>
+			<cost>25</cost>
+			<recipe>7/25</recipe>
+			<weight>0.7</weight>
+		</item>
+		<item id="5">
+			<name>Clay</name>
+			<cost>1</cost>
+			<weight>0.3</weight>
+		</item>
+		<item id="6">
+			<name>Stone shovel</name>
+			<dmg>2</dmg>
+			<hp>100</hp>
+			<cost>10</cost>
+			<type>Shovel</type>
+			<recipe>2/7:8/5</recipe>
+			<weight>0.7</weight>
+		</item>
+		<item id="7">
+			<name>Berry</name>
+			<type>Consumable</type>
+			<heal>1:20</heal>
+			<cost>1</cost>
+			<weight>0.05</weight>
+		</item>
+		<item id="8">
+			<name>Stick</name>
+			<cost>4</cost>
+			<recipe>1/1</recipe>
+			<craft_quantity>2</craft_quantity>
+			<weight>0.2</weight>
+		</item>
+		<item id="9">
+			<name>Flint</name>
+			<cost>5</cost>
+			<weight>0.1</weight>
+		</item>
+		<item id="10">
+			<name>Hewn rock</name>
+			<type>PlaceableObject</type>
+			<altobject>8</altobject>
+			<cost>7</cost>
+			<recipe>25/1</recipe>
+			<weight>1.5</weight>
+		</item>
+		<item id="11">
+			<name>Stone pickaxe</name>
+			<skill>Mining</skill>
+			<dmg>2</dmg>
+			<hp>128</hp>
+			<cost>10</cost>
+			<type>Pickaxe</type>
+			<recipe>2/7:8/5</recipe>
+			<weight>0.7</weight>
+		</item>
+		<item id="12">
+			<name>Stone sword</name>
+			<cost>11</cost>
+			<recipe>2/10:8/5</recipe>
+			<type>Weapon</type>
+			<lvl>1</lvl>
+			<strength>2</strength>
+			<weight>0.8</weight>
+		</item>
+		<item id="13">
+			<name>Iron sword</name>
+			<cost>15</cost>
+			<recipe>23/15:8/10</recipe>
+			<weight>1</weight>
+			<type>Weapon</type>
+			<lvl>2</lvl>
+			<strength>4</strength>
+		</item>
+		<item id="14">
+			<name>Iron helmet</name>
+			<cost>18</cost>
+			<recipe>23/25</recipe>
+			<type>HeadArmor</type>
+			<lvl>1</lvl>
+			<weight>1.1</weight>
+		</item>
+		<item id="15">
+			<name>Iron shield</name>
+			<type>Shield</type>
+			<cost>18</cost>
+			<recipe>23/25</recipe>
+			<lvl>1</lvl>
+			<weight>1.1</weight>
+		</item>
+		<item id="16">
+			<name>Leather chest armor</name>
+			<type>ChestArmor</type>
+			<cost>14</cost>
+			<recipe>22/15</recipe>
+			<lvl>1</lvl>
+			<weight>0.8</weight>
+		</item>
+		<item id="17">
+			<name>Iron chestplate</name>
+			<type>ChestArmor</type>
+			<cost>18</cost>
+			<recipe>23/30</recipe>
+			<weight>1.4</weight>
+		</item>
+		<item id="18">
+			<name>Chainmail</name>
+			<type>ChestArmor</type>
+			<cost>21</cost>
+			<recipe>23/37:8/3</recipe>
+			<weight>1.3</weight>
+		</item>
+		<item id="19">
+			<name>Tough iron chestplate</name>
+			<type>ChestArmor</type>
+			<cost>34</cost>
+			<weight>1.9</weight>
+		</item>
+		<item id="20">
+			<name>Hardened steel sword</name>
+			<cost>30</cost>
+			<weight>1.9</weight>
+		</item>
+		<item id="21">
+			<name>Coin</name>
+			<cost>1</cost>
+			<weight>0</weight>
+		</item>
+		<item id="22">
+			<name>Leather</name>
+			<cost>5</cost>
+			<weight>0.25</weight>
+		</item>
+		<item id="23">
+			<name>Iron ore</name>
+			<cost>16</cost>
+			<weight>0.7</weight>
+		</item>
+		<item id="24">
+			<name>Gold ore</name>
+			<cost>30</cost>
+			<weight>0.7</weight>
+		</item>
+		<item id="25">
+			<name>Stone</name>
+			<type>PlaceableObject</type>
+			<altobject>13</altobject>
+			<cost>5</cost>
+			<weight>1</weight>
+		</item>
+		<item id="26">
+			<name>Trapdoor</name>
+			<type>PlaceableObject</type>
+			<altobject>14</altobject>
+			<cost>18</cost>
+			<recipe>1/25:8/10</recipe>
+			<weight>1</weight>
+		</item>
+		<item id="27">
+			<name>Wooden floor</name>
+			<type>PlaceableTile</type>
+			<altobject>9</altobject>
+			<cost>4</cost>
+			<recipe>1/1</recipe>
+			<weight>1</weight>
+		</item>
+		<item id="28">
+			<name>Ruby</name>
+			<cost>40</cost>
+			<weight>0.1</weight>
+		</item>
+		<item id="29">
+			<name>Sapphire</name>
+			<cost>63</cost>
+			<weight>0.1</weight>
+		</item>
+		<item id="30">
+			<name>Diamond</name>
+			<cost>100</cost>
+			<weight>0.1</weight>
+		</item>
+		<item id="31">
+			<name>Emerald</name>
+			<cost>42</cost>
+			<weight>0.1</weight>
+		</item>
+		<item id="32">
+			<name>Stone plate</name>
+			<type>PlaceableObject</type>
+			<altobject>15</altobject>
+			<cost>5</cost>
+			<weight>1.2</weight>
+		</item>
+		<item id="33">
+			<name>Stone plate</name>
+			<type>PlaceableObject</type>
+			<altobject>16</altobject>
+			<cost>5</cost>
+			<weight>1.2</weight>
+		</item>
+		<item id="34">
+			<name>Stone plate</name>
+			<type>PlaceableObject</type>
+			<altobject>17</altobject>
+			<cost>5</cost>
+			<weight>1.2</weight>
+		</item>
+		<item id="35">
+			<name>Stone floor</name>
+			<type>PlaceableTile</type>
+			<altobject>12</altobject>
+			<cost>5</cost>
+			<weight>1.2</weight>
+		</item>
+		<item id="36">
+			<name>Stone floor</name>
+			<type>PlaceableTile</type>
+			<altobject>13</altobject>
+			<cost>5</cost>
+			<weight>1.2</weight>
+		</item>
+		<item id="37">
+			<name>Stone floor</name>
+			<type>PlaceableTile</type>
+			<altobject>14</altobject>
+			<cost>5</cost>
+			<weight>1.2</weight>
+		</item>
+		<item id="38">
+			<name>Sign</name>
+			<type>PlaceableObject</type>
+			<altobject>18</altobject>
+			<cost>8</cost>
+			<recipe>1/15:8/5</recipe>
+			<weight>1</weight>
+		</item>
+		<item id="39">
+			<name>Cucumber</name>
+			<type>Consumable</type>
+			<heal>3:15</heal>
+			<cost>3</cost>
+			<weight>0.15</weight>
+		</item>
+		<item id="40">
+			<name>Cucumber seed</name>
+			<altobject>20</altobject>
+			<type>Crop</type>
+			<stages>20,19,63,21</stages>
+			<stagelen>20,25,30,35</stagelen>
+			<recipe>68/5</recipe>
+			<cost>7</cost>
+			<weight>0.05</weight>
+		</item>
+		<item id="41">
+			<name>Stone hoe</name>
+			<dmg>2</dmg>
+			<hp>75</hp>
+			<cost>11</cost>
+			<recipe>2/7:8/5</recipe>
+			<type>Hoe</type>
+			<weight>0.8</weight>
+			<onuse>
+			local player = world.player;
+			local tile = world:getTileId(player.x, player.y);
+			print("Current tile: " .. tile);
+			if tile == 0 then 
+				utils:placeTile(player.x, player.y, 15);
+				utils:print("You plowed the soil");
+				print("Plowing at" .. player.x .. " " .. player.y);
+			end
+			</onuse>
+		</item>
+		<item id="42">
+			<name>Mixed stone wall</name>
+			<type>PlaceableObject</type>
+			<altobject>26</altobject>
+			<cost>10</cost>
+			<recipe>5/3:2/3</recipe>
+			<weight>1</weight>
+		</item>
+		<item id="43">
+			<name>Brown stone floor</name>
+			<type>PlaceableTile</type>
+			<altobject>19</altobject>
+			<cost>3</cost>
+			<recipe>5/1</recipe>
+			<weight>1</weight>
+		</item>
+		<item id="44">
+			<name>Edible mushroom</name>
+			<type>Consumable</type>
+			<heal>0:25</heal>
+			<cost>15</cost>
+			<weight>0.1</weight>
+		</item>
+		<item id="45">
+			<name>Amanita</name>
+			<type>Consumable</type>
+			<heal>-18:-10</heal>
+			<cost>5</cost>
+			<weight>0.1</weight>
+		</item>
+		<item id="46">
+			<name>Potatoes</name>
+			<type>Consumable</type>
+			<heal>6:25</heal>
+			<cost>13</cost>
+			<weight>0.1</weight>
+		</item>
+		<item id="47">
+			<name>Carrot</name>
+			<type>Consumable</type>
+			<heal>10:20</heal>
+			<cost>21</cost>
+			<weight>0.1</weight>
+		</item>
+		<item id="48">
+			<name>Tomatoes</name>
+			<type>Consumable</type>
+			<heal>5:20</heal>
+			<cost>21</cost>
+			<weight>0.1</weight>
+		</item>
+		<item id="49">
+			<name>Pepper</name>
+			<type>Consumable</type>
+			<heal>9:20</heal>
+			<cost>15</cost>
+			<weight>0.1</weight>
+		</item>
+		<item id="50">
+			<name>Corn</name>
+			<type>Consumable</type>
+			<heal>5:30</heal>
+			<cost>41</cost>
+			<weight>0.1</weight>
+		</item>
+		<item id="51">
+			<name>Potato seed</name>
+			<altobject>43</altobject>
+			<type>Crop</type>
+			<cost>41</cost>
+			<stages>43,44,45,46</stages>
+			<stagelen>20,25,30,35</stagelen>
+			<recipe>68/5</recipe>
+			<weight>0.05</weight>
+		</item>
+		<item id="52">
+			<name>Carrot seed</name>
+			<altobject>47</altobject>
+			<type>Crop</type>
+			<cost>41</cost>
+			<stages>47,48,49,50</stages>
+			<stagelen>20,25,30,35</stagelen>
+			<recipe>68/5</recipe>
+			<weight>0.05</weight>
+		</item>
+		<item id="53">
+			<name>Tomato seed</name>
+			<altobject>51</altobject>
+			<type>Crop</type>
+			<cost>41</cost>
+			<stages>51,52,53,54</stages>
+			<stagelen>20,25,30,35</stagelen>
+			<recipe>68/5</recipe>
+			<weight>0.05</weight>
+		</item>
+		<item id="54">
+			<name>Pepper seed</name>
+			<altobject>55</altobject>
+			<type>Crop</type>
+			<cost>41</cost>
+			<stages>55,56,57,58</stages>
+			<stagelen>20,25,30,35</stagelen>
+			<recipe>68/5</recipe>
+			<weight>0.05</weight>
+		</item>
+		<item id="55">
+			<name>Corn seed</name>
+			<altobject>59</altobject>
+			<type>Crop</type>
+			<cost>41</cost>
+			<stages>59,60,61,62</stages>
+			<stagelen>20,25,30,35</stagelen>
+			<recipe>68/5</recipe>
+			<weight>0.05</weight>
+		</item>
+		<item id="56">
+			<name>Coal</name>
+			<cost>4</cost>
+			<weight>0.7</weight>
+		</item>
+		<item id="57">
+			<name>Ham</name>
+			<type>Consumable</type>
+			<heal>15:50</heal>
+			<cost>11</cost>
+			<weight>0.4</weight>
+		</item>
+		<item id="58">
+			<name>Pint of beer</name>
+			<recipe>65/5:66/5</recipe>
+			<type>Consumable</type>
+			<heal>-5:30</heal>
+			<cost>25</cost>
+			<weight>0.5</weight>
+		</item>
+		<item id="59">
+			<name>Chicken leg</name>
+			<cost>15</cost>
+			<type>Consumable</type>
+			<heal>10:45</heal>
+			<weight>0.3</weight>
+		</item>
+		<item id="60">
+			<name>Healing potion</name>
+			<cost>20</cost>
+			<type>Consumable</type>
+			<recipe>45/3:58/1</recipe>
+			<heal>25:0</heal>
+			<weight>0.2</weight>
+		</item>
+		<item id="61">
+			<name>Steel shield</name>
+			<cost>79</cost>
+			<weight>1.1</weight>
+		</item>
+		<item id="62">
+			<name>Golden shield</name>
+			<cost>110</cost>
+			<weight>1.1</weight>
+		</item>
+		<item id="63">
+			<name>Royal shield</name>
+			<cost>199</cost>
+			<weight>1.7</weight>
+		</item>
+		<item id="64">
+			<name>Executor's shield</name>
+			<cost>231</cost>
+			<weight>1.8</weight>
+		</item>
+		<item id="65">
+			<name>Spicy leaf</name>
+			<cost>1</cost>
+			<weight>0.01</weight>
+		</item>
+		<item id="66">
+			<name>Sour leaf</name>
+			<cost>1</cost>
+			<weight>0.01</weight>
+		</item>
+		<item id="67">
+			<name>Flint pickaxe</name>
+			<skill>Mining</skill>
+			<dmg>3</dmg>
+			<hp>200</hp>
+			<cost>10</cost>
+			<type>Pickaxe</type>
+			<recipe>9/12:8/7:69/3</recipe>
+			<weight>0.7</weight>
+		</item>
+		<item id="68">
+			<name>Plant fiber</name>
+			<cost>2</cost>
+			<weight>0.01</weight>
+			<recipe>8/2</recipe>
+		</item>
+		<item id="69">
+			<name>Plant thread</name>
+			<cost>2</cost>
+			<weight>0.01</weight>
+			<recipe>68/2</recipe>
+		</item>
+		<item id="70">
+			<name>Sharp stone</name>
+			<cost>2</cost>
+			<weight>0.5</weight>
+			<recipe>2/2</recipe>
+		</item>
+		<item id="71">
+			<name>Sharp stick</name>
+			<cost>2</cost>
+			<weight>0.1</weight>
+			<recipe>2/1:8/1</recipe>
+		</item>
+		<item id="72">
+			<name>Iron ingot</name>
+			<cost>2</cost>
+			<weight>0.7</weight>
+		</item>
+		<item id="73">
+			<name>Gold ingot</name>
+			<cost>2</cost>
+			<weight>0.7</weight>
+		</item>
+		<item id="74">
+			<name>Spear</name>
+			<cost>11</cost>
+			<recipe>72/5:8/5</recipe>
+			<type>Weapon</type>
+			<lvl>2</lvl>
+			<strength>4</strength>
+			<weight>0.8</weight>
+		</item>
+	</items>

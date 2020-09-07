@@ -1,0 +1,359 @@
+{
+
+	"0" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Grass",
+		"foreground" : false
+	},
+
+	"1" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : {
+			"9" : [ 5 ]
+		},
+		"name" : "Clay",
+		"foreground" : false
+	},
+
+	"2" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : {
+			"9" : [ 9 ]
+		},
+		"name" : "Flint",
+		"foreground" : false
+	},
+
+	"3" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Sandstone",
+		"foreground" : false
+	},
+
+	"4" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Sand",
+		"foreground" : false
+	},
+
+	"5" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Stone floor",
+		"foreground" : false
+	},
+
+	"6" : {
+		"damage" : 0,
+		"onInteract" : "world:descend();",
+		"altItems" : null,
+		"name" : "Hole in the ground",
+		"foreground" : false
+	},
+
+	"7" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Stone floor",
+		"foreground" : false
+	},
+
+	"8" : {
+		"damage" : 1,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Water",
+		"foreground" : true
+	},
+
+	"9" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Wooden floor",
+		"foreground" : false
+	},
+
+	"10" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Dirt",
+		"foreground" : false
+	},
+
+	"11" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Dirt",
+		"foreground" : false
+	},
+
+	"12" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Stone floor",
+		"foreground" : false
+	},
+
+	"13" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Stone floor",
+		"foreground" : false
+	},
+
+	"14" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Stone floor",
+		"foreground" : false
+	},
+
+	"15" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Plowed dirt",
+		"foreground" : false
+	},
+
+	"16" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Hole in sand",
+		"foreground" : false
+	},
+
+	"17" : {
+		"damage" : 1,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Mad sand",
+		"foreground" : true
+	},
+
+	"18" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Mixed brick floor",
+		"foreground" : false
+	},
+
+	"19" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Gray brick floor",
+		"foreground" : false
+	},
+
+	"20" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Snow",
+		"foreground" : false
+	},
+
+	"21" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Pile of snow",
+		"foreground" : false
+	},
+
+	"22" : {
+		"damage" : 1,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Lava",
+		"foreground" : true
+	},
+
+	"23" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Dirt",
+		"foreground" : false
+	},
+
+	"24" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Burnt dirt",
+		"foreground" : false
+	},
+
+	"25" : {
+		"damage" : 0,
+		"onInteract" : "world:ascend();",
+		"altItems" : null,
+		"name" : "Cave exit",
+		"foreground" : false
+	},
+
+	"26" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Stone floor",
+		"foreground" : false
+	},
+
+	"27" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Stone floor",
+		"foreground" : false
+	},
+
+	"28" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Stone floor",
+		"foreground" : false
+	},
+
+	"29" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Gravel",
+		"foreground" : false
+	},
+
+	"30" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Stone floor",
+		"foreground" : false
+	},
+
+	"31" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Brick floor",
+		"foreground" : false
+	},
+
+	"32" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Gravel",
+		"foreground" : false
+	},
+
+	"33" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Brick floor",
+		"foreground" : false
+	},
+
+	"34" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Brick floor",
+		"foreground" : false
+	},
+
+	"35" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Brick floor",
+		"foreground" : false
+	},
+
+	"36" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Stone plate",
+		"foreground" : false
+	},
+
+	"37" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Stone plate",
+		"foreground" : false
+	},
+
+	"38" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Stone plate",
+		"foreground" : false
+	},
+
+	"39" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Dust",
+		"foreground" : false
+	},
+
+	"40" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Dust",
+		"foreground" : false
+	},
+
+	"41" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Dust",
+		"foreground" : false
+	},
+
+	"42" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Dust",
+		"foreground" : false
+	},
+
+	"43" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Dust",
+		"foreground" : false
+	}
+
+}
