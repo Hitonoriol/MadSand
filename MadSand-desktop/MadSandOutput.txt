@@ -1,32 +1,32 @@
-[18:29:43] Starting initialization!
-[18:29:43] Render area: 441
-[18:29:43] Loading resources...
-[18:29:44] 6 crops
-[18:29:44] 5 biomes
-[18:29:44] 33 craftable items
-[18:29:44] 36 npcs
-[18:29:44] Initializing worldgen...
-[18:29:44] Done initializing WorldGen!
-[18:29:44] 112 map objects
-[18:29:44] 44 tiles
-[18:29:44] 5 quests
-[18:29:44] Done loading resources.
-[18:29:45] Refreshing craft menu...
-[18:29:45] Total unlocked recipes: 0 out of 33
-[18:29:45] No unlocked recipes.
-[18:29:45] Generating new sector!
-[18:29:45] Clearing current sector...
-[18:29:45] Biome: 0
-[18:29:45] Generating terrain!
-[18:29:45] Default tile: 0
-[18:29:45] lakes from: 0.1 to: 0.27
-[18:29:45] Done generating terrain!
-[18:29:45] Generating biome objects!
-[18:29:45] Done generating biome objects!
-[18:29:45] Generating underworld...
-[18:29:45] Done generating underworld!
-[18:29:45] Generating dungeon!
-[18:29:45] Probability: 100%
-[18:29:45] Done generating dungeon!
-[18:29:45] Done generating new sector!
-[18:29:45] End of initialization!
+[18:47:22] Starting initialization!
+[18:47:22] Render area: 441
+[18:47:22] Loading resources...
+[18:47:22] 6 crops
+[18:47:22] 5 biomes
+[18:47:22] 33 craftable items
+[18:47:22] 36 npcs
+[18:47:22] Initializing worldgen...
+[18:47:22] Done initializing WorldGen!
+[18:47:22] 112 map objects
+[18:47:22] 44 tiles
+[18:47:22] 5 quests
+[18:47:22] Done loading resources.
+[18:47:23] Refreshing craft menu...
+[18:47:23] Total unlocked recipes: 0 out of 33
+[18:47:23] No unlocked recipes.
+[18:47:23] Generating new sector!
+[18:47:23] Clearing current sector...
+[18:47:23] Biome: 0
+[18:47:23] Generating terrain!
+[18:47:23] Default tile: 0
+[18:47:23] lakes from: 0.1 to: 0.27
+[18:47:23] Done generating terrain!
+[18:47:23] Generating biome objects!
+[18:47:23] Done generating biome objects!
+[18:47:23] Generating underworld...
+[18:47:23] Done generating underworld!
+[18:47:23] Generating dungeon!
+[18:47:23] Probability: 100%
+[18:47:23] Done generating dungeon!
+[18:47:23] Done generating new sector!
+[18:47:23] End of initialization!
