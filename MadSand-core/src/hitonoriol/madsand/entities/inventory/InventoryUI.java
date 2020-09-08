@@ -6,15 +6,15 @@ import java.util.Set;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.gui.AutoFocusScrollPane;
 
 public class InventoryUI {
-	ScrollPane invScroll;
+	AutoFocusScrollPane invScroll;
 	Table invTable;
 	Table invContainer;
 	Label header;
@@ -45,7 +45,7 @@ public class InventoryUI {
 		invContainer.row();
 		invContainer.add(invTable);
 		
-		invScroll = new ScrollPane(invContainer);
+		invScroll = new AutoFocusScrollPane(invContainer);
 		invScroll.setVisible(false);
 		
 		invTable.setWidth(WIDTH);

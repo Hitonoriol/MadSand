@@ -51,6 +51,19 @@ public class Item {
 		loadProperties();
 	}
 
+	public Item(Item item) {
+		this(item.id);
+		quantity = item.quantity;
+		hp = item.hp;
+
+		if (item.type.isUnique()) {
+			uid = item.uid;
+
+			if (item.type.isWeapon() || item.type.isArmor())
+				equipStats = new EquipStats(item.equipStats);
+		}
+	}
+
 	public Item() {
 		this(NULL_ITEM);
 	}
@@ -76,6 +89,11 @@ public class Item {
 	public void clear() {
 		id = 0;
 		loadProperties();
+	}
+
+	public Item setQuantity(int quantity) {
+		this.quantity = quantity;
+		return this;
 	}
 
 	@JsonIgnore

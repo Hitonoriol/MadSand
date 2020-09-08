@@ -1,58 +1,41 @@
 package hitonoriol.madsand.entities.inventory.trade;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.enums.TradeAction;
+import hitonoriol.madsand.gui.ItemButton;
 import hitonoriol.madsand.properties.ItemProp;
 
-public class TradeInventoryButton extends Group {
-	private final float WIDTH = 390;
-	private final float HEIGHT = 100;
+public class TradeInventoryButton extends ItemButton {
+	TradeInventory trade;
+	TradeAction action;
+	TradeUIRefresher refresher;
 
-	private final float IMAGE_SIZE = 50;
+	public TradeInventoryButton(TradeInventory trade, Item item, TradeAction action, TradeUIRefresher refresher) {
+		super(item);
 
-	private Label itemLabel;
-	private Image itemImage;
-	private Table buttonTable;
-	private Image highlight;
+		this.trade = trade;
+		this.action = action;
+		this.refresher = refresher;
 
-	public TradeInventoryButton(Item item) {
-		String buttonText = item.quantity + " " + ItemProp.name.get(item.id) + ", " + item.getPrice() + " each";
-		itemLabel = new Label(buttonText, Gui.skin);
-		itemImage = new Image(Resources.item[item.id]);
-		itemImage.setSize(IMAGE_SIZE, IMAGE_SIZE);
-
-		buttonTable = new Table();
-		buttonTable.add(itemImage).align(Align.left);
-		buttonTable.add(itemLabel).align(Align.right);
-		buttonTable.row();
-
-		highlight = new Image(Resources.noEquip);
-		highlight.setVisible(false);
-		highlight.setSize(WIDTH, HEIGHT);
-
-		buttonTable.setSize(WIDTH, HEIGHT);
-		super.addActor(buttonTable);
-		super.addActor(highlight);
-		super.setSize(WIDTH, HEIGHT);
-
-		this.addListener(new InputListener() {
-			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-				highlight.setVisible(true);
-			}
-
-			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-				highlight.setVisible(false);
-			}
-		});
+		super.setUpListeners();
 	}
+
+	@Override
+	protected String createButtonText() {
+		return buttonItem.quantity + " " + ItemProp.name.get(buttonItem.id) + ", " + buttonItem.getPrice() + " each";
+	}
+
+	@Override
+	protected ClickListener setButtonPressListener() {
+		return new ClickListener(Buttons.LEFT) {
+			public void clicked(InputEvent event, float x, float y) {
+				new TradeConfirmDialog(trade, buttonItem, action, refresher).show();
+			}
+		};
+	}
+
 }

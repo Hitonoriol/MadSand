@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.GameState;
+import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.world.World;
 
@@ -140,7 +141,7 @@ public class Utils {
 			Utils.out("Trade test");
 			Npc npc = MadSand.world.getCurLoc().getNpc(World.player.lookingAt());
 			Utils.out("Looking at npc: " + npc.id);
-			npc.inventory.putItem(rand(1, Resources.LASTITEMID), rand(1, 10));
+			npc.inventory.putItem(Globals.getInt(Globals.CURRENCY_FIELD), rand(100, 500));
 			World.player.tradeWithNPC(World.player.stats.look);
 		}
 		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.R)) && (debugMode)) {

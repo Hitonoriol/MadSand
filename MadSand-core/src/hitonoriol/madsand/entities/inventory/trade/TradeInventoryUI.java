@@ -15,10 +15,13 @@ import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.GameState;
+import hitonoriol.madsand.enums.TradeAction;
 import hitonoriol.madsand.gui.AutoFocusScrollPane;
 
 //TODO: Two scrollpanes with imagetext btns: left pane - sell from player inventory, right - buy
 public class TradeInventoryUI {
+	TradeUIRefresher refresher;
+	
 	private AutoFocusScrollPane sellPane, buyPane;
 	private Table sellTable, buyTable;
 	private Table tradeUITable;
@@ -45,7 +48,7 @@ public class TradeInventoryUI {
 
 		containerTable = new Table();
 		tradeUITable = new Table();
-		
+
 		//tradeUITable.setDebug(true, true);
 
 		tradeUITable.setSize(WIDTH, HEIGHT);
@@ -83,6 +86,13 @@ public class TradeInventoryUI {
 		containerTable.setVisible(false);
 
 		Gui.overlay.addActor(containerTable);
+		
+		refresher = new TradeUIRefresher() {
+			@Override
+			public void refreshUI() {
+				refresh();				
+			}
+		};
 
 		exitBtn.addListener(new ChangeListener() {
 
@@ -114,14 +124,20 @@ public class TradeInventoryUI {
 		sellTable.clear();
 		buyTable.clear();
 
-		refresh(sellTable, playerInventory, Align.topLeft);
-		refresh(buyTable, traderInventory, Align.topRight);
+		refresh(sellTable, playerInventory, TradeAction.Sell, Align.topLeft);
+		refresh(buyTable, traderInventory, TradeAction.Buy, Align.topRight);
 	}
 
-	private void refresh(Table table, Inventory inventory, int align) {
+	private void refresh(Table table, Inventory inventory, TradeAction tradeAction, int align) {
+		TradeInventory tradeInventory;
+		if (tradeAction.equals(TradeAction.Sell))
+			tradeInventory = playerSell;
+		else
+			tradeInventory = traderSell;
+
 		for (Item item : inventory.items) {
 			Utils.out("Refreshing tradeInventoryUI: adding item id" + item.id + " quantity:" + item.quantity);
-			table.add(new TradeInventoryButton(item)).align(align).row();
+			table.add(new TradeInventoryButton(tradeInventory, item, tradeAction, refresher)).align(align).row();
 			table.add().row();
 		}
 	}

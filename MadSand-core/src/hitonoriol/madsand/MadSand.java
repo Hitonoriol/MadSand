@@ -428,8 +428,6 @@ public class MadSand extends Game {
 			Utils.batch.begin();
 			drawGame();
 			Utils.batch.end();
-			
-			Mouse.mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
 
 			Gui.overlay.act();
 			Gui.overlay.draw();

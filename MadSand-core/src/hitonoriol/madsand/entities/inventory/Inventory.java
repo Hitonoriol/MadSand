@@ -254,15 +254,29 @@ public class Inventory {
 		return false;
 	}
 
-	public boolean delItem(Item item) {
+	public boolean delItem(Item item, int quantity) {
+		if (quantity > item.quantity)
+			return false;
+
 		for (int i = items.size() - 1; i >= 0; --i) {
+
 			if (items.get(i).equals(item)) {
-				refreshRemoveItem(item);
-				items.remove(i);
+				item.quantity -= quantity;
+
+				if (item.quantity < 1) {
+					refreshRemoveItem(item);
+					items.remove(i);
+				} else refreshItem(item);
+
 				return true;
 			}
 		}
+
 		return false;
+	}
+
+	public boolean delItem(Item item) {
+		return delItem(item, item.quantity);
 	}
 
 	public boolean delItem(int id) {

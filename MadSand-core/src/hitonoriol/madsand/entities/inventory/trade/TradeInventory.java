@@ -31,8 +31,10 @@ public class TradeInventory {
 			return false;
 
 		buyer.delItem(currency, cost);
-		buyer.putItem(item);
-		seller.delItem(item);
+		buyer.putItem(new Item(item).setQuantity(quantity));
+
+		seller.putItem(currency, cost);
+		seller.delItem(item, quantity);
 
 		return true;
 	}

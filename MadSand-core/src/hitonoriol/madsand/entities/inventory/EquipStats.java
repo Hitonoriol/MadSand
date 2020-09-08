@@ -26,6 +26,17 @@ public class EquipStats {
 		roll();
 	}
 
+	public EquipStats(EquipStats eStats) {
+		lvl = eStats.lvl;
+		rollMax = eStats.rollMax;
+		rollMin = eStats.rollMin;
+		constitution = eStats.constitution;
+		dexterity = eStats.dexterity;
+		strength = eStats.strength;
+		accuracy = eStats.accuracy;
+		intelligence = eStats.intelligence;
+	}
+
 	@JsonIgnore
 	private boolean isUnlucky() { // with each item lvl the chance to roll a debuff halves; idk how good is that,
 									// we'll see

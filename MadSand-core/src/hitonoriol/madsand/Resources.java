@@ -86,6 +86,7 @@ public class Resources {
 
 	public static final String emptyField = "-1";
 	public static final int emptyId = -1;
+	public static String Space = " ", Colon = ":";
 
 	static final String XML_ITEM_NODE = "item";
 	static final String XML_CROP_STAGES_NODE = "stages";
