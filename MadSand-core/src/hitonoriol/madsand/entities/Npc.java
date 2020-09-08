@@ -1,7 +1,6 @@
 package hitonoriol.madsand.entities;
 
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
@@ -16,14 +15,16 @@ import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.NpcState;
 import hitonoriol.madsand.enums.NpcType;
-import hitonoriol.madsand.enums.Skill;
+import hitonoriol.madsand.properties.NpcContainer;
 import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.world.World;
 
 public class Npc extends Entity {
 	public static int NULL_NPC = 0;
+	public static int LOOT_RANDOM_FACTOR = 2;
 
 	public int id;
+	public int rewardExp;
 	public ArrayList<Integer> questList = new ArrayList<Integer>();
 
 	public boolean canTrade = false;
@@ -67,32 +68,31 @@ public class Npc extends Entity {
 	}
 
 	void loadProperties() {
+		NpcContainer properties = NpcProp.npcs.get(id);
 		stats.roll();
-		stats.name = NpcProp.name.get(id);
-		stats.hp = NpcProp.hp.get(id);
+		stats.name = properties.name;
+		stats.hp = properties.hp;
 		stats.mhp = stats.hp;
-		stats.strength = NpcProp.atk.get(id);
-		stats.accuracy = NpcProp.accuracy.get(id);
-		stats.skills.setExp(Skill.Level, NpcProp.rewardexp.get(id));
-		stats.faction = NpcProp.faction.get(id);
+		stats.strength = properties.strength;
+		stats.accuracy = properties.accuracy;
+		rewardExp = properties.rewardExp;
+		stats.faction = properties.faction;
 		initInventory();
 		inventory.setMaxWeight(stats.calcMaxInventoryWeight());
-		inventory.putItem(NpcProp.drop.get(id));
+		inventory.putItem(properties.loot);
 
-		int toRemove;
+		int removeAmt;
 		for (Item item : inventory.items) {
-			toRemove = Utils.rand(0, item.quantity);
-			inventory.delItem(item.id, toRemove);
+			removeAmt = Utils.rand(0, item.quantity / LOOT_RANDOM_FACTOR);
+			inventory.delItem(item.id, removeAmt);
 		}
 
-		String list = NpcProp.qids.get(id);
-		StringTokenizer qTok = new StringTokenizer(list, ",");
-		while (qTok.hasMoreTokens())
-			questList.add(Utils.val(qTok.nextToken()));
+		if (properties.questList != null)
+			questList = new ArrayList<>(properties.questList);
 
-		friendly = NpcProp.friendly.get(id);
-		spawnOnce = NpcProp.spawnonce.get(id);
-		type = NpcProp.type.get(id);
+		friendly = properties.friendly;
+		spawnOnce = properties.spawnOnce;
+		type = properties.type;
 	}
 
 	@Override
@@ -100,15 +100,17 @@ public class Npc extends Entity {
 		super.turn(dir);
 		if (isStepping())
 			return false;
-		int ox = this.x, oy = this.y;
+		int originalX = this.x, originalY = this.y;
+
 		if (!super.move(dir))
 			return false;
-		int nx = x, ny = y;
-		setGridCoords(ox, oy);
-		MadSand.world.getCurLoc().moveNpc(this, nx, ny); // ykno, let's assume if npc moves, it means that it's in the
-															// same location as player, so... this should work always
-															// despite how ugly this shit looks
-		setGridCoords(nx, ny);
+
+		int newX = this.x, newY = this.y;
+		setGridCoords(originalX, originalY);
+		MadSand.world.getCurLoc().moveNpc(this, newX, newY); // ykno, let's assume if npc moves, it means that it's in the
+																// same location as player, so... this should work always
+																// despite how ugly this shit looks
+		setGridCoords(newX, newY);
 		return true;
 	}
 

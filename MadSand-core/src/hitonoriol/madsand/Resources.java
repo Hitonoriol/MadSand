@@ -19,15 +19,14 @@ import com.fasterxml.jackson.databind.type.MapType;
 
 import hitonoriol.madsand.containers.Tuple;
 import hitonoriol.madsand.entities.SkillContainer;
-import hitonoriol.madsand.enums.Faction;
 import hitonoriol.madsand.enums.ItemType;
-import hitonoriol.madsand.enums.NpcType;
 import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.properties.CropProp;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
+import hitonoriol.madsand.properties.NpcContainer;
 import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.QuestList;
@@ -41,7 +40,6 @@ public class Resources {
 	static final int PLAYER_ANIM_WIDTH = 35;
 	static final int PLAYER_ANIM_HEIGHT = 74;
 
-	static Document npcDoc;
 	static Document itemDoc;
 
 	static Document skilldoc;
@@ -91,18 +89,12 @@ public class Resources {
 
 	static final String XML_ITEM_NODE = "item";
 	static final String XML_CROP_STAGES_NODE = "stages";
-	static final String XML_NPC_NODE = "npc";
 	static final String XML_RECIPE_NODE = "recipe";
 	static final String XML_BIOME_NODE = "biome";
-	static final String XML_TUTORIAL_NODE = "tip";
-
-	static final String XML_TUTORIAL_NAME = "name";
-	static final String XML_TUTORIAL_TEXT = "text";
 
 	public static void init() throws Exception {
 		Utils.out("Loading resources...");
 
-		npcDoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.NPCFILE));
 		itemDoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.ITEMSFILE));
 
 		mapcursor = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/cur.png"));
@@ -133,11 +125,9 @@ public class Resources {
 
 		Utils.out(CROPS + " crops");
 
-		Resources.NPCSPRITES = XMLUtils.countKeys(npcDoc, XML_NPC_NODE);
 		Resources.CRAFTABLES = XMLUtils.countKeys(itemDoc, XML_RECIPE_NODE);
 
 		Utils.out(CRAFTABLES + " craftable items");
-		Utils.out(NPCSPRITES + " npcs");
 
 		Resources.craftableid = new int[Resources.CRAFTABLES];
 
@@ -177,29 +167,20 @@ public class Resources {
 
 	}
 
-	private static void loadNpcs() {
+	private static void loadNpcs() throws Exception {
+		MapType npcMap = MadSand.typeFactory.constructMapType(HashMap.class, Integer.class, NpcContainer.class);
+		NpcProp.npcs = MadSand.mapper.readValue(new File(MadSand.NPCFILE), npcMap);
+		NPCSPRITES = NpcProp.npcs.size();
+		Utils.out(NPCSPRITES + " NPCs");
+		
+		npc = new Texture[NPCSPRITES];
+		
 		int i = 0;
-		String si, type;
-		while (i < Resources.NPCSPRITES) {
+		for (Entry<Integer, NpcContainer> npcEntry : NpcProp.npcs.entrySet()) {
+			i = npcEntry.getKey();
 			npc[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "npc/" + i + ".png"));
-			si = Utils.str(i);
-			NpcProp.hp.put(i, Utils.val(XMLUtils.getKey(npcDoc, XML_NPC_NODE, si, "hp")));
-			NpcProp.maxhp.put(i, Utils.val(XMLUtils.getKey(npcDoc, XML_NPC_NODE, si, "maxhp")));
-			NpcProp.rewardexp.put(i, Utils.val(XMLUtils.getKey(npcDoc, XML_NPC_NODE, si, "rewardexp")));
-			NpcProp.drop.put(i, (XMLUtils.getKey(npcDoc, XML_NPC_NODE, si, "drop")));
-			NpcProp.atk.put(i, Utils.val(XMLUtils.getKey(npcDoc, XML_NPC_NODE, si, "atk")));
-			NpcProp.accuracy.put(i, Utils.val(XMLUtils.getKey(npcDoc, XML_NPC_NODE, si, "accuracy")));
-			NpcProp.faction.put(i, Faction.valueOf(XMLUtils.getKey(npcDoc, XML_NPC_NODE, si, "faction")));
-			type = XMLUtils.getKey(npcDoc, XML_NPC_NODE, si, "type");
-			if (type == "-1")
-				type = NpcType.Regular.toString();
-			NpcProp.type.put(i, NpcType.valueOf(type));
-			NpcProp.qids.put(i, (XMLUtils.getKey(npcDoc, XML_NPC_NODE, si, "qids")));
-			NpcProp.name.put(i, (XMLUtils.getKey(npcDoc, XML_NPC_NODE, si, "name")));
-			NpcProp.spawnonce.put(i, Boolean.parseBoolean(XMLUtils.getKey(npcDoc, XML_NPC_NODE, si, "spawnonce")));
-			NpcProp.friendly.put(i, Boolean.parseBoolean(XMLUtils.getKey(npcDoc, XML_NPC_NODE, si, "friendly")));
-			i++;
 		}
+
 	}
 
 	private static void loadMapTiles() throws Exception {

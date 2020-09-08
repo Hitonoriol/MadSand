@@ -1,223 +1,223 @@
 {
-  "0" : {
-    "biomeName" : "Plains",
-    "overworld" : {
-      "defaultTile" : 0,
-      "tiles" : [ {
-        "rollCount" : 250,
-        "idList" : [ 1, 2 ]
-      }, {
-        "rollCount" : 1,
-        "idList" : [ 6 ]
-      } ],
-      "objects" : [ {
-        "rollCount" : 50,
-        "idList" : [ 2, 30, 35, 36 ]
-      }, {
-        "rollCount" : 30,
-        "idList" : [ 1, 27, 28 ]
-      }, {
-        "rollCount" : 30,
-        "idList" : [ 37, 4 ]
-      }, {
-        "rollCount" : 20,
-        "idList" : [ 42, 41 ]
-      } ]
-    },
-    "lake" : {
-      "lakeTile" : 8,
-      "lakeModifier" : 1.0,
-      "lakeRadius" : 4,
-      "lakeFrom" : 1.0,
-      "lakeTo" : 27.0
-    },
-    "cave" : {
-      "caveTile" : 5,
-      "caveObject" : 13,
-      "caveOre" : [ 22, 23 ],
-      "maxVeinSize" : 10,
-      "maxVeinCount" : 10
-    },
-    "dungeonProbability" : 100,
-    "dungeon" : {
-      "tolerance" : 10,
-      "maxRoomSize" : 15,
-      "minRoomSize" : 3,
-      "wallObject" : 13,
-      "wallTile" : 7,
-      "roomTile" : 12,
-      "corridorTile" : 5,
-      "doorObject" : 11,
-      "dungeonContents" : [ {
-        "fromFloor" : 0,
-        "contents" : {
-          "mobs" : [ 14, 15 ],
-          "loot" : [ "1/10" ],
-          "mobProbability" : 5,
-          "mobCorridorProbability" : 1,
-          "lootProbability" : 3,
-          "lootCorridorProbability" : 1
-        }
-      } ]
-    }
-  },
-  "1" : {
-    "biomeName" : "Desert",
-    "overworld" : {
-      "defaultTile" : 4,
-      "tiles" : [ {
-        "rollCount" : 200,
-        "idList" : [ 3, 4 ]
-      }, {
-        "rollCount" : 1,
-        "idList" : [ 17 ]
-      } ],
-      "objects" : [ {
-        "rollCount" : 80,
-        "idList" : [ 10, 24 ]
-      }, {
-        "rollCount" : 15,
-        "idList" : [ 31 ]
-      } ]
-    },
-    "lake" : {
-      "lakeTile" : 0,
-      "lakeModifier" : 0.0,
-      "lakeRadius" : 0,
-      "lakeFrom" : 0.0,
-      "lakeTo" : 0.0
-    },
-    "cave" : {
-      "caveTile" : 5,
-      "caveObject" : 13,
-      "caveOre" : [ 22, 23 ],
-      "maxVeinSize" : 10,
-      "maxVeinCount" : 10
-    },
-    "dungeonProbability" : 0,
-    "dungeon" : {
-      "tolerance" : 0,
-      "maxRoomSize" : 0,
-      "minRoomSize" : 0,
-      "wallObject" : 0,
-      "wallTile" : 0,
-      "roomTile" : 0,
-      "corridorTile" : 0,
-      "doorObject" : 0,
-      "dungeonContents" : [ {
-        "fromFloor" : 0,
-        "contents" : {
-          "mobs" : null,
-          "loot" : null,
-          "mobProbability" : 0,
-          "mobCorridorProbability" : 0,
-          "lootProbability" : 0,
-          "lootCorridorProbability" : 0
-        }
-      } ]
-    }
-  },
-  "2" : {
-    "biomeName" : "Cold plains",
-    "overworld" : {
-      "defaultTile" : 20,
-      "tiles" : [ {
-        "rollCount" : 200,
-        "idList" : [ 21 ]
-      } ],
-      "objects" : [ {
-        "rollCount" : 75,
-        "idList" : [ 32, 38, 33 ]
-      } ]
-    },
-    "lake" : {
-      "lakeTile" : 0,
-      "lakeModifier" : 0.0,
-      "lakeRadius" : 0,
-      "lakeFrom" : 0.0,
-      "lakeTo" : 0.0
-    },
-    "cave" : {
-      "caveTile" : 5,
-      "caveObject" : 13,
-      "caveOre" : [ 22, 23 ],
-      "maxVeinSize" : 10,
-      "maxVeinCount" : 10
-    },
-    "dungeonProbability" : 0,
-    "dungeon" : {
-      "tolerance" : 0,
-      "maxRoomSize" : 0,
-      "minRoomSize" : 0,
-      "wallObject" : 0,
-      "wallTile" : 0,
-      "roomTile" : 0,
-      "corridorTile" : 0,
-      "doorObject" : 0,
-      "dungeonContents" : [ {
-        "fromFloor" : 0,
-        "contents" : {
-          "mobs" : null,
-          "loot" : null,
-          "mobProbability" : 0,
-          "mobCorridorProbability" : 0,
-          "lootProbability" : 0,
-          "lootCorridorProbability" : 0
-        }
-      } ]
-    }
-  },
-  "3" : {
-    "biomeName" : "Dead lands",
-    "overworld" : {
-      "defaultTile" : 24,
-      "tiles" : [ {
-        "rollCount" : 200,
-        "idList" : [ 10, 11 ]
-      } ],
-      "objects" : [ {
-        "rollCount" : 30,
-        "idList" : [ 34, 33 ]
-      }, {
-        "rollCount" : 20,
-        "idList" : [ 39, 40, 88 ]
-      } ]
-    },
-    "lake" : {
-      "lakeTile" : 22,
-      "lakeModifier" : 1.0,
-      "lakeRadius" : 5,
-      "lakeFrom" : 1.0,
-      "lakeTo" : 27.0
-    },
-    "cave" : {
-      "caveTile" : 5,
-      "caveObject" : 13,
-      "caveOre" : [ 22, 23 ],
-      "maxVeinSize" : 10,
-      "maxVeinCount" : 10
-    },
-    "dungeonProbability" : 0,
-    "dungeon" : {
-      "tolerance" : 0,
-      "maxRoomSize" : 0,
-      "minRoomSize" : 0,
-      "wallObject" : 0,
-      "wallTile" : 0,
-      "roomTile" : 0,
-      "corridorTile" : 0,
-      "doorObject" : 0,
-      "dungeonContents" : [ {
-        "fromFloor" : 0,
-        "contents" : {
-          "mobs" : null,
-          "loot" : null,
-          "mobProbability" : 0,
-          "mobCorridorProbability" : 0,
-          "lootProbability" : 0,
-          "lootCorridorProbability" : 0
-        }
-      } ]
-    }
-  }
+	"0" : {
+		"biomeName" : "Plains",
+		"overworld" : {
+			"defaultTile" : 0,
+			"tiles" : [ {
+				"rollCount" : 250,
+				"idList" : [ 1, 2 ]
+			}, {
+				"rollCount" : 1,
+				"idList" : [ 6 ]
+			} ],
+			"objects" : [ {
+				"rollCount" : 50,
+				"idList" : [ 2, 30, 35, 36 ]
+			}, {
+				"rollCount" : 30,
+				"idList" : [ 1, 27, 28 ]
+			}, {
+				"rollCount" : 30,
+				"idList" : [ 37, 4 ]
+			}, {
+				"rollCount" : 20,
+				"idList" : [ 42, 41 ]
+			} ]
+		},
+		"lake" : {
+			"lakeTile" : 8,
+			"lakeModifier" : 1.0,
+			"lakeRadius" : 4,
+			"lakeFrom" : 1.0,
+			"lakeTo" : 27.0
+		},
+		"cave" : {
+			"caveTile" : 5,
+			"caveObject" : 13,
+			"caveOre" : [ 22, 23 ],
+			"maxVeinSize" : 10,
+			"maxVeinCount" : 10
+		},
+		"dungeonProbability" : 100,
+		"dungeon" : {
+			"tolerance" : 10,
+			"maxRoomSize" : 15,
+			"minRoomSize" : 3,
+			"wallObject" : 13,
+			"wallTile" : 7,
+			"roomTile" : 12,
+			"corridorTile" : 5,
+			"doorObject" : 11,
+			"dungeonContents" : [ {
+				"fromFloor" : 0,
+				"contents" : {
+					"mobs" : [ 14, 15 ],
+					"loot" : [ "1/10" ],
+					"mobProbability" : 5,
+					"mobCorridorProbability" : 1,
+					"lootProbability" : 3,
+					"lootCorridorProbability" : 1
+				}
+			} ]
+		}
+	},
+	"1" : {
+		"biomeName" : "Desert",
+		"overworld" : {
+			"defaultTile" : 4,
+			"tiles" : [ {
+				"rollCount" : 200,
+				"idList" : [ 3, 4 ]
+			}, {
+				"rollCount" : 1,
+				"idList" : [ 17 ]
+			} ],
+			"objects" : [ {
+				"rollCount" : 80,
+				"idList" : [ 10, 24 ]
+			}, {
+				"rollCount" : 15,
+				"idList" : [ 31 ]
+			} ]
+		},
+		"lake" : {
+			"lakeTile" : 0,
+			"lakeModifier" : 0.0,
+			"lakeRadius" : 0,
+			"lakeFrom" : 0.0,
+			"lakeTo" : 0.0
+		},
+		"cave" : {
+			"caveTile" : 5,
+			"caveObject" : 13,
+			"caveOre" : [ 22, 23 ],
+			"maxVeinSize" : 10,
+			"maxVeinCount" : 10
+		},
+		"dungeonProbability" : 0,
+		"dungeon" : {
+			"tolerance" : 0,
+			"maxRoomSize" : 0,
+			"minRoomSize" : 0,
+			"wallObject" : 0,
+			"wallTile" : 0,
+			"roomTile" : 0,
+			"corridorTile" : 0,
+			"doorObject" : 0,
+			"dungeonContents" : [ {
+				"fromFloor" : 0,
+				"contents" : {
+					"mobs" : null,
+					"loot" : null,
+					"mobProbability" : 0,
+					"mobCorridorProbability" : 0,
+					"lootProbability" : 0,
+					"lootCorridorProbability" : 0
+				}
+			} ]
+		}
+	},
+	"2" : {
+		"biomeName" : "Cold plains",
+		"overworld" : {
+			"defaultTile" : 20,
+			"tiles" : [ {
+				"rollCount" : 200,
+				"idList" : [ 21 ]
+			} ],
+			"objects" : [ {
+				"rollCount" : 75,
+				"idList" : [ 32, 38, 33 ]
+			} ]
+		},
+		"lake" : {
+			"lakeTile" : 0,
+			"lakeModifier" : 0.0,
+			"lakeRadius" : 0,
+			"lakeFrom" : 0.0,
+			"lakeTo" : 0.0
+		},
+		"cave" : {
+			"caveTile" : 5,
+			"caveObject" : 13,
+			"caveOre" : [ 22, 23 ],
+			"maxVeinSize" : 10,
+			"maxVeinCount" : 10
+		},
+		"dungeonProbability" : 0,
+		"dungeon" : {
+			"tolerance" : 0,
+			"maxRoomSize" : 0,
+			"minRoomSize" : 0,
+			"wallObject" : 0,
+			"wallTile" : 0,
+			"roomTile" : 0,
+			"corridorTile" : 0,
+			"doorObject" : 0,
+			"dungeonContents" : [ {
+				"fromFloor" : 0,
+				"contents" : {
+					"mobs" : null,
+					"loot" : null,
+					"mobProbability" : 0,
+					"mobCorridorProbability" : 0,
+					"lootProbability" : 0,
+					"lootCorridorProbability" : 0
+				}
+			} ]
+		}
+	},
+	"3" : {
+		"biomeName" : "Dead lands",
+		"overworld" : {
+			"defaultTile" : 24,
+			"tiles" : [ {
+				"rollCount" : 200,
+				"idList" : [ 10, 11 ]
+			} ],
+			"objects" : [ {
+				"rollCount" : 30,
+				"idList" : [ 34, 33 ]
+			}, {
+				"rollCount" : 20,
+				"idList" : [ 39, 40, 88 ]
+			} ]
+		},
+		"lake" : {
+			"lakeTile" : 22,
+			"lakeModifier" : 1.0,
+			"lakeRadius" : 5,
+			"lakeFrom" : 1.0,
+			"lakeTo" : 27.0
+		},
+		"cave" : {
+			"caveTile" : 5,
+			"caveObject" : 13,
+			"caveOre" : [ 22, 23 ],
+			"maxVeinSize" : 10,
+			"maxVeinCount" : 10
+		},
+		"dungeonProbability" : 0,
+		"dungeon" : {
+			"tolerance" : 0,
+			"maxRoomSize" : 0,
+			"minRoomSize" : 0,
+			"wallObject" : 0,
+			"wallTile" : 0,
+			"roomTile" : 0,
+			"corridorTile" : 0,
+			"doorObject" : 0,
+			"dungeonContents" : [ {
+				"fromFloor" : 0,
+				"contents" : {
+					"mobs" : null,
+					"loot" : null,
+					"mobProbability" : 0,
+					"mobCorridorProbability" : 0,
+					"lootProbability" : 0,
+					"lootCorridorProbability" : 0
+				}
+			} ]
+		}
+	}
 }

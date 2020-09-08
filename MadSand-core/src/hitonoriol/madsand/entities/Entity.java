@@ -116,8 +116,9 @@ public abstract class Entity {
 		stepping = val;
 	}
 
-	void initInventory() {
+	public Inventory initInventory() {
 		inventory = new Inventory();
+		return inventory;
 	}
 
 	@JsonIgnore
