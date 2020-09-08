@@ -40,7 +40,7 @@ public class MadSand extends Game {
 
 	static final String SAVEDIR = "MadSand_Saves/";
 	static String QUESTFILE = SAVEDIR + "quests.json";
-	static String GENFILE = SAVEDIR + "worldgen.xml";
+	static String GENFILE = SAVEDIR + "worldgen.json";
 	static String TUTORIALFILE = SAVEDIR + "tutorial.json";
 
 	static String TILEFILE = SAVEDIR + "tiles.json";

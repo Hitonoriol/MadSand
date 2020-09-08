@@ -34,6 +34,7 @@ import hitonoriol.madsand.properties.QuestList;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.properties.Tutorial;
 import hitonoriol.madsand.properties.WorldGenProp;
+import hitonoriol.madsand.world.worldgen.WorldGenPreset;
 
 public class Resources {
 
@@ -43,7 +44,6 @@ public class Resources {
 	static Document npcDoc;
 	static Document itemDoc;
 
-	static Document gendoc;
 	static Document skilldoc;
 
 	public static Texture[] item;
@@ -105,8 +105,6 @@ public class Resources {
 		npcDoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.NPCFILE));
 		itemDoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.ITEMSFILE));
 
-		gendoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.GENFILE));
-
 		mapcursor = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/cur.png"));
 		animsheet = new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/anim.png"));
 		visitedMask = new Texture(Gdx.files.local(MadSand.SAVEDIR + "light/light_visited.png"));
@@ -133,15 +131,13 @@ public class Resources {
 		Resources.LASTITEMID = XMLUtils.countKeys(itemDoc, XML_ITEM_NODE);
 		Resources.CROPS = XMLUtils.countKeys(itemDoc, XML_CROP_STAGES_NODE);
 
-		Utils.out(Resources.CROPS + " crops");
+		Utils.out(CROPS + " crops");
 
 		Resources.NPCSPRITES = XMLUtils.countKeys(npcDoc, XML_NPC_NODE);
 		Resources.CRAFTABLES = XMLUtils.countKeys(itemDoc, XML_RECIPE_NODE);
-		Resources.BIOMES = XMLUtils.countKeys(gendoc, XML_BIOME_NODE);
 
-		Utils.out(Resources.BIOMES + " biomes");
-		Utils.out(Resources.CRAFTABLES + " craftable items");
-		Utils.out(Resources.NPCSPRITES + " npcs");
+		Utils.out(CRAFTABLES + " craftable items");
+		Utils.out(NPCSPRITES + " npcs");
 
 		Resources.craftableid = new int[Resources.CRAFTABLES];
 
@@ -321,44 +317,12 @@ public class Resources {
 		}
 	}
 
-	private static void loadWorldGen() {
-		int i = 0;
-		// Loading worldgen config
-		Vector<Integer> def;
-		Vector<String> group;
-		HashMap<String, Integer> lake;
+	private static void loadWorldGen() throws Exception {
+		MapType worldGenMap = MadSand.typeFactory.constructMapType(HashMap.class, Integer.class, WorldGenPreset.class);
+		WorldGenProp.biomes = MadSand.mapper.readValue(new File(MadSand.GENFILE), worldGenMap);
+		BIOMES = WorldGenProp.biomes.size();
 
-		Vector<String> objGroup;
-		Vector<String> ore = new Vector<String>();
-		String defT, defO;
-		HashMap<String, Integer> vdungeon;
-		Utils.out("Initializing worldgen...");
-		while (i < Resources.BIOMES) {
-			def = new Vector<Integer>();
-			lake = new HashMap<String, Integer>();
-
-			WorldGenProp.name.add(XMLUtils.getAttr(gendoc, XML_BIOME_NODE, Utils.str(i), "name"));
-			group = XMLUtils.getGroup(i, "tile_group");
-			objGroup = XMLUtils.getGroup(i, "object_group");
-
-			def.add(Integer
-					.parseInt(XMLUtils.getAttrValues(gendoc, XML_BIOME_NODE, Utils.str(i), "def_tile", Utils.str(-1))));
-			lake = Utils.toValMap(
-					XMLUtils.nodeMapToHashMap(XMLUtils.getNested(gendoc, XML_BIOME_NODE, Utils.str(i), "lake", "-1")));
-
-			WorldGenProp.loadTileBlock(i, def, group, lake);
-			WorldGenProp.loadObjectBlock(i, objGroup);
-			defT = XMLUtils.getAttrValues(gendoc, XML_BIOME_NODE, Utils.str(i), "cave_tile", Utils.str(-1));
-			defO = XMLUtils.getAttrValues(gendoc, XML_BIOME_NODE, Utils.str(i), "cave_object", Utils.str(-1));
-			ore.add(XMLUtils.getAttrValues(gendoc, XML_BIOME_NODE, Utils.str(i), "ore", Utils.str(-1)));
-			vdungeon = Utils.toValMap(XMLUtils
-					.nodeMapToHashMap(XMLUtils.getNested(gendoc, XML_BIOME_NODE, Utils.str(i), "dungeon", "-1")));
-			WorldGenProp.loadUnderworldBlock(i, defT, defO, ore, vdungeon);
-			WorldGenProp.dungeonContents.put(i, XMLUtils.nodeMapToHashMap(
-					XMLUtils.getNested(gendoc, XML_BIOME_NODE, Utils.str(i), "dungeon_contents", "-1")));
-			++i;
-		}
-		Utils.out("Done initializing WorldGen!");
+		Utils.out(BIOMES + " biomes");
 	}
 
 	static Texture mapcursor;

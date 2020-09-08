@@ -2,8 +2,6 @@ package hitonoriol.madsand.world.worldgen;
 
 import java.util.ArrayList;
 
-import com.sun.tools.javac.util.Pair;
-
 public class DungeonPreset {
 	public int tolerance;
 	public int maxRoomSize, minRoomSize;
@@ -12,5 +10,5 @@ public class DungeonPreset {
 	public int corridorTile;
 	public int doorObject;
 
-	ArrayList<Pair<Integer, DungeonContents>> dungeonContents; // {floorLowerOrEquals, <dungeonContents>; ...}
+	public ArrayList<DungeonFloorContents> dungeonContents = new ArrayList<>(); // {floorGreaterOrEquals, <dungeonContents>; ...}
 }

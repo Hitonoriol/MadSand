@@ -7,7 +7,6 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import hitonoriol.madsand.entities.Npc;
-import hitonoriol.madsand.entities.inventory.trade.TradeInventoryUI;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.properties.ItemProp;

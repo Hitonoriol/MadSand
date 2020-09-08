@@ -2,27 +2,56 @@ package hitonoriol.madsand.world.worldgen;
 
 import java.util.ArrayList;
 
-import com.sun.tools.javac.util.Pair;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class WorldGenPreset {
+	public String biomeName;
+
 	// Biome tile & object sets
-	public int defaultTile;
-	public ArrayList<Pair<Integer, ArrayList<Integer>>> tiles; // {howManyRolls, <tileList>; ...}
-	public ArrayList<Pair<Integer, ArrayList<Integer>>> objects;
+	public OverworldPreset overworld = new OverworldPreset();
 
 	// Lake generator params & lake tiles
-	public int lakeTile;
-	public double lakeModifier, lakeFrom, lakeTo;
+	public LakePreset lake = new LakePreset();
 
 	// default cave tile & object
-	public int caveTile, caveObject;
+	public CavePreset cave = new CavePreset();
 
-	//Ore ids, max ore vein size, vein count
-	public ArrayList<Integer> caveOre;
-	public int maxVeinSize, maxVeinCount;
-	
 	//Dungeon params
 	public int dungeonProbability; // Probability to generate dungeon instead of normal cave
-	public DungeonPreset dungeon;
+	public DungeonPreset dungeon = new DungeonPreset();
+
+	@JsonIgnore
+	public int getDefaultTile() {
+		return overworld.defaultTile;
+	}
+
+	@JsonIgnore
+	public ArrayList<RollList> getBiomeTiles() {
+		return overworld.tiles;
+	}
+
+	@JsonIgnore
+	public ArrayList<RollList> getBiomeObjects() {
+		return overworld.objects;
+	}
+
+	@JsonIgnore
+	public LakePreset getBiomeLake() {
+		return lake;
+	}
+
+	@JsonIgnore
+	public CavePreset getBiomeUnderworld() {
+		return cave;
+	}
+
+	@JsonIgnore
+	public DungeonPreset getBiomeDungeon() {
+		return dungeon;
+	}
 	
+	@JsonIgnore
+	public CavePreset getBiomeCave() {
+		return cave;
+	}
 }

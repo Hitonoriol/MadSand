@@ -2,7 +2,6 @@ package hitonoriol.madsand;
 
 import java.io.StringReader;
 import java.util.HashMap;
-import java.util.Vector;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -157,20 +156,6 @@ public class XMLUtils {
 
 	static String getAttrValues(Document doc, String list, String id, String name, String iid) {
 		return nodeMapDump(getNested(doc, list, id, name, iid));
-	}
-
-	static Vector<String> getGroup(int biome, String gname) {
-		Vector<String> group = new Vector<String>();
-		int j = 0;
-		String tmp = "";
-		while (!tmp.equals("-1")) {
-			tmp = getAttrValues(Resources.gendoc, "biome", Utils.str(biome), gname, Utils.str(j));
-			if (tmp.equals("-1"))
-				break;
-			group.add(tmp);
-			++j;
-		}
-		return group;
 	}
 
 }

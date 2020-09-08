@@ -306,7 +306,7 @@ public class Map {
 			return false;
 	}
 
-	void randPlaceObject(int id) {
+	public void randPlaceObject(int id) {
 		int x = Utils.random.nextInt(this.xsz);
 		int y = Utils.random.nextInt(this.ysz);
 		addObject(x, y, id);

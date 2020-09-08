@@ -6,13 +6,22 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import hitonoriol.madsand.containers.Pair;
 
 public class MapID {
-	public Pair worldxy;
+	public Pair worldxy = new Pair();
 	public int layer, id;
 
-	public MapID(Pair coords, int layer, int id) {
-		this.worldxy = coords;
+	public MapID(Pair coords, int layer, int id, boolean copyPair) {
+		if (copyPair) {
+			this.worldxy.x = coords.x;
+			this.worldxy.y = coords.y;
+		} else
+			this.worldxy = coords;
+		
 		this.layer = layer;
 		this.id = id;
+	}
+	
+	public MapID(Pair coords, int layer, int id) {
+		this(coords, layer, id, false);
 	}
 
 	public MapID(Pair coords, int layer) {
@@ -23,8 +32,17 @@ public class MapID {
 		this(coords, 0);
 	}
 
+	public MapID(MapID mapId) {
+		this(mapId.worldxy, mapId.layer, mapId.id);
+	}
+
 	public MapID() {
-		this(new Pair(0, 0), 0);
+		this(Pair.nullPair);
+	}
+
+	public MapID setLayer(int layer) {
+		this.layer = layer;
+		return this;
 	}
 
 	@Override

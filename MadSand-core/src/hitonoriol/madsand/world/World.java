@@ -3,13 +3,8 @@ package hitonoriol.madsand.world;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
-import java.util.Vector;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.github.czyzby.noise4j.map.Grid;
-import com.github.czyzby.noise4j.map.generator.noise.NoiseGenerator;
-import com.github.czyzby.noise4j.map.generator.room.dungeon.DungeonGenerator;
-import com.github.czyzby.noise4j.map.generator.util.Generators;
 
 import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
@@ -19,16 +14,15 @@ import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.map.Map;
-import hitonoriol.madsand.properties.WorldGenProp;
+import hitonoriol.madsand.world.worldgen.WorldGen;
 
 public class World {
 	Map nullLoc = new Map(0, 0);
 	public static final int DEFAULT_WORLDSIZE = 10;
-	public static final int DUNGEON_LAYER_MAX = 20;
-	public static final int TILE_CAVE_EXIT = 25;
+	public static final int DUNGEON_LAYER_MAX = 50;
+	public static final int TILE_CAVE_EXIT = 25; //TODO move this to cave preset
 
 	private Pair coords = new Pair();
 	private int xsz, ysz; // max world size, not really used anywhere (still)
@@ -42,12 +36,15 @@ public class World {
 	public static int MAPSIZE = 100; // default location size
 
 	public static final int LAYER_OVERWORLD = 0;
-	static final int LAYER_BASE_UNDERWORLD = 1;
+	public static final int LAYER_BASE_UNDERWORLD = 1;
+
+	@JsonIgnore
+	public WorldGen worldGen;
 
 	public static Player player;
 
 	@JsonIgnore
-	public Location WorldLoc; // container for all the maps and layers
+	public Location worldLoc; // container for all the maps and layers
 
 	public int worldtime = 12; // time (00 - 23)
 	int ticksPerHour = 100; // ticks per one hourTick() trigger
@@ -60,17 +57,14 @@ public class World {
 		curxwpos = xsz / 2;
 		curywpos = ysz / 2;
 
-		WorldLoc = new Location();
+		worldLoc = new Location();
 		if (!createBasicLoc(new Pair(curxwpos, curywpos), MAPSIZE, MAPSIZE))
-			Utils.die("World constructor fucked up");
+			Utils.die("Could not create new world");
+		worldGen = new WorldGen(worldLoc);
 	}
 
 	public World() {
 		this(DEFAULT_WORLDSIZE);
-	}
-
-	int randBiome() {
-		return Utils.random.nextInt(Resources.BIOMES - 1); // Biome numbers start from -1
 	}
 
 	HashMap<MapID, Map> _getLoc(int wx, int wy, int layer) {
@@ -80,12 +74,12 @@ public class World {
 	}
 
 	boolean locExists(MapID loc) {
-		return WorldLoc.containsKey(loc);
+		return worldLoc.containsKey(loc);
 	}
 
 	boolean createLoc(MapID loc, Map map) {
 		if (!locExists(loc)) {
-			this.WorldLoc.put(loc, map);
+			this.worldLoc.put(loc, map);
 			return true;
 		} else
 			return false;
@@ -94,7 +88,7 @@ public class World {
 	Map getLoc(Pair wc, int layer, int id) {
 		MapID loc = new MapID(wc, layer, id);
 		if (locExists(loc)) {
-			return WorldLoc.get(loc);
+			return worldLoc.get(loc);
 		} else
 			return nullLoc;
 	}
@@ -111,6 +105,10 @@ public class World {
 	Map getCurLoc(int layer) {
 		return getLoc(curxwpos, curywpos, layer);
 	}
+	
+	MapID getCurMapID() {
+		return new MapID(new Pair(coords.set(curxwpos, curywpos)), curlayer);
+	}
 
 	int getLocBiome() {
 		return getCurLoc(LAYER_OVERWORLD).getBiome();
@@ -121,18 +119,18 @@ public class World {
 	}
 
 	Map putLoc(Pair wc, int layer, int id, Map loc) {
-		WorldLoc.put(new MapID(wc, layer, id), loc);
+		worldLoc.put(new MapID(wc, layer, id, true), loc);
 		return loc;
 	}
 
 	Map putLoc(int x, int y, int layer, Map loc) {
-		return putLoc(new Pair(x, y), layer, 0, loc);
+		return putLoc(coords.set(x, y), layer, 0, loc);
 	}
 
 	boolean createBasicLoc(Pair wc, int mx, int my) {
-		if (!this.createLoc(new MapID(wc, 0), new Map(mx, my)))
+		if (!this.createLoc(new MapID(wc, LAYER_OVERWORLD), new Map(mx, my)))
 			return false;
-		if (!this.createLoc(new MapID(wc, 1), new Map(mx, my)))
+		if (!this.createLoc(new MapID(wc, LAYER_BASE_UNDERWORLD), new Map(mx, my)))
 			return false;
 		return true;
 	}
@@ -148,26 +146,16 @@ public class World {
 	int biome;
 
 	public void generate(int wx, int wy, int layer) {
-		int underworld = LAYER_BASE_UNDERWORLD;
-		if (layer == LAYER_OVERWORLD) {
-			Utils.out("Generating new sector!");
-			if (!locExists(new MapID(coords.set(curxwpos, curywpos), 0)))
-				createBasicLoc(wx, wy);
-			clearCurLoc();
-
-			if ((wx == 5) && (wy == 5)) // TODO: persistent locations
-				biome = 0;
-
-			else
-				biome = randBiome();
-			Utils.out("Biome: " + biome);
-			getCurLoc().setBiome(biome);
-			genTerrain();
-			genObjByTemplate();
-			genUnderworld(underworld);
-		} else
-			underworld = layer;
-		genDungeon(underworld);
+		Utils.out("Generating new sector!");
+		
+		MapID mapId = new MapID(coords.set(curxwpos, curywpos), layer);
+		
+		if (!locExists(mapId.setLayer(LAYER_OVERWORLD)))
+			createBasicLoc(wx, wy);
+		clearCurLoc();
+		
+		worldGen.generate(mapId.setLayer(layer));
+		
 		Utils.out("Done generating new sector!");
 	}
 
@@ -247,8 +235,8 @@ public class World {
 		if (curlayer == DUNGEON_LAYER_MAX)
 			return false;
 		boolean ret = switchLocation(curlayer + 1);
-		if (curlayer > (WorldLoc.layers - 1))
-			++WorldLoc.layers;
+		if (curlayer > (worldLoc.layers - 1))
+			++worldLoc.layers;
 		Map loc = getCurLoc();
 		String place = null;
 		Utils.out("In cave : " + (loc.spawnPoint.equals(Pair.nullPair)));
@@ -279,226 +267,6 @@ public class World {
 			MadSand.print("You get back to dungeon level " + curlayer);
 		Gui.processActionMenu();
 		return ret;
-	}
-
-	private final String LAKE_TID = "tid";
-	private final String LAKE_RADIUS = "radius";
-	private final String LAKE_MODIFIER = "modifier";
-	private final String LAKE_FROM = "from";
-	private final String LAKE_TO = "to";
-
-	private void genTerrain() {
-		Utils.out("Generating terrain!");
-		genBiomeTerrain();
-		HashMap<String, Integer> lake = WorldGenProp.getBiomeLake(biome);
-		if (lake.get(LAKE_TID) != -1) {
-			final Grid grid = new Grid(World.MAPSIZE + World.BORDER);
-			final NoiseGenerator noiseGenerator = new NoiseGenerator();
-			noiseGenerator.setRadius(lake.get(LAKE_RADIUS));
-			noiseGenerator.setModifier(lake.get(LAKE_MODIFIER));
-			noiseGenerator.setSeed(Generators.rollSeed());
-			noiseGenerator.generate(grid);
-
-			int i = 0;
-			int ii = 0;
-			float from = ((float) lake.get(LAKE_FROM)) / 10f;
-			float to = ((float) lake.get(LAKE_TO)) / 100f;
-
-			Utils.out("lakes from: " + from + " to: " + to);
-
-			while (i < World.MAPSIZE + World.BORDER) {
-				while (ii < World.MAPSIZE + World.BORDER) {
-					if (grid.get(ii, i) >= from && grid.get(ii, i) <= to) {
-						getCurLoc().addTile(ii, i, lake.get(LAKE_TID));
-					}
-					ii++;
-				}
-				i++;
-				ii = 0;
-			}
-		}
-		Utils.out("Done generating terrain!");
-	}
-
-	private float DUNGEON_CORRIDOR_LEVEL = 0.0f;
-	private float DUNGEON_WALL_LEVEL = 1.0f;
-	private float DUNGEON_ROOM_LEVEL = 0.5f;
-
-	private static String DUNGEON_PROBABILITY = "probability";
-	private static String DUNGEON_MAXROOMSIZE = "maxroomsize";
-	private static String DUNGEON_MINROOMSIZE = "minroomsize";
-	private static String DUNGEON_TOLERANCE = "tolerance";
-
-	private static String DUNGEON_CONTENTS_MOBS = "mobs";
-	private static String DUNGEON_CONTENTS_LOOT = "loot";
-	private static String DUNGEON_CONTENTS_MOB_PROBABILITY = "mob_probability";
-	private static String DUNGEON_CONTENTS_MOB_CORRIDOR_PROBABILITY = "mob_corridor_probability";
-	private static String DUNGEON_CONTENTS_LOOT_PROBABILITY = "loot_probability";
-	private static String DUNGEON_CONTENTS_LOOT_CORRIDOR_PROBABILITY = "loot_corridor_probability";
-
-	private static String DUNGEON_WALL_OBJ = "wall_object";
-	private static String DUNGEON_WALL_TILE = "wall_tile";
-	private static String DUNGEON_ROOM_TILE = "room_tile";
-	private static String DUNGEON_CORRIDOR_TILE = "corridor_tile";
-	private static String DUNGEON_DOOR = "door_object";
-
-	private void genDungeon(int layer) {
-		boolean force = true;
-		Utils.out("Generating dungeon!");
-		HashMap<String, Integer> dungeon = WorldGenProp.getBiomedungeon(biome);
-		HashMap<String, String> contents = WorldGenProp.dungeonContents.get(biome);
-		int prob = dungeon.get(DUNGEON_PROBABILITY);
-		Utils.out("Probability: " + prob + "%");
-
-		if (prob == 0)
-			return;
-		if (layer == LAYER_BASE_UNDERWORLD && Utils.randPercent() > prob) {
-			Utils.out("Well... Decided not to.");
-			return;
-		}
-
-		ArrayList<Integer> mobs = Utils.parseList(contents.get(DUNGEON_CONTENTS_MOBS));
-		ArrayList<String> loot = Utils.parseList(contents.get(DUNGEON_CONTENTS_LOOT), Item.BLOCK_DELIM);
-		int mobProb = Utils.val(contents.get(DUNGEON_CONTENTS_MOB_PROBABILITY));
-		int mobCorridorProb = Utils.val(contents.get(DUNGEON_CONTENTS_MOB_CORRIDOR_PROBABILITY));
-		int lootProb = Utils.val(contents.get(DUNGEON_CONTENTS_LOOT_PROBABILITY));
-		int lootCorridorProb = Utils.val(contents.get(DUNGEON_CONTENTS_LOOT_CORRIDOR_PROBABILITY));
-
-		final Grid grid = new Grid(World.MAPSIZE);
-		final DungeonGenerator dungeonGenerator = new DungeonGenerator();
-		dungeonGenerator.setRoomGenerationAttempts(World.MAPSIZE);
-		dungeonGenerator.setMaxRoomSize(dungeon.get(DUNGEON_MAXROOMSIZE));
-		dungeonGenerator.setTolerance(dungeon.get(DUNGEON_TOLERANCE)); // Max difference between width and height.
-		dungeonGenerator.setMinRoomSize(dungeon.get(DUNGEON_MINROOMSIZE));
-		dungeonGenerator.generate(grid);
-
-		int wallObj = dungeon.get(DUNGEON_WALL_OBJ);
-		int wallTile = dungeon.get(DUNGEON_WALL_TILE);
-		int roomTile = dungeon.get(DUNGEON_ROOM_TILE);
-		int corridorTile = dungeon.get(DUNGEON_CORRIDOR_TILE);
-		int door = dungeon.get(DUNGEON_DOOR);
-
-		int y = 0, x = 0;
-		Map loc = getCurLoc(layer);
-		loc.editable = false;
-
-		while (y < World.MAPSIZE) {
-			while (x < World.MAPSIZE) {
-				if (grid.get(x, y) == DUNGEON_CORRIDOR_LEVEL) { // corridors
-					loc.delObject(x, y);
-					loc.addTile(x, y, corridorTile, force);
-				}
-
-				if (grid.get(x, y) == DUNGEON_WALL_LEVEL) { // walls
-					loc.addObject(x, y, wallObj);
-					loc.addTile(x, y, wallTile);
-				}
-
-				if (grid.get(x, y) == DUNGEON_ROOM_LEVEL) { // rooms
-					loc.delObject(x, y);
-					loc.addTile(x, y, roomTile, force);
-
-					if (Utils.percentRoll(mobProb))
-						loc.spawnNpc(Utils.randElement(mobs), x, y);
-
-					if (loc.spawnPoint == Pair.nullPair)
-						loc.spawnPoint = new Pair(x, y);
-				}
-
-				if (isDoorway(grid, x, y, loc.getWidth(), loc.getHeight())) // door
-					loc.addObject(x, y, door);
-
-				x++;
-			}
-			x = 0;
-			y++;
-		}
-
-		Utils.out("Done generating dungeon!");
-	}
-
-	private boolean isDoorway(Grid grid, int x, int y, int xsz, int ysz) {
-		float up, down, left, right;
-		up = down = left = right = -1;
-		float current = grid.get(x, y);
-
-		if (y + 1 < ysz)
-			up = grid.get(x, y + 1);
-		if (y - 1 >= 0)
-			down = grid.get(x, y - 1);
-		if (x - 1 >= 0)
-			left = grid.get(x - 1, y);
-		if (x + 1 < xsz)
-			right = grid.get(x + 1, y);
-
-		return (current == DUNGEON_CORRIDOR_LEVEL) && (up == DUNGEON_ROOM_LEVEL || down == DUNGEON_ROOM_LEVEL
-				|| left == DUNGEON_ROOM_LEVEL || right == DUNGEON_ROOM_LEVEL);
-	}
-
-	final int CAVE_TILE = 0;
-	final int CAVE_OBJECT = 1;
-
-	private void genUnderworld(int layer) {
-		Utils.out("Generating underworld...");
-		Vector<Integer> underworld = WorldGenProp.getBiomeUnderworld(biome);
-		int usz = underworld.size();
-		int maxOreFieldSize = underworld.get(usz - 2);
-		int count = underworld.get(usz - 1);
-		int cdef = underworld.get(CAVE_TILE);
-		Map loc = getCurLoc(layer);
-		loc.purge();
-		loc.fillTile(cdef);
-		loc.defObject = underworld.get(CAVE_OBJECT);
-		loc.defTile = cdef;
-		loc.fillObject();
-		int a = Utils.random.nextInt(count) + 1;
-		while (a > 0) {
-			try {
-				int x = Utils.random.nextInt(World.MAPSIZE);
-				int y = Utils.random.nextInt(World.MAPSIZE);
-				int w = Utils.random.nextInt(maxOreFieldSize) + 1;
-				int h = Utils.random.nextInt(maxOreFieldSize) + 1;
-				if ((x + w < World.MAPSIZE) && (y + h < World.MAPSIZE)) {
-					int id = underworld.get(Utils.rand(1, usz - 3));
-					int k = 0;
-					int kk = 0;
-					while (kk < w) {
-						while (k < h) {
-							loc.addObject(x + kk, y + k, id);
-							k++;
-						}
-						k = 0;
-						kk++;
-					}
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			a--;
-		}
-		Utils.out("Done generating underworld!");
-	}
-
-	private void genBiomeTerrain() {
-		Vector<Vector<Integer>> terrainBlock = WorldGenProp.getBiomeTiles(biome);
-		int def = terrainBlock.get(0).get(0); // getting default tile
-		getCurLoc().defTile = def;
-		Utils.out("Default tile: " + def);
-		getCurLoc().fillTile();
-		int quantity, gsz;
-		Vector<Integer> group;
-		for (int i = 1; i < terrainBlock.size(); ++i) {
-			group = terrainBlock.get(i);
-			gsz = group.size();
-			quantity = group.get(--gsz); // last value of every group is the total quantity of objects from group to
-											// generate
-			for (int j = 0; j < quantity; ++j) {
-				getCurLoc().randPlaceTile(group.get(Utils.rand(0, gsz - 1))); // we don't check whether there are tiles
-																				// already on rand()'d place, but who
-																				// gives
-																				// a 5h17?
-			}
-		}
 	}
 
 	public int getTileId(int x, int y) {
@@ -540,23 +308,6 @@ public class World {
 	public void clearCurLoc() {
 		Utils.out("Clearing current sector...");
 		getCurLoc().purge();
-	}
-
-	private void genObjByTemplate() {
-		Utils.out("Generating biome objects!");
-		Vector<Vector<Integer>> object = WorldGenProp.getBiomeObjects(biome);
-		Vector<Integer> block;
-		int count;
-		int range;
-		for (int i = 0; i < object.size(); ++i) {
-			block = object.get(i);
-			range = block.size() - 1;
-			count = block.get(range);
-			for (int j = 0; j < count; ++j) {
-				getCurLoc().randPlaceObject(block, range);
-			}
-		}
-		Utils.out("Done generating biome objects!");
 	}
 
 	public int getTileOrDefault(int x, int y) {

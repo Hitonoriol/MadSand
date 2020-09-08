@@ -1,4 +1,4 @@
-MadSand-FallenRiseFromDust-desktop/MadSandOutput.txt
+MadSand-desktop/MadSandOutput.txt
 bin
 .settings
 .classpath
@@ -6,6 +6,5 @@ bin
 .metadata
 .gradle/
 *.log
-MadSand-FallenRiseFromDust-desktop/MadSand_Saves/lastrend.dat
-MadSand-FallenRiseFromDust-desktop/MadSandCritical.log
+MadSand-desktop/MadSand_Saves/lastrend.dat
 worlds/

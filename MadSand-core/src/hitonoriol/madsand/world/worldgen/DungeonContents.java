@@ -3,11 +3,11 @@ package hitonoriol.madsand.world.worldgen;
 import java.util.ArrayList;
 
 public class DungeonContents {
-	ArrayList<Integer> mobs;
-	ArrayList<String> loot;
+	public ArrayList<Integer> mobs;
+	public ArrayList<String> loot;
 
-	int mobProbability;
-	int mobCorridorProbability;
-	int lootProbability;
-	int lootCorridorProbability;
+	public int mobProbability;
+	public int mobCorridorProbability;
+	public int lootProbability;
+	public int lootCorridorProbability;
 }
