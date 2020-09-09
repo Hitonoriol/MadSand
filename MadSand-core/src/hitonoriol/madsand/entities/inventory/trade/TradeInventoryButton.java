@@ -4,6 +4,7 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.TradeAction;
 import hitonoriol.madsand.gui.ItemButton;
@@ -13,6 +14,7 @@ public class TradeInventoryButton extends ItemButton {
 	TradeInventory trade;
 	TradeAction action;
 	TradeUIRefresher refresher;
+	boolean isCurrencyButton;
 
 	public TradeInventoryButton(TradeInventory trade, Item item, TradeAction action, TradeUIRefresher refresher) {
 		super(item);
@@ -24,16 +26,21 @@ public class TradeInventoryButton extends ItemButton {
 		super.setUpListeners();
 	}
 
-	@Override
 	protected String createButtonText() {
-		return buttonItem.quantity + " " + ItemProp.name.get(buttonItem.id) + ", " + buttonItem.getPrice() + " each";
+		String btnText = buttonItem.quantity + Resources.Space + ItemProp.getItemName(buttonItem.id);
+		isCurrencyButton = buttonItem.isCurrency();
+
+		if (isCurrencyButton)
+			return btnText;
+
+		return btnText + ", " + buttonItem.getPrice() + " each";
 	}
 
-	@Override
 	protected ClickListener setButtonPressListener() {
 		return new ClickListener(Buttons.LEFT) {
 			public void clicked(InputEvent event, float x, float y) {
-				new TradeConfirmDialog(trade, buttonItem, action, refresher).show();
+				if (!isCurrencyButton)
+					new TradeConfirmDialog(trade, buttonItem, action, refresher).show();
 			}
 		};
 	}

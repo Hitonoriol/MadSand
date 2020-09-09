@@ -10,7 +10,6 @@ import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.properties.Globals;
-import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.world.World;
 
 import java.text.SimpleDateFormat;
@@ -26,14 +25,9 @@ import java.util.StringTokenizer;
 
 public class Utils {
 	public static boolean debugMode = true;
-	public static float pspeed = 33.0F;
 	static SpriteBatch batch;
-	static boolean admin = true;
 
-	static long seed = new Random().nextLong();
-	public static Random random = new Random(seed);
-
-	static int selected;
+	public static Random random = new Random();
 
 	public static void init() {
 		try {
@@ -50,10 +44,6 @@ public class Utils {
 
 	public static int val(String str) {
 		return Integer.parseInt(str);
-	}
-
-	public static String getItem(int id) {
-		return ItemProp.name.get(id);
 	}
 
 	public static void toggleInventory() {

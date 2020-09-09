@@ -694,7 +694,7 @@ public class Gui {
 		Player player = World.player;
 		// player.refreshAvailableRecipes();
 		int craftSz = player.craftRecipes.size();
-		Utils.out("Total unlocked recipes: " + craftSz + " out of " + Resources.CRAFTABLES);
+		Utils.out("Total unlocked recipes: " + craftSz + " out of " + Resources.craftableItemCount);
 
 		if (craftSz == 0) {
 			craftbl.add(new Label("You don't know any craft recipes.", skin));
@@ -707,16 +707,18 @@ public class Gui {
 		int perRow = 3, id;
 		int quantity;
 		String craftString;
+
 		while (i < craftSz) {
 			craftString = "";
 			id = player.craftRecipes.get(i);
-			quantity = ItemProp.craftQuantity.get(id);
+			quantity = ItemProp.getCraftQuantity(id);
 			if (quantity > 1)
 				craftString = quantity + " ";
-			craftString += ItemProp.name.get(id);
+			craftString += ItemProp.getItemName(id);
 			craftbtn[i] = new TextButton(craftString, skin);
 			craftbl.add(craftbtn[i]).width(CRAFT_BTN_WIDTH);
-			craftbl.add(new Label(" " + Item.queryToName(ItemProp.recipe.get(id)), skin)).padRight(CRAFT_ENTRY_PADDING);
+			craftbl.add(new Label(" " + Item.queryToName(ItemProp.getCraftRecipe(id)), skin))
+					.padRight(CRAFT_ENTRY_PADDING);
 
 			if ((i + 1) % perRow == 0)
 				craftbl.row();

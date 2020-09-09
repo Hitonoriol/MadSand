@@ -14,6 +14,8 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.TradeAction;
+import hitonoriol.madsand.properties.Globals;
+import hitonoriol.madsand.properties.ItemProp;
 
 public class TradeConfirmDialog extends Dialog {
 	private static final float TITLE_YPADDING = 18;
@@ -25,7 +27,7 @@ public class TradeConfirmDialog extends Dialog {
 
 	private static float WIDTH = 400;
 	private static float DEFAULT_HEIGHT = 75;
-	
+
 	private static float BUTTONS_PAD_TOP = DEFAULT_HEIGHT / 3;
 	private static float LABEL_PAD_BOTTOM = 15;
 
@@ -42,6 +44,8 @@ public class TradeConfirmDialog extends Dialog {
 
 	private static String titleBuyText = "Buy ";
 	private static String titleSellText = "Sell ";
+
+	private static String currencyName = ItemProp.getItemName(Globals.getInt(Globals.CURRENCY_FIELD));
 
 	private Label titleLabel; // Dialog title
 	private Label chooseLabel; // Label above the slider
@@ -164,7 +168,8 @@ public class TradeConfirmDialog extends Dialog {
 	}
 
 	private void setCostLabelText(int itemQuantity) {
-		costLabelText = itemQuantity + Resources.Space + item.name + costFor + (itemPrice * itemQuantity);
+		costLabelText = itemQuantity + Resources.Space + item.name
+				+ costFor + (itemPrice * itemQuantity) + Resources.Space + currencyName;
 		costLabel.setText(costLabelText);
 	}
 

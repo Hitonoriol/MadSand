@@ -3,7 +3,6 @@ package hitonoriol.madsand;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map.Entry;
-import java.util.Vector;
 
 import org.w3c.dom.Document;
 
@@ -19,11 +18,10 @@ import com.fasterxml.jackson.databind.type.MapType;
 
 import hitonoriol.madsand.containers.Tuple;
 import hitonoriol.madsand.entities.SkillContainer;
-import hitonoriol.madsand.enums.ItemType;
+import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.map.Tile;
-import hitonoriol.madsand.properties.CropProp;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.NpcContainer;
@@ -39,8 +37,6 @@ public class Resources {
 
 	static final int PLAYER_ANIM_WIDTH = 35;
 	static final int PLAYER_ANIM_HEIGHT = 74;
-
-	static Document itemDoc;
 
 	static Document skilldoc;
 
@@ -74,29 +70,20 @@ public class Resources {
 	public static Sprite playerUpSpr;
 	public static Sprite playerDownSpr;
 
-	public static int CRAFTABLES;
-	public static int LASTITEMID;
-	public static int LASTOBJID;
-	public static int NPCSPRITES;
-	public static int LASTTILEID;
-	public static int BIOMES;
-	public static int QUESTS;
-	public static int CROPS;
-	public static int[] craftableid;
+	public static int craftableItemCount;
+	public static int itemCount;
+	public static int mapObjectCount;
+	public static int npcCount;
+	public static int tileCount;
+	public static int biomeCount;
+	public static int questCount;
 
 	public static final String emptyField = "-1";
 	public static final int emptyId = -1;
 	public static String Space = " ", Colon = ":";
 
-	static final String XML_ITEM_NODE = "item";
-	static final String XML_CROP_STAGES_NODE = "stages";
-	static final String XML_RECIPE_NODE = "recipe";
-	static final String XML_BIOME_NODE = "biome";
-
 	public static void init() throws Exception {
 		Utils.out("Loading resources...");
-
-		itemDoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.ITEMSFILE));
 
 		mapcursor = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/cur.png"));
 		animsheet = new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/anim.png"));
@@ -121,21 +108,11 @@ public class Resources {
 		Cursor mouseCursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.local(MadSand.SAVEDIR + "cursor.png")), 0, 0);
 		Gdx.graphics.setCursor(mouseCursor);
 
-		Resources.LASTITEMID = XMLUtils.countKeys(itemDoc, XML_ITEM_NODE);
-		Resources.CROPS = XMLUtils.countKeys(itemDoc, XML_CROP_STAGES_NODE);
+		item = new Texture[Resources.itemCount + 1];
+		objects = new Texture[Resources.mapObjectCount];
+		npc = new Texture[Resources.npcCount + 1];
 
-		Utils.out(CROPS + " crops");
-
-		Resources.CRAFTABLES = XMLUtils.countKeys(itemDoc, XML_RECIPE_NODE);
-
-		Utils.out(CRAFTABLES + " craftable items");
-
-		Resources.craftableid = new int[Resources.CRAFTABLES];
-
-		item = new Texture[Resources.LASTITEMID + 1];
-		objects = new Texture[Resources.LASTOBJID];
-		npc = new Texture[Resources.NPCSPRITES + 1];
-
+		Globals.loadGlobals();
 		loadWorldGen();
 		loadItems();
 		loadMapObjects();
@@ -143,7 +120,6 @@ public class Resources {
 		loadQuests();
 		loadNpcs();
 		loadTutorial();
-		Globals.loadGlobals();
 
 		placeholder = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/placeholder.png"));
 		noEquip = new TextureRegionDrawable(new TextureRegion(placeholder));
@@ -171,11 +147,11 @@ public class Resources {
 	private static void loadNpcs() throws Exception {
 		MapType npcMap = MadSand.typeFactory.constructMapType(HashMap.class, Integer.class, NpcContainer.class);
 		NpcProp.npcs = MadSand.mapper.readValue(new File(MadSand.NPCFILE), npcMap);
-		NPCSPRITES = NpcProp.npcs.size();
-		Utils.out(NPCSPRITES + " NPCs");
-		
-		npc = new Texture[NPCSPRITES];
-		
+		npcCount = NpcProp.npcs.size();
+		Utils.out(npcCount + " NPCs");
+
+		npc = new Texture[npcCount];
+
 		int i = 0;
 		for (Entry<Integer, NpcContainer> npcEntry : NpcProp.npcs.entrySet()) {
 			i = npcEntry.getKey();
@@ -188,9 +164,9 @@ public class Resources {
 		MapType tileMap = MadSand.typeFactory.constructMapType(HashMap.class, Integer.class, Tile.class);
 		TileProp.tiles = MadSand.mapper.readValue(new File(MadSand.TILEFILE), tileMap);
 
-		LASTTILEID = TileProp.tiles.size();
-		tile = new Texture[LASTTILEID + 1];
-		Utils.out(LASTTILEID + " tiles");
+		tileCount = TileProp.tiles.size();
+		tile = new Texture[tileCount + 1];
+		Utils.out(tileCount + " tiles");
 
 		// Load tile textures
 		int i = 0;
@@ -204,9 +180,9 @@ public class Resources {
 		MapType objectMap = MadSand.typeFactory.constructMapType(HashMap.class, Integer.class, MapObject.class);
 		ObjectProp.objects = MadSand.mapper.readValue(new File(MadSand.OBJECTFILE), objectMap);
 
-		LASTOBJID = ObjectProp.objects.size();
-		objects = new Texture[LASTOBJID + 1];
-		Utils.out(LASTOBJID + " map objects");
+		mapObjectCount = ObjectProp.objects.size();
+		objects = new Texture[mapObjectCount + 1];
+		Utils.out(mapObjectCount + " map objects");
 
 		// Load object textures
 		int i;
@@ -216,95 +192,37 @@ public class Resources {
 		}
 	}
 
-	private static void loadItems() {
-		String stgs, stglen;
-		String typeStr;
-		String[] cont;
-		Vector<Integer> stages, slens;
-		ItemType type;
-		int i = 0, cc = 0;
-		boolean unlockable;
-		while (i < Resources.LASTITEMID) {
+	private static void loadItems() throws Exception {
+		MapType itemMap = MadSand.typeFactory.constructMapType(HashMap.class, Integer.class, Item.class);
+		ItemProp.items = MadSand.mapper.readValue(new File(MadSand.ITEMSFILE), itemMap);
+		itemCount = ItemProp.items.size();
+		item = new Texture[itemCount];
+
+		int i = 0;
+		Item valItem;
+		for (Entry<Integer, Item> entry : ItemProp.items.entrySet()) {
+			i = entry.getKey();
+			valItem = entry.getValue();
+
 			item[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "inv/" + i + ".png"));
-			if (!XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, XML_RECIPE_NODE).equals("-1")) {
-				Resources.craftableid[cc] = i;
-				cc++;
+			valItem.id = i;
+
+			if (valItem.recipe != null) {
+				ItemProp.craftReq.put(i, Item.parseCraftRequirements(valItem.recipe));
+				++craftableItemCount;
 			}
-
-			// Crops
-			stgs = XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, XML_CROP_STAGES_NODE);
-			if (!stgs.equals("-1")) {
-				cont = stgs.split("\\,");
-				stages = new Vector<Integer>();
-				for (String stage : cont)
-					stages.add(Integer.parseInt(stage));
-				CropProp.stages.put(i, stages);
-				stglen = XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, XML_CROP_STAGES_NODE);
-				cont = stglen.split("\\,");
-				slens = new Vector<Integer>();
-				for (String slen : cont)
-					slens.add(Integer.parseInt(slen));
-				CropProp.stagelen.put(i, slens);
-			}
-
-			// Item properties
-			ItemProp.weight.put(i, Float.parseFloat(XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "weight")));
-			ItemProp.name.put(i, XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "name"));
-
-			typeStr = XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "type");
-			if (typeStr == "-1")
-				typeStr = ItemType.Item.toString();
-			type = ItemType.valueOf(typeStr);
-			ItemProp.type.put(i, type);
-
-			if (type.isArmor() || type.isWeapon())
-				ItemProp.lvl.put(i, Utils.val(XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "lvl")));
-			if (type.isWeapon())
-				ItemProp.str.put(i, Utils.val(XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "strength")));
-
-			ItemProp.altObject.put(i, Integer.parseInt(XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "altobject")));
-
-			ItemProp.dmg.put(i, Integer.parseInt(XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "dmg", "0")));
-			ItemProp.skill.put(i, Skill.valueOf(XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "skill", "None")));
-
-			ItemProp.hp.put(i, Integer.parseInt(XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "hp")));
-			ItemProp.cost.put(i, Integer.parseInt(XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "cost")));
-
-			unlockable = Boolean.parseBoolean(XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "unlockable", "true"));
-			ItemProp.unlockable.put(i, unlockable);
-
-			ItemProp.recipe.put(i, XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, XML_RECIPE_NODE));
-			ItemProp.craftQuantity.put(i,
-					Utils.val(XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "craft_quantity", "1")));
-			ItemProp.heal.put(i, XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "heal"));
-			ItemProp.useAction.put(i, XMLUtils.getKey(itemDoc, XML_ITEM_NODE, "" + i, "onuse"));
-
-			String reqlist = ItemProp.recipe.get(i);
-			String item[];
-			if (reqlist != "-1" && unlockable) {
-				if (!reqlist.contains(":"))
-					reqlist += ":";
-				cont = reqlist.split("\\:");
-				Vector<Integer> reqs = new Vector<Integer>();
-				for (String req : cont) {
-					if (req == "")
-						break;
-					item = req.split("\\/");
-					reqs.add(Integer.parseInt(item[0]));
-				}
-
-				ItemProp.craftReq.put(i, reqs);
-			}
-			i++;
 		}
+
+		Utils.out(craftableItemCount + " craftable items");
+
 	}
 
 	private static void loadWorldGen() throws Exception {
 		MapType worldGenMap = MadSand.typeFactory.constructMapType(HashMap.class, Integer.class, WorldGenPreset.class);
 		WorldGenProp.biomes = MadSand.mapper.readValue(new File(MadSand.GENFILE), worldGenMap);
-		BIOMES = WorldGenProp.biomes.size();
+		biomeCount = WorldGenProp.biomes.size();
 
-		Utils.out(BIOMES + " biomes");
+		Utils.out(biomeCount + " biomes");
 	}
 
 	static Texture mapcursor;

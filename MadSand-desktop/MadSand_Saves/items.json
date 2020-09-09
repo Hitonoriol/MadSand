@@ -1,0 +1,692 @@
+{
+	"0" : { },
+	"1" : {
+		"name" : "Wood",
+		"altObject" : 9,
+		"cost" : 3,
+		"type" : "PlaceableObject"
+	},
+	"2" : {
+		"name" : "Small rock",
+		"cost" : 3,
+		"weight" : 0.6
+	},
+	"3" : {
+		"name" : "Stone axe",
+		"recipe" : "2/7:8/5",
+		"dmg" : 2,
+		"hp" : 128,
+		"cost" : 9,
+		"type" : "Axe",
+		"skill" : "Woodcutting",
+		"weight" : 0.7
+	},
+	"4" : {
+		"name" : "Cake",
+		"recipe" : "7/25",
+		"satiationAmount" : 30,
+		"healAmount" : 10,
+		"cost" : 25,
+		"type" : "Consumable",
+		"weight" : 0.7
+	},
+	"5" : {
+		"name" : "Clay",
+		"cost" : 1,
+		"weight" : 0.3
+	},
+	"6" : {
+		"name" : "Stone shovel",
+		"recipe" : "2/7:8/5",
+		"dmg" : 2,
+		"hp" : 100,
+		"cost" : 10,
+		"type" : "Shovel",
+		"weight" : 0.7
+	},
+	"7" : {
+		"name" : "Berry",
+		"satiationAmount" : 20,
+		"healAmount" : 1,
+		"cost" : 1,
+		"type" : "Consumable",
+		"weight" : 0.05
+	},
+	"8" : {
+		"name" : "Stick",
+		"recipe" : "1/1",
+		"craftQuantity" : 2,
+		"cost" : 4,
+		"weight" : 0.2
+	},
+	"9" : {
+		"name" : "Flint",
+		"cost" : 5,
+		"weight" : 0.1
+	},
+	"10" : {
+		"name" : "Hewn rock",
+		"recipe" : "25/1",
+		"altObject" : 8,
+		"cost" : 7,
+		"type" : "PlaceableObject",
+		"weight" : 1.5
+	},
+	"11" : {
+		"name" : "Stone pickaxe",
+		"recipe" : "2/7:8/5",
+		"dmg" : 2,
+		"hp" : 128,
+		"cost" : 10,
+		"type" : "Pickaxe",
+		"skill" : "Mining",
+		"weight" : 0.7
+	},
+	"12" : {
+		"name" : "Stone sword",
+		"recipe" : "2/10:8/5",
+		"cost" : 11,
+		"type" : "Weapon",
+		"weight" : 0.8,
+		"lvl" : 1,
+		"equipStats" : {
+			"strength" : 2
+		}
+	},
+	"13" : {
+		"name" : "Iron sword",
+		"recipe" : "23/15:8/10",
+		"cost" : 15,
+		"type" : "Weapon",
+		"weight" : 1.0,
+		"lvl" : 2,
+		"equipStats" : {
+			"lvl" : 2,
+			"rollMax" : 4,
+			"rollMin" : 2,
+			"constitution" : 3,
+			"dexterity" : 0,
+			"strength" : 4,
+			"accuracy" : 0,
+			"intelligence" : -4
+		}
+	},
+	"14" : {
+		"name" : "Iron helmet",
+		"recipe" : "23/25",
+		"cost" : 18,
+		"type" : "HeadArmor",
+		"weight" : 1.1,
+		"lvl" : 1,
+		"equipStats" : {
+			"lvl" : 1,
+			"rollMax" : 2,
+			"rollMin" : 1,
+			"constitution" : 0,
+			"dexterity" : -1,
+			"strength" : -2,
+			"accuracy" : 0,
+			"intelligence" : -2
+		}
+	},
+	"15" : {
+		"name" : "Iron shield",
+		"recipe" : "23/25",
+		"cost" : 18,
+		"type" : "Shield",
+		"weight" : 1.1,
+		"lvl" : 1,
+		"equipStats" : {
+			"lvl" : 1,
+			"rollMax" : 2,
+			"rollMin" : 1,
+			"constitution" : 0,
+			"dexterity" : 2,
+			"strength" : 2,
+			"accuracy" : 2,
+			"intelligence" : 0
+		}
+	},
+	"16" : {
+		"name" : "Leather chest armor",
+		"recipe" : "22/15",
+		"cost" : 14,
+		"type" : "ChestArmor",
+		"weight" : 0.8,
+		"lvl" : 1,
+		"equipStats" : {
+			"lvl" : 1,
+			"rollMax" : 2,
+			"rollMin" : 1,
+			"constitution" : 1,
+			"dexterity" : -2,
+			"strength" : -1,
+			"accuracy" : 0,
+			"intelligence" : 1
+		}
+	},
+	"17" : {
+		"name" : "Iron chestplate",
+		"recipe" : "23/30",
+		"cost" : 18,
+		"type" : "ChestArmor",
+		"weight" : 1.4,
+		"lvl" : 2,
+		"equipStats" : {
+			"lvl" : 2,
+			"rollMax" : 4,
+			"rollMin" : 2,
+			"constitution" : 4,
+			"dexterity" : 0,
+			"strength" : 4,
+			"accuracy" : 0,
+			"intelligence" : -3
+		}
+	},
+	"18" : {
+		"name" : "Chainmail",
+		"recipe" : "23/37:8/3",
+		"cost" : 21,
+		"type" : "ChestArmor",
+		"weight" : 1.3,
+		"lvl" : 2,
+		"equipStats" : {
+			"lvl" : 2,
+			"rollMax" : 4,
+			"rollMin" : 2,
+			"constitution" : 0,
+			"dexterity" : -2,
+			"strength" : 3,
+			"accuracy" : -3,
+			"intelligence" : 3
+		}
+	},
+	"19" : {
+		"name" : "Tough iron chestplate",
+		"cost" : 34,
+		"type" : "ChestArmor",
+		"weight" : 1.9,
+		"lvl" : 3,
+		"equipStats" : {
+			"lvl" : 3,
+			"rollMax" : 5,
+			"rollMin" : 2,
+			"constitution" : 4,
+			"dexterity" : 0,
+			"strength" : 2,
+			"accuracy" : 5,
+			"intelligence" : 0
+		}
+	},
+	"20" : {
+		"name" : "Hardened steel sword",
+		"cost" : 30,
+		"weight" : 1.9
+	},
+	"21" : {
+		"name" : "Coin",
+		"cost" : 1,
+		"weight" : 0.0
+	},
+	"22" : {
+		"name" : "Leather",
+		"cost" : 5
+	},
+	"23" : {
+		"name" : "Iron ore",
+		"cost" : 16,
+		"weight" : 0.7
+	},
+	"24" : {
+		"name" : "Gold ore",
+		"cost" : 30,
+		"weight" : 0.7
+	},
+	"25" : {
+		"name" : "Stone",
+		"altObject" : 13,
+		"cost" : 5,
+		"type" : "PlaceableObject",
+		"weight" : 1.0
+	},
+	"26" : {
+		"name" : "Trapdoor",
+		"recipe" : "1/25:8/10",
+		"altObject" : 14,
+		"cost" : 18,
+		"type" : "PlaceableObject",
+		"weight" : 1.0
+	},
+	"27" : {
+		"name" : "Wooden floor",
+		"recipe" : "1/1",
+		"altObject" : 9,
+		"cost" : 4,
+		"type" : "PlaceableTile",
+		"weight" : 1.0
+	},
+	"28" : {
+		"name" : "Ruby",
+		"cost" : 40,
+		"weight" : 0.1
+	},
+	"29" : {
+		"name" : "Sapphire",
+		"cost" : 63,
+		"weight" : 0.1
+	},
+	"30" : {
+		"name" : "Diamond",
+		"cost" : 100,
+		"weight" : 0.1
+	},
+	"31" : {
+		"name" : "Emerald",
+		"cost" : 42,
+		"weight" : 0.1
+	},
+	"32" : {
+		"name" : "Stone plate",
+		"altObject" : 15,
+		"cost" : 5,
+		"type" : "PlaceableObject",
+		"weight" : 1.2
+	},
+	"33" : {
+		"name" : "Stone plate",
+		"altObject" : 16,
+		"cost" : 5,
+		"type" : "PlaceableObject",
+		"weight" : 1.2
+	},
+	"34" : {
+		"name" : "Stone plate",
+		"altObject" : 17,
+		"cost" : 5,
+		"type" : "PlaceableObject",
+		"weight" : 1.2
+	},
+	"35" : {
+		"name" : "Stone floor",
+		"altObject" : 12,
+		"cost" : 5,
+		"type" : "PlaceableTile",
+		"weight" : 1.2
+	},
+	"36" : {
+		"name" : "Stone floor",
+		"altObject" : 13,
+		"cost" : 5,
+		"type" : "PlaceableTile",
+		"weight" : 1.2
+	},
+	"37" : {
+		"name" : "Stone floor",
+		"altObject" : 14,
+		"cost" : 5,
+		"type" : "PlaceableTile",
+		"weight" : 1.2
+	},
+	"38" : {
+		"name" : "Sign",
+		"recipe" : "1/15:8/5",
+		"altObject" : 18,
+		"cost" : 8,
+		"type" : "PlaceableObject",
+		"weight" : 1.0
+	},
+	"39" : {
+		"name" : "Cucumber",
+		"satiationAmount" : 15,
+		"healAmount" : 3,
+		"cost" : 3,
+		"type" : "Consumable",
+		"weight" : 0.15
+	},
+	"40" : {
+		"name" : "Cucumber seed",
+		"recipe" : "68/5",
+		"altObject" : 20,
+		"cost" : 7,
+		"type" : "Crop",
+		"weight" : 0.05,
+		"cropStages" : [ {
+			"stageLength" : 20,
+			"objectId" : 20
+		}, {
+			"stageLength" : 25,
+			"objectId" : 19
+		}, {
+			"stageLength" : 30,
+			"objectId" : 63
+		}, {
+			"stageLength" : 35,
+			"objectId" : 21
+		} ]
+	},
+	"41" : {
+		"name" : "Stone hoe",
+		"recipe" : "2/7:8/5",
+		"useAction" : "
+			local player = world.player;
+			local tile = world:getTileId(player.x, player.y);
+			print('Current tile: ' .. tile);
+			if tile == 0 then 
+				utils:placeTile(player.x, player.y, 15);
+				utils:print('You plowed the soil');
+				print('Plowing at' .. player.x .. ' ' .. player.y);
+			end
+		",
+		"dmg" : 2,
+		"hp" : 75,
+		"cost" : 11,
+		"type" : "Hoe",
+		"weight" : 0.8
+	},
+	"42" : {
+		"name" : "Mixed stone wall",
+		"recipe" : "5/3:2/3",
+		"altObject" : 26,
+		"cost" : 10,
+		"type" : "PlaceableObject",
+		"weight" : 1.0
+	},
+	"43" : {
+		"name" : "Brown stone floor",
+		"recipe" : "5/1",
+		"altObject" : 19,
+		"cost" : 3,
+		"type" : "PlaceableTile",
+		"weight" : 1.0
+	},
+	"44" : {
+		"name" : "Edible mushroom",
+		"satiationAmount" : 25,
+		"cost" : 15,
+		"type" : "Consumable",
+		"weight" : 0.1
+	},
+	"45" : {
+		"name" : "Amanita",
+		"satiationAmount" : -10,
+		"healAmount" : -18,
+		"cost" : 5,
+		"type" : "Consumable",
+		"weight" : 0.1
+	},
+	"46" : {
+		"name" : "Potatoes",
+		"satiationAmount" : 25,
+		"healAmount" : 6,
+		"cost" : 13,
+		"type" : "Consumable",
+		"weight" : 0.1
+	},
+	"47" : {
+		"name" : "Carrot",
+		"satiationAmount" : 20,
+		"healAmount" : 10,
+		"cost" : 21,
+		"type" : "Consumable",
+		"weight" : 0.1
+	},
+	"48" : {
+		"name" : "Tomatoes",
+		"satiationAmount" : 20,
+		"healAmount" : 5,
+		"cost" : 21,
+		"type" : "Consumable",
+		"weight" : 0.1
+	},
+	"49" : {
+		"name" : "Pepper",
+		"satiationAmount" : 20,
+		"healAmount" : 9,
+		"cost" : 15,
+		"type" : "Consumable",
+		"weight" : 0.1
+	},
+	"50" : {
+		"name" : "Corn",
+		"satiationAmount" : 30,
+		"healAmount" : 5,
+		"cost" : 41,
+		"type" : "Consumable",
+		"weight" : 0.1
+	},
+	"51" : {
+		"name" : "Potato seed",
+		"recipe" : "68/5",
+		"altObject" : 43,
+		"cost" : 41,
+		"type" : "Crop",
+		"weight" : 0.05,
+		"cropStages" : [ {
+			"stageLength" : 20,
+			"objectId" : 43
+		}, {
+			"stageLength" : 25,
+			"objectId" : 44
+		}, {
+			"stageLength" : 30,
+			"objectId" : 45
+		}, {
+			"stageLength" : 35,
+			"objectId" : 46
+		} ]
+	},
+	"52" : {
+		"name" : "Carrot seed",
+		"recipe" : "68/5",
+		"altObject" : 47,
+		"cost" : 41,
+		"type" : "Crop",
+		"weight" : 0.05,
+		"cropStages" : [ {
+			"stageLength" : 20,
+			"objectId" : 47
+		}, {
+			"stageLength" : 25,
+			"objectId" : 48
+		}, {
+			"stageLength" : 30,
+			"objectId" : 49
+		}, {
+			"stageLength" : 35,
+			"objectId" : 50
+		} ]
+	},
+	"53" : {
+		"name" : "Tomato seed",
+		"recipe" : "68/5",
+		"altObject" : 51,
+		"cost" : 41,
+		"type" : "Crop",
+		"weight" : 0.05,
+		"cropStages" : [ {
+			"stageLength" : 20,
+			"objectId" : 51
+		}, {
+			"stageLength" : 25,
+			"objectId" : 52
+		}, {
+			"stageLength" : 30,
+			"objectId" : 53
+		}, {
+			"stageLength" : 35,
+			"objectId" : 54
+		} ]
+	},
+	"54" : {
+		"name" : "Pepper seed",
+		"recipe" : "68/5",
+		"altObject" : 55,
+		"cost" : 41,
+		"type" : "Crop",
+		"weight" : 0.05,
+		"cropStages" : [ {
+			"stageLength" : 20,
+			"objectId" : 55
+		}, {
+			"stageLength" : 25,
+			"objectId" : 56
+		}, {
+			"stageLength" : 30,
+			"objectId" : 57
+		}, {
+			"stageLength" : 35,
+			"objectId" : 58
+		} ]
+	},
+	"55" : {
+		"name" : "Corn seed",
+		"recipe" : "68/5",
+		"altObject" : 59,
+		"cost" : 41,
+		"type" : "Crop",
+		"weight" : 0.05,
+		"cropStages" : [ {
+			"stageLength" : 20,
+			"objectId" : 59
+		}, {
+			"stageLength" : 25,
+			"objectId" : 60
+		}, {
+			"stageLength" : 30,
+			"objectId" : 61
+		}, {
+			"stageLength" : 35,
+			"objectId" : 62
+		} ]
+	},
+	"56" : {
+		"name" : "Coal",
+		"cost" : 4,
+		"weight" : 0.7
+	},
+	"57" : {
+		"name" : "Ham",
+		"satiationAmount" : 50,
+		"healAmount" : 15,
+		"cost" : 11,
+		"type" : "Consumable",
+		"weight" : 0.4
+	},
+	"58" : {
+		"name" : "Pint of beer",
+		"recipe" : "65/5:66/5",
+		"satiationAmount" : 30,
+		"healAmount" : -5,
+		"cost" : 25,
+		"type" : "Consumable",
+		"weight" : 0.5
+	},
+	"59" : {
+		"name" : "Chicken leg",
+		"satiationAmount" : 45,
+		"healAmount" : 10,
+		"cost" : 15,
+		"type" : "Consumable",
+		"weight" : 0.3
+	},
+	"60" : {
+		"name" : "Healing potion",
+		"recipe" : "45/3:58/1",
+		"healAmount" : 25,
+		"cost" : 20,
+		"type" : "Consumable",
+		"weight" : 0.2
+	},
+	"61" : {
+		"name" : "Steel shield",
+		"cost" : 79,
+		"weight" : 1.1
+	},
+	"62" : {
+		"name" : "Golden shield",
+		"cost" : 110,
+		"weight" : 1.1
+	},
+	"63" : {
+		"name" : "Royal shield",
+		"cost" : 199,
+		"weight" : 1.7
+	},
+	"64" : {
+		"name" : "Executor's shield",
+		"cost" : 231,
+		"weight" : 1.8
+	},
+	"65" : {
+		"name" : "Spicy leaf",
+		"cost" : 1,
+		"weight" : 0.01
+	},
+	"66" : {
+		"name" : "Sour leaf",
+		"cost" : 1,
+		"weight" : 0.01
+	},
+	"67" : {
+		"name" : "Flint pickaxe",
+		"recipe" : "9/12:8/7:69/3",
+		"dmg" : 3,
+		"hp" : 200,
+		"cost" : 10,
+		"type" : "Pickaxe",
+		"skill" : "Mining",
+		"weight" : 0.7
+	},
+	"68" : {
+		"name" : "Plant fiber",
+		"recipe" : "8/2",
+		"cost" : 2,
+		"weight" : 0.01
+	},
+	"69" : {
+		"name" : "Plant thread",
+		"recipe" : "68/2",
+		"cost" : 2,
+		"weight" : 0.01
+	},
+	"70" : {
+		"name" : "Sharp stone",
+		"recipe" : "2/2",
+		"cost" : 2,
+		"weight" : 0.5
+	},
+	"71" : {
+		"name" : "Sharp stick",
+		"recipe" : "2/1:8/1",
+		"cost" : 2,
+		"weight" : 0.1
+	},
+	"72" : {
+		"name" : "Iron ingot",
+		"cost" : 2,
+		"weight" : 0.7
+	},
+	"73" : {
+		"name" : "Gold ingot",
+		"cost" : 2,
+		"weight" : 0.7
+	},
+	"74" : {
+		"name" : "Spear",
+		"recipe" : "72/5:8/5",
+		"cost" : 11,
+		"type" : "Weapon",
+		"weight" : 0.8,
+		"lvl" : 2,
+		"equipStats" : {
+			"lvl" : 2,
+			"rollMax" : 4,
+			"rollMin" : 2,
+			"constitution" : 3,
+			"dexterity" : 0,
+			"strength" : 4,
+			"accuracy" : 0,
+			"intelligence" : 2
+		}
+	}
+}

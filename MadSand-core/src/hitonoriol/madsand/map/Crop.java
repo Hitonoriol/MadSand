@@ -1,14 +1,11 @@
 package hitonoriol.madsand.map;
 
-import java.util.Vector;
-
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.properties.CropProp;
+import hitonoriol.madsand.properties.ItemProp;
 
 public class Crop {
 	static final int STAGE_COUNT = 4;
-	Vector<Integer> stages;
-	Vector<Integer> stagelen;
+	CropGrowthStageContainer growthStages;
 	public int curStage = 0;
 	public long plantTime;
 	public int id;
@@ -16,16 +13,15 @@ public class Crop {
 
 	public Crop(int id, long plantTime) {
 		this.id = id;
-		stages = CropProp.stages.get(id);
+		growthStages = ItemProp.getCropStages(id);
 		this.plantTime = plantTime;
-		objId = stages.get(curStage);
-		stagelen = CropProp.stagelen.get(id);
+		objId = growthStages.getStageObject(curStage);
 	}
 
 	public Crop(int id, long plantTime, int stage) {
 		this(id, plantTime);
 		curStage = stage;
-		objId = stages.get(curStage);
+		objId = growthStages.getStageObject(curStage);
 	}
 
 	public Crop() {
@@ -33,10 +29,12 @@ public class Crop {
 	}
 
 	boolean upd() {
-		if ((curStage + 1) < STAGE_COUNT && MadSand.world.globalTick - plantTime >= stagelen.get(curStage)) {
-			objId = stages.get(++curStage);
-			return true;
-		}
-		return false;
+		if ((curStage + 1) >= STAGE_COUNT)
+			return false;
+
+		if (MadSand.world.globalTick - plantTime >= growthStages.getStageLength(curStage))
+			objId = growthStages.getStageObject(++curStage);
+
+		return true;
 	}
 }

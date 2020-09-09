@@ -55,9 +55,7 @@ public abstract class ItemButton extends Group {
 		this.addListener(setButtonPressListener());
 	}
 
-	protected String createButtonText() { // Must be overridden
-		return null;
-	}
+	protected abstract String createButtonText();
 
 	private InputListener setMouseOverListener() {
 		return new InputListener() {
@@ -71,8 +69,6 @@ public abstract class ItemButton extends Group {
 		};
 	}
 
-	protected ClickListener setButtonPressListener() { // Must be overridden
-		return null;
-	}
+	protected abstract ClickListener setButtonPressListener();
 
 }

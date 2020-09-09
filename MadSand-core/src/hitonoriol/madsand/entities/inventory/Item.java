@@ -1,41 +1,49 @@
 package hitonoriol.madsand.entities.inventory;
 
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 import java.util.UUID;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.enums.ItemType;
 import hitonoriol.madsand.enums.Skill;
+import hitonoriol.madsand.map.CropGrowthStageContainer;
+import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
 
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class Item {
 	public static final int NULL_ITEM = 0;
 	private static final float DEFAULT_WEIGHT = 0.25f;
 
 	public String name;
-	String recipe;
-	String heal;
-	int dmg;
+	public String recipe;
+	public int craftQuantity;
+	public String useAction;
+
+	public int dmg;
 	public int hp = -1;
 	public int id;
 	public int quantity;
 
 	public int satiationAmount, healAmount; // for consumables
 
-	int altobject, cost;
+	public int altObject, cost;
 	public ItemType type = ItemType.Item;
-	Skill skill = Skill.None;
-	boolean unlockable;
-	double weight = 0;
+	public Skill skill = Skill.None;
+	public float weight = 0;
 
-	int lvl; // level of item (only for weapons/armor)
+	public int lvl; // level of item (only for weapons/armor)
 
 	public EquipStats equipStats;
+	public CropGrowthStageContainer cropStages;
 
 	public String uid = "";
 
@@ -65,7 +73,7 @@ public class Item {
 	}
 
 	public Item() {
-		this(NULL_ITEM);
+		this.id = NULL_ITEM;
 	}
 
 	public Item(int id, int q) {
@@ -98,7 +106,7 @@ public class Item {
 
 	@JsonIgnore
 	public int getPrice() {
-		return ItemProp.cost.get(id);
+		return ItemProp.getCost(id);
 	}
 
 	String getInfoString() {
@@ -163,37 +171,42 @@ public class Item {
 	}
 
 	private void loadProperties() {
-		this.name = ItemProp.name.get(id);
-		this.weight = ItemProp.weight.getOrDefault(id, DEFAULT_WEIGHT);
-		this.recipe = ItemProp.recipe.get(id);
-		this.heal = ItemProp.heal.get(id);
-		this.type = ItemProp.type.get(id);
-		this.altobject = ItemProp.altObject.get(id);
-		this.cost = ItemProp.cost.get(id);
-		this.dmg = ItemProp.dmg.get(id);
-		this.hp = ItemProp.hp.get(id);
-		this.unlockable = ItemProp.unlockable.get(id);
-		this.skill = ItemProp.skill.get(id);
+		Item properties = ItemProp.items.get(id);
+
+		this.name = properties.name;
+		this.weight = properties.weight;
+
+		this.type = properties.type;
+		this.altObject = properties.altObject;
+		this.cost = properties.cost;
+		this.dmg = properties.dmg;
+		this.hp = properties.hp;
+		this.skill = properties.skill;
+		this.useAction = properties.useAction;
 
 		if (type == ItemType.Consumable) {
-			String con[] = heal.split(Item.BLOCK_DELIM);
-			healAmount = Utils.val(con[0]);
-			satiationAmount = Utils.val(con[1]);
+			healAmount = properties.healAmount;
+			satiationAmount = properties.satiationAmount;
 		}
 
-		if (weight <= 0)
+		if (weight <= 0 && !isCurrency())
 			weight = DEFAULT_WEIGHT;
 
 		if (type.isUnique())
 			uid = UUID.randomUUID().toString();
 
 		if (type.isWeapon() || type.isArmor()) {
-			this.lvl = ItemProp.lvl.get(id);
+			this.lvl = properties.lvl;
 			equipStats = new EquipStats(lvl);
 		}
 
 		if (type.isWeapon())
-			equipStats.strength = ItemProp.str.get(id);
+			equipStats.strength = properties.equipStats.strength;
+	}
+
+	@JsonIgnore
+	public boolean isCurrency() {
+		return id == Globals.getInt(Globals.CURRENCY_FIELD);
 	}
 
 	@JsonIgnore
@@ -204,7 +217,7 @@ public class Item {
 			return id + ITEM_DELIM + quantity;
 	}
 
-	double getWeight() {
+	float getWeight() {
 		return weight * quantity;
 	}
 
@@ -240,7 +253,7 @@ public class Item {
 			String[] attr;
 			while (i < block.length) {
 				attr = block[i].split(ITEM_DELIM);
-				ret = ret + attr[1] + " " + ItemProp.name.get(Integer.parseInt(attr[0])) + " ";
+				ret = ret + attr[1] + " " + ItemProp.getItemName(Integer.parseInt(attr[0])) + " ";
 				i++;
 			}
 			return ret;
@@ -250,11 +263,26 @@ public class Item {
 		return "";
 	}
 
+	public static ArrayList<Integer> parseCraftRequirements(String recipe) {
+		ArrayList<Integer> requirements = new ArrayList<>();
+
+		if (!recipe.contains(BLOCK_DELIM))
+			recipe += BLOCK_DELIM;
+
+		String[] itemBlocks = recipe.split(BLOCK_DELIM);
+
+		for (String itemBlock : itemBlocks)
+			requirements.add(Utils.val(itemBlock.split(ITEM_DELIM)[0]));
+
+		return requirements;
+
+	}
+
 	public static ItemType getType(int id) {
-		return ItemProp.type.get(id);
+		return ItemProp.getType(id);
 	}
 
 	public static int getAltObject(int id) {
-		return ItemProp.altObject.get(id);
+		return ItemProp.getAltObject(id);
 	}
 }

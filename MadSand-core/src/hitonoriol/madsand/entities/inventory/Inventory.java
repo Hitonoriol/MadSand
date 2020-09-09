@@ -13,9 +13,11 @@ import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.map.Loot;
 
 public class Inventory {
+	public static final double MAX_WEIGHT = Integer.MAX_VALUE;
+	
 	public Vector<Item> items = new Vector<Item>();
 
-	public double curWeight, maxWeight;
+	public float curWeight, maxWeight;
 
 	private HashMap<Item, InventoryUICell> itemUI;
 
@@ -36,7 +38,7 @@ public class Inventory {
 		itemUI = new HashMap<Item, InventoryUICell>();
 	}
 
-	public void setMaxWeight(double val) {
+	public void setMaxWeight(float val) {
 		maxWeight = val;
 		refreshUITitle();
 	}
@@ -185,12 +187,19 @@ public class Inventory {
 		damageTool(item, Skill.None);
 	}
 
-	public boolean putItem(Item item) { // don't use this directly, use Entity's addItem method
+	/*
+	 * This method discards "overflowing" items,
+	 * use <Entity>.addItem(...) for extra items to drop
+	 */
+	public boolean putItem(Item item) {
 		Item updItem;
-		double newWeight = item.getWeight() + curWeight;
+
+		float newWeight = item.getWeight() + curWeight;
 		int existingIdx = getSameCell(item.id);
+
 		if (item.type.isTool())
 			existingIdx = -1;
+
 		if (newWeight <= maxWeight) {
 			if (existingIdx != -1) {
 				items.get(existingIdx).quantity += item.quantity;
@@ -204,6 +213,7 @@ public class Inventory {
 
 			return true;
 		}
+
 		return false;
 	}
 
@@ -266,7 +276,8 @@ public class Inventory {
 				if (item.quantity < 1) {
 					refreshRemoveItem(item);
 					items.remove(i);
-				} else refreshItem(item);
+				} else
+					refreshItem(item);
 
 				return true;
 			}

@@ -1,30 +1,45 @@
 package hitonoriol.madsand.properties;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Vector;
 
+import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.ItemType;
-import hitonoriol.madsand.enums.Skill;
+import hitonoriol.madsand.map.CropGrowthStageContainer;
 
 public class ItemProp {
-	public static HashMap<Integer, String> name = new HashMap<Integer, String>();
-	public static HashMap<Integer, Float> weight = new HashMap<Integer, Float>();
-	public static HashMap<Integer, Integer> dmg = new HashMap<Integer, Integer>();
+	public static HashMap<Integer, Item> items = new HashMap<>();
+	public static HashMap<Integer, ArrayList<Integer>> craftReq = new HashMap<>();
 
-	public static HashMap<Integer, Integer> lvl = new HashMap<Integer, Integer>();
-	public static HashMap<Integer, Integer> str = new HashMap<Integer, Integer>();
+	public static String getItemName(int id) {
+		return items.get(id).name;
+	}
 
-	public static HashMap<Integer, Skill> skill = new HashMap<Integer, Skill>();
+	public static String getCraftRecipe(int id) {
+		return items.get(id).recipe;
+	}
 
-	public static HashMap<Integer, Integer> hp = new HashMap<Integer, Integer>();
-	public static HashMap<Integer, ItemType> type = new HashMap<Integer, ItemType>();
-	public static HashMap<Integer, Integer> altObject = new HashMap<Integer, Integer>();
-	public static HashMap<Integer, Integer> cost = new HashMap<Integer, Integer>();
-	public static HashMap<Integer, Boolean> unlockable = new HashMap<Integer, Boolean>();
-	public static HashMap<Integer, String> recipe = new HashMap<Integer, String>();
-	public static HashMap<Integer, Integer> craftQuantity = new HashMap<Integer, Integer>();
-	public static HashMap<Integer, String> heal = new HashMap<Integer, String>();
-	public static HashMap<Integer, String> useAction = new HashMap<Integer, String>();
+	public static int getCraftQuantity(int id) {
+		return items.get(id).craftQuantity;
+	}
 
-	public static HashMap<Integer, Vector<Integer>> craftReq = new HashMap<Integer, Vector<Integer>>();
+	public static int getCost(int id) {
+		return items.get(id).cost;
+	}
+
+	public static ItemType getType(int id) {
+		return items.get(id).type;
+	}
+
+	public static int getAltObject(int id) {
+		return items.get(id).altObject;
+	}
+
+	public static String getOnUseAction(int id) {
+		return items.get(id).useAction;
+	}
+
+	public static CropGrowthStageContainer getCropStages(int id) {
+		return items.get(id).cropStages;
+	}
 }

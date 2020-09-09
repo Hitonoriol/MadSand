@@ -2,7 +2,6 @@ package hitonoriol.madsand.entities;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Vector;
 import java.util.Map.Entry;
 
 import com.badlogic.gdx.Gdx;
@@ -164,11 +163,11 @@ public class Player extends Entity {
 	}
 
 	public void refreshAvailableRecipes() {
-		HashSet<Integer> reqs;
+		HashSet<Integer> reqs, all;
 
-		for (Entry<Integer, Vector<Integer>> entry : ItemProp.craftReq.entrySet()) {
+		for (Entry<Integer, ArrayList<Integer>> entry : ItemProp.craftReq.entrySet()) {
 			reqs = new HashSet<Integer>(entry.getValue());
-			HashSet<Integer> all = new HashSet<Integer>(unlockedItems);
+			all = new HashSet<Integer>(unlockedItems);
 			int id = entry.getKey();
 
 			if (reqs.contains(-1))
@@ -177,7 +176,7 @@ public class Player extends Entity {
 			all.retainAll(reqs);
 
 			if (all.equals(reqs) && !craftRecipes.contains(id)) {
-				MadSand.notice("You figure out how to craft " + ItemProp.name.get(id) + "!");
+				MadSand.notice("You figure out how to craft " + ItemProp.getItemName(id) + "!");
 				Utils.out("New recipe id: " + id + " unlocked! Adding to the list...");
 				craftRecipes.add(id);
 			}
@@ -203,22 +202,23 @@ public class Player extends Entity {
 	}
 
 	public boolean craftItem(int id) {
-		if (inventory.delItem(ItemProp.recipe.get(id))) {
+		Item itemToCraft = ItemProp.items.get(id);
+		if (inventory.delItem(itemToCraft.recipe)) {
 			increaseSkill(Skill.Crafting);
-			int quantity = ItemProp.craftQuantity.get(id);
+			int quantity = itemToCraft.craftQuantity;
 			int bonus = stats.skills.getItemReward(Skill.Crafting) - 1;
 			Item item = new Item(id, quantity + bonus);
 			if (!inventory.putItem(item)) {
 				MadSand.world.getCurLoc().putLoot(x, y, item);
 				MadSand.notice("You can't carry any more items");
 			}
-			Gui.drawOkDialog("Crafted " + quantity + " " + ItemProp.name.get(id) + " successfully!", Gui.craft);
-			MadSand.notice("You craft " + quantity + " " + ItemProp.name.get(id));
+			Gui.drawOkDialog("Crafted " + quantity + " " + itemToCraft.name + " successfully!", Gui.craft);
+			MadSand.notice("You craft " + quantity + " " + itemToCraft.name);
 			doAction(stats.AP_MINOR);
 			return true;
 		}
 		if (isMain)
-			Gui.drawOkDialog("Not enough resources to craft " + ItemProp.name.get(id), Gui.craft);
+			Gui.drawOkDialog("Not enough resources to craft " + itemToCraft.name, Gui.craft);
 		return false;
 	}
 
@@ -346,7 +346,7 @@ public class Player extends Entity {
 			return;
 		}
 
-		int item = MapObject.getAltItem(id, ItemProp.type.get(stats.hand.id).get());
+		int item = MapObject.getAltItem(id, ItemProp.getType(stats.hand.id).get());
 		int mhp = ObjectProp.getObject(obj.id).harvestHp;
 		Skill skill = obj.skill;
 		int curLvl = stats.skills.getLvl(skill);
@@ -378,7 +378,7 @@ public class Player extends Entity {
 				boolean gotItem = addItem(objLoot);
 				if (!gotItem)
 					MadSand.world.getCurLoc().putLoot(x, y, objLoot);
-				item = MapObject.getAltItem(id, ItemProp.type.get(stats.hand.id).get());
+				item = MapObject.getAltItem(id, ItemProp.getType(stats.hand.id).get());
 			}
 
 			increaseSkill(skill);
@@ -404,43 +404,50 @@ public class Player extends Entity {
 
 	public void useItem() {
 		int id = stats.hand.id;
+
 		if (equip(stats.hand))
 			return;
+
 		int ptile = MadSand.world.getTileId(x, y);
 		int item = MapObject.getTileAltItem(ptile, stats.hand.type.get());
 		checkHands(id);
 		damageHeldTool();
+
 		if (item != -1) {
 			MadSand.world.getCurLoc().delTile(x, y);
 			Item gotItem = new Item(item);
+
 			if (!inventory.putItem(gotItem)) {
 				MadSand.world.getCurLoc().putLoot(x, y, gotItem);
 				MadSand.notice("You can't carry any more items");
 			}
+
 			MadSand.notice("You dig " + gotItem.name + " from the ground");
 			increaseSkill(Skill.Digging);
 		}
-		String action = ItemProp.useAction.get(id);
+
+		String action = ItemProp.getOnUseAction(id);
 		doAction();
+
 		if (!action.equals(Resources.emptyField)) {
 			LuaUtils.execute(action);
 			return;
 		}
+
 		String tileAction = TileProp.getOnInteract(ptile);
 		if (!tileAction.equals(Resources.emptyField)) {
 			LuaUtils.execute(tileAction);
 			return;
 		}
+
 		if (Item.getType(id) == ItemType.Consumable) {
 			increaseSkill(Skill.Survival);
-			MadSand.print("You eat " + ItemProp.name.get(id));
-			String cont[] = ItemProp.heal.get(id).split(":");
-			int healAmt = Integer.parseInt(cont[0]);
-			int satAmt = Integer.parseInt(cont[1]);
-			heal(healAmt);
-			satiate(satAmt);
-			inventory.delItem(id);
+			MadSand.print("You eat " + stats.hand.name);
+			heal(stats.hand.healAmount);
+			satiate(stats.hand.satiationAmount);
+			inventory.delItem(stats.hand, 1);
 		}
+
 		if ((id == 9) && (inventory.getSameCell(9, 1) != -1) // TODO script this or make campfire craftable
 				&& (inventory.getSameCell(1, 5) != -1)) {
 			MadSand.print("You placed a campfire");
@@ -448,6 +455,7 @@ public class Player extends Entity {
 			inventory.delItem(1);
 			MadSand.world.getCurLoc().addObject(x, y, stats.look, 6);
 		}
+
 		if (Item.getType(id) == ItemType.Crop) {
 			Pair coords = new Pair(x, y).addDirection(stats.look);
 			if (MadSand.world.getCurLoc().putCrop(coords.x, coords.y, id)) {
@@ -455,16 +463,18 @@ public class Player extends Entity {
 				MadSand.print("You plant " + new Item(id).name);
 				inventory.delItem(id);
 			}
-
 		}
+
 		if (Item.getType(id) == ItemType.PlaceableObject) {
 			inventory.delItem(id);
 			MadSand.world.getCurLoc().addObject(x, y, stats.look, Item.getAltObject(id));
 		}
+
 		if (Item.getType(id) == ItemType.PlaceableTile) {
 			inventory.delItem(id);
 			MadSand.world.getCurLoc().addTile(x, y, stats.look, Item.getAltObject(id));
 		}
+
 		checkHands(id);
 	}
 

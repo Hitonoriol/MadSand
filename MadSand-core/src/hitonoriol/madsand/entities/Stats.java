@@ -11,7 +11,8 @@ import hitonoriol.madsand.enums.ItemType;
 import hitonoriol.madsand.enums.Skill;
 
 public class Stats {
-	public final static double WEIGHT_MULTIPLIER = 7.5;
+	public final static float WEIGHT_MULTIPLIER = 7.5f;
+	public final static float BASE_MAX_WEIGHT = 50;
 
 	public int AP_WALK = 5; // action points consumed by walking
 	public int AP_ATTACK = 3;
@@ -263,7 +264,7 @@ public class Stats {
 		return atk;
 	}
 
-	public double calcMaxInventoryWeight() {
-		return (strength + dexterity) * WEIGHT_MULTIPLIER;
+	public float calcMaxInventoryWeight() {
+		return BASE_MAX_WEIGHT + (strength + dexterity) * WEIGHT_MULTIPLIER;
 	}
 }

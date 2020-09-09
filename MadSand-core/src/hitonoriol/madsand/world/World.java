@@ -313,7 +313,7 @@ public class World {
 	public int getTileOrDefault(int x, int y) {
 		if (x >= 0 && y >= 0 && x < getCurLoc().getWidth() && y < getCurLoc().getHeight()) {
 			int tile = getCurLoc().getTile(x, y).id;
-			if (tile >= 0 && tile <= Resources.LASTTILEID)
+			if (tile >= 0 && tile <= Resources.tileCount)
 				return tile;
 			else
 				return getDefaultTile();
