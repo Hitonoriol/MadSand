@@ -113,13 +113,13 @@ public class Utils {
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.N) && MadSand.world.curlayer == World.LAYER_OVERWORLD) {
 			if (World.player.x == World.MAPSIZE - 1 && World.player.stats.look == Direction.RIGHT)
-				gotoSector(World.player.stats.look);
+				goToSector(World.player.stats.look);
 			if (World.player.y == World.MAPSIZE - 1 && World.player.stats.look == Direction.UP)
-				gotoSector(World.player.stats.look);
+				goToSector(World.player.stats.look);
 			if (World.player.x < World.BORDER && World.player.stats.look == Direction.LEFT)
-				gotoSector(World.player.stats.look);
+				goToSector(World.player.stats.look);
 			if (World.player.y < World.BORDER && World.player.stats.look == Direction.DOWN)
-				gotoSector(World.player.stats.look);
+				goToSector(World.player.stats.look);
 			MadSand.world.curlayer = 0;
 
 		}
@@ -190,10 +190,14 @@ public class Utils {
 	}
 
 	public static int rand(int min, int max) {
-		return Utils.random.nextInt((max - min) + 1) + min;
+		return random.nextInt((max - min) + 1) + min;
 	}
 
-	public static void gotoSector(Direction dir) {
+	public static int rand(int max) {
+		return random.nextInt(max);
+	}
+
+	public static void goToSector(Direction dir) {
 		GameSaver.saveWorld();
 		MadSand.state = GameState.GOT;
 		MadSand.world.switchLocation(dir);
@@ -221,47 +225,36 @@ public class Utils {
 	public static void checkConsoleFocus() {
 		if (!debugMode)
 			return;
-		if ((Gdx.input.isKeyJustPressed(Keys.ENTER)) && (Gui.overlay.getKeyboardFocus() == Gui.inputField)) {
+
+		if ((Gdx.input.isKeyJustPressed(Keys.ENTER)) &&
+				(Gui.overlay.getKeyboardFocus() == Gui.inputField)) {
 			String cmd = Gui.inputField.getText().trim();
+
 			try {
 				LuaUtils.execute(cmd);
 				Gui.inputField.setVisible(!Gui.inputField.isVisible());
 			} catch (Exception e) {
-				MadSand.print("Syntax error");
+				MadSand.print("Couldn't execute user input");
+				e.printStackTrace();
 			}
+
 			Gui.inputField.setText("");
 			Gui.overlay.unfocus(Gui.inputField);
 		}
 	}
 
-	public static HashMap<String, Integer> toValMap(HashMap<String, String> map) {
-		HashMap<String, Integer> ret = new HashMap<String, Integer>();
-		for (Entry<String, String> str : map.entrySet()) {
-			ret.put(str.getKey(), val(str.getValue()));
-		}
-		return ret;
-	}
-
 	public static ArrayList<Integer> parseList(String str) {
 		StringTokenizer list = new StringTokenizer(str, ",");
 		ArrayList<Integer> ret = new ArrayList<Integer>();
-		while (list.hasMoreTokens()) {
-			ret.add(val(list.nextToken()));
-		}
-		return ret;
-	}
 
-	public static ArrayList<String> parseList(String str, String delim) {
-		StringTokenizer list = new StringTokenizer(str, delim);
-		ArrayList<String> ret = new ArrayList<String>();
-		while (list.hasMoreTokens()) {
-			ret.add(list.nextToken().trim());
-		}
+		while (list.hasMoreTokens())
+			ret.add(val(list.nextToken()));
+
 		return ret;
 	}
 
 	public static int randElement(ArrayList<Integer> list) {
-		return list.get(rand(0, list.size() - 1));
+		return list.get(random.nextInt(list.size()));
 	}
 
 	public static double round(double curWeight) {

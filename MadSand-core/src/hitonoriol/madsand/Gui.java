@@ -887,11 +887,12 @@ public class Gui {
 		craft = new Stage();
 		craftbl = new Table();
 		inputField = new TextField("", skin);
+		inputField.setWidth(DEFWIDTH + 50);
 		inputField.setMessageText("");
 		inputField.setFocusTraversal(true);
 		inputField.setTextFieldListener(new TextField.TextFieldListener() {
 			public void keyTyped(TextField textField, char key) {
-				if (key == Keys.ESCAPE) {
+				if (key == Keys.ESCAPE || key == Keys.GRAVE) {
 					inputField.setText("");
 					overlay.unfocus(inputField);
 				}
@@ -915,7 +916,8 @@ public class Gui {
 			logtbl.row();
 			tpm++;
 		}
-		logtbl.add(inputField).width(200).height(30);
+		logtbl.add(inputField).width(DEFWIDTH + 50).align(Align.left).pad(3).height(30);
+		inputField.debug();
 		inputField.setVisible(false);
 
 		tpm = 0;

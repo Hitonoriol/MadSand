@@ -42,6 +42,7 @@ public class MadSand extends Game {
 	static String QUESTFILE = SAVEDIR + "quests.json";
 	static String GENFILE = SAVEDIR + "worldgen.json";
 	static String TUTORIALFILE = SAVEDIR + "tutorial.json";
+	static String TRADELISTFILE = SAVEDIR + "tradelists.json";
 
 	static String TILEFILE = SAVEDIR + "tiles.json";
 	static String OBJECTFILE = SAVEDIR + "objects.json";
@@ -119,7 +120,7 @@ public class MadSand extends Game {
 		// Gdx.graphics.setContinuousRendering(false);
 		mapper.configure(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS.mappedFeature(), true);
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		
+
 		setRenderRadius(DEFAULT_FOV);
 		setRenderRadius();
 		Utils.out("Render area: " + renderArea.length);
@@ -136,8 +137,8 @@ public class MadSand extends Game {
 		world.generate();
 		LuaUtils.init();
 		Utils.out("End of initialization!");
-		
-		LuaUtils.executeScript(LuaUtils.initScript);	// Init script for new worlds
+
+		LuaUtils.executeScript(LuaUtils.initScript); // Init script for new worlds
 	}
 
 	static int countRcells() {
@@ -389,9 +390,9 @@ public class MadSand extends Game {
 	public void render() {
 		if (state.equals(GameState.GAME)) {
 
-			if (justStarted) 
+			if (justStarted)
 				justStarted = false;
-			
+
 			Mouse.mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
 			camera.unproject(Mouse.mouseinworld);
 			Gdx.input.setInputProcessor(Gui.overlay);
@@ -411,16 +412,16 @@ public class MadSand extends Game {
 			Gui.overlay.draw();
 			Utils.batch.end();
 		} else if (state.equals(GameState.INVENTORY)) {
-				Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
-				Gdx.gl.glClear(16384);
-				Utils.batch.begin();
-				drawGame();
-				Utils.batch.end();
-				Mouse.mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
-				Utils.invKeyCheck();
+			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
+			Gdx.gl.glClear(16384);
+			Utils.batch.begin();
+			drawGame();
+			Utils.batch.end();
+			Mouse.mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
+			Utils.invKeyCheck();
 
-				Gui.overlay.act();
-				Gui.overlay.draw();
+			Gui.overlay.act();
+			Gui.overlay.draw();
 
 		} else if (state.equals(GameState.TRADE)) {
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
@@ -431,7 +432,7 @@ public class MadSand extends Game {
 
 			Gui.overlay.act();
 			Gui.overlay.draw();
-			
+
 		} else if (state.equals(GameState.NMENU)) {
 			if (!Gdx.graphics.isContinuousRendering())
 				Gdx.graphics.setContinuousRendering(true);

@@ -1,30 +1,30 @@
-[02:16:48] Starting initialization!
-[02:16:48] Render area: 441
-[02:16:48] Loading resources...
-[02:16:48] 6 crops
-[02:16:48] 33 craftable items
-[02:16:48] 4 biomes
-[02:16:48] 112 map objects
-[02:16:48] 44 tiles
-[02:16:48] 5 quests
-[02:16:48] 36 NPCs
-[02:16:48] Done loading resources.
-[02:16:49] Refreshing craft menu...
-[02:16:49] Total unlocked recipes: 0 out of 33
-[02:16:49] No unlocked recipes.
-[02:16:49] Generating new sector!
-[02:16:49] Clearing current sector...
-[02:16:49] Biome: 0
-[02:16:49] Default tile: 0
-[02:16:49] Generating lakes!
-[02:16:49] lakes from: 0.1 to: 0.27
-[02:16:49] Done generating lakes!
-[02:16:49] Generating biome objects!
-[02:16:49] Done generating biome objects!
-[02:16:49] Generating underworld...
-[02:16:49] Done generating underworld!
-[02:16:49] Generating dungeon!
-[02:16:49] Probability: 100%
-[02:16:49] Done generating dungeon!
-[02:16:49] Done generating new sector!
-[02:16:49] End of initialization!
+[20:44:34] Starting initialization!
+[20:44:34] Render area: 441
+[20:44:34] Loading resources...
+[20:44:34] 4 biomes
+[20:44:34] 33 craftable items
+[20:44:34] 112 map objects
+[20:44:34] 44 tiles
+[20:44:34] 5 quests
+[20:44:34] 36 NPCs
+[20:44:34] Cucumber
+[20:44:34] Done loading resources.
+[20:44:35] Refreshing craft menu...
+[20:44:35] Total unlocked recipes: 0 out of 33
+[20:44:35] No unlocked recipes.
+[20:44:35] Generating new sector!
+[20:44:35] Clearing current sector...
+[20:44:35] Biome: 0
+[20:44:35] Default tile: 0
+[20:44:35] Generating lakes!
+[20:44:35] lakes from: 0.1 to: 0.27
+[20:44:35] Done generating lakes!
+[20:44:35] Generating biome objects!
+[20:44:35] Done generating biome objects!
+[20:44:35] Generating underworld...
+[20:44:35] Done generating underworld!
+[20:44:35] Generating dungeon!
+[20:44:35] Probability: 100%
+[20:44:36] Done generating dungeon!
+[20:44:36] Done generating new sector!
+[20:44:36] End of initialization!

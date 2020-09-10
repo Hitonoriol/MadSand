@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.type.MapType;
 
 import hitonoriol.madsand.containers.Tuple;
 import hitonoriol.madsand.entities.SkillContainer;
+import hitonoriol.madsand.entities.TradeListContainer;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.map.MapObject;
@@ -88,29 +89,13 @@ public class Resources {
 		mapcursor = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/cur.png"));
 		animsheet = new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/anim.png"));
 		visitedMask = new Texture(Gdx.files.local(MadSand.SAVEDIR + "light/light_visited.png"));
+		placeholder = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/placeholder.png"));
+		noEquip = new TextureRegionDrawable(new TextureRegion(placeholder));
 
-		tmpAnim = TextureRegion.split(animsheet, PLAYER_ANIM_WIDTH, PLAYER_ANIM_HEIGHT);
-
-		animdown[0] = tmpAnim[0][0];
-		animdown[1] = tmpAnim[0][1];
-		animleft[0] = tmpAnim[1][0];
-		animleft[1] = tmpAnim[1][1];
-		animright[0] = tmpAnim[2][0];
-		animright[1] = tmpAnim[2][1];
-		animup[0] = tmpAnim[3][0];
-		animup[1] = tmpAnim[3][1];
-
-		uanim = new Animation<TextureRegion>(playerAnimDuration, animup);
-		danim = new Animation<TextureRegion>(playerAnimDuration, animdown);
-		lanim = new Animation<TextureRegion>(playerAnimDuration, animleft);
-		ranim = new Animation<TextureRegion>(playerAnimDuration, animright);
+		loadPlayerAnimation();
 
 		Cursor mouseCursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.local(MadSand.SAVEDIR + "cursor.png")), 0, 0);
 		Gdx.graphics.setCursor(mouseCursor);
-
-		item = new Texture[Resources.itemCount + 1];
-		objects = new Texture[Resources.mapObjectCount];
-		npc = new Texture[Resources.npcCount + 1];
 
 		Globals.loadGlobals();
 		loadWorldGen();
@@ -119,16 +104,14 @@ public class Resources {
 		loadMapTiles();
 		loadQuests();
 		loadNpcs();
+		loadTradeLists();
 		loadTutorial();
 
-		placeholder = new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/placeholder.png"));
-		noEquip = new TextureRegionDrawable(new TextureRegion(placeholder));
-
-		playerDownSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/d1.png")));
-		playerUpSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/u1.png")));
-		playerRightSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/r1.png")));
-		playerLeftSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/l1.png")));
 		Utils.out("Done loading resources.");
+	}
+
+	private static void loadTradeLists() throws Exception {
+		NpcProp.tradeLists = MadSand.mapper.readValue(new File(MadSand.TRADELISTFILE), TradeListContainer.class);
 	}
 
 	private static void loadTutorial() throws Exception {
@@ -249,5 +232,28 @@ public class Resources {
 			SkillContainer.reqList.put(skill, Tuple.makeTuple(req, mul));
 			++i;
 		}
+	}
+
+	private static void loadPlayerAnimation() {
+		tmpAnim = TextureRegion.split(animsheet, PLAYER_ANIM_WIDTH, PLAYER_ANIM_HEIGHT);
+
+		animdown[0] = tmpAnim[0][0];
+		animdown[1] = tmpAnim[0][1];
+		animleft[0] = tmpAnim[1][0];
+		animleft[1] = tmpAnim[1][1];
+		animright[0] = tmpAnim[2][0];
+		animright[1] = tmpAnim[2][1];
+		animup[0] = tmpAnim[3][0];
+		animup[1] = tmpAnim[3][1];
+
+		uanim = new Animation<TextureRegion>(playerAnimDuration, animup);
+		danim = new Animation<TextureRegion>(playerAnimDuration, animdown);
+		lanim = new Animation<TextureRegion>(playerAnimDuration, animleft);
+		ranim = new Animation<TextureRegion>(playerAnimDuration, animright);
+
+		playerDownSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/d1.png")));
+		playerUpSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/u1.png")));
+		playerRightSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/r1.png")));
+		playerLeftSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/l1.png")));
 	}
 }
