@@ -40,7 +40,7 @@ import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.enums.ItemType;
 import hitonoriol.madsand.enums.Skill;
-import hitonoriol.madsand.gui.AutoFocusScrollPane;
+import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.map.Tile;
@@ -1213,7 +1213,7 @@ public class Gui {
 			hideActionBtn();
 	}
 
-	static final String FONT_CHARS = "�?БВГДЕ�?ЖЗИЙКЛМ�?ОПРСТФХЦЧШЩЪЬЫЭЮЯабвгдеёжзийклмнопр�?тфхцчшщыъь�?ю�?abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"'<>";
+	static final String FONT_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"'<>";
 	static final String FONT_PATH = "fonts/8bitoperator.ttf";
 
 }

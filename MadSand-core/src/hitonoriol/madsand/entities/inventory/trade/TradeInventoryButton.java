@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.TradeAction;
-import hitonoriol.madsand.gui.ItemButton;
+import hitonoriol.madsand.gui.widgets.ItemButton;
 import hitonoriol.madsand.properties.ItemProp;
 
 public class TradeInventoryButton extends ItemButton {

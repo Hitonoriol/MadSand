@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Utils;
-import hitonoriol.madsand.gui.AutoFocusScrollPane;
+import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 
 public class InventoryUI {
 	AutoFocusScrollPane invScroll;

@@ -16,7 +16,7 @@ import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.enums.TradeAction;
-import hitonoriol.madsand.gui.AutoFocusScrollPane;
+import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 
 //TODO: Two scrollpanes with imagetext btns: left pane - sell from player inventory, right - buy
 public class TradeInventoryUI {
