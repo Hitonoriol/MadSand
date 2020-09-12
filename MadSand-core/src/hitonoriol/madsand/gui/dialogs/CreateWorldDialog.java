@@ -1,5 +1,119 @@
 package hitonoriol.madsand.gui.dialogs;
 
-public class CreateWorldDialog {
+import java.io.File;
+import java.io.FilenameFilter;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+
+import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.enums.GameState;
+import hitonoriol.madsand.gui.stages.Overlay;
+import hitonoriol.madsand.world.World;
+
+public class CreateWorldDialog extends Dialog {
+	Skin skin = Gui.skin;
+	Overlay stage;
+
+	public CreateWorldDialog(Overlay stage) {
+		super("", Gui.skin);
+		this.stage = stage;
+		createDialog();
+	}
+
+	void createDialog() {
+
+		File file = new File(MadSand.MAPDIR);
+		String[] dirs = file.list(new FilenameFilter() {
+			public boolean accept(File current, String name) {
+				return new File(current, name).isDirectory();
+			}
+		});
+		
+		int slots = dirs.length;
+		
+		if (slots > MadSand.MAXSAVESLOTS)
+			slots = MadSand.MAXSAVESLOTS;
+
+		final TextField worldtxt = new TextField("World #" + (++slots), skin);
+		super.text("New game");
+		TextButton okbtn = new TextButton("Proceed", skin);
+		TextButton nobtn = new TextButton("Cancel", skin);
+		
+		if (slots >= MadSand.MAXSAVESLOTS) {
+			worldtxt.setText("No free slots left!");
+			worldtxt.setDisabled(true);
+			okbtn.setDisabled(true);
+		}
+		
+		nobtn.addListener(new ChangeListener() {
+			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+				remove();
+			}
+
+		});
+		
+		okbtn.addListener(new ChangeListener() {
+			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+				if (!worldtxt.getText().trim().equals("")) {
+					MadSand.WORLDNAME = worldtxt.getText();
+					File index = new File("MadSand_Saves/" + MadSand.WORLDNAME);
+					String[] entries = index.list();
+					try {
+						String[] arrayOfString1;
+						int j = (arrayOfString1 = entries).length;
+						for (int i = 0; i < j; i++) {
+							String s = arrayOfString1[i];
+							File currentFile = new File(index.getPath(), s);
+							currentFile.delete();
+						}
+						index.delete();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
+					MadSand.switchStage(GameState.GAME, Gui.overlay);
+					if (!MadSand.justStarted)
+						MadSand.world.generate();
+					// World.player.x = new Random().nextInt(World.MAPSIZE);
+					// World.player.y = new Random().nextInt(World.MAPSIZE);
+					World.player.updCoords();
+					stage.exitToMenuBtn.setVisible(false);
+					stage.craftBtn.setVisible(false); // TODO: Move to InventoryUI
+					Gui.inventoryActive = false;
+					remove();
+					Gdx.graphics.setContinuousRendering(false);
+					MadSand.ZOOM = MadSand.DEFAULT_ZOOM;
+					stage.createCharDialog();
+				}
+
+			}
+		});
+		
+		worldtxt.setTextFieldListener(new TextField.TextFieldListener() {
+
+			public void keyTyped(TextField textField, char key) {
+			}
+
+		});
+		
+		super.row();
+		super.add(new Label("\n\n", skin)).width(Gdx.graphics.getWidth() / 2).row();
+		super.add(new Label("\n\nWorld name:\n", skin)).width(Gdx.graphics.getWidth() / 2).row();
+		super.add(worldtxt).width(Gdx.graphics.getWidth() / 2).row();
+		super.add(okbtn).width(Gdx.graphics.getWidth() / 2).row();
+		super.add(nobtn).width(Gdx.graphics.getWidth() / 2).row();
+		super.add(new Label("\n\n", skin)).width(Gdx.graphics.getWidth() / 2).row();
+	}
+	
+	public void show() {
+		super.show(Gui.menu);
+	}
 }

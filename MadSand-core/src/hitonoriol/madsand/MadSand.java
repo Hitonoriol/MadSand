@@ -51,23 +51,23 @@ public class MadSand extends Game {
 	public static String GLOBALSFILE = SAVEDIR + "globals.json";
 
 	static String SKILLFILE = SAVEDIR + "defskills.xml";
-	static final String MAPDIR = SAVEDIR + "worlds/";
+	public static final String MAPDIR = SAVEDIR + "worlds/";
 	static final String SCRIPTDIR = SAVEDIR + "scripts/";
 	static final String PLAYERFILE = "/Player" + SAVE_EXT;
 	static final String NPCSFILE = "NPCs";
 	static final String WORLDFILE = "/World" + SAVE_EXT;
 	static final String ERRFILE = "MadSandCritical.log";
 
-	static final int XDEF = 1280;
-	static final int YDEF = 720;
+	public static final int XDEF = 1280;
+	public static final int YDEF = 720;
 
-	static String WORLDNAME = "";
+	public static String WORLDNAME = "";
 
-	static final float DEFAULT_ZOOM = 1.5F;
-	static float ZOOM = DEFAULT_ZOOM;
+	public static final float DEFAULT_ZOOM = 1.5F;
+	public static float ZOOM = DEFAULT_ZOOM;
 	static final int DEFAULT_FOV = 12;
 
-	static boolean justStarted = true; // flag for once-per-launch actions
+	public static boolean justStarted = true; // flag for once-per-launch actions
 
 	static OrthographicCamera camera;
 	public static int camxoffset = 17;

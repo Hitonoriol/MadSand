@@ -10,7 +10,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.enums.ItemType;
 import hitonoriol.madsand.enums.Skill;
@@ -111,18 +111,18 @@ public class Item {
 
 	String getInfoString() {
 		String info = "";
-		info += name + Gui.LINEBREAK;
+		info += name + Resources.LINEBREAK;
 
 		if (type.isArmor() || type.isWeapon()) {
 			info += equipStats.getString();
 		}
 
 		if (type == ItemType.Consumable) {
-			info += "Satiation: " + satiationAmount + Gui.LINEBREAK;
-			info += "Health: " + healAmount + Gui.LINEBREAK;
+			info += "Satiation: " + satiationAmount + Resources.LINEBREAK;
+			info += "Health: " + healAmount + Resources.LINEBREAK;
 		}
 
-		info += "Weight: " + Utils.round(weight) + " kg" + Gui.LINEBREAK;
+		info += "Weight: " + Utils.round(weight) + " kg" + Resources.LINEBREAK;
 		info += "Cost: " + cost + "$";
 		return info;
 	}

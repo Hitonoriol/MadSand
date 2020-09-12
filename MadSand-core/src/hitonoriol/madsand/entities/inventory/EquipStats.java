@@ -2,7 +2,7 @@ package hitonoriol.madsand.entities.inventory;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 
 public class EquipStats {
@@ -69,15 +69,15 @@ public class EquipStats {
 	public String getString() {
 		String ret = "";
 		if (constitution != 0)
-			ret += "Constitution: " + constitution + Gui.LINEBREAK;
+			ret += "Constitution: " + constitution + Resources.LINEBREAK;
 		if (dexterity != 0)
-			ret += "Dexterity: " + dexterity + Gui.LINEBREAK;
+			ret += "Dexterity: " + dexterity + Resources.LINEBREAK;
 		if (strength != 0)
-			ret += "Strength: " + strength + Gui.LINEBREAK;
+			ret += "Strength: " + strength + Resources.LINEBREAK;
 		if (accuracy != 0)
-			ret += "Accuracy: " + accuracy + Gui.LINEBREAK;
+			ret += "Accuracy: " + accuracy + Resources.LINEBREAK;
 		if (intelligence != 0)
-			ret += "Intelligence: " + intelligence + Gui.LINEBREAK;
+			ret += "Intelligence: " + intelligence + Resources.LINEBREAK;
 		return ret;
 	}
 }

@@ -64,30 +64,30 @@ public class Mouse {
 		Player player = World.player;
 		String info = "";
 
-		info += ("Looking at (" + wx + ", " + wy + ")") + Gui.LINEBREAK;
+		info += ("Looking at (" + wx + ", " + wy + ")") + Resources.LINEBREAK;
 
 		if (wx == player.x && wy == player.y) {
-			info += "You look at yourself" + Gui.LINEBREAK;
+			info += "You look at yourself" + Resources.LINEBREAK;
 			info += player.getInfoString();
 		}
 
 		if (!tile.visible) {
-			info += "You can't see anything there" + Gui.LINEBREAK;
+			info += "You can't see anything there" + Resources.LINEBREAK;
 			return info;
 		}
 
-		info += ("Tile: " + TileProp.getName(tile.id)) + Gui.LINEBREAK;
+		info += ("Tile: " + TileProp.getName(tile.id)) + Resources.LINEBREAK;
 
 		if (!loot.equals(Map.nullLoot)) {
 			info += "On the ground: ";
-			info += loot.getInfo() + Gui.LINEBREAK;
+			info += loot.getInfo() + Resources.LINEBREAK;
 		}
 
 		if (!object.equals(Map.nullObject))
-			info += ("Object: " + object.name) + Gui.LINEBREAK;
+			info += ("Object: " + object.name) + Resources.LINEBREAK;
 
 		if (!npc.equals(Map.nullNpc)) {
-			info += ("You look at " + " " + npc.stats.name) + Gui.LINEBREAK;
+			info += ("You look at " + " " + npc.stats.name) + Resources.LINEBREAK;
 
 			if (World.player.knowsNpc(npc.id))
 				info += npc.getInfoString();

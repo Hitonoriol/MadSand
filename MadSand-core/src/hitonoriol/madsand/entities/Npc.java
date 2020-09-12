@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
@@ -224,7 +223,7 @@ public class Npc extends Entity {
 
 	public String getInfoString() {
 		String ret = super.getInfoString();
-		ret += "Friendly: " + (friendly ? "yes" : "no") + Gui.LINEBREAK;
+		ret += "Friendly: " + (friendly ? "yes" : "no") + Resources.LINEBREAK;
 		return ret;
 	}
 

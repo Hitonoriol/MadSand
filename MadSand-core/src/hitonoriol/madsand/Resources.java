@@ -82,6 +82,7 @@ public class Resources {
 	public static final String emptyField = "-1";
 	public static final int emptyId = -1;
 	public static String Space = " ", Colon = ":";
+	public static final String LINEBREAK = System.lineSeparator();
 
 	public static void init() throws Exception {
 		Utils.out("Loading resources...");
@@ -256,4 +257,5 @@ public class Resources {
 		playerRightSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/r1.png")));
 		playerLeftSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/l1.png")));
 	}
+
 }

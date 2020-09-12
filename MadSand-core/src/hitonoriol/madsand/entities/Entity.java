@@ -8,8 +8,8 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.containers.PairFloat;
@@ -451,8 +451,8 @@ public abstract class Entity {
 	@JsonIgnore
 	public String getInfoString() {
 		String ret = "";
-		ret += "Faction: " + stats.faction + Gui.LINEBREAK;
-		ret += "Health: " + getHealthState() + Gui.LINEBREAK;
+		ret += "Faction: " + stats.faction + Resources.LINEBREAK;
+		ret += "Health: " + getHealthState() + Resources.LINEBREAK;
 		return ret;
 	}
 

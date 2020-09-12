@@ -341,7 +341,7 @@ public class Player extends Entity {
 		}
 
 		if (!loc.editable) {
-			MadSand.notice("You try to interact with " + obj.name + "..." + Gui.LINEBREAK
+			MadSand.notice("You try to interact with " + obj.name + "..." + Resources.LINEBREAK
 					+ "But suddenly, you feel that it's protected by some mysterious force");
 			return;
 		}
@@ -354,8 +354,8 @@ public class Player extends Entity {
 		damageHeldTool(skill);
 
 		if (curLvl < obj.lvl) {
-			MadSand.notice("You are not experienced enough." + Gui.LINEBREAK + skill + " level required: " + obj.lvl
-					+ Gui.LINEBREAK + "Your " + skill + ": " + curLvl);
+			MadSand.notice("You are not experienced enough." + Resources.LINEBREAK + skill + " level required: " + obj.lvl
+					+ Resources.LINEBREAK + "Your " + skill + ": " + curLvl);
 			return;
 		}
 
