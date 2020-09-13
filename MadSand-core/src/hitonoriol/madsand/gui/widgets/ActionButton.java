@@ -2,8 +2,6 @@ package hitonoriol.madsand.gui.widgets;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -17,6 +15,7 @@ import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.enums.ItemType;
+import hitonoriol.madsand.gui.OverlayMouseoverListener;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.map.Tile;
@@ -28,7 +27,7 @@ public class ActionButton extends Table {
 	public Skin skin;
 	public static final float ACTION_TBL_YPOS = Gdx.graphics.getHeight() / 6f;
 
-	public InputListener inGameBtnListener;
+	public OverlayMouseoverListener inGameBtnListener;
 	public ChangeListener npcInteractListener;
 	public ChangeListener objInteractListener;
 
@@ -38,27 +37,15 @@ public class ActionButton extends Table {
 
 	public ActionButton() {
 		super();
-		
+
 		skin = Gui.skin;
 
 		interactButton = new TextButton("", skin);
 		super.setVisible(false);
 		super.setPosition(Gui.horizontalCenter(this), ACTION_TBL_YPOS);
 		super.add(interactButton).width(Gui.DEFWIDTH).row();
-		
-		inGameBtnListener = new InputListener() {
-			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-				Gui.gameUnfocused = true;
-				Gui.overlay.getTooltip().setVisible(false);
-			}
 
-			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-				if (!Gui.dialogActive) {
-					Gui.gameUnfocused = false;
-					Gui.overlay.getTooltip().setVisible(true);
-				}
-			}
-		};
+		inGameBtnListener = new OverlayMouseoverListener();
 
 		npcInteractListener = new ChangeListener() {
 			@Override

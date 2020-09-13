@@ -31,6 +31,7 @@ import hitonoriol.madsand.gui.widgets.ActionButton;
 import hitonoriol.madsand.gui.widgets.GameContextMenu;
 import hitonoriol.madsand.gui.widgets.GameLog;
 import hitonoriol.madsand.gui.widgets.GameTooltip;
+import hitonoriol.madsand.gui.widgets.OverlayBottomMenu;
 import hitonoriol.madsand.world.World;
 
 /*
@@ -47,6 +48,7 @@ public class Overlay extends Stage {
 	public GameContextMenu gameContextMenu;
 	public ActionButton actionButton;
 	public GameLog gameLog;
+	public OverlayBottomMenu bottomMenu;
 
 	Table overlayTable;
 
@@ -78,6 +80,7 @@ public class Overlay extends Stage {
 		gameTooltip = new GameTooltip();
 		gameContextMenu = new GameContextMenu();
 		gameLog = new GameLog();
+		bottomMenu = new OverlayBottomMenu(this);
 
 		overlayTable = new Table().align(18);
 		overlayTable.setFillParent(true);
@@ -86,6 +89,7 @@ public class Overlay extends Stage {
 
 		initButtonListeners();
 
+		super.addActor(bottomMenu);
 		super.addActor(gameTooltip);
 		super.addActor(gameContextMenu);
 		super.addActor(gameLog);
@@ -216,6 +220,7 @@ public class Overlay extends Stage {
 			return;
 		}
 
+		statWindow = new CharacterInfoWindow();
 		statWindow.show();
 	}
 

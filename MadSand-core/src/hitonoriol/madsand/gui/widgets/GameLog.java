@@ -20,6 +20,7 @@ public class GameLog extends Table {
 	public GameLog() {
 		super();
 		skin = Gui.skin;
+		
 		inputField = new TextField("", skin);
 		inputField.setWidth(INPUT_FIELD_WIDTH);
 		inputField.setMessageText("");
@@ -35,8 +36,8 @@ public class GameLog extends Table {
 		});
 
 		// Setting up game log
-		Table logtbl = new Table(skin).align(Align.topLeft);
-		logtbl.setFillParent(true);
+		super.align(Align.topLeft);
+		super.setFillParent(true);
 		int tpm = 0;
 		logLabels = new Label[LOG_LENGTH];
 		int cxxc = 0;
@@ -46,11 +47,11 @@ public class GameLog extends Table {
 		}
 		while (tpm < LOG_LENGTH) {
 			logLabels[tpm].setWrap(true);
-			logtbl.add(logLabels[tpm]).width(INPUT_FIELD_WIDTH).pad(3);
-			logtbl.row();
+			super.add(logLabels[tpm]).width(INPUT_FIELD_WIDTH).pad(3);
+			super.row();
 			tpm++;
 		}
-		logtbl.add(inputField).width(INPUT_FIELD_WIDTH).align(Align.left).pad(3).height(30);
+		super.add(inputField).width(INPUT_FIELD_WIDTH).align(Align.left).pad(3).height(30);
 		inputField.debug();
 		inputField.setVisible(false);
 
