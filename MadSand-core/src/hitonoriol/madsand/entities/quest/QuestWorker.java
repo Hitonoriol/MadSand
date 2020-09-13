@@ -11,7 +11,6 @@ import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.Item;
-import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.properties.QuestList;
 
 public class QuestWorker {
@@ -60,7 +59,7 @@ public class QuestWorker {
 		player.inventory.delItem(quest.reqItems);
 		player.inventory.delItem(quest.removeOnCompletion);
 		player.inventory.putItem(quest.rewardItems);
-		player.stats.skills.increaseSkill(Skill.Level, quest.exp);
+		player.addExp(quest.exp);
 		MadSand.notice("You get " + quest.exp + " EXP!");
 
 		if (!quest.repeatable)

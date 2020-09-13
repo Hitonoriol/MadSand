@@ -41,6 +41,22 @@ public class LuaUtils {
 		MadSand.world.getCurLoc().addTile(x, y, id, true);
 	}
 
+	public static void delObject(int x, int y) {
+		MadSand.world.getCurLoc().delObject(x, y);
+	}
+
+	public static void addObject(int x, int y, int id) {
+		MadSand.world.getCurLoc().addObject(x, y, id);
+	}
+
+	public static void descend() {
+		MadSand.world.descend();
+	}
+
+	public static void ascend() {
+		MadSand.world.ascend();
+	}
+
 	public static void showDialog(String query) {
 		GameDialog.generateDialogChain(query, Gui.overlay).show();
 	}

@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.world.World;
 
 public class DeathStage extends Stage {
@@ -42,6 +43,7 @@ public class DeathStage extends Stage {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				Gui.darkness.setVisible(false);
 				World.player.respawn();
+				MadSand.world.updateLight();
 			}
 		});
 	}

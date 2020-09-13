@@ -234,9 +234,10 @@ public abstract class Entity {
 
 	void dropInventory() {
 		Item item;
+		Map curLoc = MadSand.world.getCurLoc();
 		for (int i = inventory.items.size() - 1; i >= 0; --i) {
 			item = inventory.items.get(i);
-			MadSand.world.getCurLoc().putLoot(x, y, item);
+			curLoc.putLoot(x, y, item);
 			inventory.delItem(item);
 		}
 	}

@@ -129,7 +129,7 @@ public class MainMenu extends Stage {
 		String ver;
 
 		if (!GameSaver.getExternal(verFile).equals(""))
-			ver = "\n[GREEN]b-" + (GameSaver.getExternal(verFile));
+			ver = "\n[GREEN]" + (GameSaver.getExternal(verFile));
 		else
 			ver = "\n[GREEN]Version file not found";
 

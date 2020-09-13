@@ -1,13 +1,13 @@
 package hitonoriol.madsand.map;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
 
 public class Loot {
 	int nodes = 0;
-	public Vector<Item> contents = new Vector<Item>();
+	public ArrayList<Item> contents = new ArrayList<Item>();
 	private String lootStr;
 
 	public Loot(Item cont) {
@@ -69,7 +69,7 @@ public class Loot {
 	}
 
 	public Loot add(Item item) {
-		if (item == Item.nullItem)
+		if (item.equals(Item.nullItem))
 			return Map.nullLoot;
 
 		contents.add(item);

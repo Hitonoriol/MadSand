@@ -245,6 +245,9 @@ public class Inventory {
 	}
 
 	public boolean delItem(String query) {
+		if (query.equals(Item.EMPTY_ITEM_STRING))
+			return false;
+		
 		int i = 0;
 		if (query.indexOf(":") == -1)
 			query += ":";

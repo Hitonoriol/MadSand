@@ -202,7 +202,7 @@
 		"accuracy" : 5,
 		"dexterity" : 0,
 		"rewardExp" : 6,
-		"loot" : "n",
+		"loot" : "22/1",
 		"faction" : "Monsters",
 		"type" : "Regular",
 		"questList" : null,

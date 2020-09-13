@@ -3,6 +3,7 @@ package hitonoriol.madsand.properties;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.ItemType;
 import hitonoriol.madsand.map.CropGrowthStageContainer;
@@ -36,7 +37,12 @@ public class ItemProp {
 	}
 
 	public static String getOnUseAction(int id) {
-		return items.get(id).useAction;
+		String action = items.get(id).useAction;
+
+		if (action == null)
+			return Resources.emptyField;
+
+		return action;
 	}
 
 	public static CropGrowthStageContainer getCropStages(int id) {

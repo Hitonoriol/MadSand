@@ -58,6 +58,10 @@ public class Player extends Entity {
 		this("");
 	}
 
+	public void addExp(int amount) {
+		stats.skills.increaseSkill(Skill.Level, amount);
+	}
+
 	@Override
 	public void setFov(int val) {
 		super.setFov(val);
@@ -117,24 +121,38 @@ public class Player extends Entity {
 		boolean dead;
 		turn(dir);
 		Npc npc = MadSand.world.getCurLoc().getNpc(coords.set(x, y).addDirection(dir));
+
 		if (npc == Map.nullNpc)
 			return false;
+
+		int atk = stats.calcAttack();
+
+		if (atk == 0)
+			MadSand.print("You miss " + npc.stats.name);
 		else {
-			int atk = stats.calcAttack();
-			if (atk == 0)
-				MadSand.print("You miss " + npc.stats.name);
-			else {
-				MadSand.print("You deal " + atk + " damage to " + npc.stats.name);
-				if (npc.friendly)
-					npc.friendly = false;
-				npc.damage(atk);
-			}
-			dead = npc.stats.dead;
-			if (dead && knownNpcs.add(npc.id))
-				MadSand.print("You now know more about " + npc.stats + "s");
-			doAction(stats.AP_ATTACK);
-			return dead;
+			MadSand.print("You deal " + atk + " damage to " + npc.stats.name);
+
+			if (npc.friendly)
+				npc.friendly = false;
+
+			npc.damage(atk);
 		}
+
+		dead = npc.stats.dead;
+
+		if (dead) {
+
+			MadSand.print("You kill " + npc.stats.name);
+			addExp(npc.rewardExp);
+
+			if (knownNpcs.add(npc.id)) // If killed for the first time
+				MadSand.print("You now know more about " + npc.stats.name + "s");
+
+		}
+
+		doAction(stats.AP_ATTACK);
+		return dead;
+
 	}
 
 	public boolean attack() {
@@ -435,6 +453,7 @@ public class Player extends Entity {
 	}
 
 	public void respawn() {
+		MadSand.world.curlayer = World.LAYER_OVERWORLD;
 		int wx = MadSand.world.curxwpos;
 		int wy = MadSand.world.curywpos;
 		MadSand.state = GameState.GAME;
@@ -499,7 +518,7 @@ public class Player extends Entity {
 	}
 
 	public Pair lookingAt() {
-		return coords.set(x, y).addDirection(stats.look);
+		return new Pair(x, y).addDirection(stats.look);
 	}
 
 	public Direction lookAtMouse(int x, int y) {

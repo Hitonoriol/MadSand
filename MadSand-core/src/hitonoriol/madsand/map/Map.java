@@ -483,10 +483,8 @@ public class Map {
 		return getNpc(coords.x, coords.y);
 	}
 
-	public boolean moveNpc(Npc npc, int x, int y) { // moves npc only on the grid(not on the screen) to process smooth
-		// movement;should be called by an npc before changing its own position.
-		// yeah, the
-		// system is fucky.
+	public boolean moveNpc(Npc npc, int x, int y) { // moves npc only on the grid(not on the screen) to process smooth movement;
+		//should be called by an npc before changing its own position.
 		int xold = npc.x, yold = npc.y;
 		Npc destNpc = getNpc(coords.x, coords.y);
 
@@ -507,12 +505,16 @@ public class Map {
 		return true;
 	}
 
-	boolean removeNpc(int x, int y) {
+	public boolean removeNpc(Npc npc) {
+		return removeNpc(npc.x, npc.y);
+	}
+
+	public boolean removeNpc(int x, int y) {
 
 		if (!correctCoords(coords.set(x, y)))
 			return false;
 
-		if (getNpc(coords.x, coords.y) == nullNpc)
+		if (getNpc(coords.x, coords.y).equals(nullNpc))
 			return false;
 
 		mapNpcs.remove(coords);

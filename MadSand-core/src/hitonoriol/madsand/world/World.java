@@ -234,14 +234,17 @@ public class World {
 	public boolean descend() {
 		if (curlayer == DUNGEON_LAYER_MAX)
 			return false;
+		
 		boolean ret = switchLocation(curlayer + 1);
 		if (curlayer > (worldLoc.layers - 1))
 			++worldLoc.layers;
+		
 		Map loc = getCurLoc();
 		String place = null;
+		
 		Utils.out("In cave : " + (loc.spawnPoint.equals(Pair.nullPair)));
-		int x = loc.spawnPoint.x, y = loc.spawnPoint.y; // idk what the fuck is wrong but Pair(-1,-1) != Pair(-1,-1)
-														// according to fucking java
+		
+		int x = loc.spawnPoint.x, y = loc.spawnPoint.y;
 		int x1 = Pair.nullPair.x, y1 = Pair.nullPair.y;
 		if (x1 != x && y1 != y) { // this means we are in the dungeon
 			player.teleport(loc.spawnPoint.x, loc.spawnPoint.y);
@@ -253,6 +256,7 @@ public class World {
 			updateLight();
 			place = "cave";
 		}
+		
 		MadSand.print("You descend to " + place + " level " + curlayer);
 		return ret;
 	}
@@ -303,6 +307,10 @@ public class World {
 
 	void delObj(int x, int y, int layer) {
 		addObj(x, y, layer, 0);
+	}
+	
+	public void delNpc(Npc npc) {
+		getCurLoc().removeNpc(npc);
 	}
 
 	public void clearCurLoc() {

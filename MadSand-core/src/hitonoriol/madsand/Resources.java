@@ -128,6 +128,9 @@ public class Resources {
 		MapType questMap = MadSand.typeFactory.constructMapType(HashMap.class, Integer.class, Quest.class);
 		QuestList.quests = MadSand.mapper.readValue(new File(MadSand.QUESTFILE), questMap);
 
+		for (Entry<Integer, Quest> entry : QuestList.quests.entrySet())
+			entry.getValue().id = entry.getKey();
+
 		Utils.out(QuestList.quests.size() + " quests");
 
 	}
@@ -261,10 +264,10 @@ public class Resources {
 		playerRightSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/r1.png")));
 		playerLeftSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/l1.png")));
 	}
-	
+
 	static final String FONT_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"'<>";
 	static final String FONT_PATH = "fonts/8bitoperator.ttf";
-	
+
 	public static BitmapFont createFont(int size) {
 		BitmapFont font = new BitmapFont();
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.local(MadSand.SAVEDIR + FONT_PATH));

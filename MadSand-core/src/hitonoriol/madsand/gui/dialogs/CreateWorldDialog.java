@@ -33,9 +33,12 @@ public class CreateWorldDialog extends Dialog {
 				return new File(current, name).isDirectory();
 			}
 		});
-		
-		int slots = dirs.length;
-		
+
+		int slots = 0;
+
+		if (dirs != null)
+			slots = dirs.length;
+
 		if (slots > MadSand.MAXSAVESLOTS)
 			slots = MadSand.MAXSAVESLOTS;
 
@@ -43,20 +46,20 @@ public class CreateWorldDialog extends Dialog {
 		super.text("New game");
 		TextButton okbtn = new TextButton("Proceed", skin);
 		TextButton nobtn = new TextButton("Cancel", skin);
-		
+
 		if (slots >= MadSand.MAXSAVESLOTS) {
 			worldtxt.setText("No free slots left!");
 			worldtxt.setDisabled(true);
 			okbtn.setDisabled(true);
 		}
-		
+
 		nobtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				remove();
 			}
 
 		});
-		
+
 		okbtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				if (!worldtxt.getText().trim().equals("")) {
@@ -93,14 +96,14 @@ public class CreateWorldDialog extends Dialog {
 
 			}
 		});
-		
+
 		worldtxt.setTextFieldListener(new TextField.TextFieldListener() {
 
 			public void keyTyped(TextField textField, char key) {
 			}
 
 		});
-		
+
 		super.row();
 		super.add(new Label("\n\n", skin)).width(Gdx.graphics.getWidth() / 2).row();
 		super.add(new Label("\n\nWorld name:\n", skin)).width(Gdx.graphics.getWidth() / 2).row();
@@ -109,7 +112,7 @@ public class CreateWorldDialog extends Dialog {
 		super.add(nobtn).width(Gdx.graphics.getWidth() / 2).row();
 		super.add(new Label("\n\n", skin)).width(Gdx.graphics.getWidth() / 2).row();
 	}
-	
+
 	public void show() {
 		super.show(Gui.mainMenu);
 	}

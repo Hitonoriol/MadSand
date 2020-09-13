@@ -19,14 +19,15 @@
 		#Richard# Thanks a lot, stranger.=>
 		#Richard# I'd like to know your name now...=>
 		#Richard# Nice to meet you, {PLAYER}!=>
-		#Richard# Hm... Okay. You can take my axe as a reward. I didn't use it anyway. If you want some job or a good story, just ask!
+		#Richard# Here, take these berries. You earned them. =>
+		#Richard# Hm... well, you can also take my axe as a reward. I didn't use it anyway. If you want some job or a good story, just ask!
 	",
 
 	"reqMsg" : "#Richard# Please, give me 15 wood pieces.",
 
 	"reqItems" : "1/15",
 	"giveItems" : "3/1",
-	"rewardItems" : "n",
+	"rewardItems" : "7/12",
 	"removeOnCompletion" : "n",
 	"repeatable" : false
 },

@@ -133,9 +133,16 @@ public class Npc extends Entity {
 			int atk = stats.calcAttack();
 			if (atk == 0)
 				MadSand.print(stats.name + " misses!");
+			else
+				MadSand.print(stats.name + " deals " + atk + " damage to you");
 			player.damage(atk);
 			return true;
 		}
+	}
+	
+	public void die() {
+		super.die();
+		MadSand.world.delNpc(this);
 	}
 
 	public void act() {
@@ -166,7 +173,6 @@ public class Npc extends Entity {
 
 		case FollowPlayer:
 			int dist = distanceTo(player);
-			Utils.out("Distance to player: " + dist);
 
 			if (!enemySpotted && canSee(player))
 				enemySpotted = true;
