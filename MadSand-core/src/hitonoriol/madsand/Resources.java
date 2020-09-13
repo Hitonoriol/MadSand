@@ -23,6 +23,7 @@ import hitonoriol.madsand.containers.Tuple;
 import hitonoriol.madsand.entities.SkillContainer;
 import hitonoriol.madsand.entities.TradeListContainer;
 import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.map.Tile;

@@ -1,4 +1,4 @@
-package hitonoriol.madsand;
+package hitonoriol.madsand.entities.quest;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

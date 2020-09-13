@@ -181,12 +181,15 @@ public class GameSaver {
 			Utils.out("Loading character...");
 			String fl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.PLAYERFILE;
 			String wfl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.WORLDFILE;
-
+			
 			World.player = MadSand.mapper.readValue(getExternal(fl), Player.class);
 
-			World.player.inventory.initUI();
-			World.player.inventory.refreshContents();
-			World.player.initStatActions();
+			Player player = World.player;
+			
+			player.inventory.initUI();
+			player.inventory.refreshContents();
+			player.initStatActions();
+			player.quests.setPlayer(player);
 
 			World w;
 			w = MadSand.mapper.readValue(getExternal(wfl), World.class);

@@ -12,14 +12,13 @@ import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Quest;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
-import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.inventory.trade.TradeInventoryUI;
+import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.enums.*;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
@@ -36,10 +35,7 @@ public class Player extends Entity {
 
 	public HashSet<Integer> unlockedItems = new HashSet<Integer>(); // set of items player obtained at least once
 	public ArrayList<Integer> craftRecipes = new ArrayList<Integer>(); // list of items which recipes are available to the player
-
-	public HashSet<Integer> completedQuests = new HashSet<Integer>(); // sets of completed quests and the ones in progress
-	public HashSet<Integer> questsInProgress = new HashSet<Integer>();
-
+	public QuestWorker quests = new QuestWorker();
 	public HashSet<Integer> knownNpcs = new HashSet<Integer>();
 	public HashSet<String> luaActions = new HashSet<>(); //Set for one-time lua actions
 
@@ -55,6 +51,7 @@ public class Player extends Entity {
 				Resources.playerRightSpr);
 		initInventory();
 		setFov(fov);
+		quests.setPlayer(this);
 	}
 
 	public Player() {
@@ -222,61 +219,6 @@ public class Player extends Entity {
 		return false;
 	}
 
-	public boolean isQuestInProgress(int id) {
-		return questsInProgress.contains(id);
-	}
-
-	public boolean isQuestCompleted(int id) {
-		return completedQuests.contains(id);
-	}
-
-	private void startQuest(Quest quest) {
-		Utils.out("Trying to start quest id" + quest.id);
-		if (isQuestCompleted(quest.id))
-			return;
-		if (inventory.putItem(quest.giveItems) != -1)
-			MadSand.print("You get " + Item.queryToName(quest.giveItems));
-		questsInProgress.add(quest.id);
-		GameDialog.generateDialogChain(quest.startMsg, Gui.overlay).show();
-	}
-
-	private void completeQuest(Quest quest) {
-		MadSand.notice("You completed a quest!");
-		inventory.delItem(quest.reqItems);
-		inventory.delItem(quest.removeOnCompletion);
-		inventory.putItem(quest.rewardItems);
-		stats.skills.increaseSkill(Skill.Level, quest.exp);
-		MadSand.notice("You get " + quest.exp + " EXP!");
-		if (!quest.repeatable)
-			completedQuests.add(quest.id);
-		questsInProgress.remove(quest.id);
-		GameDialog.generateDialogChain(quest.endMsg, Gui.overlay).show();
-	}
-
-	public void processQuest(int id) {
-		Utils.out("Processing quest " + id);
-		Quest quest = QuestList.quests.get(id);
-		if (isQuestInProgress(id) && !isQuestCompleted(id)) {
-			if (inventory.itemsExist(quest.reqItems))
-				completeQuest(quest);
-			else
-				GameDialog.generateDialogChain(quest.reqMsg, Gui.overlay).show();
-		} else
-			startQuest(quest);
-	}
-
-	public int getAvailableQuest(ArrayList<Integer> quests) { // search NPC's quest list for {not yet started / not
-																// finished / repeatable} quests
-		for (int qid : quests) {
-			Utils.out("quest " + qid + " inProgress: " + isQuestInProgress(qid) + " isCompleted: "
-					+ isQuestCompleted(qid));
-			if (isQuestInProgress(qid) || !isQuestCompleted(qid)) {
-				return qid;
-			}
-		}
-		return QuestList.NO_QUESTS_STATUS;
-	}
-
 	public void interact() {
 		interact(stats.look);
 	}
@@ -290,13 +232,13 @@ public class Player extends Entity {
 			MadSand.print("Doesn't seem like " + name + " wants to talk.");
 			return;
 		case QuestMaster:
-			int qid = getAvailableQuest(npc.questList);
+			int qid = quests.getAvailableQuest(npc.questList);
 			Utils.out("Got quest id: " + qid);
 			npc.pause();
 			if (qid == QuestList.NO_QUESTS_STATUS)
 				MadSand.print(name + " has no more tasks for you.");
 			else
-				processQuest(qid);
+				quests.processQuest(qid);
 			break;
 
 		default:
@@ -354,8 +296,9 @@ public class Player extends Entity {
 		damageHeldTool(skill);
 
 		if (curLvl < obj.lvl) {
-			MadSand.notice("You are not experienced enough." + Resources.LINEBREAK + skill + " level required: " + obj.lvl
-					+ Resources.LINEBREAK + "Your " + skill + ": " + curLvl);
+			MadSand.notice(
+					"You are not experienced enough." + Resources.LINEBREAK + skill + " level required: " + obj.lvl
+							+ Resources.LINEBREAK + "Your " + skill + ": " + curLvl);
 			return;
 		}
 
@@ -573,12 +516,12 @@ public class Player extends Entity {
 	public boolean move(Direction dir) {
 		if (!super.move(dir))
 			return false;
-		
+
 		if (isMain && (MadSand.world.curlayer == World.LAYER_OVERWORLD)
 				&& (x == World.MAPSIZE - 1 || y == World.MAPSIZE - 1 || x == World.BORDER || y == World.BORDER)) {
 			MadSand.print("Press [GRAY]N[WHITE] to move to the next sector.");
 		}
-		
+
 		Gui.overlay.processActionMenu();
 		return true;
 	}

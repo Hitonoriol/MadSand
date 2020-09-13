@@ -124,20 +124,20 @@ public class Gui {
 		NinePatch ptc = new NinePatch(new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/darkness.png")), 3, 3, 3, 3);
 		darkBackground = new NinePatchDrawable(ptc);
 
-		darkBackgroundSizeable = new NinePatchDrawable(ptc);
-		darkBackgroundSizeable.setMinHeight(0);
-		darkBackgroundSizeable.setMinWidth(0);
-
 		TextTooltip.TextTooltipStyle txtool = new TextTooltip.TextTooltipStyle();
 		txtool.background = darkBackground;
 		txtool.label = labelStyle;
 		skin.add("default", txtool);
+		
+		darkBackgroundSizeable = new NinePatchDrawable(ptc);
+		darkBackgroundSizeable.setMinHeight(0);
+		darkBackgroundSizeable.setMinWidth(0);
 
 	}
 
 	static void init() {
 		initSkin();
-		
+
 		overlay = new Overlay();
 
 		darkness = new Table();

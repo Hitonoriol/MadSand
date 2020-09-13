@@ -2,7 +2,7 @@ package hitonoriol.madsand.properties;
 
 import java.util.HashMap;
 
-import hitonoriol.madsand.Quest;
+import hitonoriol.madsand.entities.quest.Quest;
 
 public class QuestList {
 	public static final int NO_QUESTS_STATUS = -1;

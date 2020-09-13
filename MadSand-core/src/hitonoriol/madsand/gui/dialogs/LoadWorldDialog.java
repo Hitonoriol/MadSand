@@ -59,6 +59,8 @@ public class LoadWorldDialog extends Dialog {
 
 					if (GameSaver.loadWorld(sa))
 						MadSand.state = GameState.GAME;
+					
+					Gui.overlay.refreshOverlay();
 
 				}
 			});
