@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -98,10 +99,10 @@ public class MadSand extends Game {
 			World.player.hideInventory();
 
 		if (Gui.gameUnfocused)
-			Gui.gamecontext.setVisible(false);
+			Gui.overlay.gameContextMenu.setVisible(false);
 
 		if (state == GameState.GAME)
-			Gui.mousemenu.setVisible(true);
+			Gui.overlay.gameTooltip.setVisible(true);
 
 		if (state == GameState.INVENTORY)
 			World.player.showInventory();
@@ -126,9 +127,9 @@ public class MadSand extends Game {
 		Utils.out("Render area: " + renderArea.length);
 		setErrFile();
 		Utils.init();
-		Gui.createBasicSkin();
+		Gui.init();
+
 		World.player = new Player();
-		Gui.initmenu();
 		camera = new OrthographicCamera();
 		camera.update();
 
@@ -362,21 +363,24 @@ public class MadSand extends Game {
 	static String oldarg = "";
 
 	public static void print(String arg) {
+		Label[] log = Gui.overlay.getLogLabels();
 		if (!oldarg.equals(arg)) {
 			repeat = 1;
 			oldarg = arg;
-			int i = Gui.log.length - 1;
+			int i = log.length - 1;
 			while (i >= 0) {
+
 				if (i != 0)
-					Gui.log[i].setText(Gui.log[i - 1].getText());
+					log[i].setText(log[i - 1].getText());
 				else {
-					Gui.log[i].setText(arg);
+					log[i].setText(arg);
 					li = i;
 				}
+
 				i--;
 			}
 		} else
-			Gui.log[li].setText(oldarg + " x" + (++repeat));
+			log[li].setText(oldarg + " x" + (++repeat));
 	}
 
 	public static void print(String msg, String color) {
@@ -396,9 +400,9 @@ public class MadSand extends Game {
 			Mouse.mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
 			camera.unproject(Mouse.mouseinworld);
 			Gdx.input.setInputProcessor(Gui.overlay);
-			Utils.checkConsoleFocus();
+			Utils.executeConsoleInput();
 			Utils.pollStatWindowKey();
-			if (Gui.overlay.getKeyboardFocus() != Gui.inputField && !Gui.gameUnfocused) {
+			if (Gui.overlay.getKeyboardFocus() != Gui.overlay.getConsoleField() && !Gui.gameUnfocused) {
 				Mouse.updCoords();
 				Mouse.mouseClickAction();
 				Utils.gameKeyCheck();
@@ -447,37 +451,37 @@ public class MadSand extends Game {
 			Utils.batch.begin();
 			drawMenuBackground();
 			Utils.batch.end();
-			Gui.menu.act();
-			Gui.menu.draw();
+			Gui.mainMenu.act();
+			Gui.mainMenu.draw();
 		} else if (state.equals(GameState.WORLDGEN)) {
 			Utils.batch.begin();
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);
 			updateCamToxy(World.player.globalPos.x, World.player.globalPos.y);
 			drawMenuBackground();
-			Gui.worldg.draw();
+			Gui.worldGenStage.draw();
 			Utils.batch.end();
 		} else if (state.equals(GameState.LOAD)) {
 			Utils.batch.begin();
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);
 			drawMenuBackground();
-			Gui.loadg.draw();
+			Gui.loadWorldStage.draw();
 			Utils.batch.end();
 		} else if (state.equals(GameState.GOT)) {
 			Utils.batch.begin();
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);
 			drawMenuBackground();
-			Gui.gotodg.draw();
+			Gui.sectorChangeStage.draw();
 			Utils.batch.end();
 		} else if (state.equals(GameState.DEAD)) {
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Utils.batch.begin();
 			drawGame();
 			Utils.batch.end();
-			Gui.dead.act();
-			Gui.dead.draw();
+			Gui.deathStage.act();
+			Gui.deathStage.draw();
 		} else if (state.equals(GameState.MSG)) {
 			camera.position.set(0.0F, 0.0F, 0.0F);
 			Utils.batch.setProjectionMatrix(camera.combined);
@@ -493,8 +497,8 @@ public class MadSand extends Game {
 			Utils.batch.begin();
 			drawGame();
 			Utils.batch.end();
-			Gui.craft.act();
-			Gui.craft.draw();
+			Gui.craftMenu.act();
+			Gui.craftMenu.draw();
 		}
 	}
 

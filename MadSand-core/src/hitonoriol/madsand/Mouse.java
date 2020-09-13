@@ -25,8 +25,8 @@ public class Mouse {
 
 	static Vector3 mouseinworld = new Vector3(0.0F, 0.0F, 0.0F);
 
-	static int wclickx = 0; // Coords of the cell of map where the mouse click occurred
-	static int wclicky = 0;
+	public static int wclickx = 0; // Coords of the cell of map where the mouse click occurred
+	public static int wclicky = 0;
 
 	public static Map loc;
 	public static Tile tile;
@@ -55,9 +55,9 @@ public class Mouse {
 
 		pointingAtObject = (npc != Map.nullNpc) || (object != Map.nullObject);
 
-		Gui.mousemenu.addAction(Actions.moveTo(x + 65, y - 70, 0.1F));
+		Gui.overlay.gameTooltip.addAction(Actions.moveTo(x + 65, y - 70, 0.1F));
 
-		Gui.mouselabel.setText(getCurrentCellInfo());
+		Gui.overlay.getTooltip().setText(getCurrentCellInfo());
 	}
 
 	public static String getCurrentCellInfo() {

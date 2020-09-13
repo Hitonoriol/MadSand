@@ -100,7 +100,7 @@ public class Player extends Entity {
 		if (itemIdx == -1) {
 			stats.hand = Item.nullItem;
 			if (isMain)
-				Gui.setHandDisplay(0);
+				Gui.overlay.setHandDisplay(0);
 			return;
 		}
 	}
@@ -109,7 +109,7 @@ public class Player extends Entity {
 	public boolean equip(Item item) {
 		boolean ret = super.equip(item);
 		if (ret) {
-			Gui.refreshEquipDisplay();
+			Gui.overlay.refreshEquipDisplay();
 			MadSand.print("You equip your " + item.name);
 		}
 		return ret;
@@ -147,9 +147,9 @@ public class Player extends Entity {
 	@Override
 	void die() {
 		super.die();
-		Gui.setDeadText("You died\nYou survived " + getSurvivedTime() + " ticks");
+		Gui.deathStage.setDeadText("You died\nYou survived " + getSurvivedTime() + " ticks");
 		Gui.darkness.setVisible(true);
-		Gdx.input.setInputProcessor(Gui.dead);
+		Gdx.input.setInputProcessor(Gui.deathStage);
 		MadSand.state = GameState.DEAD;
 	}
 
@@ -212,13 +212,13 @@ public class Player extends Entity {
 				MadSand.world.getCurLoc().putLoot(x, y, item);
 				MadSand.notice("You can't carry any more items");
 			}
-			Gui.drawOkDialog("Crafted " + quantity + " " + itemToCraft.name + " successfully!", Gui.craft);
+			Gui.drawOkDialog("Crafted " + quantity + " " + itemToCraft.name + " successfully!", Gui.craftMenu);
 			MadSand.notice("You craft " + quantity + " " + itemToCraft.name);
 			doAction(stats.AP_MINOR);
 			return true;
 		}
 		if (isMain)
-			Gui.drawOkDialog("Not enough resources to craft " + itemToCraft.name, Gui.craft);
+			Gui.drawOkDialog("Not enough resources to craft " + itemToCraft.name, Gui.craftMenu);
 		return false;
 	}
 
@@ -283,7 +283,7 @@ public class Player extends Entity {
 
 	public void interact(Npc npc) {
 		String name = npc.stats.name;
-		Gui.closeGameContextMenu();
+		Gui.overlay.closeGameContextMenu();
 		Utils.out("Interacting with NPC " + name + " type: " + npc.type.toString());
 		switch (npc.type) {
 		case Regular:
@@ -304,7 +304,7 @@ public class Player extends Entity {
 
 		}
 		doAction(stats.AP_MINOR);
-		Gui.processActionMenu();
+		Gui.overlay.processActionMenu();
 	}
 
 	public void tradeWithNPC(Direction direction) {
@@ -391,14 +391,14 @@ public class Player extends Entity {
 			MadSand.print("You damaged " + obj.name);
 
 		MadSand.world.updateLight();
-		Gui.processActionMenu();
+		Gui.overlay.processActionMenu();
 	}
 
 	public void useItem(Item item) {
 		if (inventory.getSameCell(item) == -1)
 			return;
 		stats.hand = item;
-		Gui.setHandDisplay(item.id);
+		Gui.overlay.setHandDisplay(item.id);
 		useItem();
 	}
 
@@ -483,7 +483,7 @@ public class Player extends Entity {
 			MadSand.print("You put your " + stats.hand.name + " back to your inventory");
 		super.freeHands();
 		if (isMain)
-			Gui.setHandDisplay(stats.hand.id);
+			Gui.overlay.setHandDisplay(stats.hand.id);
 	}
 
 	@Override
@@ -566,18 +566,20 @@ public class Player extends Entity {
 	@Override
 	public void turn(Direction dir) {
 		super.turn(dir);
-		Gui.processActionMenu();
+		Gui.overlay.processActionMenu();
 	}
 
 	@Override
 	public boolean move(Direction dir) {
 		if (!super.move(dir))
 			return false;
+		
 		if (isMain && (MadSand.world.curlayer == World.LAYER_OVERWORLD)
 				&& (x == World.MAPSIZE - 1 || y == World.MAPSIZE - 1 || x == World.BORDER || y == World.BORDER)) {
 			MadSand.print("Press [GRAY]N[WHITE] to move to the next sector.");
 		}
-		Gui.processActionMenu();
+		
+		Gui.overlay.processActionMenu();
 		return true;
 	}
 
@@ -595,7 +597,7 @@ public class Player extends Entity {
 	public int doAction(int ap) {
 		int ticks = super.doAction(ap);
 		MadSand.world.ticks(ticks); // committing our action and then letting everything catch up to time we've spent
-		Gui.refreshOverlay();
+		Gui.overlay.refreshOverlay();
 		LuaUtils.execute(LuaUtils.onAction);
 		return ticks;
 	}
@@ -615,7 +617,7 @@ public class Player extends Entity {
 			MadSand.world.updateLight();
 			objectInFront();
 			lootMsg();
-			Gui.processActionMenu();
+			Gui.overlay.processActionMenu();
 			return true;
 		} else
 			return false;
@@ -652,7 +654,7 @@ public class Player extends Entity {
 		Gdx.input.setInputProcessor(Gui.overlay);
 		Gui.gameUnfocused = false;
 		MadSand.state = GameState.GAME;
-		Gui.mousemenu.setVisible(true);
+		Gui.overlay.gameTooltip.setVisible(true);
 		inventory.inventoryUI.hide();
 		Gui.inventoryActive = false;
 		inventory.clearContextMenus();
@@ -660,9 +662,9 @@ public class Player extends Entity {
 
 	public void showInventory() {
 		inventory.inventoryUI.toggleVisible();
-		Gui.gamecontext.setVisible(false);
+		Gui.overlay.gameContextMenu.setVisible(false);
 		Gui.gameUnfocused = false;
-		Gui.mousemenu.setVisible(false);
+		Gui.overlay.gameTooltip.setVisible(false);
 		Utils.invBtnSetVisible(true);
 		Gdx.input.setInputProcessor(Gui.overlay);
 		MadSand.state = GameState.INVENTORY;
@@ -672,7 +674,7 @@ public class Player extends Entity {
 	@Override
 	public void setEquipment(ArrayList<Integer> eq) { // For deserializer only
 		super.setEquipment(eq);
-		Gui.refreshEquipDisplay();
-		Gui.setHandDisplay(stats.hand.id);
+		Gui.overlay.refreshEquipDisplay();
+		Gui.overlay.setHandDisplay(stats.hand.id);
 	}
 }

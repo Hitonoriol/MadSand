@@ -249,7 +249,7 @@ public class World {
 		} else { // this means we are in the cave
 			delObj(player.x, player.y);
 			putMapTile(player.x, player.y, TILE_CAVE_EXIT);
-			Gui.processActionMenu();
+			Gui.overlay.processActionMenu();
 			updateLight();
 			place = "cave";
 		}
@@ -265,7 +265,7 @@ public class World {
 			MadSand.print("You get back to surface level");
 		else
 			MadSand.print("You get back to dungeon level " + curlayer);
-		Gui.processActionMenu();
+		Gui.overlay.processActionMenu();
 		return ret;
 	}
 

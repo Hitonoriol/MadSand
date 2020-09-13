@@ -5,6 +5,7 @@ import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.enums.Direction;
@@ -15,8 +16,6 @@ import hitonoriol.madsand.world.World;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -60,21 +59,22 @@ public class Utils {
 	}
 
 	public static void invBtnSetVisible(boolean visible) {
-		Gui.craftBtn.setVisible(visible);
-		Gui.exitToMenuBtn.setVisible(visible);
+		Gui.overlay.craftMenuButton.setVisible(visible);
+		Gui.overlay.exitToMenuButton.setVisible(visible);
 	}
 
 	static Npc dummy;
 
 	public static void pollStatWindowKey() {
 		if (Gdx.input.isKeyJustPressed(Keys.Q))
-			Gui.showStatsWindow();
+			Gui.overlay.showStatsWindow();
 	}
 
 	public static void gameKeyCheck() {
 		if (Gdx.input.isKeyJustPressed(Keys.GRAVE)) {
-			Gui.inputField.setVisible(!Gui.inputField.isVisible());
-			Gui.overlay.setKeyboardFocus(Gui.inputField);
+			TextField console = Gui.overlay.getConsoleField();
+			console.setVisible(!console.isVisible());
+			Gui.overlay.setKeyboardFocus(console);
 		}
 		if (Gdx.input.isButtonPressed(Buttons.MIDDLE))
 			World.player.lookAtMouse(Mouse.wx, Mouse.wy);
@@ -152,10 +152,10 @@ public class Utils {
 				Gdx.graphics.setFullscreenMode(currentMode);
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
-			Gui.resumeBtn.setVisible(true);
+			Gui.mainMenu.resumeButton.setVisible(true);
 			MadSand.xmid = MadSand.xmenu = World.player.globalPos.x;
 			MadSand.ymid = MadSand.ymenu = World.player.globalPos.y;
-			Gdx.input.setInputProcessor(Gui.menu);
+			Gdx.input.setInputProcessor(Gui.mainMenu);
 			MadSand.state = GameState.NMENU;
 		}
 		if ((Gdx.input.isKeyJustPressed(Keys.G))) {
@@ -222,24 +222,28 @@ public class Utils {
 		System.exit(-1);
 	}
 
-	public static void checkConsoleFocus() {
+	public static void executeConsoleInput() {
 		if (!debugMode)
 			return;
 
-		if ((Gdx.input.isKeyJustPressed(Keys.ENTER)) &&
-				(Gui.overlay.getKeyboardFocus() == Gui.inputField)) {
-			String cmd = Gui.inputField.getText().trim();
+		TextField console = Gui.overlay.getConsoleField();
+
+		if (Gui.overlay.getKeyboardFocus() != console)
+			return;
+
+		if (Gdx.input.isKeyJustPressed(Keys.ENTER)) {
+			String cmd = console.getText().trim();
 
 			try {
 				LuaUtils.execute(cmd);
-				Gui.inputField.setVisible(!Gui.inputField.isVisible());
+				console.setVisible(!console.isVisible());
 			} catch (Exception e) {
 				MadSand.print("Couldn't execute user input");
 				e.printStackTrace();
 			}
 
-			Gui.inputField.setText("");
-			Gui.overlay.unfocus(Gui.inputField);
+			console.setText("");
+			Gui.overlay.unfocus(console);
 		}
 	}
 

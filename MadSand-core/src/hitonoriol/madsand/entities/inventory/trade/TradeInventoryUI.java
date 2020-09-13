@@ -111,7 +111,7 @@ public class TradeInventoryUI {
 	}
 
 	public void show() {
-		Gui.hideActionBtn();
+		Gui.overlay.hideActionBtn();
 		refresh();
 		containerTable.setVisible(true);
 		MadSand.switchStage(GameState.TRADE, Gui.overlay);

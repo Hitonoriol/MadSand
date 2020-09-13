@@ -15,16 +15,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.enums.GameState;
-import hitonoriol.madsand.gui.stages.Overlay;
 import hitonoriol.madsand.world.World;
 
 public class CreateWorldDialog extends Dialog {
 	Skin skin = Gui.skin;
-	Overlay stage;
 
-	public CreateWorldDialog(Overlay stage) {
+	public CreateWorldDialog() {
 		super("", Gui.skin);
-		this.stage = stage;
 		createDialog();
 	}
 
@@ -85,13 +82,13 @@ public class CreateWorldDialog extends Dialog {
 					// World.player.x = new Random().nextInt(World.MAPSIZE);
 					// World.player.y = new Random().nextInt(World.MAPSIZE);
 					World.player.updCoords();
-					stage.exitToMenuBtn.setVisible(false);
-					stage.craftBtn.setVisible(false); // TODO: Move to InventoryUI
+					Gui.overlay.exitToMenuButton.setVisible(false);
+					Gui.overlay.craftMenuButton.setVisible(false); // TODO: Move to InventoryUI
 					Gui.inventoryActive = false;
 					remove();
 					Gdx.graphics.setContinuousRendering(false);
 					MadSand.ZOOM = MadSand.DEFAULT_ZOOM;
-					stage.createCharDialog();
+					Gui.overlay.createCharDialog();
 				}
 
 			}
@@ -114,6 +111,6 @@ public class CreateWorldDialog extends Dialog {
 	}
 	
 	public void show() {
-		super.show(Gui.menu);
+		super.show(Gui.mainMenu);
 	}
 }

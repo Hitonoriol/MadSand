@@ -1,7 +1,6 @@
 package hitonoriol.madsand.entities.inventory;
 
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 import java.util.UUID;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;

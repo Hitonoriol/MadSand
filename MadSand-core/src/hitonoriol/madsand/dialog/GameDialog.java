@@ -75,7 +75,7 @@ public class GameDialog extends Dialog {
 	public boolean remove() {
 		boolean ret = super.remove();
 		Gui.gameUnfocused = Gui.dialogActive = false;
-		Gui.mouselabel.setVisible(true);
+		Gui.overlay.getTooltip().setVisible(true);
 		return ret;
 	}
 

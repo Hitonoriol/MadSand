@@ -1,12 +1,13 @@
 package hitonoriol.madsand.gui.widgets;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.LuaUtils;
@@ -23,29 +24,67 @@ import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.world.World;
 
-public class ActionButton {
+public class ActionButton extends Table {
 	public Skin skin;
+	public static final float ACTION_TBL_YPOS = Gdx.graphics.getHeight() / 6f;
 
 	public InputListener inGameBtnListener;
 	public ChangeListener npcInteractListener;
 	public ChangeListener objInteractListener;
 
-	public Table actionTbl;
-	public TextButton interactBtn;
+	public TextButton interactButton;
 
 	private static float WIDTH = 300;
 
 	public ActionButton() {
+		super();
+		
 		skin = Gui.skin;
+
+		interactButton = new TextButton("", skin);
+		super.setVisible(false);
+		super.setPosition(Gui.horizontalCenter(this), ACTION_TBL_YPOS);
+		super.add(interactButton).width(Gui.DEFWIDTH).row();
+		
+		inGameBtnListener = new InputListener() {
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+				Gui.gameUnfocused = true;
+				Gui.overlay.getTooltip().setVisible(false);
+			}
+
+			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+				if (!Gui.dialogActive) {
+					Gui.gameUnfocused = false;
+					Gui.overlay.getTooltip().setVisible(true);
+				}
+			}
+		};
+
+		npcInteractListener = new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				World.player.interact(World.player.stats.look);
+				setVisible(false);
+			}
+		};
+
+		objInteractListener = new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				World.player.interact(World.player.stats.look);
+				Gui.gameUnfocused = true;
+				processActionMenu();
+			}
+		};
 	}
 
 	public void hideActionBtn() {
-		actionTbl.removeActor(interactBtn);
-		actionTbl.setVisible(false);
+		super.removeActor(interactButton);
+		super.setVisible(false);
 	}
 
 	private void activateInteractBtn(TextButton btn, String text, ChangeListener listener) {
-		actionTbl.setVisible(true);
+		super.setVisible(true);
 		btn.setVisible(true);
 		btn.setText(text);
 		btn.addListener(listener);
@@ -68,14 +107,14 @@ public class ActionButton {
 
 		if (tileAction.contentEquals(Resources.emptyField) && npc == Map.nullNpc && object == Map.nullObject
 				&& tileItem == -1) {
-			actionTbl.setVisible(false);
+			super.setVisible(false);
 			return;
 		}
 
-		actionTbl.removeActor(interactBtn);
-		interactBtn = new TextButton("", skin);
-		actionTbl.add(interactBtn).width(WIDTH).row();
-		actionTbl.addListener(inGameBtnListener);
+		super.removeActor(interactButton);
+		interactButton = new TextButton("", skin);
+		super.add(interactButton).width(WIDTH).row();
+		super.addListener(inGameBtnListener);
 		boolean holdsShovel = player.stats.hand.type == ItemType.Shovel;
 
 		String tileMsg = "Interact with ";
@@ -87,7 +126,7 @@ public class ActionButton {
 			if (tileItem != -1 && holdsShovel)
 				tileMsg = "Dig ";
 
-			activateInteractBtn(interactBtn, tileMsg + TileProp.getName(tile.id), new ChangeListener() {
+			activateInteractBtn(interactButton, tileMsg + TileProp.getName(tile.id), new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
 					if (!holdsShovel)
@@ -95,15 +134,15 @@ public class ActionButton {
 					else
 						player.useItem();
 					Gui.gameUnfocused = false;
-					Gui.mouselabel.setVisible(true);
+					Gui.overlay.getTooltip().setVisible(true);
 				}
 			});
 
 		} else if (!npc.equals(Map.nullNpc) && !Gui.dialogActive) //NPC interaction button
-			activateInteractBtn(interactBtn, "Talk to " + npc.stats.name, npcInteractListener);
+			activateInteractBtn(interactButton, "Talk to " + npc.stats.name, npcInteractListener);
 
 		else if (!object.equals(Map.nullObject) && !objAction.equals(Resources.emptyField)) // Map object interaction button
-			activateInteractBtn(interactBtn, "Interact with " + object.name, objInteractListener);
+			activateInteractBtn(interactButton, "Interact with " + object.name, objInteractListener);
 
 		else
 			hideActionBtn();

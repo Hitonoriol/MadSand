@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -25,32 +24,32 @@ import hitonoriol.madsand.world.World;
 public class CraftMenu extends Stage {
 	private static float CRAFT_BTN_WIDTH = 250;
 	private static float CRAFT_ENTRY_PADDING = 30;
-	
+
 	Skin skin;
-	public Table craftbl;
-	ScrollPane scroll;
-	TextButton[] craftbtn;
+	public Table containerTable;
+	AutoFocusScrollPane scroll;
+	TextButton[] craftButtons;
 
 	public CraftMenu() {
-		craftbl = new Table();
+		containerTable = new Table();
 		skin = Gui.skin;
 	}
 
 	public void refreshCraftMenu() {
 		Utils.out("Refreshing craft menu...");
-		craftbl.remove();
-		craftbl = new Table();
+		containerTable.remove();
+		containerTable = new Table();
 		Player player = World.player;
 		// player.refreshAvailableRecipes();
 		int craftSz = player.craftRecipes.size();
 		Utils.out("Total unlocked recipes: " + craftSz + " out of " + Resources.craftableItemCount);
 
 		if (craftSz == 0) {
-			craftbl.add(new Label("You don't know any craft recipes.", skin));
+			containerTable.add(new Label("You don't know any craft recipes.", skin));
 			Utils.out("No unlocked recipes.");
 		}
 
-		craftbtn = new TextButton[craftSz];
+		craftButtons = new TextButton[craftSz];
 
 		int i = 0;
 		int perRow = 3, id;
@@ -64,18 +63,18 @@ public class CraftMenu extends Stage {
 			if (quantity > 1)
 				craftString = quantity + " ";
 			craftString += ItemProp.getItemName(id);
-			craftbtn[i] = new TextButton(craftString, skin);
-			craftbl.add(craftbtn[i]).width(CRAFT_BTN_WIDTH);
-			craftbl.add(new Label(" " + Item.queryToName(ItemProp.getCraftRecipe(id)), skin))
+			craftButtons[i] = new TextButton(craftString, skin);
+			containerTable.add(craftButtons[i]).width(CRAFT_BTN_WIDTH);
+			containerTable.add(new Label(" " + Item.queryToName(ItemProp.getCraftRecipe(id)), skin))
 					.padRight(CRAFT_ENTRY_PADDING);
 
 			if ((i + 1) % perRow == 0)
-				craftbl.row();
+				containerTable.row();
 
 			final int j = i, fid = id;
 			Utils.out("Creating a button for item " + j + " craft recipe...");
 
-			craftbtn[j].addListener(new ChangeListener() {
+			craftButtons[j].addListener(new ChangeListener() {
 				public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 					World.player.craftItem(fid);
 				}
@@ -83,10 +82,10 @@ public class CraftMenu extends Stage {
 
 			i++;
 		}
-		craftbl.row();
+		containerTable.row();
 
-		craftbl.setBackground(Gui.darkBackgroundSizeable);
-		scroll = new AutoFocusScrollPane(craftbl);
+		containerTable.setBackground(Gui.darkBackgroundSizeable);
+		scroll = new AutoFocusScrollPane(containerTable);
 		scroll.setSize(MadSand.XDEF, MadSand.YDEF);
 		super.addActor(scroll);
 

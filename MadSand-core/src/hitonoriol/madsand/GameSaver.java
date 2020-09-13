@@ -120,14 +120,14 @@ public class GameSaver {
 		File f = new File(MadSand.MAPDIR + filename);
 
 		if (!f.exists()) {
-			MadSand.switchStage(GameState.NMENU, Gui.menu);
-			Gui.drawOkDialog("Couldn't to load this world", Gui.menu);
+			MadSand.switchStage(GameState.NMENU, Gui.mainMenu);
+			Gui.drawOkDialog("Couldn't to load this world", Gui.mainMenu);
 			return false;
 		}
 
 		if (!f.isDirectory()) {
-			MadSand.switchStage(GameState.NMENU, Gui.menu);
-			Gui.drawOkDialog("Couldn't to load this world", Gui.menu);
+			MadSand.switchStage(GameState.NMENU, Gui.mainMenu);
+			Gui.drawOkDialog("Couldn't to load this world", Gui.mainMenu);
 			return false;
 		}
 
@@ -149,12 +149,12 @@ public class GameSaver {
 	}
 
 	public static void loadErrMsg() {
-		MadSand.switchStage(GameState.NMENU, Gui.menu);
+		MadSand.switchStage(GameState.NMENU, Gui.mainMenu);
 		Gui.drawOkDialog(
 				"Couldn't to load this world. \n"
 						+ "Maybe it was saved in older/newer version of the game or some files are corrupted.\n"
 						+ "Check " + MadSand.ERRFILE + " for details.",
-				Gui.menu);
+				Gui.mainMenu);
 		// MadSand.justStarted = false;
 	}
 

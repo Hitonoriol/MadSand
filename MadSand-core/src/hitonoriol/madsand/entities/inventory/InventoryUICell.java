@@ -88,7 +88,7 @@ public class InventoryUICell extends Group{
 			public void clicked(InputEvent event, float x, float y) {
 				World.player.stats.hand = item;
 				MadSand.print("You take " + item.name + " to your hand");
-				Gui.setHandDisplay(item.id);
+				Gui.overlay.setHandDisplay(item.id);
 				World.player.doAction();
 				Utils.toggleInventory();
 			}

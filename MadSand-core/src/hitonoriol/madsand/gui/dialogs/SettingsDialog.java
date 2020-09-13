@@ -69,6 +69,6 @@ public class SettingsDialog extends Dialog {
 	}
 	
 	public void show() {
-		super.show(Gui.menu);
+		super.show(Gui.mainMenu);
 	}
 }

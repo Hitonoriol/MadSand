@@ -81,6 +81,6 @@ public class LoadWorldDialog extends Dialog {
 	}
 
 	public void show() {
-		super.show(Gui.menu);
+		super.show(Gui.mainMenu);
 	}
 }

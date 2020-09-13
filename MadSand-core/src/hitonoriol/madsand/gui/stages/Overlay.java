@@ -1,19 +1,36 @@
 package hitonoriol.madsand.gui.stages;
 
+import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 
+import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.Mouse;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Stats;
 import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.gui.dialogs.CharacterCreationDialog;
 import hitonoriol.madsand.gui.dialogs.CharacterInfoWindow;
+import hitonoriol.madsand.gui.widgets.ActionButton;
+import hitonoriol.madsand.gui.widgets.GameContextMenu;
+import hitonoriol.madsand.gui.widgets.GameLog;
+import hitonoriol.madsand.gui.widgets.GameTooltip;
 import hitonoriol.madsand.world.World;
 
 /*
@@ -21,12 +38,20 @@ import hitonoriol.madsand.world.World;
  */
 
 public class Overlay extends Stage {
+	Skin skin;
 
 	public CharacterInfoWindow statWindow;
 	public CharacterCreationDialog charCreateDialog;
 
-	public TextButton exitToMenuBtn;
-	public TextButton craftBtn;
+	public GameTooltip gameTooltip;
+	public GameContextMenu gameContextMenu;
+	public ActionButton actionButton;
+	public GameLog gameLog;
+
+	Table overlayTable;
+
+	public TextButton exitToMenuButton;
+	public TextButton craftMenuButton;
 
 	static Label[] overlayStatLabels;
 	static Image[] equip;
@@ -42,17 +67,146 @@ public class Overlay extends Stage {
 
 	public Overlay() {
 		super();
-		init();
+		skin = Gui.skin;
+		initMouseListeners();
+		initOverlayStats();
+
+		exitToMenuButton = new TextButton("Exit to menu", skin); //TODO: move to InventoryUI
+		craftMenuButton = new TextButton("Crafting", skin);
+
+		actionButton = new ActionButton();
+		gameTooltip = new GameTooltip();
+		gameContextMenu = new GameContextMenu();
+		gameLog = new GameLog();
+
+		overlayTable = new Table().align(18);
+		overlayTable.setFillParent(true);
+
+		initOverlayTable(); //TODO remove this monstrosity
+
+		initButtonListeners();
+
+		super.addActor(gameTooltip);
+		super.addActor(gameContextMenu);
+		super.addActor(gameLog);
+		super.addActor(overlayTable);
+		super.addActor(actionButton);
 	}
 
-	private void init() {
-		overlayStatLabels = new Label[OVSTAT_COUNT];
+	private void initButtonListeners() {
+		craftMenuButton.addListener(new ChangeListener() {
+			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+				Gui.craftMenu.refreshCraftMenu();
+				MadSand.switchStage(GameState.CRAFT, Gui.craftMenu);
+			}
+		});
 
+		exitToMenuButton.addListener(new ChangeListener() {
+			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+				Gui.mainMenu.resumeButton.setVisible(true);
+				MadSand.switchStage(GameState.NMENU, Gui.mainMenu);
+			}
+		});
+	}
+
+	private void initOverlayTable() {
+		craftMenuButton.setHeight(82.0F);
+		craftMenuButton.align(16);
+		craftMenuButton.setWidth(250.0F);
+		overlayTable.row();
+		overlayTable.row();
+		overlayTable.add();
+		overlayTable.add();
+		overlayTable.add();
+		overlayTable.add(craftMenuButton).width(200.0F).row();
+		craftMenuButton.setVisible(false);
+		overlayTable.add();
+		overlayTable.add();
+		overlayTable.add();
+		overlayTable.add(exitToMenuButton).width(200.0F).row();
+		int aa = 0;
+		while (aa < ITEM_DISPLAY_SLOTS) {
+			overlayTable.add();
+			overlayTable.add();
+			overlayTable.add();
+			overlayTable.add(equip[aa]).width(80.0F).align(Align.right).row();
+			aa++;
+		}
+
+		exitToMenuButton.setVisible(false);
+	}
+
+	private void initMouseListeners() {
+
+		super.addListener(new ClickListener(Buttons.LEFT) {
+			public void clicked(InputEvent event, float x, float y) {
+				Mouse.justClicked = true;
+			}
+		});
+
+		super.addListener(new ClickListener(Buttons.RIGHT) {
+			public void clicked(InputEvent event, float x, float y) {
+				if (Gui.dialogActive)
+					return;
+
+				if (!MadSand.state.equals(GameState.GAME))
+					return;
+
+				if (gameTooltip.isVisible()) {
+					gameContextMenu.openGameContextMenu();
+					Gui.gameUnfocused = true;
+				} else
+					gameContextMenu.closeGameContextMenu();
+
+			}
+		});
+	}
+
+	private void initOverlayStats() {
+		// Init equipment sidebar (TODO rewrite)
 		equip = new Image[EQ_SLOTS];
 		for (int i = 0; i < EQ_SLOTS; ++i) {
 			equip[i] = new Image();
 			equip[i].setDrawable(Resources.noEquip);
 		}
+
+		// Init top stat panel
+		overlayStatLabels = new Label[OVSTAT_COUNT];
+		Table ovstatTbl = new Table();
+		ovstatTbl.setFillParent(true);
+		ovstatTbl.align(Align.topRight);
+		int count = 0;
+		while (count < OVSTAT_COUNT) {
+			overlayStatLabels[count] = new Label(" ", skin);
+			overlayStatLabels[count].setWrap(false);
+			ovstatTbl.add(overlayStatLabels[count]).width(165);
+			count++;
+		}
+		super.addActor(ovstatTbl);
+	}
+
+	public TextField getConsoleField() {
+		return gameLog.inputField;
+	}
+
+	public Label[] getLogLabels() {
+		return gameLog.logLabels;
+	}
+
+	public void processActionMenu() {
+		actionButton.processActionMenu();
+	}
+
+	public void closeGameContextMenu() {
+		gameContextMenu.closeGameContextMenu();
+	}
+
+	public Label getTooltip() {
+		return gameTooltip.tooltipLabel;
+	}
+
+	public void hideActionBtn() {
+		actionButton.hideActionBtn();
 	}
 
 	public void showStatsWindow() {
