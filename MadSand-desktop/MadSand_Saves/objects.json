@@ -782,18 +782,18 @@
 		"name" : "Pepper sprout"
 	},
 	"58" : {
-		"hp" : 8,
+		"hp" : 9,
 		"harvestHp" : 1,
 		"lvl" : -1,
 		"nocollide" : true,
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 49 ]
+			"0" : [ 49, 54 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Harvesting",
-		"name" : "Pepper sprout"
+		"name" : "Pepper bush"
 	},
 	"59" : {
 		"hp" : 1,

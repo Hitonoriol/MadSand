@@ -66,7 +66,7 @@ public class OverlayBottomMenu extends Table {
 
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				overlay.showStatsWindow();
+				overlay.toggleStatsWindow();
 			}
 
 		});

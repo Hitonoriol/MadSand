@@ -144,13 +144,16 @@ public abstract class Entity {
 		return addItem(item);
 	}
 
-	public boolean dropItem(int id, int quantity) {
-		if (inventory.getSameCell(id, quantity) == -1)
+	public boolean dropItem(Item item) {
+		
+		if (inventory.getSameCell(item) == -1)
 			return false;
-		doAction();
-		inventory.delItem(id, quantity);
+		
 		Pair coord = new Pair(x, y).addDirection(stats.look);
-		MadSand.world.getCurLoc().putLoot(coord.x, coord.y, id, quantity);
+		MadSand.world.getCurLoc().putLoot(coord.x, coord.y, new Item(item));
+		inventory.delItem(item);
+		
+		doAction();
 		return true;
 	}
 

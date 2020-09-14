@@ -127,12 +127,20 @@ public class Mouse {
 				return;
 			}
 
-			if (pointingAtObject && diagonal) {
+			if (pointingAtObject && !npc.equals(Map.nullNpc)) {
+				if (!npc.friendly) {
+					World.player.attack();
+					return;
+				}
+			}
+
+			if (pointingAtObject && diagonal) { // Interact with friendly npc or object
 				World.player.interact();
 				return;
 			}
 
 		}
+
 		justClicked = false;
 
 		if (Gdx.input.isButtonPressed(Buttons.LEFT) && !(diagonal && pointingAtObject) && !rest) {

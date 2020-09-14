@@ -98,6 +98,7 @@
 		#Richard# But first, you must find an entrance to the dungeon.[Whoa, that sounds dangerous]=>
 		#Richard# To do this, take a walk around and see if you spot any holes in the ground... [And?]=>
 		#Richard# Once you've spotted a hole, you can carefully climb down to the dungeon. [Understood]=>
+		#Richard# It's not an easy task, so here - take these vegetables, you can use them to regain some of your strength between the battles =>
 		* To go underground, you have to stand on a \"hole in the ground\" tile and press \"use\" button or the on-screen pop-up button.
 	",
 
@@ -106,7 +107,7 @@
 	"reqMsg" : "#Richard# Kill 10 rats and give me 10 leather pieces you get from them.",
 
 	"reqItems" : "22/10",
-	"giveItems" : "2/5",
+	"giveItems" : "47/5:49/5",
 	"rewardItems" : "n",
 	"removeOnCompletion" : "-1",
 	"repeatable" : false

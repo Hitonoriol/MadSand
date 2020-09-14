@@ -25,6 +25,7 @@ import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.properties.ItemProp;
+import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.QuestList;
 import hitonoriol.madsand.properties.TileProp;
@@ -41,8 +42,6 @@ public class Player extends Entity {
 
 	@JsonProperty("newlyCreated")
 	public boolean newlyCreated = true;
-
-	public boolean isMain = true;
 
 	@JsonIgnore
 	public Player(String name) {
@@ -100,8 +99,7 @@ public class Player extends Entity {
 		int itemIdx = inventory.getSameCell(id);
 		if (itemIdx == -1) {
 			stats.hand = Item.nullItem;
-			if (isMain)
-				Gui.overlay.setHandDisplay(0);
+			Gui.overlay.setHandDisplay(0);
 			return;
 		}
 	}
@@ -170,8 +168,7 @@ public class Player extends Entity {
 
 	void damageHeldTool(Skill objectSkill) {
 		if (inventory.damageTool(stats.hand, objectSkill)) {
-			if (isMain)
-				MadSand.print("Your " + stats.hand.name + " broke");
+			MadSand.print("Your " + stats.hand.name + " broke");
 			inventory.delItem(stats.hand);
 			freeHands(true);
 		}
@@ -205,12 +202,16 @@ public class Player extends Entity {
 	@Override
 	public boolean addItem(Item item) {
 		if (super.addItem(item)) {
+
 			if (item.name != "")
 				MadSand.notice("You get " + item.quantity + " " + item.name);
+
 			if (unlockedItems.add(item.id))
 				refreshAvailableRecipes();
+
 			return true;
 		} else {
+			MadSand.world.getCurLoc().putLoot(x, y, item);
 			MadSand.notice("You can't carry any more items.");
 			return false;
 		}
@@ -218,22 +219,26 @@ public class Player extends Entity {
 
 	public boolean craftItem(int id) {
 		Item itemToCraft = ItemProp.items.get(id);
+		int craftQuantity = ItemProp.getCraftQuantity(id);
+
 		if (inventory.delItem(itemToCraft.recipe)) {
 			increaseSkill(Skill.Crafting);
-			int quantity = itemToCraft.craftQuantity;
+
 			int bonus = stats.skills.getItemReward(Skill.Crafting) - 1;
+			int quantity = craftQuantity + bonus;
+
 			Item item = new Item(id, quantity + bonus);
-			if (!inventory.putItem(item)) {
-				MadSand.world.getCurLoc().putLoot(x, y, item);
-				MadSand.notice("You can't carry any more items");
-			}
+
+			addItem(item);
+
 			Gui.drawOkDialog("Crafted " + quantity + " " + itemToCraft.name + " successfully!", Gui.craftMenu);
 			MadSand.notice("You craft " + quantity + " " + itemToCraft.name);
 			doAction(stats.AP_MINOR);
 			return true;
 		}
-		if (isMain)
-			Gui.drawOkDialog("Not enough resources to craft " + itemToCraft.name, Gui.craftMenu);
+
+		Gui.drawOkDialog("Not enough resources to craft " + itemToCraft.name, Gui.craftMenu);
+
 		return false;
 	}
 
@@ -243,16 +248,23 @@ public class Player extends Entity {
 
 	public void interact(Npc npc) {
 		String name = npc.stats.name;
+		ArrayList<Integer> questList = NpcProp.npcs.get(npc.id).questList;
+
 		Gui.overlay.closeGameContextMenu();
+
 		Utils.out("Interacting with NPC " + name + " type: " + npc.type.toString());
+
 		switch (npc.type) {
+
 		case Regular:
 			MadSand.print("Doesn't seem like " + name + " wants to talk.");
 			return;
+
 		case QuestMaster:
-			int qid = quests.getAvailableQuest(npc.questList);
+			int qid = quests.getAvailableQuest(questList);
 			Utils.out("Got quest id: " + qid);
 			npc.pause();
+
 			if (qid == QuestList.NO_QUESTS_STATUS)
 				MadSand.print(name + " has no more tasks for you.");
 			else
@@ -263,6 +275,7 @@ public class Player extends Entity {
 			break;
 
 		}
+
 		doAction(stats.AP_MINOR);
 		Gui.overlay.processActionMenu();
 	}
@@ -378,10 +391,7 @@ public class Player extends Entity {
 			MadSand.world.getCurLoc().delTile(x, y);
 			Item gotItem = new Item(item);
 
-			if (!inventory.putItem(gotItem)) {
-				MadSand.world.getCurLoc().putLoot(x, y, gotItem);
-				MadSand.notice("You can't carry any more items");
-			}
+			addItem(gotItem);
 
 			MadSand.notice("You dig " + gotItem.name + " from the ground");
 			increaseSkill(Skill.Digging);
@@ -407,6 +417,7 @@ public class Player extends Entity {
 			heal(stats.hand.healAmount);
 			satiate(stats.hand.satiationAmount);
 			inventory.delItem(stats.hand, 1);
+			Gui.refreshOverlay();
 		}
 
 		if ((id == 9) && (inventory.getSameCell(9, 1) != -1) // TODO script this or make campfire craftable
@@ -440,11 +451,10 @@ public class Player extends Entity {
 	}
 
 	public void freeHands(boolean silent) {
-		if (!silent && isMain && stats.hand.id != Item.NULL_ITEM)
+		if (!silent && stats.hand.id != Item.NULL_ITEM)
 			MadSand.print("You put your " + stats.hand.name + " back to your inventory");
 		super.freeHands();
-		if (isMain)
-			Gui.overlay.setHandDisplay(stats.hand.id);
+		Gui.overlay.setHandDisplay(stats.hand.id);
 	}
 
 	@Override
@@ -536,7 +546,7 @@ public class Player extends Entity {
 		if (!super.move(dir))
 			return false;
 
-		if (isMain && (MadSand.world.curlayer == World.LAYER_OVERWORLD)
+		if ((MadSand.world.curlayer == World.LAYER_OVERWORLD)
 				&& (x == World.MAPSIZE - 1 || y == World.MAPSIZE - 1 || x == World.BORDER || y == World.BORDER)) {
 			MadSand.print("Press [GRAY]N[WHITE] to move to the next sector.");
 		}
@@ -568,7 +578,7 @@ public class Player extends Entity {
 	public int tileDmg() {
 		int tid = super.tileDmg();
 		final Tile tile = TileProp.getTileProp(tid);
-		if (tile.damage > 0 && isMain)
+		if (tile.damage > 0)
 			MadSand.print("You took " + tile.damage + " damage from " + (tile.name));
 		return tid;
 	}
@@ -577,18 +587,31 @@ public class Player extends Entity {
 	public boolean walk(Direction dir) {
 		if (super.walk(dir)) {
 			MadSand.world.updateLight();
+
 			objectInFront();
 			lootMsg();
 			Gui.overlay.processActionMenu();
 			return true;
-		} else
+		} else {
+
+			Npc npc = MadSand.world.getCurLoc().getNpc(lookingAt());
+
+			if (npc.equals(Map.nullNpc))
+				return false;
+
+			if (!npc.friendly) {
+				attack();
+				return true;
+			}
+
 			return false;
+		}
 	}
 
 	public void lootMsg() {
 		if (standingOnLoot()) {
 			Loot loot = MadSand.world.getCurLoc().getLoot(x, y);
-			MadSand.print("You see (" + loot.getInfo() + ") lying on the floor");
+			MadSand.print("You see [" + loot.getInfo() + "] lying on the floor");
 		}
 	}
 
@@ -620,17 +643,19 @@ public class Player extends Entity {
 		inventory.inventoryUI.hide();
 		Gui.inventoryActive = false;
 		inventory.clearContextMenus();
+		Gui.dialogActive = false;
 	}
 
 	public void showInventory() {
 		inventory.inventoryUI.toggleVisible();
 		Gui.overlay.gameContextMenu.setVisible(false);
-		Gui.gameUnfocused = false;
+		Gui.gameUnfocused = true;
 		Gui.overlay.gameTooltip.setVisible(false);
 		Utils.invBtnSetVisible(true);
 		Gdx.input.setInputProcessor(Gui.overlay);
 		MadSand.state = GameState.INVENTORY;
 		Gui.inventoryActive = true;
+		Gui.dialogActive = true;
 	}
 
 	@Override

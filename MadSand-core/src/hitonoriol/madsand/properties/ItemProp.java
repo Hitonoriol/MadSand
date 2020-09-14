@@ -21,7 +21,12 @@ public class ItemProp {
 	}
 
 	public static int getCraftQuantity(int id) {
-		return items.get(id).craftQuantity;
+		int quantity = items.get(id).craftQuantity;
+		
+		if (quantity < 1)
+			quantity = 1;
+		
+		return quantity;
 	}
 
 	public static int getCost(int id) {

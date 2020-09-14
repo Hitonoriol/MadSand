@@ -213,7 +213,7 @@ public class Overlay extends Stage {
 		actionButton.hideActionBtn();
 	}
 
-	public void showStatsWindow() {
+	public void toggleStatsWindow() {
 		if (statWindow != null) {
 			statWindow.remove();
 			statWindow = null;

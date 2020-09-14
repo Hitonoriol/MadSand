@@ -4,11 +4,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.enums.GameState;
@@ -109,6 +112,7 @@ public class GameSaver {
 
 	public static void saveWorld() {
 		GameSaver.createDirs();
+		saveLog();
 		if (saveLocation() && saveChar())
 			MadSand.print("Game saved!");
 		else
@@ -119,15 +123,9 @@ public class GameSaver {
 		MadSand.WORLDNAME = filename;
 		File f = new File(MadSand.MAPDIR + filename);
 
-		if (!f.exists()) {
+		if (!f.exists() || !f.isDirectory()) {
 			MadSand.switchStage(GameState.NMENU, Gui.mainMenu);
-			Gui.drawOkDialog("Couldn't to load this world", Gui.mainMenu);
-			return false;
-		}
-
-		if (!f.isDirectory()) {
-			MadSand.switchStage(GameState.NMENU, Gui.mainMenu);
-			Gui.drawOkDialog("Couldn't to load this world", Gui.mainMenu);
+			Gui.drawOkDialog("Couldn't load this world", Gui.mainMenu);
 			return false;
 		}
 
@@ -137,8 +135,10 @@ public class GameSaver {
 			loadErrMsg();
 			return false;
 		}
+
 		if (loadLocation()) {
 			MadSand.world.updateLight();
+			loadLog();
 			MadSand.print("Loaded Game!");
 			return true;
 		} else {
@@ -181,15 +181,16 @@ public class GameSaver {
 			Utils.out("Loading character...");
 			String fl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.PLAYERFILE;
 			String wfl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.WORLDFILE;
-			
+
 			World.player = MadSand.mapper.readValue(getExternal(fl), Player.class);
 
 			Player player = World.player;
-			
+
 			player.inventory.initUI();
 			player.inventory.refreshContents();
 			player.initStatActions();
 			player.quests.setPlayer(player);
+			player.turn(player.stats.look);
 
 			World w;
 			w = MadSand.mapper.readValue(getExternal(wfl), World.class);
@@ -237,6 +238,42 @@ public class GameSaver {
 
 	public static boolean loadLocation() {
 		return loadLocation(MadSand.world.curxwpos, MadSand.world.curywpos);
+	}
+
+	private static boolean saveLog() {
+		try {
+			FileWriter fw = new FileWriter(MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.LOGFILE);
+
+			for (Label logLabel : Gui.overlay.getLogLabels())
+				fw.write(logLabel.getText().toString() + Resources.LINEBREAK);
+
+			fw.close();
+
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	private static boolean loadLog() {
+		try {
+			BufferedReader br = new BufferedReader(
+					new FileReader(MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.LOGFILE));
+			String line;
+			int i = 0;
+			Label[] labels = Gui.overlay.getLogLabels();
+
+			while ((line = br.readLine()) != null)
+				labels[i++].setText(line);
+
+			br.close();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+
 	}
 
 	public static void createDirs() {

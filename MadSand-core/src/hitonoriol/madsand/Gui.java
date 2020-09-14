@@ -202,6 +202,10 @@ public class Gui {
 
 		dialog.show(stage);
 	}
+	
+	public static void refreshOverlay() {
+		overlay.refreshOverlay();
+	}
 
 	public static float horizontalCenter(Actor actor) {
 		return (Gdx.graphics.getWidth() / 2) - actor.getWidth();

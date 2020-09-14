@@ -73,6 +73,7 @@ public class Item {
 
 	public Item() {
 		this.id = NULL_ITEM;
+		quantity = 1;
 	}
 
 	public Item(int id, int q) {
@@ -81,7 +82,7 @@ public class Item {
 	}
 
 	public Item(String query) {
-		if (query == EMPTY_ITEM_STRING) {
+		if (query.equals(EMPTY_ITEM_STRING)) {
 			this.id = 0;
 			loadProperties();
 			return;

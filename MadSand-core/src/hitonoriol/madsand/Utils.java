@@ -67,7 +67,7 @@ public class Utils {
 
 	public static void pollStatWindowKey() {
 		if (Gdx.input.isKeyJustPressed(Keys.Q))
-			Gui.overlay.showStatsWindow();
+			Gui.overlay.toggleStatsWindow();
 	}
 
 	public static void gameKeyCheck() {
@@ -136,6 +136,9 @@ public class Utils {
 		}
 		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.R)) && (debugMode)) {
 			MadSand.world.generate();
+		}
+		if (Gdx.input.isKeyJustPressed(Keys.J)) {
+			// Quest Journal
 		}
 		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.DOWN)) && (debugMode)) {
 			MadSand.world.descend();

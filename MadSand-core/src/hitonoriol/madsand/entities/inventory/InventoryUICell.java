@@ -111,16 +111,16 @@ public class InventoryUICell extends Group{
 		this.addListener(new ClickListener(Buttons.RIGHT) {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if (!invCellContextContainer.isVisible() && !Gui.gameUnfocused) {
+				if (!invCellContextContainer.isVisible() ) {
 					invCellContextContainer.setVisible(true);
 					Mouse.x = Gdx.input.getX();
 					Mouse.y = Gdx.graphics.getHeight() - Gdx.input.getY();
 					invCellContextContainer.setPosition(Mouse.x + CONTEXT_BTN_WIDTH / CONTEXT_W_DENOMINATOR,
 							Mouse.y);
-					Gui.gameUnfocused = true;
+					
 				} else {
 					invCellContextContainer.setVisible(false);
-					Gui.gameUnfocused = false;
+					
 				}
 			}
 		});
@@ -136,7 +136,7 @@ public class InventoryUICell extends Group{
 		dropBtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				hideContext();
-				World.player.dropItem(item.id, item.quantity);
+				World.player.dropItem(item);
 			}
 
 		});

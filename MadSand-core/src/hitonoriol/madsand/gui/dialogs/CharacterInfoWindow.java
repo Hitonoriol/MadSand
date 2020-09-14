@@ -50,6 +50,7 @@ public class CharacterInfoWindow {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				dialog.remove();
 				dialog.clearActions();
+				Gui.overlay.toggleStatsWindow();
 			}
 
 		});

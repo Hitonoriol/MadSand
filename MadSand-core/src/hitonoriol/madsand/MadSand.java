@@ -55,6 +55,7 @@ public class MadSand extends Game {
 	public static final String MAPDIR = SAVEDIR + "worlds/";
 	static final String SCRIPTDIR = SAVEDIR + "scripts/";
 	static final String PLAYERFILE = "/Player" + SAVE_EXT;
+	static final String LOGFILE = "/log" + SAVE_EXT;
 	static final String NPCSFILE = "NPCs";
 	static final String WORLDFILE = "/World" + SAVE_EXT;
 	static final String ERRFILE = "MadSandCritical.log";
@@ -336,7 +337,7 @@ public class MadSand extends Game {
 
 				Utils.batch.draw((TextureRegion) anim.getKeyFrame(this.elapsedTime, true), drawx, drawy);
 
-				if (((Player) entity).isMain && (state == GameState.GAME))
+				if (state == GameState.GAME)
 					updateCamToxy(drawx, drawy);
 			} else
 				Utils.batch.draw(entity.getSprite(), drawx, drawy);
@@ -353,7 +354,7 @@ public class MadSand extends Game {
 		} else {
 			Utils.batch.draw(entity.getSprite(), entity.globalPos.x, entity.globalPos.y);
 
-			if ((entity instanceof Player) && ((Player) entity).isMain && (state == GameState.GAME))
+			if ((entity instanceof Player) && (state == GameState.GAME))
 				updateCamToxy(entity.globalPos.x, entity.globalPos.y);
 		}
 	}

@@ -139,7 +139,7 @@ public class Npc extends Entity {
 			return true;
 		}
 	}
-	
+
 	public void die() {
 		super.die();
 		MadSand.world.delNpc(this);
@@ -149,7 +149,7 @@ public class Npc extends Entity {
 		Player player = World.player;
 		int ticksSpent = 0;
 		tileDmg();
-		stats.perTickCheck();
+		//stats.perTickCheck(); I don't think NPCs need this
 
 		if (pauseFlag) {
 			unPause();
@@ -160,6 +160,7 @@ public class Npc extends Entity {
 			state = NpcState.FollowPlayer;
 
 		switch (state) {
+
 		case Still:
 			break;
 
@@ -214,6 +215,10 @@ public class Npc extends Entity {
 				attack(stats.look);
 			} else
 				rest();
+
+			break;
+
+		default:
 
 			break;
 

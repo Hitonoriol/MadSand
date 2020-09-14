@@ -51,7 +51,7 @@ public class MainMenu extends Stage {
 
 		if (TITLE_XPOS == 0) {
 			TITLE_XPOS = Gdx.graphics.getWidth() / 2 - titleLabel.getWidth() / 2.0F;
-			TITLE_YPOS = Gdx.graphics.getHeight() / 2 + 100;
+			TITLE_YPOS = Gdx.graphics.getHeight() / 2 + 125;
 		}
 
 		titleLabel.setPosition(TITLE_XPOS, TITLE_YPOS);
