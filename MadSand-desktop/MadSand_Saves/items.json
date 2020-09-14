@@ -574,7 +574,7 @@
 	},
 	"58" : {
 		"name" : "Pint of beer",
-		"recipe" : "65/5:66/5",
+		"recipe" : "65/3:66/3",
 		"satiationAmount" : 30,
 		"healAmount" : -5,
 		"cost" : 10,

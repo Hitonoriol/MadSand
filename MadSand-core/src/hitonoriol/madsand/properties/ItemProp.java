@@ -11,6 +11,10 @@ import hitonoriol.madsand.map.CropGrowthStageContainer;
 public class ItemProp {
 	public static HashMap<Integer, Item> items = new HashMap<>();
 	public static HashMap<Integer, ArrayList<Integer>> craftReq = new HashMap<>();
+	
+	public static Item getItem(int id) {
+		return items.get(id);
+	}
 
 	public static String getItemName(int id) {
 		return items.get(id).name;

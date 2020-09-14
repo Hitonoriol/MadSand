@@ -1,6 +1,5 @@
 package hitonoriol.madsand.gui.stages;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -18,25 +17,38 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
+import hitonoriol.madsand.gui.widgets.CraftButton;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.world.World;
 
 public class CraftMenu extends Stage {
-	private static float CRAFT_BTN_WIDTH = 250;
-	private static float CRAFT_ENTRY_PADDING = 30;
+	private static float CRAFT_ENTRY_PADDING = 40;
+	private static float BACK_BUTTON_HEIGHT = 50;
+	private static float BACK_BUTTON_WIDTH = 100;
+	private static float TITLE_PADDING = 30;
+
+	private static String titleString = "Crafting";
 
 	Skin skin;
 	public Table containerTable;
+	public Table craftTable;
 	AutoFocusScrollPane scroll;
-	TextButton[] craftButtons;
+	CraftButton[] craftButtons;
+	Label titleLabel;
 
 	public CraftMenu() {
+		craftTable = new Table();
 		containerTable = new Table();
 		skin = Gui.skin;
+		titleLabel = new Label(titleString, skin);
+		titleLabel.setFontScale(1.35f);
+		titleLabel.setAlignment(Align.center);
 	}
 
 	public void refreshCraftMenu() {
 		Utils.out("Refreshing craft menu...");
+		craftTable.remove();
+		craftTable = new Table();
 		containerTable.remove();
 		containerTable = new Table();
 		Player player = World.player;
@@ -45,61 +57,58 @@ public class CraftMenu extends Stage {
 		Utils.out("Total unlocked recipes: " + craftSz + " out of " + Resources.craftableItemCount);
 
 		if (craftSz == 0) {
-			containerTable.add(new Label("You don't know any craft recipes.", skin));
+			craftTable.add(new Label("You don't know any craft recipes.", skin));
 			Utils.out("No unlocked recipes.");
 		}
 
-		craftButtons = new TextButton[craftSz];
+		craftButtons = new CraftButton[craftSz];
 
 		int i = 0;
-		int perRow = 3, id;
+		int perRow = 2, id;
 		int quantity;
-		String craftString;
+		Label recipeLabel;
 
 		while (i < craftSz) {
-			craftString = "";
+
 			id = player.craftRecipes.get(i);
 			quantity = ItemProp.getCraftQuantity(id);
-			if (quantity > 1)
-				craftString = quantity + " ";
-			craftString += ItemProp.getItemName(id);
-			craftButtons[i] = new TextButton(craftString, skin);
-			containerTable.add(craftButtons[i]).width(CRAFT_BTN_WIDTH);
-			containerTable.add(new Label(" " + Item.queryToName(ItemProp.getCraftRecipe(id)), skin))
-					.padRight(CRAFT_ENTRY_PADDING);
+
+			craftButtons[i] = new CraftButton(ItemProp.getItem(id), quantity);
+			recipeLabel = new Label(" " + Item.queryToName(ItemProp.getCraftRecipe(id)), skin);
+			recipeLabel.setAlignment(Align.left);
+
+			Utils.out("craftbtn width: " + craftButtons[i].getWidth());
+			craftTable.add(craftButtons[i]).width(craftButtons[i].getWidth());
+			craftTable.add(recipeLabel).align(Align.left).padRight(CRAFT_ENTRY_PADDING);
 
 			if ((i + 1) % perRow == 0)
-				containerTable.row();
+				craftTable.row();
 
-			final int j = i, fid = id;
-			Utils.out("Creating a button for item " + j + " craft recipe...");
-
-			craftButtons[j].addListener(new ChangeListener() {
-				public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-					World.player.craftItem(fid);
-				}
-			});
+			Utils.out("Creating a button for item " + i + " craft recipe...");
 
 			i++;
 		}
-		containerTable.row();
+		craftTable.row();
+
+		//craftTable.setBackground(Gui.darkBackgroundSizeable);
+		craftTable.align(Align.center);
+		scroll = new AutoFocusScrollPane(craftTable);
+		scroll.setSize(MadSand.XDEF, MadSand.YDEF);
 
 		containerTable.setBackground(Gui.darkBackgroundSizeable);
-		scroll = new AutoFocusScrollPane(containerTable);
-		scroll.setSize(MadSand.XDEF, MadSand.YDEF);
-		super.addActor(scroll);
+		containerTable.setFillParent(true);
+		containerTable.add(titleLabel).align(Align.center).row();
+		containerTable.add(scroll)
+				.size(MadSand.XDEF, MadSand.YDEF - (BACK_BUTTON_HEIGHT + titleLabel.getHeight() + TITLE_PADDING)).row();
 
-		Table backTable = new Table();
 		TextButton backBtn = new TextButton("Back", skin);
 
-		backTable.align(Align.bottom);
-		backTable.add(backBtn).fillY().expandY();
-		backTable.setWidth(Gdx.graphics.getWidth());
 		backBtn.align(Align.center);
-		backBtn.setOrigin(Align.center);
-		backBtn.pad(10);
-		backBtn.setWidth(250);
-		backBtn.setHeight(50);
+		backBtn.setWidth(BACK_BUTTON_WIDTH);
+		backBtn.setHeight(BACK_BUTTON_HEIGHT);
+
+		containerTable.add(backBtn).align(Align.center).row();
+		super.addActor(containerTable);
 
 		backBtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
@@ -107,6 +116,5 @@ public class CraftMenu extends Stage {
 			}
 		});
 
-		super.addActor(backTable);
 	}
 }

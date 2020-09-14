@@ -20,10 +20,10 @@ public abstract class ItemButton extends Group {
 
 	private final float IMAGE_SIZE = 50;
 
-	private Label itemLabel;
-	private Image itemImage;
-	private Table buttonTable;
-	private Image highlight;
+	protected Label itemLabel;
+	protected Image itemImage;
+	protected Table buttonTable;
+	protected Image highlight;
 
 	protected Item buttonItem;
 
