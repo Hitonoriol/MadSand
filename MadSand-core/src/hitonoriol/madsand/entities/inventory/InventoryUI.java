@@ -14,9 +14,11 @@ import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 
 public class InventoryUI {
-	AutoFocusScrollPane invScroll;
-	Table invTable;
+	
 	Table invContainer;
+	Table invTable;
+	AutoFocusScrollPane invScroll;
+	Table invScrollTable;
 	Label header;
 
 	int stacks = 0;
@@ -31,7 +33,7 @@ public class InventoryUI {
 	}
 
 	void setUpInventory() {
-		invContainer = new Table();
+		invScrollTable = new Table();
 		invTable = new Table();
 		invTable.row();
 		// invTable.setDebug(true);
@@ -41,11 +43,11 @@ public class InventoryUI {
 		
 		header = new Label("[0/0 kg]", Gui.skin);
 		
-		invContainer.add(header).pad(10).fillY().align(Align.center);
-		invContainer.row();
-		invContainer.add(invTable);
+		invScrollTable.add(header).pad(10).fillY().align(Align.center);
+		invScrollTable.row();
+		invScrollTable.add(invTable);
 		
-		invScroll = new AutoFocusScrollPane(invContainer);
+		invScroll = new AutoFocusScrollPane(invScrollTable);
 		invScroll.setVisible(false);
 		
 		invTable.setWidth(WIDTH);
@@ -60,7 +62,7 @@ public class InventoryUI {
 	}
 
 	void remove() {
-		invContainer.remove();
+		invScrollTable.remove();
 		invTable.remove();
 		invScroll.remove();
 	}

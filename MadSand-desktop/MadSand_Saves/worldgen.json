@@ -7,20 +7,20 @@
 				"rollCount" : 250,
 				"idList" : [ 1, 2 ]
 			}, {
-				"rollCount" : 1,
+				"rollCount" : 2,
 				"idList" : [ 6 ]
 			} ],
 			"objects" : [ {
 				"rollCount" : 50,
 				"idList" : [ 2, 30, 35, 36 ]
 			}, {
-				"rollCount" : 30,
+				"rollCount" : 40,
 				"idList" : [ 1, 27, 28 ]
 			}, {
-				"rollCount" : 30,
+				"rollCount" : 40,
 				"idList" : [ 37, 4 ]
 			}, {
-				"rollCount" : 20,
+				"rollCount" : 30,
 				"idList" : [ 42, 41 ]
 			} ]
 		},
@@ -52,10 +52,10 @@
 				"fromFloor" : 0,
 				"contents" : {
 					"mobs" : [ 14, 15 ],
-					"loot" : [ "1/10" ],
-					"mobProbability" : 5,
+					"loot" : [ "2/10", "59/3", "60/1" ,"21/100" ],
+					"mobProbability" : 4,
 					"mobCorridorProbability" : 1,
-					"lootProbability" : 3,
+					"lootProbability" : 2,
 					"lootCorridorProbability" : 1
 				}
 			} ]

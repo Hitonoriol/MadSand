@@ -21,6 +21,9 @@ public class Map {
 
 	public static int PLOWED_SOIL = 15;
 
+	public static int MIN_MAPSIZE = 100;
+	public static int MAX_MAPSIZE = 200;
+
 	private int biome = -1;
 	public int defTile = 0;
 	public int defObject = 0;
@@ -51,7 +54,17 @@ public class Map {
 	}
 
 	public Map() {
-		this(0, 0);
+		rollSize();
+		purge();
+	}
+
+	public void rollSize(int min, int max) {
+		this.setSize(Utils.rand(min, max),
+				Utils.rand(min, max));
+	}
+
+	public void rollSize() {
+		rollSize(MIN_MAPSIZE, MAX_MAPSIZE);
 	}
 
 	public int getBiome() {
@@ -234,7 +247,7 @@ public class Map {
 	void setObjectSize(int x, int y, int id) { // If object is bigger than 1x1, fill the rest of the space with COLLISION_MASK_ID
 		MapObject objectProp = ObjectProp.getObject(id);
 		int i = objectProp.maskHeight;
-		if (y + 1 < World.MAPSIZE - 1) {
+		if (y + 1 < ysz - 1) {
 			while (i > 0) {
 				if (y + i < ysz) {
 					addObject(x, y + i, COLLISION_MASK_ID);
@@ -244,7 +257,7 @@ public class Map {
 		}
 
 		i = objectProp.maskWidth;
-		if (x + 1 < World.MAPSIZE - 1) {
+		if (x + 1 < xsz - 1) {
 			while (i > 0) {
 				if (x + i < xsz) {
 					addObject(x + i, y, COLLISION_MASK_ID);
@@ -353,6 +366,7 @@ public class Map {
 	public void putLoot(int x, int y, int id, int q) {
 		if (correctCoords(coords.set(x, y))) {
 			Utils.out("Adding loot id " + id + " q " + q + "|" + x + "," + y);
+			
 			if (mapLoot.get(coords) != null) {
 				Utils.out("Adding to existing loot node...");
 				mapLoot.get(coords).add(id, q);
@@ -360,6 +374,7 @@ public class Map {
 				Utils.out("Creating loot node...");
 				mapLoot.put(coords, new Loot(new Item(id, q)));
 			}
+			
 		}
 	}
 

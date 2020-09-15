@@ -21,7 +21,6 @@ import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.properties.TileProp;
-import hitonoriol.madsand.world.World;
 
 public abstract class Entity {
 	@JsonIgnore
@@ -30,8 +29,8 @@ public abstract class Entity {
 	@JsonIgnore
 	private Sprite sprite;
 
-	public int x = World.MAPSIZE / 2;
-	public int y = World.MAPSIZE / 2;
+	public int x;
+	public int y;
 
 	public int fov = 15;
 	public int maxFov, minFov;
@@ -145,30 +144,35 @@ public abstract class Entity {
 	}
 
 	public boolean dropItem(Item item) {
-		
+
 		if (inventory.getSameCell(item) == -1)
 			return false;
-		
+
 		Pair coord = new Pair(x, y).addDirection(stats.look);
 		MadSand.world.getCurLoc().putLoot(coord.x, coord.y, new Item(item));
 		inventory.delItem(item);
-		
+
 		doAction();
 		return true;
 	}
 
 	public void pickUpLoot() {
+
 		if (stats.dead)
 			return;
+
 		Loot loot = MadSand.world.getCurLoc().getLoot(x, y);
-		if (loot != Map.nullLoot) {
-			for (int i = loot.contents.size() - 1; i >= 0; --i) {
-				if (addItem(loot.contents.get(i)))
-					loot.remove(i);
-				else
-					break;
-			}
+
+		if (loot.equals(Map.nullLoot))
+			return;
+
+		for (int i = loot.contents.size() - 1; i >= 0; --i) {
+			if (addItem(new Item(loot.contents.get(i))))
+				loot.remove(i);
+			else
+				break;
 		}
+
 	}
 
 	public boolean colliding(Direction direction) {
@@ -240,7 +244,7 @@ public abstract class Entity {
 		Map curLoc = MadSand.world.getCurLoc();
 		for (int i = inventory.items.size() - 1; i >= 0; --i) {
 			item = inventory.items.get(i);
-			curLoc.putLoot(x, y, item);
+			curLoc.putLoot(x, y, new Item(item));
 			inventory.delItem(item);
 		}
 	}
@@ -318,11 +322,12 @@ public abstract class Entity {
 	}
 
 	public boolean isOnMapBound(Direction dir) {
+		Map map = MadSand.world.getCurLoc();
 		boolean ret = false;
-		if (x >= World.MAPSIZE - 1 && (dir == Direction.RIGHT)) {
+		if (x >= map.getWidth() - 1 && (dir == Direction.RIGHT)) {
 			ret = true;
 		}
-		if (y >= World.MAPSIZE - 1 && (dir == Direction.UP)) {
+		if (y >= map.getHeight() - 1 && (dir == Direction.UP)) {
 			ret = true;
 		}
 		if (x < 1 && (dir == Direction.LEFT)) {
@@ -388,14 +393,19 @@ public abstract class Entity {
 	}
 
 	boolean walk(Direction dir) {
+		
 		if (dir.isDiagonal())
 			return false;
+		
 		if (stepping)
 			return false;
+		
 		stats.look = dir;
 		turn(stats.look);
+		
 		if (colliding(stats.look) || isOnMapBound(stats.look))
 			return false;
+		
 		doAction(stats.AP_WALK);
 		move(stats.look);
 		return true;

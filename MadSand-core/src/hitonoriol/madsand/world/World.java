@@ -33,7 +33,8 @@ public class World {
 	public int curlayer = 0; // current layer: layer > 0 - underworld | layer == 0 - overworld
 
 	public static final int BORDER = 1;// map border - old shit, not really useful anymore
-	public static int MAPSIZE = 100; // default location size
+
+	public static int DEFAULT_MAPSIZE = Map.MIN_MAPSIZE;
 
 	public static final int LAYER_OVERWORLD = 0;
 	public static final int LAYER_BASE_UNDERWORLD = 1;
@@ -44,7 +45,7 @@ public class World {
 	public static Player player;
 
 	@JsonIgnore
-	public Location worldLoc; // container for all the maps and layers
+	public WorldMap worldMap; // container for all maps and layers
 
 	public int worldtime = 12; // time (00 - 23)
 	int ticksPerHour = 100; // ticks per one hourTick() trigger
@@ -57,10 +58,12 @@ public class World {
 		curxwpos = xsz / 2;
 		curywpos = ysz / 2;
 
-		worldLoc = new Location();
-		if (!createBasicLoc(new Pair(curxwpos, curywpos), MAPSIZE, MAPSIZE))
+		worldMap = new WorldMap();
+
+		if (!createBasicLoc(new Pair(curxwpos, curywpos), DEFAULT_MAPSIZE, DEFAULT_MAPSIZE))
 			Utils.die("Could not create new world");
-		worldGen = new WorldGen(worldLoc);
+
+		worldGen = new WorldGen(worldMap);
 	}
 
 	public World() {
@@ -74,12 +77,12 @@ public class World {
 	}
 
 	boolean locExists(MapID loc) {
-		return worldLoc.containsKey(loc);
+		return worldMap.containsKey(loc);
 	}
 
 	boolean createLoc(MapID loc, Map map) {
 		if (!locExists(loc)) {
-			this.worldLoc.put(loc, map);
+			this.worldMap.put(loc, map);
 			return true;
 		} else
 			return false;
@@ -88,7 +91,7 @@ public class World {
 	Map getLoc(Pair wc, int layer, int id) {
 		MapID loc = new MapID(wc, layer, id);
 		if (locExists(loc)) {
-			return worldLoc.get(loc);
+			return worldMap.get(loc);
 		} else
 			return nullLoc;
 	}
@@ -119,7 +122,7 @@ public class World {
 	}
 
 	Map putLoc(Pair wc, int layer, int id, Map loc) {
-		worldLoc.put(new MapID(wc, layer, id, true), loc);
+		worldMap.put(new MapID(wc, layer, id, true), loc);
 		return loc;
 	}
 
@@ -136,11 +139,11 @@ public class World {
 	}
 
 	boolean createBasicLoc(int wx, int wy) {
-		return createBasicLoc(new Pair(wx, wy), MAPSIZE, MAPSIZE);
+		return createBasicLoc(new Pair(wx, wy), DEFAULT_MAPSIZE, DEFAULT_MAPSIZE);
 	}
 
 	boolean createBasicLoc(int layer) {
-		return createLoc(new MapID(new Pair(curxwpos, curywpos), layer), new Map(MAPSIZE, MAPSIZE));
+		return createLoc(new MapID(new Pair(curxwpos, curywpos), layer), new Map(DEFAULT_MAPSIZE, DEFAULT_MAPSIZE));
 	}
 
 	int biome;
@@ -199,22 +202,27 @@ public class World {
 	}
 
 	public boolean switchLocation(Direction dir) {
+		Map curLoc = getCurLoc();
 		Utils.out("Switch location in direction " + dir);
+
 		if (curlayer != LAYER_OVERWORLD)
 			return false;
+
 		coords.set(curxwpos, curywpos).addDirection(dir);
 		MadSand.print("You travel to sector (" + coords.x + ", " + coords.y + ")");
+
 		if (!switchLocation(coords.x, coords.y, LAYER_OVERWORLD))
 			return false;
+
 		switch (dir) {
 		case UP:
 			player.y = 0;
 			break;
 		case DOWN:
-			player.y = MAPSIZE - 2;
+			player.y = curLoc.getHeight() - 2;
 			break;
 		case LEFT:
-			player.x = MAPSIZE - 2;
+			player.x = curLoc.getWidth() - 2;
 			break;
 		case RIGHT:
 			player.x = 0;
@@ -222,6 +230,7 @@ public class World {
 		default:
 			Utils.die("Can't switch location in dialonal direction, bruh");
 		}
+
 		player.updCoords();
 		updateLight();
 		return true;
@@ -236,8 +245,8 @@ public class World {
 			return false;
 
 		boolean ret = switchLocation(curlayer + 1);
-		if (curlayer > (worldLoc.layers - 1))
-			++worldLoc.layers;
+		if (curlayer > (worldMap.layers - 1))
+			++worldMap.layers;
 
 		Map loc = getCurLoc();
 		String place = null;

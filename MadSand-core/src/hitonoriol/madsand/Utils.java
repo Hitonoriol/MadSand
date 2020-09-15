@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.GameState;
+import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.world.World;
 
@@ -70,7 +71,29 @@ public class Utils {
 			Gui.overlay.toggleStatsWindow();
 	}
 
+	private static boolean movementKeyJustPressed() {
+		return (Gdx.input.isKeyJustPressed(Keys.W) || Gdx.input.isKeyJustPressed(Keys.A)
+				|| Gdx.input.isKeyJustPressed(Keys.S) || Gdx.input.isKeyJustPressed(Keys.D));
+	}
+
+	private static void pollMovementKeys() {
+
+		if (Gdx.input.isKeyPressed(Keys.A))
+			World.player.walk(Direction.LEFT);
+		else if (Gdx.input.isKeyPressed(Keys.D))
+			World.player.walk(Direction.RIGHT);
+		else if (Gdx.input.isKeyPressed(Keys.W))
+			World.player.walk(Direction.UP);
+		else if (Gdx.input.isKeyPressed(Keys.S))
+			World.player.walk(Direction.DOWN);
+
+		if (movementKeyJustPressed())
+			World.player.attackHostile();
+
+	}
+
 	public static void gameKeyCheck() {
+		pollMovementKeys();
 		if (Gdx.input.isKeyJustPressed(Keys.GRAVE)) {
 			TextField console = Gui.overlay.getConsoleField();
 			console.setVisible(!console.isVisible());
@@ -112,9 +135,11 @@ public class Utils {
 			World.player.attack(Direction.RIGHT);
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.N) && MadSand.world.curlayer == World.LAYER_OVERWORLD) {
-			if (World.player.x == World.MAPSIZE - 1 && World.player.stats.look == Direction.RIGHT)
+			Map map = MadSand.world.getCurLoc();
+
+			if (World.player.x == map.getWidth() - 1 && World.player.stats.look == Direction.RIGHT)
 				goToSector(World.player.stats.look);
-			if (World.player.y == World.MAPSIZE - 1 && World.player.stats.look == Direction.UP)
+			if (World.player.y == map.getHeight() - 1 && World.player.stats.look == Direction.UP)
 				goToSector(World.player.stats.look);
 			if (World.player.x < World.BORDER && World.player.stats.look == Direction.LEFT)
 				goToSector(World.player.stats.look);
@@ -173,18 +198,6 @@ public class Utils {
 		if ((Gdx.input.isKeyJustPressed(Keys.F)) && (World.player.stats.hand.id != 0)) {
 			World.player.freeHands();
 		}
-		if ((Gdx.input.isKeyPressed(Keys.A))) {
-			World.player.walk(Direction.LEFT);
-		}
-		if ((Gdx.input.isKeyPressed(Keys.D))) {
-			World.player.walk(Direction.RIGHT);
-		}
-		if ((Gdx.input.isKeyPressed(Keys.W))) {
-			World.player.walk(Direction.UP);
-		}
-		if ((Gdx.input.isKeyPressed(Keys.S))) {
-			World.player.walk(Direction.DOWN);
-		}
 		if (Gdx.input.isKeyJustPressed(Keys.Z))
 			debugMode = !debugMode;
 		if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
@@ -197,6 +210,9 @@ public class Utils {
 	}
 
 	public static int rand(int max) {
+		if (max < 1)
+			max = 1;
+
 		return random.nextInt(max);
 	}
 

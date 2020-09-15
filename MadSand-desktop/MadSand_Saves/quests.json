@@ -38,7 +38,7 @@
 	"startMsg" : "
 		#Richard# So, {PLAYER}, you liked using that axe, huh? [Uhh...]=>
 		#Richard# Guess what, I can show you how to make one yourself. You can even make other great tools that'll help you in this cruel world. [I'm interested]=>
-		#Richard# Well, let me remember... Ah! Bring me some small rocks. Maybe a dozen of them. You can find them near boulders. It won't be easy to gather them with your bare hands, but it's worth it, trust me!=>
+		#Richard# Well, let me remember... Ah! Bring me some small rocks. 10 of them, to be more specific. You can find them near boulders. It won't be easy to gather them with your bare hands, but it's worth it, trust me!=>
 		* To gather small rocks, approach a boulder and interact with it.
 	",
 
@@ -48,14 +48,15 @@
 		#Richard# Or you can just buy a recipe from crafts master, but it's more fullfilling to figure out the recipe yourself, isn't it?=>
 		#Richard# Well, I did my part, you did yours. If you need something - just ask! Bye!=>
 		* To figure out a recipe, you need to gather some resources and open \"craft\" menu from inventory. If you find new resources that can be used in some recipe, a new entry will appear on the craft screen as well as the notification in the game log.=>
-		* For example, if you gather some sticks and small rocks, you'll unlock a couple of new recipes. Go try it out.
+		* For example, if you gather some sticks and small rocks, you'll unlock a couple of new recipes. Go try it out.=>
+		#Richard# Oh... I didn't give you any reward? You can have my leftover birthday cake, it even still has candles in it! [Ugh... Cool... Thanks?]
 	",
 
-	"reqMsg" : "#Richard# Have you gathered those 12 small rocks I asked you for yet?",
+	"reqMsg" : "#Richard# Have you gathered those 10 small rocks I asked you for yet?",
 
-	"reqItems" : "2/12",
+	"reqItems" : "2/10",
 	"giveItems" : "n",
-	"rewardItems" : "n",
+	"rewardItems" : "4/4:2/10",
 	"removeOnCompletion" : "n",
 	"repeatable" : false
 },

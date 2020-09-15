@@ -23,10 +23,10 @@
 	},
 	"4" : {
 		"name" : "Cake",
-		"recipe" : "7/25",
+		"recipe" : "7/15",
 		"satiationAmount" : 30,
-		"healAmount" : 10,
-		"cost" : 25,
+		"healAmount" : 5,
+		"cost" : 15,
 		"type" : "Consumable",
 		"weight" : 0.7
 	},

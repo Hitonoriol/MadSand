@@ -9,25 +9,28 @@ import com.github.czyzby.noise4j.map.generator.util.Generators;
 
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.properties.WorldGenProp;
-import hitonoriol.madsand.world.Location;
+import hitonoriol.madsand.world.WorldMap;
 import hitonoriol.madsand.world.MapID;
 import hitonoriol.madsand.world.World;
 
 public class WorldGen {
-	private Location worldMap;
+	private WorldMap worldMap;
 	private WorldGenPreset curBiome;
 	private MapID curMapId;
 	private Map curLoc;
 
-	public WorldGen(Location worldMap) {
+	public WorldGen(WorldMap worldMap) {
 		this.worldMap = worldMap;
 	}
 
 	public void generate(MapID mapId) {
 		this.curMapId = mapId;
 		this.curLoc = worldMap.get(mapId);
+		curLoc.rollSize();
+		curLoc.purge();
 
 		int caveDepth = World.LAYER_BASE_UNDERWORLD;
 		int layer = mapId.layer;
@@ -110,23 +113,21 @@ public class WorldGen {
 		noiseGenerator.setSeed(Generators.rollSeed());
 		noiseGenerator.generate(grid);
 
-		int i = 0;
-		int ii = 0;
+		int x = 0;
+		int y = 0;
 		float from = ((float) lake.lakeFrom) / 10f;
 		float to = ((float) lake.lakeTo) / 100f;
 
-		Utils.out("lakes from: " + from + " to: " + to);
+		while (x < w - 1) {
+			while (y < h - 1) {
 
-		while (i < w) {
-			while (ii < h) {
+				if (grid.get(x, y) >= from && grid.get(x, y) <= to)
+					curLoc.addTile(x, y, lake.lakeTile);
 
-				if (grid.get(ii, i) >= from && grid.get(ii, i) <= to)
-					curLoc.addTile(ii, i, lake.lakeTile);
-
-				ii++;
+				y++;
 			}
-			i++;
-			ii = 0;
+			x++;
+			y = 0;
 		}
 
 		Utils.out("Done generating lakes!");
@@ -209,6 +210,7 @@ public class WorldGen {
 
 		ArrayList<Integer> mobs = curDungeonFloor.mobs;
 		ArrayList<String> loot = curDungeonFloor.loot;
+
 		int mobProb = curDungeonFloor.mobProbability;
 		int mobCorridorProb = curDungeonFloor.mobCorridorProbability;
 		int lootProb = curDungeonFloor.lootProbability; //TODO
@@ -218,7 +220,7 @@ public class WorldGen {
 		final Grid grid = new Grid(w, h);
 		final DungeonGenerator dungeonGenerator = new DungeonGenerator();
 
-		dungeonGenerator.setRoomGenerationAttempts(World.MAPSIZE);
+		dungeonGenerator.setRoomGenerationAttempts(World.DEFAULT_MAPSIZE);
 		dungeonGenerator.setMaxRoomSize(dungeon.maxRoomSize);
 		dungeonGenerator.setTolerance(dungeon.tolerance); // Max difference between width and height.
 		dungeonGenerator.setMinRoomSize(dungeon.minRoomSize);
@@ -231,13 +233,22 @@ public class WorldGen {
 		int door = dungeon.doorObject;
 
 		int y = 0, x = 0;
+		int mapWidth = curLoc.getWidth();
+		int mapHeight = curLoc.getHeight();
 		curLoc.editable = false;
 
-		while (y < World.MAPSIZE) {
-			while (x < World.MAPSIZE) {
+		while (y < mapHeight) {
+			while (x < mapWidth) {
 				if (grid.get(x, y) == DUNGEON_CORRIDOR_LEVEL) { // corridors
 					curLoc.delObject(x, y);
 					curLoc.addTile(x, y, corridorTile, force);
+
+					if (Utils.percentRoll(mobCorridorProb))
+						curLoc.spawnNpc(Utils.randElement(mobs), x, y);
+
+					if (Utils.percentRoll(lootCorridorProb))
+						curLoc.putLoot(x, y, rollLoot(loot));
+
 				}
 
 				if (grid.get(x, y) == DUNGEON_WALL_LEVEL) { // walls
@@ -251,6 +262,9 @@ public class WorldGen {
 
 					if (Utils.percentRoll(mobProb))
 						curLoc.spawnNpc(Utils.randElement(mobs), x, y);
+
+					if (Utils.percentRoll(lootProb))
+						curLoc.putLoot(x, y, rollLoot(loot));
 
 					if (curLoc.spawnPoint.equals(Pair.nullPair))
 						curLoc.spawnPoint = new Pair(x, y);
@@ -266,6 +280,14 @@ public class WorldGen {
 		}
 
 		Utils.out("Done generating dungeon!");
+	}
+
+	private Item rollLoot(ArrayList<String> loot) {
+		String itemString = loot.get(Utils.rand(loot.size()));
+		Item item = new Item(itemString);
+		item.quantity -= Utils.rand(item.quantity);
+
+		return item;
 	}
 
 	private boolean isDoorway(Grid grid, int x, int y, int xsz, int ysz) {

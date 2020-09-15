@@ -125,7 +125,7 @@ public class ActionButton extends Table {
 				}
 			});
 
-		} else if (!npc.equals(Map.nullNpc) && !Gui.dialogActive) //NPC interaction button
+		} else if (!npc.equals(Map.nullNpc) && !Gui.dialogActive && npc.friendly) //NPC interaction button
 			activateInteractBtn(interactButton, "Talk to " + npc.stats.name, npcInteractListener);
 
 		else if (!object.equals(Map.nullObject) && !objAction.equals(Resources.emptyField)) // Map object interaction button

@@ -18,7 +18,7 @@ import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
 
-public class Location extends HashMap<MapID, Map> {
+public class WorldMap extends HashMap<MapID, Map> {
 	private static final long serialVersionUID = -4489829388439109446L;
 
 	public int layers = 2; // Default number of layers

@@ -69,6 +69,7 @@ public class Loot {
 	}
 
 	public Loot add(Item item) {
+		
 		if (item.equals(Item.nullItem))
 			return Map.nullLoot;
 

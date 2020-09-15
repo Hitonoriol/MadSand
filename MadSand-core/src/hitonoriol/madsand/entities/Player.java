@@ -546,8 +546,10 @@ public class Player extends Entity {
 		if (!super.move(dir))
 			return false;
 
+		Map map = MadSand.world.getCurLoc();
+
 		if ((MadSand.world.curlayer == World.LAYER_OVERWORLD)
-				&& (x == World.MAPSIZE - 1 || y == World.MAPSIZE - 1 || x == World.BORDER || y == World.BORDER)) {
+				&& (x == map.getWidth() - 1 || y == map.getHeight() - 1 || x == World.BORDER || y == World.BORDER)) {
 			MadSand.print("Press [GRAY]N[WHITE] to move to the next sector.");
 		}
 
@@ -592,19 +594,21 @@ public class Player extends Entity {
 			lootMsg();
 			Gui.overlay.processActionMenu();
 			return true;
-		} else {
+		}
 
-			Npc npc = MadSand.world.getCurLoc().getNpc(lookingAt());
+		return false;
 
-			if (npc.equals(Map.nullNpc))
-				return false;
+	}
+	
+	public void attackHostile() {
+		Npc npc = MadSand.world.getCurLoc().getNpc(lookingAt());
 
-			if (!npc.friendly) {
-				attack();
-				return true;
-			}
+		if (npc.equals(Map.nullNpc))
+			return;
 
-			return false;
+		if (!npc.friendly) {
+			attack();
+			return;
 		}
 	}
 

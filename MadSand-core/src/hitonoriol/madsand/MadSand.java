@@ -88,7 +88,7 @@ public class MadSand extends Game {
 	private static final int TEST_POINT = 50;
 
 	static float ymid;
-	static float xmid = ymid = TILESIZE * (World.MAPSIZE / 2);
+	static float xmid = ymid = 0;
 	static float ymenu;
 	static float xmenu = ymenu = xmid;
 	private static float menuXStep = 0.8f, menuYStep = 0f;
@@ -141,13 +141,14 @@ public class MadSand extends Game {
 		Utils.out("End of initialization!");
 
 		LuaUtils.executeScript(LuaUtils.initScript); // Init script for new worlds
+		initMenuAnimation();
 	}
 
 	static int countRcells() {
 		int i = 0;
 		int ii = 0, cl = 0;
-		while (i < World.MAPSIZE + World.BORDER) {
-			while (ii < World.MAPSIZE + World.BORDER) {
+		while (i < World.DEFAULT_MAPSIZE + World.BORDER) {
+			while (ii < World.DEFAULT_MAPSIZE + World.BORDER) {
 				if (Line.calcDistance(TEST_POINT * TILESIZE, TEST_POINT * TILESIZE, i * TILESIZE,
 						ii * TILESIZE) <= renderradius) {
 					cl++;
@@ -163,8 +164,8 @@ public class MadSand extends Game {
 	private static PairFloat[] getAllRcells(PairFloat[] cl) {
 		int i = 0;
 		int ii = 0, clc = 0;
-		while (i < World.MAPSIZE + World.BORDER) {
-			while (ii < World.MAPSIZE + World.BORDER) {
+		while (i < World.DEFAULT_MAPSIZE + World.BORDER) {
+			while (ii < World.DEFAULT_MAPSIZE + World.BORDER) {
 				if (Line.calcDistance(TEST_POINT * TILESIZE, TEST_POINT * TILESIZE, i * TILESIZE,
 						ii * TILESIZE) <= renderradius) {
 					cl[clc] = new PairFloat(TEST_POINT - ii, TEST_POINT - i);
@@ -281,24 +282,29 @@ public class MadSand extends Game {
 		Utils.batch.begin();
 	}
 
-	float randSide(float n) {
+	private void initMenuAnimation() {
+		xmenu = xmid = World.player.x * TILESIZE;
+		ymenu = ymid = World.player.y * TILESIZE;
+	}
+
+	private float cameraBounce(float n) {
 		float ret = (float) -(n);
 		return ret;
 	}
 
-	void drawMenuBackground() {
+	private void drawMenuBackground() {
 
 		if (xmenu > (xmid + menuOffset))
-			menuXStep = randSide(menuXStep);
+			menuXStep = cameraBounce(menuXStep);
 
 		if (ymenu > (ymid + menuOffset))
-			menuYStep = randSide(menuYStep);
+			menuYStep = cameraBounce(menuYStep);
 
 		if (xmenu < (xmid - menuOffset))
-			menuXStep = randSide(menuXStep);
+			menuXStep = cameraBounce(menuXStep);
 
 		if (ymenu < (ymid - menuOffset))
-			menuYStep = randSide(menuYStep);
+			menuYStep = cameraBounce(menuYStep);
 
 		ymenu += menuYStep;
 		xmenu += menuXStep;

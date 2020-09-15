@@ -211,7 +211,7 @@ public class GameSaver {
 	public static boolean saveLocation(int wx, int wy) {
 		try {
 			OutputStream os = new FileOutputStream(getSectorFile(wx, wy));
-			os.write(MadSand.world.worldLoc.locationToBytes(wx, wy));
+			os.write(MadSand.world.worldMap.locationToBytes(wx, wy));
 			os.close();
 			return true;
 		} catch (Exception e) {
@@ -228,7 +228,7 @@ public class GameSaver {
 		try {
 			Path fileLocation = Paths.get(getSectorFile(wx, wy).toURI());
 			byte[] data = Files.readAllBytes(fileLocation);
-			MadSand.world.worldLoc.bytesToLocation(data, wx, wy);
+			MadSand.world.worldMap.bytesToLocation(data, wx, wy);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

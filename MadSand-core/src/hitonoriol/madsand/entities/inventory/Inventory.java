@@ -317,8 +317,10 @@ public class Inventory {
 	}
 
 	public int putItem(String query) {
+		
 		if (query.equals(Item.EMPTY_ITEM_STRING))
 			return -1;
+		
 		return Loot.addLootQ(query, this, 0, 0, null); // Don't ask about this, this is a long story
 	}
 }
