@@ -399,6 +399,8 @@ public class MadSand extends Game {
 	}
 
 	public void render() {
+		Utils.pollScreenshotKey();
+
 		if (state.equals(GameState.GAME)) {
 
 			if (justStarted)

@@ -71,6 +71,11 @@ public class Utils {
 			Gui.overlay.toggleStatsWindow();
 	}
 
+	public static void pollScreenshotKey() {
+		if (Gdx.input.isKeyJustPressed(Keys.F12))
+			Resources.takeScreenshot();
+	}
+
 	private static boolean movementKeyJustPressed() {
 		return (Gdx.input.isKeyJustPressed(Keys.W) || Gdx.input.isKeyJustPressed(Keys.A)
 				|| Gdx.input.isKeyJustPressed(Keys.S) || Gdx.input.isKeyJustPressed(Keys.D));
@@ -92,48 +97,90 @@ public class Utils {
 
 	}
 
+	private static void pollDebugKeys() {
+
+		if (Gdx.input.isKeyJustPressed(Keys.Z))
+			debugMode = !debugMode;
+
+		if (!debugMode)
+			return;
+
+		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.DOWN)) && (debugMode))
+			MadSand.world.descend();
+
+		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.UP)) && (debugMode))
+			MadSand.world.ascend();
+
+		if (Gdx.input.isKeyJustPressed(Keys.Y))
+			World.player.teleport(Mouse.wx, Mouse.wy);
+
+		if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT) && Gdx.input.isKeyJustPressed(Keys.T)) {
+			Utils.out("Trade test");
+			Npc npc = MadSand.world.getCurLoc().getNpc(World.player.lookingAt());
+			Utils.out("Looking at npc: " + npc.id);
+			npc.inventory.putItem(Globals.getInt(Globals.CURRENCY_FIELD), rand(100, 500));
+			World.player.tradeWithNPC(World.player.stats.look);
+		}
+
+		if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT) && Gdx.input.isKeyJustPressed(Keys.R))
+			MadSand.world.generate();
+
+		if (Gdx.input.isKeyPressed(Keys.NUMPAD_3))
+			MadSand.ZOOM = (float) (MadSand.ZOOM + 0.01D);
+
+		if (Gdx.input.isKeyPressed(Keys.NUMPAD_1))
+			MadSand.ZOOM = (float) (MadSand.ZOOM - 0.01D);
+
+		if (Gdx.input.isKeyPressed(Keys.NUMPAD_4))
+			MadSand.camxoffset -= 2;
+
+		if (Gdx.input.isKeyPressed(Keys.NUMPAD_6))
+			MadSand.camxoffset += 2;
+
+		if (Gdx.input.isKeyPressed(Keys.NUMPAD_8))
+			MadSand.camyoffset += 2;
+
+		if (Gdx.input.isKeyPressed(Keys.NUMPAD_2))
+			MadSand.camyoffset -= 2;
+
+		if (Gdx.input.isKeyPressed(Keys.NUMPAD_5)) {
+			MadSand.camyoffset = 0;
+			MadSand.camxoffset = 0;
+		}
+
+	}
+
 	public static void gameKeyCheck() {
 		pollMovementKeys();
+		pollDebugKeys();
+
 		if (Gdx.input.isKeyJustPressed(Keys.GRAVE)) {
 			TextField console = Gui.overlay.getConsoleField();
 			console.setVisible(!console.isVisible());
 			Gui.overlay.setKeyboardFocus(console);
 		}
+
 		if (Gdx.input.isButtonPressed(Buttons.MIDDLE))
 			World.player.lookAtMouse(Mouse.wx, Mouse.wy);
+
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER))
 			World.player.interact(World.player.stats.look);
-		if (Gdx.input.isKeyPressed(Keys.NUMPAD_3))
-			MadSand.ZOOM = (float) (MadSand.ZOOM + 0.01D);
-		if (Gdx.input.isKeyPressed(Keys.NUMPAD_1))
-			MadSand.ZOOM = (float) (MadSand.ZOOM - 0.01D);
-		if (Gdx.input.isKeyPressed(Keys.NUMPAD_4))
-			MadSand.camxoffset -= 2;
-		if (Gdx.input.isKeyPressed(Keys.NUMPAD_6))
-			MadSand.camxoffset += 2;
-		if (Gdx.input.isKeyPressed(Keys.NUMPAD_8))
-			MadSand.camyoffset += 2;
-		if (Gdx.input.isKeyPressed(Keys.NUMPAD_2))
-			MadSand.camyoffset -= 2;
-		if (Gdx.input.isKeyPressed(Keys.NUMPAD_5)) {
-			MadSand.camyoffset = 0;
-			MadSand.camxoffset = 0;
-		}
-		if (Gdx.input.isKeyJustPressed(Keys.U)) {
+
+		if (Gdx.input.isKeyJustPressed(Keys.U))
 			World.player.useItem();
-		}
-		if (Gdx.input.isKeyJustPressed(Keys.UP) && (!World.player.isStepping())) {
+
+		if (Gdx.input.isKeyJustPressed(Keys.UP) && (!World.player.isStepping()))
 			World.player.attack(Direction.UP);
-		}
-		if (Gdx.input.isKeyJustPressed(Keys.DOWN) && (!World.player.isStepping())) {
+
+		if (Gdx.input.isKeyJustPressed(Keys.DOWN) && (!World.player.isStepping()))
 			World.player.attack(Direction.DOWN);
-		}
-		if (Gdx.input.isKeyJustPressed(Keys.LEFT) && (!World.player.isStepping())) {
+
+		if (Gdx.input.isKeyJustPressed(Keys.LEFT) && (!World.player.isStepping()))
 			World.player.attack(Direction.LEFT);
-		}
-		if (Gdx.input.isKeyJustPressed(Keys.RIGHT) && (!World.player.isStepping())) {
+
+		if (Gdx.input.isKeyJustPressed(Keys.RIGHT) && (!World.player.isStepping()))
 			World.player.attack(Direction.RIGHT);
-		}
+
 		if (Gdx.input.isKeyJustPressed(Keys.N) && MadSand.world.curlayer == World.LAYER_OVERWORLD) {
 			Map map = MadSand.world.getCurLoc();
 
@@ -149,28 +196,10 @@ public class Utils {
 
 		}
 
-		if ((Gdx.input.isKeyJustPressed(Keys.Y)) && (debugMode)) {
-			World.player.teleport(Mouse.wx, Mouse.wy);
-		}
-		if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT) && Gdx.input.isKeyJustPressed(Keys.T)) {
-			Utils.out("Trade test");
-			Npc npc = MadSand.world.getCurLoc().getNpc(World.player.lookingAt());
-			Utils.out("Looking at npc: " + npc.id);
-			npc.inventory.putItem(Globals.getInt(Globals.CURRENCY_FIELD), rand(100, 500));
-			World.player.tradeWithNPC(World.player.stats.look);
-		}
-		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.R)) && (debugMode)) {
-			MadSand.world.generate();
-		}
 		if (Gdx.input.isKeyJustPressed(Keys.J)) {
 			// Quest Journal
 		}
-		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.DOWN)) && (debugMode)) {
-			MadSand.world.descend();
-		}
-		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.UP)) && (debugMode)) {
-			MadSand.world.ascend();
-		}
+
 		if (Gdx.input.isKeyJustPressed(Keys.F11)) {
 			Boolean fullScreen = Boolean.valueOf(Gdx.graphics.isFullscreen());
 			Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
@@ -179,6 +208,7 @@ public class Utils {
 			} else
 				Gdx.graphics.setFullscreenMode(currentMode);
 		}
+
 		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
 			Gui.mainMenu.resumeButton.setVisible(true);
 			MadSand.xmid = MadSand.xmenu = World.player.globalPos.x;
@@ -186,23 +216,19 @@ public class Utils {
 			Gdx.input.setInputProcessor(Gui.mainMenu);
 			MadSand.state = GameState.NMENU;
 		}
-		if ((Gdx.input.isKeyJustPressed(Keys.G))) {
+
+		if ((Gdx.input.isKeyJustPressed(Keys.G)))
 			GameSaver.saveWorld();
-		}
-		if ((Gdx.input.isKeyJustPressed(Keys.L))) {
+
+		if ((Gdx.input.isKeyJustPressed(Keys.L)))
 			GameSaver.loadWorld(MadSand.WORLDNAME);
-		}
-		if ((Gdx.input.isKeyJustPressed(Keys.H)) && (debugMode)) {
-			World.player.damage(10);
-		}
-		if ((Gdx.input.isKeyJustPressed(Keys.F)) && (World.player.stats.hand.id != 0)) {
+
+		if ((Gdx.input.isKeyJustPressed(Keys.F)) && (World.player.stats.hand.id != 0))
 			World.player.freeHands();
-		}
-		if (Gdx.input.isKeyJustPressed(Keys.Z))
-			debugMode = !debugMode;
-		if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
+
+		if (Gdx.input.isKeyJustPressed(Keys.SPACE))
 			World.player.rest();
-		}
+
 	}
 
 	public static int rand(int min, int max) {
