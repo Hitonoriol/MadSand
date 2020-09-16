@@ -11,7 +11,9 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.gui.OverlayMouseoverListener;
+import hitonoriol.madsand.gui.dialogs.QuestJournal;
 import hitonoriol.madsand.gui.stages.Overlay;
+import hitonoriol.madsand.world.World;
 
 /* TODO
  * Horizontal button table with shortcuts to:
@@ -27,10 +29,12 @@ public class OverlayBottomMenu extends Table {
 
 	static String characterStatString = "Character [Q]";
 	static String inventoryString = "Inventory [E]";
+	static String journalString = "Journal [J]";
 
 	Skin skin;
 	TextButton characterStatButton;
 	TextButton inventoryButton;
+	TextButton journalButton;
 	NinePatchDrawable background;
 
 	OverlayMouseoverListener mouseoverListener;
@@ -38,7 +42,6 @@ public class OverlayBottomMenu extends Table {
 
 	public OverlayBottomMenu(Overlay overlay) {
 		super();
-		
 
 		skin = Gui.skin;
 		this.overlay = overlay;
@@ -46,10 +49,12 @@ public class OverlayBottomMenu extends Table {
 
 		characterStatButton = new TextButton(characterStatString, skin);
 		inventoryButton = new TextButton(inventoryString, skin);
+		journalButton = new TextButton(journalString, skin);
 
 		addButton(characterStatButton);
 		addButton(inventoryButton);
-		
+		addButton(journalButton);
+
 		background = new NinePatchDrawable(Gui.darkBackgroundSizeable);
 
 		super.setBackground(background);
@@ -76,6 +81,16 @@ public class OverlayBottomMenu extends Table {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				Utils.toggleInventory();
+			}
+
+		});
+
+		journalButton.addListener(new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				new QuestJournal(World.player.quests).show();
+
 			}
 
 		});

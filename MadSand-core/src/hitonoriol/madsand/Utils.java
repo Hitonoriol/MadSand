@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.GameState;
+import hitonoriol.madsand.gui.dialogs.QuestJournal;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.world.World;
@@ -197,7 +198,7 @@ public class Utils {
 		}
 
 		if (Gdx.input.isKeyJustPressed(Keys.J)) {
-			// Quest Journal
+			new QuestJournal(World.player.quests).show();
 		}
 
 		if (Gdx.input.isKeyJustPressed(Keys.F11)) {
@@ -310,12 +311,12 @@ public class Utils {
 		return (Math.round(curWeight * 100) / 100.00);
 	}
 
-	public static int randPercent() {
-		return rand(1, 100);
+	public static double randPercent() {
+		return random.nextDouble() * 100.0;
 	}
 
-	public static boolean percentRoll(int percent) {
-		return ((randPercent() - 1) < percent);
+	public static boolean percentRoll(double percent) {
+		return (randPercent() < percent);
 	}
 
 	public static int val(boolean bool) {

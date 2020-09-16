@@ -24,7 +24,7 @@
 	",
 
 	"reqMsg" : "#Richard# Please, give me 15 wood pieces.",
-
+	"journalText" : "Bring 15 wood pieces to Richard",
 	"reqItems" : "1/15",
 	"giveItems" : "3/1",
 	"rewardItems" : "7/12",
@@ -53,7 +53,7 @@
 	",
 
 	"reqMsg" : "#Richard# Have you gathered those 10 small rocks I asked you for yet?",
-
+	"journalText" : "Bring 10 small rocks to Richard",
 	"reqItems" : "2/10",
 	"giveItems" : "n",
 	"rewardItems" : "4/4:2/10",
@@ -82,7 +82,7 @@
 	",
 
 	"reqMsg" : "#Richard# Bring me 5 flint and 5 clay pieces.",
-
+	"journalText" : "Bring 5 flint and 5 clay to Richard",
 	"reqItems" : "5/5:9/5",
 	"giveItems" : "n",
 	"rewardItems" : "n",
@@ -106,7 +106,7 @@
 	"endMsg" : "#Richard# Thank you, {PLAYER}! Take your reward and return to me when you are ready for the next task.",
 
 	"reqMsg" : "#Richard# Kill 10 rats and give me 10 leather pieces you get from them.",
-
+	"journalText" : "Bring 10 leather pieces to Richard",
 	"reqItems" : "22/10",
 	"giveItems" : "47/5:49/5",
 	"rewardItems" : "n",

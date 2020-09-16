@@ -24,6 +24,7 @@ public class MainMenu extends Stage {
 	Skin skin;
 
 	private static float TITLE_XPOS = 0, TITLE_YPOS = 0;
+	static float TITLE_PADBOTTOM = 50;
 
 	Table menuTable;
 
@@ -51,7 +52,7 @@ public class MainMenu extends Stage {
 
 		if (TITLE_XPOS == 0) {
 			TITLE_XPOS = Gdx.graphics.getWidth() / 2 - titleLabel.getWidth() / 2.0F;
-			TITLE_YPOS = Gdx.graphics.getHeight() / 2 + 125;
+			TITLE_YPOS = Gdx.graphics.getHeight() / 2 + 175;
 		}
 
 		titleLabel.setPosition(TITLE_XPOS, TITLE_YPOS);
@@ -63,7 +64,7 @@ public class MainMenu extends Stage {
 		menuTable = new Table();
 		menuTable.setFillParent(true);
 		menuTable.setBackground(Gui.darkBackground);
-		menuTable.add(titleLabel);
+		menuTable.add(titleLabel).padBottom(TITLE_PADBOTTOM);
 		menuTable.row();
 		menuTable.add(resumeButton).width(width);
 		menuTable.row();

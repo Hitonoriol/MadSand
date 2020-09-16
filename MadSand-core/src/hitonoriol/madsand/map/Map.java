@@ -365,16 +365,12 @@ public class Map {
 
 	public void putLoot(int x, int y, int id, int q) {
 		if (correctCoords(coords.set(x, y))) {
-			Utils.out("Adding loot id " + id + " q " + q + "|" + x + "," + y);
-			
-			if (mapLoot.get(coords) != null) {
-				Utils.out("Adding to existing loot node...");
+
+			if (mapLoot.get(coords) != null)
 				mapLoot.get(coords).add(id, q);
-			} else {
-				Utils.out("Creating loot node...");
+			else
 				mapLoot.put(coords, new Loot(new Item(id, q)));
-			}
-			
+
 		}
 	}
 
@@ -506,10 +502,8 @@ public class Map {
 		if (!correctCoords(coords.set(x, y)))
 			return false;
 
-		if (destNpc != nullNpc && destNpc != npc) {
-			Utils.out("Can't move npc to non-empty cell");
+		if (destNpc != nullNpc && destNpc != npc)
 			return false;
-		}
 
 		npc.setGridCoords(x, y);
 		putNpc(npc);
