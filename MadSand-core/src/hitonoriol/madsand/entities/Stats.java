@@ -44,11 +44,6 @@ public class Stats {
 	public int actionPtsMax = 5;
 	public int actionPts = actionPtsMax;
 
-	public float satiationFactor = 0.95f;
-	public final int maxFood = 1000;
-	public final int satiatedVal = (int) (maxFood * satiationFactor);
-	public int food = maxFood;
-
 	public long spawnTime = 0;
 
 	public int hp;
@@ -79,6 +74,12 @@ public class Stats {
 
 	public SkillContainer skills = new SkillContainer();
 
+	public float satiationFactor = 0.95f;
+	public final int maxFood = 1000;
+	public int foodTicks = skills.getLvl(Skill.Survival);
+	public final int satiatedVal = (int) (maxFood * satiationFactor);
+	public int food = maxFood;
+
 	public Faction faction = Faction.None;
 	public Direction look = Direction.DOWN;
 
@@ -88,8 +89,6 @@ public class Stats {
 
 	@JsonIgnore
 	public StatAction owner;
-
-	// public Stats(Entity owner)
 
 	public boolean equip(Item item) {
 		switch (item.type) {
@@ -225,14 +224,32 @@ public class Stats {
 		if (stamina < maxstamina * staminaLow)
 			owner._damage(STAMINA_DMG);
 
-		if (!skills.skillRoll(Skill.Survival))
-			--food;
+		perTickFoodCheck();
 
 		if (food <= 0)
 			owner._damage(STARVE_DMG);
 
 		if (food >= satiatedVal)
 			owner._heal(FOOD_HEAL);
+	}
+
+	/*
+	 * Max food ticks = Survival skill level
+	 * 
+	 * Decrement food ticks on unsuccessful skill roll
+	 * When food ticks <= 0, decrement food level
+	 */
+	private void perTickFoodCheck() {
+
+		if (!skills.skillRoll(Skill.Survival)) {
+			--foodTicks;
+
+			if (foodTicks <= 0) {
+				--food;
+				foodTicks = skills.getLvl(Skill.Survival);
+			}
+		}
+
 	}
 
 	public void interactStamina() {

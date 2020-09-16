@@ -5,6 +5,7 @@ import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
+import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.properties.Tutorial;
 
@@ -35,6 +36,10 @@ public class LuaUtils {
 
 	public static LuaValue execute(String str) {
 		return globals.load(str).call();
+	}
+
+	public static Pair locateTile(int id) {
+		return MadSand.world.getCurLoc().locateTile(id);
 	}
 
 	public static void placeTile(int x, int y, int id) { // For some reason calling world:getCurLoc():addTile(...) from lua is not working

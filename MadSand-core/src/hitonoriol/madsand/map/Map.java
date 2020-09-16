@@ -12,6 +12,7 @@ import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.properties.ObjectProp;
+import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.world.World;
 
 import java.util.Vector;
@@ -528,6 +529,18 @@ public class Map {
 
 		mapNpcs.remove(coords);
 		return true;
+	}
+
+	public Pair locateTile(int id) {
+		if (!mapTiles.containsValue(TileProp.tiles.get(id)))
+			return Pair.nullPair;
+
+		for (Entry<Pair, Tile> entry : mapTiles.entrySet()) {
+			if (entry.getValue().id == id)
+				return entry.getKey();
+		}
+
+		return Pair.nullPair;
 	}
 
 }
