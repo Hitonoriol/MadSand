@@ -139,7 +139,6 @@ public class MadSand extends Game {
 		world.generate();
 		LuaUtils.init();
 		Utils.out("End of initialization!");
-		Utils.out("Hole in ground: " + world.getCurLoc().locateTile(6));
 
 		LuaUtils.executeScript(LuaUtils.initScript); // Init script for new worlds
 		initMenuAnimation();

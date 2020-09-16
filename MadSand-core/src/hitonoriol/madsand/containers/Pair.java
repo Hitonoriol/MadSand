@@ -16,7 +16,7 @@ public class Pair {
 	}
 
 	public Pair(Pair pair) {
-		set(pair.x, pair.y);
+		this(pair.x, pair.y);
 	}
 
 	public Pair() {

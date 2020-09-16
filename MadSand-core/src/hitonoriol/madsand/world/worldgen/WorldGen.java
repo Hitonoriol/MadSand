@@ -70,6 +70,7 @@ public class WorldGen {
 		int listSize;
 
 		for (RollList tileRollList : tileGenList) {
+			Utils.out("RollList: " + tileRollList.rollCount);
 			for (int i = 0; i < tileRollList.rollCount; ++i) {
 				tileIdList = tileRollList.idList;
 				listSize = tileIdList.size();

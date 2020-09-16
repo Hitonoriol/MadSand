@@ -25,7 +25,7 @@ import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.enums.ItemType;
 import hitonoriol.madsand.world.World;
 
-public class InventoryUICell extends Group{
+public class InventoryUICell extends Group {
 	private final int size = 80;
 
 	private static final float CONTEXT_BTN_WIDTH = 100F;
@@ -96,6 +96,7 @@ public class InventoryUICell extends Group{
 
 		tooltipTbl = new Table();
 		itemInfoLbl = new Label(item.getInfoString(), Gui.skin);
+		itemInfoLbl.setWrap(true);
 
 		tooltipTbl.add(itemInfoLbl).width(TOOLTIP_WIDTH);
 		tooltipTbl.row();
@@ -111,21 +112,21 @@ public class InventoryUICell extends Group{
 		this.addListener(new ClickListener(Buttons.RIGHT) {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if (!invCellContextContainer.isVisible() ) {
+				if (!invCellContextContainer.isVisible()) {
 					invCellContextContainer.setVisible(true);
 					Mouse.x = Gdx.input.getX();
 					Mouse.y = Gdx.graphics.getHeight() - Gdx.input.getY();
 					invCellContextContainer.setPosition(Mouse.x + CONTEXT_BTN_WIDTH / CONTEXT_W_DENOMINATOR,
 							Mouse.y);
-					
+
 				} else {
 					invCellContextContainer.setVisible(false);
-					
+
 				}
 			}
 		});
 	}
-	
+
 	private void initContextMenu(Item item) {
 		invCellContextContainer = new Table(Gui.skin);
 		dropBtn = new TextButton("Drop", Gui.skin);

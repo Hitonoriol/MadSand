@@ -377,7 +377,8 @@ public class Player extends Entity {
 	}
 
 	public void useItem() {
-		int id = stats.hand.id;
+		Item usedItem = stats.hand;
+		int id = usedItem.id;
 
 		if (equip(stats.hand))
 			return;
@@ -402,6 +403,9 @@ public class Player extends Entity {
 
 		if (!action.equals(Resources.emptyField)) {
 			LuaUtils.execute(action);
+			if (usedItem.type.equals(ItemType.Consumable))
+				this.inventory.delItem(usedItem, 1);
+			checkHands(id);
 			return;
 		}
 
@@ -564,6 +568,7 @@ public class Player extends Entity {
 		MadSand.print("You rest for 1 turn");
 		if (ret)
 			MadSand.print("You feel well-rested");
+		Gui.refreshOverlay();
 		return ret;
 	}
 
@@ -599,7 +604,7 @@ public class Player extends Entity {
 		return false;
 
 	}
-	
+
 	public void attackHostile() {
 		Npc npc = MadSand.world.getCurLoc().getNpc(lookingAt());
 

@@ -111,7 +111,7 @@ public class Item {
 
 	String getInfoString() {
 		String info = "";
-		info += name + Resources.LINEBREAK;
+		info += name + Resources.LINEBREAK + Resources.LINEBREAK;
 
 		if (type.isArmor() || type.isWeapon()) {
 			info += equipStats.getString();

@@ -81,6 +81,8 @@ public class Overlay extends Stage {
 		gameContextMenu = new GameContextMenu();
 		gameLog = new GameLog();
 		bottomMenu = new OverlayBottomMenu(this);
+		
+		Mouse.tooltipContainer = gameTooltip;
 
 		overlayTable = new Table().align(18);
 		overlayTable.setFillParent(true);

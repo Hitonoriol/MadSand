@@ -1,6 +1,7 @@
 package hitonoriol.madsand.map;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -15,7 +16,6 @@ import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.world.World;
 
-import java.util.Vector;
 
 public class Map {
 	private int xsz, ysz;
@@ -168,13 +168,16 @@ public class Map {
 	}
 
 	public boolean addTile(int x, int y, int id, boolean force) {
-		if (correctCoords(coords.set(x, y))) {
-			if (force)
-				mapTiles.remove(coords);
-			mapTiles.put(coords, new Tile(id));
-			return true;
-		} else
+		if (!correctCoords(coords.set(x, y)))
 			return false;
+
+		if (force)
+			mapTiles.remove(coords);
+
+		mapTiles.put(new Pair(coords), new Tile(id));
+
+		return true;
+
 	}
 
 	public void delTile(int x, int y) {
@@ -274,14 +277,16 @@ public class Map {
 	}
 
 	public boolean addObject(int x, int y, int id) {
-		if (correctCoords(coords.set(x, y))) {
-			if (mapObjects.containsKey(coords))
-				mapObjects.remove(coords);
-			mapObjects.put(coords, new MapObject(id));
-			setObjectSize(x, y, id);
-			return true;
-		} else
+		if (!correctCoords(coords.set(x, y)))
 			return false;
+
+		if (mapObjects.containsKey(coords))
+			mapObjects.remove(coords);
+
+		mapObjects.put(new Pair(coords), new MapObject(id));
+		setObjectSize(x, y, id);
+		return true;
+
 	}
 
 	boolean addObject(Pair coord, int id) {
@@ -326,7 +331,7 @@ public class Map {
 		addObject(x, y, id);
 	}
 
-	public void randPlaceObject(Vector<Integer> id, int range) {
+	public void randPlaceObject(ArrayList<Integer> id, int range) {
 		randPlaceObject(id.get(Utils.random.nextInt(range)));
 	}
 
@@ -388,7 +393,7 @@ public class Map {
 	public void update() {
 		Pair coord = new Pair();
 		Crop newCrop;
-		Vector<Pair> del = new Vector<Pair>();
+		ArrayList<Pair> del = new ArrayList<Pair>();
 		for (Entry<Pair, Crop> crop : mapCrops.entrySet()) {
 			if (crop.getValue().upd()) {
 				coord = crop.getKey();
@@ -532,12 +537,16 @@ public class Map {
 	}
 
 	public Pair locateTile(int id) {
-		if (!mapTiles.containsValue(TileProp.tiles.get(id)))
+		Tile tile = TileProp.tiles.get(id);
+
+		if (!mapTiles.containsValue(tile))
 			return Pair.nullPair;
 
 		for (Entry<Pair, Tile> entry : mapTiles.entrySet()) {
-			if (entry.getValue().id == id)
-				return entry.getKey();
+
+			if (entry.getValue().equals(tile))
+				return (entry.getKey());
+
 		}
 
 		return Pair.nullPair;

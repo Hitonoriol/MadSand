@@ -122,6 +122,7 @@ public class ActionButton extends Table {
 						player.useItem();
 					Gui.gameUnfocused = false;
 					Gui.overlay.getTooltip().setVisible(true);
+					hideActionBtn();
 				}
 			});
 

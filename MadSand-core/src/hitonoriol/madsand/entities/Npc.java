@@ -21,6 +21,7 @@ import hitonoriol.madsand.world.World;
 public class Npc extends Entity {
 	public static int NULL_NPC = 0;
 	public static int LOOT_RANDOM_FACTOR = 2;
+	static double IDLE_NPC_MOVE_CHANCE = 20;
 
 	public int id;
 	public int rewardExp;
@@ -165,7 +166,7 @@ public class Npc extends Entity {
 			break;
 
 		case Idle:
-			if (canAct(stats.AP_WALK) && Utils.random.nextBoolean()) {
+			if (canAct(stats.AP_WALK) && Utils.percentRoll(IDLE_NPC_MOVE_CHANCE)) {
 				ticksSpent = doAction(stats.AP_WALK);
 				randMove();
 			} else

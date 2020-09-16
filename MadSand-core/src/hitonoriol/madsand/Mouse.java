@@ -3,12 +3,12 @@ package hitonoriol.madsand;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.enums.GameState;
+import hitonoriol.madsand.gui.widgets.GameTooltip;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
@@ -33,6 +33,7 @@ public class Mouse {
 	public static MapObject object;
 	public static Npc npc;
 	public static Loot loot;
+	public static GameTooltip tooltipContainer;
 
 	public static boolean pointingAtObject = false; // flag that shows if mouse is pointing at object or npc or not
 	public static boolean justClicked = false;
@@ -55,7 +56,7 @@ public class Mouse {
 
 		pointingAtObject = (npc != Map.nullNpc) || (object != Map.nullObject);
 
-		Gui.overlay.gameTooltip.addAction(Actions.moveTo(x + 65, y - 70, 0.1F));
+		tooltipContainer.moveTo(x, y);
 
 		Gui.overlay.getTooltip().setText(getCurrentCellInfo());
 	}
@@ -63,7 +64,7 @@ public class Mouse {
 	public static String getCurrentCellInfo() {
 		Player player = World.player;
 		String info = "";
-
+		info += ("You are at (" + player.x + ", " + player.y + ")") + Resources.LINEBREAK;
 		info += ("Looking at (" + wx + ", " + wy + ")") + Resources.LINEBREAK;
 
 		if (wx == player.x && wy == player.y) {
