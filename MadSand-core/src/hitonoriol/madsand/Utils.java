@@ -148,6 +148,9 @@ public class Utils {
 			MadSand.camyoffset = 0;
 			MadSand.camxoffset = 0;
 		}
+		
+		if (Gdx.input.isKeyJustPressed(Keys.F5))
+			MadSand.world.hourTick();
 
 	}
 

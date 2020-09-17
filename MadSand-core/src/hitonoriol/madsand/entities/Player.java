@@ -415,7 +415,7 @@ public class Player extends Entity {
 			return;
 		}
 
-		if (Item.getType(id) == ItemType.Consumable) {
+		if (Item.getType(id).equals(ItemType.Consumable)) {
 			increaseSkill(Skill.Survival);
 			MadSand.print("You eat " + stats.hand.name);
 			heal(stats.hand.healAmount);

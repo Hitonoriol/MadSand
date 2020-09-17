@@ -21,7 +21,7 @@ import hitonoriol.madsand.world.World;
 public class Npc extends Entity {
 	public static int NULL_NPC = 0;
 	public static int LOOT_RANDOM_FACTOR = 2;
-	static double IDLE_NPC_MOVE_CHANCE = 20;
+	static double IDLE_NPC_MOVE_CHANCE = 30;
 
 	public int id;
 	public int rewardExp;

@@ -169,6 +169,7 @@ public class WorldGen {
 	private void genDungeon(int layer) {
 		MapID dungeonId = new MapID(curMapId).setLayer(layer);
 		Map curLoc = worldMap.get(dungeonId);
+		curLoc.rollSize();
 
 		Utils.out("Generating dungeon!");
 

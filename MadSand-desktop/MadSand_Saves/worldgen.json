@@ -4,7 +4,7 @@
 		"overworld" : {
 			"defaultTile" : 0,
 			"tiles" : [ {
-				"rollCount" : 250,
+				"rollCount" : 350,
 				"idList" : [ 1, 2 ]
 			}, {
 				"rollCount" : 2,
@@ -41,7 +41,12 @@
 				{"rollCount": 3,
 				"idList": [41, 42]}
 			],
-			"chanceToRegenerate": 50
+			"chanceToRegenerate": 50,
+			
+			"hostileMobs": {"rollCount": 3, "idList": [19]},
+			"friendlyMobs": {"rollCount": 4, "idList": [24, 25]},
+			"hostileSpawnChance": 75,
+			"friendlySpawnChance": 60
 		},
 		"lake" : {
 			"lakeTile" : 8,
@@ -76,8 +81,8 @@
 					"loot" : [ "2/10", "59/3", "60/1" ,"21/100" ],
 					"mobProbability" : 4,
 					"mobCorridorProbability" : 1,
-					"lootProbability" : 1.5,
-					"lootCorridorProbability" : 1
+					"lootProbability" : 1,
+					"lootCorridorProbability" : 0.7
 				}
 			} ]
 		}

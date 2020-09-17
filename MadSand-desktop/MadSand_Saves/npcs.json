@@ -271,13 +271,13 @@
 		"strength" : 2,
 		"accuracy" : 15,
 		"dexterity" : 0,
-		"rewardExp" : 3,
+		"rewardExp" : 6,
 		"loot" : "n",
 		"faction" : "Monsters",
 		"type" : "Regular",
 		"questList" : null,
 		"spawnOnce" : false,
-		"friendly" : true
+		"friendly" : false
 	},
 	"20" : {
 		"name" : "Ghost",

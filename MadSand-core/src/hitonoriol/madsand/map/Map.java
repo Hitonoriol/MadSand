@@ -10,6 +10,7 @@ import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Npc;
+import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.properties.ObjectProp;
@@ -122,6 +123,18 @@ public class Map {
 
 	public int getNpcCount() {
 		return mapNpcs.size();
+	}
+
+	public Pair getRandomPoint(int distanceFromPlayer) {
+		Player player = World.player;
+		int x = player.x, y = player.y;
+
+		while (Line.calcDistance(x, y, player.x, player.y) < distanceFromPlayer) {
+			x = Utils.rand(xsz);
+			y = Utils.rand(ysz);
+		}
+
+		return coords.set(x, y);
 	}
 
 	public Map purge() {
@@ -547,13 +560,33 @@ public class Map {
 		return true;
 	}
 
+	private static int MAX_NPCS = 50; // Max npcs -- for autospawn only
+
+	public void spawnMobs(boolean friendly) {
+		WorldGenPreset preset = WorldGenProp.getBiome(getBiome());
+		OverworldPreset overworld = preset.overworld;
+
+		if (getNpcCount() >= MAX_NPCS)
+			return;
+
+		if (friendly)
+			spawnFromRollList(overworld.friendlyMobs, overworld.friendlySpawnChance);
+		else
+			spawnFromRollList(overworld.hostileMobs, overworld.hostileSpawnChance);
+
+	}
+
+	private void spawnFromRollList(RollList list, double chance) {
+		if (Utils.percentRoll(chance))
+			for (int i = 0; i < list.rollCount; ++i) {
+				getRandomPoint(World.player.fov);
+				spawnNpc(Utils.randElement(list.idList), coords.x, coords.y);
+			}
+	}
+
 	public void naturalRegeneration() {
 
 		WorldGenPreset preset = WorldGenProp.getBiome(getBiome());
-
-		if (preset == null)
-			return;
-
 		OverworldPreset overworld = preset.overworld;
 
 		if (overworld.regenerateObjects == null)

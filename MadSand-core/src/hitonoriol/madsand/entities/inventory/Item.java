@@ -117,7 +117,7 @@ public class Item {
 			info += equipStats.getString();
 		}
 
-		if (type == ItemType.Consumable) {
+		if (type.equals(ItemType.Consumable)) {
 			info += "Satiation: " + satiationAmount + Resources.LINEBREAK;
 			info += "Health: " + healAmount + Resources.LINEBREAK;
 		}
@@ -184,7 +184,7 @@ public class Item {
 		this.skill = properties.skill;
 		this.useAction = properties.useAction;
 
-		if (type == ItemType.Consumable) {
+		if (type.equals(ItemType.Consumable)) {
 			healAmount = properties.healAmount;
 			satiationAmount = properties.satiationAmount;
 		}

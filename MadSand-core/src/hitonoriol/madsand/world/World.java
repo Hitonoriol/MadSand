@@ -366,14 +366,14 @@ public class World {
 		return !isNight();
 	}
 
-	private static final int fovDelta = 7;
+	private static final int fovDelta = 5;
 	private static int TIME_FOV_DECREASE_START = 18;// hour when the fov begins to decrease
 	private static int TIME_FOV_DECREASE_END = TIME_FOV_DECREASE_START + fovDelta;
 	private static int TIME_FOV_INCREASE_START = 4;// hour when the fov begins to decrease
 	private static int TIME_FOV_INCREASE_END = TIME_FOV_INCREASE_START + fovDelta;
 	private static int TIME_MIDNIGHT = 24;
 
-	void hourTick() {
+	public void hourTick() {
 		Map curLoc = getCurLoc();
 
 		++worldtime;
@@ -388,8 +388,7 @@ public class World {
 			player.setFov(player.fov + 1);
 
 		curLoc.naturalRegeneration();
-		
-		Utils.out("isNight: " + isNight());
+		curLoc.spawnMobs(!isNight()); // Autospawn hostile mobs at night / friendly mobs during the day
 
 		MadSand.notice("Another hour passes...");
 		MadSand.notice("It's " + worldtime + ":00");

@@ -214,16 +214,11 @@ public abstract class Entity {
 	}
 
 	public void heal(int to) {
-		if (stats.hp + to < stats.mhp) {
-			stats.hp += stats.skills.getLvlReward(Skill.Survival, to);
-		} else {
-			stats.hp = stats.mhp;
-		}
-	}
+		stats.hp += stats.skills.getLvlReward(Skill.Survival, to);
 
-	void starve() {
-		--stats.food;
-		stats.check();
+		if (stats.hp > stats.mhp)
+			stats.hp = stats.mhp;
+
 	}
 
 	void satiate(int amt) {
@@ -393,19 +388,19 @@ public abstract class Entity {
 	}
 
 	boolean walk(Direction dir) {
-		
+
 		if (dir.isDiagonal())
 			return false;
-		
+
 		if (stepping)
 			return false;
-		
+
 		stats.look = dir;
 		turn(stats.look);
-		
+
 		if (colliding(stats.look) || isOnMapBound(stats.look))
 			return false;
-		
+
 		doAction(stats.AP_WALK);
 		move(stats.look);
 		return true;

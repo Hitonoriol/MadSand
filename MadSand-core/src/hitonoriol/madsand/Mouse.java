@@ -28,6 +28,8 @@ public class Mouse {
 	public static int wclickx = 0; // Coords of the cell of map where the mouse click occurred
 	public static int wclicky = 0;
 
+	public static String lineDelimiter = "**********";
+
 	public static Map loc;
 	public static Tile tile;
 	public static MapObject object;
@@ -67,8 +69,12 @@ public class Mouse {
 		info += ("You are at (" + player.x + ", " + player.y + ")") + Resources.LINEBREAK;
 		info += ("Looking at (" + wx + ", " + wy + ")") + Resources.LINEBREAK;
 
-		if (Utils.debugMode)
+		if (Utils.debugMode) {
+			info += lineDelimiter + Resources.LINEBREAK;
 			info += "Objects on map: " + loc.getObjectCount() + Resources.LINEBREAK;
+			info += "NPCs on map: " + loc.getNpcCount() + Resources.LINEBREAK;
+			info += lineDelimiter + Resources.LINEBREAK;
+		}
 
 		if (wx == player.x && wy == player.y) {
 			info += "You look at yourself" + Resources.LINEBREAK;
