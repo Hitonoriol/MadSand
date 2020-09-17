@@ -651,7 +651,8 @@
 	},
 	"70" : {
 		"name" : "Sharp stone",
-		"recipe" : "2/2",
+		"recipe" : "2/1",
+		"craftQuantity": 2,
 		"cost" : 6,
 		"weight" : 0.5
 	},

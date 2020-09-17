@@ -70,7 +70,7 @@ public class DungeonGenerator extends AbstractRoomGenerator {
     private int deadEndRemovalIterations = Integer.MAX_VALUE;
 
     // Control variables.
-    private final List<Room> rooms = new ArrayList<Room>();
+    protected final List<Room> rooms = new ArrayList<Room>();
     private final List<Direction> directions = new ArrayList<Direction>();
     private Int2dArray regions;
     private int currentRegion;
@@ -117,7 +117,7 @@ public class DungeonGenerator extends AbstractRoomGenerator {
     /** Resets control variables. */
     protected void reset() {
         currentRegion = lastRoomRegion = -1;
-        rooms.clear();
+        //rooms.clear();
         directions.clear();
         regions = null;
     }

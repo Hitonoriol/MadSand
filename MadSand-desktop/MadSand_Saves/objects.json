@@ -131,12 +131,14 @@
 	},
 	"10" : {
 		"hp" : 5,
-		"harvestHp" : -1,
+		"harvestHp" : 2,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
 		"maskHeight" : 0,
-		"altItems" : null,
+		"altItems" : {
+			"0" : [ 68 ]
+		},
 		"onInteract" : "-1",
 		"skill" : "None",
 		"name" : "Cactus"
@@ -1432,5 +1434,47 @@
 		"onInteract" : "-1",
 		"skill" : "None",
 		"name" : "Clay wall"
+	},
+	"112" : {
+		"hp" : 30,
+		"harvestHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "
+			utils:ascend();
+		",
+		"skill" : "None",
+		"name" : "Ladder to the surface"
+	},
+	"113" : {
+		"hp" : 30,
+		"harvestHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "
+			utils:descend();
+		",
+		"skill" : "None",
+		"name" : "Staircase down"
+	},
+	"114" : {
+		"hp" : 30,
+		"harvestHp" : -1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "
+			utils:ascend();
+		",
+		"skill" : "None",
+		"name" : "Staircase up"
 	}
 }

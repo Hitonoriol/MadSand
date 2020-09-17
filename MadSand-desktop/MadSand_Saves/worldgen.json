@@ -67,6 +67,8 @@
 			"roomTile" : 12,
 			"corridorTile" : 5,
 			"doorObject" : 11,
+			"staircaseDownObject": 113,
+			"staircaseUpObject": 114,
 			"dungeonContents" : [ {
 				"fromFloor" : 0,
 				"contents" : {
@@ -74,7 +76,7 @@
 					"loot" : [ "2/10", "59/3", "60/1" ,"21/100" ],
 					"mobProbability" : 4,
 					"mobCorridorProbability" : 1,
-					"lootProbability" : 2,
+					"lootProbability" : 1.5,
 					"lootCorridorProbability" : 1
 				}
 			} ]
@@ -121,25 +123,6 @@
 		},
 		"dungeonProbability" : 0,
 		"dungeon" : {
-			"tolerance" : 0,
-			"maxRoomSize" : 0,
-			"minRoomSize" : 0,
-			"wallObject" : 0,
-			"wallTile" : 0,
-			"roomTile" : 0,
-			"corridorTile" : 0,
-			"doorObject" : 0,
-			"dungeonContents" : [ {
-				"fromFloor" : 0,
-				"contents" : {
-					"mobs" : null,
-					"loot" : null,
-					"mobProbability" : 0,
-					"mobCorridorProbability" : 0,
-					"lootProbability" : 0,
-					"lootCorridorProbability" : 0
-				}
-			} ]
 		}
 	},
 	"2" : {
@@ -171,25 +154,6 @@
 		},
 		"dungeonProbability" : 0,
 		"dungeon" : {
-			"tolerance" : 0,
-			"maxRoomSize" : 0,
-			"minRoomSize" : 0,
-			"wallObject" : 0,
-			"wallTile" : 0,
-			"roomTile" : 0,
-			"corridorTile" : 0,
-			"doorObject" : 0,
-			"dungeonContents" : [ {
-				"fromFloor" : 0,
-				"contents" : {
-					"mobs" : null,
-					"loot" : null,
-					"mobProbability" : 0,
-					"mobCorridorProbability" : 0,
-					"lootProbability" : 0,
-					"lootCorridorProbability" : 0
-				}
-			} ]
 		}
 	},
 	"3" : {
@@ -224,25 +188,6 @@
 		},
 		"dungeonProbability" : 0,
 		"dungeon" : {
-			"tolerance" : 0,
-			"maxRoomSize" : 0,
-			"minRoomSize" : 0,
-			"wallObject" : 0,
-			"wallTile" : 0,
-			"roomTile" : 0,
-			"corridorTile" : 0,
-			"doorObject" : 0,
-			"dungeonContents" : [ {
-				"fromFloor" : 0,
-				"contents" : {
-					"mobs" : null,
-					"loot" : null,
-					"mobProbability" : 0,
-					"mobCorridorProbability" : 0,
-					"lootProbability" : 0,
-					"lootCorridorProbability" : 0
-				}
-			} ]
 		}
 	}
 }

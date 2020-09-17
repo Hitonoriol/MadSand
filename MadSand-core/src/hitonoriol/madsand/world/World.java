@@ -352,18 +352,33 @@ public class World {
 		return ysz;
 	}
 
+	private static int TIME_NIGHT_START = 22;
+	private static int TIME_NIGHT_END = 6;
+
+	public boolean isNight() {
+		boolean beforeMidnight = worldtime >= TIME_NIGHT_START && worldtime < TIME_MIDNIGHT;
+		boolean afterMidnight = worldtime >= 0 && worldtime < TIME_NIGHT_END;
+
+		return beforeMidnight || afterMidnight;
+	}
+
+	public boolean isDay() {
+		return !isNight();
+	}
+
 	private static final int fovDelta = 7;
 	private static int TIME_FOV_DECREASE_START = 18;// hour when the fov begins to decrease
 	private static int TIME_FOV_DECREASE_END = TIME_FOV_DECREASE_START + fovDelta;
 	private static int TIME_FOV_INCREASE_START = 4;// hour when the fov begins to decrease
 	private static int TIME_FOV_INCREASE_END = TIME_FOV_INCREASE_START + fovDelta;
+	private static int TIME_MIDNIGHT = 24;
 
 	void hourTick() {
 		Map curLoc = getCurLoc();
 
 		++worldtime;
 
-		if (worldtime == 24)
+		if (worldtime == TIME_MIDNIGHT)
 			worldtime = 0;
 
 		if (worldtime > TIME_FOV_DECREASE_START && worldtime <= TIME_FOV_DECREASE_END)
@@ -373,6 +388,8 @@ public class World {
 			player.setFov(player.fov + 1);
 
 		curLoc.naturalRegeneration();
+		
+		Utils.out("isNight: " + isNight());
 
 		MadSand.notice("Another hour passes...");
 		MadSand.notice("It's " + worldtime + ":00");

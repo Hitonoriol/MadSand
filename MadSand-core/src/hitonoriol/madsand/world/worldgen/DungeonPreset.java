@@ -9,6 +9,9 @@ public class DungeonPreset {
 	public int roomTile;
 	public int corridorTile;
 	public int doorObject;
+	
+	public int staircaseDownObject;
+	public int staircaseUpObject;
 
 	public ArrayList<DungeonFloorContents> dungeonContents = new ArrayList<>(); // {floorGreaterOrEquals, <dungeonContents>; ...}
 }

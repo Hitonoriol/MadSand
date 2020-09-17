@@ -550,6 +550,10 @@ public class Map {
 	public void naturalRegeneration() {
 
 		WorldGenPreset preset = WorldGenProp.getBiome(getBiome());
+
+		if (preset == null)
+			return;
+
 		OverworldPreset overworld = preset.overworld;
 
 		if (overworld.regenerateObjects == null)
@@ -588,7 +592,7 @@ public class Map {
 	/*
 	 * Get maximum count of objects on map by its size
 	 */
-	private float MAX_OBJECT_PERCENT = 0.2f; // Max percent of map allowed to be filled with objects
+	private float MAX_OBJECT_PERCENT = 0.15f; // Max percent of map allowed to be filled with objects
 
 	public int getMaxObjects() {
 		return (int) (xsz * ysz * MAX_OBJECT_PERCENT);
