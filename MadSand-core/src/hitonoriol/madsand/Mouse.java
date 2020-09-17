@@ -67,6 +67,9 @@ public class Mouse {
 		info += ("You are at (" + player.x + ", " + player.y + ")") + Resources.LINEBREAK;
 		info += ("Looking at (" + wx + ", " + wy + ")") + Resources.LINEBREAK;
 
+		if (Utils.debugMode)
+			info += "Objects on map: " + loc.getObjectCount() + Resources.LINEBREAK;
+
 		if (wx == player.x && wy == player.y) {
 			info += "You look at yourself" + Resources.LINEBREAK;
 			info += player.getInfoString();

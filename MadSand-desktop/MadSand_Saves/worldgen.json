@@ -10,6 +10,7 @@
 				"rollCount" : 2,
 				"idList" : [ 6 ]
 			} ],
+			
 			"objects" : [ {
 				"rollCount" : 50,
 				"idList" : [ 2, 30, 35, 36 ]
@@ -22,7 +23,25 @@
 			}, {
 				"rollCount" : 30,
 				"idList" : [ 42, 41 ]
-			} ]
+			} ],
+			
+			"regenerateObjects": [
+				{"rollCount": 10,
+				"idList": [4, 37]},
+				
+				{"rollCount": 5,
+				"idList": [2, 35, 36]},
+				
+				{"rollCount": 4,
+				"idList": [1, 27, 28]},
+				
+				{"rollCount": 2,
+				"idList": [21, 58, 54, 62]},
+				
+				{"rollCount": 3,
+				"idList": [41, 42]}
+			],
+			"chanceToRegenerate": 50
 		},
 		"lake" : {
 			"lakeTile" : 8,
@@ -78,7 +97,13 @@
 			}, {
 				"rollCount" : 15,
 				"idList" : [ 31 ]
-			} ]
+			} ],
+			
+			"regenerateObjects": [
+				{"rollCount": 20,
+				"idList": [10, 24]}
+			],
+			"chanceToRegenerate": 35
 		},
 		"lake" : {
 			"lakeTile" : 0,

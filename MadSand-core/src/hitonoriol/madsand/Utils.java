@@ -316,6 +316,10 @@ public class Utils {
 	}
 
 	public static boolean percentRoll(double percent) {
+		
+		if (percent == 0)
+			return false;
+		
 		return (randPercent() < percent);
 	}
 

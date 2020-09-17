@@ -83,16 +83,8 @@ public class WorldGen {
 		Utils.out("Generating biome objects!");
 		ArrayList<RollList> objectGenList = curBiome.getBiomeObjects();
 
-		ArrayList<Integer> objectIdList;
-		int listSize;
-
-		for (RollList objectRollList : objectGenList) {
-			for (int i = 0; i < objectRollList.rollCount; ++i) {
-				objectIdList = objectRollList.idList;
-				listSize = objectIdList.size();
-				curLoc.randPlaceObject(objectIdList.get(Utils.random.nextInt(listSize)));
-			}
-		}
+		for (RollList objectRollList : objectGenList)
+			curLoc.rollObjects(objectRollList);
 
 		Utils.out("Done generating biome objects!");
 	}
@@ -313,4 +305,5 @@ public class WorldGen {
 		ArrayList<Integer> keyList = new ArrayList<Integer>(WorldGenProp.biomes.keySet());
 		return keyList.get(Utils.random.nextInt(keyList.size()));
 	}
+
 }

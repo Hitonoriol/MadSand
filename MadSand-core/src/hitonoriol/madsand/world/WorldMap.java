@@ -155,14 +155,14 @@ public class WorldMap extends HashMap<MapID, Map> {
 		try {
 			ByteArrayInputStream stream = new ByteArrayInputStream(sector);
 			// Read header
-			boolean editable = Utils.bool(GameSaver.decode2(stream.readNBytes(BLOCK_SIZE)));
-			int xsz = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
-			int ysz = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
-			int spawnX = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
-			int spawnY = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
-			int defTile = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
-			int defObject = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
-			int biome = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
+			boolean editable = Utils.bool(loadNextBlock(stream));
+			int xsz = loadNextBlock(stream);
+			int ysz = loadNextBlock(stream);
+			int spawnX = loadNextBlock(stream);
+			int spawnY = loadNextBlock(stream);
+			int defTile = loadNextBlock(stream);
+			int defObject = loadNextBlock(stream);
+			int biome = loadNextBlock(stream);
 
 			MapID loc = new MapID(new Pair(wx, wy), layer);
 			Map map = new Map(xsz, ysz);
@@ -242,5 +242,9 @@ public class WorldMap extends HashMap<MapID, Map> {
 			e.printStackTrace();
 			Utils.die();
 		}
+	}
+	
+	private int loadNextBlock(ByteArrayInputStream stream) throws Exception {
+		return GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
 	}
 }

@@ -14,8 +14,11 @@ import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
+import hitonoriol.madsand.properties.WorldGenProp;
 import hitonoriol.madsand.world.World;
-
+import hitonoriol.madsand.world.worldgen.OverworldPreset;
+import hitonoriol.madsand.world.worldgen.RollList;
+import hitonoriol.madsand.world.worldgen.WorldGenPreset;
 
 public class Map {
 	private int xsz, ysz;
@@ -111,6 +114,14 @@ public class Map {
 
 	public int getHeight() {
 		return ysz;
+	}
+
+	public int getObjectCount() {
+		return mapObjects.size();
+	}
+
+	public int getNpcCount() {
+		return mapNpcs.size();
 	}
 
 	public Map purge() {
@@ -536,6 +547,28 @@ public class Map {
 		return true;
 	}
 
+	public void naturalRegeneration() {
+
+		WorldGenPreset preset = WorldGenProp.getBiome(getBiome());
+		OverworldPreset overworld = preset.overworld;
+
+		if (overworld.regenerateObjects == null)
+			return;
+
+		if (!Utils.percentRoll(overworld.chanceToRegenerate))
+			return;
+
+		int maxObjects = getMaxObjects();
+
+		Utils.out("Regenerating objects from regenerateObjects...");
+		Utils.out("Max objects for current location: " + maxObjects);
+
+		if (getObjectCount() < maxObjects)
+			for (RollList rollList : overworld.regenerateObjects)
+				rollObjects(rollList);
+
+	}
+
 	public Pair locateTile(int id) {
 		Tile tile = TileProp.tiles.get(id);
 
@@ -550,6 +583,25 @@ public class Map {
 		}
 
 		return Pair.nullPair;
+	}
+
+	/*
+	 * Get maximum count of objects on map by its size
+	 */
+	private float MAX_OBJECT_PERCENT = 0.2f; // Max percent of map allowed to be filled with objects
+
+	public int getMaxObjects() {
+		return (int) (xsz * ysz * MAX_OBJECT_PERCENT);
+	}
+
+	public void rollObjects(RollList objectRollList) {
+		ArrayList<Integer> objectIdList;
+		int listSize;
+		for (int i = 0; i < objectRollList.rollCount; ++i) {
+			objectIdList = objectRollList.idList;
+			listSize = objectIdList.size();
+			randPlaceObject(objectIdList.get(Utils.random.nextInt(listSize)));
+		}
 	}
 
 }
