@@ -83,16 +83,33 @@ public class Pair {
 			return null;
 	}
 
-	public static Direction getRelativeDirection(int originX, int originY, int cellX, int cellY) {
+	public static Direction getRelativeDirection(int originX, int originY, int cellX, int cellY, boolean fourWay) {
 		Direction ret = null;
-		if (originX > cellX)
+		int dx = cellX - originX;
+		int dy = cellY - originY;
+
+		if (dx > 0)
 			ret = Direction.RIGHT;
-		else if (originX < cellX)
+		else if (dx < 0)
 			ret = Direction.LEFT;
-		else if (originY > cellY)
+
+		if (dy > 0)
 			ret = Direction.UP;
-		else
+		else if (dy < 0)
 			ret = Direction.DOWN;
+		
+		if (fourWay)
+			return ret;
+
+		if (dx < 0 && dy < 0)
+			ret = Direction.DOWN_LEFT;
+		else if (dx > 0 && dy < 0)
+			ret = Direction.DOWN_RIGHT;
+		else if (dx < 0 && dy > 0)
+			ret = Direction.UP_LEFT;
+		else if (dx > 0 && dy > 0)
+			ret = Direction.UP_RIGHT;
+
 		return ret;
 	}
 

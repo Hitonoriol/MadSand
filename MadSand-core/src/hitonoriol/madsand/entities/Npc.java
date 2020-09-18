@@ -185,19 +185,7 @@ public class Npc extends Entity {
 			if (!enemySpotted)
 				return;
 
-			int dx = player.x - x;
-			int dy = player.y - y;
-			Direction dir = null;
-
-			if (dx > 0)
-				dir = Direction.RIGHT;
-			else if (dx < 0)
-				dir = Direction.LEFT;
-
-			if (dy > 0)
-				dir = Direction.UP;
-			else if (dy < 0)
-				dir = Direction.DOWN;
+			Direction dir = Pair.getRelativeDirection(x, y, player.x, player.y, true);
 
 			if (dist > attackDistance) {
 				if (canAct(stats.AP_WALK) && dir != null) {
@@ -209,11 +197,15 @@ public class Npc extends Entity {
 				return;
 			}
 
-			if (stats.actionPts >= stats.AP_ATTACK) {
+			dir = Pair.getRelativeDirection(x, y, player.x, player.y, false);
+			if (canAct(stats.AP_ATTACK)) {
 				turn(dir);
-				ticksSpent = doAction(stats.AP_ATTACK);
-				Utils.out("Ticks spent attacking: " + ticksSpent);
-				attack(stats.look);
+
+				do {
+					Utils.out("Ticks spent attacking: " + ticksSpent);
+					attack(stats.look);
+				} while ((ticksSpent = doAction(stats.AP_ATTACK)) < 1);
+
 			} else
 				rest();
 

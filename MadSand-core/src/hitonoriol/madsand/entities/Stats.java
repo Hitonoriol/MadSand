@@ -23,7 +23,7 @@ public class Stats {
 	final static int FOOD_HEAL = 1;
 
 	int STAT_MIN_SUM = 20;
-	int STAT_MAX_SUM = 24;
+	public static int STAT_MAX_SUM = 24;
 	static final int STAT_RAND_MAX = 8;
 	static final int STAT_RAND_MIN = 3;
 
@@ -164,7 +164,8 @@ public class Stats {
 		// AP_MINOR = ;
 		// AP_WALK = ;
 		// AP_ATTACK = ;
-		// actionPtsMax = ;
+		actionPtsMax = dexterity;
+		actionPts = actionPtsMax;
 	}
 
 	public void roll() {
@@ -188,6 +189,8 @@ public class Stats {
 
 		stamina = ((dexterity + constitution) / 2) * 5;
 		maxstamina = stamina;
+		
+		calcActionCosts();
 	}
 
 	@JsonIgnore

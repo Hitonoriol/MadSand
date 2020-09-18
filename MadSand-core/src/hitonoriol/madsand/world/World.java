@@ -405,17 +405,10 @@ public class World {
 			hourTick();
 		}
 
+		updateNpcs();
 	}
 
-	public void updateLight() {
-		getCurLoc().updateLight(player.x, player.y, player.fov);
-	}
-
-	public void ticks(int n) {
-		for (int i = n; i > 0; --i) {
-			tick();
-		}
-
+	private void updateNpcs() {
 		Map loc = getCurLoc();
 		HashMap<Pair, Npc> npcs = loc.getNpcs();
 		ArrayList<Npc> queue = new ArrayList<Npc>();
@@ -425,7 +418,15 @@ public class World {
 
 		for (Npc npc : queue)
 			npc.act();
+	}
 
+	public void updateLight() {
+		getCurLoc().updateLight(player.x, player.y, player.fov);
+	}
+
+	public void ticks(int n) {
+		for (int i = n; i > 0; --i)
+			tick();
 	}
 
 	@JsonIgnore

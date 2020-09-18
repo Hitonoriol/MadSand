@@ -253,6 +253,7 @@ public abstract class Entity {
 		int tmp = stats.actionPts;
 		stats.actionPts -= ap;
 		int ticks = 0, absPts = Math.abs(stats.actionPts), absTmp = Math.abs(tmp);
+		
 		if (stats.actionPts <= 0) {
 			ticks = (absPts / stats.actionPtsMax);
 			if (absPts < stats.actionPtsMax && stats.actionPts < 0)
@@ -269,10 +270,12 @@ public abstract class Entity {
 			if (absPts > stats.actionPtsMax)
 				stats.actionPts = stats.actionPtsMax - stats.actionPts;
 		}
+		
 		if (stats.actionPts == 0) {
 			stats.actionPts = stats.actionPtsMax;
 			++ticks;
 		}
+		
 		return ticks;
 	}
 
@@ -429,6 +432,11 @@ public abstract class Entity {
 			return true;
 
 		return false;
+	}
+	
+	@JsonIgnore
+	public int getSpeed() {
+		return stats.actionPtsMax;
 	}
 
 	private String HEALTH_STATE_FULL = "full";
