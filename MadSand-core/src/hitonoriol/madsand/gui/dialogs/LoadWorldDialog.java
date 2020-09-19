@@ -57,8 +57,10 @@ public class LoadWorldDialog extends Dialog {
 				public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 					MadSand.WORLDNAME = sa;
 
-					if (GameSaver.loadWorld(sa))
+					if (GameSaver.loadWorld(sa)) {
 						MadSand.state = GameState.GAME;
+						Gdx.graphics.setContinuousRendering(false);
+					}
 					
 					Gui.overlay.refreshOverlay();
 

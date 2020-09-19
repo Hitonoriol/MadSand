@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.gui.OverlayMouseoverListener;
 import hitonoriol.madsand.gui.dialogs.QuestJournal;
 import hitonoriol.madsand.gui.stages.Overlay;
@@ -80,7 +79,7 @@ public class OverlayBottomMenu extends Table {
 
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				Utils.toggleInventory();
+				Gui.toggleInventory();
 			}
 
 		});

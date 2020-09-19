@@ -1,5 +1,5 @@
 {
-	"0" : { },
+	"0" : { "name": "Nothing"},
 	"1" : {
 		"name" : "Wood",
 		"altObject" : 9,

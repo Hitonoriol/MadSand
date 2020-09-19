@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -28,6 +27,7 @@ import hitonoriol.madsand.gui.stages.CraftMenu;
 import hitonoriol.madsand.gui.stages.DeathStage;
 import hitonoriol.madsand.gui.stages.MainMenu;
 import hitonoriol.madsand.gui.stages.Overlay;
+import hitonoriol.madsand.world.World;
 
 public class Gui {
 	public static final float DEFWIDTH = 250f;
@@ -65,6 +65,7 @@ public class Gui {
 
 		skin = new Skin();
 		skin.add("default", font);
+		loadNinePatches();
 
 		Pixmap pixmap = new Pixmap(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 12, Pixmap.Format.RGB888);
 		pixmap.setColor(Color.WHITE);
@@ -92,14 +93,8 @@ public class Gui {
 		labelStyle.fontColor = Color.WHITE;
 		skin.add("default", labelStyle);
 
-		transparency = new NinePatchDrawable(
-				new NinePatch(new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/transparency.png"))));
-
 		Window.WindowStyle ws = new Window.WindowStyle();
-		NinePatch patch = new NinePatch(new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/bg.png")));
-		dialogBackground = new NinePatchDrawable(patch);
-		dialogBackground.setMinHeight(50);
-		dialogBackground.setMinWidth(100);
+
 		ws.background = skin.newDrawable("background", Color.LIGHT_GRAY);
 
 		ws.stageBackground = transparency;
@@ -121,18 +116,24 @@ public class Gui {
 		ScrollPane.ScrollPaneStyle spx = new ScrollPane.ScrollPaneStyle();
 		skin.add("default", spx);
 
-		NinePatch ptc = new NinePatch(new Texture(Gdx.files.local(MadSand.SAVEDIR + "misc/darkness.png")), 3, 3, 3, 3);
-		darkBackground = new NinePatchDrawable(ptc);
-
 		TextTooltip.TextTooltipStyle txtool = new TextTooltip.TextTooltipStyle();
 		txtool.background = darkBackground;
 		txtool.label = labelStyle;
 		skin.add("default", txtool);
-		
-		darkBackgroundSizeable = new NinePatchDrawable(ptc);
+
+	}
+
+	static private void loadNinePatches() {
+		dialogBackground = Resources.loadNinePatch("misc/bg.png");
+		dialogBackground.setMinHeight(50);
+		dialogBackground.setMinWidth(100);
+
+		transparency = Resources.loadNinePatch("misc/transparency.png");
+
+		darkBackground = Resources.loadNinePatch("misc/darkness.png");
+		darkBackgroundSizeable = new NinePatchDrawable(darkBackground);
 		darkBackgroundSizeable.setMinHeight(0);
 		darkBackgroundSizeable.setMinWidth(0);
-
 	}
 
 	static void init() {
@@ -202,13 +203,20 @@ public class Gui {
 
 		dialog.show(stage);
 	}
-	
+
 	public static void refreshOverlay() {
 		overlay.refreshOverlay();
 	}
 
 	public static float horizontalCenter(Actor actor) {
 		return (Gdx.graphics.getWidth() / 2) - actor.getWidth();
+	}
+
+	public static void toggleInventory() {
+		if (inventoryActive)
+			World.player.hideInventory();
+		else
+			World.player.showInventory();
 	}
 
 }

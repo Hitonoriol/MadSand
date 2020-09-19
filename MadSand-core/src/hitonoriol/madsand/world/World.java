@@ -25,6 +25,8 @@ public class World {
 	public static final int TILE_CAVE_EXIT = 25; //TODO move this to cave preset
 
 	private Pair coords = new Pair();
+	private MapID mapID = new MapID();
+	
 	private int xsz, ysz; // max world size, not really used anywhere (still)
 
 	public int curywpos; // global coords of current sector
@@ -89,7 +91,7 @@ public class World {
 	}
 
 	Map getLoc(Pair wc, int layer, int id) {
-		MapID loc = new MapID(wc, layer, id);
+		MapID loc = mapID.set(wc, layer, id);
 		if (locExists(loc)) {
 			return worldMap.get(loc);
 		} else
@@ -107,10 +109,6 @@ public class World {
 
 	Map getCurLoc(int layer) {
 		return getLoc(curxwpos, curywpos, layer);
-	}
-
-	MapID getCurMapID() {
-		return new MapID(new Pair(coords.set(curxwpos, curywpos)), curlayer);
 	}
 
 	int getLocBiome() {

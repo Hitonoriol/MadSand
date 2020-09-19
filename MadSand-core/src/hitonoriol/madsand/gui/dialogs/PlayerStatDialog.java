@@ -18,19 +18,27 @@ import hitonoriol.madsand.world.World;
 
 public class PlayerStatDialog extends GameDialog {
 
-	static int MAX_STAT_POINTS = Stats.STAT_MAX_SUM;
-	StatLabels statLabels;
+	static int DEFAULT_STAT_SUM = 6;
+	int maxStatSum = World.player.stats.maxStatSum;
+	int minStatSum;
+	protected StatLabels statLabels;
 	String titleString;
 	TextField nameField;
 
-	public PlayerStatDialog(Stage stage, StatLabels statLabels, String title) {
+	public PlayerStatDialog(Stage stage, StatLabels statLabels, String title, int minStatSum) {
 		super(stage);
 		this.statLabels = statLabels;
+		this.minStatSum = minStatSum;
 		titleString = title;
+		statLabels.refreshStatLabels();
 		init();
 	}
 
-	void init() {
+	public PlayerStatDialog(Stage stage, StatLabels statLabels, String title) {
+		this(stage, statLabels, title, DEFAULT_STAT_SUM);
+	}
+
+	private void init() {
 		float width = Gui.defLblWidth;
 
 		Label title = super.getTitleLabel();
@@ -55,9 +63,10 @@ public class PlayerStatDialog extends GameDialog {
 		super.add(statLabels.freeStatPointsLbl).width(width).row();
 	}
 
-	float STAT_BUTTON_WIDTH = 15;
+	float BUTTON_WIDTH = 15;
 	float ENTRY_HEIGHT = 15;
-	float LABEL_WIDTH = Gui.defLblWidth - STAT_BUTTON_WIDTH * 2;
+	float BUTTON_PADDING = 4;
+	float LABEL_WIDTH = Gui.defLblWidth - ((BUTTON_WIDTH + BUTTON_PADDING) * 2);
 
 	private void addStatEntry(Label label) {
 		IntContainer stat = getStatByLabel(label);
@@ -66,13 +75,13 @@ public class PlayerStatDialog extends GameDialog {
 		TextButton incButton = getStatButton(stat, true);
 		TextButton decButton = getStatButton(stat, false);
 
-		incButton.setSize(STAT_BUTTON_WIDTH, STAT_BUTTON_WIDTH);
-		decButton.setSize(STAT_BUTTON_WIDTH, STAT_BUTTON_WIDTH);
+		incButton.setSize(BUTTON_WIDTH, BUTTON_WIDTH);
+		decButton.setSize(BUTTON_WIDTH, BUTTON_WIDTH);
 		label.setWidth(LABEL_WIDTH);
 
-		group.add(decButton).size(STAT_BUTTON_WIDTH, ENTRY_HEIGHT);
 		group.add(label).size(LABEL_WIDTH, ENTRY_HEIGHT);
-		group.add(incButton).size(STAT_BUTTON_WIDTH, ENTRY_HEIGHT);
+		group.add(decButton).size(BUTTON_WIDTH, ENTRY_HEIGHT).padRight(BUTTON_PADDING);
+		group.add(incButton).size(BUTTON_WIDTH, ENTRY_HEIGHT).padRight(BUTTON_PADDING);
 
 		super.add(group);
 		super.row();
@@ -102,11 +111,12 @@ public class PlayerStatDialog extends GameDialog {
 		TextButton button = new TextButton(inc ? "+" : "-", Gui.skin);
 		ChangeListener listener = new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
+				int statSum = statLabels.stats.getSum();
 				if (inc) {
-					if (statLabels.stats.getSum() < MAX_STAT_POINTS)
+					if (statSum < maxStatSum)
 						++stat.value;
 				} else {
-					if (stat.value > 1)
+					if (statSum > minStatSum && stat.value > 1)
 						--stat.value;
 				}
 				statLabels.refreshStatLabel(stat);

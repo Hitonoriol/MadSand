@@ -47,16 +47,9 @@ public class Utils {
 		return Integer.parseInt(str);
 	}
 
-	public static void toggleInventory() {
-		if (Gui.inventoryActive)
-			World.player.hideInventory();
-		else
-			World.player.showInventory();
-	}
-
 	public static void invKeyCheck() {
 		if (Gdx.input.isKeyJustPressed(Keys.E)) {
-			toggleInventory();
+			Gui.toggleInventory();
 		}
 	}
 

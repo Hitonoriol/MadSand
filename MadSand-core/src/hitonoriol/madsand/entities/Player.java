@@ -51,6 +51,7 @@ public class Player extends Entity {
 		initInventory();
 		setFov(fov);
 		quests.setPlayer(this);
+		Gui.overlay.equipmentSidebar.init();
 	}
 
 	public Player() {
@@ -99,9 +100,10 @@ public class Player extends Entity {
 		int itemIdx = inventory.getSameCell(id);
 		if (itemIdx == -1) {
 			stats.hand = Item.nullItem;
-			Gui.overlay.setHandDisplay(0);
+			Gui.overlay.setHandDisplay(Item.nullItem);
 			return;
-		}
+		} else
+			Gui.overlay.equipmentSidebar.refreshSlot(EquipSlot.MainHand);
 	}
 
 	@Override
@@ -168,10 +170,11 @@ public class Player extends Entity {
 
 	void damageHeldTool(Skill objectSkill) {
 		if (inventory.damageTool(stats.hand, objectSkill)) {
-			MadSand.print("Your " + stats.hand.name + " broke");
+			MadSand.notice("Your " + stats.hand.name + " broke");
 			inventory.delItem(stats.hand);
 			freeHands(true);
-		}
+		} else
+			Gui.overlay.equipmentSidebar.refreshSlot(EquipSlot.MainHand);
 	}
 
 	public void refreshAvailableRecipes() {
@@ -372,8 +375,9 @@ public class Player extends Entity {
 		if (inventory.getSameCell(item) == -1)
 			return;
 		stats.hand = item;
-		Gui.overlay.setHandDisplay(item.id);
+		Gui.overlay.setHandDisplay(item);
 		useItem();
+		Gui.overlay.equipmentSidebar.refreshSlot(EquipSlot.MainHand);
 	}
 
 	public void useItem() {
@@ -458,7 +462,7 @@ public class Player extends Entity {
 		if (!silent && stats.hand.id != Item.NULL_ITEM)
 			MadSand.print("You put your " + stats.hand.name + " back to your inventory");
 		super.freeHands();
-		Gui.overlay.setHandDisplay(stats.hand.id);
+		Gui.overlay.setHandDisplay(stats.hand);
 	}
 
 	@Override
@@ -671,6 +675,6 @@ public class Player extends Entity {
 	public void setEquipment(ArrayList<Integer> eq) { // For deserializer only
 		super.setEquipment(eq);
 		Gui.overlay.refreshEquipDisplay();
-		Gui.overlay.setHandDisplay(stats.hand.id);
+		Gui.overlay.setHandDisplay(stats.hand);
 	}
 }

@@ -47,10 +47,11 @@ public class StatLabels {
 		luckStatLbl.setText("Luck: " + stats.luck);
 		dexStatLbl.setText("Dexterity: " + stats.dexterity);
 		statSumLbl.setText("\nStat sum: " + statSum);
-		freeStatPointsLbl.setText("Free stat points: " + (Stats.STAT_MAX_SUM - statSum));
+		freeStatPointsLbl.setText("Free stat points: " + (stats.maxStatSum - statSum));
 
 		hpStatLbl.setText("HP: " + stats.hp + "/" + stats.mhp);
 		staminaStatLbl.setText("Stamina: " + stats.stamina + "/" + stats.maxstamina);
+		Gui.refreshOverlay();
 	}
 
 	public static String conString = "Constitution";
@@ -74,6 +75,7 @@ public class StatLabels {
 		if (value.name.equals(dexString))
 			stats.dexterity = value.value;
 
+		stats.calcVarStats();
 		refreshStatLabels();
 
 	}

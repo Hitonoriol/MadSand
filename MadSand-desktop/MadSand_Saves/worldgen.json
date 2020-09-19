@@ -99,10 +99,10 @@
 				"idList" : [ 17 ]
 			} ],
 			"objects" : [ {
-				"rollCount" : 80,
+				"rollCount" : 160,
 				"idList" : [ 10, 24 ]
 			}, {
-				"rollCount" : 15,
+				"rollCount" : 30,
 				"idList" : [ 31 ]
 			} ],
 			
@@ -135,11 +135,11 @@
 		"overworld" : {
 			"defaultTile" : 20,
 			"tiles" : [ {
-				"rollCount" : 200,
+				"rollCount" : 400,
 				"idList" : [ 21 ]
 			} ],
 			"objects" : [ {
-				"rollCount" : 75,
+				"rollCount" : 300,
 				"idList" : [ 32, 38, 33 ]
 			} ]
 		},
@@ -166,15 +166,15 @@
 		"overworld" : {
 			"defaultTile" : 24,
 			"tiles" : [ {
-				"rollCount" : 200,
+				"rollCount" : 400,
 				"idList" : [ 10, 11 ]
 			} ],
 			"objects" : [ {
-				"rollCount" : 30,
+				"rollCount" : 150,
 				"idList" : [ 34, 33 ]
 			}, {
-				"rollCount" : 20,
-				"idList" : [ 39, 40, 88 ]
+				"rollCount" : 100,
+				"idList" : [ 39, 40 ]
 			} ]
 		},
 		"lake" : {

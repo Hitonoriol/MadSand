@@ -10,16 +10,12 @@ public class MapID {
 	public int layer, id;
 
 	public MapID(Pair coords, int layer, int id, boolean copyPair) {
-		if (copyPair) {
-			this.worldxy.x = coords.x;
-			this.worldxy.y = coords.y;
-		} else
-			this.worldxy = coords;
-		
-		this.layer = layer;
-		this.id = id;
+		if (copyPair)
+			set(worldxy.set(coords.x, coords.y), layer, id);
+		else
+			set(coords, layer, id);
 	}
-	
+
 	public MapID(Pair coords, int layer, int id) {
 		this(coords, layer, id, false);
 	}
@@ -38,6 +34,13 @@ public class MapID {
 
 	public MapID() {
 		this(Pair.nullPair);
+	}
+
+	public MapID set(Pair coords, int layer, int id) {
+		this.worldxy = coords;
+		this.layer = layer;
+		this.id = id;
+		return this;
 	}
 
 	public MapID setLayer(int layer) {

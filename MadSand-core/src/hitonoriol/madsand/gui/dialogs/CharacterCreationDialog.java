@@ -6,21 +6,24 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.LuaUtils;
+import hitonoriol.madsand.entities.Stats;
 import hitonoriol.madsand.gui.widgets.StatLabels;
 import hitonoriol.madsand.world.World;
 
 public class CharacterCreationDialog {
 	StatLabels statLabels;
+	Stats stats;
 	PlayerStatDialog dialog;
 	static String titleString = "Character Creation";
 
 	public CharacterCreationDialog() {
 		statLabels = new StatLabels();
+		stats = statLabels.stats;
 		createCharDialog();
 	}
 
 	void rollStats() {
-		World.player.stats.roll();
+		stats.roll();
 		statLabels.refreshStatLabels();
 	}
 
@@ -37,6 +40,12 @@ public class CharacterCreationDialog {
 
 		cbtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+				
+				if (stats.maxStatSum - stats.getSum() > 0) {
+					Gui.drawOkDialog("You still have unassigned stat points left!", Gui.overlay);
+					return;
+				}
+				
 				if (!dialog.nameField.getText().trim().equals("")) {
 					World.player.setName(dialog.nameField.getText());
 					World.player.reinit();

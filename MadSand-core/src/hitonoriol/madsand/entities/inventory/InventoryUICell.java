@@ -2,47 +2,24 @@ package hitonoriol.madsand.entities.inventory;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Tooltip;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Mouse;
-import hitonoriol.madsand.Resources;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.enums.ItemType;
 import hitonoriol.madsand.world.World;
 
-public class InventoryUICell extends Group {
-	private final int size = 80;
+public class InventoryUICell extends ItemUI {
 
 	private static final float CONTEXT_BTN_WIDTH = 100F;
 	private static final float CONTEXT_BTN_HEIGHT = 30F;
 	public static final float CONTEXT_W_DENOMINATOR = 1.75f;
-
-	private float TOOLTIP_WIDTH = 200F;
-	private float TOOLTIP_HEIGHT = 50F;
-
-	private Table tooltipTbl;
-	private Label itemInfoLbl;
-	private Tooltip<Table> tooltip;
-
-	private ImageButton itemBtn; // button with item image
-
-	private Label itemQuantityLabel;
-	private Label toolHpLabel;
 
 	private Table invCellContextContainer; // RMB context menu container and buttons
 
@@ -50,68 +27,29 @@ public class InventoryUICell extends Group {
 	private TextButton useBtn;
 	private TextButton equipBtn;
 
-	private Image highlight; // for mouseover highlighting of items
-
 	public InventoryUICell(Item item) {
-		super();
-		highlight = new Image(Resources.noEquip);
-		toolHpLabel = new Label("", Gui.skin);
-		itemBtn = new ImageButton(new SpriteDrawable(new Sprite(Resources.item[item.id])));
-		itemQuantityLabel = new Label(item.quantity + "", Gui.skin);
-
-		if (item.type.isTool())
-			setHp(item.hp);
-
-		toolHpLabel.setPosition(itemQuantityLabel.getX() + size / 1.6f, itemQuantityLabel.getY() + 6);
-
-		super.addActor(itemBtn);
-		super.addActor(itemQuantityLabel);
-		super.addActor(toolHpLabel);
-		super.addActor(highlight);
-		super.setSize(size, size);
-
-		highlight.setVisible(false);
-
+		super(item);
 		initContextMenu(item);
-
-		this.addListener(new InputListener() {
-			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-				highlight.setVisible(true);
-			}
-
-			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-				highlight.setVisible(false);
-			}
-		});
 
 		this.addListener(new ClickListener(Buttons.LEFT) {
 			public void clicked(InputEvent event, float x, float y) {
+				if (!Gui.inventoryActive)
+					return;
+
 				World.player.stats.hand = item;
 				MadSand.print("You take " + item.name + " to your hand");
-				Gui.overlay.setHandDisplay(item.id);
+				Gui.overlay.setHandDisplay(item);
 				World.player.doAction();
-				Utils.toggleInventory();
+				Gui.toggleInventory();
 			}
 		});
-
-		tooltipTbl = new Table();
-		itemInfoLbl = new Label(item.getInfoString(), Gui.skin);
-		itemInfoLbl.setWrap(true);
-
-		tooltipTbl.add(itemInfoLbl).width(TOOLTIP_WIDTH);
-		tooltipTbl.row();
-
-		tooltipTbl.setBackground(Gui.darkBackgroundSizeable);
-		tooltipTbl.setSize(TOOLTIP_WIDTH, TOOLTIP_HEIGHT);
-
-		tooltip = new Tooltip<Table>(tooltipTbl);
-		tooltip.setInstant(true);
-
-		this.addListener(tooltip);
 
 		this.addListener(new ClickListener(Buttons.RIGHT) {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				if (!Gui.inventoryActive)
+					return;
+				
 				if (!invCellContextContainer.isVisible()) {
 					invCellContextContainer.setVisible(true);
 					Mouse.x = Gdx.input.getX();
@@ -184,13 +122,5 @@ public class InventoryUICell extends Group {
 	void hideContext() {
 		Gui.gameUnfocused = false;
 		closeContextMenu();
-	}
-
-	void setText(String str) {
-		itemQuantityLabel.setText(str);
-	}
-
-	void setHp(int hp) {
-		toolHpLabel.setText("[GREEN]" + hp);
 	}
 }

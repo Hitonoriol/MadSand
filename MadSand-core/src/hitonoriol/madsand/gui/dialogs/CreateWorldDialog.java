@@ -89,9 +89,9 @@ public class CreateWorldDialog extends Dialog {
 					Gui.overlay.craftMenuButton.setVisible(false); // TODO: Move to InventoryUI
 					Gui.inventoryActive = false;
 					remove();
-					Gdx.graphics.setContinuousRendering(false);
 					MadSand.ZOOM = MadSand.DEFAULT_ZOOM;
 					Gui.overlay.createCharDialog();
+					Gdx.graphics.setContinuousRendering(false);
 				}
 
 			}

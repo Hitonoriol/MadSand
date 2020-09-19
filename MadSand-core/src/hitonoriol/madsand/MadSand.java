@@ -119,7 +119,7 @@ public class MadSand extends Game {
 	public void create() {
 		Utils.out("Starting initialization!");
 
-		// Gdx.graphics.setContinuousRendering(false);
+		Gdx.graphics.setContinuousRendering(false);
 		mapper.configure(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS.mappedFeature(), true);
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
@@ -132,6 +132,8 @@ public class MadSand extends Game {
 
 		World.player = new Player();
 		camera = new OrthographicCamera();
+		camera.viewportWidth = (Gdx.graphics.getWidth() / ZOOM);
+		camera.viewportHeight = (Gdx.graphics.getHeight() / ZOOM);
 		camera.update();
 
 		world = new World(MadSand.WORLDSIZE);
@@ -452,8 +454,6 @@ public class MadSand extends Game {
 			Gdx.gl.glClearColor(1.0F, 1.0F, 1.0F, 1.0F);
 			Gdx.gl.glClear(16384);
 			updateCamToxy(xmenu, ymenu);
-			camera.viewportWidth = (Gdx.graphics.getWidth() / ZOOM);
-			camera.viewportHeight = (Gdx.graphics.getHeight() / ZOOM);
 			camera.update();
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);

@@ -69,12 +69,8 @@ public class Mouse {
 		info += ("You are at (" + player.x + ", " + player.y + ")") + Resources.LINEBREAK;
 		info += ("Looking at (" + wx + ", " + wy + ")") + Resources.LINEBREAK;
 
-		if (Utils.debugMode) {
-			info += lineDelimiter + Resources.LINEBREAK;
-			info += "Objects on map: " + loc.getObjectCount() + Resources.LINEBREAK;
-			info += "NPCs on map: " + loc.getNpcCount() + Resources.LINEBREAK;
-			info += lineDelimiter + Resources.LINEBREAK;
-		}
+		if (Utils.debugMode)
+			info += getDebugInfo();
 
 		if (wx == player.x && wy == player.y) {
 			info += "You look at yourself" + Resources.LINEBREAK;
@@ -108,6 +104,18 @@ public class Mouse {
 		}
 
 		return info;
+	}
+
+	private static String getDebugInfo() {
+		String info = "[#C3C3C3]";
+		info += lineDelimiter + Resources.LINEBREAK;
+		info += "Debug Info:" + Resources.LINEBREAK;
+		info += "Objects on map: " + loc.getObjectCount() + Resources.LINEBREAK;
+		info += "NPCs on map: " + loc.getNpcCount() + Resources.LINEBREAK;
+		info += lineDelimiter + Resources.LINEBREAK;
+		info += "[]";
+		return info;
+
 	}
 
 	private static final int CLICK_ACTION_REST = 0;

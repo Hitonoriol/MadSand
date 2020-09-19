@@ -14,7 +14,7 @@ import hitonoriol.madsand.map.Loot;
 
 public class Inventory {
 	public static final double MAX_WEIGHT = Integer.MAX_VALUE;
-	
+
 	public Vector<Item> items = new Vector<Item>();
 
 	public float curWeight, maxWeight;
@@ -247,7 +247,7 @@ public class Inventory {
 	public boolean delItem(String query) {
 		if (query.equals(Item.EMPTY_ITEM_STRING))
 			return false;
-		
+
 		int i = 0;
 		if (query.indexOf(":") == -1)
 			query += ":";
@@ -317,10 +317,10 @@ public class Inventory {
 	}
 
 	public int putItem(String query) {
-		
+
 		if (query.equals(Item.EMPTY_ITEM_STRING))
 			return -1;
-		
+
 		return Loot.addLootQ(query, this, 0, 0, null); // Don't ask about this, this is a long story
 	}
 }

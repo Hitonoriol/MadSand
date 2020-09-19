@@ -2,11 +2,13 @@ package hitonoriol.madsand.entities;
 
 import java.util.HashMap;
 
+import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Tuple;
 import hitonoriol.madsand.enums.Skill;
+import hitonoriol.madsand.world.World;
 
 public class SkillContainer extends HashMap<Skill, SkillValue> {
 	final int BONUS_DENOMINATOR = 25; // skill lvl/this = bonus percent of something for some actions
@@ -39,8 +41,14 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 
 	public boolean check(Skill skill, boolean verbose) {
 		boolean lvup = get(skill).check();
-		if (verbose && lvup)
+		if (verbose && lvup) {
 			MadSand.notice(skill.toString() + " increased!");
+
+			if (skill.equals(Skill.Level)) {
+				++World.player.stats.maxStatSum;
+				Gui.overlay.levelUpDialog();
+			}
+		}
 		return lvup;
 	}
 

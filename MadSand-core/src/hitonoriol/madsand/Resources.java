@@ -14,9 +14,11 @@ import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -288,6 +290,10 @@ public class Resources {
 		generator.dispose();
 		font.getData().markupEnabled = true;
 		return font;
+	}
+
+	public static NinePatchDrawable loadNinePatch(String file) {
+		return new NinePatchDrawable(new NinePatch(new Texture(Gdx.files.local(MadSand.SAVEDIR + file))));
 	}
 
 	public static void takeScreenshot() {

@@ -4,7 +4,6 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -12,22 +11,21 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Mouse;
-import hitonoriol.madsand.Resources;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Stats;
 import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.enums.EquipSlot;
 import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.gui.dialogs.CharacterCreationDialog;
 import hitonoriol.madsand.gui.dialogs.CharacterInfoWindow;
+import hitonoriol.madsand.gui.dialogs.LevelupDialog;
 import hitonoriol.madsand.gui.widgets.ActionButton;
+import hitonoriol.madsand.gui.widgets.EquipmentSidebar;
 import hitonoriol.madsand.gui.widgets.GameContextMenu;
 import hitonoriol.madsand.gui.widgets.GameLog;
 import hitonoriol.madsand.gui.widgets.GameTooltip;
@@ -40,6 +38,7 @@ import hitonoriol.madsand.world.World;
 
 public class Overlay extends Stage {
 	Skin skin;
+	static float SIDEBAR_PADDING = 100;
 
 	public CharacterInfoWindow statWindow;
 	public CharacterCreationDialog charCreateDialog;
@@ -49,22 +48,14 @@ public class Overlay extends Stage {
 	public ActionButton actionButton;
 	public GameLog gameLog;
 	public OverlayBottomMenu bottomMenu;
+	public EquipmentSidebar equipmentSidebar;
 
 	Table overlayTable;
 
 	public TextButton exitToMenuButton;
-	public TextButton craftMenuButton;
+	public TextButton craftMenuButton; //TODO: move to inventory
 
 	static Label[] overlayStatLabels;
-	static Image[] equip;
-
-	public static final int EQ_SLOTS = 5;
-	static int ITEM_DISPLAY_HEAD = 0;
-	static int ITEM_DISPLAY_CHEST = 1;
-	static int ITEM_DISPLAY_LEGS = 2;
-	static int ITEM_DISPLAY_SHIELD = 3;
-	static int ITEM_DISPLAY_HOLDING = 4;
-	static int ITEM_DISPLAY_SLOTS = 5;
 	static final int OVSTAT_COUNT = 6;
 
 	public Overlay() {
@@ -81,7 +72,10 @@ public class Overlay extends Stage {
 		gameContextMenu = new GameContextMenu();
 		gameLog = new GameLog();
 		bottomMenu = new OverlayBottomMenu(this);
-		
+
+		equipmentSidebar = new EquipmentSidebar();
+		equipmentSidebar.setPosition(this.getWidth(), equipmentSidebar.getHeight() + SIDEBAR_PADDING, Align.topRight);
+
 		Mouse.tooltipContainer = gameTooltip;
 
 		overlayTable = new Table().align(18);
@@ -91,6 +85,7 @@ public class Overlay extends Stage {
 
 		initButtonListeners();
 
+		super.addActor(equipmentSidebar);
 		super.addActor(bottomMenu);
 		super.addActor(gameTooltip);
 		super.addActor(gameContextMenu);
@@ -130,15 +125,6 @@ public class Overlay extends Stage {
 		overlayTable.add();
 		overlayTable.add();
 		overlayTable.add(exitToMenuButton).width(200.0F).row();
-		int aa = 0;
-		while (aa < ITEM_DISPLAY_SLOTS) {
-			overlayTable.add();
-			overlayTable.add();
-			overlayTable.add();
-			overlayTable.add(equip[aa]).width(80.0F).align(Align.right).row();
-			aa++;
-		}
-
 		exitToMenuButton.setVisible(false);
 	}
 
@@ -169,13 +155,6 @@ public class Overlay extends Stage {
 	}
 
 	private void initOverlayStats() {
-		// Init equipment sidebar (TODO rewrite)
-		equip = new Image[EQ_SLOTS];
-		for (int i = 0; i < EQ_SLOTS; ++i) {
-			equip[i] = new Image();
-			equip[i].setDrawable(Resources.noEquip);
-		}
-
 		// Init top stat panel
 		overlayStatLabels = new Label[OVSTAT_COUNT];
 		Table ovstatTbl = new Table();
@@ -189,6 +168,10 @@ public class Overlay extends Stage {
 			count++;
 		}
 		super.addActor(ovstatTbl);
+	}
+
+	public void levelUpDialog() {
+		new LevelupDialog().show();
 	}
 
 	public TextField getConsoleField() {
@@ -232,32 +215,22 @@ public class Overlay extends Stage {
 		charCreateDialog.show();
 	}
 
-	public void setHandDisplay(int id) {
-		Utils.out("Setting hand display to " + id);
-		Drawable img = Resources.noEquip;
-		if (id != 0)
-			img = new TextureRegionDrawable(Resources.item[id]);
-		equip[ITEM_DISPLAY_HOLDING].setDrawable((Drawable) img);
-	}
-
 	public void refreshEquipDisplay() {
 		Stats stats = World.player.stats;
-		Drawable img = Resources.noEquip;
 
-		if (stats.headEquip != Item.nullItem)
-			img = new TextureRegionDrawable(Resources.item[stats.headEquip.id]);
-		equip[ITEM_DISPLAY_HEAD].setDrawable((Drawable) img);
+		if (!stats.headEquip.equals(Item.nullItem))
+			equipmentSidebar.equipItem(EquipSlot.Head, stats.headEquip);
 
-		img = Resources.noEquip;
-		if (stats.chestEquip != Item.nullItem)
-			img = new TextureRegionDrawable(Resources.item[stats.chestEquip.id]);
-		equip[ITEM_DISPLAY_CHEST].setDrawable((Drawable) img);
+		if (!stats.chestEquip.equals(Item.nullItem))
+			equipmentSidebar.equipItem(EquipSlot.Chest, stats.chestEquip);
 
-		img = Resources.noEquip;
-		if (stats.legsEquip != Item.nullItem)
-			img = new TextureRegionDrawable(Resources.item[stats.legsEquip.id]);
-		equip[ITEM_DISPLAY_LEGS].setDrawable((Drawable) img);
+		if (!stats.legsEquip.equals(Item.nullItem))
+			equipmentSidebar.equipItem(EquipSlot.Legs, stats.legsEquip);
 
+	}
+
+	public void setHandDisplay(Item item) {
+		equipmentSidebar.equipItem(EquipSlot.MainHand, item);
 	}
 
 	public void refreshOverlay() {

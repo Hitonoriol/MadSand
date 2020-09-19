@@ -22,8 +22,9 @@ public class Stats {
 	final static int STAMINA_DMG = 3;
 	final static int FOOD_HEAL = 1;
 
-	int STAT_MIN_SUM = 20;
-	public static int STAT_MAX_SUM = 24;
+	static int STAT_MIN_SUM = 20; //for roll() method
+	public int maxStatSum = 22; //Changes every levelup
+
 	static final int STAT_RAND_MAX = 8;
 	static final int STAT_RAND_MIN = 3;
 
@@ -170,7 +171,7 @@ public class Stats {
 
 	public void roll() {
 		int sum = 0;
-		while (sum < STAT_MIN_SUM || sum > STAT_MAX_SUM) {
+		while (sum < STAT_MIN_SUM || sum > maxStatSum) {
 			strength = Utils.rand(STAT_RAND_MIN, STAT_RAND_MAX);
 			constitution = Utils.rand(STAT_RAND_MIN, STAT_RAND_MAX);
 			accuracy = Utils.rand(STAT_RAND_MIN, STAT_RAND_MAX);
@@ -189,7 +190,7 @@ public class Stats {
 
 		stamina = ((dexterity + constitution) / 2) * 5;
 		maxstamina = stamina;
-		
+
 		calcActionCosts();
 	}
 
