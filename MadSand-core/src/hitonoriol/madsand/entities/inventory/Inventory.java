@@ -108,6 +108,19 @@ public class Inventory {
 		return i;
 	}
 
+	public Item getItem(String uid) {
+
+		if (uid.equals(""))
+			return Item.nullItem;
+
+		for (Item item : items) {
+			if (item.uid.equals(uid))
+				return item;
+		}
+
+		return Item.nullItem;
+	}
+
 	public Item getItem(int id) { // get item by its id, not the index
 		Item ret = Item.nullItem;
 		int pos = getSameCell(id);

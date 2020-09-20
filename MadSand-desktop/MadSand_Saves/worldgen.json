@@ -12,16 +12,16 @@
 			} ],
 			
 			"objects" : [ {
-				"rollCount" : 50,
+				"rollCount" : 100,
 				"idList" : [ 2, 30, 35, 36 ]
 			}, {
-				"rollCount" : 40,
+				"rollCount" : 50,
 				"idList" : [ 1, 27, 28 ]
 			}, {
-				"rollCount" : 40,
+				"rollCount" : 50,
 				"idList" : [ 37, 4 ]
 			}, {
-				"rollCount" : 30,
+				"rollCount" : 40,
 				"idList" : [ 42, 41 ]
 			} ],
 			

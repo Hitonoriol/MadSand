@@ -10,13 +10,13 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
+import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.containers.PairFloat;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Direction;
-import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
@@ -214,7 +214,8 @@ public abstract class Entity {
 	}
 
 	public void heal(int to) {
-		stats.hp += stats.skills.getLvlReward(Skill.Survival, to);
+		// stats.skills.getLvlReward(Skill.Survival, to)
+		stats.hp += to;
 
 		if (stats.hp > stats.mhp)
 			stats.hp = stats.mhp;
@@ -253,7 +254,7 @@ public abstract class Entity {
 		int tmp = stats.actionPts;
 		stats.actionPts -= ap;
 		int ticks = 0, absPts = Math.abs(stats.actionPts), absTmp = Math.abs(tmp);
-		
+
 		if (stats.actionPts <= 0) {
 			ticks = (absPts / stats.actionPtsMax);
 			if (absPts < stats.actionPtsMax && stats.actionPts < 0)
@@ -270,12 +271,12 @@ public abstract class Entity {
 			if (absPts > stats.actionPtsMax)
 				stats.actionPts = stats.actionPtsMax - stats.actionPts;
 		}
-		
+
 		if (stats.actionPts == 0) {
 			stats.actionPts = stats.actionPtsMax;
 			++ticks;
 		}
-		
+
 		return ticks;
 	}
 
@@ -300,7 +301,7 @@ public abstract class Entity {
 	}
 
 	public void freeHands() {
-		stats.hand = Item.nullItem;
+		stats.setHand(Item.nullItem);
 	}
 
 	public void updCoords() {
@@ -433,7 +434,7 @@ public abstract class Entity {
 
 		return false;
 	}
-	
+
 	@JsonIgnore
 	public int getSpeed() {
 		return stats.actionPtsMax;
@@ -474,29 +475,27 @@ public abstract class Entity {
 	}
 
 	@JsonGetter("Equipment")
-	public ArrayList<Integer> getEquipment() { // For serializer, don't touch this!
-		ArrayList<Integer> ret = new ArrayList<Integer>();
-		ret.add(stats.hand.id);
-		ret.add(stats.offHand.id);
-		ret.add(stats.headEquip.id);
-		ret.add(stats.chestEquip.id);
-		ret.add(stats.legsEquip.id);
-
-		return ret;
+	public ArrayList<String> getEquipment() { // For serializer
+		return stats.equipment.getUidList();
 	}
 
-	private int EQ_HAND = 0;
-	private int EQ_OFFHAND = 1;
-	private int EQ_HEAD = 2;
-	private int EQ_CHEST = 3;
-	private int EQ_LEGS = 4;
-
 	@JsonSetter("Equipment")
-	public void setEquipment(ArrayList<Integer> eq) { // For deserializer
-		stats.hand = inventory.getItem(eq.get(EQ_HAND));
-		stats.offHand = inventory.getItem(eq.get(EQ_OFFHAND));
-		stats.headEquip = inventory.getItem(eq.get(EQ_HEAD));
-		stats.chestEquip = inventory.getItem(eq.get(EQ_CHEST));
-		stats.legsEquip = inventory.getItem(eq.get(EQ_LEGS));
+	public void setEquipment(ArrayList<String> list) { // For deserializer
+		int len = list.size();
+		for (int i = 0; i < len - 1; ++i)
+			stats.equip(inventory.getItem(list.get(i)));
+
+		int handId = Utils.val(list.get(len - 1));
+		stats.setHand(inventory.getItem(handId));
+	}
+	
+	@JsonGetter("isPlayer")
+	public boolean isPlayer() {
+		return stats.equipment.getIsPlayer();
+	}
+
+	@JsonSetter("isPlayer")
+	public void setIsPlayer(boolean val) {
+		stats.equipment.setIsPlayer(val);
 	}
 }

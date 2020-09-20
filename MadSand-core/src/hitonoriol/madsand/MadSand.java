@@ -277,11 +277,12 @@ public class MadSand extends Game {
 		if (!player.isInBackground())
 			drawEntity(player);
 
-		if (!Gui.gameUnfocused)
+		if (!Gui.gameUnfocused) {
 			Utils.batch.draw(Resources.mapcursor, Mouse.wx * TILESIZE, Mouse.wy * TILESIZE);
+			Utils.batch.end();
+			Utils.batch.begin();
+		}
 
-		Utils.batch.end();
-		Utils.batch.begin();
 	}
 
 	private void initMenuAnimation() {

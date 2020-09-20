@@ -11,4 +11,36 @@ public enum EquipSlot {
 		this.number = val;
 		this.text = slotString;
 	}
+
+	private static EquipSlot values[] = EquipSlot.values();
+
+	public static EquipSlot getByNumber(int i) {
+		return values[i];
+	}
+
+	public static EquipSlot slotByType(ItemType type) {
+		switch (type) {
+		case HeadArmor:
+			return Head;
+
+		case ChestArmor:
+			return Chest;
+
+		case LegArmor:
+			return Legs;
+
+		case FootArmor:
+			return Feet;
+
+		case Shield:
+		case OffhandWeapon:
+			return Offhand;
+
+		case Weapon:
+			return MainHand;
+
+		default:
+			return null;
+		}
+	}
 }

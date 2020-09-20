@@ -220,7 +220,7 @@ public class Utils {
 		if ((Gdx.input.isKeyJustPressed(Keys.L)))
 			GameSaver.loadWorld(MadSand.WORLDNAME);
 
-		if ((Gdx.input.isKeyJustPressed(Keys.F)) && (World.player.stats.hand.id != 0))
+		if ((Gdx.input.isKeyJustPressed(Keys.F)) && (World.player.stats.hand().id != 0))
 			World.player.freeHands();
 
 		if (Gdx.input.isKeyJustPressed(Keys.SPACE))

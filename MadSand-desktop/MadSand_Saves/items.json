@@ -166,7 +166,7 @@
 		}
 	},
 	"17" : {
-		"name" : "Iron chestplate",
+		"name" : "Iron platemail",
 		"recipe" : "23/30",
 		"cost" : 18,
 		"type" : "ChestArmor",
@@ -702,5 +702,59 @@
 			utils:showDialog('#Dungeon Search# You feel an immense amount of magical power guiding you towards ' .. coordString .. '...');
 			utils:notice('Dungeon entrance found at ' .. coordString);
 		"
+	},
+	"76" : {
+		"name" : "Leather Boots",
+		"recipe" : "22/10",
+		"cost" : 50,
+		"type" : "FootArmor",
+		"weight" : 1,
+		"lvl" : 1,
+		"equipStats" : {
+			"lvl" : 2,
+			"rollMax" : 4,
+			"rollMin" : 2,
+			"constitution" : 0,
+			"dexterity" : -2,
+			"strength" : 3,
+			"accuracy" : -3,
+			"intelligence" : 3
+		}
+	},
+	"77" : {
+		"name" : "Iron Boots",
+		"recipe" : "72/10",
+		"cost" : 80,
+		"type" : "FootArmor",
+		"weight" : 1.9,
+		"lvl" : 2,
+		"equipStats" : {
+			"lvl" : 2,
+			"rollMax" : 4,
+			"rollMin" : 2,
+			"constitution" : 0,
+			"dexterity" : -2,
+			"strength" : 3,
+			"accuracy" : -3,
+			"intelligence" : 3
+		}
+	},
+	"78" : {
+		"name" : "Golden Boots",
+		"recipe" : "73/10",
+		"cost" : 135,
+		"type" : "FootArmor",
+		"weight" : 1.75,
+		"lvl" : 3,
+		"equipStats" : {
+			"lvl" : 2,
+			"rollMax" : 4,
+			"rollMin" : 2,
+			"constitution" : 0,
+			"dexterity" : -2,
+			"strength" : 3,
+			"accuracy" : -3,
+			"intelligence" : 3
+		}
 	}
 }

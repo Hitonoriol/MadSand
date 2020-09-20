@@ -2,7 +2,7 @@ package hitonoriol.madsand.enums;
 
 public enum ItemType {
 	Item(0), PlaceableObject(1), PlaceableTile(2), Crop(3), HeadArmor(4), ChestArmor(5), Shield(6), Consumable(7),
-	Axe(8), Shovel(9), Pickaxe(10), Hoe(11), Weapon(12), LegArmor(13);
+	Axe(8), Shovel(9), Pickaxe(10), Hoe(11), Weapon(12), LegArmor(13), FootArmor(14), OffhandWeapon(15);
 
 	private final int val;
 
@@ -23,18 +23,30 @@ public enum ItemType {
 	}
 
 	public boolean isWeapon() {
-		return (this == Weapon);
+		return (this == Weapon ||
+				this == OffhandWeapon);
 	}
 
 	public boolean isArmor() {
-		return (this == HeadArmor || this == ChestArmor || this == Shield || this == LegArmor);
+		return (this == HeadArmor ||
+				this == ChestArmor ||
+				this == Shield ||
+				this == LegArmor ||
+				this == FootArmor);
+	}
+
+	public boolean isEquipment() {
+		return isWeapon() || isArmor();
 	}
 
 	public boolean isTool() {
-		return (this == Hoe || this == Pickaxe || this == Shovel || this == Axe);
+		return (this == Hoe ||
+				this == Pickaxe ||
+				this == Shovel ||
+				this == Axe);
 	}
 
-	public boolean isUnique() {
+	public boolean isUnique() { //Unique = non-stackable
 		return (isWeapon() || isTool() || isArmor());
 	}
 }

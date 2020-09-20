@@ -191,6 +191,7 @@ public class GameSaver {
 			player.initStatActions();
 			player.quests.setPlayer(player);
 			player.turn(player.stats.look);
+			player.stats.equipment.refreshUI();
 
 			World w;
 			w = MadSand.mapper.readValue(getExternal(wfl), World.class);

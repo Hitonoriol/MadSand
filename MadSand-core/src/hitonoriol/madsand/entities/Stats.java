@@ -7,7 +7,6 @@ import hitonoriol.madsand.entities.inventory.EquipStats;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.Faction;
-import hitonoriol.madsand.enums.ItemType;
 import hitonoriol.madsand.enums.Skill;
 
 public class Stats {
@@ -29,18 +28,6 @@ public class Stats {
 	static final int STAT_RAND_MIN = 3;
 
 	static int STAMINA_INTERACT_COST = 5;
-
-	@JsonIgnore
-	public Item hand = Item.nullItem;
-	@JsonIgnore
-	public Item offHand = Item.nullItem;
-
-	@JsonIgnore
-	public Item headEquip = Item.nullItem;
-	@JsonIgnore
-	public Item chestEquip = Item.nullItem;
-	@JsonIgnore
-	public Item legsEquip = Item.nullItem;
 
 	public int actionPtsMax = 5;
 	public int actionPts = actionPtsMax;
@@ -75,6 +62,9 @@ public class Stats {
 
 	public SkillContainer skills = new SkillContainer();
 
+	@JsonIgnore
+	public Equipment equipment;
+
 	public float satiationFactor = 0.95f;
 	public final int maxFood = 1000;
 	public int foodTicks = skills.getLvl(Skill.Survival);
@@ -90,51 +80,34 @@ public class Stats {
 
 	@JsonIgnore
 	public StatAction owner;
+	
+	public Stats() {
+		this(false);
+	}
+	
+	public Stats(boolean isPlayer) {
+		equipment = new Equipment(this, isPlayer);
+	}
+
+	public Item hand() {
+		return equipment.getHand();
+	}
+
+	@JsonIgnore
+	public void setHand(Item item) {
+		equipment.setHand(item);
+	}
 
 	public boolean equip(Item item) {
-		switch (item.type) {
-		case HeadArmor:
-			headEquip = item;
-			break;
-		case ChestArmor:
-			chestEquip = item;
-			break;
-		case LegArmor:
-			legsEquip = item;
-			break;
-
-		default:
-			return false;
-		}
-		applyBonus(item);
-		return true;
+		return equipment.equip(item);
 	}
 
 	public boolean unequip(Item item) {
-		switch (item.type) {
-		case HeadArmor:
-			headEquip = Item.nullItem;
-			break;
-		case ChestArmor:
-			chestEquip = Item.nullItem;
-			break;
-		case LegArmor:
-			legsEquip = Item.nullItem;
-			break;
-
-		default:
-			return false;
-		}
-		removeBonus(item);
-		return true;
+		return equipment.unEquip(item);
 	}
 
 	public void applyBonus(Item item) {
-		if (item.type == ItemType.HeadArmor && headEquip == item)
-			return;
-		if (item.type == ItemType.ChestArmor && chestEquip == item)
-			return;
-		if (item.type == ItemType.LegArmor && legsEquip == item)
+		if (!item.type.isEquipment())
 			return;
 
 		EquipStats bonus = item.equipStats;
@@ -146,11 +119,7 @@ public class Stats {
 	}
 
 	public void removeBonus(Item item) {
-		if (item.type == ItemType.HeadArmor && headEquip != item)
-			return;
-		if (item.type == ItemType.ChestArmor && chestEquip != item)
-			return;
-		if (item.type == ItemType.LegArmor && legsEquip != item)
+		if (!item.type.isEquipment())
 			return;
 
 		EquipStats bonus = item.equipStats;
@@ -274,10 +243,10 @@ public class Stats {
 			return 0;
 
 		int weaponStr;
-		if (!hand.type.isWeapon())
+		if (!hand().type.isWeapon())
 			weaponStr = 0;
 		else
-			weaponStr = hand.equipStats.strength;
+			weaponStr = hand().equipStats.strength;
 
 		int atk = (strength + weaponStr);
 

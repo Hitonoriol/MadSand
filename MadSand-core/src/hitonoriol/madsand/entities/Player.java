@@ -48,6 +48,7 @@ public class Player extends Entity {
 		super(name);
 		super.setSprites(Resources.playerUpSpr, Resources.playerDownSpr, Resources.playerLeftSpr,
 				Resources.playerRightSpr);
+		stats.equipment.setIsPlayer(true);
 		initInventory();
 		setFov(fov);
 		quests.setPlayer(this);
@@ -99,7 +100,7 @@ public class Player extends Entity {
 	public void checkHands(int id) {
 		int itemIdx = inventory.getSameCell(id);
 		if (itemIdx == -1) {
-			stats.hand = Item.nullItem;
+			stats.setHand(Item.nullItem);
 			Gui.overlay.setHandDisplay(Item.nullItem);
 			return;
 		} else
@@ -109,10 +110,10 @@ public class Player extends Entity {
 	@Override
 	public boolean equip(Item item) {
 		boolean ret = super.equip(item);
-		if (ret) {
-			Gui.overlay.refreshEquipDisplay();
+
+		if (ret)
 			MadSand.print("You equip your " + item.name);
-		}
+
 		return ret;
 	}
 
@@ -169,9 +170,9 @@ public class Player extends Entity {
 	}
 
 	void damageHeldTool(Skill objectSkill) {
-		if (inventory.damageTool(stats.hand, objectSkill)) {
-			MadSand.notice("Your " + stats.hand.name + " broke");
-			inventory.delItem(stats.hand);
+		if (inventory.damageTool(stats.hand(), objectSkill)) {
+			MadSand.notice("Your " + stats.hand().name + " broke");
+			inventory.delItem(stats.hand());
 			freeHands(true);
 		} else
 			Gui.overlay.equipmentSidebar.refreshSlot(EquipSlot.MainHand);
@@ -322,7 +323,7 @@ public class Player extends Entity {
 			return;
 		}
 
-		int item = MapObject.getAltItem(id, ItemProp.getType(stats.hand.id).get());
+		int item = MapObject.getAltItem(id, ItemProp.getType(stats.hand().id).get());
 		int mhp = ObjectProp.getObject(obj.id).harvestHp;
 		Skill skill = obj.skill;
 		int curLvl = stats.skills.getLvl(skill);
@@ -341,7 +342,7 @@ public class Player extends Entity {
 			return;
 		}
 
-		boolean destroyed = obj.takeDamage(stats.skills.getLvl(skill) + stats.hand.getSkillDamage(skill));
+		boolean destroyed = obj.takeDamage(stats.skills.getLvl(skill) + stats.hand().getSkillDamage(skill));
 
 		if (item != -1 && destroyed) { // Succesfull interaction with item that drops something
 			int rewardCount = stats.skills.getItemReward(skill);
@@ -355,7 +356,7 @@ public class Player extends Entity {
 				boolean gotItem = addItem(objLoot);
 				if (!gotItem)
 					MadSand.world.getCurLoc().putLoot(x, y, objLoot);
-				item = MapObject.getAltItem(id, ItemProp.getType(stats.hand.id).get());
+				item = MapObject.getAltItem(id, ItemProp.getType(stats.hand().id).get());
 			}
 
 			increaseSkill(skill);
@@ -374,21 +375,21 @@ public class Player extends Entity {
 	public void useItem(Item item) {
 		if (inventory.getSameCell(item) == -1)
 			return;
-		stats.hand = item;
+		stats.setHand(item);
 		Gui.overlay.setHandDisplay(item);
 		useItem();
 		Gui.overlay.equipmentSidebar.refreshSlot(EquipSlot.MainHand);
 	}
 
 	public void useItem() {
-		Item usedItem = stats.hand;
+		Item usedItem = stats.hand();
 		int id = usedItem.id;
 
-		if (equip(stats.hand))
+		if (equip(stats.hand()))
 			return;
 
 		int ptile = MadSand.world.getTileId(x, y);
-		int item = MapObject.getTileAltItem(ptile, stats.hand.type.get());
+		int item = MapObject.getTileAltItem(ptile, stats.hand().type.get());
 		checkHands(id);
 		damageHeldTool();
 
@@ -421,10 +422,10 @@ public class Player extends Entity {
 
 		if (Item.getType(id).equals(ItemType.Consumable)) {
 			increaseSkill(Skill.Survival);
-			MadSand.print("You eat " + stats.hand.name);
-			heal(stats.hand.healAmount);
-			satiate(stats.hand.satiationAmount);
-			inventory.delItem(stats.hand, 1);
+			MadSand.print("You eat " + stats.hand().name);
+			heal(stats.hand().healAmount);
+			satiate(stats.hand().satiationAmount);
+			inventory.delItem(stats.hand(), 1);
 			Gui.refreshOverlay();
 		}
 
@@ -459,10 +460,10 @@ public class Player extends Entity {
 	}
 
 	public void freeHands(boolean silent) {
-		if (!silent && stats.hand.id != Item.NULL_ITEM)
-			MadSand.print("You put your " + stats.hand.name + " back to your inventory");
+		if (!silent && stats.hand().id != Item.NULL_ITEM)
+			MadSand.print("You put your " + stats.hand().name + " back to your inventory");
 		super.freeHands();
-		Gui.overlay.setHandDisplay(stats.hand);
+		Gui.overlay.setHandDisplay(stats.hand());
 	}
 
 	@Override
@@ -669,12 +670,5 @@ public class Player extends Entity {
 		MadSand.state = GameState.INVENTORY;
 		Gui.inventoryActive = true;
 		Gui.dialogActive = true;
-	}
-
-	@Override
-	public void setEquipment(ArrayList<Integer> eq) { // For deserializer only
-		super.setEquipment(eq);
-		Gui.overlay.refreshEquipDisplay();
-		Gui.overlay.setHandDisplay(stats.hand);
 	}
 }

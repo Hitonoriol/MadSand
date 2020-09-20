@@ -70,6 +70,7 @@ public class Npc extends Entity {
 	void loadProperties() {
 		NpcContainer properties = NpcProp.npcs.get(id);
 		stats.roll();
+		stats.dexterity = stats.AP_WALK;
 		stats.name = properties.name;
 		stats.hp = properties.hp;
 		stats.mhp = stats.hp;
@@ -77,6 +78,8 @@ public class Npc extends Entity {
 		stats.accuracy = properties.accuracy;
 		rewardExp = properties.rewardExp;
 		stats.faction = properties.faction;
+		stats.calcVarStats();
+		
 		initInventory();
 		inventory.setMaxWeight(stats.calcMaxInventoryWeight());
 		inventory.putItem(properties.loot);

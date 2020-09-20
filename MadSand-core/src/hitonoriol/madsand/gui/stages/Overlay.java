@@ -16,7 +16,6 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Mouse;
-import hitonoriol.madsand.entities.Stats;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.EquipSlot;
 import hitonoriol.madsand.enums.GameState;
@@ -39,6 +38,7 @@ import hitonoriol.madsand.world.World;
 public class Overlay extends Stage {
 	Skin skin;
 	static float SIDEBAR_PADDING = 100;
+	static float SIDEBAR_XPADDING = 5;
 
 	public CharacterInfoWindow statWindow;
 	public CharacterCreationDialog charCreateDialog;
@@ -74,7 +74,8 @@ public class Overlay extends Stage {
 		bottomMenu = new OverlayBottomMenu(this);
 
 		equipmentSidebar = new EquipmentSidebar();
-		equipmentSidebar.setPosition(this.getWidth(), equipmentSidebar.getHeight() + SIDEBAR_PADDING, Align.topRight);
+		equipmentSidebar.setPosition(this.getWidth() - SIDEBAR_XPADDING, equipmentSidebar.getHeight() + SIDEBAR_PADDING,
+				Align.topRight);
 
 		Mouse.tooltipContainer = gameTooltip;
 
@@ -215,20 +216,6 @@ public class Overlay extends Stage {
 		charCreateDialog.show();
 	}
 
-	public void refreshEquipDisplay() {
-		Stats stats = World.player.stats;
-
-		if (!stats.headEquip.equals(Item.nullItem))
-			equipmentSidebar.equipItem(EquipSlot.Head, stats.headEquip);
-
-		if (!stats.chestEquip.equals(Item.nullItem))
-			equipmentSidebar.equipItem(EquipSlot.Chest, stats.chestEquip);
-
-		if (!stats.legsEquip.equals(Item.nullItem))
-			equipmentSidebar.equipItem(EquipSlot.Legs, stats.legsEquip);
-
-	}
-
 	public void setHandDisplay(Item item) {
 		equipmentSidebar.equipItem(EquipSlot.MainHand, item);
 	}
@@ -238,6 +225,6 @@ public class Overlay extends Stage {
 		overlayStatLabels[1].setText("LVL: " + World.player.stats.skills.getLvl(Skill.Level));
 		overlayStatLabels[2].setText("XP: " + World.player.stats.skills.getExpString(Skill.Level));
 		overlayStatLabels[3].setText("Food: " + World.player.stats.food + " / " + World.player.stats.maxFood);
-		overlayStatLabels[4].setText("Hand: " + World.player.stats.hand.name);
+		overlayStatLabels[4].setText("Hand: " + World.player.stats.hand().name);
 	}
 }

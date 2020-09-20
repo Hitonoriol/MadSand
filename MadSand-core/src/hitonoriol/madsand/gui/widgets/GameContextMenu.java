@@ -72,7 +72,7 @@ public class GameContextMenu extends Table {
 	private final static int CONTEXT_USE_BTN = 3;
 
 	public void openGameContextMenu() {
-		contextMenuButtons[CONTEXT_USE_BTN].setText("Use " + World.player.stats.hand.name);
+		contextMenuButtons[CONTEXT_USE_BTN].setText("Use " + World.player.stats.hand().name);
 		Gui.overlay.getTooltip().setVisible(false);
 		super.setVisible(true);
 		super.setPosition(Mouse.x + 50, Mouse.y - 30);
