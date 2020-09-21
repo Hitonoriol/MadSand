@@ -15,8 +15,9 @@ public class EquipStats {
 	public int strength;
 	public int accuracy;
 	public int intelligence;
+	public int defense;
 
-	private static float multiplier = 1.5f;
+	private static float multiplier = 2.1f;
 
 	public EquipStats(int lvl) {
 		this.lvl = lvl;
@@ -35,6 +36,7 @@ public class EquipStats {
 		strength = eStats.strength;
 		accuracy = eStats.accuracy;
 		intelligence = eStats.intelligence;
+		defense = eStats.defense;
 	}
 
 	public EquipStats() {
@@ -42,17 +44,16 @@ public class EquipStats {
 	}
 
 	@JsonIgnore
-	private boolean isUnlucky() { // with each item lvl the chance to roll a debuff halves; idk how good is that,
-									// we'll see
+	private boolean isUnlucky() { // with each item lvl the chance to roll a debuff halves; idk how good is that, we'll see
 		return Utils.rand(0, lvl) == lvl;
 	}
 
 	private int rollStat() {
 		int ret = Utils.rand(rollMin, rollMax);
-		int f = (isUnlucky()) ? -1 : 1;
+		float f = (isUnlucky()) ? -0.5f : 1;
 		if (isUnlucky())
 			f = 0;
-		return ret * f;
+		return (int) (ret * f);
 	}
 
 	public EquipStats roll() {
@@ -61,23 +62,33 @@ public class EquipStats {
 		strength = rollStat();
 		accuracy = rollStat();
 		intelligence = rollStat();
+		defense = rollStat();
 
 		return this;
+	}
+
+	private String POSITIVE_STAT_COLOR = "[GREEN]";
+	private String NEGATIVE_STAT_COLOR = "[RED]";
+
+	private String asStatString(int stat) {
+		return ((stat > 0) ? (POSITIVE_STAT_COLOR + "+" + stat) : (NEGATIVE_STAT_COLOR + Utils.str(stat))) + "[]";
 	}
 
 	@JsonIgnore
 	public String getString() {
 		String ret = "";
+		if (defense != 0)
+			ret += "Defense " + asStatString(defense) + Resources.LINEBREAK;
 		if (constitution != 0)
-			ret += "Constitution: " + constitution + Resources.LINEBREAK;
+			ret += "Constitution " + asStatString(constitution) + Resources.LINEBREAK;
 		if (dexterity != 0)
-			ret += "Dexterity: " + dexterity + Resources.LINEBREAK;
+			ret += "Dexterity " + asStatString(dexterity) + Resources.LINEBREAK;
 		if (strength != 0)
-			ret += "Strength: " + strength + Resources.LINEBREAK;
+			ret += "Strength " + asStatString(strength) + Resources.LINEBREAK;
 		if (accuracy != 0)
-			ret += "Accuracy: " + accuracy + Resources.LINEBREAK;
+			ret += "Accuracy " + asStatString(accuracy) + Resources.LINEBREAK;
 		if (intelligence != 0)
-			ret += "Intelligence: " + intelligence + Resources.LINEBREAK;
+			ret += "Intelligence " + asStatString(intelligence) + Resources.LINEBREAK;
 		return ret;
 	}
 }

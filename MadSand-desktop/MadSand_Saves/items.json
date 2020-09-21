@@ -101,14 +101,7 @@
 		"weight" : 1.0,
 		"lvl" : 2,
 		"equipStats" : {
-			"lvl" : 2,
-			"rollMax" : 4,
-			"rollMin" : 2,
-			"constitution" : 3,
-			"dexterity" : 0,
-			"strength" : 4,
-			"accuracy" : 0,
-			"intelligence" : -4
+			"strength" : 4
 		}
 	},
 	"14" : {
@@ -119,14 +112,7 @@
 		"weight" : 1.1,
 		"lvl" : 1,
 		"equipStats" : {
-			"lvl" : 1,
-			"rollMax" : 2,
-			"rollMin" : 1,
-			"constitution" : 0,
-			"dexterity" : -1,
-			"strength" : -2,
-			"accuracy" : 0,
-			"intelligence" : -2
+			"defense" : 4
 		}
 	},
 	"15" : {
@@ -137,32 +123,18 @@
 		"weight" : 1.1,
 		"lvl" : 1,
 		"equipStats" : {
-			"lvl" : 1,
-			"rollMax" : 2,
-			"rollMin" : 1,
-			"constitution" : 0,
-			"dexterity" : 2,
-			"strength" : 2,
-			"accuracy" : 2,
-			"intelligence" : 0
+			"defense" : 3
 		}
 	},
 	"16" : {
-		"name" : "Leather chest armor",
+		"name" : "Leather armor",
 		"recipe" : "22/15",
 		"cost" : 14,
 		"type" : "ChestArmor",
 		"weight" : 0.8,
 		"lvl" : 1,
 		"equipStats" : {
-			"lvl" : 1,
-			"rollMax" : 2,
-			"rollMin" : 1,
-			"constitution" : 1,
-			"dexterity" : -2,
-			"strength" : -1,
-			"accuracy" : 0,
-			"intelligence" : 1
+			"defense" : 1
 		}
 	},
 	"17" : {
@@ -173,14 +145,7 @@
 		"weight" : 1.4,
 		"lvl" : 2,
 		"equipStats" : {
-			"lvl" : 2,
-			"rollMax" : 4,
-			"rollMin" : 2,
-			"constitution" : 4,
-			"dexterity" : 0,
-			"strength" : 4,
-			"accuracy" : 0,
-			"intelligence" : -3
+			"defense" : 6
 		}
 	},
 	"18" : {
@@ -191,31 +156,17 @@
 		"weight" : 1.3,
 		"lvl" : 2,
 		"equipStats" : {
-			"lvl" : 2,
-			"rollMax" : 4,
-			"rollMin" : 2,
-			"constitution" : 0,
-			"dexterity" : -2,
-			"strength" : 3,
-			"accuracy" : -3,
-			"intelligence" : 3
+			"defense" : 5
 		}
 	},
 	"19" : {
-		"name" : "Tough iron chestplate",
+		"name" : "Reinforced iron chestplate",
 		"cost" : 34,
 		"type" : "ChestArmor",
 		"weight" : 1.9,
 		"lvl" : 3,
 		"equipStats" : {
-			"lvl" : 3,
-			"rollMax" : 5,
-			"rollMin" : 2,
-			"constitution" : 4,
-			"dexterity" : 0,
-			"strength" : 2,
-			"accuracy" : 5,
-			"intelligence" : 0
+			"defense" : 8
 		}
 	},
 	"20" : {
@@ -680,14 +631,7 @@
 		"weight" : 0.8,
 		"lvl" : 2,
 		"equipStats" : {
-			"lvl" : 2,
-			"rollMax" : 4,
-			"rollMin" : 2,
-			"constitution" : 3,
-			"dexterity" : 0,
-			"strength" : 4,
-			"accuracy" : 0,
-			"intelligence" : 2
+			"strength" : 6
 		}
 	},
 	"75": {
@@ -700,7 +644,7 @@
 			local coordString = '(' .. tileCoords.x .. ', ' .. tileCoords.y .. ')';
 			
 			utils:showDialog('#Dungeon Search# You feel an immense amount of magical power guiding you towards ' .. coordString .. '...');
-			utils:notice('Dungeon entrance found at ' .. coordString);
+			utils:notice('Dungeon entrance found somewhere around ' .. coordString);
 		"
 	},
 	"76" : {
@@ -711,14 +655,8 @@
 		"weight" : 1,
 		"lvl" : 1,
 		"equipStats" : {
-			"lvl" : 2,
-			"rollMax" : 4,
-			"rollMin" : 2,
-			"constitution" : 0,
-			"dexterity" : -2,
-			"strength" : 3,
-			"accuracy" : -3,
-			"intelligence" : 3
+			"defense" : 1,
+			"dexterity" : 2
 		}
 	},
 	"77" : {
@@ -729,14 +667,8 @@
 		"weight" : 1.9,
 		"lvl" : 2,
 		"equipStats" : {
-			"lvl" : 2,
-			"rollMax" : 4,
-			"rollMin" : 2,
-			"constitution" : 0,
-			"dexterity" : -2,
-			"strength" : 3,
-			"accuracy" : -3,
-			"intelligence" : 3
+			"defense" : 3,
+			"dexterity" : 1
 		}
 	},
 	"78" : {
@@ -747,14 +679,206 @@
 		"weight" : 1.75,
 		"lvl" : 3,
 		"equipStats" : {
-			"lvl" : 2,
-			"rollMax" : 4,
-			"rollMin" : 2,
-			"constitution" : 0,
-			"dexterity" : -2,
-			"strength" : 3,
-			"accuracy" : -3,
-			"intelligence" : 3
+			"defense" : 4,
+			"dexterity" : 1
 		}
+	},
+	"79" : {
+		"name" : "Leather Pants",
+		"recipe" : "22/10",
+		"cost" : 50,
+		"type" : "LegArmor",
+		"weight" : 0.7,
+		"lvl" : 1,
+		"equipStats" : {
+			"defense" : 1
+		}
+	},
+	"80" : {
+		"name" : "Adventurer's Pants",
+		"recipe" : "68/10:69/3",
+		"cost" : 55,
+		"type" : "LegArmor",
+		"weight" : 0.5,
+		"lvl" : 1,
+		"equipStats" : {
+			"defense" : 1
+		}
+	},
+	"81" : {
+		"name" : "Reinforced Iron Helmet",
+		"recipe" : "72/20:56/10",
+		"cost" : 150,
+		"type" : "HeadArmor",
+		"weight" : 2.25,
+		"lvl" : 3,
+		"equipStats" : {
+			"defense" : 5
+		}
+	},
+	"82" : {
+		"name" : "Adventurer's Hat",
+		"recipe" : "68/10:69/3",
+		"cost" : 55,
+		"type" : "HeadArmor",
+		"weight" : 2.25,
+		"lvl" : 1,
+		"equipStats" : {
+			"defense" : 1
+		}
+	},
+	"83" : {
+		"name" : "Leather Helmet",
+		"recipe" : "22/10",
+		"cost" : 45,
+		"type" : "HeadArmor",
+		"weight" : 1,
+		"lvl" : 1,
+		"equipStats" : {
+			"defense" : 1
+		}
+	},
+	"84" : {
+		"name" : "Light Iron Armor",
+		"recipe" : "72/10",
+		"cost" : 100,
+		"type" : "ChestArmor",
+		"weight" : 1.75,
+		"lvl" : 2,
+		"equipStats" : {
+			"defense" : 2
+		}
+	},
+	"85" : {
+		"name" : "Toy Sword",
+		"cost" : 14,
+		"type" : "Weapon",
+		"weight" : 0.6,
+		"lvl" : 1,
+		"equipStats" : {
+			"strength" : 1
+		}
+	},
+	"86" : {
+		"name" : "Spiked Club",
+		"recipe" : "70/5:1/1",
+		"cost" : 20,
+		"type" : "Weapon",
+		"weight" : 1.1,
+		"lvl" : 1,
+		"equipStats" : {
+			"strength" : 2
+		}
+	},
+	"87" : {
+		"name" : "Dagger",
+		"cost" : 79,
+		"type" : "OffhandWeapon",
+		"weight" : 0.9,
+		"lvl" : 1,
+		"equipStats" : {
+			"strength" : 2
+		}
+	},
+	"88" : {
+		"name" : "Steel Dagger",
+		"cost" : 111,
+		"type" : "OffhandWeapon",
+		"weight" : 1.1,
+		"lvl" : 2,
+		"equipStats" : {
+			"strength" : 3
+		}
+	},
+	"89" : {
+		"name" : "Iron Flail",
+		"recipe" : "72/17",
+		"cost" : 125,
+		"type" : "Weapon",
+		"weight" : 2,
+		"lvl" : 3,
+		"equipStats" : {
+			"strength" : 5
+		}
+	},
+	"90" : {
+		"name" : "Rapier",
+		"cost" : 150,
+		"type" : "Weapon",
+		"weight" : 1.7,
+		"lvl" : 3,
+		"equipStats" : {
+			"strength" : 6
+		}
+	},
+	"91" : {
+		"name" : "Saber",
+		"cost" : 150,
+		"type" : "Weapon",
+		"weight" : 1.9,
+		"lvl" : 3,
+		"equipStats" : {
+			"strength" : 6
+		}
+	},
+	"92" : {
+		"name" : "Royal Shortsword",
+		"cost" : 190,
+		"type" : "Weapon",
+		"weight" : 2.25,
+		"lvl" : 4,
+		"equipStats" : {
+			"strength" : 8
+		}
+	},
+	"93" : {
+		"name" : "Waraxe",
+		"cost" : 235,
+		"type" : "Weapon",
+		"weight" : 4,
+		"lvl" : 5,
+		"equipStats" : {
+			"strength" : 10
+		}
+	},
+	"94" : {
+		"name" : "Fishing Rod",
+		"recipe" : "8/5:69/5",
+		"cost" : 20,
+		"weight" : 0.7
+	},
+	"95" : {
+		"name" : "Bone",
+		"cost" : 4,
+		"weight" : 0.1
+	},
+	"96" : {
+		"name" : "Raw Meat",
+		"cost" : 4,
+		"weight" : 0.3
+	},
+	"97" : {
+		"name" : "Apple",
+		"satiationAmount" : 15,
+		"healAmount" : 3,
+		"cost" : 5,
+		"type" : "Consumable",
+		"weight" : 0.09
+	},
+	"98" : {
+		"name" : "Cheese",
+		"satiationAmount" : 45,
+		"healAmount" : 10,
+		"cost" : 30,
+		"type" : "Consumable",
+		"weight" : 0.6
+	},
+	"99" : {
+		"name" : "Grapes",
+		"satiationAmount" : 25,
+		"healAmount" : 4,
+		"cost" : 7,
+		"type" : "Consumable",
+		"weight" : 0.17
 	}
 }

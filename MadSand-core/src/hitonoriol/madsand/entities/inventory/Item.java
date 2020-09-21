@@ -114,7 +114,7 @@ public class Item {
 		info += name + Resources.LINEBREAK + Resources.LINEBREAK;
 
 		if (type.isArmor() || type.isWeapon()) {
-			info += equipStats.getString();
+			info += equipStats.getString() + Resources.LINEBREAK;
 		}
 
 		if (type.equals(ItemType.Consumable)) {
@@ -158,15 +158,10 @@ public class Item {
 		return damage(1);
 	}
 
-	Item reinit(int id, int q) {
-		this.id = id;
-		this.quantity = q;
-		loadProperties();
-		return this;
-	}
-
 	Item reinit() {
+		EquipStats stats = equipStats;
 		loadProperties();
+		this.equipStats = stats;
 		return this;
 	}
 
