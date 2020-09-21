@@ -1,30 +1,38 @@
 {
 "Food": [
-	{ "tier": 0, "items": [44, 39, 46, 47, 48, 49, 50, 7] },
-	{ "tier": 1, "items": [4, 57, 58, 59] }
+	
+	{ "tier": 0, "minRolls": 3, "maxRolls": 10, "items": [44, 39, 46, 47, 48, 49, 50, 7, 97] },
+	{ "tier": 1, "minRolls": 3, "maxRolls": 10, "items": [4, 57, 58, 59, 98] }
+],
+
+"Potions": [
+	{ "tier": 0, "minRolls": 2, "maxRolls": 15, "items": [60] }
 ],
 
 "Farming": [
-	{ "tier": 0, "items": [40, 51, 52, 53, 54, 55] }
+	{ "tier": 0, "minRolls": 5, "maxRolls": 20, "items": [40, 51, 52, 53, 54, 55] }
 ],
 
 "Tools": [
-	{ "tier": 0, "items": [3, 6, 11, 41] }
+	{ "tier": 0, "minRolls": 5, "maxRolls": 15, "items": [3, 6, 11, 41, 94] }
 ],
 
 "Weapons": [
-	{ "tier": 0, "items": [12, 13] },
-	{ "tier": 1, "items": [20, 74] }
+	{ "tier": 0, "minRolls": 3, "maxRolls": 10, "items": [12, 85, 86] },
+	{ "tier": 1, "minRolls": 3, "maxRolls": 10, "items": [13, 20, 74] },
+	{ "tier": 2, "minRolls": 3, "maxRolls": 10, "items": [87, 88, 89, 90] },
+	{ "tier": 3, "minRolls": 3, "maxRolls": 10, "items": [91, 92, 93] }
 ],
 
 "Armor": [
-	{ "tier": 0, "items": [14, 16] },
-	{ "tier": 1, "items": [15, 17, 18] }
+	{ "tier": 0, "minRolls": 3, "maxRolls": 10, "items": [83, 16, 76, 79, 80, 82] },
+	{ "tier": 1, "minRolls": 3, "maxRolls": 10, "items": [14, 15, 17, 18, 61, 62, 77, 84] },
+	{ "tier": 2, "minRolls": 3, "maxRolls": 10, "items": [81, 78] }
 ],
 
 "Building": [
-	{ "tier": 0, "items": [10, 25, 34] },
-	{ "tier": 1, "items": [1, 27, 32, 33] },
-	{ "tier": 2, "items": [42, 43] }
+	{ "tier": 0, "minRolls": 3, "maxRolls": 10, "items": [10, 25, 34] },
+	{ "tier": 1, "minRolls": 3, "maxRolls": 10, "items": [1, 27, 32, 33] },
+	{ "tier": 2, "minRolls": 3, "maxRolls": 10, "items": [42, 43] }
 ]
 }

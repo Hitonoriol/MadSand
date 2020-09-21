@@ -10,8 +10,9 @@ import hitonoriol.madsand.enums.TradeCategory;
 public class NpcContainer {
 	public String name;
 	
+	public int lvl;
 	public int hp, strength, accuracy;
-	public int dexterity;
+	public int dexterity, defense;
 
 	public int rewardExp;
 	public LootTable loot;

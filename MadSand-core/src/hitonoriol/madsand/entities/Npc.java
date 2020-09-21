@@ -14,6 +14,8 @@ import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.NpcState;
 import hitonoriol.madsand.enums.NpcType;
+import hitonoriol.madsand.enums.TradeCategory;
+import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.NpcContainer;
 import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.world.World;
@@ -37,6 +39,7 @@ public class Npc extends Entity {
 
 	public NpcState state = NpcState.Idle;
 	public NpcType type = NpcType.Regular;
+	public TradeCategory tradeCategory;
 
 	public Npc(int id) {
 		super();
@@ -70,6 +73,7 @@ public class Npc extends Entity {
 	void loadProperties() {
 		NpcContainer properties = NpcProp.npcs.get(id);
 		stats.roll();
+		stats.skills.setLvl(properties.lvl);
 		stats.dexterity = stats.AP_WALK;
 		stats.name = properties.name;
 		stats.hp = properties.hp;
@@ -97,10 +101,31 @@ public class Npc extends Entity {
 		friendly = properties.friendly;
 		spawnOnce = properties.spawnOnce;
 		type = properties.type;
+		tradeCategory = properties.tradeCategory;
+		initTrader();
+	}
+
+	private static int BASE_TRADER_COINS = 450;
+	private static int TIER_COIN_MULTIPLIER = 100;
+
+	private void initTrader() {
+		if (!type.equals(NpcType.Trader) || tradeCategory == null)
+			return;
+
+		inventory.setMaxWeight(Integer.MAX_VALUE);
+
+		int tier = stats.skills.getLvl();
+		int currencyId = Globals.getInt(Globals.CURRENCY_FIELD);
+		int maxCoins = BASE_TRADER_COINS + tier * TIER_COIN_MULTIPLIER;
+		int quantity = Utils.rand(BASE_TRADER_COINS / 2, maxCoins);
+
+		inventory.putItem(NpcProp.tradeLists.roll(tradeCategory, tier));
+		inventory.putItem(new Item(currencyId, quantity));
+		canTrade = true;
 	}
 
 	@Override
-	public boolean move(Direction dir) { // just kill me
+	public boolean move(Direction dir) {
 		super.turn(dir);
 		if (isStepping())
 			return false;

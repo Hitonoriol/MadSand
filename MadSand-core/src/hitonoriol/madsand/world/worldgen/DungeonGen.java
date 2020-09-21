@@ -97,17 +97,43 @@ public class DungeonGen extends DungeonGenerator {
 		}
 
 		placeObjectInRoom(dungeon.staircaseDownObject);
+		placeSpecialMobs(curDungeonFloor);
 		rooms.clear();
 	}
 
+	private void placeSpecialMobs(DungeonContents contents) {
+		Pair coords = new Pair(-1, -1);
+		int npcId;
+		int quantity = Utils.rand(1, contents.specialMobsMax);
+
+		for (int i = 0; i < quantity; ++i) {
+			npcId = Utils.randElement(contents.specialMobs);
+
+			while (!map.spawnNpc(npcId, coords.x, coords.y))
+				coords = randomRoomPoint();
+
+			Utils.out("Placed special mob at " + coords);
+		}
+
+	}
+
 	private void placeObjectInRoom(int id) {
+		Pair roomCoords = randomRoomPoint();
+		map.addObject(roomCoords.x, roomCoords.y, id);
+	}
+
+	private Pair randomRoomPoint(Pair coords) {
 		Room room = getRandomRoom();
 		int roomX = room.getX(), roomY = room.getY();
 
-		int x = Utils.rand(roomX, roomX + room.getWidth());
-		int y = Utils.rand(roomY, roomY + room.getHeight());
+		int x = Utils.rand(roomX, roomX + room.getWidth() - 1);
+		int y = Utils.rand(roomY, roomY + room.getHeight() - 1);
 
-		map.addObject(x, y, id);
+		return coords.set(x, y);
+	}
+
+	private Pair randomRoomPoint() {
+		return randomRoomPoint(new Pair());
 	}
 
 	private Room getRandomRoom() {

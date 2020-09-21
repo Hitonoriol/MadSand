@@ -113,7 +113,7 @@ public class Utils {
 			Npc npc = MadSand.world.getCurLoc().getNpc(World.player.lookingAt());
 			Utils.out("Looking at npc: " + npc.id);
 			npc.inventory.putItem(Globals.getInt(Globals.CURRENCY_FIELD), rand(100, 500));
-			World.player.tradeWithNPC(World.player.stats.look);
+			World.player.tradeWithNpc(World.player.stats.look);
 		}
 
 		if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT) && Gdx.input.isKeyJustPressed(Keys.R))

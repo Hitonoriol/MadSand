@@ -10,4 +10,7 @@ public class DungeonContents {
 	public int mobCorridorProbability;
 	public int lootProbability;
 	public int lootCorridorProbability;
+	
+	public ArrayList<Integer> specialMobs;
+	public int specialMobsMax;
 }

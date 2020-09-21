@@ -1,7 +1,8 @@
 package hitonoriol.madsand.enums;
 
 public enum TradeCategory {
-	All, // For traders only: include all categories
+	All, // include all categories
+	Random,	// -- Roll a random category
 
 	Food,
 	Potions,

@@ -14,7 +14,11 @@ import hitonoriol.madsand.entities.inventory.Item;
 
 public class TradeItemList {
 
+	public static int DEFAULT_MIN_ROLLS = 3;
+	public static int DEFAULT_MAX_ROLLS = 10;
+
 	public int tier = 0;
+	public int minRolls, maxRolls;
 	public ArrayList<Integer> items;
 
 	public static int BASE_TOOL_QUANTITY = 2;
@@ -48,6 +52,22 @@ public class TradeItemList {
 		rollItemQuantity(item);
 
 		return item;
+	}
+
+	private static int TIER_MULTIPLIER = 3;
+
+	public ArrayList<Item> roll(ArrayList<Item> items) {
+		if (maxRolls < 1) {
+			minRolls = DEFAULT_MIN_ROLLS;
+			maxRolls = DEFAULT_MAX_ROLLS;
+		}
+
+		int rolls = Utils.rand(minRolls + tier * (TIER_MULTIPLIER / 2), maxRolls + tier * TIER_MULTIPLIER);
+
+		for (int i = 0; i < rolls; ++i)
+			items.add(rollItem());
+
+		return items;
 	}
 
 	public TradeItemList add(int... itemList) {

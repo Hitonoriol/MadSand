@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.TradeCategory;
 
@@ -50,7 +51,18 @@ public class TradeListContainer extends HashMap<TradeCategory, ArrayList<TradeIt
 		super.put(category, valList);
 	}
 
-	public Item roll(TradeCategory category, int tier) {
-		return getTradeItemList(category, tier).rollItem();
+	public ArrayList<Item> roll(TradeCategory category, int tier) {
+		ArrayList<Item> items = new ArrayList<>();
+		TradeCategory[] categoryList = TradeCategory.values();
+
+		while (category.equals(TradeCategory.Random) || category.equals(TradeCategory.All))
+			category = categoryList[Utils.rand(categoryList.length)];
+
+		for (int i = tier; i >= 0; i--) {
+			Utils.out("Rolling tradeList " + category + " tier: " + tier);
+			getTradeItemList(category, tier).roll(items);
+		}
+
+		return items;
 	}
 }

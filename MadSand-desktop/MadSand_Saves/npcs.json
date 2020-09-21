@@ -119,6 +119,7 @@
 	"8" : {
 		"name" : "Shopkeeper",
 		"hp" : 100,
+		"tradeCategory": "Random",
 		"strength" : 11,
 		"accuracy" : 50,
 		"dexterity" : 0,

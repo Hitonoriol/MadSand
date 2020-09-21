@@ -15,6 +15,7 @@ import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.enums.ItemType;
+import hitonoriol.madsand.enums.NpcType;
 import hitonoriol.madsand.gui.OverlayMouseoverListener;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
@@ -126,10 +127,17 @@ public class ActionButton extends Table {
 				}
 			});
 
-		} else if (!npc.equals(Map.nullNpc) && !Gui.dialogActive && npc.friendly) //NPC interaction button
-			activateInteractBtn(interactButton, "Talk to " + npc.stats.name, npcInteractListener);
+		} else if (!npc.equals(Map.nullNpc) && !Gui.dialogActive && npc.friendly) { //NPC interaction button
+			String npcString = npc.stats.name;
 
-		else if (!object.equals(Map.nullObject) && !objAction.equals(Resources.emptyField)) // Map object interaction button
+			if (!npc.type.equals(NpcType.Trader))
+				npcString = "Talk to " + npcString;
+			else
+				npcString = "Trade with " + npcString;
+
+			activateInteractBtn(interactButton, npcString, npcInteractListener);
+
+		} else if (!object.equals(Map.nullObject) && !objAction.equals(Resources.emptyField)) // Map object interaction button
 			activateInteractBtn(interactButton, "Interact with " + object.name, objInteractListener);
 
 		else

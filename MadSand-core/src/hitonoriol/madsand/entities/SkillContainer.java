@@ -76,6 +76,10 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 	public int getLvl(Skill skill) {
 		return get(skill).lvl;
 	}
+	
+	public void setLvl(int lvl) {
+		super.get(Skill.Level).lvl = lvl;
+	}
 
 	public int getLvl() {
 		return getLvl(Skill.Level);

@@ -260,6 +260,10 @@ public class Player extends Entity {
 
 		switch (npc.type) {
 
+		case Trader:
+			tradeWithNpc(npc);
+			return;
+
 		case Regular:
 			MadSand.print("Doesn't seem like " + name + " wants to talk.");
 			return;
@@ -273,7 +277,7 @@ public class Player extends Entity {
 				MadSand.print(name + " has no more tasks for you.");
 			else
 				quests.processQuest(qid);
-			break;
+			return;
 
 		default:
 			break;
@@ -284,11 +288,17 @@ public class Player extends Entity {
 		Gui.overlay.processActionMenu();
 	}
 
-	public void tradeWithNPC(Direction direction) {
+	public void tradeWithNpc(Direction direction) {
 		coords.set(x, y).addDirection(direction);
 		Npc npc = MadSand.world.getCurLoc().getNpc(coords);
+		tradeWithNpc(npc);
+	}
+
+	public void tradeWithNpc(Npc npc) {
+
 		if (!npc.canTrade)
 			return;
+
 		new TradeInventoryUI(npc.inventory, inventory).show();
 	}
 
