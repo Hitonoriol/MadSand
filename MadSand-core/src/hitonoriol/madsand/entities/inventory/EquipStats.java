@@ -91,4 +91,9 @@ public class EquipStats {
 			ret += "Intelligence " + asStatString(intelligence) + Resources.LINEBREAK;
 		return ret;
 	}
+
+	@JsonIgnore
+	public int getTotalBonus() {
+		return defense + constitution + dexterity + strength + accuracy + intelligence;
+	}
 }

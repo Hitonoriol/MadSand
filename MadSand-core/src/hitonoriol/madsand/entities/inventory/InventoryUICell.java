@@ -37,7 +37,7 @@ public class InventoryUICell extends ItemUI {
 					return;
 
 				World.player.stats.setHand(item);
-				MadSand.print("You take " + item.name + " to your hand");
+				MadSand.print("You take " + item.name + " in your hand");
 				Gui.overlay.setHandDisplay(item);
 				World.player.doAction();
 				Gui.toggleInventory();

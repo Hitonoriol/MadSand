@@ -22,7 +22,8 @@ public class Stats {
 	final static int FOOD_HEAL = 1;
 
 	static int STAT_MIN_SUM = 20; //for roll() method
-	public int maxStatSum = 22; //Changes every levelup
+	public int maxStatSum = 22; // Changes every levelup
+	private int statBonus = 0; // Total equipment stat bonus
 
 	static final int STAT_RAND_MAX = 8;
 	static final int STAT_RAND_MIN = 3;
@@ -41,6 +42,7 @@ public class Stats {
 	public int stamina;
 	public int maxstamina;
 
+	public int defense = 0;
 	public int accuracy = 2;
 	public int constitution;
 	public int strength = 3;
@@ -53,12 +55,6 @@ public class Stats {
 	public int respawnX = -1;
 	public int respawnY = -1;
 	public int respawnWX = -1, respawnWY = -1;
-
-	public int[] def = new int[3];
-
-	public int helmet = 0;
-	public int cplate = 0;
-	public int shield = 0;
 
 	public SkillContainer skills = new SkillContainer();
 
@@ -80,13 +76,23 @@ public class Stats {
 
 	@JsonIgnore
 	public StatAction owner;
-	
+
 	public Stats() {
 		this(false);
 	}
-	
+
 	public Stats(boolean isPlayer) {
 		equipment = new Equipment(this, isPlayer);
+	}
+
+	public void calcStats() {
+		hp = constitution * 10;
+		mhp = hp;
+
+		stamina = ((dexterity + constitution) / 2) * 5;
+		maxstamina = stamina;
+
+		calcActionCosts();
 	}
 
 	public Item hand() {
@@ -111,11 +117,16 @@ public class Stats {
 			return;
 
 		EquipStats bonus = item.equipStats;
+
 		constitution += bonus.constitution;
 		dexterity += bonus.dexterity;
 		strength += bonus.strength;
 		accuracy += bonus.accuracy;
 		intelligence += bonus.intelligence;
+		defense += bonus.defense;
+
+		statBonus += bonus.getTotalBonus();
+		calcStats();
 	}
 
 	public void removeBonus(Item item) {
@@ -123,11 +134,16 @@ public class Stats {
 			return;
 
 		EquipStats bonus = item.equipStats;
+
 		constitution -= bonus.constitution;
 		dexterity -= bonus.dexterity;
 		strength -= bonus.strength;
 		accuracy -= bonus.accuracy;
 		intelligence -= bonus.intelligence;
+		defense -= bonus.defense;
+
+		statBonus -= bonus.getTotalBonus();
+		calcStats();
 	}
 
 	public void calcActionCosts() {
@@ -150,22 +166,17 @@ public class Stats {
 			sum = getSum();
 		}
 
-		calcVarStats();
-	}
-
-	public void calcVarStats() {
-		hp = constitution * 10;
-		mhp = hp;
-
-		stamina = ((dexterity + constitution) / 2) * 5;
-		maxstamina = stamina;
-
-		calcActionCosts();
+		calcStats();
 	}
 
 	@JsonIgnore
 	public int getSum() {
-		return strength + constitution + accuracy + luck + dexterity + intelligence;
+		return (strength +
+				constitution +
+				accuracy +
+				luck +
+				dexterity +
+				intelligence) - statBonus;
 	}
 
 	public void check() {
@@ -229,26 +240,25 @@ public class Stats {
 		stamina -= (STAMINA_INTERACT_COST);
 	}
 
-	public boolean attackMissed() {
-		return (Utils.rand(0, accuracy) == accuracy);
-	}
-
 	public boolean luckRoll() {
 		int roll = Utils.rand(0, luck);
 		return (roll != luck);
 	}
 
-	public int calcAttack() {
+	public boolean attackMissed() {
+		return (Utils.rand(0, accuracy) == accuracy);
+	}
+
+	public int calcAttack(int defense) {
 		if (attackMissed())
 			return 0;
 
-		int weaponStr;
-		if (!hand().type.isWeapon())
-			weaponStr = 0;
-		else
-			weaponStr = hand().equipStats.strength;
+		int atk = (strength - defense);
 
-		int atk = (strength + weaponStr);
+		if (atk <= 0)
+			atk = 1;
+
+		Utils.out("CalcAttack with defense: " + defense + " | Strength: " + strength + "; ATK: " + atk);
 
 		return atk;
 	}

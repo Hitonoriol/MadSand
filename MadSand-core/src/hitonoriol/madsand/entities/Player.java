@@ -126,7 +126,7 @@ public class Player extends Entity {
 		if (npc == Map.nullNpc)
 			return false;
 
-		int atk = stats.calcAttack();
+		int atk = stats.calcAttack(npc.getDefense());
 
 		if (atk == 0)
 			MadSand.print("You miss " + npc.stats.name);
@@ -372,64 +372,14 @@ public class Player extends Entity {
 		Gui.overlay.processActionMenu();
 	}
 
-	public void useItem(Item item) {
-		if (inventory.getSameCell(item) == -1)
-			return;
-		stats.setHand(item);
-		Gui.overlay.setHandDisplay(item);
-		useItem();
-		Gui.overlay.equipmentSidebar.refreshSlot(EquipSlot.MainHand);
-	}
-
 	public void useItem() {
-		Item usedItem = stats.hand();
-		int id = usedItem.id;
-
-		if (equip(stats.hand()))
-			return;
-
-		int ptile = MadSand.world.getTileId(x, y);
-		int item = MapObject.getTileAltItem(ptile, stats.hand().type.get());
-		checkHands(id);
-		damageHeldTool();
-
-		if (item != -1) {
-			MadSand.world.getCurLoc().delTile(x, y);
-			Item gotItem = new Item(item);
-
-			addItem(gotItem);
-
-			MadSand.notice("You dig " + gotItem.name + " from the ground");
-			increaseSkill(Skill.Digging);
-		}
-
-		String action = ItemProp.getOnUseAction(id);
+		int usedItemId = stats.hand().id;
 		doAction();
+		checkHands(usedItemId);
+		damageHeldTool();
+		useItem(stats.hand());
 
-		if (!action.equals(Resources.emptyField)) {
-			LuaUtils.execute(action);
-			if (usedItem.type.equals(ItemType.Consumable))
-				this.inventory.delItem(usedItem, 1);
-			checkHands(id);
-			return;
-		}
-
-		String tileAction = TileProp.getOnInteract(ptile);
-		if (!tileAction.equals(Resources.emptyField)) {
-			LuaUtils.execute(tileAction);
-			return;
-		}
-
-		if (Item.getType(id).equals(ItemType.Consumable)) {
-			increaseSkill(Skill.Survival);
-			MadSand.print("You eat " + stats.hand().name);
-			heal(stats.hand().healAmount);
-			satiate(stats.hand().satiationAmount);
-			inventory.delItem(stats.hand(), 1);
-			Gui.refreshOverlay();
-		}
-
-		if ((id == 9) && (inventory.getSameCell(9, 1) != -1) // TODO script this or make campfire craftable
+		if ((usedItemId == 9) && (inventory.getSameCell(9, 1) != -1) // TODO script this or make campfire craftable
 				&& (inventory.getSameCell(1, 5) != -1)) {
 			MadSand.print("You placed a campfire");
 			inventory.delItem(9);
@@ -437,26 +387,126 @@ public class Player extends Entity {
 			MadSand.world.getCurLoc().addObject(x, y, stats.look, 6);
 		}
 
-		if (Item.getType(id) == ItemType.Crop) {
+		checkHands(usedItemId);
+	}
+
+	public boolean useItem(Item item) {
+		if (equip(item))
+			return true;
+
+		if (useTileInteractItem(item))
+			return true;
+
+		if (useScriptedItem(item))
+			return true;
+
+		if (useScriptedTile())
+			return true;
+
+		if (useConsumableItem(item))
+			return true;
+
+		if (plantCrop(item))
+			return true;
+
+		if (usePlaceableObject(item))
+			return true;
+
+		if (usePlaceableTile(item))
+			return true;
+
+		return false;
+
+	}
+
+	private boolean usePlaceableTile(Item item) {
+		if (Item.getType(item.id).equals(ItemType.PlaceableTile)) {
+			inventory.delItem(item, 1);
+			MadSand.world.getCurLoc().addTile(x, y, stats.look, Item.getAltObject(item.id));
+			return true;
+		}
+
+		return false;
+	}
+
+	private boolean usePlaceableObject(Item item) {
+		if (Item.getType(item.id).equals(ItemType.PlaceableObject)) {
+			inventory.delItem(item, 1);
+			MadSand.world.getCurLoc().addObject(x, y, stats.look, Item.getAltObject(item.id));
+			return true;
+		}
+
+		return false;
+	}
+
+	private boolean plantCrop(Item item) {
+		if (Item.getType(item.id) == ItemType.Crop) {
 			Pair coords = new Pair(x, y).addDirection(stats.look);
-			if (MadSand.world.getCurLoc().putCrop(coords.x, coords.y, id)) {
+			if (MadSand.world.getCurLoc().putCrop(coords.x, coords.y, item.id)) {
 				increaseSkill(Skill.Farming);
-				MadSand.print("You plant " + new Item(id).name);
-				inventory.delItem(id);
+				MadSand.print("You plant " + item.name);
+				inventory.delItem(item, 1);
 			}
+			return true;
 		}
 
-		if (Item.getType(id) == ItemType.PlaceableObject) {
-			inventory.delItem(id);
-			MadSand.world.getCurLoc().addObject(x, y, stats.look, Item.getAltObject(id));
+		return false;
+	}
+
+	private boolean useConsumableItem(Item item) {
+		if (Item.getType(item.id).equals(ItemType.Consumable)) {
+			increaseSkill(Skill.Survival);
+			MadSand.print("You eat " + item.name);
+			heal(item.healAmount);
+			satiate(item.satiationAmount);
+			inventory.delItem(item, 1);
+			Gui.refreshOverlay();
+			return true;
 		}
 
-		if (Item.getType(id) == ItemType.PlaceableTile) {
-			inventory.delItem(id);
-			MadSand.world.getCurLoc().addTile(x, y, stats.look, Item.getAltObject(id));
+		return false;
+	}
+
+	private boolean useScriptedTile() {
+		String tileAction = TileProp.getOnInteract(MadSand.world.getTileId(x, y));
+		if (!tileAction.equals(Resources.emptyField)) {
+			LuaUtils.execute(tileAction);
+			return true;
 		}
 
-		checkHands(id);
+		return false;
+	}
+
+	private boolean useScriptedItem(Item item) {
+		String action = ItemProp.getOnUseAction(item.id);
+
+		if (!action.equals(Resources.emptyField)) {
+			LuaUtils.execute(action);
+			if (item.type.equals(ItemType.Consumable))
+				this.inventory.delItem(item, 1);
+			checkHands(item.id);
+			return true;
+		}
+
+		return false;
+	}
+
+	private boolean useTileInteractItem(Item item) {
+		int ptile = MadSand.world.getTileId(x, y);
+		int altItem = MapObject.getTileAltItem(ptile, item.type.get());
+
+		if (altItem != -1) {
+			MadSand.world.getCurLoc().delTile(x, y);
+			Item gotItem = new Item(altItem);
+
+			addItem(gotItem);
+
+			MadSand.notice("You dig " + gotItem.name + " from the ground");
+			increaseSkill(Skill.Digging);
+			return true;
+		}
+
+		return false;
 	}
 
 	public void freeHands(boolean silent) {

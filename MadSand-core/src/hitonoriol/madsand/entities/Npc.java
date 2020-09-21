@@ -78,11 +78,12 @@ public class Npc extends Entity {
 		stats.accuracy = properties.accuracy;
 		rewardExp = properties.rewardExp;
 		stats.faction = properties.faction;
-		stats.calcVarStats();
-		
+		stats.calcStats();
+
 		initInventory();
 		inventory.setMaxWeight(stats.calcMaxInventoryWeight());
-		inventory.putItem(properties.loot);
+		if (properties.loot != null)
+			inventory.putItem(properties.loot.roll());
 
 		int removeAmt;
 		for (Item item : inventory.items) {
@@ -134,7 +135,7 @@ public class Npc extends Entity {
 		if (!(player.x == coords.x && player.y == coords.y))
 			return false;
 		else {
-			int atk = stats.calcAttack();
+			int atk = stats.calcAttack(player.getDefense());
 			if (atk == 0)
 				MadSand.print(stats.name + " misses!");
 			else

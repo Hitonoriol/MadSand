@@ -1,5 +1,6 @@
 package hitonoriol.madsand.entities.inventory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 import java.util.Map.Entry;
@@ -228,6 +229,13 @@ public class Inventory {
 		}
 
 		return false;
+	}
+
+	public boolean putItem(ArrayList<Item> items) {
+		for (Item item : items)
+			if (!putItem(item))
+				return false;
+		return true;
 	}
 
 	public boolean putItem(int id) {

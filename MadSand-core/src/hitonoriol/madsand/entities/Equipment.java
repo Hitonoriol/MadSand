@@ -98,6 +98,14 @@ public class Equipment {
 		return list;
 	}
 
+	public void setStatBonus(boolean apply) {
+		for (Entry<EquipSlot, Item> entry : equipped.entrySet())
+			if (!apply)
+				stats.removeBonus(entry.getValue());
+			else
+				stats.applyBonus(entry.getValue());
+	}
+
 	public void refreshUI() {
 		if (!isPlayer)
 			return;

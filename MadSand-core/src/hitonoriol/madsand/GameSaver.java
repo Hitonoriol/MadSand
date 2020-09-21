@@ -167,8 +167,12 @@ public class GameSaver {
 		try {
 			String fl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.PLAYERFILE;
 			String wfl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.WORLDFILE;
+			
+			World.player.stats.equipment.setStatBonus(false);
 			MadSand.mapper.writeValue(new File(fl), World.player);
 			MadSand.mapper.writeValue(new File(wfl), MadSand.world);
+			World.player.stats.equipment.setStatBonus(true);
+			
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

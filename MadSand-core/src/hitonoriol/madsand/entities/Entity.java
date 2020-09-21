@@ -235,6 +235,11 @@ public abstract class Entity {
 		}
 	}
 
+	@JsonIgnore
+	public int getDefense() {
+		return stats.defense;
+	}
+
 	void dropInventory() {
 		Item item;
 		Map curLoc = MadSand.world.getCurLoc();
@@ -476,7 +481,8 @@ public abstract class Entity {
 
 	@JsonGetter("Equipment")
 	public ArrayList<String> getEquipment() { // For serializer
-		return stats.equipment.getUidList();
+		ArrayList<String> list = stats.equipment.getUidList();
+		return list;
 	}
 
 	@JsonSetter("Equipment")
@@ -488,7 +494,7 @@ public abstract class Entity {
 		int handId = Utils.val(list.get(len - 1));
 		stats.setHand(inventory.getItem(handId));
 	}
-	
+
 	@JsonGetter("isPlayer")
 	public boolean isPlayer() {
 		return stats.equipment.getIsPlayer();

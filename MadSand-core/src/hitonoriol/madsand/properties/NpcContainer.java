@@ -2,8 +2,10 @@ package hitonoriol.madsand.properties;
 
 import java.util.ArrayList;
 
+import hitonoriol.madsand.entities.LootTable;
 import hitonoriol.madsand.enums.Faction;
 import hitonoriol.madsand.enums.NpcType;
+import hitonoriol.madsand.enums.TradeCategory;
 
 public class NpcContainer {
 	public String name;
@@ -12,10 +14,11 @@ public class NpcContainer {
 	public int dexterity;
 
 	public int rewardExp;
-	public String loot;
+	public LootTable loot;
 
 	public Faction faction;
 	public NpcType type;
+	public TradeCategory tradeCategory;
 
 	public ArrayList<Integer> questList;
 

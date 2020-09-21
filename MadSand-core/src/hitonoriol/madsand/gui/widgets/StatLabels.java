@@ -75,7 +75,7 @@ public class StatLabels {
 		if (value.name.equals(dexString))
 			stats.dexterity = value.value;
 
-		stats.calcVarStats();
+		stats.calcStats();
 		refreshStatLabels();
 
 	}
