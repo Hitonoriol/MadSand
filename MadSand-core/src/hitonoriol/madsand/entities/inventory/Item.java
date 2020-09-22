@@ -79,6 +79,12 @@ public class Item {
 	public Item(int id, int q) {
 		this(id);
 		this.quantity = q;
+
+		if (q < 1) {
+			this.id = 0;
+			loadProperties();
+		}
+
 	}
 
 	public Item(String query) {

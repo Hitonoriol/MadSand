@@ -37,6 +37,8 @@ public class DungeonGen extends DungeonGenerator {
 		ArrayList<Integer> mobs = curDungeonFloor.mobs;
 		ArrayList<String> loot = curDungeonFloor.loot;
 
+		map.rollSize(curDungeonFloor.minSize, curDungeonFloor.maxSize);
+		map.editable = false;
 		int w = map.getWidth(), h = map.getHeight();
 		final Grid grid = new Grid(w, h);
 
@@ -47,18 +49,20 @@ public class DungeonGen extends DungeonGenerator {
 		super.generate(grid);
 
 		int y = 0, x = 0;
-		int mapWidth = map.getWidth();
-		int mapHeight = map.getHeight();
-		map.editable = false;
+		int mobCount = 0;
 
-		while (y < mapHeight) {
-			while (x < mapWidth) {
+		while (y < h) {
+			while (x < w) {
 				if (grid.get(x, y) == DUNGEON_CORRIDOR_LEVEL) { // corridors
 					map.delObject(x, y);
 					map.addTile(x, y, dungeon.corridorTile, true);
 
-					if (Utils.percentRoll(curDungeonFloor.mobCorridorProbability))
+					if (Utils.percentRoll(curDungeonFloor.mobCorridorProbability)
+							&& mobCount < curDungeonFloor.maxMobs) {
+
 						map.spawnNpc(Utils.randElement(mobs), x, y);
+						++mobCount;
+					}
 
 					if (Utils.percentRoll(curDungeonFloor.lootCorridorProbability))
 						map.putLoot(x, y, rollLoot(loot));
@@ -74,8 +78,10 @@ public class DungeonGen extends DungeonGenerator {
 					map.delObject(x, y);
 					map.addTile(x, y, dungeon.roomTile, true);
 
-					if (Utils.percentRoll(curDungeonFloor.mobProbability))
+					if (Utils.percentRoll(curDungeonFloor.mobProbability) && mobCount < curDungeonFloor.maxMobs) {
 						map.spawnNpc(Utils.randElement(mobs), x, y);
+						++mobCount;
+					}
 
 					if (Utils.percentRoll(curDungeonFloor.lootProbability))
 						map.putLoot(x, y, rollLoot(loot));
@@ -101,7 +107,7 @@ public class DungeonGen extends DungeonGenerator {
 		rooms.clear();
 	}
 
-	private void placeSpecialMobs(DungeonContents contents) {
+	private void placeSpecialMobs(DungeonContents contents) { //TODO: trader's room with it's own tile, furniture, ...
 		Pair coords = new Pair(-1, -1);
 		int npcId;
 		int quantity = Utils.rand(1, contents.specialMobsMax);
@@ -112,7 +118,7 @@ public class DungeonGen extends DungeonGenerator {
 			while (!map.spawnNpc(npcId, coords.x, coords.y))
 				coords = randomRoomPoint();
 
-			Utils.out("Placed special mob at " + coords);
+			Utils.out("Spawned special mob at " + coords);
 		}
 
 	}

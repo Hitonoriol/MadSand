@@ -77,9 +77,12 @@
 			"dungeonContents" : [ {
 				"fromFloor" : 0,
 				"contents" : {
+					"maxSize" : 80,
+					"minSize" : 50,
 					"specialMobs" : [8, 24, 25],
 					"specialMobsMax" : 10,
 					"mobs" : [ 14, 15 ],
+					"maxMobs" : 50,
 					"loot" : [ "2/10", "59/3", "60/1" ,"21/100" ],
 					"mobProbability" : 4,
 					"mobCorridorProbability" : 1,
