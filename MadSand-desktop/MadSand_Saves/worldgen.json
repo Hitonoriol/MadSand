@@ -71,7 +71,6 @@
 			"wallTile" : 7,
 			"roomTile" : 12,
 			"corridorTile" : 5,
-			"doorObject" : 11,
 			"staircaseDownObject": 113,
 			"staircaseUpObject": 114,
 			"dungeonContents" : [ {
@@ -79,6 +78,9 @@
 				"contents" : {
 					"maxSize" : 80,
 					"minSize" : 50,
+					"doorObject" : 11,
+					"specialRoomTiles" : [9, 18, 19, 29, 30, 32, 38],
+					"specialRoomWalls" : [104, 105, 26, 108, 109, 110, 111],
 					"specialMobs" : [8, 24, 25],
 					"specialMobsMax" : 10,
 					"mobs" : [ 14, 15 ],

@@ -5,7 +5,7 @@ local map = world:getCurLoc();
 local player = world.player;
 
 map:spawnNpc(5, 55, 55);
-utils:addObject(55, 54, 6);
+map:addObject(55, 54, 6);
 
 player:teleport(50, 50);
 world:updateLight();

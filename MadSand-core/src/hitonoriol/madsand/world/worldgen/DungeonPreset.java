@@ -8,8 +8,6 @@ public class DungeonPreset {
 	public int wallObject, wallTile; //Dungeon room wall objects & tiles
 	public int roomTile;
 	public int corridorTile;
-	public int doorObject;
-	
 	public int staircaseDownObject;
 	public int staircaseUpObject;
 

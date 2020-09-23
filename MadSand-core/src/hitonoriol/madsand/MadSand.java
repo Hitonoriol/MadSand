@@ -258,6 +258,9 @@ public class MadSand extends Game {
 				++i;
 				continue;
 			}
+			
+			if (player.standingOnLoot(x, y))
+				Utils.batch.draw(Resources.objects[OBJECT_LOOT], x * TILESIZE, y * TILESIZE);
 
 			npc = loc.getNpc(x, y);
 			if (npc != Map.nullNpc)
@@ -267,9 +270,6 @@ public class MadSand extends Game {
 
 			if ((objid != MapObject.NULL_OBJECT_ID) && (objid != MapObject.COLLISION_MASK_ID))
 				Utils.batch.draw(Resources.objects[objid], x * TILESIZE, y * TILESIZE);
-
-			if (player.standingOnLoot(x, y))
-				Utils.batch.draw(Resources.objects[OBJECT_LOOT], x * TILESIZE, y * TILESIZE);
 
 			++i;
 		}

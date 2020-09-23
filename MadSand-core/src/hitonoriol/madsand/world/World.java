@@ -239,7 +239,7 @@ public class World {
 	}
 
 	public boolean descend() {
-		if (curlayer == DUNGEON_LAYER_MAX)
+		if (curlayer >= DUNGEON_LAYER_MAX)
 			return false;
 
 		boolean ret = switchLocation(curlayer + 1);
@@ -269,7 +269,7 @@ public class World {
 	}
 
 	public boolean ascend() {
-		if (curlayer == LAYER_OVERWORLD)
+		if (curlayer <= LAYER_OVERWORLD)
 			return false;
 		boolean ret = switchLocation(curlayer - 1);
 		if (curlayer == LAYER_OVERWORLD)
@@ -395,7 +395,7 @@ public class World {
 	private void tick() {
 		player.stats.perTickCheck();
 		player.tileDmg();
-		getCurLoc().update();
+		getCurLoc().updateCrops();
 		++globalTick;
 
 		if (++tick >= ticksPerHour - 1) {

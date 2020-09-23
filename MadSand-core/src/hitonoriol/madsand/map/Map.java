@@ -150,34 +150,58 @@ public class Map {
 		this.addTile(x, y, dir, id);
 	}
 
-	public Map fillTile(int id) {
-		int i = 0, ii = 0;
-		while (i <= xsz) {
-			while (ii <= ysz) {
-				this.addTile(i, ii, id, true);
-				ii++;
-			}
-			ii = 0;
-			i++;
+	@FunctionalInterface
+	private interface MapAction {
+		public boolean changeMap(int x, int y, int id);
+	}
+
+	private MapAction tileAction = (int x, int y, int id) -> {
+		return addTile(x, y, id, true);
+	};
+
+	private MapAction objectAction = (int x, int y, int id) -> {
+		return addObject(x, y, id, true);
+	};
+
+	private Map drawRect(MapAction action, int x, int y, int w, int h, int id, boolean fill) {
+		int rectWidth = x + w, rectHeight = y + h;
+		int startX = x, startY = y;
+
+		for (; x <= rectWidth; ++x) {
+			for (y = startY; y <= rectHeight; ++y)
+				if (fill || (x == startX || y == startY || x == rectWidth || y == rectHeight))
+					action.changeMap(x, y, id);
 		}
+
 		return this;
+	}
+
+	public Map drawTileRectangle(int x, int y, int w, int h, int id) {
+		return drawRect(tileAction, x, y, w, h, id, false);
+	}
+
+	public Map drawObjectRectangle(int x, int y, int w, int h, int id) {
+		return drawRect(objectAction, x, y, w, h, id, false);
+	}
+
+	public Map fillTile(int x, int y, int w, int h, int id) {
+		return drawRect(tileAction, x, y, w, h, id, true);
+	}
+
+	public Map fillTile(int id) {
+		return fillTile(0, 0, xsz, ysz, id);
 	}
 
 	public Map fillTile() {
 		return fillTile(defTile);
 	}
 
+	public Map fillObject(int x, int y, int w, int h, int id) {
+		return drawRect(objectAction, x, y, w, h, id, true);
+	}
+
 	public Map fillObject(int id) {
-		int i = 0, ii = 0;
-		while (i <= xsz) {
-			while (ii <= ysz) {
-				this.addObject(i, ii, id);
-				ii++;
-			}
-			ii = 0;
-			i++;
-		}
-		return this;
+		return fillObject(0, 0, xsz, ysz, id);
 	}
 
 	public Map fillObject() {
@@ -191,6 +215,10 @@ public class Map {
 			return false;
 	}
 
+	private boolean addTile(Pair coords, Tile tile) {
+		return mapTiles.put(coords, tile) == null;
+	}
+
 	public boolean addTile(int x, int y, int id, boolean force) {
 		if (!correctCoords(coords.set(x, y)))
 			return false;
@@ -198,15 +226,17 @@ public class Map {
 		if (force)
 			mapTiles.remove(coords);
 
-		mapTiles.put(new Pair(coords), new Tile(id));
-
-		return true;
-
+		return addTile(new Pair(coords), new Tile(id));
 	}
 
-	public void delTile(int x, int y) {
-		mapTiles.remove(coords.set(x, y));
+	private boolean delTile(Pair coords) {
+		boolean removed = mapTiles.remove(coords) != null;
 		mapTiles.put(coords, new Tile(defTile));
+		return removed;
+	}
+
+	public boolean delTile(int x, int y) {
+		return delTile(coords.set(x, y));
 	}
 
 	public boolean addTile(int x, int y, int id) {
@@ -220,41 +250,6 @@ public class Map {
 			return true;
 		} else
 			return false;
-	}
-
-	public void updateLight(int wx, int wy, int r) {
-		Tile tile;
-		MapObject object;
-		boolean blocksLight = false;
-		for (int x = -r; x < r; x++) {
-			for (int y = -r; y < r; y++) {
-
-				if (x * x + y * y > r * r)
-					continue;
-
-				if (wx + x < 0 || wx + x > xsz || wy + y < 0 || wy + y > ysz)
-					continue;
-
-				tile = getTile(wx + x, wy + y);
-
-				tile.visible = true;
-				blocksLight = false;
-
-				for (Point p : new Line(wx, wy, wx + x, wy + y)) {
-					tile = getTile(p.x, p.y);
-					object = getObject(p.x, p.y);
-
-					if (blocksLight)
-						tile.visible = false;
-
-					if (object != nullObject && !object.nocollide)
-						blocksLight = true;
-
-					if (tile.visible)
-						tile.visited = true;
-				}
-			}
-		}
 	}
 
 	public Tile getTile(int x, int y) {
@@ -295,22 +290,39 @@ public class Map {
 		}
 	}
 
-	public void delObject(int x, int y) {
-		if (correctCoords(coords.set(x, y)))
-			mapObjects.remove(coords);
+	private boolean delObject(Pair coords) {
+		return mapObjects.remove(coords) != null;
 	}
 
-	public boolean addObject(int x, int y, int id) {
+	public boolean delObject(int x, int y) {
+		if (correctCoords(coords.set(x, y)))
+			return delObject(coords);
+
+		return false;
+	}
+
+	private boolean addObject(Pair coords, MapObject object) {
+		return mapObjects.put(coords, object) == null;
+	}
+
+	public boolean addObject(int x, int y, int id, boolean force) {
 		if (!correctCoords(coords.set(x, y)))
 			return false;
 
-		if (mapObjects.containsKey(coords))
-			mapObjects.remove(coords);
+		if (mapObjects.containsKey(coords)) {
+			if (force)
+				mapObjects.remove(coords);
+			else
+				return false;
+		}
 
-		mapObjects.put(new Pair(coords), new MapObject(id));
+		addObject(new Pair(coords), new MapObject(id));
 		setObjectSize(x, y, id);
 		return true;
+	}
 
+	public boolean addObject(int x, int y, int id) {
+		return addObject(x, y, id, true);
 	}
 
 	boolean addObject(Pair coord, int id) {
@@ -414,7 +426,42 @@ public class Map {
 		}
 	}
 
-	public void update() {
+	public void updateLight(int wx, int wy, int r) {
+		Tile tile;
+		MapObject object;
+		boolean blocksLight = false;
+		for (int x = -r; x < r; x++) {
+			for (int y = -r; y < r; y++) {
+
+				if (x * x + y * y > r * r)
+					continue;
+
+				if (wx + x < 0 || wx + x > xsz || wy + y < 0 || wy + y > ysz)
+					continue;
+
+				tile = getTile(wx + x, wy + y);
+
+				tile.visible = true;
+				blocksLight = false;
+
+				for (Point p : new Line(wx, wy, wx + x, wy + y)) {
+					tile = getTile(p.x, p.y);
+					object = getObject(p.x, p.y);
+
+					if (blocksLight)
+						tile.visible = false;
+
+					if (object != nullObject && !object.nocollide)
+						blocksLight = true;
+
+					if (tile.visible)
+						tile.visited = true;
+				}
+			}
+		}
+	}
+
+	public void updateCrops() {
 		Pair coord = new Pair();
 		Crop newCrop;
 		ArrayList<Pair> del = new ArrayList<Pair>();

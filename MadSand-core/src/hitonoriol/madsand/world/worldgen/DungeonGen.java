@@ -48,6 +48,7 @@ public class DungeonGen extends DungeonGenerator {
 		super.setMinRoomSize(dungeon.minRoomSize);
 		super.generate(grid);
 
+		ArrayList<Pair> doors = new ArrayList<>();
 		int y = 0, x = 0;
 		int mobCount = 0;
 
@@ -94,7 +95,7 @@ public class DungeonGen extends DungeonGenerator {
 				}
 
 				if (isDoorway(grid, x, y, w, h)) // door
-					map.addObject(x, y, dungeon.doorObject);
+					doors.add(new Pair(x, y));
 
 				x++;
 			}
@@ -104,19 +105,35 @@ public class DungeonGen extends DungeonGenerator {
 
 		placeObjectInRoom(dungeon.staircaseDownObject);
 		placeSpecialMobs(curDungeonFloor);
+		placeDoors(curDungeonFloor.doorObject, doors);
 		rooms.clear();
 	}
 
-	private void placeSpecialMobs(DungeonContents contents) { //TODO: trader's room with it's own tile, furniture, ...
-		Pair coords = new Pair(-1, -1);
+	private void placeDoors(int id, ArrayList<Pair> doors) {
+		for (Pair coords : doors)
+			map.addObject(coords.x, coords.y, id);
+		doors.clear();
+	}
+
+	private void placeSpecialMobs(DungeonContents contents) {
+		Room room;
+		Pair coords;
 		int npcId;
+		int specialTile, specialWallObject;
 		int quantity = Utils.rand(1, contents.specialMobsMax);
 
 		for (int i = 0; i < quantity; ++i) {
+			room = getRandomRoom();
+			coords = new Pair(-1, -1);
 			npcId = Utils.randElement(contents.specialMobs);
 
 			while (!map.spawnNpc(npcId, coords.x, coords.y))
-				coords = randomRoomPoint();
+				coords = randomRoomPoint(room, coords);
+
+			specialTile = Utils.randElement(contents.specialRoomTiles);
+			specialWallObject = Utils.randElement(contents.specialRoomWalls);
+			map.fillTile(room.getX(), room.getY(), room.getWidth(), room.getHeight(), specialTile);
+			map.drawObjectRectangle(room.getX() - 1, room.getY() - 1, room.getWidth() + 1, room.getHeight() + 1, specialWallObject);
 
 			Utils.out("Spawned special mob at " + coords);
 		}
@@ -128,14 +145,18 @@ public class DungeonGen extends DungeonGenerator {
 		map.addObject(roomCoords.x, roomCoords.y, id);
 	}
 
-	private Pair randomRoomPoint(Pair coords) {
-		Room room = getRandomRoom();
+	private Pair randomRoomPoint(Room room, Pair coords) {
 		int roomX = room.getX(), roomY = room.getY();
 
 		int x = Utils.rand(roomX, roomX + room.getWidth() - 1);
 		int y = Utils.rand(roomY, roomY + room.getHeight() - 1);
 
 		return coords.set(x, y);
+	}
+
+	private Pair randomRoomPoint(Pair coords) {
+		return randomRoomPoint(getRandomRoom(), coords);
+
 	}
 
 	private Pair randomRoomPoint() {

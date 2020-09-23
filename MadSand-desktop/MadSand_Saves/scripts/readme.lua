@@ -9,10 +9,11 @@ Available bindings:
 		* utils:notice() -- print to in-game log with noticeColor
 		* utils:showDialog(query) -- generates dialog chain from string query ( #Title#Dialog text[button text]=>#Next title#next dialog text[btn]=>.... )
 
-	* Map editing (currently not possible using map:... methods, so use these instead):
-		* utils:placeTile(x, y, tile_id) -- place tile
-		* utils:addObject(x, y, object_id) -- place map object
-		* utils:delObject(x, y)	-- delete map object
+	* Map editing:
+		local map = world:getCurLoc();
+		* map:addTile(x, y, tile_id) -- place tile
+		* map:addObject(x, y, object_id) -- place map object
+		* map:delObject(x, y)	-- delete map object
 
 	* Misc Map-related stuff:
 		* utils:locateTile(id) -- returns a pair(x, y) of coordinates of specified tile
