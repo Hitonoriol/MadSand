@@ -155,6 +155,10 @@ public abstract class Entity {
 		doAction();
 		return true;
 	}
+	
+	public boolean hasItem(int id) {
+		return inventory.getSameCell(id) != -1;
+	}
 
 	public void pickUpLoot() {
 

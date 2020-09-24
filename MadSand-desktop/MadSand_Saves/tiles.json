@@ -354,6 +354,31 @@
 		"altItems" : null,
 		"name" : "Dust",
 		"foreground" : false
+	},
+	
+	"44" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Dust",
+		"foreground" : false
+	},
+	
+	"45" : {
+		"damage" : 0,
+		"onInteract" : "
+			local player = world.player;
+			local keyItem = 100;
+			if (not player:hasItem(keyItem)) then
+				utils:notice('You need a key to open this trapdoor');
+			else
+				utils:notice('You open the trapdoor...');
+				world:getCurLoc():addTile(player.x, player.y, 6, true);
+				player.inventory:delItem(keyItem, 1);
+			end
+		",
+		"altItems" : null,
+		"name" : "Trapdoor",
+		"foreground" : false
 	}
-
 }

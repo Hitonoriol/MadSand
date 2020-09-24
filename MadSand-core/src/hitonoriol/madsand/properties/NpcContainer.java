@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import hitonoriol.madsand.entities.LootTable;
 import hitonoriol.madsand.enums.Faction;
+import hitonoriol.madsand.enums.NpcState;
 import hitonoriol.madsand.enums.NpcType;
 import hitonoriol.madsand.enums.TradeCategory;
 
@@ -20,6 +21,7 @@ public class NpcContainer {
 	public Faction faction;
 	public NpcType type;
 	public TradeCategory tradeCategory;
+	public NpcState defaultState;
 
 	public ArrayList<Integer> questList;
 

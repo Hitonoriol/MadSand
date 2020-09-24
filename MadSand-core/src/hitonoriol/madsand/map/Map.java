@@ -163,6 +163,14 @@ public class Map {
 		return addObject(x, y, id, true);
 	};
 
+	private static double ERODE_PROBABILITY = 30;
+	private MapAction erodeTileAction = (int x, int y, int id) -> {
+		if (Utils.percentRoll(ERODE_PROBABILITY))
+			return addTile(x, y, id);
+
+		return false;
+	};
+
 	private Map drawRect(MapAction action, int x, int y, int w, int h, int id, boolean fill) {
 		int rectWidth = x + w, rectHeight = y + h;
 		int startX = x, startY = y;
@@ -173,6 +181,16 @@ public class Map {
 					action.changeMap(x, y, id);
 		}
 
+		return this;
+	}
+
+	public Map erodeTileRectangle(int x, int y, int w, int h, int id) {
+		return drawRect(erodeTileAction, x, y, w, h, id, false);
+	}
+
+	public Map erodeTileRectangle(int x, int y, int w, int h, int depth, int id) {
+		for (; depth >= 0; --depth)
+			erodeTileRectangle(x + depth, y + depth, w - depth, h - depth, id);
 		return this;
 	}
 

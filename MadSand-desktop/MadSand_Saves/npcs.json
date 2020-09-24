@@ -539,5 +539,21 @@
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : true
+	},
+	"36" : {
+		"name" : "Vending machine",
+		"hp" : 999,
+		"strength" : 1,
+		"accuracy" : 10,
+		"dexterity" : 500,
+		"rewardExp" : 500,
+		"loot" : null,
+		"faction" : "Monsters",
+		"type" : "Trader",
+		"defaultState": "Still",
+		"tradeCategory": "All",
+		"questList" : null,
+		"spawnOnce" : false,
+		"friendly" : true
 	}
 }

@@ -53,14 +53,16 @@ public class TradeListContainer extends HashMap<TradeCategory, ArrayList<TradeIt
 
 	public ArrayList<Item> roll(TradeCategory category, int tier) {
 		ArrayList<Item> items = new ArrayList<>();
-		TradeCategory[] categoryList = TradeCategory.values();
+		boolean all = category.equals(TradeCategory.All);
 
-		while (category.equals(TradeCategory.Random) || category.equals(TradeCategory.All))
-			category = categoryList[Utils.rand(categoryList.length)];
+		if (category.isFlag())
+			category = TradeCategory.roll();
 
 		for (int i = tier; i >= 0; i--) {
 			Utils.out("Rolling tradeList " + category + " tier: " + tier);
 			getTradeItemList(category, tier).roll(items);
+			if (all)
+				category = TradeCategory.roll();
 		}
 
 		return items;

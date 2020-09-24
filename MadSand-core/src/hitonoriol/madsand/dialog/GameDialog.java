@@ -1,9 +1,5 @@
 package hitonoriol.madsand.dialog;
 
-import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -43,7 +39,8 @@ public class GameDialog extends Dialog {
 		titleTbl.padTop(TITLE_YPADDING).padLeft(TITLE_XPADDING);
 
 		row();
-		textLbl = new Label(replaceDialogConstants(text), Gui.skin);
+		textLbl = new Label("", Gui.skin);
+		setText(text);
 		textLbl.setAlignment(Align.topLeft);
 		textLbl.setWrap(true);
 		add(textLbl).width(WIDTH).height(HEIGHT).pad(PADDING).padTop(TEXT_YPADDING).row();
@@ -70,6 +67,14 @@ public class GameDialog extends Dialog {
 		this(title, text, stage);
 		addOkButton(okText);
 	}
+	
+	public void setText(String text) {
+		textLbl.setText(replaceDialogConstants(text));
+	}
+
+	public void setTitle(String text) {
+		super.getTitleLabel().setText(text);
+	}
 
 	@Override
 	public boolean remove() {
@@ -85,16 +90,20 @@ public class GameDialog extends Dialog {
 		Gui.gameUnfocused = Gui.dialogActive = true;
 		return ret;
 	}
-
-	public void chainReply(String btnText, GameDialog nextDialog) {
-		TextButton nextBtn = new TextButton(btnText, Gui.skin);
-		nextBtn.addListener(new ChangeListener() {
+	
+	public void chainReply(TextButton replyButton, GameDialog nextDialog) {
+		replyButton.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				remove();
 				nextDialog.show(stage);
 			}
 		});
+	}
+
+	public void chainReply(String btnText, GameDialog nextDialog) {
+		TextButton nextBtn = new TextButton(btnText, Gui.skin);
 		addButton(nextBtn);
+		chainReply(nextBtn, nextDialog);
 	}
 
 	public void addOkButton(String text) {
@@ -116,104 +125,17 @@ public class GameDialog extends Dialog {
 		show(stage);
 	}
 
+	public static final String DIALOG_PLAYER_NAME_CONSTANT = "{PLAYER}";
+	public static final String DIALOG_LINEBREAK_CONSTANT = "{br}";
+
 	public String replaceDialogConstants(String text) {
 		text = text.replace(DIALOG_PLAYER_NAME_CONSTANT, World.player.stats.name);
 		text = text.replace(DIALOG_LINEBREAK_CONSTANT, "\n");
 		return text;
 	}
 
-	public static final String DEFAULT_BTN_TEXT = "Proceed";
-	public static final String DEFAULT_TITLE_TEXT = "";
-
-	public static final String DIALOG_TEXT_DELIMITER = "=>";
-
-	public static final String DIALOG_BTN_SCRIPT_DELIMITER = "|";
-	public static final String DIALOG_BTN_TREE_REPLY_DELIMITER = "$";
-
-	public static final String DIALOG_PLAYER_NAME_CONSTANT = "{PLAYER}";
-	public static final String DIALOG_LINEBREAK_CONSTANT = "{br}";
-
-	public static final String DIALOG_TITLE_REGEX = "\\#(.*?)\\#";
-	public static final String DIALOG_BUTTON_REGEX = "\\[(.*?)\\]";
-
-	public static Pattern titlePattern = Pattern.compile(DIALOG_TITLE_REGEX);
-	public static Pattern buttonPattern = Pattern.compile(DIALOG_BUTTON_REGEX);
-
-	/*
-	 * Chain dialog generator Syntax:
-	 * #Title# Dialog text [Button text] => Next Text => ....
-	 */
-
-	public static Tuple<String, String> getDialogParams(String text) {
-		String buttonText, titleText;
-
-		buttonText = getFirstMatch(buttonPattern, text);
-		titleText = getFirstMatch(titlePattern, text);
-
-		if (buttonText == "")
-			buttonText = DEFAULT_BTN_TEXT;
-		if (titleText == "")
-			titleText = DEFAULT_TITLE_TEXT;
-
-		return new Tuple<String, String>(titleText, buttonText);
-	}
-
-	public static String getFirstMatch(Pattern pattern, String haystack) {
-		Matcher matcher = pattern.matcher(haystack);
-		if (matcher.find())
-			return matcher.group(1);
-		else
-			return "";
-	}
-
-	public static String removeDialogRegex(String text) {
-		Matcher matcher;
-		String match;
-		matcher = titlePattern.matcher(text);
-		if (matcher.find()) {
-			match = text.substring(matcher.start(), matcher.end());
-			text = text.replace(match, "");
-		}
-		matcher = buttonPattern.matcher(text);
-		if (matcher.find()) {
-			match = text.substring(matcher.start(), matcher.end());
-			text = text.replace(match, "");
-		}
-		return text.trim();
-	}
-
-	public static GameDialog generateDialogChain(String text, Stage stage) { // generates a chain of one-button dialogs
-		GameDialog dialog = null;
-		GameDialog newDialog;
-		StringTokenizer dialogTokens = new StringTokenizer(text, DIALOG_TEXT_DELIMITER);
-		String dialogText, buttonText, newButtonText, titleText;
-		Tuple<String, String> params;
-
-		dialogText = dialogTokens.nextToken();
-		params = getDialogParams(dialogText);
-		dialogText = removeDialogRegex(dialogText);
-		buttonText = params.r;
-		dialog = new GameDialog(params.l, dialogText, stage);
-		GameDialog ret = dialog;
-
-		while (dialogTokens.hasMoreTokens()) {
-			dialogText = dialogTokens.nextToken();
-
-			params = getDialogParams(dialogText);
-			newButtonText = params.r;
-			titleText = params.l;
-
-			dialogText = removeDialogRegex(dialogText);
-
-			newDialog = new GameDialog(titleText, dialogText, stage);
-			dialog.chainReply(buttonText, newDialog);
-			buttonText = newButtonText;
-
-			dialog = newDialog;
-		}
-
-		dialog.addOkButton(DEFAULT_BTN_TEXT);
-		return ret;
+	public static GameDialog generateDialogChain(String text, Stage stage) {
+		return new DialogChainGenerator(text).generateDialogChain(stage);
 	}
 
 }

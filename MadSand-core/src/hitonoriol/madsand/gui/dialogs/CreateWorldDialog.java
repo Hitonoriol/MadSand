@@ -66,17 +66,15 @@ public class CreateWorldDialog extends Dialog {
 					MadSand.WORLDNAME = worldtxt.getText();
 					File index = new File("MadSand_Saves/" + MadSand.WORLDNAME);
 					String[] entries = index.list();
-					try {
-						String[] arrayOfString1;
-						int j = (arrayOfString1 = entries).length;
+
+					if (entries != null) {
+						int j = entries.length;
 						for (int i = 0; i < j; i++) {
-							String s = arrayOfString1[i];
+							String s = entries[i];
 							File currentFile = new File(index.getPath(), s);
 							currentFile.delete();
 						}
 						index.delete();
-					} catch (Exception e) {
-						e.printStackTrace();
 					}
 
 					MadSand.switchStage(GameState.GAME, Gui.overlay);

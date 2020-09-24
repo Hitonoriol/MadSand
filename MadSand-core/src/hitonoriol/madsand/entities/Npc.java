@@ -83,6 +83,9 @@ public class Npc extends Entity {
 		rewardExp = properties.rewardExp;
 		stats.faction = properties.faction;
 		stats.calcStats();
+		
+		if (properties.defaultState != null)
+			state = properties.defaultState;
 
 		initInventory();
 		inventory.setMaxWeight(stats.calcMaxInventoryWeight());

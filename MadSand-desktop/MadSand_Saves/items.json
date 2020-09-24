@@ -880,5 +880,10 @@
 		"cost" : 7,
 		"type" : "Consumable",
 		"weight" : 0.17
+	},
+	"100" : {
+		"name" : "Dungeon key",
+		"cost" : 350,
+		"weight" : 0.1
 	}
 }
