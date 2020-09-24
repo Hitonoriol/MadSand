@@ -38,6 +38,10 @@ public class LuaUtils {
 		return globals.load(str).call();
 	}
 
+	public static String getSectorScriptPath(int wx, int wy) {
+		return "/location/" + GameSaver.SECTOR_DELIM + wx + GameSaver.SECTOR_DELIM + wy + ".lua";
+	}
+
 	public static Pair locateTile(int id) {
 		return MadSand.world.getCurLoc().locateTile(id);
 	}

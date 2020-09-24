@@ -84,7 +84,7 @@
 		}},
 		"faction" : "Partisans",
 		"type" : "QuestMaster",
-		"questList" : [ 0, 1, 2, 3 ],
+		"questList" : [ 0, 1, 2, 3, 4 ],
 		"spawnOnce" : true,
 		"friendly" : true
 	},

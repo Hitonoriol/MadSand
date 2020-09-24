@@ -3,6 +3,7 @@ package hitonoriol.madsand.containers;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.enums.Direction;
 
 public class Pair {
@@ -37,6 +38,10 @@ public class Pair {
 
 	Pair add(int x, int y) {
 		return add(new Pair(x, y));
+	}
+
+	public Pair random(int xMax, int yMax) {
+		return this.set(Utils.rand(xMax), Utils.rand(yMax));
 	}
 
 	public static Pair directionToCoord(Direction arg) {
@@ -97,7 +102,7 @@ public class Pair {
 			ret = Direction.UP;
 		else if (dy < 0)
 			ret = Direction.DOWN;
-		
+
 		if (fourWay)
 			return ret;
 

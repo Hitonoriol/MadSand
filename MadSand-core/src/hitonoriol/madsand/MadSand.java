@@ -53,7 +53,7 @@ public class MadSand extends Game {
 
 	static String SKILLFILE = SAVEDIR + "defskills.xml";
 	public static final String MAPDIR = SAVEDIR + "worlds/";
-	static final String SCRIPTDIR = SAVEDIR + "scripts/";
+	public static final String SCRIPTDIR = SAVEDIR + "scripts/";
 	static final String PLAYERFILE = "/Player" + SAVE_EXT;
 	static final String LOGFILE = "/log" + SAVE_EXT;
 	static final String NPCSFILE = "NPCs";
@@ -137,13 +137,13 @@ public class MadSand extends Game {
 		camera.update();
 
 		world = new World(MadSand.WORLDSIZE);
+		LuaUtils.init();
 		World.player.updCoords();
 		world.generate();
-		LuaUtils.init();
+		initMenuAnimation();
+		
 		Utils.out("End of initialization!");
 
-		LuaUtils.executeScript(LuaUtils.initScript); // Init script for new worlds
-		initMenuAnimation();
 	}
 
 	static int countRcells() {
@@ -258,7 +258,7 @@ public class MadSand extends Game {
 				++i;
 				continue;
 			}
-			
+
 			if (player.standingOnLoot(x, y))
 				Utils.batch.draw(Resources.objects[OBJECT_LOOT], x * TILESIZE, y * TILESIZE);
 

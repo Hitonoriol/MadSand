@@ -163,6 +163,15 @@ public class Map {
 		return addObject(x, y, id, true);
 	};
 
+	private MapAction lootAction = (int x, int y, int id) -> {
+		if (objectExists(x, y))
+			return false;
+
+		putLoot(x, y, id, 1);
+
+		return true;
+	};
+
 	private static double ERODE_PROBABILITY = 30;
 	private MapAction erodeTileAction = (int x, int y, int id) -> {
 		if (Utils.percentRoll(ERODE_PROBABILITY))
@@ -379,20 +388,29 @@ public class Map {
 			return false;
 	}
 
+	private void randPlace(MapAction action, int id) {
+		coords = Pair.nullPair;
+
+		do
+			coords.random(xsz, ysz);
+		while (!action.changeMap(coords.x, coords.y, id));
+
+	}
+
 	public void randPlaceObject(int id) {
-		int x = Utils.random.nextInt(this.xsz);
-		int y = Utils.random.nextInt(this.ysz);
-		addObject(x, y, id);
+		randPlace(objectAction, id);
 	}
 
 	public void randPlaceObject(ArrayList<Integer> id, int range) {
-		randPlaceObject(id.get(Utils.random.nextInt(range)));
+		randPlace(objectAction, id.get(Utils.random.nextInt(range)));
 	}
 
 	public void randPlaceTile(int id) {
-		int x = Utils.random.nextInt(this.xsz);
-		int y = Utils.random.nextInt(this.ysz);
-		addTile(x, y, id, true);
+		randPlace(tileAction, id);
+	}
+
+	public void randPlaceLoot(int id) {
+		randPlace(lootAction, id);
 	}
 
 	public MapObject getObject(int x, int y, Direction dir) {

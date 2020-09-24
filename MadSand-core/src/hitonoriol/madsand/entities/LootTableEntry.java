@@ -13,9 +13,7 @@ public class LootTableEntry {
 		int minQuantity = allowEmptyRoll ? 0 : 1;
 		LootItemEntry itemPair = items.get(Utils.rand(items.size())); // x -- item id | y -- item quantity
 
-		itemPair.maxQuantity = Utils.rand(minQuantity, itemPair.maxQuantity);
-
-		return new Item(itemPair.id, itemPair.maxQuantity);
+		return new Item(itemPair.id, Utils.rand(minQuantity, itemPair.maxQuantity));
 	}
 
 	public Item rollItem() {

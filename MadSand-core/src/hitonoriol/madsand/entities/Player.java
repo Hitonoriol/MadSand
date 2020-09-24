@@ -566,6 +566,9 @@ public class Player extends Entity {
 	}
 
 	public Direction lookAtMouse(int x, int y, boolean diagonal) {
+		if (isStepping())
+			return stats.look;
+		
 		Direction dir;
 
 		if (x > this.x)

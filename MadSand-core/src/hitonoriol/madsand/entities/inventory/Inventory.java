@@ -206,6 +206,10 @@ public class Inventory {
 	 * use <Entity>.addItem(...) for extra items to drop
 	 */
 	public boolean putItem(Item item) {
+		
+		if (item.quantity < 1)
+			return false;
+		
 		Item updItem;
 
 		float newWeight = item.getWeight() + curWeight;
@@ -233,8 +237,7 @@ public class Inventory {
 
 	public boolean putItem(ArrayList<Item> items) {
 		for (Item item : items)
-			if (!putItem(item))
-				return false;
+			putItem(item);
 		return true;
 	}
 
