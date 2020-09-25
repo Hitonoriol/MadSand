@@ -1,3 +1,5 @@
+world.worldGen:generate(world:getCurMapID());
+
 local map = world:getCurLoc();
 local player = world.player;
 

@@ -56,7 +56,9 @@ public class QuestWorker {
 	private void completeQuest(Quest quest) {
 		MadSand.notice("You completed a quest!");
 
-		player.inventory.delItem(quest.reqItems);
+		if (quest.deleteRequiredItems)
+			player.inventory.delItem(quest.reqItems);
+		
 		player.inventory.delItem(quest.removeOnCompletion);
 		player.inventory.putItem(quest.rewardItems);
 		player.addExp(quest.exp);
@@ -83,12 +85,11 @@ public class QuestWorker {
 	}
 
 	public int getAvailableQuest(ArrayList<Integer> quests) { // search NPC's quest list for {not yet started / not finished / repeatable} quests
-		for (int qid : quests) {
 
+		for (int qid : quests)
 			if (isQuestInProgress(qid) || !isQuestCompleted(qid))
 				return qid;
 
-		}
 		return QuestList.NO_QUESTS_STATUS;
 	}
 }

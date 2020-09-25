@@ -1,16 +1,12 @@
 package hitonoriol.madsand.world.worldgen;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import com.github.czyzby.noise4j.map.Grid;
 import com.github.czyzby.noise4j.map.generator.noise.NoiseGenerator;
 import com.github.czyzby.noise4j.map.generator.util.Generators;
 
-import hitonoriol.madsand.LuaUtils;
-import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
-import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.properties.WorldGenProp;
 import hitonoriol.madsand.world.WorldMap;
@@ -57,19 +53,6 @@ public class WorldGen {
 			caveDepth = layer;
 
 		genDungeon(caveDepth);
-
-		executeLocationScript();
-	}
-
-	private void executeLocationScript() {
-		Pair coords = curMapId.worldxy;
-		String locationScriptPath = LuaUtils.getSectorScriptPath(coords.x, coords.y);
-		File locationScript = new File(MadSand.SCRIPTDIR + locationScriptPath);
-		
-		if (!locationScript.exists())
-			return;
-
-		LuaUtils.executeScript(locationScriptPath);
 	}
 
 	private void genBiomeTerrain() {

@@ -26,7 +26,7 @@ import java.util.StringTokenizer;
 
 public class Utils {
 	public static boolean debugMode = true;
-	static SpriteBatch batch;
+	public static SpriteBatch batch;
 
 	public static Random random = new Random();
 
@@ -91,7 +91,7 @@ public class Utils {
 
 	}
 
-	private static void pollDebugKeys() {
+	public static void pollDebugKeys() {
 
 		if (Gdx.input.isKeyJustPressed(Keys.Z))
 			debugMode = !debugMode;
@@ -241,9 +241,8 @@ public class Utils {
 
 	public static void goToSector(Direction dir) {
 		GameSaver.saveWorld();
-		MadSand.state = GameState.GOT;
+		MadSand.switchScreen(Gui.travelScreen);
 		MadSand.world.switchLocation(dir);
-		MadSand.state = GameState.GAME;
 	}
 
 	public static void out(String arg) {

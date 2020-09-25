@@ -1,6 +1,7 @@
 package hitonoriol.madsand;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
@@ -27,6 +30,7 @@ import hitonoriol.madsand.gui.stages.CraftMenu;
 import hitonoriol.madsand.gui.stages.DeathStage;
 import hitonoriol.madsand.gui.stages.MainMenu;
 import hitonoriol.madsand.gui.stages.Overlay;
+import hitonoriol.madsand.screens.TravelScreen;
 import hitonoriol.madsand.world.World;
 
 public class Gui {
@@ -121,6 +125,12 @@ public class Gui {
 		txtool.label = labelStyle;
 		skin.add("default", txtool);
 
+		Drawable barKnob = skin.newDrawable("background", Color.DARK_GRAY);
+		barKnob.setMinWidth(5);
+		ProgressBar.ProgressBarStyle barStyle = new ProgressBarStyle(skin.newDrawable("background", Color.GRAY), barKnob);
+		barStyle.knobBefore = barStyle.knob;
+		skin.add("default-horizontal", barStyle);
+
 	}
 
 	static private void loadNinePatches() {
@@ -160,12 +170,12 @@ public class Gui {
 
 	static Stage worldGenStage;
 	static Stage loadWorldStage;
-	static Stage sectorChangeStage;
+	static Screen travelScreen;
 
 	private static void createTransitionScreens() {
 		createTransitionScreen(worldGenStage, "Generating your world...");
 		createTransitionScreen(loadWorldStage, "Loading...");
-		createTransitionScreen(sectorChangeStage, "Saving current sector and going to the next one...");
+		travelScreen = new TravelScreen(MadSand.game);
 	}
 
 	private static void createTransitionScreen(Stage stage, String text) {

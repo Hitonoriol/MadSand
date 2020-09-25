@@ -2,6 +2,7 @@ package hitonoriol.madsand;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -93,6 +94,12 @@ public class MadSand extends Game {
 	static float xmenu = ymenu = xmid;
 	private static float menuXStep = 0.8f, menuYStep = 0f;
 	private static float menuOffset = 250;
+	
+	public static Game game;
+	
+	public static void switchScreen(Screen screen) {
+		game.setScreen(screen);
+	}
 
 	public static void switchStage(GameState state, Stage stage) {
 
@@ -112,11 +119,14 @@ public class MadSand extends Game {
 		MadSand.state = state;
 	}
 
-	static void reset() {
+	public static void reset() {
+		switchScreen(null);
 		switchStage(GameState.GAME, Gui.overlay);
 	}
 
 	public void create() {
+		game = this;
+		
 		Utils.out("Starting initialization!");
 
 		Gdx.graphics.setContinuousRendering(false);
@@ -427,6 +437,7 @@ public class MadSand extends Game {
 			Gui.overlay.act();
 			Gui.overlay.draw();
 			Utils.batch.end();
+			super.render();
 		} else if (state.equals(GameState.INVENTORY)) {
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);
@@ -483,7 +494,8 @@ public class MadSand extends Game {
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);
 			drawMenuBackground();
-			Gui.sectorChangeStage.draw();
+			//Gui.sectorChangeStage.draw();
+			//Gui.sectorChangeStage.act();
 			Utils.batch.end();
 		} else if (state.equals(GameState.DEAD)) {
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);

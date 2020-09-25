@@ -1,5 +1,6 @@
 package hitonoriol.madsand.world;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -8,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
@@ -26,7 +28,7 @@ public class World {
 
 	private Pair coords = new Pair();
 	private MapID mapID = new MapID();
-	
+
 	private int xsz, ysz; // max world size, not really used anywhere (still)
 
 	public int curywpos; // global coords of current sector
@@ -90,6 +92,11 @@ public class World {
 			return false;
 	}
 
+	@JsonIgnore
+	public MapID getCurMapID() {
+		return mapID;
+	}
+
 	Map getLoc(Pair wc, int layer, int id) {
 		MapID loc = mapID.set(wc, layer, id);
 		if (locExists(loc)) {
@@ -149,15 +156,35 @@ public class World {
 	public void generate(int wx, int wy, int layer) {
 		Utils.out("Generating new sector!");
 
-		MapID mapId = new MapID(coords.set(curxwpos, curywpos), layer);
+		mapID = new MapID(coords.set(curxwpos, curywpos), layer);
 
-		if (!locExists(mapId.setLayer(LAYER_OVERWORLD)))
+		if (!locExists(mapID.setLayer(LAYER_OVERWORLD)))
 			createBasicLoc(wx, wy);
-		clearCurLoc();
 
-		worldGen.generate(mapId.setLayer(layer));
+		clearCurLoc();
+		mapID.setLayer(layer);
+
+		if (!executeLocationScript())
+			worldGen.generate(mapID);
 
 		Utils.out("Done generating new sector!");
+	}
+
+	private boolean executeLocationScript() {
+
+		if (mapID.layer != LAYER_OVERWORLD)
+			return false;
+
+		Pair coords = mapID.worldxy;
+		String locationScriptPath = LuaUtils.getSectorScriptPath(coords.x, coords.y);
+		File locationScript = new File(MadSand.SCRIPTDIR + locationScriptPath);
+
+		if (!locationScript.exists())
+			return false;
+
+		LuaUtils.executeScript(locationScriptPath);
+
+		return true;
 	}
 
 	public void generate(int layer) {
@@ -185,15 +212,18 @@ public class World {
 
 		jumpToLocation(x, y, layer);
 		Utils.out(curxwpos + " " + curywpos + " " + curlayer);
+
 		if (locExists(new MapID(coords.set(x, y), layer))) {
 			updateLight();
 			return true;
 		}
+
 		clearCurLoc();
 		if (GameSaver.verifyNextSector(x, y))
 			GameSaver.loadLocation();
 		else
 			generate(layer);
+
 		player.updCoords();
 		updateLight();
 		return true;
