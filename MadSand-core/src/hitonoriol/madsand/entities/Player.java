@@ -568,7 +568,7 @@ public class Player extends Entity {
 	public Direction lookAtMouse(int x, int y, boolean diagonal) {
 		if (isStepping())
 			return stats.look;
-		
+
 		Direction dir;
 
 		if (x > this.x)
@@ -621,7 +621,7 @@ public class Player extends Entity {
 		Map map = MadSand.world.getCurLoc();
 
 		if ((MadSand.world.curlayer == World.LAYER_OVERWORLD)
-				&& (x == map.getWidth() - 1 || y == map.getHeight() - 1 || x == World.BORDER || y == World.BORDER)) {
+				&& (x == map.getWidth() || y == map.getHeight() || x == 0 || y == 0)) {
 			MadSand.print("Press [GRAY]N[WHITE] to move to the next sector.");
 		}
 
@@ -712,7 +712,6 @@ public class Player extends Entity {
 	}
 
 	public void hideInventory() {
-		Utils.invBtnSetVisible(false);
 		Gdx.input.setInputProcessor(Gui.overlay);
 		Gui.gameUnfocused = false;
 		MadSand.state = GameState.GAME;
@@ -728,7 +727,6 @@ public class Player extends Entity {
 		Gui.overlay.gameContextMenu.setVisible(false);
 		Gui.gameUnfocused = true;
 		Gui.overlay.gameTooltip.setVisible(false);
-		Utils.invBtnSetVisible(true);
 		Gdx.input.setInputProcessor(Gui.overlay);
 		MadSand.state = GameState.INVENTORY;
 		Gui.inventoryActive = true;

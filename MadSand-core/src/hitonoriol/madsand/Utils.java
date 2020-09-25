@@ -11,7 +11,6 @@ import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.gui.dialogs.QuestJournal;
-import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.world.World;
 
@@ -51,11 +50,6 @@ public class Utils {
 		if (Gdx.input.isKeyJustPressed(Keys.E)) {
 			Gui.toggleInventory();
 		}
-	}
-
-	public static void invBtnSetVisible(boolean visible) {
-		Gui.overlay.craftMenuButton.setVisible(visible);
-		Gui.overlay.exitToMenuButton.setVisible(visible);
 	}
 
 	static Npc dummy;
@@ -178,20 +172,8 @@ public class Utils {
 		if (Gdx.input.isKeyJustPressed(Keys.RIGHT) && (!World.player.isStepping()))
 			World.player.attack(Direction.RIGHT);
 
-		if (Gdx.input.isKeyJustPressed(Keys.N) && MadSand.world.curlayer == World.LAYER_OVERWORLD) {
-			Map map = MadSand.world.getCurLoc();
-
-			if (World.player.x == map.getWidth() - 1 && World.player.stats.look == Direction.RIGHT)
-				goToSector(World.player.stats.look);
-			if (World.player.y == map.getHeight() - 1 && World.player.stats.look == Direction.UP)
-				goToSector(World.player.stats.look);
-			if (World.player.x < World.BORDER && World.player.stats.look == Direction.LEFT)
-				goToSector(World.player.stats.look);
-			if (World.player.y < World.BORDER && World.player.stats.look == Direction.DOWN)
-				goToSector(World.player.stats.look);
-			MadSand.world.curlayer = 0;
-
-		}
+		if (Gdx.input.isKeyJustPressed(Keys.N) && MadSand.world.curlayer == World.LAYER_OVERWORLD)
+			MadSand.world.travel();
 
 		if (Gdx.input.isKeyJustPressed(Keys.J)) {
 			new QuestJournal(World.player.quests).show();
@@ -237,12 +219,6 @@ public class Utils {
 			max = 1;
 
 		return random.nextInt(max);
-	}
-
-	public static void goToSector(Direction dir) {
-		GameSaver.saveWorld();
-		MadSand.switchScreen(Gui.travelScreen);
-		MadSand.world.switchLocation(dir);
 	}
 
 	public static void out(String arg) {

@@ -66,6 +66,7 @@ public class Map {
 	public void rollSize(int min, int max) {
 		this.setSize(Utils.rand(min, max),
 				Utils.rand(min, max));
+		Utils.out("Rolled map size: " + xsz + ", " + ysz);
 	}
 
 	public void rollSize() {

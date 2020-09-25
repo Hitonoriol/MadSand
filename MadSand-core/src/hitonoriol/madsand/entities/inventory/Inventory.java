@@ -215,7 +215,7 @@ public class Inventory {
 		float newWeight = item.getWeight() + curWeight;
 		int existingIdx = getSameCell(item.id);
 
-		if (item.type.isTool())
+		if (item.type.isUnique())
 			existingIdx = -1;
 
 		if (newWeight <= maxWeight) {

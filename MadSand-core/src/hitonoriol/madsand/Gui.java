@@ -170,7 +170,7 @@ public class Gui {
 
 	static Stage worldGenStage;
 	static Stage loadWorldStage;
-	static Screen travelScreen;
+	public static Screen travelScreen;
 
 	private static void createTransitionScreens() {
 		createTransitionScreen(worldGenStage, "Generating your world...");

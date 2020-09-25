@@ -1,15 +1,12 @@
 package hitonoriol.madsand.gui.stages;
 
 import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
@@ -50,11 +47,6 @@ public class Overlay extends Stage {
 	public OverlayBottomMenu bottomMenu;
 	public EquipmentSidebar equipmentSidebar;
 
-	Table overlayTable;
-
-	public TextButton exitToMenuButton;
-	public TextButton craftMenuButton; //TODO: move to inventory
-
 	static Label[] overlayStatLabels;
 	static final int OVSTAT_COUNT = 6;
 
@@ -63,9 +55,6 @@ public class Overlay extends Stage {
 		skin = Gui.skin;
 		initMouseListeners();
 		initOverlayStats();
-
-		exitToMenuButton = new TextButton("Exit to menu", skin); //TODO: move to InventoryUI
-		craftMenuButton = new TextButton("Crafting", skin);
 
 		actionButton = new ActionButton();
 		gameTooltip = new GameTooltip();
@@ -79,54 +68,12 @@ public class Overlay extends Stage {
 
 		Mouse.tooltipContainer = gameTooltip;
 
-		overlayTable = new Table().align(18);
-		overlayTable.setFillParent(true);
-
-		initOverlayTable(); //TODO remove this monstrosity
-
-		initButtonListeners();
-
 		super.addActor(equipmentSidebar);
 		super.addActor(bottomMenu);
 		super.addActor(gameTooltip);
 		super.addActor(gameContextMenu);
 		super.addActor(gameLog);
-		super.addActor(overlayTable);
 		super.addActor(actionButton);
-	}
-
-	private void initButtonListeners() {
-		craftMenuButton.addListener(new ChangeListener() {
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				Gui.craftMenu.refreshCraftMenu();
-				MadSand.switchStage(GameState.CRAFT, Gui.craftMenu);
-			}
-		});
-
-		exitToMenuButton.addListener(new ChangeListener() {
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				Gui.mainMenu.resumeButton.setVisible(true);
-				MadSand.switchStage(GameState.NMENU, Gui.mainMenu);
-			}
-		});
-	}
-
-	private void initOverlayTable() {
-		craftMenuButton.setHeight(82.0F);
-		craftMenuButton.align(16);
-		craftMenuButton.setWidth(250.0F);
-		overlayTable.row();
-		overlayTable.row();
-		overlayTable.add();
-		overlayTable.add();
-		overlayTable.add();
-		overlayTable.add(craftMenuButton).width(200.0F).row();
-		craftMenuButton.setVisible(false);
-		overlayTable.add();
-		overlayTable.add();
-		overlayTable.add();
-		overlayTable.add(exitToMenuButton).width(200.0F).row();
-		exitToMenuButton.setVisible(false);
 	}
 
 	private void initMouseListeners() {

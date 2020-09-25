@@ -83,8 +83,6 @@ public class CreateWorldDialog extends Dialog {
 					// World.player.x = new Random().nextInt(World.MAPSIZE);
 					// World.player.y = new Random().nextInt(World.MAPSIZE);
 					World.player.updCoords();
-					Gui.overlay.exitToMenuButton.setVisible(false);
-					Gui.overlay.craftMenuButton.setVisible(false); // TODO: Move to InventoryUI
 					Gui.inventoryActive = false;
 					remove();
 					MadSand.ZOOM = MadSand.DEFAULT_ZOOM;

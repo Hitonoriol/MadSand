@@ -97,10 +97,10 @@
 	"1" : {
 		"biomeName" : "Desert",
 		"overworld" : {
-			"defaultTile" : 4,
+			"defaultTile" : 40,
 			"tiles" : [ {
-				"rollCount" : 200,
-				"idList" : [ 3, 4 ]
+				"rollCount" : 400,
+				"idList" : [ 41, 43, 44 ]
 			}, {
 				"rollCount" : 1,
 				"idList" : [ 17 ]

@@ -219,6 +219,7 @@ public class World {
 		}
 
 		clearCurLoc();
+
 		if (GameSaver.verifyNextSector(x, y))
 			GameSaver.loadLocation();
 		else
@@ -230,8 +231,10 @@ public class World {
 	}
 
 	public boolean switchLocation(Direction dir) {
-		Map curLoc = getCurLoc();
 		Utils.out("Switch location in direction " + dir);
+
+		GameSaver.saveWorld();
+		MadSand.switchScreen(Gui.travelScreen);
 
 		if (curlayer != LAYER_OVERWORLD)
 			return false;
@@ -239,8 +242,18 @@ public class World {
 		coords.set(curxwpos, curywpos).addDirection(dir);
 		MadSand.print("You travel to sector (" + coords.x + ", " + coords.y + ")");
 
-		if (!switchLocation(coords.x, coords.y, LAYER_OVERWORLD))
+		if (!switchLocation(coords.x, coords.y, LAYER_OVERWORLD)) {
+			Utils.out("Switch location oopsie :c");
 			return false;
+		}
+
+		Map curLoc = getCurLoc();
+		int mapWidth = curLoc.getWidth(), mapHeight = curLoc.getHeight();
+
+		if (player.x > mapWidth)
+			player.x = mapWidth;
+		if (player.y > mapHeight)
+			player.y = mapHeight;
 
 		switch (dir) {
 		case UP:
@@ -262,6 +275,21 @@ public class World {
 		player.updCoords();
 		updateLight();
 		return true;
+	}
+
+	public void travel() {
+		Map map = getCurLoc();
+		int x = player.x, y = player.y;
+		Direction direction = player.stats.look;
+		boolean canTravel = false;
+
+		canTravel = (x == map.getWidth() - 1 && direction == Direction.RIGHT);
+		canTravel |= (y == map.getHeight() - 1 && direction == Direction.UP);
+		canTravel |= (x < 1 && direction == Direction.LEFT);
+		canTravel |= (y < 1 && direction == Direction.DOWN);
+
+		if (canTravel)
+			switchLocation(direction);
 	}
 
 	public boolean switchLocation(int layer) {

@@ -4,22 +4,28 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 
 public class InventoryUI {
-	
+
 	Table invContainer;
 	Table invTable;
 	AutoFocusScrollPane invScroll;
 	Table invScrollTable;
 	Label header;
+	public TextButton craftMenuButton;
 
 	int stacks = 0;
 
@@ -28,43 +34,56 @@ public class InventoryUI {
 	int HEIGHT = 500;
 	int OFFSET = 5;
 
+	float BUTTON_PADDING = 5;
+	float BUTTON_WIDTH = 250;
+	float BUTTON_HEIGHT = 50;
+
 	public InventoryUI() {
 		setUpInventory();
 	}
 
 	void setUpInventory() {
+		invContainer = new Table();
 		invScrollTable = new Table();
 		invTable = new Table();
+		craftMenuButton = new TextButton("Crafting", Gui.skin);
 		invTable.row();
-		// invTable.setDebug(true);
-		
+
+		header = new Label("[0/0 kg]", Gui.skin);
+		header.setFontScale(1.5f);
+
 		invTable.setBackground(Gui.darkBackground);
 		invTable.align(Align.topLeft);
-		
-		header = new Label("[0/0 kg]", Gui.skin);
-		
-		invScrollTable.add(header).pad(10).fillY().align(Align.center);
-		invScrollTable.row();
-		invScrollTable.add(invTable);
-		
-		invScroll = new AutoFocusScrollPane(invScrollTable);
-		invScroll.setVisible(false);
-		
 		invTable.setWidth(WIDTH);
+		invScrollTable.add(invTable);
+
+		invScroll = new AutoFocusScrollPane(invScrollTable);
 		invScroll.setHeight(HEIGHT);
 		invScroll.setWidth(WIDTH + OFFSET);
-		header.setFontScale(1.5f);
 		invScroll.setOverscroll(false, false);
 		invScroll.setScrollingDisabled(true, false);
-		invScroll.setPosition(Gdx.graphics.getWidth() / 2 - WIDTH / 2, Gdx.graphics.getHeight() / 2 - HEIGHT / 2);
-		Gui.overlay.addActor(invScroll);
+
+		invContainer.add(header).pad(10).fillY().align(Align.center).row();
+		invContainer.setSize(WIDTH + OFFSET, HEIGHT);
+		invContainer.setPosition(Gdx.graphics.getWidth() / 2 - WIDTH / 2, Gdx.graphics.getHeight() / 2 - HEIGHT / 2);
+		invContainer.add(invScroll).size(WIDTH, HEIGHT).row();
+		invContainer.add(craftMenuButton).size(BUTTON_WIDTH, BUTTON_HEIGHT).align(Align.center).pad(BUTTON_PADDING)
+				.row();
+		invContainer.setVisible(false);
+
+		Gui.overlay.addActor(invContainer);
 		stacks = 0;
+
+		craftMenuButton.addListener(new ChangeListener() {
+			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+				Gui.craftMenu.refreshCraftMenu();
+				MadSand.switchStage(GameState.CRAFT, Gui.craftMenu);
+			}
+		});
 	}
 
 	void remove() {
-		invScrollTable.remove();
-		invTable.remove();
-		invScroll.remove();
+		invContainer.remove();
 	}
 
 	void refresh(Set<Entry<Item, InventoryUICell>> set) {
@@ -83,15 +102,15 @@ public class InventoryUI {
 	}
 
 	public void hide() {
-		invScroll.setVisible(false);
+		invContainer.setVisible(false);
 	}
 
 	public void toggleVisible() {
-		invScroll.setVisible(!invScroll.isVisible());
+		invContainer.setVisible(!invContainer.isVisible());
 	}
 
 	boolean isVisible() {
-		return invScroll.isVisible();
+		return invContainer.isVisible();
 	}
 
 	void setMass(double curWeight, double maxWeight) {

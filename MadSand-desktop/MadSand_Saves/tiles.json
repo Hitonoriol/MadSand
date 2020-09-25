@@ -32,7 +32,7 @@
 		"damage" : 0,
 		"onInteract" : "-1",
 		"altItems" : null,
-		"name" : "Sandstone",
+		"name" : "???",
 		"foreground" : false
 	},
 
@@ -40,7 +40,7 @@
 		"damage" : 0,
 		"onInteract" : "-1",
 		"altItems" : null,
-		"name" : "Sand",
+		"name" : "???",
 		"foreground" : false
 	},
 
@@ -328,7 +328,7 @@
 		"damage" : 0,
 		"onInteract" : "-1",
 		"altItems" : null,
-		"name" : "Dust",
+		"name" : "Sand",
 		"foreground" : false
 	},
 
@@ -336,7 +336,7 @@
 		"damage" : 0,
 		"onInteract" : "-1",
 		"altItems" : null,
-		"name" : "Dust",
+		"name" : "Sand",
 		"foreground" : false
 	},
 
@@ -344,7 +344,7 @@
 		"damage" : 0,
 		"onInteract" : "-1",
 		"altItems" : null,
-		"name" : "Dust",
+		"name" : "???",
 		"foreground" : false
 	},
 
@@ -352,7 +352,7 @@
 		"damage" : 0,
 		"onInteract" : "-1",
 		"altItems" : null,
-		"name" : "Dust",
+		"name" : "Sand",
 		"foreground" : false
 	},
 	
@@ -360,7 +360,7 @@
 		"damage" : 0,
 		"onInteract" : "-1",
 		"altItems" : null,
-		"name" : "Dust",
+		"name" : "Sand",
 		"foreground" : false
 	},
 	
