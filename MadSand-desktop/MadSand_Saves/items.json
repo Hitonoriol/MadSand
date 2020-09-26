@@ -55,7 +55,7 @@
 	"8" : {
 		"name" : "Stick",
 		"recipe" : "1/1",
-		"craftQuantity" : 2,
+		"craftQuantity" : 3,
 		"cost" : 4,
 		"weight" : 0.2
 	},
@@ -305,13 +305,12 @@
 			"stageLength" : 20,
 			"objectId" : 20
 		}, {
-			"stageLength" : 25,
+			"stageLength" : 30,
 			"objectId" : 19
 		}, {
 			"stageLength" : 30,
 			"objectId" : 63
 		}, {
-			"stageLength" : 35,
 			"objectId" : 21
 		} ]
 	},
@@ -416,13 +415,12 @@
 			"stageLength" : 20,
 			"objectId" : 43
 		}, {
-			"stageLength" : 25,
+			"stageLength" : 30,
 			"objectId" : 44
 		}, {
-			"stageLength" : 30,
+			"stageLength" : 60,
 			"objectId" : 45
 		}, {
-			"stageLength" : 35,
 			"objectId" : 46
 		} ]
 	},
@@ -437,13 +435,12 @@
 			"stageLength" : 20,
 			"objectId" : 47
 		}, {
-			"stageLength" : 25,
+			"stageLength" : 30,
 			"objectId" : 48
 		}, {
-			"stageLength" : 30,
+			"stageLength" : 60,
 			"objectId" : 49
 		}, {
-			"stageLength" : 35,
 			"objectId" : 50
 		} ]
 	},
@@ -458,13 +455,12 @@
 			"stageLength" : 20,
 			"objectId" : 51
 		}, {
-			"stageLength" : 25,
+			"stageLength" : 30,
 			"objectId" : 52
 		}, {
-			"stageLength" : 30,
+			"stageLength" : 60,
 			"objectId" : 53
 		}, {
-			"stageLength" : 35,
 			"objectId" : 54
 		} ]
 	},
@@ -476,16 +472,15 @@
 		"type" : "Crop",
 		"weight" : 0.05,
 		"cropStages" : [ {
-			"stageLength" : 20,
+			"stageLength" : 30,
 			"objectId" : 55
 		}, {
-			"stageLength" : 25,
+			"stageLength" : 60,
 			"objectId" : 56
 		}, {
-			"stageLength" : 30,
+			"stageLength" : 60,
 			"objectId" : 57
 		}, {
-			"stageLength" : 35,
 			"objectId" : 58
 		} ]
 	},
@@ -497,16 +492,15 @@
 		"type" : "Crop",
 		"weight" : 0.05,
 		"cropStages" : [ {
-			"stageLength" : 20,
+			"stageLength" : 30,
 			"objectId" : 59
 		}, {
-			"stageLength" : 25,
+			"stageLength" : 60,
 			"objectId" : 60
 		}, {
-			"stageLength" : 30,
+			"stageLength" : 60,
 			"objectId" : 61
 		}, {
-			"stageLength" : 35,
 			"objectId" : 62
 		} ]
 	},

@@ -130,7 +130,7 @@ public class GameSaver {
 			return false;
 		}
 
-		MadSand.world = new World();
+		MadSand.initNewGame();
 
 		if (!loadChar()) {
 			loadErrMsg();
@@ -138,6 +138,7 @@ public class GameSaver {
 		}
 
 		if (loadLocation()) {
+			LuaUtils.init();
 			MadSand.world.updateLight();
 			loadLog();
 			MadSand.print("Loaded Game!");
@@ -169,12 +170,12 @@ public class GameSaver {
 		try {
 			String fl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.PLAYERFILE;
 			String wfl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.WORLDFILE;
-			
+
 			World.player.stats.equipment.setStatBonus(false);
 			MadSand.mapper.writeValue(new File(fl), World.player);
 			MadSand.mapper.writeValue(new File(wfl), MadSand.world);
 			World.player.stats.equipment.setStatBonus(true);
-			
+
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -187,11 +188,9 @@ public class GameSaver {
 			Utils.out("Loading character...");
 			String fl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.PLAYERFILE;
 			String wfl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.WORLDFILE;
-			
+
 			MadSand.world = MadSand.mapper.readValue(getExternal(wfl), World.class);
-
 			World.player = MadSand.mapper.readValue(getExternal(fl), Player.class);
-
 			Player player = World.player;
 
 			player.inventory.initUI();
@@ -229,7 +228,10 @@ public class GameSaver {
 		try {
 			Path fileLocation = Paths.get(getSectorFile(wx, wy).toURI());
 			byte[] data = Files.readAllBytes(fileLocation);
+			Utils.out("Loading location " + wx + ", " + wy);
+
 			MadSand.world.worldMap.bytesToLocation(data, wx, wy);
+
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

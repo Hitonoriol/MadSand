@@ -12,6 +12,7 @@ import hitonoriol.madsand.enums.Skill;
 public class Stats {
 	public final static float WEIGHT_MULTIPLIER = 7.5f;
 	public final static float BASE_MAX_WEIGHT = 50;
+	public final static int BASE_FOOD_TICKS = 2;
 
 	public int AP_WALK = 5; // action points consumed by walking
 	public int AP_ATTACK = 3;
@@ -230,7 +231,7 @@ public class Stats {
 
 			if (foodTicks < 0) {
 				--food;
-				foodTicks = skills.getLvl(Skill.Survival);
+				foodTicks = skills.getLvl(Skill.Survival) + BASE_FOOD_TICKS;
 			}
 		}
 

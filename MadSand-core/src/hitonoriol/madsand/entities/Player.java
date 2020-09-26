@@ -207,7 +207,7 @@ public class Player extends Entity {
 	public boolean addItem(Item item) {
 		if (super.addItem(item)) {
 
-			if (item.name != "")
+			if (item.name != "" && item.quantity > 0)
 				MadSand.notice("You get " + item.quantity + " " + item.name);
 
 			if (unlockedItems.add(item.id))
@@ -356,17 +356,17 @@ public class Player extends Entity {
 		boolean destroyed = obj.takeDamage(stats.skills.getLvl(skill) + stats.hand().getSkillDamage(skill));
 
 		if (item != -1 && destroyed) { // Succesfull interaction with item that drops something
-			int rewardCount = stats.skills.getItemReward(skill);
-			int rolls = stats.skills.getLvl(skill) + 1; // The higher the level of the skill, the more rolls of drop we
-														// make
-			if (!stats.luckRoll())
+			Item objLoot;
+			int rewardCount;
+			int rolls = stats.skills.getItemDropRolls(skill); // The higher the level of the skill, the more rolls of drop we make
+			if (!stats.luckRoll() || !stats.skills.skillRoll(skill))
 				rolls = 1;
 
 			for (int i = 0; i < rolls; ++i) {
-				Item objLoot = new Item(item, rewardCount);
-				boolean gotItem = addItem(objLoot);
-				if (!gotItem)
-					MadSand.world.getCurLoc().putLoot(x, y, objLoot);
+				rewardCount = stats.skills.getItemReward(skill);
+				Utils.out("Rolling " + i + "/" + rolls + ": item id" + item + ", quantity: " + rewardCount);
+				objLoot = new Item(item, rewardCount);
+				addItem(objLoot);
 				item = MapObject.getAltItem(id, ItemProp.getType(stats.hand().id).get());
 			}
 
@@ -385,9 +385,6 @@ public class Player extends Entity {
 
 	public void useItem() {
 		int usedItemId = stats.hand().id;
-		doAction();
-		checkHands(usedItemId);
-		damageHeldTool();
 		useItem(stats.hand());
 
 		if ((usedItemId == 9) && (inventory.getSameCell(9, 1) != -1) // TODO script this or make campfire craftable
@@ -397,36 +394,39 @@ public class Player extends Entity {
 			inventory.delItem(1);
 			MadSand.world.getCurLoc().addObject(x, y, stats.look, 6);
 		}
-
-		checkHands(usedItemId);
 	}
 
 	public boolean useItem(Item item) {
-		if (equip(item))
-			return true;
 
-		if (useTileInteractItem(item))
-			return true;
+		boolean itemUsed = false;
+		checkHands(item.id);
 
-		if (useScriptedItem(item))
-			return true;
+		if (itemUsed = equip(item))
+			;
+		else if (itemUsed = useTileInteractItem(item))
+			;
+		else if (itemUsed = useScriptedItem(item))
+			;
+		else if (itemUsed = useScriptedTile())
+			;
+		else if (itemUsed = useConsumableItem(item))
+			;
+		else if (itemUsed = plantCrop(item))
+			;
+		else if (itemUsed = usePlaceableObject(item))
+			;
 
-		if (useScriptedTile())
-			return true;
+		else if (itemUsed = usePlaceableTile(item))
+			;
 
-		if (useConsumableItem(item))
-			return true;
+		checkHands(item.id);
 
-		if (plantCrop(item))
-			return true;
+		if (itemUsed) {
+			damageHeldTool();
+			doAction();
+		}
 
-		if (usePlaceableObject(item))
-			return true;
-
-		if (usePlaceableTile(item))
-			return true;
-
-		return false;
+		return itemUsed;
 
 	}
 
@@ -452,7 +452,7 @@ public class Player extends Entity {
 
 	private boolean plantCrop(Item item) {
 		if (Item.getType(item.id) == ItemType.Crop) {
-			Pair coords = new Pair(x, y).addDirection(stats.look);
+			Pair coords = new Pair(x, y);
 			if (MadSand.world.getCurLoc().putCrop(coords.x, coords.y, item.id)) {
 				increaseSkill(Skill.Farming);
 				MadSand.print("You plant " + item.name);
@@ -622,7 +622,7 @@ public class Player extends Entity {
 		Map map = MadSand.world.getCurLoc();
 
 		if ((MadSand.world.curlayer == World.LAYER_OVERWORLD)
-				&& (x == map.getWidth() || y == map.getHeight() || x == 0 || y == 0)) {
+				&& (x == map.getWidth() - 1 || y == map.getHeight() - 1 || x == 0 || y == 0)) {
 			MadSand.print("Press [GRAY]N[WHITE] to move to the next sector.");
 		}
 
@@ -716,21 +716,21 @@ public class Player extends Entity {
 		Gdx.input.setInputProcessor(Gui.overlay);
 		Gui.gameUnfocused = false;
 		MadSand.state = GameState.GAME;
-		Gui.overlay.gameTooltip.setVisible(true);
 		inventory.inventoryUI.hide();
 		Gui.inventoryActive = false;
 		inventory.clearContextMenus();
 		Gui.dialogActive = false;
+		Gui.overlay.showTooltip();
 	}
 
 	public void showInventory() {
 		inventory.inventoryUI.toggleVisible();
 		Gui.overlay.gameContextMenu.setVisible(false);
 		Gui.gameUnfocused = true;
-		Gui.overlay.gameTooltip.setVisible(false);
 		Gdx.input.setInputProcessor(Gui.overlay);
 		MadSand.state = GameState.INVENTORY;
 		Gui.inventoryActive = true;
 		Gui.dialogActive = true;
+		Gui.overlay.hideTooltip();
 	}
 }

@@ -8,25 +8,19 @@ import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.world.World;
 
 public class CraftButton extends ItemButton {
-	int craftQuantity;
-	
+
 	private float WIDTH_SIZEBY = -150;
 	private float HEIGHT_SIZEBY = 0;
 
 	public CraftButton(Item item) {
 		super(item);
-	}
 
-	public CraftButton(Item item, int quantity) {
-		this(item);
-		craftQuantity = quantity;
-		
 		super.buttonTable.align(Align.left);
-		
+
 		super.sizeBy(WIDTH_SIZEBY, HEIGHT_SIZEBY);
 		super.buttonTable.sizeBy(WIDTH_SIZEBY, HEIGHT_SIZEBY);
 		super.highlight.sizeBy(WIDTH_SIZEBY, HEIGHT_SIZEBY);
-		
+
 		super.buttonTable.pack();
 		setUpListeners();
 	}
@@ -35,8 +29,8 @@ public class CraftButton extends ItemButton {
 	protected String createButtonText() {
 		String buttonString = buttonItem.name;
 
-		if (craftQuantity > 1)
-			buttonString = craftQuantity + " " + buttonString;
+		if (buttonItem.craftQuantity > 1)
+			buttonString = buttonItem.craftQuantity + " " + buttonString;
 
 		return buttonString;
 	}

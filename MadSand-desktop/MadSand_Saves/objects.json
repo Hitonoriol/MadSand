@@ -285,17 +285,17 @@
 		"name" : "Cucumber seeds"
 	},
 	"21" : {
-		"hp" : 5,
+		"hp" : 3,
 		"harvestHp" : 1,
 		"lvl" : -1,
 		"nocollide" : true,
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 39 ]
+			"0" : [ 39, 40 ]
 		},
 		"onInteract" : "-1",
-		"skill" : "Harvesting",
+		"skill" : "Farming",
 		"name" : "Cucumber bush"
 	},
 	"22" : {
@@ -634,18 +634,18 @@
 		"name" : "Potato sprout"
 	},
 	"46" : {
-		"hp" : 8,
+		"hp" : 3,
 		"harvestHp" : 1,
 		"lvl" : -1,
 		"nocollide" : true,
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 46 ]
+			"0" : [ 46, 51 ]
 		},
 		"onInteract" : "-1",
-		"skill" : "Harvesting",
-		"name" : "Potato sprout"
+		"skill" : "Farming",
+		"name" : "Potato"
 	},
 	"47" : {
 		"hp" : 1,
@@ -684,18 +684,18 @@
 		"name" : "Carrot sprout"
 	},
 	"50" : {
-		"hp" : 8,
+		"hp" : 3,
 		"harvestHp" : 1,
 		"lvl" : -1,
 		"nocollide" : true,
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 47 ]
+			"0" : [ 47, 54 ]
 		},
 		"onInteract" : "-1",
-		"skill" : "Harvesting",
-		"name" : "Carrot sprout"
+		"skill" : "Farming",
+		"name" : "Carrot"
 	},
 	"51" : {
 		"hp" : 1,
@@ -734,18 +734,18 @@
 		"name" : "Tomato sprout"
 	},
 	"54" : {
-		"hp" : 8,
+		"hp" : 3,
 		"harvestHp" : 1,
 		"lvl" : -1,
 		"nocollide" : true,
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 48 ]
+			"0" : [ 48, 53 ]
 		},
 		"onInteract" : "-1",
-		"skill" : "Harvesting",
-		"name" : "Tomato sprout"
+		"skill" : "Farming",
+		"name" : "Tomato bush"
 	},
 	"55" : {
 		"hp" : 1,
@@ -784,7 +784,7 @@
 		"name" : "Pepper sprout"
 	},
 	"58" : {
-		"hp" : 9,
+		"hp" : 3,
 		"harvestHp" : 1,
 		"lvl" : -1,
 		"nocollide" : true,
@@ -794,7 +794,7 @@
 			"0" : [ 49, 54 ]
 		},
 		"onInteract" : "-1",
-		"skill" : "Harvesting",
+		"skill" : "Farming",
 		"name" : "Pepper bush"
 	},
 	"59" : {
@@ -834,18 +834,18 @@
 		"name" : "Corn sprout"
 	},
 	"62" : {
-		"hp" : 8,
+		"hp" : 3,
 		"harvestHp" : 1,
 		"lvl" : -1,
 		"nocollide" : true,
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 50 ]
+			"0" : [ 50, 55 ]
 		},
 		"onInteract" : "-1",
-		"skill" : "Harvesting",
-		"name" : "Corn sprout"
+		"skill" : "Farming",
+		"name" : "Corn"
 	},
 	"63" : {
 		"hp" : 1,

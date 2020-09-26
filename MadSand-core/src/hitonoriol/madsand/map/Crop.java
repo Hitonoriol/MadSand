@@ -32,7 +32,7 @@ public class Crop {
 		if ((curStage + 1) >= STAGE_COUNT)
 			return false;
 
-		if (MadSand.world.globalTick - plantTime >= growthStages.getStageLength(curStage))
+		if (MadSand.world.globalRealtimeTick - plantTime >= growthStages.getStageLength(curStage))
 			objId = growthStages.getStageObject(++curStage);
 
 		return true;

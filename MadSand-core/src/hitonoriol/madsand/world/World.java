@@ -1,10 +1,12 @@
 package hitonoriol.madsand.world;
 
 import java.io.File;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import com.badlogic.gdx.utils.Timer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.GameSaver;
@@ -29,6 +31,9 @@ public class World {
 	private Pair coords = new Pair();
 	private MapID mapID = new MapID();
 
+	private int MAX_PREVIOUS_LOCATIONS = 2; // Max amount of maps allowed to be in WorldMap at the same time
+	private ArrayDeque<MapID> previousLocations = new ArrayDeque<>(); // Maps that are currently loaded in WorldMap
+
 	private int xsz, ysz; // max world size, not really used anywhere (still)
 
 	public int curywpos; // global coords of current sector
@@ -52,8 +57,12 @@ public class World {
 	@JsonIgnore
 	public WorldMap worldMap; // container for all maps and layers
 
+	private Timer realTimeRefresher;
+	private int realtimeTickRate = 5; // seconds per 1 tick
+	public long globalRealtimeTick = 0; // global realtime tick counter, never resets
+
+	private int ticksPerHour = 100; // ticks per one hourTick() trigger
 	public int worldtime = 12; // time (00 - 23)
-	int ticksPerHour = 100; // ticks per one hourTick() trigger
 	public int tick = 0; // tick counter, resets every <ticksPerHour> ticks
 	public long globalTick = 0; // global tick counter, never resets
 
@@ -66,17 +75,27 @@ public class World {
 		curywpos = ysz / 2;
 
 		player = new Player();
-
 		worldMap = new WorldMap();
-
-		if (!createBasicLoc(new Pair(curxwpos, curywpos), DEFAULT_MAPSIZE, DEFAULT_MAPSIZE))
-			Utils.die("Could not create new world");
-
 		worldGen = new WorldGen(worldMap);
+		initRealtimeRefresher();
 	}
 
 	public World() {
 		this(DEFAULT_WORLDSIZE);
+	}
+
+	public void enter() {
+		realTimeRefresher.start();
+	}
+
+	private void initRealtimeRefresher() {
+		realTimeRefresher = new Timer();
+		realTimeRefresher.scheduleTask(new Timer.Task() {
+			@Override
+			public void run() {
+				realtimeTick();
+			}
+		}, realtimeTickRate, realtimeTickRate);
 	}
 
 	public long getLogoutTimeStamp() {
@@ -169,7 +188,7 @@ public class World {
 	public void generate(int wx, int wy, int layer) {
 		Utils.out("Generating new sector!");
 
-		mapID = new MapID(coords.set(curxwpos, curywpos), layer);
+		mapID.set(new Pair(coords.set(curxwpos, curywpos)), layer);
 
 		if (!locExists(mapID.setLayer(LAYER_OVERWORLD)))
 			createBasicLoc(wx, wy);
@@ -219,14 +238,14 @@ public class World {
 	}
 
 	public boolean switchLocation(int x, int y, int layer) {
-		Utils.out("Switching location to " + x + ", " + y + " layer " + layer);
+		Utils.out("Switching location to " + x + ", " + y + " layer: " + layer);
 		if (layer > DUNGEON_LAYER_MAX)
 			return false;
 
 		jumpToLocation(x, y, layer);
-		Utils.out(curxwpos + " " + curywpos + " " + curlayer);
 
 		if (locExists(new MapID(coords.set(x, y), layer))) {
+			Utils.out("This sector already exists! Noice.");
 			updateLight();
 			return true;
 		}
@@ -237,6 +256,8 @@ public class World {
 			GameSaver.loadLocation();
 		else
 			generate(layer);
+
+		cleanUpPreviousLocations();
 
 		player.updCoords();
 		updateLight();
@@ -264,9 +285,9 @@ public class World {
 		int mapWidth = curLoc.getWidth(), mapHeight = curLoc.getHeight();
 
 		if (player.x > mapWidth)
-			player.x = mapWidth;
+			player.x = mapWidth - 1;
 		if (player.y > mapHeight)
-			player.y = mapHeight;
+			player.y = mapHeight - 1;
 
 		switch (dir) {
 		case UP:
@@ -314,8 +335,8 @@ public class World {
 			return false;
 
 		boolean ret = switchLocation(curlayer + 1);
-		if (curlayer > (worldMap.layers - 1))
-			++worldMap.layers;
+		if (curlayer > (worldMap.getLayerCount(curxwpos, curywpos) - 1))
+			worldMap.increaseLayerCount(curxwpos, curywpos);
 
 		Map loc = getCurLoc();
 		String place = null;
@@ -349,6 +370,22 @@ public class World {
 			MadSand.print("You get back to dungeon level " + curlayer);
 		Gui.overlay.processActionMenu();
 		return ret;
+	}
+
+	private void cleanUpPreviousLocations() {
+		if (curlayer != LAYER_OVERWORLD)
+			return;
+
+		previousLocations.add(new MapID(new Pair(curxwpos, curywpos), LAYER_OVERWORLD));
+
+		if (previousLocations.size() < MAX_PREVIOUS_LOCATIONS)
+			return;
+
+		Utils.out("Removing the oldest loaded sector...");
+		MapID rootLocation = previousLocations.poll();
+		int layers = worldMap.getLayerCount(curxwpos, curywpos);
+		for (int i = layers - 1; i >= 0; --i)
+			worldMap.remove(rootLocation.setLayer(i));
 	}
 
 	public int getTileId(int x, int y) {
@@ -500,10 +537,23 @@ public class World {
 			tick();
 	}
 
-	private void offlineReward(long offlineTime) {
+	private void realtimeRefresh() {
 		Map map = getCurLoc(LAYER_OVERWORLD);
+		map.updateCrops();
+	}
+
+	private void realtimeTick() {
+		++globalRealtimeTick;
+		realtimeRefresh();
+	}
+
+	private void offlineReward(long offlineTime) {
+		long offlineTicks = offlineTime / realtimeTickRate;
+		globalRealtimeTick += offlineTicks;
 		LuaUtils.executeScript(LuaUtils.offlineRewardScript, offlineTime);
 
+		for (; offlineTicks > 0; --offlineTicks)
+			realtimeRefresh();
 	}
 
 	private float HOURS_DAY = 24;

@@ -526,7 +526,7 @@ public class Map {
 		if (getTile(x, y).id != PLOWED_SOIL)
 			return false;
 
-		Crop newCrop = new Crop(id, MadSand.world.globalTick);
+		Crop newCrop = new Crop(id, MadSand.world.globalRealtimeTick);
 		mapCrops.put(new Pair(coords), newCrop);
 		addObject(x, y, newCrop.objId);
 		return true;
@@ -580,7 +580,8 @@ public class Map {
 
 		if (npc.spawnOnce)
 			World.player.knownNpcs.add(npc.id);
-		mapNpcs.put(coords, npc);
+
+		mapNpcs.put(new Pair(coords), npc);
 		return true;
 	}
 
@@ -646,18 +647,22 @@ public class Map {
 
 	private static int MAX_NPCS = 50; // Max npcs -- for autospawn only
 
-	public void spawnMobs(boolean friendly) {
+	public void spawnMobs(boolean friendly, boolean force) {
 		WorldGenPreset preset = WorldGenProp.getBiome(getBiome());
 		OverworldPreset overworld = preset.overworld;
+		double forceVal = force ? 100 : 0;
 
 		if (getNpcCount() >= MAX_NPCS)
 			return;
 
 		if (friendly)
-			spawnFromRollList(overworld.friendlyMobs, overworld.friendlySpawnChance);
+			spawnFromRollList(overworld.friendlyMobs, overworld.friendlySpawnChance + forceVal);
 		else
-			spawnFromRollList(overworld.hostileMobs, overworld.hostileSpawnChance);
+			spawnFromRollList(overworld.hostileMobs, overworld.hostileSpawnChance + forceVal);
+	}
 
+	public void spawnMobs(boolean friendly) {
+		spawnMobs(friendly, false);
 	}
 
 	private void spawnFromRollList(RollList list, double chance) {

@@ -94,15 +94,15 @@
 "3" : {
 	"exp" : 50,
 	"startMsg" : "
-		#Richard# Listen, {PLAYER}, yesterday i heard some loud noises from underground. I think it's the dungeon. Again. [Dungeon?]=>
+		#Richard# Listen, {PLAYER}, yesterday I heard some loud noises from underground. I think it's the dungeon. Again. [Dungeon?]=>
 		#Richard# Oh well, I forgot you didn't remember anything... I'll explain later. What's important now is the key's location. [A key? To the dungeon?]=>
 		#Richard# Yeah, I kinda know about where to find one. But only a general location... [So... Where is it?]=>
 		#Richard# It's somewhere one sector North from here... (5, 6), to be more accurate. You'll have to search the whole sector for it. [I guess I have no choice...]=>
-		#Richard# You're right, {PLAYER}. You can't even imagine what would happen if monsters were to escape from the underground again.
+		#Richard# You're right, {PLAYER}. You can't even imagine what would happen if monsters were to escape from the dungeon again.
 		You need to find the key as soon as possible.[I'll do my best]=>
 		#Richard# I believe in you. So head to the sector (5,6) and find the dungeon key!=>
-		#Richard# It's not an easy task, so here - take these vegetables, you can use them to regain some of your strength between the battles =>
-		* To move to the next sector you need to approach the edge of the current one and press \"N\" when a prompt in the gamelog appears.
+		#Richard# And... here - take these vegetables. You don't want to starve to death while searching for the key, do you? [Thanks]=>
+		* To move to the next sector you need to approach the edge of the current one and press \"N\" when a prompt in the game log appears.
 	",
 
 	"endMsg" : "#Richard# That's excellent news, {PLAYER}. Talk to me again as soon as possible and I'll explain you how to enter the dungeon!",
@@ -111,7 +111,7 @@
 	"journalText" : "Find the dungeon key at the sector (5, 6)",
 	"reqItems" : "100/1",
 	"deleteRequiredItems" : false,
-	"giveItems" : "n",
+	"giveItems" : "47/5:49/5",
 	"rewardItems" : "21/80:85/1",
 	"removeOnCompletion" : "-1",
 	"repeatable" : false
@@ -123,14 +123,13 @@
 		#Richard# It's finally the time for you to go to the dungeon, {PLAYER}. [I'm kinda nervous]=>
 		#Richard# Well, don't worry. By doing this you'll save us both![Both? What about your faction?]=>
 		#Richard# Oh... Uhmm... It's a long story, but the thing is... I got lost. [What?!] =>
-		#Richard# The last thing I remember was crossing the desert with my group. Then a bright flash and complete darkness afterwards. When I finally regained consciousness, I was here. My group was nowhere to be seen. All my equipment - gone. I was wandering desperately for a few weeks and then decided to set up a camp here. [So how long has it been?]
-		#Richard# Since I'm here all alone? About half a year. I can't tell exactly. But hey, when you appeared here out of nowhere you definitely gave me some more hope! We will escape this place. But first, if the dungeon releases its beasts, we'll be dead in no time. So back to the dungeon stuff. [Okay]
+		#Richard# The last thing I remember was crossing the desert with my group. Then a bright flash and complete darkness afterwards. When I finally regained consciousness, I was here. My group was nowhere to be seen. All my equipment - gone. I was wandering desperately for a few weeks and then decided to set up a camp here. [So how long has it been?]=>
+		#Richard# Since I'm here all alone? About half a year. I can't tell exactly. But hey, when you appeared here out of nowhere you definitely gave me some more hope! We will escape this place. But first, if the dungeon releases its beasts, we'll be dead in no time. So back to the dungeon stuff. [Okay]=>
 		#Richard# So, you must find an entrance to the dungeon. It looks like a trapdoor, and, well, it is. It's locked, but now that you have the key - it's not a problem.=>
 		#Richard# When you open the trapdoor, just carefully climb down to the dungeon. [Understood]=>
-		#Richard# It's not an easy task, so here - take these vegetables, you can use them to regain some of your strength between the battles =>
 		* To go underground, you have to unlock dungeon trapdoor and then stand on a \"hole in the ground\" tile and press \"use\" button or the on-screen pop-up button. => 
 		#Richard# Almost forgot, here you go - my last Dungeon Search scroll. Take it. Use it to find the Dungeon Entrance. Good luck, {PLAYER}! =>
-		* To use a scroll, open your inventory, click on it with RMB and press \"Use\" button.
+		* To use a scroll, open your inventory, click on it with RMB and press \"Use\" button.=>
 		#Richard# I'll be waiting for you here. If you survive - bring me some trophies... Yes! Bring me 10 leather pieces you get from the monsters you kill there.
 	",
 
@@ -139,7 +138,7 @@
 	"reqMsg" : "#Richard# Kill at least 10 rats and give me 10 leather pieces you get from them.",
 	"journalText" : "Bring 10 leather pieces to Richard",
 	"reqItems" : "22/10",
-	"giveItems" : "47/5:49/5:75/1",
+	"giveItems" : "75/1",
 	"rewardItems" : "21/200",
 	"removeOnCompletion" : "-1",
 	"repeatable" : false

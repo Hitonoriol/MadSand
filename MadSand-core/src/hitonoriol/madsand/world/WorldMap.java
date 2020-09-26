@@ -20,8 +20,11 @@ import hitonoriol.madsand.map.MapObject;
 
 public class WorldMap extends HashMap<MapID, Map> {
 	private static final long serialVersionUID = -4489829388439109446L;
+	private int DEFAULT_LAYERS = 2;
 
-	public int layers = 2; // Default number of layers
+	private Pair coords = new Pair();
+	private MapID mapID = new MapID();
+	public HashMap<MapID, Integer> layers = new HashMap<>(); // Default number of layers
 
 	final String LOOT_DELIM = "|";
 	final int CROP_BLOCK_LEN = 16;
@@ -115,6 +118,7 @@ public class WorldMap extends HashMap<MapID, Map> {
 		byte[] layer;
 		long size;
 		try {
+			int layers = getLayerCount(wx, wy);
 			//Header: format version, sector layer count
 			stream.write(GameSaver.encode8(GameSaver.saveFormatVersion));
 			stream.write(GameSaver.encode2(layers));
@@ -143,7 +147,8 @@ public class WorldMap extends HashMap<MapID, Map> {
 		if (saveVersion != GameSaver.saveFormatVersion)
 			throw (new Exception("Save version is too old / new!"));
 
-		layers = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
+		int layers = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
+		setLayerCount(wx, wy, layers);
 		for (int i = 0; i < layers; ++i) {
 			layersz = GameSaver.decode8(stream.readNBytes(LONG_BLOCK_SIZE));
 			bytesToSector(stream.readNBytes((int) layersz), wx, wy, i);
@@ -243,8 +248,33 @@ public class WorldMap extends HashMap<MapID, Map> {
 			Utils.die();
 		}
 	}
-	
+
 	private int loadNextBlock(ByteArrayInputStream stream) throws Exception {
 		return GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
+	}
+
+	public void setLayerCount(int wx, int wy, int layers) {
+		this.layers.put(new MapID(new Pair(wx, wy), World.LAYER_OVERWORLD), layers);
+	}
+
+	public int getLayerCount(int wx, int wy) {
+		return layers.getOrDefault(mapID.set(coords.set(wx, wy), World.LAYER_OVERWORLD), DEFAULT_LAYERS);
+	}
+
+	public void increaseLayerCount(int wx, int wy) {
+		setLayerCount(wx, wy, getLayerCount(wx, wy) + 1);
+	}
+
+	public Map remove(Object key) {
+		Map removed = super.remove(key);
+		MapID id = (MapID) key;
+		if (id.layer == World.LAYER_OVERWORLD)
+			deleteLayerCountEntry(id.worldxy.x, id.worldxy.y);
+		return removed;
+	}
+
+	private void deleteLayerCountEntry(int wx, int wy) {
+		layers.remove(mapID.set(coords.set(wx, wy), World.LAYER_OVERWORLD));
+		Utils.out("Sector (" + wx + ", " + wy + ") has been removed from worldMap!");
 	}
 }

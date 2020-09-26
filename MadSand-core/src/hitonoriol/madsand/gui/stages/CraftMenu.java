@@ -65,15 +65,13 @@ public class CraftMenu extends Stage {
 
 		int i = 0;
 		int perRow = 2, id;
-		int quantity;
 		Label recipeLabel;
 
 		while (i < craftSz) {
 
 			id = player.craftRecipes.get(i);
-			quantity = ItemProp.getCraftQuantity(id);
 
-			craftButtons[i] = new CraftButton(ItemProp.getItem(id), quantity);
+			craftButtons[i] = new CraftButton(ItemProp.getItem(id));
 			recipeLabel = new Label(" " + Item.queryToName(ItemProp.getCraftRecipe(id)), skin);
 			recipeLabel.setAlignment(Align.left);
 

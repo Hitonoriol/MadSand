@@ -528,6 +528,8 @@ public class MadSand extends Game {
 	public static void worldEntered() {
 		if (MadSand.isWorldUntouched)
 			MadSand.isWorldUntouched = false;
+		
+		world.enter();
 	}
 
 	public static void setWorldName(String arg) {

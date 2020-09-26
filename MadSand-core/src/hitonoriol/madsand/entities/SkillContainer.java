@@ -97,10 +97,11 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 		get(skill).exp = amt;
 	}
 
-	static final int REWARD_CHANCE = 60;
+	static final int REWARD_CHANCE = 40;
 
+	// How many items to get from one roll
 	public int getItemReward(Skill skill) {
-		int rew = get(skill).lvl / ITEM_BONUS_DENOMINATOR;
+		int rew = getLvl(skill) / ITEM_BONUS_DENOMINATOR;
 		if (rew == 0)
 			return 1;
 		if (Utils.percentRoll(REWARD_CHANCE))
@@ -109,6 +110,15 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 			return 1;
 	}
 
+	// How many times to roll for drops
+	public int getItemDropRolls(Skill skill) {
+		if (Utils.percentRoll(getLvl(skill)))
+			return Utils.rand(1, getLvl(skill));
+
+		return 1;
+	}
+
+	// Is roll successful
 	public boolean skillRoll(Skill skill) {
 		int lvl = get(skill).lvl;
 

@@ -27,6 +27,8 @@ public class WorldGen {
 		this.curMapId = mapId;
 		this.curLoc = worldMap.get(mapId);
 
+		Utils.out("Generating " + mapId.worldxy + " : " + mapId.layer);
+
 		if (width < 1 || height < 1)
 			curLoc.rollSize();
 		else

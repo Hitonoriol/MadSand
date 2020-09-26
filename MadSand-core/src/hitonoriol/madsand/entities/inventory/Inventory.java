@@ -208,7 +208,7 @@ public class Inventory {
 	public boolean putItem(Item item) {
 		
 		if (item.quantity < 1)
-			return false;
+			return true;
 		
 		Item updItem;
 

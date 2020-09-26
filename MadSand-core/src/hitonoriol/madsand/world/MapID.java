@@ -43,6 +43,10 @@ public class MapID {
 		return this;
 	}
 
+	public MapID set(Pair coords, int layer) {
+		return set(coords, layer, 0);
+	}
+
 	public MapID setLayer(int layer) {
 		this.layer = layer;
 		return this;
