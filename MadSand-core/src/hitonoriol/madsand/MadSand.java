@@ -70,7 +70,7 @@ public class MadSand extends Game {
 	public static float ZOOM = DEFAULT_ZOOM;
 	static final int DEFAULT_FOV = 12;
 
-	public static boolean justStarted = true; // flag for once-per-launch actions
+	public static boolean isWorldUntouched = true; // flag for once-per-launch actions
 
 	static OrthographicCamera camera;
 	public static int camxoffset = 17;
@@ -94,9 +94,46 @@ public class MadSand extends Game {
 	static float xmenu = ymenu = xmid;
 	private static float menuXStep = 0.8f, menuYStep = 0f;
 	private static float menuOffset = 250;
-	
+
 	public static Game game;
-	
+
+	public void create() {
+		game = this;
+		Gdx.graphics.setContinuousRendering(false);
+
+		Utils.out("Starting initialization!");
+
+		mapper.configure(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS.mappedFeature(), true);
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+		setRenderRadius(DEFAULT_FOV);
+		setRenderRadius();
+		Utils.out("Render area: " + renderArea.length);
+		setErrFile();
+		Utils.init();
+		Gui.init();
+
+		camera = new OrthographicCamera();
+		camera.viewportWidth = (Gdx.graphics.getWidth() / ZOOM);
+		camera.viewportHeight = (Gdx.graphics.getHeight() / ZOOM);
+		camera.update();
+
+		initNewGame();
+		world.generate();
+
+		initMenuAnimation();
+
+		Utils.out("End of initialization!");
+
+	}
+
+	public static void initNewGame() {
+		world = new World(MadSand.WORLDSIZE);
+		World.player.updCoords();
+		LuaUtils.init();
+		Gui.overlay.gameLog.clear();
+	}
+
 	public static void switchScreen(Screen screen) {
 		game.setScreen(screen);
 	}
@@ -122,38 +159,6 @@ public class MadSand extends Game {
 	public static void reset() {
 		switchScreen(null);
 		switchStage(GameState.GAME, Gui.overlay);
-	}
-
-	public void create() {
-		game = this;
-		
-		Utils.out("Starting initialization!");
-
-		Gdx.graphics.setContinuousRendering(false);
-		mapper.configure(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS.mappedFeature(), true);
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-		setRenderRadius(DEFAULT_FOV);
-		setRenderRadius();
-		Utils.out("Render area: " + renderArea.length);
-		setErrFile();
-		Utils.init();
-		Gui.init();
-
-		World.player = new Player();
-		camera = new OrthographicCamera();
-		camera.viewportWidth = (Gdx.graphics.getWidth() / ZOOM);
-		camera.viewportHeight = (Gdx.graphics.getHeight() / ZOOM);
-		camera.update();
-
-		world = new World(MadSand.WORLDSIZE);
-		LuaUtils.init();
-		World.player.updCoords();
-		world.generate();
-		initMenuAnimation();
-		
-		Utils.out("End of initialization!");
-
 	}
 
 	static int countRcells() {
@@ -412,23 +417,18 @@ public class MadSand extends Game {
 	}
 
 	public void render() {
-		Utils.pollScreenshotKey();
+		Keyboard.pollScreenshotKey();
 
 		if (state.equals(GameState.GAME)) {
 
-			if (justStarted)
-				justStarted = false;
-
 			Mouse.mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
 			camera.unproject(Mouse.mouseinworld);
-			Gdx.input.setInputProcessor(Gui.overlay);
-			Utils.executeConsoleInput();
-			Utils.pollStatWindowKey();
+			Gui.overlay.pollGameConsole();
+			Keyboard.pollStatWindowKey();
 			if (Gui.overlay.getKeyboardFocus() != Gui.overlay.getConsoleField() && !Gui.gameUnfocused) {
 				Mouse.updCoords();
 				Mouse.mouseClickAction();
-				Utils.gameKeyCheck();
-				Utils.invKeyCheck();
+				Keyboard.pollGameKeys();
 			}
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);
@@ -445,7 +445,7 @@ public class MadSand extends Game {
 			drawGame();
 			Utils.batch.end();
 			Mouse.mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
-			Utils.invKeyCheck();
+			Keyboard.pollInventoryKey();
 
 			Gui.overlay.act();
 			Gui.overlay.draw();
@@ -524,6 +524,12 @@ public class MadSand extends Game {
 		}
 	}
 
+	// New world is generated on game launch, so this thing ensures that new world won't be generated twice when you press "New Game" button
+	public static void worldEntered() {
+		if (MadSand.isWorldUntouched)
+			MadSand.isWorldUntouched = false;
+	}
+
 	public static void setWorldName(String arg) {
 		WORLDNAME = arg;
 	}
@@ -542,6 +548,7 @@ public class MadSand extends Game {
 	}
 
 	public void dispose() {
+		Utils.out("End");
 	}
 
 	void setErrFile() {

@@ -30,4 +30,12 @@ public class GameTooltip extends Table {
 	public void moveTo(int x, int y) {
 		super.addAction(Actions.moveTo(x + TOOLTIP_XPAD, y - TOOLTIP_YPAD, 0.1F));
 	}
+	
+	public void show() {
+		setVisible(true);
+	}
+	
+	public void hide() {
+		setVisible(false);
+	}
 }

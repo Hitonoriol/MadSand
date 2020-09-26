@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
@@ -20,12 +19,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.enums.GameState;
+import hitonoriol.madsand.gui.dialogs.OkDialog;
 import hitonoriol.madsand.gui.stages.CraftMenu;
 import hitonoriol.madsand.gui.stages.DeathStage;
 import hitonoriol.madsand.gui.stages.MainMenu;
@@ -127,7 +126,8 @@ public class Gui {
 
 		Drawable barKnob = skin.newDrawable("background", Color.DARK_GRAY);
 		barKnob.setMinWidth(5);
-		ProgressBar.ProgressBarStyle barStyle = new ProgressBarStyle(skin.newDrawable("background", Color.GRAY), barKnob);
+		ProgressBar.ProgressBarStyle barStyle = new ProgressBarStyle(skin.newDrawable("background", Color.GRAY),
+				barKnob);
 		barStyle.knobBefore = barStyle.knob;
 		skin.add("default-horizontal", barStyle);
 
@@ -190,28 +190,7 @@ public class Gui {
 	}
 
 	public static void drawOkDialog(String msg, Stage stage) {
-		final Dialog dialog = new Dialog(" ", skin);
-		int linesToSkip = 2;
-		dialog.text(msg).pad(25);
-		dialog.row();
-		for (int i = 0; i < linesToSkip; ++i) {
-			dialog.add(" ");
-			dialog.row();
-		}
-
-		TextButton cbtn = new TextButton("Ok", skin);
-
-		cbtn.align(Align.center);
-		dialog.add(cbtn).width(defLblWidth).row();
-
-		cbtn.addListener(new ChangeListener() {
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				dialog.remove();
-			}
-
-		});
-
-		dialog.show(stage);
+		new OkDialog(msg, stage).show();
 	}
 
 	public static void refreshOverlay() {
@@ -227,6 +206,10 @@ public class Gui {
 			World.player.hideInventory();
 		else
 			World.player.showInventory();
+	}
+	
+	public static Drawable getColorDrawable(Color color) {
+		return skin.newDrawable("background", color);
 	}
 
 }

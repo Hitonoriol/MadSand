@@ -57,4 +57,9 @@ public class GameLog extends Table {
 
 	}
 	
+	public void clear() {
+		for (Label label : logLabels)
+			label.setText("");
+	}
+	
 }

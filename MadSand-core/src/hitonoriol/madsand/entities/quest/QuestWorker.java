@@ -68,6 +68,7 @@ public class QuestWorker {
 			completedQuests.add(quest.id);
 
 		questsInProgress.remove(quest.id);
+		Gui.refreshOverlay();
 		GameDialog.generateDialogChain(quest.endMsg, Gui.overlay).show();
 	}
 

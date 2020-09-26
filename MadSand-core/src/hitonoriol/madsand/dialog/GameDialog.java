@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.Mouse;
 import hitonoriol.madsand.containers.Tuple;
 import hitonoriol.madsand.world.World;
 
@@ -27,7 +28,7 @@ public class GameDialog extends Dialog {
 	public static final float HEIGHT = 250;
 	public static final float PADDING = 10;
 
-	private Label textLbl;
+	protected Label textLbl;
 	private Stage stage;
 
 	@SafeVarargs
@@ -67,7 +68,7 @@ public class GameDialog extends Dialog {
 		this(title, text, stage);
 		addOkButton(okText);
 	}
-	
+
 	public void setText(String text) {
 		textLbl.setText(replaceDialogConstants(text));
 	}
@@ -80,7 +81,8 @@ public class GameDialog extends Dialog {
 	public boolean remove() {
 		boolean ret = super.remove();
 		Gui.gameUnfocused = Gui.dialogActive = false;
-		Gui.overlay.getTooltip().setVisible(true);
+		Gui.overlay.showTooltip();
+		Mouse.justClicked = false;
 		return ret;
 	}
 
@@ -88,9 +90,10 @@ public class GameDialog extends Dialog {
 	public Dialog show(Stage stage) {
 		Dialog ret = super.show(stage);
 		Gui.gameUnfocused = Gui.dialogActive = true;
+		Gui.overlay.hideTooltip();
 		return ret;
 	}
-	
+
 	public void chainReply(TextButton replyButton, GameDialog nextDialog) {
 		replyButton.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {

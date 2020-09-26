@@ -247,10 +247,11 @@ public class Player extends Entity {
 	}
 
 	public void interact() {
+		Gui.overlay.hideActionBtn();
 		interact(stats.look);
 	}
 
-	public void interact(Npc npc) {
+	private void interact(Npc npc) {
 		String name = npc.stats.name;
 		ArrayList<Integer> questList = NpcProp.npcs.get(npc.id).questList;
 
@@ -302,7 +303,7 @@ public class Player extends Entity {
 		new TradeInventoryUI(npc.inventory, inventory).show();
 	}
 
-	public void interact(final Direction direction) {
+	private void interact(Direction direction) {
 		coords.set(x, y).addDirection(direction);
 
 		Map loc = MadSand.world.getCurLoc();

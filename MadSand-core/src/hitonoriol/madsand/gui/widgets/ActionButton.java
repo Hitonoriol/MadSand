@@ -51,7 +51,7 @@ public class ActionButton extends Table {
 		npcInteractListener = new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				World.player.interact(World.player.stats.look);
+				World.player.interact();
 				setVisible(false);
 			}
 		};
@@ -59,7 +59,7 @@ public class ActionButton extends Table {
 		objInteractListener = new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				World.player.interact(World.player.stats.look);
+				World.player.interact();
 				Gui.gameUnfocused = true;
 				processActionMenu();
 			}

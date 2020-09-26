@@ -76,7 +76,7 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 	public int getLvl(Skill skill) {
 		return get(skill).lvl;
 	}
-	
+
 	public void setLvl(int lvl) {
 		super.get(Skill.Level).lvl = lvl;
 	}
@@ -111,8 +111,10 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 
 	public boolean skillRoll(Skill skill) {
 		int lvl = get(skill).lvl;
+
 		if (lvl == 0)
 			return false;
+
 		return (Utils.rand(0, lvl) != lvl) && (Utils.rand(0, lvl) != lvl); // e.g. if lvl is 1, probability of
 																			// successful roll is 1/4
 	}

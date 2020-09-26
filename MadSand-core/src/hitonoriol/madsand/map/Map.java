@@ -105,7 +105,7 @@ public class Map {
 		mapObjects = objects;
 	}
 
-	void setSize(int xsz, int ysz) {
+	public void setSize(int xsz, int ysz) {
 		this.xsz = xsz;
 		this.ysz = ysz;
 	}

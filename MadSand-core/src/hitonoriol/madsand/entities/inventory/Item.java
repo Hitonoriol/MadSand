@@ -37,7 +37,7 @@ public class Item {
 	public int altObject, cost;
 	public ItemType type = ItemType.Item;
 	public Skill skill = Skill.None;
-	public float weight = 0;
+	public float weight = DEFAULT_WEIGHT;
 
 	public int lvl; // level of item (only for weapons/armor)
 
@@ -189,9 +189,6 @@ public class Item {
 			healAmount = properties.healAmount;
 			satiationAmount = properties.satiationAmount;
 		}
-
-		if (weight <= 0 && !isCurrency())
-			weight = DEFAULT_WEIGHT;
 
 		if (type.isUnique())
 			uid = UUID.randomUUID().toString();

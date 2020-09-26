@@ -26,7 +26,7 @@ public class GameContextMenu extends Table {
 		contextMenuButtons[0].addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				World.player.lookAtMouse(Mouse.wclickx, Mouse.wclicky);
-				World.player.interact(World.player.stats.look);
+				World.player.interact();
 			}
 
 		});

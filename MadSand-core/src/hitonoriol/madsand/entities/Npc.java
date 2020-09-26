@@ -22,7 +22,6 @@ import hitonoriol.madsand.world.World;
 
 public class Npc extends Entity {
 	public static int NULL_NPC = 0;
-	public static int LOOT_RANDOM_FACTOR = 2;
 	static double IDLE_NPC_MOVE_CHANCE = 30;
 
 	public int id;
@@ -91,12 +90,6 @@ public class Npc extends Entity {
 		inventory.setMaxWeight(stats.calcMaxInventoryWeight());
 		if (properties.loot != null)
 			inventory.putItem(properties.loot.roll());
-
-		int removeAmt;
-		for (Item item : inventory.items) {
-			removeAmt = Utils.rand(0, item.quantity / LOOT_RANDOM_FACTOR);
-			inventory.delItem(item.id, removeAmt);
-		}
 
 		if (properties.questList != null)
 			questList = new ArrayList<>(properties.questList);

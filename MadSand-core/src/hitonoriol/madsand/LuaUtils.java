@@ -10,15 +10,18 @@ import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.properties.Tutorial;
 
 public class LuaUtils {
-	public static Globals globals = JsePlatform.standardGlobals();
+	public static Globals globals;
 
 	public static String onAction;
 
 	public static final String initScript = "map_init_newgame.lua";
 	public static final String onActionScript = "player_onaction.lua";
 	public static final String onCreationScript = "player_oncreation.lua";
+	public static final String offlineRewardScript = "offline_reward.lua";
 
 	public static void init() {
+		globals = JsePlatform.standardGlobals();
+
 		LuaValue luaWorld = CoerceJavaToLua.coerce(MadSand.world);
 		LuaValue luaTutorial = CoerceJavaToLua.coerce(new Tutorial());
 		LuaValue luaUtils = CoerceJavaToLua.coerce(new LuaUtils());
@@ -30,8 +33,16 @@ public class LuaUtils {
 		onAction = GameSaver.getExternal(MadSand.SCRIPTDIR + onActionScript, true);
 	}
 
+	private static LuaValue loadScript(String file) {
+		return globals.loadfile(MadSand.SCRIPTDIR + file);
+	}
+
+	public static LuaValue executeScript(String file, Object arg) {
+		return loadScript(file).call(LuaValue.valueOf(String.valueOf(arg)));
+	}
+
 	public static LuaValue executeScript(String file) {
-		return globals.loadfile(MadSand.SCRIPTDIR + file).call();
+		return loadScript(file).call();
 	}
 
 	public static LuaValue execute(String str) {

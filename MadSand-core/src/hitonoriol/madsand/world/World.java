@@ -46,6 +46,7 @@ public class World {
 	@JsonIgnore
 	public WorldGen worldGen;
 
+	@JsonIgnore
 	public static Player player;
 
 	@JsonIgnore
@@ -56,11 +57,15 @@ public class World {
 	public int tick = 0; // tick counter, resets every <ticksPerHour> ticks
 	public long globalTick = 0; // global tick counter, never resets
 
+	private long logoutTimeStamp;
+
 	public World(int sz) {
 		this.xsz = sz;
 		this.ysz = sz;
 		curxwpos = xsz / 2;
 		curywpos = ysz / 2;
+
+		player = new Player();
 
 		worldMap = new WorldMap();
 
@@ -72,6 +77,14 @@ public class World {
 
 	public World() {
 		this(DEFAULT_WORLDSIZE);
+	}
+
+	public long getLogoutTimeStamp() {
+		return logoutTimeStamp;
+	}
+
+	public void setLogoutTimeStamp(long logoutTimeStamp) {
+		this.logoutTimeStamp = logoutTimeStamp;
 	}
 
 	HashMap<MapID, Map> _getLoc(int wx, int wy, int layer) {
@@ -411,6 +424,7 @@ public class World {
 	private static int TIME_NIGHT_START = 22;
 	private static int TIME_NIGHT_END = 6;
 
+	@JsonIgnore
 	public boolean isNight() {
 		boolean beforeMidnight = worldtime >= TIME_NIGHT_START && worldtime < TIME_MIDNIGHT;
 		boolean afterMidnight = worldtime >= 0 && worldtime < TIME_NIGHT_END;
@@ -418,6 +432,7 @@ public class World {
 		return beforeMidnight || afterMidnight;
 	}
 
+	@JsonIgnore
 	public boolean isDay() {
 		return !isNight();
 	}
@@ -483,6 +498,46 @@ public class World {
 	public void ticks(int n) {
 		for (int i = n; i > 0; --i)
 			tick();
+	}
+
+	private void offlineReward(long offlineTime) {
+		Map map = getCurLoc(LAYER_OVERWORLD);
+		LuaUtils.executeScript(LuaUtils.offlineRewardScript, offlineTime);
+
+	}
+
+	private float HOURS_DAY = 24;
+	private float HOUR = 3600;
+	private float MINUTE = 60;
+
+	public void calcOfflineTime() {
+		long offlineTime = Utils.now() - logoutTimeStamp;
+		float offlineHours = offlineTime / HOUR;
+		int maxHours = player.stats.skills.getLvl() + 1;
+
+		if (offlineHours > maxHours)
+			offlineTime = (long) (maxHours * HOUR);
+
+		String offlineString = "You've been away for ";
+
+		if (offlineHours < 1)
+			offlineString += Utils.round((float) (offlineTime / MINUTE)) + " minutes.";
+		else if (offlineHours < HOURS_DAY)
+			offlineString += Utils.round(offlineHours) + " hours.";
+		else
+			offlineString += Utils.round((float) (offlineHours / HOURS_DAY)) + " days.";
+
+		offlineString += Resources.LINEBREAK;
+
+		offlineString += "Your maximum offline bonus is " + maxHours + " hours.";
+
+		Gui.drawOkDialog(offlineString, Gui.overlay);
+
+		offlineReward(offlineTime);
+	}
+
+	public void logout() {
+		setLogoutTimeStamp(Utils.now());
 	}
 
 	@JsonIgnore

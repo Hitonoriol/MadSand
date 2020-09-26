@@ -59,10 +59,13 @@ public class LoadWorldDialog extends Dialog {
 
 					if (GameSaver.loadWorld(sa)) {
 						MadSand.state = GameState.GAME;
+						Gdx.input.setInputProcessor(Gui.overlay);
 						Gdx.graphics.setContinuousRendering(false);
+						MadSand.worldEntered();
 					}
 					
 					Gui.overlay.refreshOverlay();
+					remove();
 
 				}
 			});

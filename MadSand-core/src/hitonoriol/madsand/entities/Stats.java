@@ -22,7 +22,7 @@ public class Stats {
 	final static int FOOD_HEAL = 1;
 
 	static int STAT_MIN_SUM = 20; //for roll() method
-	public int maxStatSum = 22; // Changes every levelup
+	public int maxStatSum = 20; // Changes every levelup
 	private int statBonus = 0; // Total equipment stat bonus
 
 	static final int STAT_RAND_MAX = 8;
@@ -61,7 +61,7 @@ public class Stats {
 	@JsonIgnore
 	public Equipment equipment;
 
-	public float satiationFactor = 0.95f;
+	public float satiationFactor = 0.90f;
 	public final int maxFood = 1000;
 	public int foodTicks = skills.getLvl(Skill.Survival);
 	public final int satiatedVal = (int) (maxFood * satiationFactor);
@@ -221,14 +221,14 @@ public class Stats {
 	 * Max food ticks = Survival skill level
 	 * 
 	 * Decrement food ticks on unsuccessful skill roll
-	 * When food ticks <= 0, decrement food level
+	 * When food ticks < 0, decrement food level
 	 */
 	private void perTickFoodCheck() {
 
 		if (!skills.skillRoll(Skill.Survival)) {
 			--foodTicks;
 
-			if (foodTicks <= 0) {
+			if (foodTicks < 0) {
 				--food;
 				foodTicks = skills.getLvl(Skill.Survival);
 			}

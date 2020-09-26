@@ -78,10 +78,14 @@ public class CreateWorldDialog extends Dialog {
 					}
 
 					MadSand.switchStage(GameState.GAME, Gui.overlay);
-					if (!MadSand.justStarted)
+
+					if (!MadSand.isWorldUntouched) {
+						MadSand.initNewGame();
 						MadSand.world.generate();
-					// World.player.x = new Random().nextInt(World.MAPSIZE);
-					// World.player.y = new Random().nextInt(World.MAPSIZE);
+					}
+
+					MadSand.worldEntered();
+
 					World.player.updCoords();
 					Gui.inventoryActive = false;
 					remove();

@@ -51,21 +51,23 @@ public class SettingsDialog extends Dialog {
 				renderv.setText("Render radius (" + (int) renderslide.getValue() + ")");
 			}
 		});
+		
 		cbtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				MadSand.setRenderRadius(Math.round(renderslide.getValue()));
 				GameSaver.saveToExternal("lastrend.dat", Math.round(renderslide.getValue()) + "");
-				// TODO
 				remove();
 			}
 
 		});
+		
 		cancel.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				remove();
 			}
 
 		});
+		
 	}
 	
 	public void show() {

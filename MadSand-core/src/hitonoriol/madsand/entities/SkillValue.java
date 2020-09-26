@@ -1,7 +1,7 @@
 package hitonoriol.madsand.entities;
 
 public class SkillValue {
-	final static double DEFAULT_MULTIPLIER = 1.4;
+	final static double DEFAULT_MULTIPLIER = 1.3;
 	final static int DEFAULT_REQUIRED_EXP = 30;
 	final static int DEFAULT_MAX_LEVEL = 100;
 
@@ -31,6 +31,7 @@ public class SkillValue {
 		if (exp >= requiredExp) {
 			++lvl;
 			requiredExp += requiredExp * lvUpMultiplier;
+			exp = 0;
 			return true;
 		}
 		return false;

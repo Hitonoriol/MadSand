@@ -23,29 +23,30 @@ public class WorldGen {
 		this.worldMap = worldMap;
 	}
 
-	public void generate(MapID mapId) {
+	public void generate(MapID mapId, int biome, int width, int height) {
 		this.curMapId = mapId;
 		this.curLoc = worldMap.get(mapId);
-		curLoc.rollSize();
+
+		if (width < 1 || height < 1)
+			curLoc.rollSize();
+		else
+			curLoc.setSize(width, height);
+
 		curLoc.purge();
 
 		int caveDepth = World.LAYER_BASE_UNDERWORLD;
 		int layer = mapId.layer;
-		int wx = mapId.worldxy.x, wy = mapId.worldxy.y;
-		int biome;
 
 		if (layer == World.LAYER_OVERWORLD) {
 
-			if ((wx == 5) && (wy == 5)) // TODO: persistent locations & move this shit somewhere
-				biome = 0;
-			else
+			if (biome < 0)
 				biome = chooseRandomBiome();
 
 			Utils.out("Biome: " + biome);
 			curLoc.setBiome(biome);
 
 			curBiome = WorldGenProp.getBiome(biome);
-			genBiomeTerrain(); //TODO pass map to these things?
+			genBiomeTerrain();
 			genLakes();
 			genBiomeObjects();
 			genCave(caveDepth);
@@ -53,6 +54,14 @@ public class WorldGen {
 			caveDepth = layer;
 
 		genDungeon(caveDepth);
+	}
+
+	public void generate(MapID mapId, int biome) {
+		generate(mapId, biome, -1, -1);
+	}
+
+	public void generate(MapID mapId) {
+		generate(mapId, -1);
 	}
 
 	private void genBiomeTerrain() {

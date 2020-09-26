@@ -39,7 +39,7 @@ public class TradeInventoryButton extends ItemButton {
 	protected ClickListener setButtonPressListener() {
 		return new ClickListener(Buttons.LEFT) {
 			public void clicked(InputEvent event, float x, float y) {
-				if (!isCurrencyButton)
+				if (!isCurrencyButton && buttonItem.getPrice() > 0)
 					new TradeConfirmDialog(trade, buttonItem, action, refresher).show();
 			}
 		};

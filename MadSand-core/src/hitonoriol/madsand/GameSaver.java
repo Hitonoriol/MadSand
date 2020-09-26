@@ -112,6 +112,7 @@ public class GameSaver {
 
 	public static void saveWorld() {
 		GameSaver.createDirs();
+		MadSand.world.logout();
 		saveLog();
 		if (saveLocation() && saveChar())
 			MadSand.print("Game saved!");
@@ -140,6 +141,7 @@ public class GameSaver {
 			MadSand.world.updateLight();
 			loadLog();
 			MadSand.print("Loaded Game!");
+			MadSand.world.calcOfflineTime();
 			return true;
 		} else {
 			loadErrMsg();
@@ -185,6 +187,8 @@ public class GameSaver {
 			Utils.out("Loading character...");
 			String fl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.PLAYERFILE;
 			String wfl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.WORLDFILE;
+			
+			MadSand.world = MadSand.mapper.readValue(getExternal(wfl), World.class);
 
 			World.player = MadSand.mapper.readValue(getExternal(fl), Player.class);
 
@@ -196,14 +200,6 @@ public class GameSaver {
 			player.quests.setPlayer(player);
 			player.turn(player.stats.look);
 			player.stats.equipment.refreshUI();
-
-			World w;
-			w = MadSand.mapper.readValue(getExternal(wfl), World.class);
-			MadSand.world.curxwpos = w.curxwpos;
-			MadSand.world.curywpos = w.curywpos;
-			MadSand.world.curlayer = w.curlayer;
-			MadSand.world.worldtime = w.worldtime;
-			MadSand.world.tick = w.tick;
 
 			Utils.out("Done loading character.");
 			return true;

@@ -1,6 +1,8 @@
 package hitonoriol.madsand.gui.stages;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -11,8 +13,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Mouse;
+import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.EquipSlot;
 import hitonoriol.madsand.enums.GameState;
@@ -80,7 +84,8 @@ public class Overlay extends Stage {
 
 		super.addListener(new ClickListener(Buttons.LEFT) {
 			public void clicked(InputEvent event, float x, float y) {
-				Mouse.justClicked = true;
+				if (!Gui.gameUnfocused)
+					Mouse.justClicked = true;
 			}
 		});
 
@@ -116,6 +121,29 @@ public class Overlay extends Stage {
 			count++;
 		}
 		super.addActor(ovstatTbl);
+	}
+
+	public void pollGameConsole() {
+		if (!Utils.debugMode)
+			return;
+
+		if (getKeyboardFocus() != gameLog.inputField)
+			return;
+
+		if (Gdx.input.isKeyJustPressed(Keys.ENTER)) {
+			String cmd = gameLog.inputField.getText().trim();
+
+			try {
+				LuaUtils.execute(cmd);
+				gameLog.inputField.setVisible(!gameLog.inputField.isVisible());
+			} catch (Exception e) {
+				MadSand.print("Couldn't execute user input");
+				e.printStackTrace();
+			}
+
+			gameLog.inputField.setText("");
+			unfocus(gameLog.inputField);
+		}
 	}
 
 	public void levelUpDialog() {
@@ -165,6 +193,14 @@ public class Overlay extends Stage {
 
 	public void setHandDisplay(Item item) {
 		equipmentSidebar.equipItem(EquipSlot.MainHand, item);
+	}
+	
+	public void hideTooltip() {
+		gameTooltip.hide();
+	}
+	
+	public void showTooltip() {
+		gameTooltip.show();
 	}
 
 	public void refreshOverlay() {
