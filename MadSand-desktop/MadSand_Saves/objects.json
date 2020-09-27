@@ -88,6 +88,7 @@
 		"altItems" : null,
 		"onInteract" : "-1",
 		"skill" : "Survival",
+		"isProductionStation": true,
 		"name" : "Campfire"
 	},
 	"7" : {

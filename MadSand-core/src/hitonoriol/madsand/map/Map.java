@@ -49,6 +49,7 @@ public class Map {
 	private HashMap<Pair, Loot> mapLoot;
 	private HashMap<Pair, Crop> mapCrops;
 	private HashMap<Pair, Npc> mapNpcs;
+	private HashMap<Pair, ProductionStation> mapProductionStations;
 
 	Pair coords = new Pair(0, 0);
 
@@ -79,6 +80,14 @@ public class Map {
 
 	public void setBiome(int val) {
 		biome = val;
+	}
+
+	public HashMap<Pair, ProductionStation> getMapProductionStations() {
+		return mapProductionStations;
+	}
+
+	public void setMapProductionStations(HashMap<Pair, ProductionStation> productionStations) {
+		mapProductionStations = productionStations;
 	}
 
 	public HashMap<Pair, Npc> getNpcs() {
@@ -139,11 +148,12 @@ public class Map {
 	}
 
 	public Map purge() {
-		mapTiles = new HashMap<Pair, Tile>();
-		mapObjects = new HashMap<Pair, MapObject>();
-		mapLoot = new HashMap<Pair, Loot>();
-		mapNpcs = new HashMap<Pair, Npc>();
-		mapCrops = new HashMap<Pair, Crop>();
+		mapTiles = new HashMap<>();
+		mapObjects = new HashMap<>();
+		mapLoot = new HashMap<>();
+		mapNpcs = new HashMap<>();
+		mapCrops = new HashMap<>();
+		mapProductionStations = new HashMap<>();
 		return this;
 	}
 
@@ -344,9 +354,19 @@ public class Map {
 				return false;
 		}
 
-		addObject(new Pair(coords), new MapObject(id));
-		setObjectSize(x, y, id);
-		return true;
+		Pair coords = new Pair(this.coords);
+		MapObject object = new MapObject(id);
+
+		if (addObject(coords, object)) {
+			setObjectSize(x, y, id);
+
+			if (object.isProductionStation)
+				mapProductionStations.put(coords, new ProductionStation(id));
+
+			return true;
+		}
+
+		return false;
 	}
 
 	public boolean addObject(int x, int y, int id) {

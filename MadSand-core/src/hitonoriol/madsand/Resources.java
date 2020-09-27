@@ -31,6 +31,7 @@ import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.map.MapObject;
+import hitonoriol.madsand.map.ProductionStation;
 import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
@@ -111,6 +112,7 @@ public class Resources {
 		loadWorldGen();
 		loadItems();
 		loadMapObjects();
+		loadProductionStations();
 		loadMapTiles();
 		loadQuests();
 		loadNpcs();
@@ -223,6 +225,11 @@ public class Resources {
 		biomeCount = WorldGenProp.biomes.size();
 
 		Utils.out(biomeCount + " biomes");
+	}
+
+	private static void loadProductionStations() throws Exception {
+		MapType prodMap = MadSand.typeFactory.constructMapType(HashMap.class, Integer.class, ProductionStation.class);
+		ObjectProp.productionStations = MadSand.mapper.readValue(new File(MadSand.OBJECTFILE), prodMap);
 	}
 
 	static Texture mapcursor;

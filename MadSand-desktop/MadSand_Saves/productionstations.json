@@ -1,0 +1,13 @@
+{
+	"6" : {
+		"producedMaterial" : 56,
+		"consumedMaterial" : 1,
+		"maxLvl" : 100,
+		"upgradeRequirement" : 10,
+		"upgradeProductionMultiplier" : 0.1,
+		"upgradeRequirementMultiplier" : 0.25,
+		"maxProductStorage" : 10,
+		"productionRate" : 0.05,
+		"consumptionRate": 0.07
+	}
+}
