@@ -19,13 +19,13 @@ import hitonoriol.madsand.world.World;
 
 public class GameSaver {
 	static String SECTOR_DELIM = "!";
-	public final static long saveFormatVersion = 4;
+	public final static long saveFormatVersion = 5;
 
 	public static byte[] concat(byte[]... arrays) {
 		int totalLength = 0;
-		for (int i = 0; i < arrays.length; i++) {
+		for (int i = 0; i < arrays.length; i++) 
 			totalLength += arrays[i].length;
-		}
+		
 
 		byte[] result = new byte[totalLength];
 
@@ -100,14 +100,26 @@ public class GameSaver {
 		return getExternal(name, false);
 	}
 
+	public static String getProdStationFile(int wx, int wy, int layer) {
+		return MadSand.MAPDIR + MadSand.WORLDNAME + "/productionstations" + getSectorString(wx, wy, layer)
+				+ MadSand.SAVE_EXT;
+	}
+
+	static String getSectorString(int wx, int wy, int layer) {
+		return getSectorString(wx, wy) + SECTOR_DELIM + layer;
+	}
+
+	static String getSectorString(int wx, int wy) {
+		return SECTOR_DELIM + wx + SECTOR_DELIM + wy;
+	}
+
 	static File getSectorFile(int wx, int wy) {
-		return new File(MadSand.MAPDIR + MadSand.WORLDNAME + "/sector" + SECTOR_DELIM + wx + SECTOR_DELIM + wy
-				+ MadSand.SAVE_EXT);
+		return new File(MadSand.MAPDIR + MadSand.WORLDNAME + "/sector" + getSectorString(wx, wy) + MadSand.SAVE_EXT);
 	}
 
 	public static String getNpcFile(int wx, int wy, int layer) {
-		return MadSand.MAPDIR + MadSand.WORLDNAME + "/" + MadSand.NPCSFILE + wx + SECTOR_DELIM + wy + SECTOR_DELIM
-				+ layer + SECTOR_DELIM + MadSand.SAVE_EXT;
+		return MadSand.MAPDIR + MadSand.WORLDNAME + "/" + MadSand.NPCSFILE + getSectorString(wx, wy, layer)
+				+ MadSand.SAVE_EXT;
 	}
 
 	public static void saveWorld() {
@@ -172,8 +184,8 @@ public class GameSaver {
 			String wfl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.WORLDFILE;
 
 			World.player.stats.equipment.setStatBonus(false);
-			MadSand.mapper.writeValue(new File(fl), World.player);
-			MadSand.mapper.writeValue(new File(wfl), MadSand.world);
+			Resources.mapper.writeValue(new File(fl), World.player);
+			Resources.mapper.writeValue(new File(wfl), MadSand.world);
 			World.player.stats.equipment.setStatBonus(true);
 
 			return true;
@@ -189,8 +201,8 @@ public class GameSaver {
 			String fl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.PLAYERFILE;
 			String wfl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.WORLDFILE;
 
-			MadSand.world = MadSand.mapper.readValue(getExternal(wfl), World.class);
-			World.player = MadSand.mapper.readValue(getExternal(fl), Player.class);
+			MadSand.world = Resources.mapper.readValue(getExternal(wfl), World.class);
+			World.player = Resources.mapper.readValue(getExternal(fl), Player.class);
 			Player player = World.player;
 
 			player.inventory.initUI();

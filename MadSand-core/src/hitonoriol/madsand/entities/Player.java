@@ -20,6 +20,7 @@ import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.inventory.trade.TradeInventoryUI;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.enums.*;
+import hitonoriol.madsand.gui.dialogs.ProductionStationUI;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
@@ -323,6 +324,11 @@ public class Player extends Entity {
 		String action = ObjectProp.getOnInteract(id);
 		doAction();
 
+		if (obj.isProductionStation) {
+			new ProductionStationUI(loc.getProductionStation(coords)).show();
+			return;
+		}
+
 		if (!action.equals(Resources.emptyField)) {
 			LuaUtils.execute(action);
 			return;
@@ -353,7 +359,7 @@ public class Player extends Entity {
 			return;
 		}
 
-		boolean destroyed = obj.takeDamage(stats.skills.getLvl(skill) + stats.hand().getSkillDamage(skill));
+		boolean destroyed = obj.takeDamage(stats.skills.getBaseSkillDamage(skill) + stats.hand().getSkillDamage(skill));
 
 		if (item != -1 && destroyed) { // Succesfull interaction with item that drops something
 			Item objLoot;

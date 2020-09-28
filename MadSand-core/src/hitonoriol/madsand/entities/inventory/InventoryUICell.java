@@ -120,7 +120,6 @@ public class InventoryUICell extends ItemUI {
 	}
 
 	void hideContext() {
-		Gui.gameUnfocused = false;
 		closeContextMenu();
 	}
 }

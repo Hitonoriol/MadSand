@@ -1,13 +1,19 @@
 package hitonoriol.madsand.containers;
 
+import java.io.IOException;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.KeyDeserializer;
 
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.enums.Direction;
 
 public class Pair {
 	public static final Pair nullPair = new Pair(-1, -1);
+	private static Pair instance = new Pair();
 
 	public int x;
 	public int y;
@@ -42,6 +48,10 @@ public class Pair {
 
 	public Pair random(int xMax, int yMax) {
 		return this.set(Utils.rand(xMax), Utils.rand(yMax));
+	}
+	
+	public static Pair getInstance() {
+		return instance;
 	}
 
 	public static Pair directionToCoord(Direction arg) {
@@ -138,8 +148,19 @@ public class Pair {
 		return new EqualsBuilder().append(x, rhs.x).append(y, rhs.y).isEquals();
 	}
 
+	final String PAIR_STRING_DELIMITER = ", ";
+
 	@Override
 	public String toString() {
-		return "(" + x + ", " + y + ")";
+		return x + PAIR_STRING_DELIMITER + y;
+	}
+
+	public class PairKeyDeserializer extends KeyDeserializer {
+
+		@Override
+		public Pair deserializeKey(String key, DeserializationContext ctxt) throws IOException {
+			String[] pair = key.split(PAIR_STRING_DELIMITER);
+			return new Pair(Integer.parseInt(pair[0]), Integer.parseInt(pair[1]));
+		}
 	}
 }

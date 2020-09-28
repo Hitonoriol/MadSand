@@ -27,6 +27,8 @@ public class OkDialog extends GameDialog {
 
 	Table dialogContainer;
 
+	boolean isOnTop = false; // If the dialog is displayed on top of another dialog
+
 	private OkDialog(Stage stage) {
 		super(stage);
 	}
@@ -35,7 +37,9 @@ public class OkDialog extends GameDialog {
 		this(stage);
 		super.clear();
 		super.setBackground(Gui.getColorDrawable(Color.DARK_GRAY));
-		
+
+		isOnTop = Gui.dialogActive;
+
 		dialogContainer = new Table();
 		textLbl = new Label(text, Gui.skin);
 		dialogContainer.setBackground(Gui.getColorDrawable(Color.LIGHT_GRAY));
@@ -52,6 +56,7 @@ public class OkDialog extends GameDialog {
 		okButton.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				remove();
+				Gui.dialogActive = Gui.gameUnfocused = isOnTop;
 			}
 
 		});

@@ -3,13 +3,10 @@ package hitonoriol.madsand.world;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-
 import hitonoriol.madsand.GameSaver;
-import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Npc;
@@ -17,6 +14,7 @@ import hitonoriol.madsand.map.Crop;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
+import hitonoriol.madsand.map.ProductionStation;
 
 public class WorldMap extends HashMap<MapID, Map> {
 	private static final long serialVersionUID = -4489829388439109446L;
@@ -37,15 +35,14 @@ public class WorldMap extends HashMap<MapID, Map> {
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			MapID loc = new MapID(new Pair(wx, wy), layer);
 			Map map = this.get(loc);
-			ArrayList<Npc> npcs = new ArrayList<Npc>();
-			HashMap<Pair, Npc> mapNpcs = map.getNpcs();
-			if (!mapNpcs.isEmpty())
-				for (Entry<Pair, Npc> entry : mapNpcs.entrySet()) {
-					npcs.add(entry.getValue());
-				}
 
-			String npf = GameSaver.getNpcFile(wx, wy, layer);
-			MadSand.mapper.writeValue(new File(npf), npcs);
+			Resources.mapper.writeValue(
+					new File(GameSaver.getNpcFile(wx, wy, layer)),
+					map.getNpcs());
+
+			Resources.mapper.writeValue(
+					new File(GameSaver.getProdStationFile(wx, wy, layer)),
+					map.getMapProductionStations());
 
 			int xsz = map.getWidth();
 			int ysz = map.getHeight();
@@ -134,6 +131,7 @@ public class WorldMap extends HashMap<MapID, Map> {
 			return stream.toByteArray();
 		} catch (Exception e) {
 			e.printStackTrace();
+			Utils.die();
 			return null;
 		}
 	}
@@ -177,16 +175,16 @@ public class WorldMap extends HashMap<MapID, Map> {
 			Utils.out("Dungeon spawnpoint: " + map.spawnPoint);
 
 			// Load NPCs
-			String npf = GameSaver.getNpcFile(wx, wy, layer);
-			ArrayList<Npc> npcs = new ArrayList<Npc>();
-			npcs = MadSand.mapper.readValue(GameSaver.getExternal(npf), new TypeReference<ArrayList<Npc>>() {
-			});
+			HashMap<Pair, Npc> npcs = Resources.mapper.readValue(
+					new File(GameSaver.getNpcFile(wx, wy, layer)),
+					Resources.getMapType(Pair.class, Npc.class));
 
-			for (Npc npc : npcs) {
-				npc.loadSprite();
-				npc.initStatActions();
-				map.putNpc(npc);
+			for (Entry<Pair, Npc> npc : npcs.entrySet()) {
+				npc.getValue().loadSprite();
+				npc.getValue().initStatActions();
 			}
+
+			map.setNpcs(npcs);
 
 			// Load tiles & objects
 			map.setBiome(biome);
@@ -205,6 +203,13 @@ public class WorldMap extends HashMap<MapID, Map> {
 					map.getObject(x, y).hp = GameSaver.decode2(block);
 				}
 			}
+
+			//Load production stations
+			HashMap<Pair, ProductionStation> prodStations = Resources.mapper.readValue(
+					new File(GameSaver.getProdStationFile(wx, wy, layer)),
+					Resources.getMapType(Pair.class, ProductionStation.class));
+
+			map.setMapProductionStations(prodStations);
 
 			// Load loot
 			String loot;

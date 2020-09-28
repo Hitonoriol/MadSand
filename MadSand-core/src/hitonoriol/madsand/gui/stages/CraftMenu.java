@@ -77,10 +77,12 @@ public class CraftMenu extends Stage {
 
 			Utils.out("craftbtn width: " + craftButtons[i].getWidth());
 			craftTable.add(craftButtons[i]).width(craftButtons[i].getWidth());
-			craftTable.add(recipeLabel).align(Align.left).padRight(CRAFT_ENTRY_PADDING);
+			craftTable.add(recipeLabel).align(Align.left);
 
 			if ((i + 1) % perRow == 0)
 				craftTable.row();
+			else
+				craftTable.padRight(CRAFT_ENTRY_PADDING);
 
 			Utils.out("Creating a button for item " + i + " craft recipe...");
 

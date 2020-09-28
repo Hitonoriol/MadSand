@@ -77,9 +77,12 @@ public class Gui {
 
 		Slider.SliderStyle slst = new Slider.SliderStyle();
 		slst.background = skin.newDrawable("background", Color.DARK_GRAY);
+		slst.background.setMinHeight(30);
+		slst.background.setMinWidth(10);
 
 		Drawable knob = skin.newDrawable("background", Color.GRAY);
-		knob.setMinWidth(20);
+		knob.setMinWidth(10);
+		knob.setMinHeight(30);
 		slst.knob = knob;
 		skin.add("default-horizontal", slst);
 

@@ -8,11 +8,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.fasterxml.jackson.core.json.JsonReadFeature;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.PairFloat;
@@ -81,9 +76,6 @@ public class MadSand extends Game {
 	public static GameState state = GameState.LAUNCHER;
 	public static int MAXSAVESLOTS = 10;
 
-	public static ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-	public static TypeFactory typeFactory = mapper.getTypeFactory();
-
 	public static World world;
 
 	private static PairFloat[] renderArea;
@@ -101,11 +93,7 @@ public class MadSand extends Game {
 	public void create() {
 		game = this;
 		Gdx.graphics.setContinuousRendering(false);
-
 		Utils.out("Starting initialization!");
-
-		mapper.configure(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS.mappedFeature(), true);
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 		setRenderRadius(DEFAULT_FOV);
 		setRenderRadius();

@@ -23,14 +23,18 @@ public class MainMenu extends Stage {
 
 	Skin skin;
 
+	final float PAD = 4;
+	final float BUTTON_WIDTH = 260;
 	private static float TITLE_XPOS = 0, TITLE_YPOS = 0;
 	static float TITLE_PADBOTTOM = 50;
 
 	Table menuTable;
+	Table resumeTable;
 
 	Label titleLabel;
 	TextButton newGameButton;
 	public TextButton resumeButton;
+	public TextButton saveGameButton;
 	TextButton settingsButton;
 	TextButton loadGameButton;
 	TextButton exitButton;
@@ -39,16 +43,20 @@ public class MainMenu extends Stage {
 	public MainMenu() {
 		super();
 		skin = Gui.skin;
-		float width = Gui.DEFWIDTH;
 
 		newGameButton = new TextButton("New game", skin);
 		resumeButton = new TextButton("Resume game", skin);
-		resumeButton.setVisible(false);
+		saveGameButton = new TextButton("Save game", skin);
 		settingsButton = new TextButton("Settings", skin);
 		exitButton = new TextButton("Exit", skin);
 		loadGameButton = new TextButton("Load game", skin);
 
-		titleLabel = new Label("MadSand: Fallen. Rise From Dust", skin);
+		resumeTable = new Table();
+		resumeTable.add(resumeButton).width(BUTTON_WIDTH / 2);
+		resumeTable.add(saveGameButton).width(BUTTON_WIDTH / 2);
+		resumeTable.setVisible(false);
+
+		titleLabel = new Label("MadSand", skin);
 
 		if (TITLE_XPOS == 0) {
 			TITLE_XPOS = Gdx.graphics.getWidth() / 2 - titleLabel.getWidth() / 2.0F;
@@ -64,23 +72,27 @@ public class MainMenu extends Stage {
 		menuTable = new Table();
 		menuTable.setFillParent(true);
 		menuTable.setBackground(Gui.darkBackground);
-		menuTable.add(titleLabel).padBottom(TITLE_PADBOTTOM);
-		menuTable.row();
-		menuTable.add(resumeButton).width(width);
-		menuTable.row();
-		menuTable.add(newGameButton).width(width);
-		menuTable.row();
-		menuTable.add(loadGameButton).width(width);
-		menuTable.row();
-		menuTable.add(settingsButton).width(width);
-		menuTable.row();
-		menuTable.add(exitButton).width(width);
-		menuTable.row();
-		menuTable.add(versionLabel).width(width);
+		menuTable.add(titleLabel).padBottom(TITLE_PADBOTTOM).row();
+
+		menuTable.add(resumeTable).width(BUTTON_WIDTH).row();
+
+		menuTable.add(newGameButton).width(BUTTON_WIDTH).row();
+		menuTable.add(loadGameButton).width(BUTTON_WIDTH).row();
+		menuTable.add(settingsButton).width(BUTTON_WIDTH).row();
+		menuTable.add(exitButton).width(BUTTON_WIDTH).row();
+		menuTable.add(versionLabel).width(BUTTON_WIDTH);
 
 		super.addActor(menuTable);
 
 		initButtonListeners();
+	}
+
+	public void showResumeTable() {
+		resumeTable.setVisible(true);
+	}
+
+	public void hideResumeTable() {
+		resumeTable.setVisible(false);
 	}
 
 	private void initButtonListeners() {
@@ -96,8 +108,17 @@ public class MainMenu extends Stage {
 
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				Gdx.graphics.setContinuousRendering(false);
-				MadSand.state = GameState.GAME;
-				Gdx.input.setInputProcessor(Gui.overlay);
+				MadSand.switchStage(GameState.GAME, Gui.overlay);
+			}
+
+		});
+
+		saveGameButton.addListener(new ChangeListener() {
+
+			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+				GameSaver.saveWorld();
+				Gdx.graphics.setContinuousRendering(false);
+				MadSand.switchStage(GameState.GAME, Gui.overlay);
 			}
 
 		});

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
@@ -20,6 +21,7 @@ import hitonoriol.madsand.properties.NpcContainer;
 import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.world.World;
 
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class Npc extends Entity {
 	public static int NULL_NPC = 0;
 	static double IDLE_NPC_MOVE_CHANCE = 30;

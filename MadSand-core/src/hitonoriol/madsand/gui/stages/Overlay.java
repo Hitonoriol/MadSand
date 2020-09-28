@@ -84,7 +84,7 @@ public class Overlay extends Stage {
 
 		super.addListener(new ClickListener(Buttons.LEFT) {
 			public void clicked(InputEvent event, float x, float y) {
-				if (!Gui.gameUnfocused)
+				if (!Gui.gameUnfocused && !Gui.dialogActive && MadSand.state.equals(GameState.GAME))
 					Mouse.justClicked = true;
 			}
 		});
@@ -194,11 +194,11 @@ public class Overlay extends Stage {
 	public void setHandDisplay(Item item) {
 		equipmentSidebar.equipItem(EquipSlot.MainHand, item);
 	}
-	
+
 	public void hideTooltip() {
 		gameTooltip.hide();
 	}
-	
+
 	public void showTooltip() {
 		gameTooltip.show();
 	}

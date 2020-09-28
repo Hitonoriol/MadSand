@@ -94,7 +94,7 @@ public class Map {
 		return mapNpcs;
 	}
 
-	void setNpcs(HashMap<Pair, Npc> npcs) {
+	public void setNpcs(HashMap<Pair, Npc> npcs) {
 		mapNpcs = npcs;
 	}
 
@@ -663,6 +663,15 @@ public class Map {
 
 		mapNpcs.remove(coords);
 		return true;
+	}
+
+	public ProductionStation getProductionStation(Pair coords) {
+		return mapProductionStations.get(coords);
+	}
+
+	public void updateProductionStations() {
+		for (Entry<Pair, ProductionStation> entry : mapProductionStations.entrySet())
+			entry.getValue().produce();
 	}
 
 	private static int MAX_NPCS = 50; // Max npcs -- for autospawn only

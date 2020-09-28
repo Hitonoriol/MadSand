@@ -48,7 +48,7 @@ public class Keyboard {
 		}
 
 		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
-			Gui.mainMenu.resumeButton.setVisible(true);
+			Gui.mainMenu.showResumeTable();
 			MadSand.xmid = MadSand.xmenu = World.player.globalPos.x;
 			MadSand.ymid = MadSand.ymenu = World.player.globalPos.y;
 			Gdx.input.setInputProcessor(Gui.mainMenu);

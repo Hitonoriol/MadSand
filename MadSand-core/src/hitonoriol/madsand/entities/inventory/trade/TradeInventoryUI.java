@@ -82,7 +82,7 @@ public class TradeInventoryUI {
 		containerTable.setPosition(Gdx.graphics.getWidth() / 2 - WIDTH / 2, Gdx.graphics.getHeight() / 2 - HEIGHT / 2);
 
 		containerTable.add(tradeUITable).row();
-		containerTable.add(exitBtn).align(Align.bottom).row();
+		containerTable.add(exitBtn).align(Align.bottom).padBottom(5).row();
 		containerTable.setVisible(false);
 
 		Gui.overlay.addActor(containerTable);

@@ -58,7 +58,7 @@ public class World {
 	public WorldMap worldMap; // container for all maps and layers
 
 	private Timer realTimeRefresher;
-	private int realtimeTickRate = 5; // seconds per 1 tick
+	public int realtimeTickRate = 5; // seconds per 1 tick
 	public long globalRealtimeTick = 0; // global realtime tick counter, never resets
 
 	private int ticksPerHour = 100; // ticks per one hourTick() trigger
@@ -540,6 +540,7 @@ public class World {
 	private void realtimeRefresh() {
 		Map map = getCurLoc(LAYER_OVERWORLD);
 		map.updateCrops();
+		map.updateProductionStations();
 	}
 
 	private void realtimeTick() {
@@ -578,7 +579,6 @@ public class World {
 			offlineString += Utils.round((float) (offlineHours / HOURS_DAY)) + " days.";
 
 		offlineString += Resources.LINEBREAK;
-
 		offlineString += "Your maximum offline bonus is " + maxHours + " hours.";
 
 		Gui.drawOkDialog(offlineString, Gui.overlay);

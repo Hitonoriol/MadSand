@@ -144,13 +144,19 @@ public class Item {
 		return damageTool(Skill.None);
 	}
 
+	// Item skill damage - roll amount of damage to do to objects
+	// Min: 1
 	public int getSkillDamage(Skill skill) {
 		if (skill != this.skill)
 			return 1;
 		else {
 			int damage = dmg / Skill.SKILL_DMG_DENOMINATOR;
+
 			if (damage == 0)
 				damage = 1;
+			else
+				damage = Utils.rand(1, damage);
+
 			return damage;
 		}
 	}

@@ -29,16 +29,14 @@ public abstract class Entity {
 	@JsonIgnore
 	private Sprite sprite;
 
-	public int x;
-	public int y;
+	public int x, y; // Grid coords
+	public PairFloat globalPos = new PairFloat(); // Screen space coords
 
 	public int fov = 15;
 	public int maxFov, minFov;
 
 	public Inventory inventory;
 	public Stats stats;
-
-	public PairFloat globalPos = new PairFloat(x * MadSand.TILESIZE, y * MadSand.TILESIZE);
 
 	@JsonIgnore
 	public int movespeed = 2; // on-screen move speed (for smooth movement)
@@ -155,7 +153,7 @@ public abstract class Entity {
 		doAction();
 		return true;
 	}
-	
+
 	public boolean hasItem(int id) {
 		return inventory.getSameCell(id) != -1;
 	}

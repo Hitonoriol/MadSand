@@ -129,8 +129,14 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 																			// successful roll is 1/4
 	}
 
-	public int getLvlReward(Skill skill, int baseVal) {
-		return (get(skill).lvl / BONUS_DENOMINATOR) * baseVal;
+	// Currently used to determine amount of "skill-damage" done to objects on interaction 
+	// Tools have "skill damage" too, this one and the ones of tools stack
+	// Min: 0
+	public int getBaseSkillDamage(Skill skill) {
+		if (getLvl(skill) < 2)
+			return 0;
+
+		return skillRoll(skill) ? Utils.rand(1, getLvl(skill)) : 1;
 	}
 
 	public String getExpString(Skill skill) {
