@@ -59,7 +59,7 @@ public class Resources {
 	static Document skilldoc;
 
 	public static Texture[] item;
-	static Texture[] objects;
+	public static Texture[] objects;
 	static Texture[] tile;
 	static Texture visitedMask;
 	public static Texture[] npc;
@@ -251,8 +251,13 @@ public class Resources {
 	}
 
 	private static void loadProductionStations() throws Exception {
-		MapType prodMap = Resources.typeFactory.constructMapType(HashMap.class, Integer.class, ProductionStation.class);
-		ObjectProp.productionStations = Resources.mapper.readValue(new File(MadSand.PRODSTATIONFILE), prodMap);
+		ObjectProp.productionStations = mapper.readValue(
+				new File(MadSand.PRODSTATIONFILE),
+				getMapType(Integer.class, ProductionStation.class));
+
+		ObjectProp.buildRecipes = mapper.readValue(
+				new File(MadSand.BUILDRECIPE),
+				getMapType(Integer.class, String.class));
 	}
 
 	static Texture mapcursor;

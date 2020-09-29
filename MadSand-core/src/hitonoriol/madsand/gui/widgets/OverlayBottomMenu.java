@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.gui.OverlayMouseoverListener;
+import hitonoriol.madsand.gui.dialogs.BuildDialog;
 import hitonoriol.madsand.gui.dialogs.QuestJournal;
 import hitonoriol.madsand.gui.stages.Overlay;
 import hitonoriol.madsand.world.World;
@@ -26,14 +27,17 @@ public class OverlayBottomMenu extends Table {
 	static float BUTTON_PADDING = 5;
 	static float TABLE_PADDING_LEFT = 25;
 
-	static String characterStatString = "Character [Q]";
-	static String inventoryString = "Inventory [E]";
-	static String journalString = "Journal [J]";
+	final String characterStatString = "Character [Q]";
+	final String inventoryString = "Inventory [E]";
+	final String journalString = "Journal [J]";
+	final String buildString = "Build [B]";
 
 	Skin skin;
 	TextButton characterStatButton;
 	TextButton inventoryButton;
 	TextButton journalButton;
+	TextButton buildButton;
+
 	NinePatchDrawable background;
 
 	OverlayMouseoverListener mouseoverListener;
@@ -49,10 +53,12 @@ public class OverlayBottomMenu extends Table {
 		characterStatButton = new TextButton(characterStatString, skin);
 		inventoryButton = new TextButton(inventoryString, skin);
 		journalButton = new TextButton(journalString, skin);
+		buildButton = new TextButton(buildString, skin);
 
 		addButton(characterStatButton);
 		addButton(inventoryButton);
 		addButton(journalButton);
+		addButton(buildButton);
 
 		background = new NinePatchDrawable(Gui.darkBackgroundSizeable);
 
@@ -90,6 +96,15 @@ public class OverlayBottomMenu extends Table {
 			public void changed(ChangeEvent event, Actor actor) {
 				new QuestJournal(World.player.quests).show();
 
+			}
+
+		});
+
+		buildButton.addListener(new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				new BuildDialog().show();
 			}
 
 		});

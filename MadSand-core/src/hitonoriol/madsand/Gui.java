@@ -42,7 +42,7 @@ public class Gui {
 	public static boolean inventoryActive = false;
 	public static boolean dialogActive = false;
 
-	static NinePatchDrawable transparency;
+	public static NinePatchDrawable transparency;
 
 	public static Table darkness;
 

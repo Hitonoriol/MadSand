@@ -390,16 +390,7 @@ public class Player extends Entity {
 	}
 
 	public void useItem() {
-		int usedItemId = stats.hand().id;
 		useItem(stats.hand());
-
-		if ((usedItemId == 9) && (inventory.getSameCell(9, 1) != -1) // TODO script this or make campfire craftable
-				&& (inventory.getSameCell(1, 5) != -1)) {
-			MadSand.print("You placed a campfire");
-			inventory.delItem(9);
-			inventory.delItem(1);
-			MadSand.world.getCurLoc().addObject(x, y, stats.look, 6);
-		}
 	}
 
 	public boolean useItem(Item item) {

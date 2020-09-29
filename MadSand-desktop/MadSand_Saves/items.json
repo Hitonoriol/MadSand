@@ -888,5 +888,20 @@
 		"name" : "Time flux powder",
 		"cost" : 0,
 		"weight" : 0
+	},
+	"102" : {
+		"name" : "Empty flask",
+		"cost" : 5,
+		"weight" : 0.15
+	},
+	"103" : {
+		"name" : "Water flask",
+		"cost" : 5,
+		"weight" : 0.2
+	},
+	"104" : {
+		"name" : "Hay",
+		"cost" : 5,
+		"weight" : 0.1
 	}
 }

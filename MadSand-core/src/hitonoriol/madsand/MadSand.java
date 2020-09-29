@@ -47,6 +47,7 @@ public class MadSand extends Game {
 	static String NPCFILE = SAVEDIR + "npcs.json";
 	static String ITEMSFILE = SAVEDIR + "items.json";
 	public static String GLOBALSFILE = SAVEDIR + "globals.json";
+	public static String BUILDRECIPE = SAVEDIR + "buildrecipes.json";
 
 	static String SKILLFILE = SAVEDIR + "defskills.xml";
 	public static final String MAPDIR = SAVEDIR + "worlds/";

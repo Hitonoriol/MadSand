@@ -9,5 +9,27 @@
 		"maxProductStorage" : 10,
 		"productionRate" : 0.05,
 		"consumptionRate": 0.07
+	},
+	"92" : {
+		"producedMaterial" : 103,
+		"consumedMaterial" : 102,
+		"maxLvl" : 100,
+		"upgradeRequirement" : 3,
+		"upgradeProductionMultiplier" : 0.16,
+		"upgradeRequirementMultiplier" : 0.17,
+		"maxProductStorage" : 5,
+		"productionRate" : 0.1,
+		"consumptionRate": 0.1
+	},
+	"90" : {
+		"producedMaterial" : 104,
+		"consumedMaterial" : 68,
+		"maxLvl" : 100,
+		"upgradeRequirement" : 5,
+		"upgradeProductionMultiplier" : 0.15,
+		"upgradeRequirementMultiplier" : 0.1,
+		"maxProductStorage" : 15,
+		"productionRate" : 0.2,
+		"consumptionRate": 0.2
 	}
 }
