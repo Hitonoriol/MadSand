@@ -694,12 +694,21 @@ public class Map {
 		spawnMobs(friendly, false);
 	}
 
-	private void spawnFromRollList(RollList list, double chance) {
+	public void spawnMobs(String list, int count, int distanceFromPlayer) {
+		spawnFromRollList(new RollList(count, Utils.parseList(list)), 100, distanceFromPlayer);
+	}
+
+	private void spawnFromRollList(RollList list, double chance, int distanceFromPlayer) {
 		if (Utils.percentRoll(chance))
 			for (int i = 0; i < list.rollCount; ++i) {
-				getRandomPoint(World.player.fov);
-				spawnNpc(Utils.randElement(list.idList), coords.x, coords.y);
+				do {
+					getRandomPoint(distanceFromPlayer);
+				} while (!spawnNpc(Utils.randElement(list.idList), coords.x, coords.y));
 			}
+	}
+
+	private void spawnFromRollList(RollList list, double chance) {
+		spawnFromRollList(list, chance, World.player.fov);
 	}
 
 	public void naturalRegeneration() {

@@ -93,7 +93,6 @@ class BuildDialogEntry extends Group {
 		container.add("Consumes " + ItemProp.getItemName(station.consumedMaterial)).padBottom(PAD).row();
 		container.add(resourceLabel).align(Align.center).width(WIDTH).row();
 		container.setFillParent(true);
-		;
 
 		super.setSize(WIDTH, HEIGHT);
 		super.addActor(container);

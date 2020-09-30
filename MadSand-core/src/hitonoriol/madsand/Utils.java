@@ -10,6 +10,7 @@ import java.util.Calendar;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.util.Random;
+import java.util.StringTokenizer;
 
 public class Utils {
 	public static boolean debugMode = true;
@@ -32,6 +33,16 @@ public class Utils {
 
 	public static int val(String str) {
 		return Integer.parseInt(str);
+	}
+
+	public static ArrayList<Integer> parseList(String str) {
+		StringTokenizer list = new StringTokenizer(str, ",");
+		ArrayList<Integer> ret = new ArrayList<Integer>();
+
+		while (list.hasMoreTokens())
+			ret.add(val(list.nextToken()));
+
+		return ret;
 	}
 
 	public static void out(String arg) {

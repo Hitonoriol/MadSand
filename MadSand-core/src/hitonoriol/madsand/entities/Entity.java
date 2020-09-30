@@ -312,6 +312,15 @@ public abstract class Entity {
 	}
 
 	public void updCoords() {
+		Map map = MadSand.world.getCurLoc();
+		if (x >= map.getWidth())
+			x = map.getWidth() - 1;
+		if (y >= map.getHeight())
+			y = map.getHeight() - 1;
+		if (x < 0)
+			x = 0;
+		if (y < 0)
+			y = 0;
 		globalPos.x = (x * MadSand.TILESIZE);
 		globalPos.y = (y * MadSand.TILESIZE);
 	}

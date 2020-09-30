@@ -35,7 +35,7 @@
 				{"rollCount": 4,
 				"idList": [1, 27, 28]},
 				
-				{"rollCount": 2,
+				{"rollCount": 1,
 				"idList": [21, 58, 54, 62]},
 				
 				{"rollCount": 3,
@@ -81,7 +81,7 @@
 					"doorObject" : 11,
 					"specialRoomTiles" : [9, 18, 19, 29, 30, 32, 38],
 					"specialRoomWalls" : [104, 105, 26, 108, 109, 110, 111],
-					"specialMobs" : [8, 24, 25],
+					"specialMobs" : [8, 36, 24, 25],
 					"specialMobsMax" : 10,
 					"mobs" : [ 14, 15 ],
 					"maxMobs" : 50,

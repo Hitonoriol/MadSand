@@ -2,6 +2,8 @@ package hitonoriol.madsand.gui.dialogs;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -59,6 +61,14 @@ public class OkDialog extends GameDialog {
 				Gui.dialogActive = Gui.gameUnfocused = isOnTop;
 			}
 
+		});
+		
+		dialogContainer.addListener(new InputListener() {
+			@Override
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+				Gui.gameUnfocused = true;
+				Gui.overlay.hideTooltip();
+			}
 		});
 	}
 

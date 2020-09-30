@@ -135,7 +135,7 @@ public class QuestJournal extends Dialog {
 
 	public boolean remove() {
 		Gui.gameUnfocused = Gui.dialogActive = false;
-		Gui.overlay.getTooltip().setVisible(true);
+		Gui.overlay.showTooltip();
 		return super.remove();
 	}
 

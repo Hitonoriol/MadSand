@@ -73,7 +73,7 @@ public class GameContextMenu extends Table {
 
 	public void openGameContextMenu() {
 		contextMenuButtons[CONTEXT_USE_BTN].setText("Use " + World.player.stats.hand().name);
-		Gui.overlay.getTooltip().setVisible(false);
+		Gui.overlay.hideTooltip();
 		super.setVisible(true);
 		super.setPosition(Mouse.x + 50, Mouse.y - 30);
 		Mouse.wclickx = Mouse.wx;
@@ -81,7 +81,7 @@ public class GameContextMenu extends Table {
 	}
 
 	public void closeGameContextMenu() {
-		Gui.overlay.getTooltip().setVisible(true);
+		Gui.overlay.showTooltip();
 		super.setVisible(false);
 		Gui.gameUnfocused = false;
 	}

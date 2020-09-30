@@ -80,6 +80,10 @@ public class LuaUtils {
 	public static void showDialog(String query) {
 		GameDialog.generateDialogChain(query, Gui.overlay).show();
 	}
+	
+	public static void showOkDialog(String text) {
+		Gui.drawOkDialog(text, Gui.overlay);
+	}
 
 	public static void print(String msg) {
 		MadSand.print(msg);

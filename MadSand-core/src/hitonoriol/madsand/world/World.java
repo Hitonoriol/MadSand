@@ -267,8 +267,20 @@ public class World {
 	public boolean switchLocation(Direction dir) {
 		Utils.out("Switch location in direction " + dir);
 
-		GameSaver.saveWorld();
+		if (!inEncounter)
+			GameSaver.saveWorld();
+		else
+			removeLocation(getCurMapID());
+
 		MadSand.switchScreen(Gui.travelScreen);
+
+		if (player.stats.rollEncounter() && !inEncounter) {
+			switchToEncounter();
+			return true;
+		}
+
+		if (inEncounter)
+			inEncounter = false;
 
 		if (curlayer != LAYER_OVERWORLD)
 			return false;
@@ -324,6 +336,19 @@ public class World {
 
 		if (canTravel)
 			switchLocation(direction);
+
+	}
+
+	public boolean inEncounter = false;
+
+	private void switchToEncounter() {
+		inEncounter = true;
+		clearCurLoc();
+		File encounterDir = new File(MadSand.SCRIPTDIR + MadSand.ENCOUNTERDIR);
+		File[] files = encounterDir.listFiles();
+		File encounterScript = files[Utils.rand(files.length)];
+
+		LuaUtils.executeScript(MadSand.ENCOUNTERDIR + encounterScript.getName());
 	}
 
 	public boolean switchLocation(int layer) {
@@ -383,9 +408,13 @@ public class World {
 
 		Utils.out("Removing the oldest loaded sector...");
 		MapID rootLocation = previousLocations.poll();
+		removeLocation(rootLocation);
+	}
+
+	public void removeLocation(MapID mapId) {
 		int layers = worldMap.getLayerCount(curxwpos, curywpos);
 		for (int i = layers - 1; i >= 0; --i)
-			worldMap.remove(rootLocation.setLayer(i));
+			worldMap.remove(mapId.setLayer(i));
 	}
 
 	public int getTileId(int x, int y) {
@@ -495,7 +524,9 @@ public class World {
 		if (worldtime > TIME_FOV_INCREASE_START && worldtime <= TIME_FOV_INCREASE_END)
 			player.setFov(player.fov + 1);
 
-		curLoc.naturalRegeneration();
+		if (!inEncounter)
+			curLoc.naturalRegeneration();
+
 		curLoc.spawnMobs(!isNight()); // Autospawn hostile mobs at night / friendly mobs during the day
 
 		MadSand.notice("Another hour passes...");

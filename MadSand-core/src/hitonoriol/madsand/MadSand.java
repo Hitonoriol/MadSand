@@ -35,7 +35,7 @@ public class MadSand extends Game {
 
 	static final String SAVE_EXT = ".msf";
 
-	static final String SAVEDIR = "MadSand_Saves/";
+	public static final String SAVEDIR = "MadSand_Saves/";
 	static String QUESTFILE = SAVEDIR + "quests.json";
 	static String GENFILE = SAVEDIR + "worldgen.json";
 	static String TUTORIALFILE = SAVEDIR + "tutorial.json";
@@ -57,6 +57,7 @@ public class MadSand extends Game {
 	static final String NPCSFILE = "NPCs";
 	static final String WORLDFILE = "/World" + SAVE_EXT;
 	static final String ERRFILE = "MadSandCritical.log";
+	public static final String ENCOUNTERDIR = "encounter/";
 
 	public static final int XDEF = 1280;
 	public static final int YDEF = 720;

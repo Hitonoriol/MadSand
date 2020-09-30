@@ -267,4 +267,10 @@ public class Stats {
 	public float calcMaxInventoryWeight() {
 		return BASE_MAX_WEIGHT + (strength + dexterity) * WEIGHT_MULTIPLIER;
 	}
+
+	public boolean rollEncounter() {
+		double chance = (100 / (luck + dexterity * 0.75));
+		Utils.out("Encounter chance: " + chance);
+		return Utils.percentRoll(chance);
+	}
 }

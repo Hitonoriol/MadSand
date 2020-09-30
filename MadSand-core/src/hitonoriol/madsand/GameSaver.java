@@ -23,9 +23,8 @@ public class GameSaver {
 
 	public static byte[] concat(byte[]... arrays) {
 		int totalLength = 0;
-		for (int i = 0; i < arrays.length; i++) 
+		for (int i = 0; i < arrays.length; i++)
 			totalLength += arrays[i].length;
-		
 
 		byte[] result = new byte[totalLength];
 
@@ -123,6 +122,10 @@ public class GameSaver {
 	}
 
 	public static void saveWorld() {
+		if (MadSand.world.inEncounter) {
+			Gui.drawOkDialog("You can't save during an encounter!", Gui.overlay);
+			return;
+		}
 		GameSaver.createDirs();
 		MadSand.world.logout();
 		saveLog();

@@ -18,14 +18,14 @@ public class OverlayMouseoverListener extends InputListener {
 	@Override
 	public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
 		Gui.gameUnfocused = true;
-		Gui.overlay.getTooltip().setVisible(false);
+		Gui.overlay.hideTooltip();
 	}
 
 	@Override
 	public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
 		if (!Gui.dialogActive) {
 			Gui.gameUnfocused = false;
-			Gui.overlay.getTooltip().setVisible(true);
+			Gui.overlay.showTooltip();
 		}
 	}
 }
