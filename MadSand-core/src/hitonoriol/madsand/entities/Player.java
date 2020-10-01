@@ -611,19 +611,21 @@ public class Player extends Entity {
 		Gui.overlay.processActionMenu();
 	}
 
+	public boolean canTravel() {
+		Map map = MadSand.world.getCurLoc();
+		return (x == map.getWidth() - 1 || y == map.getHeight() - 1 || x == 0 || y == 0);
+	}
+
 	@Override
 	public boolean move(Direction dir) {
 		if (!super.move(dir))
 			return false;
 
-		Map map = MadSand.world.getCurLoc();
-
-		if ((MadSand.world.curlayer == World.LAYER_OVERWORLD)
-				&& (x == map.getWidth() - 1 || y == map.getHeight() - 1 || x == 0 || y == 0)) {
-			MadSand.print("Press [GRAY]N[WHITE] to move to the next sector.");
-		}
-
 		Gui.overlay.processActionMenu();
+
+		if ((MadSand.world.curlayer == World.LAYER_OVERWORLD) && canTravel())
+			MadSand.print("Press [GRAY]N[WHITE] to travel to the next sector.");
+
 		return true;
 	}
 
@@ -711,23 +713,21 @@ public class Player extends Entity {
 
 	public void hideInventory() {
 		Gdx.input.setInputProcessor(Gui.overlay);
-		Gui.gameUnfocused = false;
+		Gui.gameResumeFocus();
 		MadSand.state = GameState.GAME;
 		inventory.inventoryUI.hide();
 		Gui.inventoryActive = false;
 		inventory.clearContextMenus();
-		Gui.dialogActive = false;
 		Gui.overlay.showTooltip();
 	}
 
 	public void showInventory() {
 		inventory.inventoryUI.toggleVisible();
 		Gui.overlay.gameContextMenu.setVisible(false);
-		Gui.gameUnfocused = true;
+		Gui.gameUnfocus();
 		Gdx.input.setInputProcessor(Gui.overlay);
 		MadSand.state = GameState.INVENTORY;
 		Gui.inventoryActive = true;
-		Gui.dialogActive = true;
 		Gui.overlay.hideTooltip();
 	}
 }

@@ -100,6 +100,24 @@ public class Utils {
 		return Instant.now().getEpochSecond();
 	}
 
+	final static float S_MINUTE = 60;
+	final static float S_HOUR = 3600;
+	final static float S_DAY = 86400;
+
+	public static String timeString(long seconds) {
+		if (seconds < S_MINUTE)
+			return seconds + " seconds";
+
+		else if (seconds < S_HOUR)
+			return round(((float) seconds / S_MINUTE)) + " minutes";
+
+		else if (seconds < 86400)
+			return round(((float) seconds / S_HOUR)) + " hours";
+
+		else
+			return round(((float) seconds / S_DAY)) + " days";
+	}
+
 	public static int val(boolean bool) {
 		return bool ? 1 : 0;
 	}

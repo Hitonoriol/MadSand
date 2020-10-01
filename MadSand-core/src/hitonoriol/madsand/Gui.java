@@ -196,6 +196,18 @@ public class Gui {
 		new OkDialog(msg, stage).show();
 	}
 
+	public static void gameUnfocus() {
+		dialogActive = gameUnfocused = true;
+	}
+
+	public static void gameResumeFocus() {
+		dialogActive = gameUnfocused = false;
+	}
+	
+	public static boolean isGameUnfocused() {
+		return gameUnfocused || dialogActive;
+	}
+
 	public static void refreshOverlay() {
 		overlay.refreshOverlay();
 	}
@@ -210,7 +222,7 @@ public class Gui {
 		else
 			World.player.showInventory();
 	}
-	
+
 	public static Drawable getColorDrawable(Color color) {
 		return skin.newDrawable("background", color);
 	}

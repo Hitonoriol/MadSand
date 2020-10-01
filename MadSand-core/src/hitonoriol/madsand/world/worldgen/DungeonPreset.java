@@ -10,6 +10,9 @@ public class DungeonPreset {
 	public int corridorTile;
 	public int staircaseDownObject;
 	public int staircaseUpObject;
+	
+	public int exitFloor;
+	public int exitObject;
 
 	public ArrayList<DungeonFloorContents> dungeonContents = new ArrayList<>(); // {floorGreaterOrEquals, <dungeonContents>; ...}
 }

@@ -16,7 +16,9 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Mouse;
+import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.EquipSlot;
 import hitonoriol.madsand.enums.GameState;
@@ -51,7 +53,7 @@ public class Overlay extends Stage {
 	public OverlayBottomMenu bottomMenu;
 	public EquipmentSidebar equipmentSidebar;
 
-	static Label[] overlayStatLabels;
+	static Label overlayStatLabel;
 	static final int OVSTAT_COUNT = 6;
 
 	public Overlay() {
@@ -83,14 +85,32 @@ public class Overlay extends Stage {
 	private void initMouseListeners() {
 
 		super.addListener(new ClickListener(Buttons.LEFT) {
+			private boolean ignoreClick = false;
+
 			public void clicked(InputEvent event, float x, float y) {
-				if (!Gui.gameUnfocused && !Gui.dialogActive && MadSand.state.equals(GameState.GAME))
+				if (ignoreClick) {
+					ignoreClick = false;
+					return;
+				}
+
+				if (!Gui.gameUnfocused && !Gui.dialogActive && MadSand.state.equals(GameState.GAME)) {
 					Mouse.justClicked = true;
+					Mouse.mouseClickAction();
+				}
+			}
+
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				super.touchDown(event, x, y, pointer, button);
+				if (event.getType().equals(InputEvent.Type.touchDown))
+					ignoreClick = Gui.isGameUnfocused() || !MadSand.state.equals(GameState.GAME);
+				return true;
 			}
 		});
 
 		super.addListener(new ClickListener(Buttons.RIGHT) {
+
 			public void clicked(InputEvent event, float x, float y) {
+
 				if (Gui.dialogActive)
 					return;
 
@@ -104,22 +124,17 @@ public class Overlay extends Stage {
 					gameContextMenu.closeGameContextMenu();
 
 			}
+
 		});
 	}
 
 	private void initOverlayStats() {
 		// Init top stat panel
-		overlayStatLabels = new Label[OVSTAT_COUNT];
 		Table ovstatTbl = new Table();
 		ovstatTbl.setFillParent(true);
 		ovstatTbl.align(Align.topRight);
-		int count = 0;
-		while (count < OVSTAT_COUNT) {
-			overlayStatLabels[count] = new Label(" ", skin);
-			overlayStatLabels[count].setWrap(false);
-			ovstatTbl.add(overlayStatLabels[count]).width(165);
-			count++;
-		}
+		overlayStatLabel = new Label(" ", skin);
+		ovstatTbl.add(overlayStatLabel).width(Gdx.graphics.getWidth() - GameLog.INPUT_FIELD_WIDTH);
 		super.addActor(ovstatTbl);
 	}
 
@@ -204,10 +219,22 @@ public class Overlay extends Stage {
 	}
 
 	public void refreshOverlay() {
-		overlayStatLabels[0].setText("HP: " + World.player.stats.hp + "/" + World.player.stats.mhp);
-		overlayStatLabels[1].setText("LVL: " + World.player.stats.skills.getLvl(Skill.Level));
-		overlayStatLabels[2].setText("XP: " + World.player.stats.skills.getExpString(Skill.Level));
-		overlayStatLabels[3].setText("Food: " + World.player.stats.food + " / " + World.player.stats.maxFood);
-		overlayStatLabels[4].setText("Hand: " + World.player.stats.hand().name);
+		Player player = World.player;
+		String info = "";
+		info += ("HP: " + player.stats.hp + "/" + player.stats.mhp) + Resources.Tab;
+		info += ("LVL: " + player.stats.skills.getLvl(Skill.Level)) + Resources.Tab;
+		info += ("XP: " + player.stats.skills.getExpString(Skill.Level)) + Resources.Tab;
+		info += ("Food: " + player.stats.food + " / " + player.stats.maxFood) + Resources.Tab;
+		info += ("Location: Cell (" + player.x + ", " + player.y + ")" +
+				getSectorString());
+
+		overlayStatLabel.setText(info);
+	}
+
+	private String getSectorString() {
+		return (MadSand.world.inEncounter
+				? " @ Random Encounter"
+				: " @ Sector (" + MadSand.world.curxwpos + ", " + MadSand.world.curywpos + ")");
+
 	}
 }

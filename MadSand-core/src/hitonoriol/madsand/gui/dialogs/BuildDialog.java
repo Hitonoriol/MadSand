@@ -115,8 +115,10 @@ class BuildDialogEntry extends Group {
 			public void clicked(InputEvent event, float x, float y) {
 				if (!player.inventory.delItem(recipe))
 					Gui.drawOkDialog("You don't have enough resources to build this!", Gui.overlay);
-				else
+				else {
 					MadSand.world.getCurLoc().addObject(player.x, player.y, player.stats.look, id);
+					remove();
+				}
 			}
 		});
 	}

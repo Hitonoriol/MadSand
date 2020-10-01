@@ -67,7 +67,6 @@ public class CharacterCreationDialog {
 	}
 
 	public void show() {
-		Gui.gameUnfocused = true;
 		dialog.show(Gui.overlay);
 	}
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.github.czyzby.noise4j.map.Grid;
 import com.github.czyzby.noise4j.map.generator.room.dungeon.DungeonGenerator;
 
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.inventory.Item;
@@ -106,7 +107,17 @@ public class DungeonGen extends DungeonGenerator {
 		placeObjectInRoom(dungeon.staircaseDownObject);
 		placeSpecialMobs(curDungeonFloor);
 		placeDoors(curDungeonFloor.doorObject, doors);
+
+		if (depth >= dungeon.exitFloor)
+			placeExit(dungeon);
+
 		rooms.clear();
+	}
+
+	private void placeExit(DungeonPreset dungeon) {
+		MadSand.notice("You feel that exit to the surface is somewhere nearby...");
+		Pair coords = randomRoomPoint();
+		map.addObject(coords.x, coords.y, dungeon.exitObject);
 	}
 
 	private void placeDoors(int id, ArrayList<Pair> doors) {
@@ -133,7 +144,8 @@ public class DungeonGen extends DungeonGenerator {
 			specialTile = Utils.randElement(contents.specialRoomTiles);
 			specialWallObject = Utils.randElement(contents.specialRoomWalls);
 			map.fillTile(room.getX(), room.getY(), room.getWidth(), room.getHeight(), specialTile);
-			map.drawObjectRectangle(room.getX() - 1, room.getY() - 1, room.getWidth() + 1, room.getHeight() + 1, specialWallObject);
+			map.drawObjectRectangle(room.getX() - 1, room.getY() - 1, room.getWidth() + 1, room.getHeight() + 1,
+					specialWallObject);
 
 			Utils.out("Spawned special mob at " + coords);
 		}

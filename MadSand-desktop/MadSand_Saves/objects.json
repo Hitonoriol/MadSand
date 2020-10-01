@@ -1445,7 +1445,7 @@
 		"maskHeight" : 0,
 		"altItems" : null,
 		"onInteract" : "
-			utils:ascend();
+			world:ascend(0);
 		",
 		"skill" : "None",
 		"name" : "Ladder to the surface"
@@ -1477,5 +1477,355 @@
 		",
 		"skill" : "None",
 		"name" : "Staircase up"
+	},
+	"115" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Watermelon sprout"
+	},
+	"116" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Watermelon sprout"
+	},
+	"117" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Watermelon sprout"
+	},
+	"118" : {
+		"hp" : 3,
+		"harvestHp" : 1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"altItems" : {
+			"0" : [ 106, 115 ]
+		},
+		"skill" : "Farming",
+		"name" : "Watermelon"
+	},
+	"119" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Melon sprout"
+	},
+	"120" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Melon sprout"
+	},
+	"121" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Melon sprout"
+	},
+	"122" : {
+		"hp" : 3,
+		"harvestHp" : 1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"altItems" : {
+			"0" : [ 107, 116 ]
+		},
+		"skill" : "Farming",
+		"name" : "Melon"
+	},
+	"123" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Pineapple sprout"
+	},
+	"124" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Pineapple sprout"
+	},
+	"125" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Pineapple sprout"
+	},
+	"126" : {
+		"hp" : 3,
+		"harvestHp" : 1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"altItems" : {
+			"0" : [ 108, 117 ]
+		},
+		"skill" : "Farming",
+		"name" : "Pineapple"
+	},
+	"127" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Pea sprout"
+	},
+	"128" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Pea sprout"
+	},
+	"129" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Pea sprout"
+	},
+	"130" : {
+		"hp" : 3,
+		"harvestHp" : 1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"altItems" : {
+			"0" : [ 109, 118 ]
+		},
+		"skill" : "Farming",
+		"name" : "Peas"
+	},
+	"131" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Wheat sprout"
+	},
+	"132" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Wheat sprout"
+	},
+	"133" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Wheat sprout"
+	},
+	"134" : {
+		"hp" : 3,
+		"harvestHp" : 1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"altItems" : {
+			"0" : [ 110, 119 ]
+		},
+		"skill" : "Farming",
+		"name" : "Wheat"
+	},
+	"135" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Wheat sprout"
+	},
+	"136" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Wheat sprout"
+	},
+	"137" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Wheat sprout"
+	},
+	"138" : {
+		"hp" : 3,
+		"harvestHp" : 1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"altItems" : {
+			"0" : [ 111, 120 ]
+		},
+		"skill" : "Farming",
+		"name" : "Cocoa"
+	},
+	"139" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Eggplant sprout"
+	},
+	"140" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Eggplant sprout"
+	},
+	"141" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Eggplant sprout"
+	},
+	"142" : {
+		"hp" : 3,
+		"harvestHp" : 1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"altItems" : {
+			"0" : [ 112, 121 ]
+		},
+		"skill" : "Farming",
+		"name" : "Eggplant"
+	},
+	"143" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Grape sprout"
+	},
+	"144" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Grape sprout"
+	},
+	"145" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Grape sprout"
+	},
+	"146" : {
+		"hp" : 3,
+		"harvestHp" : 1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"altItems" : {
+			"0" : [ 99, 122 ]
+		},
+		"skill" : "Farming",
+		"name" : "Grapes"
+	},
+	"147" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Radish sprout"
+	},
+	"148" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Radish sprout"
+	},
+	"149" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Radish sprout"
+	},
+	"150" : {
+		"hp" : 3,
+		"harvestHp" : 1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"altItems" : {
+			"0" : [ 113, 123 ]
+		},
+		"skill" : "Farming",
+		"name" : "Radish"
+	},
+	"151" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Strawberry sprout"
+	},
+	"152" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Strawberry sprout"
+	},
+	"153" : {
+		"hp" : 1,
+		"harvestHp" : -1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Strawberry sprout"
+	},
+	"154" : {
+		"hp" : 3,
+		"harvestHp" : 1,
+		"nocollide" : true,
+		"onInteract" : "-1",
+		"altItems" : {
+			"0" : [ 114, 124 ]
+		},
+		"skill" : "Farming",
+		"name" : "Strawberry"
 	}
 }

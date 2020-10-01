@@ -99,6 +99,7 @@ public class Resources {
 	public static final String emptyField = "-1";
 	public static final int emptyId = -1;
 	public static String Space = " ", Colon = ":";
+	public static final String Tab = "      ";
 	public static final String LINEBREAK = System.lineSeparator();
 
 	public static ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);

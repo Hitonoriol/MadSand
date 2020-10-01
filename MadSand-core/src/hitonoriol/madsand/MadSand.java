@@ -283,7 +283,7 @@ public class MadSand extends Game {
 		if (!player.isInBackground())
 			drawEntity(player);
 
-		if (!Gui.gameUnfocused) {
+		if (!Gui.gameUnfocused && state.equals(GameState.GAME)) {
 			Utils.batch.draw(Resources.mapcursor, Mouse.wx * TILESIZE, Mouse.wy * TILESIZE);
 			Utils.batch.end();
 			Utils.batch.begin();
@@ -414,11 +414,11 @@ public class MadSand extends Game {
 
 			Mouse.mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
 			camera.unproject(Mouse.mouseinworld);
+			Mouse.updCoords();
 			Gui.overlay.pollGameConsole();
 			Keyboard.pollStatWindowKey();
-			if (Gui.overlay.getKeyboardFocus() != Gui.overlay.getConsoleField() && !Gui.gameUnfocused) {
-				Mouse.updCoords();
-				Mouse.mouseClickAction();
+			if (Gui.overlay.getKeyboardFocus() != Gui.overlay.getConsoleField() && !Gui.isGameUnfocused()) {
+				Mouse.pollMouseMovement();
 				Keyboard.pollGameKeys();
 			}
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
@@ -519,7 +519,7 @@ public class MadSand extends Game {
 	public static void worldEntered() {
 		if (MadSand.isWorldUntouched)
 			MadSand.isWorldUntouched = false;
-		
+
 		world.enter();
 	}
 

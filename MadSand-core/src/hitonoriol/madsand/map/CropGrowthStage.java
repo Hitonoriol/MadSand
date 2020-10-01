@@ -1,7 +1,7 @@
 package hitonoriol.madsand.map;
 
 public class CropGrowthStage {
-	public int stageLength;
+	public int stageLength = 0;
 	public int objectId;
 
 	public CropGrowthStage(int stageLength, int objectId) {

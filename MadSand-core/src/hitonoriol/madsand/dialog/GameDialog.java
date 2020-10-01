@@ -80,7 +80,7 @@ public class GameDialog extends Dialog {
 	@Override
 	public boolean remove() {
 		boolean ret = super.remove();
-		Gui.gameUnfocused = Gui.dialogActive = false;
+		Gui.gameResumeFocus();
 		Gui.overlay.showTooltip();
 		Mouse.justClicked = false;
 		return ret;
@@ -89,7 +89,7 @@ public class GameDialog extends Dialog {
 	@Override
 	public Dialog show(Stage stage) {
 		Dialog ret = super.show(stage);
-		Gui.gameUnfocused = Gui.dialogActive = true;
+		Gui.gameUnfocus();
 		Gui.overlay.hideTooltip();
 		return ret;
 	}
@@ -124,7 +124,7 @@ public class GameDialog extends Dialog {
 	}
 
 	public void show() {
-		Gui.gameUnfocused = true;
+		Gui.gameUnfocus();
 		show(stage);
 	}
 

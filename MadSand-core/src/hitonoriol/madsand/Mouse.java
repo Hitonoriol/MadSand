@@ -9,6 +9,7 @@ import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.gui.widgets.GameTooltip;
+import hitonoriol.madsand.map.Crop;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
@@ -19,7 +20,7 @@ import hitonoriol.madsand.world.World;
 public class Mouse {
 	public static int wx = 0; // Coords of the cell of map that mouse is currently pointing at
 	public static int wy = 0;
-
+	public static int clickDst = 0; // Distance from wx, wy to player
 	public static int x = 0; // Coords of mouse cursor on the screen
 	public static int y = 0;
 
@@ -35,6 +36,8 @@ public class Mouse {
 	public static MapObject object;
 	public static Npc npc;
 	public static Loot loot;
+	public static Crop crop;
+
 	public static GameTooltip tooltipContainer;
 
 	public static boolean pointingAtObject = false; // flag that shows if mouse is pointing at object or npc or not
@@ -47,7 +50,7 @@ public class Mouse {
 		wx = (int) Math.floor(Mouse.mouseinworld.x / MadSand.TILESIZE);
 		wy = (int) Math.floor(Mouse.mouseinworld.y / MadSand.TILESIZE);
 
-		if (Gui.gameUnfocused)
+		if (Gui.gameUnfocused || !MadSand.state.equals(GameState.GAME))
 			return;
 
 		loc = MadSand.world.getCurLoc();
@@ -55,6 +58,7 @@ public class Mouse {
 		tile = loc.getTile(wx, wy);
 		object = loc.getObject(wx, wy);
 		loot = loc.getLoot(wx, wy);
+		crop = loc.getCrop(wx, wy);
 
 		pointingAtObject = (npc != Map.nullNpc) || (object != Map.nullObject);
 
@@ -66,7 +70,6 @@ public class Mouse {
 	public static String getCurrentCellInfo() {
 		Player player = World.player;
 		String info = "";
-		info += ("You are at (" + player.x + ", " + player.y + ")") + Resources.LINEBREAK;
 		info += ("Looking at (" + wx + ", " + wy + ")") + Resources.LINEBREAK;
 
 		if (Utils.debugMode)
@@ -92,6 +95,9 @@ public class Mouse {
 		if (!object.equals(Map.nullObject))
 			info += ("Object: " + object.name) + Resources.LINEBREAK;
 
+		if (!crop.equals(Map.nullCrop))
+			info += getCropInfo();
+
 		if (!npc.equals(Map.nullNpc)) {
 			info += ("You look at " + " " + npc.stats.name) + Resources.LINEBREAK;
 
@@ -103,6 +109,14 @@ public class Mouse {
 
 		}
 
+		return info;
+	}
+
+	private static String getCropInfo() {
+		long time = crop.getHarvestTime() * MadSand.world.realtimeTickRate;
+		String info = (time <= 0)
+				? ("* Ready to harvest!")
+				: ("[#58FFB1]* Will fully grow in " + Utils.timeString(time) + "[]");
 		return info;
 	}
 
@@ -120,16 +134,21 @@ public class Mouse {
 
 	private static final int CLICK_ACTION_REST = 0;
 	private static final int CLICK_ACTION_DIAGONAL = 1;
+	private static boolean rest, diagonal;
 
-	static void mouseClickAction() {
-		int dst = (int) Line.calcDistance(World.player.x, World.player.y, wx, wy);
-		boolean diagonal = (dst == CLICK_ACTION_DIAGONAL);
-		boolean rest = (dst == CLICK_ACTION_REST);
+	private static void processClick() {
+		clickDst = (int) Line.calcDistance(World.player.x, World.player.y, wx, wy);
+		diagonal = (clickDst == CLICK_ACTION_DIAGONAL);
+		rest = (clickDst == CLICK_ACTION_REST);
+	}
+
+	public static void mouseClickAction() {
+		processClick();
 
 		if (MadSand.state != GameState.GAME)
 			return;
 
-		if ((World.player.isStepping()) || (Gui.gameUnfocused))
+		if ((World.player.isStepping()) || Gui.isGameUnfocused())
 			return;
 
 		if (justClicked && ((pointingAtObject && diagonal) || rest)) {
@@ -160,7 +179,10 @@ public class Mouse {
 		}
 
 		justClicked = false;
+	}
 
+	public static void pollMouseMovement() {
+		processClick();
 		if (Gdx.input.isButtonPressed(Buttons.LEFT) && !(diagonal && pointingAtObject) && !rest) {
 			World.player.lookAtMouse(wx, wy);
 			World.player.walk(World.player.stats.look);

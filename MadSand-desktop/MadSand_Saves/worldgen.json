@@ -41,11 +41,11 @@
 				{"rollCount": 3,
 				"idList": [41, 42]}
 			],
-			"chanceToRegenerate": 50,
+			"chanceToRegenerate": 40,
 			
-			"hostileMobs": {"rollCount": 3, "idList": [19]},
+			"hostileMobs": {"rollCount": 5, "idList": [19]},
 			"friendlyMobs": {"rollCount": 4, "idList": [24, 25]},
-			"hostileSpawnChance": 75,
+			"hostileSpawnChance": 80,
 			"friendlySpawnChance": 60
 		},
 		"lake" : {
@@ -73,11 +73,13 @@
 			"corridorTile" : 5,
 			"staircaseDownObject": 113,
 			"staircaseUpObject": 114,
+			"exitFloor" : 3,
+			"exitObject" : 112,
 			"dungeonContents" : [ {
 				"fromFloor" : 0,
 				"contents" : {
-					"maxSize" : 80,
-					"minSize" : 50,
+					"maxSize" : 60,
+					"minSize" : 45,
 					"doorObject" : 11,
 					"specialRoomTiles" : [9, 18, 19, 29, 30, 32, 38],
 					"specialRoomWalls" : [104, 105, 26, 108, 109, 110, 111],

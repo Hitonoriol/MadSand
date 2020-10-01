@@ -61,7 +61,7 @@ public class World {
 	public int realtimeTickRate = 5; // seconds per 1 tick
 	public long globalRealtimeTick = 0; // global realtime tick counter, never resets
 
-	private int ticksPerHour = 100; // ticks per one hourTick() trigger
+	private int ticksPerHour = 175; // ticks per one hourTick() trigger
 	public int worldtime = 12; // time (00 - 23)
 	public int tick = 0; // tick counter, resets every <ticksPerHour> ticks
 	public long globalTick = 0; // global tick counter, never resets
@@ -385,16 +385,20 @@ public class World {
 		return ret;
 	}
 
-	public boolean ascend() {
-		if (curlayer <= LAYER_OVERWORLD)
+	public boolean ascend(int layer) {
+		if (layer <= LAYER_OVERWORLD)
 			return false;
-		boolean ret = switchLocation(curlayer - 1);
+		boolean ret = switchLocation(layer);
 		if (curlayer == LAYER_OVERWORLD)
 			MadSand.print("You get back to surface level");
 		else
 			MadSand.print("You get back to dungeon level " + curlayer);
 		Gui.overlay.processActionMenu();
 		return ret;
+	}
+
+	public boolean ascend() {
+		return ascend(curlayer - 1);
 	}
 
 	private void cleanUpPreviousLocations() {
@@ -588,10 +592,7 @@ public class World {
 			realtimeRefresh();
 	}
 
-	private float HOURS_DAY = 24;
 	private float HOUR = 3600;
-	private float MINUTE = 60;
-
 	public void calcOfflineTime() {
 		long offlineTime = Utils.now() - logoutTimeStamp;
 		float offlineHours = offlineTime / HOUR;
@@ -602,14 +603,7 @@ public class World {
 
 		String offlineString = "You've been away for ";
 
-		if (offlineHours < 1)
-			offlineString += Utils.round((float) (offlineTime / MINUTE)) + " minutes.";
-		else if (offlineHours < HOURS_DAY)
-			offlineString += Utils.round(offlineHours) + " hours.";
-		else
-			offlineString += Utils.round((float) (offlineHours / HOURS_DAY)) + " days.";
-
-		offlineString += Resources.LINEBREAK;
+		offlineString += Utils.timeString(offlineTime) + "." + Resources.LINEBREAK;
 		offlineString += "Your maximum offline bonus is " + maxHours + " hours.";
 
 		Gui.drawOkDialog(offlineString, Gui.overlay);

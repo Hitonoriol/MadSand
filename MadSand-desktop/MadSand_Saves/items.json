@@ -455,10 +455,10 @@
 			"stageLength" : 20,
 			"objectId" : 51
 		}, {
-			"stageLength" : 30,
+			"stageLength" : 40,
 			"objectId" : 52
 		}, {
-			"stageLength" : 60,
+			"stageLength" : 50,
 			"objectId" : 53
 		}, {
 			"objectId" : 54
@@ -903,5 +903,282 @@
 		"name" : "Hay",
 		"cost" : 5,
 		"weight" : 0.1
+	},
+	"105" : {
+		"name" : "Plant fiber shirt",
+		"recipe" : "68/10:69/1",
+		"cost" : 33,
+		"type" : "ChestArmor",
+		"weight" : 0.11,
+		"lvl" : 1,
+		"equipStats" : {
+			"defense" : 1
+		}
+	},
+	"106" : {
+		"name" : "Watermelon",
+		"satiationAmount" : 30,
+		"healAmount" : 3,
+		"cost" : 8,
+		"type" : "Consumable",
+		"weight" : 0.2
+	},
+	"107" : {
+		"name" : "Melon",
+		"satiationAmount" : 33,
+		"healAmount" : 3,
+		"cost" : 8,
+		"type" : "Consumable",
+		"weight" : 0.19
+	},
+	"108" : {
+		"name" : "Pineapple",
+		"satiationAmount" : 38,
+		"healAmount" : 7,
+		"cost" : 9,
+		"type" : "Consumable",
+		"weight" : 0.1
+	},
+	"109" : {
+		"name" : "Peas",
+		"satiationAmount" : 15,
+		"healAmount" : 1,
+		"cost" : 6,
+		"type" : "Consumable",
+		"weight" : 0.05
+	},
+	"110" : {
+		"name" : "Wheat",
+		"cost" : 8,
+		"weight" : 0.1
+	},
+	"111" : {
+		"name" : "Cocoa",
+		"cost" : 10,
+		"weight" : 0.11
+	},
+	"112" : {
+		"name" : "Eggplant",
+		"satiationAmount" : 20,
+		"healAmount" : 4,
+		"cost" : 9,
+		"type" : "Consumable",
+		"weight" : 0.1
+	},
+	"113" : {
+		"name" : "Radish",
+		"satiationAmount" : 17,
+		"healAmount" : 2,
+		"cost" : 8,
+		"type" : "Consumable",
+		"weight" : 0.09
+	},
+	"114" : {
+		"name" : "Strawberry",
+		"satiationAmount" : 25,
+		"healAmount" : 7,
+		"cost" : 12,
+		"type" : "Consumable",
+		"weight" : 0.05
+	},
+	"115" : {
+		"name" : "Watermelon seed",
+		"recipe" : "68/5",
+		"altObject" : 115,
+		"cost" : 30,
+		"type" : "Crop",
+		"weight" : 0.05,
+		"cropStages" : [ {
+			"stageLength" : 70,
+			"objectId" : 115
+		}, {
+			"stageLength" : 80,
+			"objectId" : 116
+		}, {
+			"stageLength" : 90,
+			"objectId" : 117
+		}, {
+			"objectId" : 118
+		} ]
+	},
+	"116" : {
+		"name" : "Melon seed",
+		"recipe" : "68/5",
+		"altObject" : 119,
+		"cost" : 30,
+		"type" : "Crop",
+		"weight" : 0.05,
+		"cropStages" : [ {
+			"stageLength" : 70,
+			"objectId" : 119
+		}, {
+			"stageLength" : 80,
+			"objectId" : 120
+		}, {
+			"stageLength" : 90,
+			"objectId" : 121
+		}, {
+			"objectId" : 122
+		} ]
+	},
+	"117" : {
+		"name" : "Pineapple seed",
+		"recipe" : "68/5",
+		"altObject" : 123,
+		"cost" : 35,
+		"type" : "Crop",
+		"weight" : 0.05,
+		"cropStages" : [ {
+			"stageLength" : 80,
+			"objectId" : 123
+		}, {
+			"stageLength" : 90,
+			"objectId" : 124
+		}, {
+			"stageLength" : 100,
+			"objectId" : 125
+		}, {
+			"objectId" : 126
+		} ]
+	},
+	"118" : {
+		"name" : "Peas seed",
+		"recipe" : "68/5",
+		"altObject" : 127,
+		"cost" : 20,
+		"type" : "Crop",
+		"weight" : 0.05,
+		"cropStages" : [ {
+			"stageLength" : 70,
+			"objectId" : 127
+		}, {
+			"stageLength" : 80,
+			"objectId" : 128
+		}, {
+			"stageLength" : 90,
+			"objectId" : 129
+		}, {
+			"objectId" : 130
+		} ]
+	},
+	"119" : {
+		"name" : "Wheat seed",
+		"recipe" : "68/5",
+		"altObject" : 131,
+		"cost" : 33,
+		"type" : "Crop",
+		"weight" : 0.05,
+		"cropStages" : [ {
+			"stageLength" : 100,
+			"objectId" : 131
+		}, {
+			"stageLength" : 100,
+			"objectId" : 132
+		}, {
+			"stageLength" : 100,
+			"objectId" : 133
+		}, {
+			"objectId" : 134
+		} ]
+	},
+	"120" : {
+		"name" : "Cocoa seed",
+		"recipe" : "68/5",
+		"altObject" : 135,
+		"cost" : 40,
+		"type" : "Crop",
+		"weight" : 0.05,
+		"cropStages" : [ {
+			"stageLength" : 120,
+			"objectId" : 135
+		}, {
+			"stageLength" : 130,
+			"objectId" : 136
+		}, {
+			"stageLength" : 140,
+			"objectId" : 137
+		}, {
+			"objectId" : 138
+		} ]
+	},
+	"121" : {
+		"name" : "Eggplant seed",
+		"recipe" : "68/5",
+		"altObject" : 139,
+		"cost" : 30,
+		"type" : "Crop",
+		"weight" : 0.05,
+		"cropStages" : [ {
+			"stageLength" : 70,
+			"objectId" : 139
+		}, {
+			"stageLength" : 80,
+			"objectId" : 140
+		}, {
+			"stageLength" : 90,
+			"objectId" : 141
+		}, {
+			"objectId" : 142
+		} ]
+	},
+	"122" : {
+		"name" : "Grape seed",
+		"recipe" : "68/5",
+		"altObject" : 143,
+		"cost" : 35,
+		"type" : "Crop",
+		"weight" : 0.05,
+		"cropStages" : [ {
+			"stageLength" : 80,
+			"objectId" : 143
+		}, {
+			"stageLength" : 90,
+			"objectId" : 144
+		}, {
+			"stageLength" : 100,
+			"objectId" : 145
+		}, {
+			"objectId" : 146
+		} ]
+	},
+	"123" : {
+		"name" : "Radish seed",
+		"recipe" : "68/5",
+		"altObject" : 147,
+		"cost" : 25,
+		"type" : "Crop",
+		"weight" : 0.05,
+		"cropStages" : [ {
+			"stageLength" : 60,
+			"objectId" : 147
+		}, {
+			"stageLength" : 70,
+			"objectId" : 148
+		}, {
+			"stageLength" : 80,
+			"objectId" : 149
+		}, {
+			"objectId" : 150
+		} ]
+	},
+	"124" : {
+		"name" : "Strawberry seed",
+		"recipe" : "68/5",
+		"altObject" : 151,
+		"cost" : 50,
+		"type" : "Crop",
+		"weight" : 0.05,
+		"cropStages" : [ {
+			"stageLength" : 150,
+			"objectId" : 151
+		}, {
+			"stageLength" : 160,
+			"objectId" : 152
+		}, {
+			"stageLength" : 170,
+			"objectId" : 153
+		}, {
+			"objectId" : 154
+		} ]
 	}
 }

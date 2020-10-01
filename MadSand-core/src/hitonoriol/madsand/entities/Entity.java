@@ -421,8 +421,8 @@ public abstract class Entity {
 		if (colliding(stats.look) || isOnMapBound(stats.look))
 			return false;
 
-		doAction(stats.AP_WALK);
 		move(stats.look);
+		doAction(stats.AP_WALK);
 		return true;
 	}
 

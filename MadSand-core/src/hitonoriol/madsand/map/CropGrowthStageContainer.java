@@ -14,6 +14,11 @@ public class CropGrowthStageContainer extends ArrayList<CropGrowthStage> {
 	}
 
 	public int getStageLength(int stage) { // Get <growth stage> duration in ticks
-		return super.get(stage).stageLength;
+		int duration = 0;
+
+		for (int i = 0; i <= stage; ++i)
+			duration += super.get(i).stageLength;
+
+		return duration;
 	}
 }

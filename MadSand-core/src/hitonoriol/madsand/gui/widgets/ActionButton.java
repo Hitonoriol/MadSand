@@ -31,10 +31,11 @@ public class ActionButton extends Table {
 	public OverlayMouseoverListener inGameBtnListener;
 	public ChangeListener npcInteractListener;
 	public ChangeListener objInteractListener;
+	public ChangeListener travelListener;
 
 	public TextButton interactButton;
 
-	private static float WIDTH = 300;
+	private final float WIDTH = 300;
 
 	public ActionButton() {
 		super();
@@ -44,7 +45,7 @@ public class ActionButton extends Table {
 		interactButton = new TextButton("", skin);
 		super.setVisible(false);
 		super.setPosition(Gui.horizontalCenter(this), ACTION_TBL_YPOS);
-		super.add(interactButton).width(Gui.DEFWIDTH).row();
+		super.add(interactButton).width(WIDTH).row();
 
 		inGameBtnListener = new OverlayMouseoverListener();
 
@@ -62,6 +63,14 @@ public class ActionButton extends Table {
 				World.player.interact();
 				Gui.gameUnfocused = true;
 				processActionMenu();
+			}
+		};
+
+		travelListener = new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				MadSand.world.travel();
+				setVisible(false);
 			}
 		};
 	}
@@ -93,12 +102,6 @@ public class ActionButton extends Table {
 		String tileAction = TileProp.getOnInteract(tile.id);
 		String objAction = ObjectProp.getOnInteract(object.id);
 
-		if (tileAction.contentEquals(Resources.emptyField) && npc == Map.nullNpc && object == Map.nullObject
-				&& tileItem == -1) {
-			super.setVisible(false);
-			return;
-		}
-
 		super.removeActor(interactButton);
 		interactButton = new TextButton("", skin);
 		super.add(interactButton).width(WIDTH).row();
@@ -107,7 +110,9 @@ public class ActionButton extends Table {
 
 		String tileMsg = "Interact with ";
 
-		if (!tile.equals(Map.nullTile) // Tile interaction button
+		if (player.canTravel())
+			activateInteractBtn(interactButton, "Travel to the next sector", travelListener);
+		else if (!tile.equals(Map.nullTile) // Tile interaction button
 				&& (!tileAction.equals(Resources.emptyField)
 						|| (tileItem != -1 && holdsShovel))) {
 
@@ -139,7 +144,6 @@ public class ActionButton extends Table {
 
 		} else if (!object.equals(Map.nullObject) && !objAction.equals(Resources.emptyField)) // Map object interaction button
 			activateInteractBtn(interactButton, "Interact with " + object.name, objInteractListener);
-
 		else
 			hideActionBtn();
 	}

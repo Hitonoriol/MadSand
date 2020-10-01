@@ -11,14 +11,12 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.enums.TradeAction;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 
-//TODO: Two scrollpanes with imagetext btns: left pane - sell from player inventory, right - buy
 public class TradeInventoryUI {
 	TradeUIRefresher refresher;
 	
@@ -99,7 +97,7 @@ public class TradeInventoryUI {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				remove();
-				MadSand.switchStage(GameState.GAME, Gui.overlay);
+				MadSand.reset();
 			}
 		});
 	}
@@ -114,6 +112,7 @@ public class TradeInventoryUI {
 		Gui.overlay.hideActionBtn();
 		refresh();
 		containerTable.setVisible(true);
+		Gui.gameUnfocus();
 		MadSand.switchStage(GameState.TRADE, Gui.overlay);
 	}
 
@@ -136,13 +135,14 @@ public class TradeInventoryUI {
 			tradeInventory = traderSell;
 
 		for (Item item : inventory.items) {
-			Utils.out("Refreshing tradeInventoryUI: adding item id" + item.id + " quantity:" + item.quantity);
+			//Utils.out("Refreshing tradeInventoryUI: adding item id" + item.id + " quantity:" + item.quantity);
 			table.add(new TradeInventoryButton(tradeInventory, item, tradeAction, refresher)).align(align).row();
 			table.add().row();
 		}
 	}
 
 	public void remove() {
+		Gui.gameResumeFocus();
 		containerTable.remove();
 	}
 

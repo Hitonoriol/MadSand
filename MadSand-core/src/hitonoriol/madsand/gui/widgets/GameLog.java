@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.Gui;
 
 public class GameLog extends Table {
-	private static float INPUT_FIELD_WIDTH = 300;
+	public static float INPUT_FIELD_WIDTH = 300;
 	private static final int LOG_LENGTH = 20;
 	
 	Skin skin;
