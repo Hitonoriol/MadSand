@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.enums.ItemType;
+import hitonoriol.madsand.enums.Stat;
 
 public class EquipStats {
 	public int lvl;
@@ -16,21 +18,30 @@ public class EquipStats {
 	public int accuracy;
 	public int intelligence;
 	public int defense;
+	
+	public ItemType type;
+	public Stat mainStat;
 
 	private static float multiplier = 2.1f;
 
-	public EquipStats(int lvl) {
+	public EquipStats(int lvl, ItemType type) {
 		this.lvl = lvl;
+		
 		rollMax = (int) (lvl * multiplier + 1);
 		rollMin = lvl / 2 + 1;
+		
+		this.type = type;
+		mainStat = getMainStat();
 
-		roll();
+		rollMainStat();
+		rollBonusStats();
 	}
 
 	public EquipStats(EquipStats eStats) {
 		lvl = eStats.lvl;
 		rollMax = eStats.rollMax;
 		rollMin = eStats.rollMin;
+
 		constitution = eStats.constitution;
 		dexterity = eStats.dexterity;
 		strength = eStats.strength;
@@ -48,7 +59,7 @@ public class EquipStats {
 		return Utils.rand(0, lvl) == lvl;
 	}
 
-	private int rollStat() {
+	private int rollStatValue() {
 		int ret = Utils.rand(rollMin, rollMax);
 		float f = (isUnlucky()) ? -0.5f : 1;
 		if (isUnlucky())
@@ -56,13 +67,68 @@ public class EquipStats {
 		return (int) (ret * f);
 	}
 
-	public EquipStats roll() {
-		constitution = rollStat();
-		dexterity = rollStat();
-		strength = rollStat();
-		accuracy = rollStat();
-		intelligence = rollStat();
-		defense = rollStat();
+	private void setStat(Stat stat, int value) {
+		switch (stat) {
+		case Accuracy:
+			accuracy = value;
+			break;
+		case Constitution:
+			constitution = value;
+			break;
+		case Defense:
+			defense = value;
+			break;
+		case Dexterity:
+			dexterity = value;
+			break;
+		case Intelligence:
+			intelligence = value;
+			break;
+		case Strength:
+			strength = value;
+			break;
+		default:
+			break;
+		}
+	}
+
+	private int rollRandomStat() {
+		Stat stats[] = Stat.values();
+		int value = rollStatValue();
+		Stat stat = null;
+		
+		do
+			stat = stats[Utils.rand(stats.length)];
+		while(stat.equals(mainStat));
+		
+		setStat(stat, value);
+		return value;
+	}
+
+	@JsonIgnore
+	private Stat getMainStat() {
+		if (type.isWeapon())
+			return Stat.Strength;
+		else if (type.isArmor())
+			return Stat.Defense;
+		else
+			return null;
+	}
+
+	private void rollMainStat() {
+		int value = 0;
+
+		do
+			value = rollStatValue();
+		while (value == 0);
+
+		setStat(mainStat, value);
+	}
+
+	public EquipStats rollBonusStats() {
+		int absSum = 0;
+		for (int i = 1; i < lvl && absSum == 0; ++i)
+			absSum += Math.abs(rollRandomStat());
 
 		return this;
 	}

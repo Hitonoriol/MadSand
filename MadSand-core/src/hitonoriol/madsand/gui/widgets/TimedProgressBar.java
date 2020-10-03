@@ -24,7 +24,6 @@ public class TimedProgressBar extends ProgressBar {
 		this(MIN_VALUE, MAX_VALUE, STEP, false, Gui.skin);
 		this.delay = delay;
 		reset();
-		super.setAnimateDuration(delay);
 	}
 
 	private void reset() {

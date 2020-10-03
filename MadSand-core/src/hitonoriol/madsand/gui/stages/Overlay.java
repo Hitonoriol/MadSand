@@ -23,9 +23,11 @@ import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.EquipSlot;
 import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.enums.Skill;
+import hitonoriol.madsand.gui.dialogs.BuildDialog;
 import hitonoriol.madsand.gui.dialogs.CharacterCreationDialog;
 import hitonoriol.madsand.gui.dialogs.CharacterInfoWindow;
 import hitonoriol.madsand.gui.dialogs.LevelupDialog;
+import hitonoriol.madsand.gui.dialogs.QuestJournal;
 import hitonoriol.madsand.gui.widgets.ActionButton;
 import hitonoriol.madsand.gui.widgets.EquipmentSidebar;
 import hitonoriol.madsand.gui.widgets.GameContextMenu;
@@ -205,6 +207,14 @@ public class Overlay extends Stage {
 			charCreateDialog = new CharacterCreationDialog();
 		charCreateDialog.show();
 	}
+	
+	public void showJournal() {
+		new QuestJournal(World.player.quests).show();
+	}
+	
+	public void showBuildMenu() {
+		new BuildDialog().show();
+	}
 
 	public void setHandDisplay(Item item) {
 		equipmentSidebar.equipItem(EquipSlot.MainHand, item);
@@ -220,7 +230,7 @@ public class Overlay extends Stage {
 
 	public void refreshOverlay() {
 		Player player = World.player;
-		String info = "";
+		String info = Resources.Tab;
 		info += ("HP: " + player.stats.hp + "/" + player.stats.mhp) + Resources.Tab;
 		info += ("LVL: " + player.stats.skills.getLvl(Skill.Level)) + Resources.Tab;
 		info += ("XP: " + player.stats.skills.getExpString(Skill.Level)) + Resources.Tab;

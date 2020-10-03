@@ -3,7 +3,7 @@ world.worldGen:generate(world:getCurMapID(), 0);
 local map = world:getCurLoc();
 local player = world.player;
 
-for i = 0,2 do
+for i = 1,4 do
 	map:spawnMobs(true, true);
 end
 

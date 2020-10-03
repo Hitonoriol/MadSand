@@ -43,8 +43,8 @@
 			],
 			"chanceToRegenerate": 40,
 			
-			"hostileMobs": {"rollCount": 5, "idList": [19]},
-			"friendlyMobs": {"rollCount": 4, "idList": [24, 25]},
+			"hostileMobs": {"rollCount": 6, "idList": [19]},
+			"friendlyMobs": {"rollCount": 4, "idList": [37, 38, 39, 21, 22, 23, 24, 25]},
 			"hostileSpawnChance": 80,
 			"friendlySpawnChance": 60
 		},

@@ -13,6 +13,7 @@ import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.enums.NpcType;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.properties.WorldGenProp;
@@ -669,19 +670,30 @@ public class Map {
 		return mapProductionStations.get(coords);
 	}
 
+	public ProductionStation getProductionStation(int x, int y) {
+		return getProductionStation(coords.set(x, y));
+	}
+
 	public void updateProductionStations() {
 		for (Entry<Pair, ProductionStation> entry : mapProductionStations.entrySet())
 			entry.getValue().produce();
-	}
 
-	private static int MAX_NPCS = 50; // Max npcs -- for autospawn only
+		for (Entry<Pair, Npc> entry : mapNpcs.entrySet()) {
+			if (!entry.getValue().type.equals(NpcType.FarmAnimal))
+				continue;
+
+			entry.getValue().animalProductWorker.produce();
+		}
+	}
 
 	public void spawnMobs(boolean friendly, boolean force) {
 		WorldGenPreset preset = WorldGenProp.getBiome(getBiome());
 		OverworldPreset overworld = preset.overworld;
 		double forceVal = force ? 100 : 0;
+		int maxNpcs = getMaxNpcs();
+		Utils.out("Max auto-spawned npcs: " + maxNpcs);
 
-		if (getNpcCount() >= MAX_NPCS)
+		if (getNpcCount() >= maxNpcs)
 			return;
 
 		if (friendly)
@@ -753,9 +765,14 @@ public class Map {
 	 * Get maximum count of objects on map by its size
 	 */
 	private float MAX_OBJECT_PERCENT = 0.15f; // Max percent of map allowed to be filled with objects
+	private float MAX_NPC_PERCENT = 0.05f;
 
 	public int getMaxObjects() {
 		return (int) (xsz * ysz * MAX_OBJECT_PERCENT);
+	}
+
+	public int getMaxNpcs() {
+		return (int) (xsz * ysz * MAX_NPC_PERCENT);
 	}
 
 	public void rollObjects(RollList objectRollList) {

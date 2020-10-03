@@ -68,6 +68,7 @@ public class Item {
 
 			if (item.type.isWeapon() || item.type.isArmor())
 				equipStats = new EquipStats(item.equipStats);
+
 		}
 	}
 
@@ -201,7 +202,8 @@ public class Item {
 
 		if (type.isWeapon() || type.isArmor()) {
 			this.lvl = properties.lvl;
-			equipStats = new EquipStats(lvl);
+			equipStats = new EquipStats(lvl, type);
+			name += " of " + Utils.randWord();
 		}
 
 		if (type.isWeapon())

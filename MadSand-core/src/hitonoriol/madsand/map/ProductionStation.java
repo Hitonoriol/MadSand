@@ -3,6 +3,7 @@ package hitonoriol.madsand.map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.ObjectProp;
 
 public class ProductionStation {
@@ -51,14 +52,23 @@ public class ProductionStation {
 
 	// Called every realTimeTick
 	public void produce() {
-		if (productStorage >= maxProductStorage)
-			return;
-		
-		if (consumableMaterialStorage - consumptionRate < 0)
+		if (!canProduce())
 			return;
 
 		productStorage += productionRate;
 		consumableMaterialStorage -= consumptionRate;
+	}
+
+	public boolean hasFreeStorage() {
+		return productStorage < maxProductStorage;
+	}
+
+	public boolean hasRawMaterial() {
+		return consumableMaterialStorage - consumptionRate >= 0;
+	}
+
+	public boolean canProduce() {
+		return hasFreeStorage() && hasRawMaterial();
 	}
 
 	public boolean upgrade() {
@@ -82,5 +92,15 @@ public class ProductionStation {
 
 		productStorage -= quantity;
 		return new Item(producedMaterial, quantity);
+	}
+
+	@JsonIgnore
+	public String getConsumableName() {
+		return ItemProp.getItemName(consumedMaterial);
+	}
+
+	@JsonIgnore
+	public String getProductName() {
+		return ItemProp.getItemName(producedMaterial);
 	}
 }

@@ -11,15 +11,15 @@ import hitonoriol.madsand.enums.TradeCategory;
 public class NpcContainer {
 	public String name;
 	
-	public int lvl;
+	public int lvl = 0;
 	public int hp, strength, accuracy;
-	public int dexterity, defense;
+	public int dexterity = 5, defense;
 
 	public int rewardExp;
 	public LootTable loot;
 
-	public Faction faction;
-	public NpcType type;
+	public Faction faction = Faction.None;
+	public NpcType type = NpcType.Regular;
 	public TradeCategory tradeCategory;
 	public NpcState defaultState;
 
@@ -27,5 +27,5 @@ public class NpcContainer {
 
 	public boolean spawnOnce = false;
 	public boolean friendly = false;
-
+	public boolean canTrade = false;
 }

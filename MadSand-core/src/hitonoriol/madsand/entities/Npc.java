@@ -16,6 +16,7 @@ import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.NpcState;
 import hitonoriol.madsand.enums.NpcType;
 import hitonoriol.madsand.enums.TradeCategory;
+import hitonoriol.madsand.map.ProductionStation;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.NpcContainer;
 import hitonoriol.madsand.properties.NpcProp;
@@ -30,7 +31,7 @@ public class Npc extends Entity {
 	public int rewardExp;
 	public ArrayList<Integer> questList = new ArrayList<Integer>();
 
-	public boolean canTrade = true;
+	public boolean canTrade = false;
 	public boolean friendly;
 	public boolean spawnOnce;
 	private boolean pauseFlag = false;
@@ -41,6 +42,8 @@ public class Npc extends Entity {
 	public NpcState state = NpcState.Idle;
 	public NpcType type = NpcType.Regular;
 	public TradeCategory tradeCategory;
+	
+	public ProductionStation animalProductWorker;
 
 	public Npc(int id) {
 		super();
@@ -84,6 +87,7 @@ public class Npc extends Entity {
 		rewardExp = properties.rewardExp;
 		stats.faction = properties.faction;
 		stats.calcStats();
+		canTrade = properties.canTrade;
 		
 		if (properties.defaultState != null)
 			state = properties.defaultState;
@@ -101,10 +105,18 @@ public class Npc extends Entity {
 		type = properties.type;
 		tradeCategory = properties.tradeCategory;
 		initTrader();
+		initFarmAnimal();
+	}
+	
+	private void initFarmAnimal() {
+		if (!type.equals(NpcType.FarmAnimal))
+			return;
+		
+		animalProductWorker = new ProductionStation(-id);
 	}
 
-	private static int BASE_TRADER_COINS = 450;
-	private static int TIER_COIN_MULTIPLIER = 100;
+	private static int BASE_TRADER_COINS = 500;
+	private static int TIER_COIN_MULTIPLIER = 300;
 
 	private void initTrader() {
 		if (!type.equals(NpcType.Trader) || tradeCategory == null)
@@ -112,7 +124,7 @@ public class Npc extends Entity {
 
 		inventory.setMaxWeight(Integer.MAX_VALUE);
 
-		int tier = stats.skills.getLvl();
+		int tier = NpcProp.tradeLists.rollTier();
 		int currencyId = Globals.getInt(Globals.CURRENCY_FIELD);
 		int maxCoins = BASE_TRADER_COINS + tier * TIER_COIN_MULTIPLIER;
 		int quantity = Utils.rand(BASE_TRADER_COINS / 2, maxCoins);

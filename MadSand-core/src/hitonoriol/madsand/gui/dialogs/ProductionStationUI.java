@@ -17,6 +17,7 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.map.ProductionStation;
 import hitonoriol.madsand.properties.ItemProp;
+import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.world.World;
 
@@ -79,7 +80,11 @@ public class ProductionStationUI extends GameDialog {
 		this.player = World.player;
 		consumedMaterial = ItemProp.getItemName(station.consumedMaterial);
 		producedMaterial = ItemProp.getItemName(station.producedMaterial);
-		stationName = ObjectProp.getName(station.id);
+
+		if (station.id > 0)
+			stationName = ObjectProp.getName(station.id);
+		else
+			stationName = NpcProp.npcs.get(-station.id).name;
 
 		closeButton = new TextButton(closeBtnString, Gui.skin);
 

@@ -2,6 +2,8 @@ package hitonoriol.madsand;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import me.xdrop.jrand.JRand;
+
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -98,6 +100,12 @@ public class Utils {
 
 	public static long now() {
 		return Instant.now().getEpochSecond();
+	}
+
+	final static int MAX_SYLLABLES = 4;
+
+	public static String randWord() {
+		return JRand.word().syllables(1, MAX_SYLLABLES).capitalize().gen();
 	}
 
 	final static float S_MINUTE = 60;

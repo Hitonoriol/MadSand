@@ -16,6 +16,8 @@ import hitonoriol.madsand.enums.TradeCategory;
 
 public class TradeListContainer extends HashMap<TradeCategory, ArrayList<TradeItemList>> {
 
+	public static int MAX_TIER = 10;
+
 	public TradeListContainer() {
 		super();
 	}
@@ -66,5 +68,15 @@ public class TradeListContainer extends HashMap<TradeCategory, ArrayList<TradeIt
 		}
 
 		return items;
+	}
+
+	public int rollTier() {
+		double baseChance;
+		for (int i = 0; i <= MAX_TIER; ++i) {
+			baseChance = (1 / (i + 1));
+			if (Utils.percentRoll(baseChance * 0.9))
+				return i;
+		}
+		return 0;
 	}
 }

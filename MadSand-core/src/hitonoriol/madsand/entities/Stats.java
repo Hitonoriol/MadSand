@@ -214,12 +214,12 @@ public class Stats {
 		if (food <= 0)
 			owner._damage(STARVE_DMG);
 
-		if (food >= satiatedVal)
+		if (food >= satiatedVal && !skills.skillRoll(Skill.Survival))
 			owner._heal(FOOD_HEAL);
 	}
 
 	/*
-	 * Max food ticks = Survival skill level
+	 * Max food ticks = Survival skill level + base food ticks
 	 * 
 	 * Decrement food ticks on unsuccessful skill roll
 	 * When food ticks < 0, decrement food level

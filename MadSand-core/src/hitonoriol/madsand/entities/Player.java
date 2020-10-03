@@ -266,6 +266,10 @@ public class Player extends Entity {
 			tradeWithNpc(npc);
 			return;
 
+		case FarmAnimal:
+			new ProductionStationUI(npc.animalProductWorker).show();
+			return;
+
 		case Regular:
 			MadSand.print("Doesn't seem like " + name + " wants to talk.");
 			return;
@@ -298,7 +302,9 @@ public class Player extends Entity {
 
 	public void tradeWithNpc(Npc npc) {
 
-		if (!npc.canTrade)
+		Utils.out("Trade with npc: " + npc.stats.name);
+
+		if (!npc.canTrade && !npc.type.equals(NpcType.Trader))
 			return;
 
 		new TradeInventoryUI(npc.inventory, inventory).show();

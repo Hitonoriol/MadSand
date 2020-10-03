@@ -8,11 +8,13 @@ import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.enums.GameState;
+import hitonoriol.madsand.enums.NpcType;
 import hitonoriol.madsand.gui.widgets.GameTooltip;
 import hitonoriol.madsand.map.Crop;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
+import hitonoriol.madsand.map.ProductionStation;
 import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.world.World;
@@ -37,6 +39,7 @@ public class Mouse {
 	public static Npc npc;
 	public static Loot loot;
 	public static Crop crop;
+	public static ProductionStation station;
 
 	public static GameTooltip tooltipContainer;
 
@@ -59,6 +62,14 @@ public class Mouse {
 		object = loc.getObject(wx, wy);
 		loot = loc.getLoot(wx, wy);
 		crop = loc.getCrop(wx, wy);
+
+		if (npc.type.equals(NpcType.FarmAnimal))
+			station = npc.animalProductWorker;
+
+		if (object.isProductionStation)
+			station = loc.getProductionStation(wx, wy);
+		else
+			station = null;
 
 		pointingAtObject = (npc != Map.nullNpc) || (object != Map.nullObject);
 
@@ -95,6 +106,9 @@ public class Mouse {
 		if (!object.equals(Map.nullObject))
 			info += ("Object: " + object.name) + Resources.LINEBREAK;
 
+		if (station != null)
+			info += getProdStationInfo();
+
 		if (!crop.equals(Map.nullCrop))
 			info += getCropInfo();
 
@@ -108,6 +122,27 @@ public class Mouse {
 				info += npc.spottedMsg();
 
 		}
+
+		return info;
+	}
+
+	private static String getProdStationInfo() {
+		String info = "Status: ";
+		String productName = station.getProductName();
+		String rawMaterialName = station.getConsumableName();
+
+		if (station.canProduce()) {
+			info += "Producing " + productName;
+			info += " (" + Utils.round(station.productStorage) + "/" + station.maxProductStorage + ")";
+		} else
+			info += "Idle";
+
+		info += Resources.LINEBREAK;
+
+		if (!station.hasRawMaterial())
+			info += "* Add more " + rawMaterialName + " to start " + productName + " production";
+		else if (!station.hasFreeStorage())
+			info += productName + " storage is full!";
 
 		return info;
 	}

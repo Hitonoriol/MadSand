@@ -12,7 +12,8 @@ public enum TradeCategory {
 	Tools,
 	Weapons,
 	Armor,
-	Building;
+	Building,
+	Materials;
 
 	public boolean isFlag() {
 		return this.equals(TradeCategory.Random) ||

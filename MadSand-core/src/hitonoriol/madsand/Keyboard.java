@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.GameState;
-import hitonoriol.madsand.gui.dialogs.QuestJournal;
 import hitonoriol.madsand.world.World;
 
 public class Keyboard {
@@ -99,7 +98,10 @@ public class Keyboard {
 			MadSand.world.travel();
 
 		if (Gdx.input.isKeyJustPressed(Keys.J))
-			new QuestJournal(World.player.quests).show();
+			Gui.overlay.showJournal();
+		
+		if (Gdx.input.isKeyJustPressed(Keys.B))
+			Gui.overlay.showBuildMenu();
 
 	}
 

@@ -16,7 +16,7 @@ public class TravelStage extends Stage {
 	static float WIDTH = 500;
 	static float ENTRY_HEIGHT = 50;
 
-	float travelDelay = 2f;
+	float travelDelay = 1.5f;
 	Label travelLabel;
 	TimedProgressBar travelProgressBar;
 	Table travelContainer;

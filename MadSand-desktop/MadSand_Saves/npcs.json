@@ -26,7 +26,8 @@
 		"tradeCategory": "Random",
 		"questList" : null,
 		"spawnOnce" : false,
-		"friendly" : true
+		"friendly" : true,
+		"canTrade" : true
 	},
 	"2" : {
 		"name" : "Troll",
@@ -128,6 +129,7 @@
 		"loot" : null,
 		"faction" : "Marauders",
 		"type" : "Trader",
+		"canTrade" : true,
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : true
@@ -544,17 +546,36 @@
 	"36" : {
 		"name" : "Vending machine",
 		"hp" : 999,
-		"strength" : 1,
+		"strength" : 5,
 		"accuracy" : 10,
-		"dexterity" : 500,
-		"rewardExp" : 500,
+		"dexterity" : 50,
+		"rewardExp" : 1000,
 		"loot" : null,
 		"faction" : "Monsters",
 		"type" : "Trader",
+		"canTrade" : true,
 		"defaultState": "Still",
 		"tradeCategory": "All",
 		"questList" : null,
 		"spawnOnce" : false,
+		"friendly" : true
+	},
+	"37" : {
+		"name" : "Chicken",
+		"hp" : 10,
+		"type" : "FarmAnimal",
+		"friendly" : true
+	},
+	"38" : {
+		"name" : "Cow",
+		"hp" : 50,
+		"type" : "FarmAnimal",
+		"friendly" : true
+	},
+	"39" : {
+		"name" : "Sheep",
+		"hp" : 25,
+		"type" : "FarmAnimal",
 		"friendly" : true
 	}
 }
