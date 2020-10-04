@@ -191,6 +191,11 @@ public class Gui {
 		tbl.add(label).width(Gdx.graphics.getWidth()).row();
 		stage.addActor(tbl);
 	}
+	
+	public static void openCraftMenu(int id) {
+		craftMenu.refreshCraftMenu(id);
+		MadSand.switchStage(GameState.CRAFT, Gui.craftMenu);
+	}
 
 	public static void drawOkDialog(String msg, Stage stage) {
 		new OkDialog(msg, stage).show();

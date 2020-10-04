@@ -330,7 +330,11 @@ public class Player extends Entity {
 
 		String action = ObjectProp.getOnInteract(id);
 		doAction();
-
+		
+		if (obj.isCraftingStation) {
+			Gui.openCraftMenu(obj.id);
+			return;
+		}
 		if (obj.isProductionStation) {
 			new ProductionStationUI(loc.getProductionStation(coords)).show();
 			return;

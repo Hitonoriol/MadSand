@@ -293,7 +293,7 @@
 	},
 	"40" : {
 		"name" : "Cucumber seeds",
-		"recipe" : "68/5",
+		"recipe" : "91|68/5",
 		"altObject" : 20,
 		"cost" : 18,
 		"type" : "Crop",
@@ -403,7 +403,7 @@
 	},
 	"51" : {
 		"name" : "Potato seed",
-		"recipe" : "68/5",
+		"recipe" : "91|68/5",
 		"altObject" : 43,
 		"cost" : 24,
 		"type" : "Crop",
@@ -423,7 +423,7 @@
 	},
 	"52" : {
 		"name" : "Carrot seed",
-		"recipe" : "68/5",
+		"recipe" : "91|68/5",
 		"altObject" : 47,
 		"cost" : 24,
 		"type" : "Crop",
@@ -443,7 +443,7 @@
 	},
 	"53" : {
 		"name" : "Tomato seed",
-		"recipe" : "68/5",
+		"recipe" : "91|68/5",
 		"altObject" : 51,
 		"cost" : 24,
 		"type" : "Crop",
@@ -463,7 +463,7 @@
 	},
 	"54" : {
 		"name" : "Pepper seed",
-		"recipe" : "68/5",
+		"recipe" : "91|68/5",
 		"altObject" : 55,
 		"cost" : 24,
 		"type" : "Crop",
@@ -483,7 +483,7 @@
 	},
 	"55" : {
 		"name" : "Corn seed",
-		"recipe" : "68/5",
+		"recipe" : "91|68/5",
 		"altObject" : 59,
 		"cost" : 24,
 		"type" : "Crop",
@@ -980,7 +980,7 @@
 	},
 	"115" : {
 		"name" : "Watermelon seed",
-		"recipe" : "68/5",
+		"recipe" : "91|68/5",
 		"altObject" : 115,
 		"cost" : 30,
 		"type" : "Crop",
@@ -1000,7 +1000,7 @@
 	},
 	"116" : {
 		"name" : "Melon seed",
-		"recipe" : "68/5",
+		"recipe" : "91|68/5",
 		"altObject" : 119,
 		"cost" : 30,
 		"type" : "Crop",
@@ -1020,7 +1020,7 @@
 	},
 	"117" : {
 		"name" : "Pineapple seed",
-		"recipe" : "68/5",
+		"recipe" : "91|68/5",
 		"altObject" : 123,
 		"cost" : 35,
 		"type" : "Crop",
@@ -1040,7 +1040,7 @@
 	},
 	"118" : {
 		"name" : "Peas seed",
-		"recipe" : "68/5",
+		"recipe" : "91|68/5",
 		"altObject" : 127,
 		"cost" : 20,
 		"type" : "Crop",
@@ -1060,7 +1060,7 @@
 	},
 	"119" : {
 		"name" : "Wheat seed",
-		"recipe" : "68/5",
+		"recipe" : "91|68/5",
 		"altObject" : 131,
 		"cost" : 33,
 		"type" : "Crop",
@@ -1080,7 +1080,7 @@
 	},
 	"120" : {
 		"name" : "Cocoa seed",
-		"recipe" : "68/5",
+		"recipe" : "91|68/5",
 		"altObject" : 135,
 		"cost" : 40,
 		"type" : "Crop",
@@ -1100,7 +1100,7 @@
 	},
 	"121" : {
 		"name" : "Eggplant seed",
-		"recipe" : "68/5",
+		"recipe" : "91|68/5",
 		"altObject" : 139,
 		"cost" : 30,
 		"type" : "Crop",
@@ -1120,7 +1120,7 @@
 	},
 	"122" : {
 		"name" : "Grape seed",
-		"recipe" : "68/5",
+		"recipe" : "91|68/5",
 		"altObject" : 143,
 		"cost" : 35,
 		"type" : "Crop",
@@ -1140,7 +1140,7 @@
 	},
 	"123" : {
 		"name" : "Radish seed",
-		"recipe" : "68/5",
+		"recipe" : "91|68/5",
 		"altObject" : 147,
 		"cost" : 25,
 		"type" : "Crop",
@@ -1160,7 +1160,7 @@
 	},
 	"124" : {
 		"name" : "Strawberry seed",
-		"recipe" : "68/5",
+		"recipe" : "91|68/5",
 		"altObject" : 151,
 		"cost" : 50,
 		"type" : "Crop",

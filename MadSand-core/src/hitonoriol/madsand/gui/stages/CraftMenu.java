@@ -1,5 +1,7 @@
 package hitonoriol.madsand.gui.stages;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -19,6 +21,7 @@ import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.gui.widgets.CraftButton;
 import hitonoriol.madsand.properties.ItemProp;
+import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.world.World;
 
 public class CraftMenu extends Stage {
@@ -46,14 +49,29 @@ public class CraftMenu extends Stage {
 	}
 
 	public void refreshCraftMenu() {
-		Utils.out("Refreshing craft menu...");
+		refreshCraftMenu(0);
+	}
+
+	public void refreshCraftMenu(int craftStationId) {
+		Utils.out("Refreshing craft menu id: " + craftStationId);
 		craftTable.remove();
 		craftTable = new Table();
 		containerTable.remove();
 		containerTable = new Table();
 		Player player = World.player;
-		// player.refreshAvailableRecipes();
-		int craftSz = player.craftRecipes.size();
+		ArrayList<Integer> itemList;
+		String stationName = titleString;
+
+		if (craftStationId == 0)
+			itemList = player.craftRecipes;
+		else {
+			itemList = ItemProp.craftStationRecipes.get(craftStationId);
+			stationName = ObjectProp.getName(craftStationId);
+		}
+
+		titleLabel.setText(stationName);
+
+		int craftSz = itemList.size();
 		Utils.out("Total unlocked recipes: " + craftSz + " out of " + Resources.craftableItemCount);
 
 		if (craftSz == 0) {
@@ -69,7 +87,7 @@ public class CraftMenu extends Stage {
 
 		while (i < craftSz) {
 
-			id = player.craftRecipes.get(i);
+			id = itemList.get(i);
 
 			craftButtons[i] = new CraftButton(ItemProp.getItem(id));
 			recipeLabel = new Label(" " + Item.queryToName(ItemProp.getCraftRecipe(id)), skin);
@@ -112,7 +130,10 @@ public class CraftMenu extends Stage {
 
 		backBtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				MadSand.switchStage(GameState.INVENTORY, Gui.overlay);
+				if (craftStationId == 0)
+					MadSand.switchStage(GameState.INVENTORY, Gui.overlay);
+				else
+					MadSand.reset();
 			}
 		});
 

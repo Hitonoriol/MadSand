@@ -27,6 +27,7 @@ public class MapObject {
 	
 	public boolean nocollide = false;
 	public boolean isProductionStation = false;
+	public boolean isCraftingStation = false;
 	public boolean isWall = false;
 	
 	public int maskWidth = 0, maskHeight = 0; // Collision mask dimensions for objects larger than 1x1 cell
@@ -46,6 +47,7 @@ public class MapObject {
 		this.nocollide = objectProp.nocollide;
 		this.isProductionStation = objectProp.isProductionStation;
 		this.isWall = objectProp.isWall;
+		this.isCraftingStation = objectProp.isCraftingStation;
 		maskHeight = objectProp.maskHeight;
 		maskWidth = objectProp.maskWidth;
 

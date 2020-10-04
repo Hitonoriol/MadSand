@@ -225,6 +225,7 @@ public class Resources {
 
 		int i = 0;
 		Item valItem;
+		String craftStationRecipe[];
 		for (Entry<Integer, Item> entry : ItemProp.items.entrySet()) {
 			i = entry.getKey();
 			valItem = entry.getValue();
@@ -232,9 +233,17 @@ public class Resources {
 			item[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "inv/" + i + ".png"));
 			valItem.id = i;
 
+			// Load item's craft recipe if it has one
 			if (valItem.recipe != null) {
-				ItemProp.craftReq.put(i, Item.parseCraftRequirements(valItem.recipe));
-				++craftableItemCount;
+				if (valItem.recipe.contains(Item.CRAFTSTATION_DELIM)) {
+					craftStationRecipe = valItem.recipe.split("\\" + Item.CRAFTSTATION_DELIM);
+					valItem.recipe = craftStationRecipe[1];
+					ItemProp.addCraftStationRecipe(Utils.val(craftStationRecipe[0]), valItem.id);
+					++craftableItemCount;
+				} else {
+					ItemProp.craftReq.put(i, Item.parseCraftRequirements(valItem.recipe));
+					++craftableItemCount;
+				}
 			}
 		}
 

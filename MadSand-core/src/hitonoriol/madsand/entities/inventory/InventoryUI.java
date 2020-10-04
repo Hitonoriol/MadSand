@@ -13,9 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
-import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 
 public class InventoryUI {
@@ -76,8 +74,7 @@ public class InventoryUI {
 
 		craftMenuButton.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				Gui.craftMenu.refreshCraftMenu();
-				MadSand.switchStage(GameState.CRAFT, Gui.craftMenu);
+				Gui.openCraftMenu(0);
 			}
 		});
 	}

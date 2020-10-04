@@ -1204,7 +1204,8 @@
 		"altItems" : null,
 		"onInteract" : "-1",
 		"skill" : "None",
-		"name" : "Barrel"
+		"isCraftingStation" : true,
+		"name" : "Seed barrel"
 	},
 	"92" : {
 		"hp" : 15,

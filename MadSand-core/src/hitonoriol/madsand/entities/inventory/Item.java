@@ -57,6 +57,7 @@ public class Item {
 	public final static String ITEM_DELIM = "/";
 	public final static String BLOCK_DELIM = ":";
 	public final static String EMPTY_ITEM_STRING = "n";
+	public final static String CRAFTSTATION_DELIM = "|";
 
 	public Item(int id) {
 		this.id = id;
@@ -292,6 +293,7 @@ public class Item {
 	}
 
 	public static ArrayList<Integer> parseCraftRequirements(String recipe) {
+		
 		ArrayList<Integer> requirements = new ArrayList<>();
 
 		if (!recipe.contains(BLOCK_DELIM))

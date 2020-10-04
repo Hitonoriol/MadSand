@@ -10,8 +10,21 @@ import hitonoriol.madsand.map.CropGrowthStageContainer;
 
 public class ItemProp {
 	public static HashMap<Integer, Item> items = new HashMap<>();
+	public static HashMap<Integer, ArrayList<Integer>> craftStationRecipes = new HashMap<>();
 	public static HashMap<Integer, ArrayList<Integer>> craftReq = new HashMap<>();
-	
+
+	public static void addCraftStationRecipe(int id, int item) {
+		ArrayList<Integer> items;
+		if (!craftStationRecipes.containsKey(id))
+			items = new ArrayList<>();
+		else
+			items = craftStationRecipes.remove(id);
+
+		items.add(item);
+		craftStationRecipes.put(id, items);
+
+	}
+
 	public static Item getItem(int id) {
 		return items.get(id);
 	}
@@ -26,10 +39,10 @@ public class ItemProp {
 
 	public static int getCraftQuantity(int id) {
 		int quantity = items.get(id).craftQuantity;
-		
+
 		if (quantity < 1)
 			quantity = 1;
-		
+
 		return quantity;
 	}
 
