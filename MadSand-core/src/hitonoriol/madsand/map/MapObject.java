@@ -24,8 +24,11 @@ public class MapObject {
 	public int hp;
 	public int harvestHp;
 	public int lvl;
+	
 	public boolean nocollide = false;
 	public boolean isProductionStation = false;
+	public boolean isWall = false;
+	
 	public int maskWidth = 0, maskHeight = 0; // Collision mask dimensions for objects larger than 1x1 cell
 	public HashMap<Integer, Vector<Integer>> altItems;
 	public String onInteract;
@@ -42,6 +45,7 @@ public class MapObject {
 		this.lvl = objectProp.lvl;
 		this.nocollide = objectProp.nocollide;
 		this.isProductionStation = objectProp.isProductionStation;
+		this.isWall = objectProp.isWall;
 		maskHeight = objectProp.maskHeight;
 		maskWidth = objectProp.maskWidth;
 

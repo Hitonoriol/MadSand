@@ -8,9 +8,12 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.entities.LootTable;
 import hitonoriol.madsand.enums.ItemType;
 import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.map.CropGrowthStageContainer;
@@ -38,6 +41,9 @@ public class Item {
 	public ItemType type = ItemType.Item;
 	public Skill skill = Skill.None;
 	public float weight = DEFAULT_WEIGHT;
+
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	public LootTable contents;
 
 	public int lvl; // level of item (only for weapons/armor)
 
@@ -191,6 +197,7 @@ public class Item {
 		this.hp = properties.hp;
 		this.skill = properties.skill;
 		this.useAction = properties.useAction;
+		this.contents = properties.contents;
 
 		if (type.equals(ItemType.Consumable)) {
 			healAmount = properties.healAmount;
@@ -208,6 +215,21 @@ public class Item {
 
 		if (type.isWeapon())
 			equipStats.strength = properties.equipStats.strength;
+	}
+
+	@JsonSetter("contents")
+	public void setContents(String contents) {
+		if (contents == null)
+			return;
+
+		if (contents.contains("|"))
+			this.contents = LootTable.parse(contents);
+		else
+			try {
+				this.contents = Resources.mapper.readValue(contents, LootTable.class);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 	}
 
 	@JsonIgnore

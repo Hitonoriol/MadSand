@@ -80,7 +80,7 @@ public class InventoryUICell extends ItemUI {
 
 		});
 
-		if (item.type == ItemType.Consumable || item.type == ItemType.PlaceableObject
+		if (item.type.isConsumable() || item.type == ItemType.PlaceableObject
 				|| item.type == ItemType.PlaceableTile) {
 			useBtn = new TextButton("Use", Gui.skin);
 			useBtn.addListener(new ChangeListener() {

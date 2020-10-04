@@ -32,11 +32,11 @@
 	"2" : {
 		"name" : "Troll",
 		"hp" : 30,
-		"strength" : 3,
+		"strength" : 4,
 		"accuracy" : 2,
 		"dexterity" : 5,
 		"rewardExp" : 10,
-		"loot" : null,
+		"loot" : "(15|95/4:96/2) (2.5|12/1:86/1) (1|83/1:16/1:79/1:76/1)",
 		"faction" : "Outlaws",
 		"type" : "Regular",
 		"questList" : null,
@@ -78,12 +78,7 @@
 		"accuracy" : 50,
 		"dexterity" : 0,
 		"rewardExp" : 0,
-		"loot" : {
-			"lootTable" : {
-				"100.0" : {
-					"items" : [{"id" : 21, "maxQuantity" : 2500}]
-				}
-		}},
+		"loot" : "(100|21/2500)",
 		"faction" : "Partisans",
 		"type" : "QuestMaster",
 		"questList" : [ 0, 1, 2, 3, 4 ],
@@ -211,24 +206,7 @@
 		"accuracy" : 5,
 		"dexterity" : 5,
 		"rewardExp" : 6,
-		"loot" : {"lootTable" : {
-			"100.0" : {
-				"items" : [ 	{"id" : 22, "maxQuantity" : 1},
-						{"id" : 95, "maxQuantity" : 3},
-						{"id" : 96, "maxQuantity" : 2}
-				]
-			},
-			"25.0" : {
-				"items" : [
-					{"id" : 21, "maxQuantity" : 9}
-				]
-			},
-			"5.0" : {
-				"items" : [
-					{"id" : 85, "maxQuantity" : 1}
-				]
-			}
-		}},
+		"loot" : "(100|22/2:95/3:96/2) (25|21/9) (5|85/1) (2.5|12/1:86/1) (1|83/1:16/1:79/1:76/1)",
 		"faction" : "Monsters",
 		"type" : "Regular",
 		"questList" : null,
@@ -242,21 +220,7 @@
 		"accuracy" : 10,
 		"dexterity" : 6,
 		"rewardExp" : 16,
-		"loot" : {"lootTable" : {
-			"25.0" : {
-				"items" : [
-					{"id" : 21, "maxQuantity" : 12}
-				]
-			},
-			"1.0" : {
-				"items" : [
-					{"id" : 83, "maxQuantity" : 1},
-					{"id" : 16, "maxQuantity" : 1},
-					{"id" : 79, "maxQuantity" : 1},
-					{"id" : 76, "maxQuantity" : 1}
-				]
-			}
-		}},
+		"loot" : "(25|21/12) (2.5|12/1:86/1) (1|83/1:16/1:79/1:76/1)",
 		"faction" : "Monsters",
 		"type" : "Regular",
 		"questList" : null,

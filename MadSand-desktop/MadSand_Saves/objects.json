@@ -113,6 +113,7 @@
 		"altItems" : null,
 		"onInteract" : "-1",
 		"skill" : "None",
+		"isWall" : true,
 		"name" : "Hewn rock"
 	},
 	"9" : {
@@ -128,6 +129,7 @@
 		},
 		"onInteract" : "-1",
 		"skill" : "Woodcutting",
+		"isWall" : true,
 		"name" : "Wooden planks"
 	},
 	"10" : {
@@ -190,6 +192,7 @@
 		},
 		"onInteract" : "-1",
 		"skill" : "Mining",
+		"isWall" : true,
 		"name" : "Rock"
 	},
 	"14" : {
@@ -202,7 +205,7 @@
 		"altItems" : null,
 		"onInteract" : "-1",
 		"skill" : "None",
-		"name" : "Trapdoor"
+		"name" : "???"
 	},
 	"15" : {
 		"hp" : 1,
@@ -217,6 +220,7 @@
 		},
 		"onInteract" : "-1",
 		"skill" : "None",
+		"isWall" : true,
 		"name" : "Stone wall"
 	},
 	"16" : {
@@ -232,6 +236,7 @@
 		},
 		"onInteract" : "-1",
 		"skill" : "None",
+		"isWall" : true,
 		"name" : "Stone wall"
 	},
 	"17" : {
@@ -247,6 +252,7 @@
 		},
 		"onInteract" : "-1",
 		"skill" : "None",
+		"isWall" : true,
 		"name" : "Stone wall"
 	},
 	"18" : {
@@ -312,6 +318,7 @@
 		},
 		"onInteract" : "-1",
 		"skill" : "Mining",
+		"isWall" : true,
 		"name" : "Iron ore"
 	},
 	"23" : {
@@ -327,6 +334,7 @@
 		},
 		"onInteract" : "-1",
 		"skill" : "Mining",
+		"isWall" : true,
 		"name" : "Gold ore"
 	},
 	"24" : {
@@ -356,6 +364,7 @@
 		},
 		"onInteract" : "-1",
 		"skill" : "Mining",
+		"isWall" : true,
 		"name" : "Coal"
 	},
 	"26" : {
@@ -368,6 +377,7 @@
 		"altItems" : null,
 		"onInteract" : "-1",
 		"skill" : "None",
+		"isWall" : true,
 		"name" : "Mixed brick wall"
 	},
 	"27" : {
@@ -1314,6 +1324,7 @@
 		"altItems" : null,
 		"onInteract" : "-1",
 		"skill" : "None",
+		"isWall" : true,
 		"name" : "Brick wall"
 	},
 	"102" : {
@@ -1326,6 +1337,7 @@
 		"altItems" : null,
 		"onInteract" : "-1",
 		"skill" : "None",
+		"isWall" : true,
 		"name" : "Brick wall"
 	},
 	"103" : {
@@ -1338,6 +1350,7 @@
 		"altItems" : null,
 		"onInteract" : "-1",
 		"skill" : "None",
+		"isWall" : true,
 		"name" : "Wall"
 	},
 	"104" : {
@@ -1350,6 +1363,7 @@
 		"altItems" : null,
 		"onInteract" : "-1",
 		"skill" : "None",
+		"isWall" : true,
 		"name" : "Brick wall"
 	},
 	"105" : {
@@ -1362,6 +1376,7 @@
 		"altItems" : null,
 		"onInteract" : "-1",
 		"skill" : "None",
+		"isWall" : true,
 		"name" : "Brick wall"
 	},
 	"106" : {
@@ -1374,6 +1389,7 @@
 		"altItems" : null,
 		"onInteract" : "-1",
 		"skill" : "None",
+		"isWall" : true,
 		"name" : "Wall"
 	},
 	"107" : {
@@ -1386,6 +1402,7 @@
 		"altItems" : null,
 		"onInteract" : "-1",
 		"skill" : "None",
+		"isWall" : true,
 		"name" : "Stone wall"
 	},
 	"108" : {
@@ -1398,6 +1415,7 @@
 		"altItems" : null,
 		"onInteract" : "-1",
 		"skill" : "None",
+		"isWall" : true,
 		"name" : "Yellow wall"
 	},
 	"109" : {
@@ -1410,6 +1428,7 @@
 		"altItems" : null,
 		"onInteract" : "-1",
 		"skill" : "None",
+		"isWall" : true,
 		"name" : "Turquoise wall"
 	},
 	"110" : {
@@ -1422,6 +1441,7 @@
 		"altItems" : null,
 		"onInteract" : "-1",
 		"skill" : "None",
+		"isWall" : true,
 		"name" : "Turquoise wall"
 	},
 	"111" : {
@@ -1434,6 +1454,7 @@
 		"altItems" : null,
 		"onInteract" : "-1",
 		"skill" : "None",
+		"isWall" : true,
 		"name" : "Clay wall"
 	},
 	"112" : {

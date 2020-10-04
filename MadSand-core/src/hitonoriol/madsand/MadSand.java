@@ -209,12 +209,18 @@ public class MadSand extends Game {
 		Utils.batch.setProjectionMatrix(camera.combined);
 	}
 
+	private void renderObject(MapObject object, int x, int y) {
+		if ((object.id != MapObject.NULL_OBJECT_ID) && (object.id != MapObject.COLLISION_MASK_ID))
+			Utils.batch.draw(Resources.objects[object.id], x * TILESIZE, y * TILESIZE);
+	}
+
 	void drawGame() {
 		Map loc = world.getCurLoc();
 		Npc npc;
 		Tile tile;
+		MapObject object;
 		Player player = World.player;
-		int objid;
+		boolean tileVisited;
 
 		int x, y;
 		int xsz = loc.getWidth(), ysz = loc.getHeight();
@@ -250,6 +256,8 @@ public class MadSand extends Game {
 			y = World.player.y + (int) renderArea[i].y;
 
 			tile = loc.getTile(x, y);
+			object = loc.getObject(x, y);
+			tileVisited = tile.visited && !tile.visible;
 
 			if ((x > xsz || y > ysz || x < 0 || y < 0) && MadSand.world.isUnderGround()) {
 				++i;
@@ -259,7 +267,12 @@ public class MadSand extends Game {
 			if (!tile.visible && !tile.visited) { // Don't render objects/entities on tiles which were never seen by player
 				++i;
 				continue;
-			} else if (tile.visited && !tile.visible) { // Render visited & not currently visible tiles partially darkened
+			}
+
+			if (tileVisited && object.isWall) // If object is a wall, it'll be rendered even when not visible
+				renderObject(object, x, y);
+
+			if (tileVisited) { // Render visited & not currently visible tiles partially darkened
 				Utils.batch.draw(Resources.visitedMask, x * TILESIZE, y * TILESIZE);
 				++i;
 				continue;
@@ -272,10 +285,7 @@ public class MadSand extends Game {
 			if (npc != Map.nullNpc)
 				drawEntity(npc);
 
-			objid = loc.getObject(x, y).id;
-
-			if ((objid != MapObject.NULL_OBJECT_ID) && (objid != MapObject.COLLISION_MASK_ID))
-				Utils.batch.draw(Resources.objects[objid], x * TILESIZE, y * TILESIZE);
+			renderObject(object, x, y);
 
 			++i;
 		}
@@ -319,6 +329,7 @@ public class MadSand extends Game {
 		xmenu += menuXStep;
 
 		drawGame();
+		Gdx.graphics.requestRendering();
 	}
 
 	void drawEntity(Entity entity) {
@@ -452,8 +463,6 @@ public class MadSand extends Game {
 			Gui.overlay.draw();
 
 		} else if (state.equals(GameState.NMENU)) {
-			if (!Gdx.graphics.isContinuousRendering())
-				Gdx.graphics.setContinuousRendering(true);
 			Gdx.gl.glClearColor(1.0F, 1.0F, 1.0F, 1.0F);
 			Gdx.gl.glClear(16384);
 			updateCamToxy(xmenu, ymenu);

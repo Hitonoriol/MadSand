@@ -7,7 +7,15 @@ import hitonoriol.madsand.entities.inventory.Item;
 
 public class LootTableEntry {
 	public boolean allowEmptyRoll = false;
-	public ArrayList<LootItemEntry> items = new ArrayList<>();
+	public ArrayList<LootItemEntry> items;
+	
+	public LootTableEntry(ArrayList<LootItemEntry> items) {
+		this.items = items;
+	}
+	
+	public LootTableEntry() {
+		items = new ArrayList<>();
+	}
 
 	public Item rollItem(boolean allowEmptyRoll) {
 		int minQuantity = allowEmptyRoll ? 0 : 1;

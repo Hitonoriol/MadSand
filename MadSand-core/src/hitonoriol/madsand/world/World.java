@@ -67,6 +67,7 @@ public class World {
 	public long globalTick = 0; // global tick counter, never resets
 
 	private long logoutTimeStamp;
+	public HashMap<String, String> luaStorage = new HashMap<>();
 
 	public World(int sz) {
 		this.xsz = sz;
@@ -593,6 +594,7 @@ public class World {
 	}
 
 	private float HOUR = 3600;
+
 	public void calcOfflineTime() {
 		long offlineTime = Utils.now() - logoutTimeStamp;
 		float offlineHours = offlineTime / HOUR;
@@ -618,6 +620,17 @@ public class World {
 	@JsonIgnore
 	public boolean isUnderGround() {
 		return curlayer != World.LAYER_OVERWORLD;
+	}
+
+	@JsonIgnore
+	public void setStorageValue(String name, String value) {
+		luaStorage.remove(name);
+		luaStorage.put(name, value);
+	}
+
+	@JsonIgnore
+	public String getStorageValue(String name) {
+		return luaStorage.getOrDefault(name, "");
 	}
 
 }

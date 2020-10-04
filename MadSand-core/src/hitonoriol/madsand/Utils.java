@@ -15,7 +15,7 @@ import java.util.Random;
 import java.util.StringTokenizer;
 
 public class Utils {
-	public static boolean debugMode = true;
+	public static boolean debugMode = false;
 	public static SpriteBatch batch;
 
 	public static Random random = new Random();
@@ -45,6 +45,10 @@ public class Utils {
 			ret.add(val(list.nextToken()));
 
 		return ret;
+	}
+
+	public static int oneOf(String stringList) {
+		return randElement(parseList(stringList));
 	}
 
 	public static void out(String arg) {

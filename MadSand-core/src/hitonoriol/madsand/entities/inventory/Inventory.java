@@ -200,6 +200,8 @@ public class Inventory {
 	void damageTool(Item item) {
 		damageTool(item, Skill.None);
 	}
+	
+	
 
 	/*
 	 * This method discards "overflowing" items,

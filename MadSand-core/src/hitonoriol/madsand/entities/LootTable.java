@@ -3,6 +3,8 @@ package hitonoriol.madsand.entities;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -56,5 +58,48 @@ public class LootTable {
 
 	private boolean rollEntry(float probability) {
 		return Utils.percentRoll(probability);
+	}
+
+	static final String ENTRY_PROBABILITY_DELIM = "\\|";
+	static final String TABLE_ENTRY_REGEX = "\\((.*?)\\)";
+	static final Pattern tableEntryPattern = Pattern.compile(TABLE_ENTRY_REGEX);
+
+	public static LootTable parse(String lootTblString) {
+		LootTable table = new LootTable();
+		Matcher entryMatcher = tableEntryPattern.matcher(lootTblString);
+		String entryString;
+		String entryArr[]; // <probability>|id/maxQuantity:id/maxQuantity:...
+
+		float entryProbability;
+
+		while (entryMatcher.find()) {
+			entryString = entryMatcher.group(1);
+			entryArr = entryString.split(ENTRY_PROBABILITY_DELIM);
+			entryProbability = Float.parseFloat(entryArr[0]);
+			table.lootTable.put(entryProbability, parseItemList(entryArr[1]));
+		}
+
+		return table;
+	}
+
+	private static LootTableEntry parseItemList(String listString) {
+		ArrayList<LootItemEntry> lootEntries = new ArrayList<>();
+		LootTableEntry tableEntry = new LootTableEntry(lootEntries);
+
+		if (!listString.contains(Item.BLOCK_DELIM))
+			listString += Item.BLOCK_DELIM;
+
+		String items[] = listString.split(Item.BLOCK_DELIM);
+		String itemArr[];
+		for (String itemStr : items) {
+
+			if (itemStr.equals(""))
+				continue;
+
+			itemArr = itemStr.split(Item.ITEM_DELIM);
+			lootEntries.add(new LootItemEntry(Utils.val(itemArr[0]), Utils.val(itemArr[1])));
+		}
+
+		return tableEntry;
 	}
 }

@@ -39,6 +39,7 @@ public class Player extends Entity {
 	public ArrayList<Integer> craftRecipes = new ArrayList<Integer>(); // list of items which recipes are available to the player
 	public QuestWorker quests = new QuestWorker();
 	public HashSet<Integer> knownNpcs = new HashSet<Integer>();
+	
 	public HashSet<String> luaActions = new HashSet<>(); //Set for one-time lua actions
 
 	@JsonProperty("newlyCreated")
@@ -404,23 +405,23 @@ public class Player extends Entity {
 		boolean itemUsed = false;
 		checkHands(item.id);
 
-		if (itemUsed = equip(item))
-			;
-		else if (itemUsed = useTileInteractItem(item))
-			;
-		else if (itemUsed = useScriptedItem(item))
-			;
-		else if (itemUsed = useScriptedTile())
-			;
-		else if (itemUsed = useConsumableItem(item))
-			;
-		else if (itemUsed = plantCrop(item))
-			;
-		else if (itemUsed = usePlaceableObject(item))
-			;
+		if (itemUsed = equip(item));
+		
+		else if (itemUsed = useGrabBag(item));
+		
+		else if (itemUsed = useTileInteractItem(item));
+		
+		else if (itemUsed = useScriptedItem(item));
+		
+		else if (itemUsed = useScriptedTile());
+		
+		else if (itemUsed = useConsumableItem(item));
+		
+		else if (itemUsed = plantCrop(item));
+		
+		else if (itemUsed = usePlaceableObject(item));
 
-		else if (itemUsed = usePlaceableTile(item))
-			;
+		else if (itemUsed = usePlaceableTile(item));
 
 		checkHands(item.id);
 
@@ -431,6 +432,19 @@ public class Player extends Entity {
 
 		return itemUsed;
 
+	}
+
+	private boolean useGrabBag(Item item) {
+		if (!item.type.equals(ItemType.GrabBag))
+			return false;
+
+		ArrayList<Item> items = item.contents.roll();
+		for (Item rolledItem : items)
+			addItem(rolledItem);
+		
+		inventory.delItem(item, 1);
+
+		return true;
 	}
 
 	private boolean usePlaceableTile(Item item) {
