@@ -80,7 +80,7 @@ class BuildDialogEntry extends Group {
 		super();
 		this.id = id;
 		this.recipe = recipe;
-		ProductionStation station = ObjectProp.productionStations.get(id);
+
 		Image objImage = new Image(Resources.objects[id]);
 		Label resourceLabel = new Label("Resources required to build:" + Resources.LINEBREAK + Item.queryToName(recipe),
 				Gui.skin);
@@ -89,8 +89,9 @@ class BuildDialogEntry extends Group {
 
 		container.add(ObjectProp.getName(id)).padBottom(PAD).row();
 		container.add(objImage).align(Align.center).height(objImage.getHeight()).padBottom(PAD).row();
-		container.add("Produces " + ItemProp.getItemName(station.producedMaterial)).padBottom(PAD).row();
-		container.add("Consumes " + ItemProp.getItemName(station.consumedMaterial)).padBottom(PAD).row();
+
+		additionalInfo(container);
+
 		container.add(resourceLabel).align(Align.center).width(WIDTH).row();
 		container.setFillParent(true);
 
@@ -98,6 +99,17 @@ class BuildDialogEntry extends Group {
 		super.addActor(container);
 
 		initListeners();
+	}
+
+	private void additionalInfo(Table container) {
+		ProductionStation station = ObjectProp.productionStations.get(id);
+		boolean isCraftingStation = ObjectProp.getObject(id).isCraftingStation;
+
+		if (station != null) {
+			container.add("Produces " + ItemProp.getItemName(station.producedMaterial)).padBottom(PAD).row();
+			container.add("Consumes " + ItemProp.getItemName(station.consumedMaterial)).padBottom(PAD).row();
+		} else if (isCraftingStation)
+			container.add("Crafting station").padBottom(PAD).row();
 	}
 
 	private void initListeners() {

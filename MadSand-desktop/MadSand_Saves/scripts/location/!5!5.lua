@@ -13,8 +13,6 @@ map:spawnNpc(5, 55, 55);
 map:spawnNpc(36, 51, 58);
 map:addObject(55, 54, 6);
 
-map:addObject(58, 57, 91); -- Just for testing (seeds crafting station)
-
 map:delObject(50, 50);
 player:teleport(50, 50);
 world:updateLight();
