@@ -81,7 +81,7 @@
 		"loot" : "(100|21/2500)",
 		"faction" : "Partisans",
 		"type" : "QuestMaster",
-		"questList" : [ 0, 1, 2, 3, 4 ],
+		"questList" : [ 0, 1, 2, 3, 4, 5 ],
 		"spawnOnce" : true,
 		"friendly" : true
 	},

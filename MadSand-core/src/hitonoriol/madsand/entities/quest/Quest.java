@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Quest {
 	@JsonIgnore
 	public int id;
-
+	public String name;
+	public int previousQuest = -1;
+	
 	public int exp;
 
 	public String startMsg; // Dialog chain string -- displayed on quest start

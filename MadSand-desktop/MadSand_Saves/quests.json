@@ -2,7 +2,7 @@
 
 "0" : {
 		"exp" : 25,
-
+		"name" : "Introduction",
 		"startMsg" : "
 			#Stranger# Oh, hello there...=>
 			#Stranger# Uhm... I haven't seen you here before, who are you?=>
@@ -34,7 +34,7 @@
 
 "1" : {
 	"exp" : 35,
-
+	"name" : "Crafting tutorial",
 	"startMsg" : "
 		#Richard# So, {PLAYER}, you liked using that axe, huh? [Uhh...]=>
 		#Richard# Guess what, I can show you how to make one yourself. You can even make other great tools that'll help you in this cruel world. [I'm interested]=>
@@ -59,11 +59,13 @@
 	"rewardItems" : "4/4",
 	"deleteRequiredItems" : false,
 	"removeOnCompletion" : "n",
+	"previousQuest" : 0,
 	"repeatable" : false
 },
 
 "2" : {
 	"exp" : 40,
+	"name" : "New tableware",
 	"startMsg" : "
 		#Richard# Oi, {PLAYER}! I need your help again. [What do you need this time?]=>
 		#Richard# I need some clay to make myself new tableware because I broke every single dish when I was drunk yesterday... [I'm sorry for your... Uhm... Loss.]=>
@@ -88,11 +90,13 @@
 	"giveItems" : "n",
 	"rewardItems" : "n",
 	"removeOnCompletion" : "n",
+	"previousQuest" : 1,
 	"repeatable" : false
 },
 
 "3" : {
 	"exp" : 50,
+	"name" : "The Dungeon",
 	"startMsg" : "
 		#Richard# Listen, {PLAYER}, yesterday I heard some loud noises from underground. I think it's the dungeon. Again. [Dungeon?]=>
 		#Richard# Oh well, I forgot you didn't remember anything... I'll explain later. What's important now is the key's location. [A key? To the dungeon?]=>
@@ -114,11 +118,13 @@
 	"giveItems" : "47/5:49/5",
 	"rewardItems" : "21/80:85/1",
 	"removeOnCompletion" : "-1",
+	"previousQuest" : 2,
 	"repeatable" : false
 },
 
 "4" : {
 	"exp" : 90,
+	"name" : "Entrance to the Dungeon",
 	"startMsg" : "
 		#Richard# It's finally the time for you to go to the dungeon, {PLAYER}. [I'm kinda nervous]=>
 		#Richard# Well, don't worry. By doing this you'll save us both![Both? What about your faction?]=>
@@ -141,7 +147,29 @@
 	"giveItems" : "75/1",
 	"rewardItems" : "21/200",
 	"removeOnCompletion" : "-1",
+	"previousQuest" : 3,
 	"repeatable" : false
+},
+
+"5" : {
+	"exp" : 15,
+	"name" : "Beer",
+	"startMsg" : "
+		#Richard# Yo {PLAYER}! It's kinda hot in here. I'd reeeally love to have some beer right now. [What are you, alcoholic?]=>
+		#Richard# Meh, say what you want about me, but bring me a pint of beer. I'll pay you 10 coins for it. Deal?[Okay]=>
+		* You can craft beer using sour and spicy leaves which can be gathered from bushes. [Cool]
+	",
+
+	"endMsg" : "#Richard# Nice job, {PLAYER}. Here are your coins.",
+
+	"reqMsg" : "#Richard# Where's my beer? Bring me my beer! Now!",
+	"journalText" : "Craft a pint of beer for Richard",
+	"reqItems" : "58/1",
+	"giveItems" : "n",
+	"rewardItems" : "21/10",
+	"removeOnCompletion" : "-1",
+	"repeatable" : false,
+	"previousQuest" : 1
 }
 
 }

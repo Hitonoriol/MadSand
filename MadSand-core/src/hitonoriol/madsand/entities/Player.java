@@ -28,7 +28,6 @@ import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.properties.ObjectProp;
-import hitonoriol.madsand.properties.QuestList;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.world.World;
 
@@ -39,7 +38,7 @@ public class Player extends Entity {
 	public ArrayList<Integer> craftRecipes = new ArrayList<Integer>(); // list of items which recipes are available to the player
 	public QuestWorker quests = new QuestWorker();
 	public HashSet<Integer> knownNpcs = new HashSet<Integer>();
-	
+
 	public HashSet<String> luaActions = new HashSet<>(); //Set for one-time lua actions
 
 	@JsonProperty("newlyCreated")
@@ -276,15 +275,9 @@ public class Player extends Entity {
 			return;
 
 		case QuestMaster:
-			int qid = quests.getAvailableQuest(questList);
-			Utils.out("Got quest id: " + qid);
 			npc.pause();
-
-			if (qid == QuestList.NO_QUESTS_STATUS)
-				MadSand.print(name + " has no more tasks for you.");
-			else
-				quests.processQuest(qid);
-			return;
+			if (!quests.processQuests(questList, name))
+				MadSand.print(name + " has no more quests for you.");
 
 		default:
 			break;
@@ -330,7 +323,7 @@ public class Player extends Entity {
 
 		String action = ObjectProp.getOnInteract(id);
 		doAction();
-		
+
 		if (obj.isCraftingStation) {
 			Gui.openCraftMenu(obj.id);
 			return;
@@ -409,23 +402,32 @@ public class Player extends Entity {
 		boolean itemUsed = false;
 		checkHands(item.id);
 
-		if (itemUsed = equip(item));
-		
-		else if (itemUsed = useGrabBag(item));
-		
-		else if (itemUsed = useTileInteractItem(item));
-		
-		else if (itemUsed = useScriptedItem(item));
-		
-		else if (itemUsed = useScriptedTile());
-		
-		else if (itemUsed = useConsumableItem(item));
-		
-		else if (itemUsed = plantCrop(item));
-		
-		else if (itemUsed = usePlaceableObject(item));
+		if (itemUsed = equip(item))
+			;
 
-		else if (itemUsed = usePlaceableTile(item));
+		else if (itemUsed = useGrabBag(item))
+			;
+
+		else if (itemUsed = useTileInteractItem(item))
+			;
+
+		else if (itemUsed = useScriptedItem(item))
+			;
+
+		else if (itemUsed = useScriptedTile())
+			;
+
+		else if (itemUsed = useConsumableItem(item))
+			;
+
+		else if (itemUsed = plantCrop(item))
+			;
+
+		else if (itemUsed = usePlaceableObject(item))
+			;
+
+		else if (itemUsed = usePlaceableTile(item))
+			;
 
 		checkHands(item.id);
 
@@ -445,7 +447,7 @@ public class Player extends Entity {
 		ArrayList<Item> items = item.contents.roll();
 		for (Item rolledItem : items)
 			addItem(rolledItem);
-		
+
 		inventory.delItem(item, 1);
 
 		return true;

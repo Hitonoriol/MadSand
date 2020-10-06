@@ -15,7 +15,8 @@ public class AutoFocusScrollPane extends ScrollPane {
 			}
 
 			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-				getStage().setScrollFocus(null);
+				if (getStage() != null)
+					getStage().setScrollFocus(null);
 			}
 		});
 	}

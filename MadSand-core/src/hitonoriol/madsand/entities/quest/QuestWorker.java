@@ -11,10 +11,12 @@ import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.gui.dialogs.QuestListDialog;
 import hitonoriol.madsand.properties.QuestList;
 
 public class QuestWorker {
 
+	public int lastProceduralQuest = -1;
 	public HashSet<Integer> completedQuests = new HashSet<Integer>(); // sets of completed quests and the ones in progress
 	public HashSet<Integer> questsInProgress = new HashSet<Integer>();
 	private Player player;
@@ -30,6 +32,46 @@ public class QuestWorker {
 	@JsonIgnore
 	public void setPlayer(Player player) {
 		this.player = player;
+	}
+
+	public int getPreviousQuest(int id) {
+		Quest quest = QuestList.quests.get(id);
+
+		if (quest.previousQuest == -1)
+			return -1;
+
+		return quest.previousQuest;
+	}
+
+	public boolean isQuestAvailable(int id) {
+		Quest quest = QuestList.quests.get(id);
+		int prevQuestId = getPreviousQuest(id);
+
+		if (isQuestCompleted(id) && !quest.repeatable)
+			return false;
+
+		if (prevQuestId == -1 && (!isQuestCompleted(id) || quest.repeatable))
+			return true;
+
+		if (isQuestCompleted(prevQuestId))
+			return true;
+
+		if (isQuestInProgress(id))
+			return true;
+
+		return false;
+	}
+
+	public ArrayList<Integer> getAvailableQuests(ArrayList<Integer> mobQuestList) {
+		ArrayList<Integer> quests = new ArrayList<>();
+
+		for (int quest : mobQuestList)
+			if (isQuestAvailable(quest)) {
+				Utils.out("Quest " + quest + " is available!");
+				quests.add(quest);
+			}
+
+		return quests;
 	}
 
 	public boolean isQuestInProgress(int id) {
@@ -58,7 +100,7 @@ public class QuestWorker {
 
 		if (quest.deleteRequiredItems)
 			player.inventory.delItem(quest.reqItems);
-		
+
 		player.inventory.delItem(quest.removeOnCompletion);
 		player.inventory.putItem(quest.rewardItems);
 		player.addExp(quest.exp);
@@ -76,6 +118,7 @@ public class QuestWorker {
 		Utils.out("Processing quest " + id);
 
 		Quest quest = QuestList.quests.get(id);
+
 		if (isQuestInProgress(id) && !isQuestCompleted(id)) {
 			if (player.inventory.itemsExist(quest.reqItems))
 				completeQuest(quest);
@@ -83,6 +126,20 @@ public class QuestWorker {
 				GameDialog.generateDialogChain(quest.reqMsg, Gui.overlay).show();
 		} else
 			startQuest(quest);
+
+	}
+
+	public boolean processQuests(ArrayList<Integer> mobQuestList, String npcName) {
+		ArrayList<Integer> availableQuests = getAvailableQuests(mobQuestList);
+
+		if (availableQuests.size() == 0)
+			return false;
+		else if (availableQuests.size() == 1)
+			processQuest(availableQuests.get(0));
+		else
+			new QuestListDialog(this, availableQuests, npcName).show();
+
+		return true;
 	}
 
 	public int getAvailableQuest(ArrayList<Integer> quests) { // search NPC's quest list for {not yet started / not finished / repeatable} quests
