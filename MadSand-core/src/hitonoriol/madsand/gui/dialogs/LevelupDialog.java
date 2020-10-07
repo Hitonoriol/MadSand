@@ -20,6 +20,7 @@ public class LevelupDialog extends PlayerStatDialog {
 	public LevelupDialog() {
 		this(Gui.overlay, new StatLabels(), title);
 		super.nameField.setDisabled(true);
+		super.nameField.setText(World.player.stats.name);
 		TextButton okButton = new TextButton(okButtonText, Gui.skin);
 		super.add(okButton).width(Gui.defLblWidth).row();
 

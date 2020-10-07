@@ -26,11 +26,6 @@ public class Keyboard {
 			Resources.takeScreenshot();
 	}
 
-	public static void pollStatWindowKey() {
-		if (Gdx.input.isKeyJustPressed(Keys.Q))
-			Gui.overlay.toggleStatsWindow();
-	}
-
 	public static void pollInventoryKey() {
 		if (Gdx.input.isKeyJustPressed(Keys.E))
 			Gui.toggleInventory();
@@ -102,6 +97,9 @@ public class Keyboard {
 		
 		if (Gdx.input.isKeyJustPressed(Keys.B))
 			Gui.overlay.showBuildMenu();
+		
+		if (Gdx.input.isKeyJustPressed(Keys.Q))
+			Gui.overlay.toggleStatsWindow();
 
 	}
 

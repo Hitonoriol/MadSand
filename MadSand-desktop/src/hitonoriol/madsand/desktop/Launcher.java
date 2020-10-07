@@ -12,9 +12,11 @@ import hitonoriol.madsand.Utils;
 
 public class Launcher {
 
+	static LwjglApplicationConfiguration config;
+
 	public static void main(String[] args) throws Exception {
 		System.setOut(new PrintStream(new BufferedOutputStream(new FileOutputStream("MadSandOutput.txt")), true));
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		config = new LwjglApplicationConfiguration();
 		config.resizable = false;
 
 		config.addIcon("icon-256.png", FileType.Internal);
@@ -28,7 +30,6 @@ public class Launcher {
 		config.height = 720;
 		config.foregroundFPS = 60;
 		config.backgroundFPS = -1;
-		config.fullscreen = false;
 
 		applyArgs(args);
 
@@ -36,6 +37,7 @@ public class Launcher {
 	}
 
 	final static String debugFlag = "debug";
+	final static String fullscreenFlag = "fullscreen";
 
 	private static void applyArgs(String[] args) {
 		if (args.length == 0)
@@ -44,5 +46,7 @@ public class Launcher {
 		ArgParser parser = new ArgParser(args);
 
 		Utils.debugMode = parser.argExists(debugFlag);
+		config.fullscreen = parser.argExists(fullscreenFlag);
+
 	}
 }

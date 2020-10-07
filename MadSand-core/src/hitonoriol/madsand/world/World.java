@@ -146,6 +146,10 @@ public class World {
 	public Map getCurLoc() {
 		return getLoc(curxwpos, curywpos, curlayer);
 	}
+	
+	public Map getOverworld() {
+		return getLoc(curxwpos, curywpos, LAYER_OVERWORLD);
+	}
 
 	Map getCurLoc(int layer) {
 		return getLoc(curxwpos, curywpos, layer);
@@ -239,6 +243,7 @@ public class World {
 	}
 
 	public boolean switchLocation(int x, int y, int layer) {
+		int prevX = curxwpos, prevY = curywpos;
 		Utils.out("Switching location to " + x + ", " + y + " layer: " + layer);
 		if (layer > DUNGEON_LAYER_MAX)
 			return false;
@@ -253,10 +258,12 @@ public class World {
 
 		clearCurLoc();
 
-		if (GameSaver.verifyNextSector(x, y))
+		if (x == prevX && y == prevY && curlayer != LAYER_OVERWORLD)
+			generate(layer);
+		else if (GameSaver.verifyNextSector(x, y))
 			GameSaver.loadLocation();
 		else
-			generate(layer);
+			Utils.die("Congratulations! You broke switchLocation()!");
 
 		cleanUpPreviousLocations();
 
@@ -270,8 +277,10 @@ public class World {
 
 		if (!inEncounter)
 			GameSaver.saveWorld();
-		else
+		else {
+			Utils.out("Removing encounter location");
 			removeLocation(getCurMapID());
+		}
 
 		MadSand.switchScreen(Gui.travelScreen);
 
@@ -387,13 +396,19 @@ public class World {
 	}
 
 	public boolean ascend(int layer) {
-		if (layer <= LAYER_OVERWORLD)
+		if (layer < LAYER_OVERWORLD)
 			return false;
+		
+		Utils.out("Ascending to " + layer);
+		
 		boolean ret = switchLocation(layer);
+		Utils.out("switchLocation returned " + ret);
+		
 		if (curlayer == LAYER_OVERWORLD)
 			MadSand.print("You get back to surface level");
 		else
 			MadSand.print("You get back to dungeon level " + curlayer);
+		
 		Gui.overlay.processActionMenu();
 		return ret;
 	}

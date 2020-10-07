@@ -23,6 +23,8 @@ import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
+import hitonoriol.madsand.map.Map;
+import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.map.ProductionStation;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.ObjectProp;
@@ -125,7 +127,11 @@ class BuildDialogEntry extends Group {
 
 		super.addListener(new ClickListener(Buttons.LEFT) {
 			public void clicked(InputEvent event, float x, float y) {
-				if (!player.inventory.delItem(recipe))
+				MapObject object = player.objectLookingAt();
+				if (!object.equals(Map.nullObject))
+					Gui.drawOkDialog("The tile in front of you is not empty." + Resources.LINEBREAK
+							+ "You can only build on empty tiles.", Gui.overlay);
+				else if (!player.inventory.delItem(recipe))
 					Gui.drawOkDialog("You don't have enough resources to build this!", Gui.overlay);
 				else {
 					MadSand.world.getCurLoc().addObject(player.x, player.y, player.stats.look, id);

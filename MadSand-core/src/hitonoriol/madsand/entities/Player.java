@@ -626,6 +626,10 @@ public class Player extends Entity {
 	public Pair lookingAt() {
 		return new Pair(x, y).addDirection(stats.look);
 	}
+	
+	public MapObject objectLookingAt() {
+		return MadSand.world.getCurLoc().getObject(x, y, stats.look);
+	}
 
 	public Direction lookAtMouse(int x, int y) {
 		return lookAtMouse(x, y, false);

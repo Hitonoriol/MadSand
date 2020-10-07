@@ -6,6 +6,7 @@ import com.github.czyzby.noise4j.map.Grid;
 import com.github.czyzby.noise4j.map.generator.noise.NoiseGenerator;
 import com.github.czyzby.noise4j.map.generator.util.Generators;
 
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.properties.WorldGenProp;
@@ -180,6 +181,7 @@ public class WorldGen {
 	private void genDungeon(int layer) {
 		MapID dungeonId = new MapID(curMapId).setLayer(layer);
 		Map curLoc = worldMap.get(dungeonId);
+		setCurBiome();
 		curLoc.rollSize();
 
 		Utils.out("Generating dungeon!");
@@ -197,6 +199,15 @@ public class WorldGen {
 		dungeonGen.generate(dungeon, layer);
 
 		Utils.out("Done generating dungeon!");
+	}
+
+	private WorldGenPreset setCurBiome(int biome) {
+		curBiome = WorldGenProp.getBiome(biome);
+		return curBiome;
+	}
+
+	private WorldGenPreset setCurBiome() { // Sets current generator biome to the overworld biome
+		return setCurBiome(MadSand.world.getOverworld().getBiome());
 	}
 
 	public int chooseRandomBiome() {
