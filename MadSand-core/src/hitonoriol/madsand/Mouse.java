@@ -161,6 +161,10 @@ public class Mouse {
 		info += "Debug Info:" + Resources.LINEBREAK;
 		info += "Objects on map: " + loc.getObjectCount() + Resources.LINEBREAK;
 		info += "NPCs on map: " + loc.getNpcCount() + Resources.LINEBREAK;
+		if (!object.equals(Map.nullObject))
+			info += "Object HP: " + object.hp + " | Object HarvestHp: " + object.harvestHp + Resources.LINEBREAK;
+		if (!npc.equals(Map.nullNpc))
+			info += "Npc hp: " + npc.stats.hp + Resources.LINEBREAK;
 		info += lineDelimiter + Resources.LINEBREAK;
 		info += "[]";
 		return info;

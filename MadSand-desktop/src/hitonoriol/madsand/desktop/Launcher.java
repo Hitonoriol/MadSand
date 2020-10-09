@@ -28,7 +28,7 @@ public class Launcher {
 		config.vSyncEnabled = true;
 		config.width = 1280;
 		config.height = 720;
-		config.foregroundFPS = 60;
+		config.foregroundFPS = 59;
 		config.backgroundFPS = -1;
 
 		applyArgs(args);
@@ -48,5 +48,7 @@ public class Launcher {
 		Utils.debugMode = parser.argExists(debugFlag);
 		config.fullscreen = parser.argExists(fullscreenFlag);
 
+		if (config.fullscreen)
+			config.setFromDisplayMode(LwjglApplicationConfiguration.getDesktopDisplayMode());
 	}
 }

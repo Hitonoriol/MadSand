@@ -21,6 +21,7 @@ import hitonoriol.madsand.entities.inventory.trade.TradeInventoryUI;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.enums.*;
 import hitonoriol.madsand.gui.dialogs.ProductionStationUI;
+import hitonoriol.madsand.gui.widgets.ResourceProgressBar;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
@@ -144,7 +145,7 @@ public class Player extends Entity {
 
 		if (dead) {
 
-			MadSand.print("You kill " + npc.stats.name);
+			MadSand.notice("You kill " + npc.stats.name + "! [+" + npc.rewardExp + " exp]");
 			addExp(npc.rewardExp);
 
 			if (knownNpcs.add(npc.id)) // If killed for the first time
@@ -311,6 +312,9 @@ public class Player extends Entity {
 		MapObject obj = MadSand.world.getCurLoc().getObject(coords.x, coords.y);
 		Npc npc = loc.getNpc(coords.x, coords.y);
 
+		if (obj.id == Map.nullObject.id)
+			return;
+
 		if (!npc.equals(Map.nullNpc)) {
 			interact(npc);
 			return;
@@ -344,7 +348,21 @@ public class Player extends Entity {
 			return;
 		}
 
-		int item = MapObject.getAltItem(id, ItemProp.getType(stats.hand().id).get());
+		if (obj.harvestHp > 0)
+			new ResourceProgressBar(obj).start();
+		else
+			gatherResources(obj);
+
+		MadSand.world.updateLight();
+		Gui.overlay.processActionMenu();
+	}
+
+	// returns amount of damage done to object's harvestHp
+	public int gatherResources(MapObject obj) {
+		if (obj.id == Map.nullObject.id)
+			return -1;
+
+		int item = MapObject.getAltItem(obj.id, ItemProp.getType(stats.hand().id).get());
 		int mhp = ObjectProp.getObject(obj.id).harvestHp;
 		Skill skill = obj.skill;
 		int curLvl = stats.skills.getLvl(skill);
@@ -355,17 +373,18 @@ public class Player extends Entity {
 			MadSand.notice(
 					"You are not experienced enough." + Resources.LINEBREAK + skill + " level required: " + obj.lvl
 							+ Resources.LINEBREAK + "Your " + skill + ": " + curLvl);
-			return;
+			return 0;
 		}
 
 		if (!stats.luckRoll()) {
 			MadSand.print("You fail to interact with " + obj.name);
-			return;
+			return -1;
 		}
 
-		boolean destroyed = obj.takeDamage(stats.skills.getBaseSkillDamage(skill) + stats.hand().getSkillDamage(skill));
+		int damage = stats.skills.getBaseSkillDamage(skill) + stats.hand().getSkillDamage(skill);
+		boolean damaged = obj.takeDamage(damage);
 
-		if (item != -1 && destroyed) { // Succesfull interaction with item that drops something
+		if (item != -1 && damaged) { // Succesfull interaction with item that drops something
 			Item objLoot;
 			int rewardCount;
 			int rolls = stats.skills.getItemDropRolls(skill); // The higher the level of the skill, the more rolls of drop we make
@@ -377,20 +396,19 @@ public class Player extends Entity {
 				Utils.out("Rolling " + i + "/" + rolls + ": item id" + item + ", quantity: " + rewardCount);
 				objLoot = new Item(item, rewardCount);
 				addItem(objLoot);
-				item = MapObject.getAltItem(id, ItemProp.getType(stats.hand().id).get());
+				item = MapObject.getAltItem(obj.id, ItemProp.getType(stats.hand().id).get());
 			}
 
 			increaseSkill(skill);
 		}
 
-		if (!destroyed)
+		if (!damaged)
 			MadSand.print("You hit a " + obj.name + " [ " + obj.harvestHp + " / " + mhp + " ]");
 
-		if (item == -1 && destroyed)
+		if (item == -1 && damaged && obj.id != Map.nullObject.id)
 			MadSand.print("You damaged " + obj.name);
 
-		MadSand.world.updateLight();
-		Gui.overlay.processActionMenu();
+		return damage;
 	}
 
 	public void useItem() {
@@ -626,7 +644,7 @@ public class Player extends Entity {
 	public Pair lookingAt() {
 		return new Pair(x, y).addDirection(stats.look);
 	}
-	
+
 	public MapObject objectLookingAt() {
 		return MadSand.world.getCurLoc().getObject(x, y, stats.look);
 	}

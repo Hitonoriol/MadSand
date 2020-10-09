@@ -12,9 +12,9 @@ public class TimedProgressBar extends ProgressBar {
 	static float MAX_VALUE = 100;
 	static float STEP = 0.02f;
 
-	float delay;
-	TimedAction action;
-	boolean done;
+	protected float delay;
+	protected TimedAction action;
+	protected boolean done;
 
 	private TimedProgressBar(float min, float max, float stepSize, boolean vertical, Skin skin) {
 		super(min, max, stepSize, vertical, skin);
@@ -35,14 +35,18 @@ public class TimedProgressBar extends ProgressBar {
 
 	public void start(TimedAction action) {
 		reset();
-		this.action = action;
+		setAction(action);
 		super.setValue(super.getMaxValue());
+	}
+	
+	public void setAction(TimedAction action) {
+		this.action = action;
 	}
 
 	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
 
-		if (!done && super.getVisualValue() == MAX_VALUE) {
+		if (!done && super.getVisualValue() == getMaxValue()) {
 			action.doAction();
 			done = true;
 		}

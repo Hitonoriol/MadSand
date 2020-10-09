@@ -120,13 +120,25 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 
 	// Is roll successful
 	public boolean skillRoll(Skill skill) {
-		int lvl = get(skill).lvl;
+		int lvl = getLvl(skill);
 
 		if (lvl == 0)
 			return false;
 
-		return (Utils.rand(0, lvl) != lvl) && (Utils.rand(0, lvl) != lvl); // e.g. if lvl is 1, probability of
-																			// successful roll is 1/4
+		return Utils.percentRoll(getSkillRollPercent(skill));
+	}
+
+	// Formula to roll things based on skills
+	public double getSkillRollPercent(Skill skill) {
+		double lvlComponent = (double) getLvl(skill);
+		
+		if (lvlComponent <= 1)
+			return 1;
+
+		if (lvlComponent < 2)
+			lvlComponent += 0.4;
+
+		return Math.log(Math.pow(lvlComponent + 0.05, 22.0)) * 0.6; // Is capped at 64% when lvl == 100, & increases smoothly
 	}
 
 	// Currently used to determine amount of "skill-damage" done to objects on interaction 
@@ -136,7 +148,7 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 		if (getLvl(skill) < 2)
 			return 0;
 
-		return skillRoll(skill) ? Utils.rand(1, getLvl(skill)) : 1;
+		return skillRoll(skill) ? Utils.rand(1, getLvl(skill)) : 0;
 	}
 
 	public String getExpString(Skill skill) {

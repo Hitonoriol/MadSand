@@ -70,6 +70,13 @@ public class ProductionStationUI extends GameDialog {
 	Label produceLabel;
 	Label consumeLabel;
 
+	Timer.Task refreshTask = new Timer.Task() {
+		@Override
+		public void run() {
+			refresh();
+		}
+	};
+
 	private ProductionStationUI(Stage stage) {
 		super(stage);
 	}
@@ -134,21 +141,12 @@ public class ProductionStationUI extends GameDialog {
 	public void show() {
 		super.show();
 		int tickRate = MadSand.world.realtimeTickRate;
-		Timer.instance().scheduleTask(new Timer.Task() {
-
-			@Override
-			public void run() {
-				refresh();
-
-			}
-		}, tickRate, tickRate);
-		Timer.instance().start();
+		Timer.instance().scheduleTask(refreshTask, tickRate, tickRate);
 	}
 
 	public boolean remove() {
 		boolean ret = super.remove();
-		Timer.instance().stop();
-		Timer.instance().clear();
+		refreshTask.cancel();
 		return ret;
 	}
 

@@ -61,7 +61,7 @@ public class World {
 	public int realtimeTickRate = 5; // seconds per 1 tick
 	public long globalRealtimeTick = 0; // global realtime tick counter, never resets
 
-	private int ticksPerHour = 175; // ticks per one hourTick() trigger
+	private int ticksPerHour = 150; // ticks per one hourTick() trigger
 	public int worldtime = 12; // time (00 - 23)
 	public int tick = 0; // tick counter, resets every <ticksPerHour> ticks
 	public long globalTick = 0; // global tick counter, never resets

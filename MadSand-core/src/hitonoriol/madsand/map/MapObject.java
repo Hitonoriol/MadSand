@@ -13,6 +13,7 @@ import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
 
 public class MapObject {
+	public static final int CLEANUP_FLAG = -1337;
 	@JsonIgnore
 	public static final int NULL_OBJECT_ID = 0;
 	@JsonIgnore
@@ -24,12 +25,12 @@ public class MapObject {
 	public int hp;
 	public int harvestHp;
 	public int lvl;
-	
+
 	public boolean nocollide = false;
 	public boolean isProductionStation = false;
 	public boolean isCraftingStation = false;
 	public boolean isWall = false;
-	
+
 	public int maskWidth = 0, maskHeight = 0; // Collision mask dimensions for objects larger than 1x1 cell
 	public HashMap<Integer, Vector<Integer>> altItems;
 	public String onInteract;
@@ -64,6 +65,7 @@ public class MapObject {
 
 	void destroy() {
 		this.id = 0; // cleaned up later in map
+		this.hp = CLEANUP_FLAG;
 	}
 
 	private boolean verify() {
@@ -80,7 +82,7 @@ public class MapObject {
 			amt = 1;
 		boolean dmg = false;
 		harvestHp -= amt;
-		if (harvestHp <= 0) {
+		if (harvestHp < 0) {
 			--this.hp;
 			harvestHp = ObjectProp.getObject(id).harvestHp;
 			dmg = true;

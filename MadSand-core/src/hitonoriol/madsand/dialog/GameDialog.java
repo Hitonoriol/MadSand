@@ -94,7 +94,7 @@ public class GameDialog extends Dialog {
 		return ret;
 	}
 
-	public void chainReply(TextButton replyButton, GameDialog nextDialog) {
+	public void chainReply(TextButton replyButton, final GameDialog nextDialog) {
 		replyButton.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				remove();

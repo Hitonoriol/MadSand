@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.Gui;
 
 public class GameTooltip extends Table {
-	static float TOOLTIP_WIDTH = 300;
+	static float TOOLTIP_WIDTH = 500;
 	static float TOOLTIP_XPAD = TOOLTIP_WIDTH / 2 + 20;
 	static float TOOLTIP_HEIGHT = 300;
 	static float TOOLTIP_YPAD = TOOLTIP_HEIGHT / 2 + 25;

@@ -469,7 +469,7 @@ public abstract class Entity {
 
 	@JsonIgnore
 	public String getHealthState() {
-		float state = stats.hp / stats.mhp;
+		float state = (float) stats.hp / (float) stats.mhp;
 		if (state > HEALTH_75)
 			return HEALTH_STATE_FULL;
 		else if (state > HEALTH_50)

@@ -203,10 +203,12 @@ public class Gui {
 
 	public static void gameUnfocus() {
 		dialogActive = gameUnfocused = true;
+		overlay.hideTooltip();
 	}
 
 	public static void gameResumeFocus() {
 		dialogActive = gameUnfocused = false;
+		overlay.showTooltip();
 	}
 	
 	public static boolean isGameUnfocused() {

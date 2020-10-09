@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Timer;
 
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.PairFloat;
@@ -70,7 +71,7 @@ public class MadSand extends Game {
 
 	public static boolean isWorldUntouched = true; // flag for once-per-launch actions
 
-	static OrthographicCamera camera;
+	public static OrthographicCamera camera;
 	public static int camxoffset = 17;
 	public static int camyoffset = 37;
 	private float elapsedTime;// For player animation
@@ -96,6 +97,8 @@ public class MadSand extends Game {
 		game = this;
 		Gdx.graphics.setContinuousRendering(false);
 		Utils.out("Starting initialization!");
+
+		Timer.instance().start();
 
 		setRenderRadius(DEFAULT_FOV);
 		setRenderRadius();

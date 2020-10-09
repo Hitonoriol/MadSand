@@ -51,13 +51,12 @@ public class Utils {
 		return randElement(parseList(stringList));
 	}
 
+	static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
 	public static void out(String arg) {
 		if (!debugMode)
 			return;
-
-		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-		System.out.print("[" + sdf.format(cal.getTime()) + "] " + arg + "\n");
+		
+		System.out.print("[" + sdf.format(Calendar.getInstance().getTime()) + "] " + arg + "\n");
 
 	}
 

@@ -160,9 +160,7 @@ public class Item {
 		else {
 			int damage = dmg / Skill.SKILL_DMG_DENOMINATOR;
 
-			if (damage == 0)
-				damage = 1;
-			else
+			if (damage != 0)
 				damage = Utils.rand(1, damage);
 
 			return damage;
@@ -293,7 +291,7 @@ public class Item {
 	}
 
 	public static ArrayList<Integer> parseCraftRequirements(String recipe) {
-		
+
 		ArrayList<Integer> requirements = new ArrayList<>();
 
 		if (!recipe.contains(BLOCK_DELIM))

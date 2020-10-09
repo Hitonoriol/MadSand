@@ -214,7 +214,7 @@ public class Stats {
 		if (food <= 0)
 			owner._damage(STARVE_DMG);
 
-		if (food >= satiatedVal && !skills.skillRoll(Skill.Survival))
+		if (food >= satiatedVal && skills.skillRoll(Skill.Survival))
 			owner._heal(FOOD_HEAL);
 	}
 

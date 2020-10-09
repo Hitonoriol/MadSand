@@ -389,18 +389,24 @@ public class Map {
 	}
 
 	public MapObject getObject(int x, int y) {
-		if (correctCoords(coords.set(x, y))) {
-			MapObject ret = mapObjects.get(coords);
-			if (ret != null) {
-				if (ret.id == 0) {
-					mapObjects.remove(coords);
-					return nullObject;
-				}
-				return ret;
-			} else
-				return nullObject;
-		} else
+		if (!correctCoords(coords.set(x, y)))
 			return nullObject;
+
+		MapObject ret = mapObjects.get(coords);
+
+		if (ret == null)
+			return nullObject;
+
+		if (ret.id == nullObject.id) {
+			delObject(coords);
+
+			if (ret.hp == MapObject.CLEANUP_FLAG)
+				MadSand.world.updateLight();
+
+			return nullObject;
+		}
+
+		return ret;
 	}
 
 	boolean objectExists(int x, int y) {
