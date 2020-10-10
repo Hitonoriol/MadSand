@@ -2,6 +2,9 @@ package hitonoriol.madsand.world.worldgen;
 
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+
+import hitonoriol.madsand.entities.LootTable;
 import hitonoriol.madsand.world.World;
 
 public class DungeonContents {
@@ -13,7 +16,7 @@ public class DungeonContents {
 	public ArrayList<Integer> mobs;
 	public int maxMobs;
 
-	public ArrayList<String> loot;
+	public LootTable loot;
 
 	public int mobProbability;
 	public int mobCorridorProbability;
@@ -24,5 +27,11 @@ public class DungeonContents {
 	public ArrayList<Integer> specialRoomWalls;
 	public ArrayList<Integer> specialMobs;
 	public int specialMobsMax;
+	
+	@JsonSetter("loot")
+	public void setLoot(String loot) {
+		if (loot != null)
+			this.loot = LootTable.parse(loot);
+	}
 
 }

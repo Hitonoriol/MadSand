@@ -44,6 +44,7 @@ public class DeathStage extends Stage {
 				Gui.darkness.setVisible(false);
 				World.player.respawn();
 				MadSand.world.updateLight();
+				MadSand.reset();
 			}
 		});
 	}

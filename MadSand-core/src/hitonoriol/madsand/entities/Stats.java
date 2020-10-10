@@ -10,16 +10,18 @@ import hitonoriol.madsand.enums.Faction;
 import hitonoriol.madsand.enums.Skill;
 
 public class Stats {
+	final static double PERCENT = 100.0;
 	public final static float WEIGHT_MULTIPLIER = 7.5f;
 	public final static float BASE_MAX_WEIGHT = 50;
-	public final static int BASE_FOOD_TICKS = 2;
+	public final static int BASE_FOOD_TICKS = 1;
+	final int HP_MULTIPLIER = 10; // maxHp = constitution * HP_MULTIPLIER
 
 	public int AP_WALK = 5; // action points consumed by walking
 	public int AP_ATTACK = 3;
 	public int AP_MINOR = 1; // action points consumed by minor action
 
 	final static int STARVE_DMG = 1;
-	final static int STAMINA_DMG = 3;
+	final static int STAMINA_DMG = 1;
 	final static int FOOD_HEAL = 1;
 
 	static int STAT_MIN_SUM = 20; //for roll() method
@@ -29,8 +31,6 @@ public class Stats {
 	static final int STAT_RAND_MAX = 8;
 	static final int STAT_RAND_MIN = 3;
 
-	static int STAMINA_INTERACT_COST = 5;
-
 	public int actionPtsMax = 5;
 	public int actionPts = actionPtsMax;
 
@@ -39,9 +39,10 @@ public class Stats {
 	public int hp;
 	public int mhp;
 
-	public static final float staminaLow = 0.15f;
-	public int stamina;
-	public int maxstamina;
+	public float GATHERING_STAMINA_COST = 0.05f;
+	public float staminaLow = 0.1f;
+	public float stamina;
+	public float maxstamina;
 
 	public int defense = 0;
 	public int accuracy = 2;
@@ -53,6 +54,7 @@ public class Stats {
 
 	public int air = 3;
 
+	public boolean hasRespawnPoint = false;
 	public int respawnX = -1;
 	public int respawnY = -1;
 	public int respawnWX = -1, respawnWY = -1;
@@ -62,10 +64,9 @@ public class Stats {
 	@JsonIgnore
 	public Equipment equipment;
 
-	public float satiationFactor = 0.90f;
+	public double satiatedPercent = 90;
 	public final int maxFood = 1000;
 	public int foodTicks = skills.getLvl(Skill.Survival);
-	public final int satiatedVal = (int) (maxFood * satiationFactor);
 	public int food = maxFood;
 
 	public Faction faction = Faction.None;
@@ -87,7 +88,7 @@ public class Stats {
 	}
 
 	public void calcStats() {
-		hp = constitution * 10;
+		hp = constitution * HP_MULTIPLIER;
 		mhp = hp;
 
 		stamina = ((dexterity + constitution) / 2) * 5;
@@ -155,19 +156,24 @@ public class Stats {
 		actionPts = actionPtsMax;
 	}
 
-	public void roll() {
+	public void roll(int lvl) {
 		int sum = 0;
-		while (sum < STAT_MIN_SUM || sum > maxStatSum) {
-			strength = Utils.rand(STAT_RAND_MIN, STAT_RAND_MAX);
-			constitution = Utils.rand(STAT_RAND_MIN, STAT_RAND_MAX);
-			accuracy = Utils.rand(STAT_RAND_MIN, STAT_RAND_MAX);
-			luck = Utils.rand(STAT_RAND_MIN, STAT_RAND_MAX);
-			dexterity = Utils.rand(STAT_RAND_MIN, STAT_RAND_MAX);
-			intelligence = Utils.rand(STAT_RAND_MIN, STAT_RAND_MAX);
+		int maxSum = STAT_RAND_MAX + lvl;
+		while (sum < STAT_MIN_SUM || sum > maxStatSum + lvl * 6) {
+			strength = Utils.rand(STAT_RAND_MIN, maxSum);
+			constitution = Utils.rand(STAT_RAND_MIN, maxSum);
+			accuracy = Utils.rand(STAT_RAND_MIN, maxSum);
+			luck = Utils.rand(STAT_RAND_MIN, maxSum);
+			dexterity = Utils.rand(STAT_RAND_MIN, maxSum);
+			intelligence = Utils.rand(STAT_RAND_MIN, maxSum);
 			sum = getSum();
 		}
 
 		calcStats();
+	}
+
+	public void roll() {
+		roll(0);
 	}
 
 	@JsonIgnore
@@ -178,6 +184,11 @@ public class Stats {
 				luck +
 				dexterity +
 				intelligence) - statBonus;
+	}
+
+	@JsonIgnore
+	public double getSatiationPercent() {
+		return PERCENT * ((double) food / (double) maxFood);
 	}
 
 	public void check() {
@@ -206,16 +217,29 @@ public class Stats {
 	}
 
 	public void perTickCheck() {
-		if (stamina < maxstamina * staminaLow)
-			owner._damage(STAMINA_DMG);
 
 		perTickFoodCheck();
+		perTickStaminaCheck();
+
+		if (stamina < maxstamina * staminaLow && !skills.skillRoll(Skill.Survival))
+			owner._damage(STAMINA_DMG);
 
 		if (food <= 0)
 			owner._damage(STARVE_DMG);
 
-		if (food >= satiatedVal && skills.skillRoll(Skill.Survival))
+		if (getSatiationPercent() >= satiatedPercent && skills.skillRoll(Skill.Survival))
 			owner._heal(FOOD_HEAL);
+	}
+
+	private void perTickStaminaCheck() {
+		double survivalPercent = skills.getSkillRollPercent(Skill.Survival);
+		double reqSatiationPercent = 95.0 - survivalPercent;
+		if (getSatiationPercent() < reqSatiationPercent)
+			return;
+
+		stamina += (survivalPercent * 0.2);
+		check();
+
 	}
 
 	/*
@@ -235,10 +259,6 @@ public class Stats {
 			}
 		}
 
-	}
-
-	public void interactStamina() {
-		stamina -= (STAMINA_INTERACT_COST);
 	}
 
 	public boolean luckRoll() {

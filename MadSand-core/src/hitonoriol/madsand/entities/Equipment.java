@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.EquipSlot;
 
 public class Equipment {
 	private HashMap<EquipSlot, Item> equipped = new HashMap<>();
+	private float equipmentWeight = 0;
 	private Stats stats;
 	private boolean isPlayer = false;
 
@@ -39,6 +42,7 @@ public class Equipment {
 		if (isPlayer)
 			Gui.overlay.equipmentSidebar.equipItem(slot, item);
 
+		equipmentWeight += item.weight;
 		stats.applyBonus(item);
 		return true;
 	}
@@ -57,6 +61,7 @@ public class Equipment {
 			return false;
 
 		Item item = equipped.get(slot);
+		equipmentWeight -= item.weight;
 		stats.removeBonus(item);
 
 		if (isPlayer)
@@ -80,6 +85,11 @@ public class Equipment {
 	public void setHand(Item item) {
 		unEquip(EquipSlot.MainHand);
 		equip(EquipSlot.MainHand, item);
+	}
+
+	@JsonIgnore
+	public float getTotalWeight() {
+		return equipmentWeight;
 	}
 
 	public ArrayList<String> getUidList() { //For serializer

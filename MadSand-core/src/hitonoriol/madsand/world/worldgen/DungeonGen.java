@@ -8,7 +8,7 @@ import com.github.czyzby.noise4j.map.generator.room.dungeon.DungeonGenerator;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
-import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.entities.LootTable;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.world.World;
 
@@ -36,7 +36,7 @@ public class DungeonGen extends DungeonGenerator {
 		DungeonContents curDungeonFloor = contents.get(floorNumber).contents;
 
 		ArrayList<Integer> mobs = curDungeonFloor.mobs;
-		ArrayList<String> loot = curDungeonFloor.loot;
+		LootTable loot = curDungeonFloor.loot;
 
 		map.rollSize(curDungeonFloor.minSize, curDungeonFloor.maxSize);
 		map.editable = false;
@@ -67,7 +67,7 @@ public class DungeonGen extends DungeonGenerator {
 					}
 
 					if (Utils.percentRoll(curDungeonFloor.lootCorridorProbability))
-						map.putLoot(x, y, rollLoot(loot));
+						map.putLoot(x, y, loot.roll());
 
 				}
 
@@ -86,7 +86,7 @@ public class DungeonGen extends DungeonGenerator {
 					}
 
 					if (Utils.percentRoll(curDungeonFloor.lootProbability))
-						map.putLoot(x, y, rollLoot(loot));
+						map.putLoot(x, y, loot.roll());
 
 					if (map.spawnPoint.equals(Pair.nullPair)) {
 						map.spawnPoint = new Pair(x, y);
@@ -177,14 +177,6 @@ public class DungeonGen extends DungeonGenerator {
 
 	private Room getRandomRoom() {
 		return rooms.get(Utils.rand(rooms.size()));
-	}
-
-	private Item rollLoot(ArrayList<String> loot) {
-		String itemString = loot.get(Utils.rand(loot.size()));
-		Item item = new Item(itemString);
-		item.quantity -= Utils.rand(item.quantity);
-
-		return item;
 	}
 
 	private boolean isDoorway(Grid grid, int x, int y, int xsz, int ysz) {

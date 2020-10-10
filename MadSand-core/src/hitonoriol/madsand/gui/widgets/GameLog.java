@@ -12,7 +12,7 @@ import hitonoriol.madsand.Gui;
 public class GameLog extends Table {
 	public static float INPUT_FIELD_WIDTH = 300;
 	private static final int LOG_LENGTH = 20;
-	
+
 	Skin skin;
 	public TextField inputField;
 	public Label[] logLabels;
@@ -20,7 +20,7 @@ public class GameLog extends Table {
 	public GameLog() {
 		super();
 		skin = Gui.skin;
-		
+
 		inputField = new TextField("", skin);
 		inputField.setWidth(INPUT_FIELD_WIDTH);
 		inputField.setMessageText("");
@@ -56,10 +56,38 @@ public class GameLog extends Table {
 		inputField.setVisible(false);
 
 	}
-	
+
 	public void clear() {
 		for (Label label : logLabels)
 			label.setText("");
 	}
-	
+
+	private int lineRepeat = 1;
+	private int lineNum;
+	private String printedLine = "";
+
+	public void print(String arg) {
+		if (!printedLine.equals(arg)) {
+			lineRepeat = 1;
+			printedLine = arg;
+			int i = logLabels.length - 1;
+			while (i >= 0) {
+
+				if (i != 0)
+					logLabels[i].setText(logLabels[i - 1].getText());
+				else {
+					logLabels[i].setText(arg);
+					lineNum = i;
+				}
+
+				i--;
+			}
+		} else
+			logLabels[lineNum].setText(printedLine + " x" + (++lineRepeat));
+	}
+
+	public String getLastPrintedLine() {
+		return printedLine;
+	}
+
 }

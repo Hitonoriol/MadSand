@@ -916,6 +916,7 @@
 		"altItems" : null,
 		"onInteract" : "-1",
 		"skill" : "None",
+		"isCraftingStation" : true,
 		"name" : "Furnace"
 	},
 	"68" : {
@@ -976,6 +977,7 @@
 		"altItems" : null,
 		"onInteract" : "-1",
 		"skill" : "None",
+		"isCraftingStation" : true,
 		"name" : "Cooking place"
 	},
 	"73" : {
@@ -1849,5 +1851,18 @@
 		},
 		"skill" : "Farming",
 		"name" : "Strawberry"
+	},
+	"155" : {
+		"hp" : 50,
+		"harvestHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"isCraftingStation" : true,
+		"name" : "Iron Anvil"
 	}
 }

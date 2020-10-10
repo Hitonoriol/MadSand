@@ -8,7 +8,6 @@ import com.badlogic.gdx.Gdx;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.MadSand;
@@ -312,20 +311,16 @@ public class Player extends Entity {
 		MapObject obj = MadSand.world.getCurLoc().getObject(coords.x, coords.y);
 		Npc npc = loc.getNpc(coords.x, coords.y);
 
-		if (obj.id == Map.nullObject.id)
-			return;
-
 		if (!npc.equals(Map.nullNpc)) {
+			Utils.out("**********Npc Interaction");
 			interact(npc);
 			return;
 		}
 
-		int id = obj.id;
-
-		if (id == 0)
+		if (obj.id == Map.nullObject.id)
 			return;
 
-		String action = ObjectProp.getOnInteract(id);
+		String action = ObjectProp.getOnInteract(obj.id);
 		doAction();
 
 		if (obj.isCraftingStation) {
@@ -348,6 +343,11 @@ public class Player extends Entity {
 			return;
 		}
 
+		if (stats.stamina <= 0) {
+			MadSand.print("You are too tired to gather resources. Try resting a little.");
+			return;
+		}
+		
 		if (obj.harvestHp > 0)
 			new ResourceProgressBar(obj).start();
 		else
@@ -367,14 +367,15 @@ public class Player extends Entity {
 		Skill skill = obj.skill;
 		int curLvl = stats.skills.getLvl(skill);
 
-		damageHeldTool(skill);
-
 		if (curLvl < obj.lvl) {
 			MadSand.notice(
 					"You are not experienced enough." + Resources.LINEBREAK + skill + " level required: " + obj.lvl
 							+ Resources.LINEBREAK + "Your " + skill + ": " + curLvl);
 			return 0;
 		}
+
+		damageHeldTool(skill);
+		changeStamina(-stats.GATHERING_STAMINA_COST);
 
 		if (!stats.luckRoll()) {
 			MadSand.print("You fail to interact with " + obj.name);
@@ -452,6 +453,9 @@ public class Player extends Entity {
 		if (itemUsed) {
 			damageHeldTool();
 			doAction();
+			
+			if (!item.type.isConsumable())
+				changeStamina(-item.weight);
 		}
 
 		return itemUsed;
@@ -577,6 +581,7 @@ public class Player extends Entity {
 		MadSand.world.curlayer = World.LAYER_OVERWORLD;
 		int wx = MadSand.world.curxwpos;
 		int wy = MadSand.world.curywpos;
+		Map map = MadSand.world.getCurLoc();
 		MadSand.state = GameState.GAME;
 		stats.food = stats.maxFood;
 		stats.actionPts = stats.actionPtsMax;
@@ -586,24 +591,18 @@ public class Player extends Entity {
 		freeHands();
 		stats.spawnTime = MadSand.world.globalTick;
 
-		if (stats.respawnX == -1) {
-			x = Utils.rand(0, MadSand.world.getCurLoc().getWidth());
-			y = Utils.rand(0, MadSand.world.getCurLoc().getHeight());
-		} else {
+		if (stats.hasRespawnPoint) {
 			if (stats.respawnWX == wx && stats.respawnWY == wy) {
 				x = stats.respawnX;
 				y = stats.respawnY;
 			} else {
-				wx = MadSand.world.curxwpos = stats.respawnWX;
-				wy = MadSand.world.curywpos = stats.respawnWY;
-				if (GameSaver.verifyNextSector(wx, wy)) {
-					MadSand.world.clearCurLoc();
-					GameSaver.loadLocation();
-				} else {
-					MadSand.world.generate();
-				}
+				MadSand.world.switchLocation(stats.respawnWX, stats.respawnWY, World.LAYER_OVERWORLD);
 			}
+		} else {
+			x = Utils.rand(0, map.getWidth());
+			y = Utils.rand(0, MadSand.world.getCurLoc().getHeight());
 		}
+
 		updCoords();
 	}
 
@@ -731,6 +730,11 @@ public class Player extends Entity {
 			attack();
 			return;
 		}
+	}
+
+	public void changeStamina(float by) {
+		super.changeStamina(by);
+		Gui.overlay.refreshOverlay();
 	}
 
 	public void lootMsg() {

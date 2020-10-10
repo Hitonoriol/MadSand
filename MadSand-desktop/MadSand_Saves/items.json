@@ -25,6 +25,7 @@
 		"name" : "Cake",
 		"recipe" : "7/15",
 		"satiationAmount" : 30,
+		"staminaAmount" : 5,
 		"healAmount" : 5,
 		"cost" : 15,
 		"type" : "Consumable",
@@ -47,6 +48,7 @@
 	"7" : {
 		"name" : "Berry",
 		"satiationAmount" : 25,
+		"staminaAmount" : 1,
 		"healAmount" : 1,
 		"cost" : 7,
 		"type" : "Consumable",
@@ -66,7 +68,7 @@
 	},
 	"10" : {
 		"name" : "Hewn rock",
-		"recipe" : "25/1",
+		"recipe" : "2/3",
 		"altObject" : 8,
 		"cost" : 7,
 		"type" : "PlaceableObject",
@@ -95,7 +97,7 @@
 	},
 	"13" : {
 		"name" : "Iron sword",
-		"recipe" : "23/15:8/10",
+		"recipe" : "155|23/15:8/10",
 		"cost" : 29,
 		"type" : "Weapon",
 		"weight" : 1.0,
@@ -106,7 +108,7 @@
 	},
 	"14" : {
 		"name" : "Iron helmet",
-		"recipe" : "23/25",
+		"recipe" : "155|23/25",
 		"cost" : 32,
 		"type" : "HeadArmor",
 		"weight" : 1.1,
@@ -117,7 +119,7 @@
 	},
 	"15" : {
 		"name" : "Iron shield",
-		"recipe" : "23/25",
+		"recipe" : "155|23/25",
 		"cost" : 35,
 		"type" : "Shield",
 		"weight" : 1.1,
@@ -139,7 +141,7 @@
 	},
 	"17" : {
 		"name" : "Iron platemail",
-		"recipe" : "23/30",
+		"recipe" : "155|23/30",
 		"cost" : 49,
 		"type" : "ChestArmor",
 		"weight" : 1.4,
@@ -160,7 +162,8 @@
 		}
 	},
 	"19" : {
-		"name" : "Reinforced iron chestplate",
+		"name" : "Reinforced iron platemail",
+		"recipe" : "155|17/1:72/10",
 		"cost" : 85,
 		"type" : "ChestArmor",
 		"weight" : 1.9,
@@ -170,9 +173,15 @@
 		}
 	},
 	"20" : {
-		"name" : "Hardened steel sword",
-		"cost" : 50,
-		"weight" : 1.9
+		"name" : "Hardened iron sword",
+		"recipe" : "155|13/1:72/10",
+		"cost" : 90,
+		"type" : "Weapon",
+		"weight" : 1.9,
+		"lvl" : 3,
+		"equipStats" : {
+			"strength" : 3
+		}
 	},
 	"21" : {
 		"name" : "Coin",
@@ -286,6 +295,7 @@
 	"39" : {
 		"name" : "Cucumber",
 		"satiationAmount" : 15,
+		"staminaAmount" : 2.5,
 		"healAmount" : 3,
 		"cost" : 9,
 		"type" : "Consumable",
@@ -349,6 +359,7 @@
 	"44" : {
 		"name" : "Edible mushroom",
 		"satiationAmount" : 35,
+		"staminaAmount" : 3,
 		"cost" : 11,
 		"type" : "Consumable",
 		"weight" : 0.1
@@ -364,6 +375,7 @@
 	"46" : {
 		"name" : "Potatoes",
 		"satiationAmount" : 35,
+		"staminaAmount" : 3,
 		"healAmount" : 6,
 		"cost" : 11,
 		"type" : "Consumable",
@@ -372,6 +384,7 @@
 	"47" : {
 		"name" : "Carrot",
 		"satiationAmount" : 35,
+		"staminaAmount" : 3,
 		"healAmount" : 10,
 		"cost" : 11,
 		"type" : "Consumable",
@@ -380,6 +393,7 @@
 	"48" : {
 		"name" : "Tomatoes",
 		"satiationAmount" : 35,
+		"staminaAmount" : 3,
 		"healAmount" : 5,
 		"cost" : 11,
 		"type" : "Consumable",
@@ -388,6 +402,7 @@
 	"49" : {
 		"name" : "Pepper",
 		"satiationAmount" : 35,
+		"staminaAmount" : 3,
 		"healAmount" : 9,
 		"cost" : 11,
 		"type" : "Consumable",
@@ -396,6 +411,7 @@
 	"50" : {
 		"name" : "Corn",
 		"satiationAmount" : 40,
+		"staminaAmount" : 3,
 		"healAmount" : 5,
 		"cost" : 12,
 		"type" : "Consumable",
@@ -507,10 +523,12 @@
 		"weight" : 0.7
 	},
 	"57" : {
-		"name" : "Ham",
+		"name" : "Cooked meat",
+		"recipe" : "72|96/1",
 		"satiationAmount" : 50,
 		"healAmount" : 15,
 		"cost" : 11,
+		"staminaAmount" : 5,
 		"type" : "Consumable",
 		"weight" : 0.4
 	},
@@ -518,6 +536,7 @@
 		"name" : "Pint of beer",
 		"recipe" : "65/3:66/3",
 		"satiationAmount" : 30,
+		"staminaAmount" : 1.5,
 		"healAmount" : -5,
 		"cost" : 12,
 		"type" : "Consumable",
@@ -526,6 +545,7 @@
 	"59" : {
 		"name" : "Chicken leg",
 		"satiationAmount" : 45,
+		"staminaAmount" : 4,
 		"healAmount" : 10,
 		"cost" : 15,
 		"type" : "Consumable",
@@ -535,6 +555,7 @@
 		"name" : "Healing potion",
 		"recipe" : "45/3:58/1",
 		"healAmount" : 25,
+		"staminaAmount" : 2.5,
 		"cost" : 25,
 		"type" : "Consumable",
 		"weight" : 0.2
@@ -610,11 +631,13 @@
 	},
 	"72" : {
 		"name" : "Iron ingot",
+		"recipe" : "67|23/1:56/1",
 		"cost" : 30,
 		"weight" : 0.7
 	},
 	"73" : {
 		"name" : "Gold ingot",
+		"recipe" : "67|24/1:56/1",
 		"cost" : 45,
 		"weight" : 0.7
 	},
@@ -656,7 +679,7 @@
 	},
 	"77" : {
 		"name" : "Iron Boots",
-		"recipe" : "72/10",
+		"recipe" : "155|72/10",
 		"cost" : 80,
 		"type" : "FootArmor",
 		"weight" : 1.9,
@@ -702,7 +725,7 @@
 	},
 	"81" : {
 		"name" : "Reinforced Iron Helmet",
-		"recipe" : "72/20:56/10",
+		"recipe" : "155|14/1:72/10",
 		"cost" : 150,
 		"type" : "HeadArmor",
 		"weight" : 2.25,
@@ -735,7 +758,7 @@
 	},
 	"84" : {
 		"name" : "Light Iron Armor",
-		"recipe" : "72/10",
+		"recipe" : "155|72/10",
 		"cost" : 100,
 		"type" : "ChestArmor",
 		"weight" : 1.75,
@@ -777,17 +800,18 @@
 	},
 	"88" : {
 		"name" : "Steel Dagger",
+		"recipe" : "155|72/15",
 		"cost" : 111,
 		"type" : "OffhandWeapon",
 		"weight" : 1.1,
 		"lvl" : 2,
 		"equipStats" : {
-			"strength" : 3
+			"strength" : 2
 		}
 	},
 	"89" : {
 		"name" : "Iron Flail",
-		"recipe" : "72/17",
+		"recipe" : "155|72/17",
 		"cost" : 125,
 		"type" : "Weapon",
 		"weight" : 2,
@@ -855,6 +879,7 @@
 	"97" : {
 		"name" : "Apple",
 		"satiationAmount" : 15,
+		"staminaAmount" : 1,
 		"healAmount" : 3,
 		"cost" : 5,
 		"type" : "Consumable",
@@ -863,6 +888,7 @@
 	"98" : {
 		"name" : "Cheese",
 		"satiationAmount" : 45,
+		"staminaAmount" : 5,
 		"healAmount" : 10,
 		"cost" : 30,
 		"type" : "Consumable",
@@ -871,6 +897,7 @@
 	"99" : {
 		"name" : "Grapes",
 		"satiationAmount" : 25,
+		"staminaAmount" : 2,
 		"healAmount" : 4,
 		"cost" : 7,
 		"type" : "Consumable",
@@ -915,6 +942,7 @@
 	"106" : {
 		"name" : "Watermelon",
 		"satiationAmount" : 30,
+		"staminaAmount" : 2.5,
 		"healAmount" : 3,
 		"cost" : 8,
 		"type" : "Consumable",
@@ -923,6 +951,7 @@
 	"107" : {
 		"name" : "Melon",
 		"satiationAmount" : 33,
+		"staminaAmount" : 2.5,
 		"healAmount" : 3,
 		"cost" : 8,
 		"type" : "Consumable",
@@ -931,6 +960,7 @@
 	"108" : {
 		"name" : "Pineapple",
 		"satiationAmount" : 38,
+		"staminaAmount" : 2.5,
 		"healAmount" : 7,
 		"cost" : 9,
 		"type" : "Consumable",
@@ -939,6 +969,7 @@
 	"109" : {
 		"name" : "Peas",
 		"satiationAmount" : 15,
+		"staminaAmount" : 1,
 		"healAmount" : 1,
 		"cost" : 6,
 		"type" : "Consumable",
@@ -957,6 +988,7 @@
 	"112" : {
 		"name" : "Eggplant",
 		"satiationAmount" : 20,
+		"staminaAmount" : 2,
 		"healAmount" : 4,
 		"cost" : 9,
 		"type" : "Consumable",
@@ -965,6 +997,7 @@
 	"113" : {
 		"name" : "Radish",
 		"satiationAmount" : 17,
+		"staminaAmount" : 1.9,
 		"healAmount" : 2,
 		"cost" : 8,
 		"type" : "Consumable",
@@ -973,6 +1006,7 @@
 	"114" : {
 		"name" : "Strawberry",
 		"satiationAmount" : 25,
+		"staminaAmount" : 2,
 		"healAmount" : 7,
 		"cost" : 12,
 		"type" : "Consumable",
@@ -1186,6 +1220,7 @@
 	"126" : {
 		"name" : "Milk",
 		"satiationAmount" : 20,
+		"staminaAmount" : 2,
 		"healAmount" : 4,
 		"cost" : 9,
 		"type" : "Consumable",

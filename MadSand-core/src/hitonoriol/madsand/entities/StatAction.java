@@ -9,5 +9,7 @@ public interface StatAction {
 
 	public void _heal(int amt);
 
+	public void _changeStamina(float by);
+
 	public Item _getItem(int id);
 }

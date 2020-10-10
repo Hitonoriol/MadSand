@@ -102,16 +102,16 @@ public class Pair {
 		Direction ret = null;
 		int dx = cellX - originX;
 		int dy = cellY - originY;
+		
+		if (dy > 0)
+			ret = Direction.UP;
+		else if (dy < 0)
+			ret = Direction.DOWN;
 
 		if (dx > 0)
 			ret = Direction.RIGHT;
 		else if (dx < 0)
 			ret = Direction.LEFT;
-
-		if (dy > 0)
-			ret = Direction.UP;
-		else if (dy < 0)
-			ret = Direction.DOWN;
 
 		if (fourWay)
 			return ret;

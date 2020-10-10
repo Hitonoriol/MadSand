@@ -35,7 +35,7 @@ public class Item {
 	public int id;
 	public int quantity;
 
-	public int satiationAmount, healAmount; // for consumables
+	public int satiationAmount, healAmount, staminaAmount; // for consumables
 
 	public int altObject, cost;
 	public ItemType type = ItemType.Item;
@@ -134,6 +134,7 @@ public class Item {
 		if (type.equals(ItemType.Consumable)) {
 			info += "Satiation: " + satiationAmount + Resources.LINEBREAK;
 			info += "Health: " + healAmount + Resources.LINEBREAK;
+			info += "Stamina: " + staminaAmount + Resources.LINEBREAK;
 		}
 
 		info += "Weight: " + Utils.round(weight) + " kg" + Resources.LINEBREAK;
@@ -201,6 +202,7 @@ public class Item {
 		if (type.equals(ItemType.Consumable)) {
 			healAmount = properties.healAmount;
 			satiationAmount = properties.satiationAmount;
+			staminaAmount = properties.staminaAmount;
 		}
 
 		if (type.isUnique())

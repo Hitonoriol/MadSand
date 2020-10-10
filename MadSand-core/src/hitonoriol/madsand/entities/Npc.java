@@ -76,9 +76,11 @@ public class Npc extends Entity {
 
 	void loadProperties() {
 		NpcContainer properties = NpcProp.npcs.get(id);
-		stats.roll();
+		stats.roll(properties.lvl);
 		stats.skills.setLvl(properties.lvl);
-		stats.dexterity = stats.AP_WALK;
+		stats.dexterity = properties.dexterity;
+		stats.calcStats();
+		
 		stats.name = properties.name;
 		stats.hp = properties.hp;
 		stats.mhp = stats.hp;
@@ -86,7 +88,6 @@ public class Npc extends Entity {
 		stats.accuracy = properties.accuracy;
 		rewardExp = properties.rewardExp;
 		stats.faction = properties.faction;
-		stats.calcStats();
 		canTrade = properties.canTrade;
 		
 		if (properties.defaultState != null)

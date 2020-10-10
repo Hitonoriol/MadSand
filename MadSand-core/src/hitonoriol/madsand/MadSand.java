@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Timer;
 
 import hitonoriol.madsand.containers.Line;
@@ -94,9 +93,9 @@ public class MadSand extends Game {
 	public static Game game;
 
 	public void create() {
+		Utils.out("Starting initialization!");
 		game = this;
 		Gdx.graphics.setContinuousRendering(false);
-		Utils.out("Starting initialization!");
 
 		Timer.instance().start();
 
@@ -107,15 +106,11 @@ public class MadSand extends Game {
 		Utils.init();
 		Gui.init();
 
-		camera = new OrthographicCamera();
-		camera.viewportWidth = (Gdx.graphics.getWidth() / ZOOM);
-		camera.viewportHeight = (Gdx.graphics.getHeight() / ZOOM);
-		camera.update();
-
 		initNewGame();
 		world.generate();
 
 		initMenuAnimation();
+		initCamera();
 
 		Utils.out("End of initialization!");
 
@@ -200,16 +195,18 @@ public class MadSand extends Game {
 		setRenderRadius();
 	}
 
-	public void updateCamToxy(float f, float y2) {
-		camera.position.set(f + camxoffset, y2 + camyoffset, 0.0F);
-
+	private void initCamera() {
+		camera = new OrthographicCamera();
 		camera.viewportWidth = (Gdx.graphics.getWidth() / ZOOM);
 		camera.viewportHeight = (Gdx.graphics.getHeight() / ZOOM);
-		camera.update();
+		updateCamToxy(xmenu, ymenu);
 
-		Mouse.mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
-		camera.unproject(Mouse.mouseinworld);
+	}
+
+	public void updateCamToxy(float x, float y) {
+		camera.position.set(x + camxoffset, y + camyoffset, 0.0F);
 		Utils.batch.setProjectionMatrix(camera.combined);
+		camera.update();
 	}
 
 	private void renderObject(MapObject object, int x, int y) {
@@ -388,29 +385,8 @@ public class MadSand extends Game {
 		}
 	}
 
-	static int repeat = 1;
-	static int li;
-	static String oldarg = "";
-
 	public static void print(String arg) {
-		Label[] log = Gui.overlay.getLogLabels();
-		if (!oldarg.equals(arg)) {
-			repeat = 1;
-			oldarg = arg;
-			int i = log.length - 1;
-			while (i >= 0) {
-
-				if (i != 0)
-					log[i].setText(log[i - 1].getText());
-				else {
-					log[i].setText(arg);
-					li = i;
-				}
-
-				i--;
-			}
-		} else
-			log[li].setText(oldarg + " x" + (++repeat));
+		Gui.overlay.gameLog.print(arg);
 	}
 
 	public static void print(String msg, String color) {

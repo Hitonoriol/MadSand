@@ -52,6 +52,12 @@ public class QuestListDialog extends GameDialog {
 		refresh();
 		container.add(closeButton).size(BUTTON_WIDTH / 2, BUTTON_HEIGHT).row();
 
+		closeButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				remove();
+			}
+		});
 	}
 
 	private void refresh() {

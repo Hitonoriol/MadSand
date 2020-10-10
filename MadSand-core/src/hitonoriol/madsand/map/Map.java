@@ -490,6 +490,11 @@ public class Map {
 		}
 	}
 
+	public void putLoot(int x, int y, ArrayList<Item> loot) {
+		for (Item item : loot)
+			putLoot(x, y, item);
+	}
+
 	public void updateLight(int wx, int wy, int r) {
 		Tile tile;
 		MapObject object;

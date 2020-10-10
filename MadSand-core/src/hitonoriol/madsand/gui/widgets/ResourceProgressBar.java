@@ -3,6 +3,7 @@ package hitonoriol.madsand.gui.widgets;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 
@@ -10,12 +11,13 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.entities.SkillContainer;
 import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.world.World;
 
 /*
- * Progress bar that *will be* displayed on interaction with objects (when gathering resources)
- * It should call player.interact() with short delays (~100ms?) until the object's harvestHp is > 0
+ * Progress bar that is displayed on interaction with objects (when gathering resources)
+ * It should call player.interact() with short delays (~BASE - <D_MUL...> * skill lvl) until the object's harvestHp is < 0
  * The progressbar displays range [0; harvestHp]
  */
 
@@ -23,11 +25,15 @@ public class ResourceProgressBar extends TimedProgressBar {
 
 	static ProgressBarStyle style;
 
-	static float BASE_DELAY = 1f;
-	static float D_MULTIPLIER = 0.014f;
+	static float BASE_DELAY = 0.35f;
+	static float D_MULTIPLIER = 0.8f * (BASE_DELAY / (float) SkillContainer.MAX_SKILL_ROLL_PERCENT);
 
 	float HEIGHT = 20;
 	float WIDTH = 175;
+	float YPADDING = 26;
+	float LABEL_PADDING = 10;
+
+	Label progressLabel;
 
 	MapObject object;
 	int initialObjectHp;
@@ -51,8 +57,8 @@ public class ResourceProgressBar extends TimedProgressBar {
 		super.setAnimateDuration(delay);
 		nextValue = delay;
 		Utils.out("Skill delay: " + delay);
+		Utils.out("Lowest possible delay: " + (BASE_DELAY - (D_MULTIPLIER * SkillContainer.MAX_SKILL_ROLL_PERCENT)));
 
-		super.setOrigin(Align.center);
 		done = true;
 		setStyle();
 
@@ -60,19 +66,27 @@ public class ResourceProgressBar extends TimedProgressBar {
 
 		if (rangeMax < 1)
 			rangeMax = 1;
-		else
-			--rangeMax;
 
 		setRange(0, rangeMax);
 		Utils.out("Setting range to [0," + object.harvestHp + "]");
 		this.object = object;
 		initialObjectHp = object.hp;
 
+		progressLabel = new Label("", Gui.skin);
+		progressLabel.setAlignment(Align.center);
+		progressLabel.setWidth(WIDTH + 150);
+
 		super.setAction(new TimedProgressBar.TimedAction() {
 			@Override
 			public void doAction() {
 				remove();
 				Gui.gameResumeFocus();
+				Timer.instance().scheduleTask(new Timer.Task() {
+					@Override
+					public void run() {
+						progressLabel.remove();
+					}
+				}, 0.5f);
 			}
 		});
 
@@ -111,6 +125,7 @@ public class ResourceProgressBar extends TimedProgressBar {
 			if (damage > 0) {
 				nextValue = delay / (float) damage;
 				setAnimateDuration(nextValue);
+				Utils.out("setv " + (getValue() + damage));
 				setValue(getValue() + damage);
 				Utils.out("setValue to: " + getValue() + " | animating for: " + nextValue);
 			} else {
@@ -122,22 +137,33 @@ public class ResourceProgressBar extends TimedProgressBar {
 	}
 
 	public int gatherResources() {
-		return damage = World.player.gatherResources(object);
+		damage = World.player.gatherResources(object);
+		progressLabel.setText(Gui.overlay.gameLog.getLastPrintedLine());
+		return damage;
 	}
 
 	float WAKE_TIME = 0.019f; // Request rendering once per WAKE_TIME
 
 	public void start() {
 		Gui.overlay.addActor(this);
+		Gui.overlay.addActor(progressLabel);
 
 		Timer.instance().scheduleTask(wakeTask, WAKE_TIME, WAKE_TIME);
 
 		Player player = World.player;
 		Vector3 coords = new Vector3(player.x * MadSand.TILESIZE, player.y * MadSand.TILESIZE, 0);
 
+		coords.y -= YPADDING;
+
 		MadSand.camera.project(coords);
-		super.setPosition(((coords.x + (coords.x - super.getWidth())) / 2) + MadSand.TILESIZE, coords.y - 40);
+		super.setPosition(centerRelative(coords.x, getWidth(), player.getSpriteWidth()), coords.y);
+		progressLabel.setPosition(centerRelative(coords.x, progressLabel.getWidth(), player.getSpriteWidth()),
+				coords.y - LABEL_PADDING);
 		Gui.gameUnfocus();
+	}
+
+	private float centerRelative(float x, float width, float objectWidth) {
+		return (x + (objectWidth * 0.75f)) - (width / 2);
 	}
 
 	private void setStyle() {

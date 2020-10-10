@@ -11,6 +11,9 @@ import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.world.World;
 
 public class SkillContainer extends HashMap<Skill, SkillValue> {
+	public final static int MAX_SKILL_LVL = 100; // max effective lvl (possible to get higher lvls, but lvl bonuses won't increase further than this)
+	public final static double MAX_SKILL_ROLL_PERCENT = magicFormula(MAX_SKILL_LVL);
+
 	final int BONUS_DENOMINATOR = 25; // skill lvl/this = bonus percent of something for some actions
 	final int ITEM_BONUS_DENOMINATOR = 5; // level/this = quantity of bonus items from action
 	public static HashMap<Skill, Tuple<Integer, Double>> reqList = new HashMap<Skill, Tuple<Integer, Double>>();
@@ -97,14 +100,14 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 		get(skill).exp = amt;
 	}
 
-	static final int REWARD_CHANCE = 40;
-
 	// How many items to get from one roll
 	public int getItemReward(Skill skill) {
 		int rew = getLvl(skill) / ITEM_BONUS_DENOMINATOR;
+
 		if (rew == 0)
 			return 1;
-		if (Utils.percentRoll(REWARD_CHANCE))
+
+		if (Utils.percentRoll(getSkillRollPercent(skill)))
 			return rew;
 		else
 			return 1;
@@ -112,33 +115,21 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 
 	// How many times to roll for drops
 	public int getItemDropRolls(Skill skill) {
-		if (Utils.percentRoll(getLvl(skill)))
+
+		if (Utils.percentRoll(getSkillRollPercent(skill)))
 			return Utils.rand(1, getLvl(skill));
 
 		return 1;
 	}
 
-	// Is roll successful
+	// Is roll with probability getSkillRollPercent() successful
 	public boolean skillRoll(Skill skill) {
-		int lvl = getLvl(skill);
-
-		if (lvl == 0)
-			return false;
-
 		return Utils.percentRoll(getSkillRollPercent(skill));
 	}
 
-	// Formula to roll things based on skills
+	// Get roll percent for Skill
 	public double getSkillRollPercent(Skill skill) {
-		double lvlComponent = (double) getLvl(skill);
-		
-		if (lvlComponent <= 1)
-			return 1;
-
-		if (lvlComponent < 2)
-			lvlComponent += 0.4;
-
-		return Math.log(Math.pow(lvlComponent + 0.05, 22.0)) * 0.6; // Is capped at 64% when lvl == 100, & increases smoothly
+		return magicFormula((double) getLvl(skill));
 	}
 
 	// Currently used to determine amount of "skill-damage" done to objects on interaction 
@@ -149,6 +140,19 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 			return 0;
 
 		return skillRoll(skill) ? Utils.rand(1, getLvl(skill)) : 0;
+	}
+
+	private static double magicFormula(double skillLvl) {
+		if (skillLvl < 1)
+			return 1;
+
+		if (skillLvl < 2)
+			skillLvl += 0.4;
+
+		if (skillLvl >= MAX_SKILL_LVL)
+			return skillLvl = MAX_SKILL_LVL;
+
+		return Math.log(Math.pow(skillLvl + 0.05, 22.0)) * 0.6; // Is capped at ~64%(MAX_SKILL_ROLL_PERCENT) when lvl == 100, & increases smoothly
 	}
 
 	public String getExpString(Skill skill) {

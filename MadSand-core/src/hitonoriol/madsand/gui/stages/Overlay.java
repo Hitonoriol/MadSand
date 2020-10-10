@@ -19,6 +19,7 @@ import hitonoriol.madsand.Mouse;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.entities.Stats;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.EquipSlot;
 import hitonoriol.madsand.enums.GameState;
@@ -136,6 +137,7 @@ public class Overlay extends Stage {
 		ovstatTbl.setFillParent(true);
 		ovstatTbl.align(Align.topRight);
 		overlayStatLabel = new Label(" ", skin);
+		overlayStatLabel.setAlignment(Align.center);
 		ovstatTbl.add(overlayStatLabel).width(Gdx.graphics.getWidth() - GameLog.INPUT_FIELD_WIDTH);
 		super.addActor(ovstatTbl);
 	}
@@ -207,11 +209,11 @@ public class Overlay extends Stage {
 			charCreateDialog = new CharacterCreationDialog();
 		charCreateDialog.show();
 	}
-	
+
 	public void showJournal() {
 		new QuestJournal(World.player.quests).show();
 	}
-	
+
 	public void showBuildMenu() {
 		new BuildDialog().show();
 	}
@@ -230,13 +232,17 @@ public class Overlay extends Stage {
 
 	public void refreshOverlay() {
 		Player player = World.player;
+		Stats stats = player.stats;
 		String info = Resources.Tab;
-		info += ("HP: " + player.stats.hp + "/" + player.stats.mhp) + Resources.Tab;
-		info += ("LVL: " + player.stats.skills.getLvl(Skill.Level)) + Resources.Tab;
-		info += ("XP: " + player.stats.skills.getExpString(Skill.Level)) + Resources.Tab;
-		info += ("Food: " + player.stats.food + " / " + player.stats.maxFood) + Resources.Tab;
-		info += ("Location: Cell (" + player.x + ", " + player.y + ")" +
-				getSectorString());
+		info += ("HP: " + stats.hp + "/" + stats.mhp) + Resources.Tab;
+		info += ("LVL: " + stats.skills.getLvl(Skill.Level)) + Resources.Tab;
+		info += ("XP: " + stats.skills.getExpString(Skill.Level)) + Resources.Tab;
+		info += ("Food: " + stats.food + " / " + stats.maxFood) + Resources.Tab;
+		info += ("Location: Cell (" + player.x + ", " + player.y + ")" + getSectorString());
+		
+		info += Resources.LINEBREAK + Resources.Tab;
+		
+		info += "Stamina: " + Utils.round(stats.stamina) + "/" + Utils.round(stats.maxstamina);
 
 		overlayStatLabel.setText(info);
 	}

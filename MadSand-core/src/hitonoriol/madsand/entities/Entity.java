@@ -28,6 +28,7 @@ public abstract class Entity {
 
 	@JsonIgnore
 	private Sprite sprite;
+	private float spriteWidth;
 
 	public int x, y; // Grid coords
 	public PairFloat globalPos = new PairFloat(); // Screen space coords
@@ -70,6 +71,8 @@ public abstract class Entity {
 		leftSpr = l;
 		rightSpr = r;
 		sprite = d;
+
+		spriteWidth = downSpr.getWidth();
 	}
 
 	@JsonIgnore
@@ -101,6 +104,11 @@ public abstract class Entity {
 			@Override
 			public Item _getItem(int id) {
 				return inventory.getItem(id);
+			}
+
+			@Override
+			public void _changeStamina(float by) {
+				changeStamina(by);
 			}
 		};
 	}
@@ -210,6 +218,11 @@ public abstract class Entity {
 		return standingOnLoot(x, y);
 	}
 
+	public void changeStamina(float by) {
+		stats.stamina += by;
+		stats.check();
+	}
+
 	public void damage(int to) {
 		stats.hp -= to;
 		stats.check();
@@ -218,9 +231,7 @@ public abstract class Entity {
 	public void heal(int to) {
 		// stats.skills.getLvlReward(Skill.Survival, to)
 		stats.hp += to;
-
-		if (stats.hp > stats.mhp)
-			stats.hp = stats.mhp;
+		stats.check();
 
 	}
 
@@ -454,6 +465,11 @@ public abstract class Entity {
 	@JsonIgnore
 	public int getSpeed() {
 		return stats.actionPtsMax;
+	}
+
+	@JsonIgnore
+	public float getSpriteWidth() {
+		return spriteWidth;
 	}
 
 	private String HEALTH_STATE_FULL = "full";

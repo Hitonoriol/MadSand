@@ -274,7 +274,7 @@
 		"hp" : 15,
 		"strength" : 2,
 		"accuracy" : 15,
-		"dexterity" : 0,
+		"dexterity" : 8,
 		"rewardExp" : 6,
 		"loot" : null,
 		"faction" : "Monsters",
