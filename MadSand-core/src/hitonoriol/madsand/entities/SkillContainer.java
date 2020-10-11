@@ -115,7 +115,11 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 
 	// How many times to roll for drops
 	public int getItemDropRolls(Skill skill) {
-
+		int lvl = getLvl(skill);
+		
+		if (lvl < 2)
+			return 1;
+		
 		if (Utils.percentRoll(getSkillRollPercent(skill)))
 			return Utils.rand(1, getLvl(skill));
 

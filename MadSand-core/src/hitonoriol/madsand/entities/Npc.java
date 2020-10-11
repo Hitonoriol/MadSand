@@ -42,7 +42,7 @@ public class Npc extends Entity {
 	public NpcState state = NpcState.Idle;
 	public NpcType type = NpcType.Regular;
 	public TradeCategory tradeCategory;
-	
+
 	public ProductionStation animalProductWorker;
 
 	public Npc(int id) {
@@ -80,7 +80,7 @@ public class Npc extends Entity {
 		stats.skills.setLvl(properties.lvl);
 		stats.dexterity = properties.dexterity;
 		stats.calcStats();
-		
+
 		stats.name = properties.name;
 		stats.hp = properties.hp;
 		stats.mhp = stats.hp;
@@ -89,7 +89,7 @@ public class Npc extends Entity {
 		rewardExp = properties.rewardExp;
 		stats.faction = properties.faction;
 		canTrade = properties.canTrade;
-		
+
 		if (properties.defaultState != null)
 			state = properties.defaultState;
 
@@ -108,11 +108,11 @@ public class Npc extends Entity {
 		initTrader();
 		initFarmAnimal();
 	}
-	
+
 	private void initFarmAnimal() {
 		if (!type.equals(NpcType.FarmAnimal))
 			return;
-		
+
 		animalProductWorker = new ProductionStation(-id);
 	}
 
@@ -230,7 +230,7 @@ public class Npc extends Entity {
 			if (dist > attackDistance) {
 				if (canAct(stats.AP_WALK) && dir != null) {
 					ticksSpent = doAction(stats.AP_WALK);
-					Utils.out("Ticks spent walking: " + ticksSpent);
+					//Utils.out(stats.name + "spent ticks walking: " + ticksSpent);
 					move(dir);
 				} else
 					rest();
@@ -242,7 +242,7 @@ public class Npc extends Entity {
 				turn(dir);
 
 				do {
-					Utils.out("Ticks spent attacking: " + ticksSpent);
+					//Utils.out(stats.name + " spent ticks attacking: " + ticksSpent);
 					attack(stats.look);
 				} while ((ticksSpent = doAction(stats.AP_ATTACK)) < 1);
 

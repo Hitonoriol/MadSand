@@ -102,20 +102,26 @@
 		#Richard# Oh well, I forgot you didn't remember anything... I'll explain later. What's important now is the key's location. [A key? To the dungeon?]=>
 		#Richard# Yeah, I kinda know about where to find one. But only a general location... [So... Where is it?]=>
 		#Richard# It's somewhere one sector North from here... (5, 6), to be more accurate. You'll have to search the whole sector for it. [I guess I have no choice...]=>
-		#Richard# You're right, {PLAYER}. You can't even imagine what would happen if monsters were to escape from the dungeon again.
+		#Richard# You're right, {PLAYER}. You can't even imagine what would happen if monsters were to escape from the dungeon again.=>
+		* To travel between unexplored sectors, you need a Travelling Kit.=>
+		#Richard# Oh, yeah, here's my last travel kit. You won't make it to (5, 6) without it. [Thanks]=>
 		You need to find the key as soon as possible.[I'll do my best]=>
-		#Richard# I believe in you. So head to the sector (5,6) and find the dungeon key!=>
+		#Richard# I believe in you. So head to the sector (5, 6) and find the dungeon key!=>
 		#Richard# And... here - take these vegetables. You don't want to starve to death while searching for the key, do you? [Thanks]=>
 		* To move to the next sector you need to approach the edge of the current one and press \"N\" when a prompt in the game log appears.
 	",
 
-	"endMsg" : "#Richard# That's excellent news, {PLAYER}. Talk to me again as soon as possible and I'll explain you how to enter the dungeon!",
+	"endMsg" : "
+		#Richard# That's excellent news, {PLAYER}. Here's your reward: 80 coins. It's not much, but you might need them if you meet any traders in the dungeon.=>
+		#Richard# Oh... You need some kind of weapon? Take this. [A toy sword? Duh.]=>
+		#Richard# Talk to me again as soon as possible and I'll explain you how to enter the dungeon!
+		",
 
 	"reqMsg" : "#Richard# You are still here? Head to the sector (5, 6) and retrieve the dungeon key! Hurry!",
 	"journalText" : "Find the dungeon key at the sector (5, 6)",
 	"reqItems" : "100/1",
 	"deleteRequiredItems" : false,
-	"giveItems" : "47/5:49/5",
+	"giveItems" : "130/1:47/3:49/2",
 	"rewardItems" : "21/80:85/1",
 	"removeOnCompletion" : "-1",
 	"previousQuest" : 2,
@@ -170,6 +176,29 @@
 	"removeOnCompletion" : "-1",
 	"repeatable" : false,
 	"previousQuest" : 1
+},
+
+"6" : {
+	"exp" : 50,
+	"name" : "Farming tutorial",
+	"startMsg" : "
+		#Old farmer# Greetings, young man! What's your name? {PLAYER}? Hmmm... Tell me, {PLAYER}, do you want to know about farming crops? [Yes?]=>
+		#Old farmer# Then I'll teach you everything you'll ever need to know to become the greatest farmer ever!
+			First of all, you need to plow a couple of tiles of soil. You can do it with a hoe while standing on a grass tile.[Please, continue]=>
+		#Old farmer# After that, you need something to plant into the soil: some kind of seeds. I'll give you a handful of some seeds so that you can train on them. [Thanks]=>
+		#Old farmer# And then you plant your seeds while standing on a plowed soil tile and wait until your crops fully grow. [And that's it?]=>
+		#Old farmer# Yeah, it's that simple. Go try it out and bring me 3 tomatoes once they grow. [Understood]
+	",
+
+	"endMsg" : "#Old farmer# Well done! You are going to be a great farmer... someday! Take these potato seeds as a reward.",
+
+	"reqMsg" : "#Old farmer# Bring me 3 tomatoes.",
+	"journalText" : "Grow and harvest crops from seeds Old farmer gave you and bring 3 tomatoes to him.",
+	"reqItems" : "48/3",
+	"giveItems" : "53/5",
+	"rewardItems" : "51/1",
+	"removeOnCompletion" : "-1",
+	"repeatable" : false
 }
 
 }

@@ -9,7 +9,6 @@ import com.badlogic.gdx.utils.Timer;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.SkillContainer;
 import hitonoriol.madsand.map.MapObject;
@@ -25,7 +24,7 @@ public class ResourceProgressBar extends TimedProgressBar {
 
 	static ProgressBarStyle style;
 
-	static float BASE_DELAY = 0.35f;
+	static float BASE_DELAY = 0.29f;
 	static float D_MULTIPLIER = 0.8f * (BASE_DELAY / (float) SkillContainer.MAX_SKILL_ROLL_PERCENT);
 
 	float HEIGHT = 20;
@@ -56,8 +55,6 @@ public class ResourceProgressBar extends TimedProgressBar {
 		this(BASE_DELAY - (D_MULTIPLIER * (float) World.player.stats.skills.getSkillRollPercent(object.skill)));
 		super.setAnimateDuration(delay);
 		nextValue = delay;
-		Utils.out("Skill delay: " + delay);
-		Utils.out("Lowest possible delay: " + (BASE_DELAY - (D_MULTIPLIER * SkillContainer.MAX_SKILL_ROLL_PERCENT)));
 
 		done = true;
 		setStyle();
@@ -68,7 +65,6 @@ public class ResourceProgressBar extends TimedProgressBar {
 			rangeMax = 1;
 
 		setRange(0, rangeMax);
-		Utils.out("Setting range to [0," + object.harvestHp + "]");
 		this.object = object;
 		initialObjectHp = object.hp;
 
@@ -117,7 +113,6 @@ public class ResourceProgressBar extends TimedProgressBar {
 
 		if (getVisualValue() >= getValue()) {
 			gatherResources();
-			Utils.out("Object damage: " + damage);
 
 			if (object.hp <= 0 || initialObjectHp != object.hp)
 				action.doAction();
@@ -125,9 +120,7 @@ public class ResourceProgressBar extends TimedProgressBar {
 			if (damage > 0) {
 				nextValue = delay / (float) damage;
 				setAnimateDuration(nextValue);
-				Utils.out("setv " + (getValue() + damage));
 				setValue(getValue() + damage);
-				Utils.out("setValue to: " + getValue() + " | animating for: " + nextValue);
 			} else {
 				skip = true;
 				Timer.instance().scheduleTask(skipTask, nextValue);

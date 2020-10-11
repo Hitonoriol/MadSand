@@ -31,7 +31,7 @@ public class WorldMap extends HashMap<MapID, Map> {
 
 	byte[] sectorToBytes(int wx, int wy, int layer) {
 		try {
-			Utils.out("Saving sector " + wx + ", " + wy + " : " + layer);
+			Utils.out("Saving sector " + wx + ", " + wy + " Layer: " + layer);
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			MapID loc = new MapID(new Pair(wx, wy), layer);
 			Map map = this.get(loc);
@@ -172,7 +172,6 @@ public class WorldMap extends HashMap<MapID, Map> {
 			map.purge();
 			map.editable = editable;
 			map.spawnPoint = new Pair(spawnX, spawnY);
-			Utils.out("Dungeon spawnpoint: " + map.spawnPoint);
 
 			// Load NPCs
 			HashMap<Pair, Npc> npcs = Resources.mapper.readValue(
@@ -280,6 +279,6 @@ public class WorldMap extends HashMap<MapID, Map> {
 
 	private void deleteLayerCountEntry(int wx, int wy) {
 		layers.remove(mapID.set(coords.set(wx, wy), World.LAYER_OVERWORLD));
-		Utils.out("Sector (" + wx + ", " + wy + ") has been removed from worldMap!");
+		Utils.out("Location (" + wx + ", " + wy + ") has been removed from worldMap!");
 	}
 }

@@ -172,7 +172,7 @@
 		"friendly" : true
 	},
 	"12" : {
-		"name" : "Elder",
+		"name" : "Old Farmer",
 		"hp" : 50,
 		"strength" : 5,
 		"accuracy" : 1,
@@ -180,9 +180,9 @@
 		"rewardExp" : 10,
 		"loot" : null,
 		"faction" : "Partisans",
-		"type" : "Regular",
-		"questList" : null,
-		"spawnOnce" : false,
+		"type" : "QuestMaster",
+		"questList" : [6],
+		"spawnOnce" : true,
 		"friendly" : true
 	},
 	"13" : {

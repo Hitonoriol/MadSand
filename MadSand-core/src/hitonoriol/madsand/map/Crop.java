@@ -1,7 +1,6 @@
 package hitonoriol.madsand.map;
 
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.properties.ItemProp;
 
 public class Crop {
@@ -49,10 +48,8 @@ public class Crop {
 			return totalGrowthTime;
 
 		int time = 0;
-		for (CropGrowthStage stageLen : growthStages) {
-			Utils.out("Stage len: " + stageLen.stageLength);
+		for (CropGrowthStage stageLen : growthStages) 
 			time += stageLen.stageLength;
-		}
 
 		totalGrowthTime = time;
 		return time;

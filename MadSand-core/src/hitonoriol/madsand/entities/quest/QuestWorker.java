@@ -66,10 +66,8 @@ public class QuestWorker {
 		ArrayList<Integer> quests = new ArrayList<>();
 
 		for (int quest : mobQuestList)
-			if (isQuestAvailable(quest)) {
-				Utils.out("Quest " + quest + " is available!");
+			if (isQuestAvailable(quest)) 
 				quests.add(quest);
-			}
 
 		return quests;
 	}
@@ -83,7 +81,7 @@ public class QuestWorker {
 	}
 
 	private void startQuest(Quest quest) {
-		Utils.out("Trying to start quest id" + quest.id);
+		Utils.out("Trying to start quest " + quest.id);
 
 		if (isQuestCompleted(quest.id))
 			return;

@@ -78,7 +78,6 @@ public class DialogChainGenerator {
 				});
 
 			} else {
-				Utils.out("buttonString: [" + buttonString + "]");
 				nextDialogButton.setText(buttonString);
 				dialog.addButton(nextDialogButton);
 				nextDialogButton.addListener(new ChangeListener() {

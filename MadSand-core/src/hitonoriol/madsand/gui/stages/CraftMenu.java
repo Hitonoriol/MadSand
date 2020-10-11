@@ -93,7 +93,6 @@ public class CraftMenu extends Stage {
 			recipeLabel = new Label(" " + Item.queryToName(ItemProp.getCraftRecipe(id)), skin);
 			recipeLabel.setAlignment(Align.left);
 
-			Utils.out("craftbtn width: " + craftButtons[i].getWidth());
 			craftTable.add(craftButtons[i]).width(craftButtons[i].getWidth());
 			craftTable.add(recipeLabel).align(Align.left);
 
@@ -101,8 +100,6 @@ public class CraftMenu extends Stage {
 				craftTable.row();
 			else
 				craftTable.padRight(CRAFT_ENTRY_PADDING);
-
-			Utils.out("Creating a button for item " + i + " craft recipe...");
 
 			i++;
 		}

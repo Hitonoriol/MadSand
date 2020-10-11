@@ -156,7 +156,6 @@ public class Inventory {
 			inventoryUI.stacks -= 1;
 
 			inventoryUI.refresh(itemUI.entrySet());
-			Utils.out("Removed item stacks: " + inventoryUI.stacks);
 		}
 	}
 

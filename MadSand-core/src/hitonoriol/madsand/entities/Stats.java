@@ -279,8 +279,6 @@ public class Stats {
 		if (atk <= 0)
 			atk = 1;
 
-		Utils.out("CalcAttack with defense: " + defense + " | Strength: " + strength + "; ATK: " + atk);
-
 		return atk;
 	}
 

@@ -9,6 +9,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 
 public class Globals {
+	public static String TRAVEL_ITEM = "travelItem";
 	public static String CURRENCY_FIELD = "currencyId";
 
 	private static HashMap<String, String> values = new HashMap<>();

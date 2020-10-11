@@ -20,6 +20,8 @@ import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.map.Map;
+import hitonoriol.madsand.properties.Globals;
+import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.world.worldgen.WorldGen;
 
 public class World {
@@ -146,7 +148,7 @@ public class World {
 	public Map getCurLoc() {
 		return getLoc(curxwpos, curywpos, curlayer);
 	}
-	
+
 	public Map getOverworld() {
 		return getLoc(curxwpos, curywpos, LAYER_OVERWORLD);
 	}
@@ -344,8 +346,24 @@ public class World {
 		canTravel |= (x < 1 && direction == Direction.LEFT);
 		canTravel |= (y < 1 && direction == Direction.DOWN);
 
-		if (canTravel)
+		if (canTravel) {
+
+			int travelItem = Globals.getInt(Globals.TRAVEL_ITEM);
+			Pair nextSector = coords.set(curxwpos, curywpos).addDirection(direction);
+
+			if (!GameSaver.verifyNextSector(nextSector.x, nextSector.y)) {
+				if (!player.hasItem(travelItem)) {
+					Gui.drawOkDialog(
+							"You need at least 1 " + ItemProp.getItemName(travelItem)
+									+ " to travel to the next sector.",
+							Gui.overlay);
+					return;
+				} else
+					player.inventory.delItem(travelItem);
+			}
+
 			switchLocation(direction);
+		}
 
 	}
 
@@ -376,11 +394,7 @@ public class World {
 		Map loc = getCurLoc();
 		String place = null;
 
-		Utils.out("In cave : " + (loc.spawnPoint.equals(Pair.nullPair)));
-
-		int x = loc.spawnPoint.x, y = loc.spawnPoint.y;
-		int x1 = Pair.nullPair.x, y1 = Pair.nullPair.y;
-		if (x1 != x && y1 != y) { // this means we are in the dungeon
+		if (!loc.spawnPoint.equals(Pair.nullPair)) { // this means we are in the dungeon
 			player.teleport(loc.spawnPoint.x, loc.spawnPoint.y);
 			place = "dungeon";
 		} else { // this means we are in the cave
@@ -398,17 +412,16 @@ public class World {
 	public boolean ascend(int layer) {
 		if (layer < LAYER_OVERWORLD)
 			return false;
-		
+
 		Utils.out("Ascending to " + layer);
-		
+
 		boolean ret = switchLocation(layer);
-		Utils.out("switchLocation returned " + ret);
-		
+
 		if (curlayer == LAYER_OVERWORLD)
 			MadSand.print("You get back to surface level");
 		else
 			MadSand.print("You get back to dungeon level " + curlayer);
-		
+
 		Gui.overlay.processActionMenu();
 		return ret;
 	}

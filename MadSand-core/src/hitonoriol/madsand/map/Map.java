@@ -136,6 +136,16 @@ public class Map {
 		return mapNpcs.size();
 	}
 
+	public int getHostileNpcCount() {
+		int count = 0;
+
+		for (Entry<Pair, Npc> entry : mapNpcs.entrySet())
+			if (!entry.getValue().friendly)
+				++count;
+
+		return count;
+	}
+
 	public Pair getRandomPoint(int distanceFromPlayer) {
 		Player player = World.player;
 		int x = player.x, y = player.y;
@@ -702,10 +712,12 @@ public class Map {
 		OverworldPreset overworld = preset.overworld;
 		double forceVal = force ? 100 : 0;
 		int maxNpcs = getMaxNpcs();
-		Utils.out("Max auto-spawned npcs: " + maxNpcs);
 
 		if (getNpcCount() >= maxNpcs)
 			return;
+		
+		Utils.out("Auto-spawning mobs, friendly = " + friendly);
+		Utils.out("Max auto-spawned npcs: " + maxNpcs);
 
 		if (friendly)
 			spawnFromRollList(overworld.friendlyMobs, overworld.friendlySpawnChance + forceVal);
@@ -747,7 +759,7 @@ public class Map {
 
 		int maxObjects = getMaxObjects();
 
-		Utils.out("Regenerating objects from regenerateObjects...");
+		Utils.out("Performing natural object regeneration");
 		Utils.out("Max objects for current location: " + maxObjects);
 
 		if (getObjectCount() < maxObjects)

@@ -52,10 +52,11 @@ public class Utils {
 	}
 
 	static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
+
 	public static void out(String arg) {
 		if (!debugMode)
 			return;
-		
+
 		System.out.print("[" + sdf.format(Calendar.getInstance().getTime()) + "] " + arg + "\n");
 
 	}
@@ -75,6 +76,11 @@ public class Utils {
 	}
 
 	public static int rand(int min, int max) {
+		if (max < min) {
+			Utils.out("***bruh momentum: rand max < min, returning min");
+			return min;
+		}
+
 		return random.nextInt((max - min) + 1) + min;
 	}
 

@@ -122,7 +122,8 @@ public class Player extends Entity {
 	public boolean attack(Direction dir) {
 		boolean dead;
 		turn(dir);
-		Npc npc = MadSand.world.getCurLoc().getNpc(coords.set(x, y).addDirection(dir));
+		Map map = MadSand.world.getCurLoc();
+		Npc npc = map.getNpc(coords.set(x, y).addDirection(dir));
 
 		if (npc == Map.nullNpc)
 			return false;
@@ -149,6 +150,12 @@ public class Player extends Entity {
 
 			if (knownNpcs.add(npc.id)) // If killed for the first time
 				MadSand.print("You now know more about " + npc.stats.name + "s");
+			
+			if (map.getHostileNpcCount() == 0 && MadSand.world.isUnderGround()) {
+				MadSand.print("The curse of the dungeon has been lifted!" + Resources.LINEBREAK +
+						"You can now break objects on this floor of the dungeon.");
+				map.editable = true;
+			}
 
 		}
 
@@ -258,8 +265,6 @@ public class Player extends Entity {
 
 		Gui.overlay.closeGameContextMenu();
 
-		Utils.out("Interacting with NPC " + name + " type: " + npc.type.toString());
-
 		switch (npc.type) {
 
 		case Trader:
@@ -296,8 +301,6 @@ public class Player extends Entity {
 
 	public void tradeWithNpc(Npc npc) {
 
-		Utils.out("Trade with npc: " + npc.stats.name);
-
 		if (!npc.canTrade && !npc.type.equals(NpcType.Trader))
 			return;
 
@@ -312,7 +315,6 @@ public class Player extends Entity {
 		Npc npc = loc.getNpc(coords.x, coords.y);
 
 		if (!npc.equals(Map.nullNpc)) {
-			Utils.out("**********Npc Interaction");
 			interact(npc);
 			return;
 		}
@@ -394,7 +396,6 @@ public class Player extends Entity {
 
 			for (int i = 0; i < rolls; ++i) {
 				rewardCount = stats.skills.getItemReward(skill);
-				Utils.out("Rolling " + i + "/" + rolls + ": item id" + item + ", quantity: " + rewardCount);
 				objLoot = new Item(item, rewardCount);
 				addItem(objLoot);
 				item = MapObject.getAltItem(obj.id, ItemProp.getType(stats.hand().id).get());
@@ -404,7 +405,7 @@ public class Player extends Entity {
 		}
 
 		if (!damaged)
-			MadSand.print("You hit a " + obj.name + " [ " + obj.harvestHp + " / " + mhp + " ]");
+			MadSand.print("You hit " + obj.name + " [ " + obj.harvestHp + " / " + mhp + " ]");
 
 		if (item == -1 && damaged && obj.id != Map.nullObject.id)
 			MadSand.print("You damaged " + obj.name);
