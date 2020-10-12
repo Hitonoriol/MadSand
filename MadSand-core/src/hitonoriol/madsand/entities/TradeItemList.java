@@ -62,12 +62,16 @@ public class TradeItemList {
 			maxRolls = DEFAULT_MAX_ROLLS;
 		}
 
-		int rolls = Utils.rand(minRolls + tier * (TIER_MULTIPLIER / 2), maxRolls + tier * TIER_MULTIPLIER);
+		int rolls = rollTimes();
 
 		for (int i = 0; i < rolls; ++i)
 			items.add(rollItem());
 
 		return items;
+	}
+
+	public int rollTimes() {
+		return Utils.rand(minRolls + tier * (TIER_MULTIPLIER / 2), maxRolls + tier * TIER_MULTIPLIER);
 	}
 
 	public TradeItemList add(int... itemList) {

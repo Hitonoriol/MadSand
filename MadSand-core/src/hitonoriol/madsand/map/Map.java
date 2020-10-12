@@ -355,7 +355,7 @@ public class Map {
 	}
 
 	public boolean addObject(int x, int y, int id, boolean force) {
-		if (!correctCoords(coords.set(x, y)))
+		if (!correctCoords(coords.set(x, y)) || id == Map.nullObject.id)
 			return false;
 
 		if (mapObjects.containsKey(coords)) {
@@ -715,9 +715,8 @@ public class Map {
 
 		if (getNpcCount() >= maxNpcs)
 			return;
-		
+
 		Utils.out("Auto-spawning mobs, friendly = " + friendly);
-		Utils.out("Max auto-spawned npcs: " + maxNpcs);
 
 		if (friendly)
 			spawnFromRollList(overworld.friendlyMobs, overworld.friendlySpawnChance + forceVal);
@@ -760,7 +759,6 @@ public class Map {
 		int maxObjects = getMaxObjects();
 
 		Utils.out("Performing natural object regeneration");
-		Utils.out("Max objects for current location: " + maxObjects);
 
 		if (getObjectCount() < maxObjects)
 			for (RollList rollList : overworld.regenerateObjects)
@@ -790,12 +788,26 @@ public class Map {
 	private float MAX_OBJECT_PERCENT = 0.15f; // Max percent of map allowed to be filled with objects
 	private float MAX_NPC_PERCENT = 0.05f;
 
+	private int maxObjects = -1;
+
 	public int getMaxObjects() {
-		return (int) (xsz * ysz * MAX_OBJECT_PERCENT);
+		if (maxObjects == -1) {
+			maxObjects = (int) (xsz * ysz * MAX_OBJECT_PERCENT);
+			Utils.out("Max objects for current location: " + maxObjects);
+		}
+
+		return maxObjects;
 	}
 
+	private int maxNpcs = -1;
+
 	public int getMaxNpcs() {
-		return (int) (xsz * ysz * MAX_NPC_PERCENT);
+		if (maxNpcs == -1) {
+			maxNpcs = (int) (xsz * ysz * MAX_NPC_PERCENT);
+			Utils.out("Max auto-spawned npcs: " + maxNpcs);
+		}
+
+		return maxNpcs;
 	}
 
 	public void rollObjects(RollList objectRollList) {

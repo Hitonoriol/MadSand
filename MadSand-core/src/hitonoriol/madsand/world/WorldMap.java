@@ -140,16 +140,22 @@ public class WorldMap extends HashMap<MapID, Map> {
 		ByteArrayInputStream stream = new ByteArrayInputStream(location);
 		long layersz;
 		long saveVersion;
+		byte[] block = new byte[BLOCK_SIZE];
+		byte[] longBlock = new byte[LONG_BLOCK_SIZE];
 
-		saveVersion = GameSaver.decode8(stream.readNBytes(LONG_BLOCK_SIZE));
+		saveVersion = loadNextLongBlock(stream, longBlock);
 		if (saveVersion != GameSaver.saveFormatVersion)
-			throw (new Exception("Save version is too old / new!"));
+			throw (new Exception("Incompatible save format version!"));
 
-		int layers = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
+		int layers = loadNextBlock(stream, block);
 		setLayerCount(wx, wy, layers);
+
+		byte[] sectorContents;
 		for (int i = 0; i < layers; ++i) {
-			layersz = GameSaver.decode8(stream.readNBytes(LONG_BLOCK_SIZE));
-			bytesToSector(stream.readNBytes((int) layersz), wx, wy, i);
+			layersz = loadNextLongBlock(stream, longBlock);
+			sectorContents = new byte[(int) layersz];
+			stream.read(sectorContents);
+			bytesToSector(sectorContents, wx, wy, i);
 		}
 
 	}
@@ -157,15 +163,17 @@ public class WorldMap extends HashMap<MapID, Map> {
 	void bytesToSector(byte[] sector, int wx, int wy, int layer) {
 		try {
 			ByteArrayInputStream stream = new ByteArrayInputStream(sector);
+			byte[] block = new byte[BLOCK_SIZE];
+			byte[] longBlock = new byte[LONG_BLOCK_SIZE];
 			// Read header
-			boolean editable = Utils.bool(loadNextBlock(stream));
-			int xsz = loadNextBlock(stream);
-			int ysz = loadNextBlock(stream);
-			int spawnX = loadNextBlock(stream);
-			int spawnY = loadNextBlock(stream);
-			int defTile = loadNextBlock(stream);
-			int defObject = loadNextBlock(stream);
-			int biome = loadNextBlock(stream);
+			boolean editable = Utils.bool(loadNextBlock(stream, block));
+			int xsz = loadNextBlock(stream, block);
+			int ysz = loadNextBlock(stream, block);
+			int spawnX = loadNextBlock(stream, block);
+			int spawnY = loadNextBlock(stream, block);
+			int defTile = loadNextBlock(stream, block);
+			int defObject = loadNextBlock(stream, block);
+			int biome = loadNextBlock(stream, block);
 
 			MapID loc = new MapID(new Pair(wx, wy), layer);
 			Map map = new Map(xsz, ysz);
@@ -189,7 +197,7 @@ public class WorldMap extends HashMap<MapID, Map> {
 			map.setBiome(biome);
 			map.defTile = defTile;
 			map.defObject = defObject;
-			byte[] block = new byte[BLOCK_SIZE];
+
 			for (int y = 0; y < ysz; ++y) {
 				for (int x = 0; x < xsz; ++x) {
 					stream.read(block);
@@ -227,16 +235,16 @@ public class WorldMap extends HashMap<MapID, Map> {
 			}
 
 			//Load crops
-			int cropsCount = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
+			int cropsCount = loadNextBlock(stream, block);
 			int x, y, id, stage;
 			long ptime;
 			Crop crop;
 			for (int i = 0; i < cropsCount; ++i) {
-				x = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
-				y = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
-				id = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
-				ptime = GameSaver.decode8(stream.readNBytes(LONG_BLOCK_SIZE));
-				stage = GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
+				x = loadNextBlock(stream, block);
+				y = loadNextBlock(stream, block);
+				id = loadNextBlock(stream, block);
+				ptime = loadNextLongBlock(stream, longBlock);
+				stage = loadNextBlock(stream, block);
 				crop = new Crop(id, ptime, stage);
 				map.putCrop(x, y, crop);
 			}
@@ -253,8 +261,14 @@ public class WorldMap extends HashMap<MapID, Map> {
 		}
 	}
 
-	private int loadNextBlock(ByteArrayInputStream stream) throws Exception {
-		return GameSaver.decode2(stream.readNBytes(BLOCK_SIZE));
+	private long loadNextLongBlock(ByteArrayInputStream stream, byte[] buffer) throws Exception {
+		stream.read(buffer);
+		return GameSaver.decode8(buffer);
+	}
+
+	private int loadNextBlock(ByteArrayInputStream stream, byte[] buffer) throws Exception {
+		stream.read(buffer);
+		return GameSaver.decode2(buffer);
 	}
 
 	public void setLayerCount(int wx, int wy, int layers) {

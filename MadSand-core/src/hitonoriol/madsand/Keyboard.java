@@ -43,8 +43,8 @@ public class Keyboard {
 
 		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
 			Gui.mainMenu.showResumeTable();
-			MadSand.xmid = MadSand.xmenu = World.player.globalPos.x;
-			MadSand.ymid = MadSand.ymenu = World.player.globalPos.y;
+			MadSand.xmid = MadSand.cameraX = World.player.globalPos.x;
+			MadSand.ymid = MadSand.cameraY = World.player.globalPos.y;
 			Gdx.input.setInputProcessor(Gui.mainMenu);
 			MadSand.state = GameState.NMENU;
 		}
@@ -155,11 +155,15 @@ public class Keyboard {
 		if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT) && Gdx.input.isKeyJustPressed(Keys.R))
 			MadSand.world.generate();
 
-		if (Gdx.input.isKeyPressed(Keys.NUMPAD_3))
-			MadSand.ZOOM = (float) (MadSand.ZOOM + 0.01D);
+		if (Gdx.input.isKeyPressed(Keys.NUMPAD_3)) {
+			MadSand.ZOOM += 0.01f;
+			MadSand.setViewport();
+		}
 
-		if (Gdx.input.isKeyPressed(Keys.NUMPAD_1))
-			MadSand.ZOOM = (float) (MadSand.ZOOM - 0.01D);
+		if (Gdx.input.isKeyPressed(Keys.NUMPAD_1)) {
+			MadSand.ZOOM -= 0.01f;
+			MadSand.setViewport();
+		}
 
 		if (Gdx.input.isKeyPressed(Keys.NUMPAD_4))
 			MadSand.camxoffset -= 2;

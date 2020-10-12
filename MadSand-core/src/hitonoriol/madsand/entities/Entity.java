@@ -35,6 +35,8 @@ public abstract class Entity {
 
 	public int fov = 15;
 	public int maxFov, minFov;
+	
+	protected Pair coords = new Pair();
 
 	public Inventory inventory;
 	public Stats stats;
@@ -368,21 +370,24 @@ public abstract class Entity {
 	public boolean move(Direction dir) {
 		if (dir.isDiagonal())
 			return false;
-		if ((!colliding(dir))) {
-			boolean canMove = !isOnMapBound(dir);
-			if ((dir == Direction.UP) && (canMove)) {
+
+		if (!colliding(dir)) {
+			if (isOnMapBound(dir))
+				return false;
+			
+			if (dir == Direction.UP) {
 				++y;
 				globalPos.y += MadSand.TILESIZE;
 			}
-			if ((dir == Direction.DOWN) && (canMove)) {
+			if (dir == Direction.DOWN) {
 				--y;
 				globalPos.y -= MadSand.TILESIZE;
 			}
-			if ((dir == Direction.LEFT) && (canMove)) {
+			if (dir == Direction.LEFT) {
 				--x;
 				globalPos.x -= MadSand.TILESIZE;
 			}
-			if ((dir == Direction.RIGHT) && (canMove)) {
+			if (dir == Direction.RIGHT) {
 				++x;
 				globalPos.x += MadSand.TILESIZE;
 			}
@@ -460,6 +465,11 @@ public abstract class Entity {
 			return true;
 
 		return false;
+	}
+
+	public void attackAnimation(Entity entity) {
+		MadSand.queueAnimation(Resources.createAnimation(Resources.attackAnimStrip),
+				entity.globalPos.x, entity.globalPos.y);
 	}
 
 	@JsonIgnore

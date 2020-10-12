@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.properties.ObjectProp;
@@ -30,6 +31,7 @@ public class MapObject {
 	public boolean isProductionStation = false;
 	public boolean isCraftingStation = false;
 	public boolean isWall = false;
+	public boolean centered = false;
 
 	public int maskWidth = 0, maskHeight = 0; // Collision mask dimensions for objects larger than 1x1 cell
 	public HashMap<Integer, Vector<Integer>> altItems;
@@ -46,6 +48,7 @@ public class MapObject {
 		this.skill = objectProp.skill;
 		this.lvl = objectProp.lvl;
 		this.nocollide = objectProp.nocollide;
+		this.centered = objectProp.centered;
 		this.isProductionStation = objectProp.isProductionStation;
 		this.isWall = objectProp.isWall;
 		this.isCraftingStation = objectProp.isCraftingStation;
@@ -124,5 +127,10 @@ public class MapObject {
 
 		MapObject rhs = (MapObject) obj;
 		return new EqualsBuilder().append(id, rhs.id).isEquals();
+	}
+	
+	@JsonIgnore
+	public float getRenderOffset() {
+		return Resources.objects[id].getWidth() / 4;
 	}
 }

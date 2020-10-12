@@ -142,6 +142,10 @@ public class Npc extends Entity {
 			return false;
 		int originalX = this.x, originalY = this.y;
 
+		coords.set(x, y).addDirection(dir);
+		if (coords.x == World.player.x && coords.y == World.player.y)
+			return false;
+
 		if (!super.move(dir))
 			return false;
 
@@ -174,8 +178,10 @@ public class Npc extends Entity {
 			int atk = stats.calcAttack(player.getDefense());
 			if (atk == 0)
 				MadSand.print(stats.name + " misses!");
-			else
+			else {
 				MadSand.print(stats.name + " deals " + atk + " damage to you");
+				super.attackAnimation(player);
+			}
 			player.damage(atk);
 			return true;
 		}
@@ -188,7 +194,6 @@ public class Npc extends Entity {
 
 	public void act() {
 		Player player = World.player;
-		int ticksSpent = 0;
 		tileDmg();
 		//stats.perTickCheck(); I don't think NPCs need this
 
@@ -207,7 +212,7 @@ public class Npc extends Entity {
 
 		case Idle:
 			if (canAct(stats.AP_WALK) && Utils.percentRoll(IDLE_NPC_MOVE_CHANCE)) {
-				ticksSpent = doAction(stats.AP_WALK);
+				doAction(stats.AP_WALK);
 				randMove();
 			} else
 				rest();
@@ -229,7 +234,7 @@ public class Npc extends Entity {
 
 			if (dist > attackDistance) {
 				if (canAct(stats.AP_WALK) && dir != null) {
-					ticksSpent = doAction(stats.AP_WALK);
+					doAction(stats.AP_WALK);
 					//Utils.out(stats.name + "spent ticks walking: " + ticksSpent);
 					move(dir);
 				} else
@@ -244,7 +249,7 @@ public class Npc extends Entity {
 				do {
 					//Utils.out(stats.name + " spent ticks attacking: " + ticksSpent);
 					attack(stats.look);
-				} while ((ticksSpent = doAction(stats.AP_ATTACK)) < 1);
+				} while ((doAction(stats.AP_ATTACK)) < 1);
 
 			} else
 				rest();

@@ -58,15 +58,17 @@ public class Utils {
 			return;
 
 		System.out.print("[" + sdf.format(Calendar.getInstance().getTime()) + "] " + arg + "\n");
+	}
 
+	public static void out() {
+		System.out.println();
 	}
 
 	public static void die(String... msg) {
 		out("Seems like some fatal error occured. Check " + MadSand.ERRFILE + " for details.");
 		if (msg.length > 0) {
-			for (String m : msg) {
+			for (String m : msg)
 				out(m);
-			}
 		}
 		System.exit(-1);
 	}

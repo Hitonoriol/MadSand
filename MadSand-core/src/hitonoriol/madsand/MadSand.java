@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Timer;
 
+import hitonoriol.madsand.containers.AnimationContainer;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.PairFloat;
 import hitonoriol.madsand.entities.Entity;
@@ -23,6 +24,8 @@ import hitonoriol.madsand.world.World;
 
 import java.io.File;
 import java.io.PrintStream;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MadSand extends Game {
 	public static String VER = "";
@@ -78,6 +81,8 @@ public class MadSand extends Game {
 	public static GameState state = GameState.LAUNCHER;
 	public static int MAXSAVESLOTS = 10;
 
+	private static ConcurrentHashMap<PairFloat, AnimationContainer> animations = new ConcurrentHashMap<>();
+
 	public static World world;
 
 	private static PairFloat[] renderArea;
@@ -85,8 +90,8 @@ public class MadSand extends Game {
 
 	static float ymid;
 	static float xmid = ymid = 0;
-	static float ymenu;
-	static float xmenu = ymenu = xmid;
+	static float cameraY;
+	static float cameraX = cameraY = xmid;
 	private static float menuXStep = 0.8f, menuYStep = 0f;
 	private static float menuOffset = 250;
 
@@ -110,7 +115,9 @@ public class MadSand extends Game {
 		world.generate();
 
 		initMenuAnimation();
-		initCamera();
+		camera = new OrthographicCamera();
+		setViewport();
+		updateCamPosition();
 
 		Utils.out("End of initialization!");
 
@@ -195,23 +202,57 @@ public class MadSand extends Game {
 		setRenderRadius();
 	}
 
-	private void initCamera() {
-		camera = new OrthographicCamera();
+	public static void setViewport() {
 		camera.viewportWidth = (Gdx.graphics.getWidth() / ZOOM);
 		camera.viewportHeight = (Gdx.graphics.getHeight() / ZOOM);
-		updateCamToxy(xmenu, ymenu);
-
+		camera.update();
+	}
+	
+	public static void setCamPosition(float x, float y) {
+		cameraX = x;
+		cameraY = y;
 	}
 
-	public void updateCamToxy(float x, float y) {
+	public static void updateCamPosition(float x, float y) {
 		camera.position.set(x + camxoffset, y + camyoffset, 0.0F);
 		Utils.batch.setProjectionMatrix(camera.combined);
 		camera.update();
 	}
 
+	public static void updateCamPosition() {
+		updateCamPosition(cameraX, cameraY);
+	}
+
 	private void renderObject(MapObject object, int x, int y) {
+		x *= TILESIZE;
+		y *= TILESIZE;
+
+		if (object.centered)
+			x -= object.getRenderOffset();
+
 		if ((object.id != MapObject.NULL_OBJECT_ID) && (object.id != MapObject.COLLISION_MASK_ID))
-			Utils.batch.draw(Resources.objects[object.id], x * TILESIZE, y * TILESIZE);
+			Utils.batch.draw(Resources.objects[object.id], x, y);
+	}
+
+	public static void queueAnimation(AnimationContainer animation, float x, float y) {
+		animations.put(new PairFloat(x, y), animation);
+	}
+
+	public static void drawAnimations() {
+		if (animations.isEmpty())
+			return;
+
+		PairFloat coords;
+		AnimationContainer animation;
+
+		for (Entry<PairFloat, AnimationContainer> anim : animations.entrySet()) {
+			coords = anim.getKey();
+			animation = anim.getValue();
+			Utils.batch.draw(animation.getCurrentKeyFrame(), coords.x, coords.y);
+
+			if (animation.isAnimationFinished())
+				animations.remove(coords);
+		}
 	}
 
 	void drawGame() {
@@ -226,12 +267,12 @@ public class MadSand extends Game {
 		int xsz = loc.getWidth(), ysz = loc.getHeight();
 		int i = 0;
 
-		if (player.isInBackground()) // Draw player under tiles & objeccts if he is currently in the background
+		if (player.isInBackground()) // Draw player under tiles & objects if he is currently in the background
 			drawEntity(player);
 
 		while (i < renderArea.length) { // Render background tiles
-			x = World.player.x + (int) renderArea[i].x;
-			y = World.player.y + (int) renderArea[i].y;
+			x = player.x + (int) renderArea[i].x;
+			y = player.y + (int) renderArea[i].y;
 
 			tile = loc.getTile(x, y);
 
@@ -251,12 +292,13 @@ public class MadSand extends Game {
 
 		i = 0;
 
-		while (i < renderArea.length) { // Render objects & entities
-			x = World.player.x + (int) renderArea[i].x;
-			y = World.player.y + (int) renderArea[i].y;
+		while (i < renderArea.length) { // Render objects, loot, NPCs and player
+			x = player.x + (int) renderArea[i].x;
+			y = player.y + (int) renderArea[i].y;
 
 			tile = loc.getTile(x, y);
 			object = loc.getObject(x, y);
+			npc = loc.getNpc(x, y);
 			tileVisited = tile.visited && !tile.visible;
 
 			if ((x > xsz || y > ysz || x < 0 || y < 0) && MadSand.world.isUnderGround()) {
@@ -264,7 +306,7 @@ public class MadSand extends Game {
 				continue;
 			}
 
-			if (!tile.visible && !tile.visited) { // Don't render objects/entities on tiles which were never seen by player
+			if (!tile.visible && !tile.visited) { //Don't render anything on tiles which were never seen
 				++i;
 				continue;
 			}
@@ -281,17 +323,19 @@ public class MadSand extends Game {
 			if (player.standingOnLoot(x, y))
 				Utils.batch.draw(Resources.objects[OBJECT_LOOT], x * TILESIZE, y * TILESIZE);
 
-			npc = loc.getNpc(x, y);
 			if (npc != Map.nullNpc)
 				drawEntity(npc);
 
 			renderObject(object, x, y);
 
+			if (x == player.x && y == player.y)
+				if (!player.isInBackground())
+					drawEntity(player);
+
 			++i;
 		}
 
-		if (!player.isInBackground())
-			drawEntity(player);
+		drawAnimations();
 
 		if (!Gui.gameUnfocused && state.equals(GameState.GAME)) {
 			Utils.batch.draw(Resources.mapcursor, Mouse.wx * TILESIZE, Mouse.wy * TILESIZE);
@@ -302,8 +346,8 @@ public class MadSand extends Game {
 	}
 
 	private void initMenuAnimation() {
-		xmenu = xmid = World.player.x * TILESIZE;
-		ymenu = ymid = World.player.y * TILESIZE;
+		cameraX = xmid = World.player.x * TILESIZE;
+		cameraY = ymid = World.player.y * TILESIZE;
 	}
 
 	private float cameraBounce(float n) {
@@ -313,20 +357,20 @@ public class MadSand extends Game {
 
 	private void drawMenuBackground() {
 
-		if (xmenu > (xmid + menuOffset))
+		if (cameraX > (xmid + menuOffset))
 			menuXStep = cameraBounce(menuXStep);
 
-		if (ymenu > (ymid + menuOffset))
+		if (cameraY > (ymid + menuOffset))
 			menuYStep = cameraBounce(menuYStep);
 
-		if (xmenu < (xmid - menuOffset))
+		if (cameraX < (xmid - menuOffset))
 			menuXStep = cameraBounce(menuXStep);
 
-		if (ymenu < (ymid - menuOffset))
+		if (cameraY < (ymid - menuOffset))
 			menuYStep = cameraBounce(menuYStep);
 
-		ymenu += menuYStep;
-		xmenu += menuXStep;
+		cameraY += menuYStep;
+		cameraX += menuXStep;
 
 		drawGame();
 		Gdx.graphics.requestRendering();
@@ -364,7 +408,7 @@ public class MadSand extends Game {
 				Utils.batch.draw((TextureRegion) anim.getKeyFrame(this.elapsedTime, true), drawx, drawy);
 
 				if (state == GameState.GAME)
-					updateCamToxy(drawx, drawy);
+					setCamPosition(drawx, drawy);
 			} else
 				Utils.batch.draw(entity.getSprite(), drawx, drawy);
 
@@ -381,7 +425,7 @@ public class MadSand extends Game {
 			Utils.batch.draw(entity.getSprite(), entity.globalPos.x, entity.globalPos.y);
 
 			if ((entity instanceof Player) && (state == GameState.GAME))
-				updateCamToxy(entity.globalPos.x, entity.globalPos.y);
+				setCamPosition(entity.globalPos.x, entity.globalPos.y);
 		}
 	}
 
@@ -414,6 +458,7 @@ public class MadSand extends Game {
 			Gdx.gl.glClear(16384);
 			Utils.batch.begin();
 			drawGame();
+			updateCamPosition();
 			Gui.overlay.act();
 			Gui.overlay.draw();
 			Utils.batch.end();
@@ -443,7 +488,7 @@ public class MadSand extends Game {
 		} else if (state.equals(GameState.NMENU)) {
 			Gdx.gl.glClearColor(1.0F, 1.0F, 1.0F, 1.0F);
 			Gdx.gl.glClear(16384);
-			updateCamToxy(xmenu, ymenu);
+			updateCamPosition(cameraX, cameraY);
 			camera.update();
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);
@@ -456,7 +501,7 @@ public class MadSand extends Game {
 			Utils.batch.begin();
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);
-			updateCamToxy(World.player.globalPos.x, World.player.globalPos.y);
+			updateCamPosition(World.player.globalPos.x, World.player.globalPos.y);
 			drawMenuBackground();
 			Gui.worldGenStage.draw();
 			Utils.batch.end();

@@ -30,6 +30,7 @@
 		"harvestHp" : 4,
 		"lvl" : -1,
 		"nocollide" : false,
+		"centered" : true,
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
@@ -427,6 +428,7 @@
 		"harvestHp" : 4,
 		"lvl" : -1,
 		"nocollide" : false,
+		"centered" : true,
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
@@ -442,6 +444,7 @@
 		"harvestHp" : 4,
 		"lvl" : 2,
 		"nocollide" : false,
+		"centered" : true,
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
@@ -457,6 +460,7 @@
 		"harvestHp" : 4,
 		"lvl" : -1,
 		"nocollide" : false,
+		"centered" : true,
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
@@ -485,8 +489,9 @@
 	"34" : {
 		"hp" : 11,
 		"harvestHp" : 4,
-		"lvl" : 4,
+		"lvl" : 2,
 		"nocollide" : false,
+		"centered" : true,
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
@@ -502,6 +507,7 @@
 		"harvestHp" : 4,
 		"lvl" : -1,
 		"nocollide" : false,
+		"centered" : true,
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
@@ -517,6 +523,7 @@
 		"harvestHp" : 4,
 		"lvl" : -1,
 		"nocollide" : false,
+		"centered" : true,
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {

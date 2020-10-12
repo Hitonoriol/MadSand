@@ -32,7 +32,6 @@ import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.world.World;
 
 public class Player extends Entity {
-	private Pair coords = new Pair();
 
 	public HashSet<Integer> unlockedItems = new HashSet<Integer>(); // set of items player obtained at least once
 	public ArrayList<Integer> craftRecipes = new ArrayList<Integer>(); // list of items which recipes are available to the player
@@ -138,6 +137,8 @@ public class Player extends Entity {
 			if (npc.friendly)
 				npc.friendly = false;
 
+			super.attackAnimation(npc);
+
 			npc.damage(atk);
 		}
 
@@ -150,7 +151,7 @@ public class Player extends Entity {
 
 			if (knownNpcs.add(npc.id)) // If killed for the first time
 				MadSand.print("You now know more about " + npc.stats.name + "s");
-			
+
 			if (map.getHostileNpcCount() == 0 && MadSand.world.isUnderGround()) {
 				MadSand.print("The curse of the dungeon has been lifted!" + Resources.LINEBREAK +
 						"You can now break objects on this floor of the dungeon.");
@@ -349,7 +350,7 @@ public class Player extends Entity {
 			MadSand.print("You are too tired to gather resources. Try resting a little.");
 			return;
 		}
-		
+
 		if (obj.harvestHp > 0)
 			new ResourceProgressBar(obj).start();
 		else
@@ -454,7 +455,7 @@ public class Player extends Entity {
 		if (itemUsed) {
 			damageHeldTool();
 			doAction();
-			
+
 			if (!item.type.isConsumable())
 				changeStamina(-item.weight);
 		}

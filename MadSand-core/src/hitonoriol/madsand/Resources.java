@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.type.MapType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
+import hitonoriol.madsand.containers.AnimationContainer;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.containers.Tuple;
 import hitonoriol.madsand.entities.SkillContainer;
@@ -53,8 +54,8 @@ import hitonoriol.madsand.world.worldgen.WorldGenPreset;
 
 public class Resources {
 
-	static final int PLAYER_ANIM_WIDTH = 35;
-	static final int PLAYER_ANIM_HEIGHT = 74;
+	static final int ANIM_FRAME_SIZE = 32;
+	static final float ACTION_ANIM_DURATION = 0.15f;
 
 	static Document skilldoc;
 
@@ -87,6 +88,8 @@ public class Resources {
 	public static Sprite playerLeftSpr;
 	public static Sprite playerUpSpr;
 	public static Sprite playerDownSpr;
+
+	public static TextureRegion[] attackAnimStrip;
 
 	public static int craftableItemCount;
 	public static int itemCount;
@@ -131,8 +134,13 @@ public class Resources {
 		loadNpcs();
 		loadTradeLists();
 		loadTutorial();
+		loadActionAnimations();
 
 		Utils.out("Done loading resources.");
+	}
+
+	private static void loadActionAnimations() {
+		attackAnimStrip = loadAnimationStrip("anim/hit.png", ANIM_FRAME_SIZE);
 	}
 
 	private static void initObjectMapper() {
@@ -296,27 +304,27 @@ public class Resources {
 		}
 	}
 
+	static final int PLAYER_ANIM_WIDTH = 35;
+	static final int PLAYER_ANIM_HEIGHT = 74;
+	static final int PLAYER_ANIM_FRAMES = 2;
+
 	private static void loadPlayerAnimation() {
 		tmpAnim = TextureRegion.split(animsheet, PLAYER_ANIM_WIDTH, PLAYER_ANIM_HEIGHT);
 
-		animdown[0] = tmpAnim[0][0];
-		animdown[1] = tmpAnim[0][1];
-		animleft[0] = tmpAnim[1][0];
-		animleft[1] = tmpAnim[1][1];
-		animright[0] = tmpAnim[2][0];
-		animright[1] = tmpAnim[2][1];
-		animup[0] = tmpAnim[3][0];
-		animup[1] = tmpAnim[3][1];
+		animdown = getAnimationStrip(tmpAnim, 0, PLAYER_ANIM_FRAMES);
+		animleft = getAnimationStrip(tmpAnim, 1, PLAYER_ANIM_FRAMES);
+		animright = getAnimationStrip(tmpAnim, 2, PLAYER_ANIM_FRAMES);
+		animup = getAnimationStrip(tmpAnim, 3, PLAYER_ANIM_FRAMES);
 
 		uanim = new Animation<TextureRegion>(playerAnimDuration, animup);
 		danim = new Animation<TextureRegion>(playerAnimDuration, animdown);
 		lanim = new Animation<TextureRegion>(playerAnimDuration, animleft);
 		ranim = new Animation<TextureRegion>(playerAnimDuration, animright);
 
-		playerDownSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/d1.png")));
-		playerUpSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/u1.png")));
-		playerRightSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/r1.png")));
-		playerLeftSpr = new Sprite(new Texture(Gdx.files.local(MadSand.SAVEDIR + "player/l1.png")));
+		playerDownSpr = new Sprite(animdown[0]);
+		playerUpSpr = new Sprite(animup[0]);
+		playerRightSpr = new Sprite(animright[0]);
+		playerLeftSpr = new Sprite(animleft[0]);
 	}
 
 	static final String FONT_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"'<>";
@@ -342,11 +350,34 @@ public class Resources {
 	}
 
 	public static NinePatchDrawable loadNinePatch(String file) {
-		return new NinePatchDrawable(new NinePatch(new Texture(Gdx.files.local(MadSand.SAVEDIR + file))));
+		return new NinePatchDrawable(new NinePatch(loadTexture(file)));
 	}
 
 	public static Texture loadTexture(String file) {
 		return new Texture(Gdx.files.local(MadSand.SAVEDIR + file));
+	}
+
+	public static AnimationContainer createAnimation(TextureRegion[] strip, float duration) { // Create animation from loaded strip
+		return new AnimationContainer(duration, strip);
+	}
+	
+	public static AnimationContainer createAnimation(TextureRegion[] strip) {
+		return createAnimation(strip, ACTION_ANIM_DURATION);
+	}
+
+	public static TextureRegion[] loadAnimationStrip(String file, int frameSize) { // load 1xN animation strip from file
+		TextureRegion[][] animStrip = TextureRegion.split(loadTexture(file), frameSize, frameSize);
+		Utils.out("Loading animstrip w len: " + animStrip[0].length);
+		return getAnimationStrip(animStrip, 0, animStrip[0].length);
+	}
+
+	private static TextureRegion[] getAnimationStrip(TextureRegion[][] region, int row, int frames) { // convert [][] strip to []
+		TextureRegion[] strip = new TextureRegion[frames];
+
+		for (int i = 0; i < frames; ++i)
+			strip[i] = region[row][i];
+
+		return strip;
 	}
 
 	public static void takeScreenshot() {

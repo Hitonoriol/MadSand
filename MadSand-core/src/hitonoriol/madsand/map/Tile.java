@@ -22,9 +22,9 @@ public class Tile {
 	public boolean foreground = false;
 
 	@JsonIgnore
-	public boolean visited = false;
+	public boolean visited = false; // has tile been seen before
 	@JsonIgnore
-	public boolean visible = true;
+	public boolean visible = true; // can tile currently be seen
 
 	public Tile(int id) {
 		final Tile tileProp = TileProp.getTileProp(id);
