@@ -66,6 +66,16 @@ public class GameSaver {
 		return (bytes[0] << 8) | (bytes[1] & 0xFF);
 	}
 
+	public static boolean deleteDirectory(File dir) {
+		File[] allContents = dir.listFiles();
+		if (allContents != null) {
+			for (File file : allContents) {
+				deleteDirectory(file);
+			}
+		}
+		return dir.delete();
+	}
+
 	public static void saveToExternal(String name, String text) {
 		try {
 			File file = new File(name);
