@@ -8,27 +8,56 @@ import com.github.czyzby.noise4j.map.generator.util.Generators;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.properties.WorldGenProp;
 import hitonoriol.madsand.world.WorldMap;
-import hitonoriol.madsand.world.MapID;
-import hitonoriol.madsand.world.World;
+import hitonoriol.madsand.world.Location;
 
 public class WorldGen {
 	private WorldMap worldMap;
 	private WorldGenPreset curBiome;
-	private MapID curMapId;
+	private int curBiomeId;
+	private Pair curMapCoords;
+	private int curLayer;
 	private Map curLoc;
+	private int width, height;
 
 	public WorldGen(WorldMap worldMap) {
 		this.worldMap = worldMap;
+		reset();
 	}
 
-	public void generate(MapID mapId, int biome, int width, int height) {
-		this.curMapId = mapId;
-		this.curLoc = worldMap.get(mapId);
+	public WorldGen initPosition(Pair coords, int layer) {
+		curMapCoords = coords;
+		curLayer = layer;
+		return this;
+	}
+	
+	public WorldGen initPosition() {
+		return initPosition(worldMap.curWorldPos, worldMap.curLayer);
+	}
 
-		Utils.out("Generating " + mapId.worldxy + " : " + mapId.layer);
+	public WorldGen setBiome(int biome) {
+		this.curBiomeId = biome;
+		this.curBiome = WorldGenProp.getBiome(biome);
+		return this;
+	}
+
+	public WorldGen setSize(int w, int h) {
+		this.width = w;
+		this.height = h;
+		return this;
+	}
+
+	public void reset() {
+		this.setSize(-1, -1).setBiome(-1);
+	}
+
+	public void generate() {
+		this.curLoc = worldMap.get(curMapCoords).getLayer(curLayer);
+
+		Utils.out("Generating " + curMapCoords + " : " + curLayer);
 
 		if (width < 1 || height < 1)
 			curLoc.rollSize();
@@ -37,34 +66,28 @@ public class WorldGen {
 
 		curLoc.purge();
 
-		int caveDepth = World.LAYER_BASE_UNDERWORLD;
-		int layer = mapId.layer;
+		int caveDepth = Location.LAYER_BASE_DUNGEON;
 
-		if (layer == World.LAYER_OVERWORLD) {
+		if (curLayer == Location.LAYER_OVERWORLD) {
 
-			if (biome < 0)
-				biome = chooseRandomBiome();
+			if (curBiome.equals(WorldGenProp.nullPreset))
+				setBiome(chooseRandomBiome());
 
-			Utils.out("Biome: " + biome);
-			curLoc.setBiome(biome);
+			Utils.out("Biome: " + curBiomeId);
+			curLoc.setBiome(curBiomeId);
 
-			curBiome = WorldGenProp.getBiome(biome);
+			setBiome(curBiomeId);
+
 			genBiomeTerrain();
 			genLakes();
 			genBiomeObjects();
 			genCave(caveDepth);
 		} else
-			caveDepth = layer;
+			caveDepth = curLayer;
 
 		genDungeon(caveDepth);
-	}
 
-	public void generate(MapID mapId, int biome) {
-		generate(mapId, biome, -1, -1);
-	}
-
-	public void generate(MapID mapId) {
-		generate(mapId, -1);
+		reset();
 	}
 
 	private void genBiomeTerrain() {
@@ -99,7 +122,7 @@ public class WorldGen {
 
 	private void genLakes() {
 		Utils.out("Generating lakes!");
-		Map curLoc = worldMap.get(curMapId);
+		Map curLoc = worldMap.get(curMapCoords).getLayer(curLayer);
 		int w = curLoc.getWidth(), h = curLoc.getHeight();
 		LakePreset lake = curBiome.getBiomeLake();
 
@@ -136,7 +159,6 @@ public class WorldGen {
 
 	private void genCave(int layer) {
 		Utils.out("Generating underworld...");
-		MapID caveId = new MapID(curMapId).setLayer(layer);
 		CavePreset cave = curBiome.getBiomeCave();
 		ArrayList<Integer> oreList = cave.caveOre;
 		int oreListSize = oreList.size();
@@ -144,7 +166,7 @@ public class WorldGen {
 		int maxOreFieldSize = cave.maxVeinSize;
 		int count = cave.maxVeinCount;
 		int cdef = cave.caveTile;
-		Map loc = worldMap.get(caveId);
+		Map loc = worldMap.get(curMapCoords).getLayer(layer);
 		loc.purge();
 		loc.fillTile(cdef);
 		loc.defObject = cave.caveObject;
@@ -178,8 +200,7 @@ public class WorldGen {
 	}
 
 	private void genDungeon(int layer) {
-		MapID dungeonId = new MapID(curMapId).setLayer(layer);
-		Map curLoc = worldMap.get(dungeonId);
+		Map curLoc = worldMap.get(curMapCoords).getLayer(layer);
 		setCurBiome();
 		curLoc.rollSize();
 
@@ -188,7 +209,7 @@ public class WorldGen {
 		int prob = curBiome.dungeonProbability;
 		Utils.out("Probability: " + prob + "%");
 
-		if (layer == World.LAYER_BASE_UNDERWORLD && !Utils.percentRoll(prob)) {
+		if (layer == Location.LAYER_BASE_DUNGEON && !Utils.percentRoll(prob)) {
 			Utils.out("Well... Decided not to.");
 			return;
 		}

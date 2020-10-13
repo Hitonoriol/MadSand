@@ -38,6 +38,7 @@ public class ConfirmDialog extends GameDialog {
 		super.getTitleLabel().setAlignment(Align.center);
 		msgLabel = new Label(msg, Gui.skin);
 		msgLabel.setWrap(true);
+		msgLabel.setAlignment(Align.center);
 		super.add(msgLabel).size(WIDTH,HEIGHT).row();
 
 		buttonTable.add(confirmBtn).size(BTN_WIDTH, BTN_HEIGHT).pad(5);

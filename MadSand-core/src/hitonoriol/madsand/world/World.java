@@ -31,24 +31,13 @@ public class World {
 	public static final int TILE_CAVE_EXIT = 25; //TODO move this to cave preset
 
 	private Pair coords = new Pair();
-	private MapID mapID = new MapID();
 
 	private int MAX_PREVIOUS_LOCATIONS = 2; // Max amount of maps allowed to be in WorldMap at the same time
-	private ArrayDeque<MapID> previousLocations = new ArrayDeque<>(); // Maps that are currently loaded in WorldMap
-
-	private int xsz, ysz; // max world size, not really used anywhere (still)
-
-	public int curywpos; // global coords of current sector
-	public int curxwpos;
-
-	public int curlayer = 0; // current layer: layer > 0 - underworld | layer == 0 - overworld
+	private ArrayDeque<Pair> previousLocations = new ArrayDeque<>(); // Maps that are currently loaded in WorldMap
 
 	public static final int BORDER = 1;// map border - old shit, not really useful anymore
 
 	public static int DEFAULT_MAPSIZE = Map.MIN_MAPSIZE;
-
-	public static final int LAYER_OVERWORLD = 0;
-	public static final int LAYER_BASE_UNDERWORLD = 1;
 
 	@JsonIgnore
 	public WorldGen worldGen;
@@ -56,8 +45,7 @@ public class World {
 	@JsonIgnore
 	public static Player player;
 
-	@JsonIgnore
-	public WorldMap worldMap; // container for all maps and layers
+	public WorldMap worldMap; // container of "Locations": maps grouped by world coords
 
 	private Timer realTimeRefresher;
 	public int realtimeTickRate = 5; // seconds per 1 tick
@@ -72,14 +60,10 @@ public class World {
 	public HashMap<String, String> luaStorage = new HashMap<>();
 
 	public World(int sz) {
-		this.xsz = sz;
-		this.ysz = sz;
-		curxwpos = xsz / 2;
-		curywpos = ysz / 2;
-
 		player = new Player();
-		worldMap = new WorldMap();
+		worldMap = new WorldMap(sz);
 		worldGen = new WorldGen(worldMap);
+		
 		initRealtimeRefresher();
 	}
 
@@ -109,75 +93,91 @@ public class World {
 		this.logoutTimeStamp = logoutTimeStamp;
 	}
 
-	HashMap<MapID, Map> _getLoc(int wx, int wy, int layer) {
-		HashMap<MapID, Map> ret = new HashMap<MapID, Map>();
-		ret.put(new MapID(new Pair(wx, wy), layer), getLoc(wx, wy, layer));
-		return ret;
+	boolean locExists(Pair loc) {
+		return worldMap.hasLocation(loc);
 	}
 
-	boolean locExists(MapID loc) {
-		return worldMap.containsKey(loc);
+	boolean locExists(Pair loc, int layer) {
+		if (!locExists(loc))
+			return false;
+
+		return worldMap.get(loc).hasLayer(layer);
 	}
 
-	boolean createLoc(MapID loc, Map map) {
-		if (!locExists(loc)) {
-			this.worldMap.put(loc, map);
+	boolean createLoc(Pair loc, int layer, Map map) {
+		if (!locExists(loc, layer)) {
+			this.worldMap.addMap(loc, layer, map);
 			return true;
 		} else
 			return false;
 	}
 
-	@JsonIgnore
-	public MapID getCurMapID() {
-		return mapID;
-	}
-
-	Map getLoc(Pair wc, int layer, int id) {
-		MapID loc = mapID.set(wc, layer, id);
-		if (locExists(loc)) {
-			return worldMap.get(loc);
+	Map getLoc(Pair wc, int layer) {
+		if (locExists(wc, layer)) {
+			return worldMap.get(wc).getLayer(layer);
 		} else
 			return nullLoc;
 	}
 
 	Map getLoc(int x, int y, int layer) {
-		return getLoc(coords.set(x, y), layer, 0);
+		return getLoc(coords.set(x, y), layer);
+	}
+	
+	public int wx() {
+		return worldMap.wx();
+	}
+	
+	public int wy() {
+		return worldMap.wy();
+	}
+	
+	public int curLayer() {
+		return worldMap.curLayer;
+	}
+	
+	public void setLayer(int layer) {
+		worldMap.curLayer = layer;
+	}
+	
+	@JsonIgnore
+	public Pair getCurWPos() {
+		return worldMap.curWorldPos;
 	}
 
 	@JsonIgnore
 	public Map getCurLoc() {
-		return getLoc(curxwpos, curywpos, curlayer);
+		return getLoc(worldMap.curWorldPos, worldMap.curLayer);
 	}
 
 	public Map getOverworld() {
-		return getLoc(curxwpos, curywpos, LAYER_OVERWORLD);
+		return getLoc(worldMap.curWorldPos, Location.LAYER_OVERWORLD);
 	}
 
 	Map getCurLoc(int layer) {
-		return getLoc(curxwpos, curywpos, layer);
+		return getLoc(worldMap.curWorldPos, layer);
 	}
 
 	int getLocBiome() {
-		return getCurLoc(LAYER_OVERWORLD).getBiome();
+		return getCurLoc(Location.LAYER_OVERWORLD).getBiome();
 	}
 
 	int getDefaultTile() {
 		return getCurLoc().defTile;
 	}
 
-	Map putLoc(Pair wc, int layer, int id, Map loc) {
-		worldMap.put(new MapID(wc, layer, id, true), loc);
+	Map putLoc(Pair wc, int layer, Map loc) {
+		worldMap.addMap(wc, layer, loc);
 		return loc;
 	}
 
 	Map putLoc(int x, int y, int layer, Map loc) {
-		return putLoc(coords.set(x, y), layer, 0, loc);
+		return putLoc(new Pair(x, y), layer, loc);
 	}
 
 	boolean createBasicLoc(Pair wc, int mx, int my) {
-		if (!this.createLoc(new MapID(wc, LAYER_OVERWORLD), new Map(mx, my)))
+		if (!this.createLoc(wc, Location.LAYER_OVERWORLD, new Map(mx, my)))
 			return false;
-		if (!this.createLoc(new MapID(wc, LAYER_BASE_UNDERWORLD), new Map(mx, my)))
+		if (!this.createLoc(wc, Location.LAYER_BASE_DUNGEON, new Map(mx, my)))
 			return false;
 		return true;
 	}
@@ -187,7 +187,7 @@ public class World {
 	}
 
 	boolean createBasicLoc(int layer) {
-		return createLoc(new MapID(new Pair(curxwpos, curywpos), layer), new Map(DEFAULT_MAPSIZE, DEFAULT_MAPSIZE));
+		return createLoc(new Pair(worldMap.curWorldPos), layer, new Map(DEFAULT_MAPSIZE, DEFAULT_MAPSIZE));
 	}
 
 	int biome;
@@ -195,26 +195,23 @@ public class World {
 	public void generate(int wx, int wy, int layer) {
 		Utils.out("Generating new sector!");
 
-		mapID.set(new Pair(coords.set(curxwpos, curywpos)), layer);
-
-		if (!locExists(mapID.setLayer(LAYER_OVERWORLD)))
+		if (!locExists(coords.set(wx, wy), layer))
 			createBasicLoc(wx, wy);
 
 		clearCurLoc();
-		mapID.setLayer(layer);
 
 		if (!executeLocationScript())
-			worldGen.generate(mapID);
+			worldGen.initPosition(coords.set(wx, wy), layer).generate();
 
 		Utils.out("Done generating new sector!");
 	}
 
 	private boolean executeLocationScript() {
 
-		if (mapID.layer != LAYER_OVERWORLD)
+		if (worldMap.curLayer != Location.LAYER_OVERWORLD)
 			return false;
 
-		Pair coords = mapID.worldxy;
+		Pair coords = worldMap.curWorldPos;
 		String locationScriptPath = LuaUtils.getSectorScriptPath(coords.x, coords.y);
 		File locationScript = new File(MadSand.SCRIPTDIR + locationScriptPath);
 
@@ -227,32 +224,26 @@ public class World {
 	}
 
 	public void generate(int layer) {
-		if (layer != LAYER_OVERWORLD)
+		if (layer != Location.LAYER_OVERWORLD)
 			createBasicLoc(layer);
-		generate(curxwpos, curywpos, layer);
+		generate(worldMap.wx(), worldMap.wx(), layer);
 		updateLight();
 	}
 
 	public void generate() {
-		generate(curxwpos, curywpos, LAYER_OVERWORLD);
+		generate(worldMap.wx(), worldMap.wy(), Location.LAYER_OVERWORLD);
 		updateLight();
 	}
 
-	private void jumpToLocation(int x, int y, int layer) {
-		curxwpos = x;
-		curywpos = y;
-		curlayer = layer;
-	}
-
 	public boolean switchLocation(int x, int y, int layer) {
-		int prevX = curxwpos, prevY = curywpos;
+		int prevX = worldMap.wx(), prevY = worldMap.wy();
 		Utils.out("Switching location to " + x + ", " + y + " layer: " + layer);
 		if (layer > DUNGEON_LAYER_MAX)
 			return false;
 
-		jumpToLocation(x, y, layer);
+		worldMap.jumpToLocation(this, x, y, layer);
 
-		if (locExists(new MapID(coords.set(x, y), layer))) {
+		if (locExists(coords.set(x, y), layer)) {
 			Utils.out("This sector already exists! Noice.");
 			updateLight();
 			return true;
@@ -260,7 +251,7 @@ public class World {
 
 		clearCurLoc();
 
-		if (x == prevX && y == prevY && curlayer != LAYER_OVERWORLD)
+		if (x == prevX && y == prevY && worldMap.curLayer != Location.LAYER_OVERWORLD)
 			generate(layer);
 		else if (GameSaver.verifyNextSector(x, y))
 			GameSaver.loadLocation();
@@ -281,7 +272,7 @@ public class World {
 			GameSaver.saveWorld();
 		else {
 			Utils.out("Removing encounter location");
-			removeLocation(getCurMapID());
+			worldMap.remove();
 		}
 
 		MadSand.switchScreen(Gui.travelScreen);
@@ -294,13 +285,13 @@ public class World {
 		if (inEncounter)
 			inEncounter = false;
 
-		if (curlayer != LAYER_OVERWORLD)
+		if (worldMap.curLayer != Location.LAYER_OVERWORLD)
 			return false;
 
-		coords.set(curxwpos, curywpos).addDirection(dir);
+		coords.set(worldMap.wx(), worldMap.wy()).addDirection(dir);
 		MadSand.print("You travel to sector (" + coords.x + ", " + coords.y + ")");
 
-		if (!switchLocation(coords.x, coords.y, LAYER_OVERWORLD)) {
+		if (!switchLocation(coords.x, coords.y, Location.LAYER_OVERWORLD)) {
 			Utils.out("Switch location oopsie :c");
 			return false;
 		}
@@ -349,7 +340,7 @@ public class World {
 		if (canTravel) {
 
 			int travelItem = Globals.getInt(Globals.TRAVEL_ITEM);
-			Pair nextSector = coords.set(curxwpos, curywpos).addDirection(direction);
+			Pair nextSector = coords.set(worldMap.wx(), worldMap.wy()).addDirection(direction);
 
 			if (!GameSaver.verifyNextSector(nextSector.x, nextSector.y)) {
 				if (!player.hasItem(travelItem)) {
@@ -380,16 +371,14 @@ public class World {
 	}
 
 	public boolean switchLocation(int layer) {
-		return switchLocation(curxwpos, curywpos, layer);
+		return switchLocation(worldMap.wx(), worldMap.wy(), layer);
 	}
 
 	public boolean descend() {
-		if (curlayer >= DUNGEON_LAYER_MAX)
+		if (worldMap.curLayer >= DUNGEON_LAYER_MAX)
 			return false;
 
-		boolean ret = switchLocation(curlayer + 1);
-		if (curlayer > (worldMap.getLayerCount(curxwpos, curywpos) - 1))
-			worldMap.increaseLayerCount(curxwpos, curywpos);
+		boolean ret = switchLocation(worldMap.curLayer + 1);
 
 		Map loc = getCurLoc();
 		String place = null;
@@ -405,49 +394,43 @@ public class World {
 			place = "cave";
 		}
 
-		MadSand.print("You descend to " + place + " level " + curlayer);
+		MadSand.print("You descend to " + place + " level " + worldMap.curLayer);
 		return ret;
 	}
 
 	public boolean ascend(int layer) {
-		if (layer < LAYER_OVERWORLD)
+		if (layer < Location.LAYER_OVERWORLD)
 			return false;
 
 		Utils.out("Ascending to " + layer);
 
 		boolean ret = switchLocation(layer);
 
-		if (curlayer == LAYER_OVERWORLD)
+		if (worldMap.curLayer == Location.LAYER_OVERWORLD)
 			MadSand.print("You get back to surface level");
 		else
-			MadSand.print("You get back to dungeon level " + curlayer);
+			MadSand.print("You get back to dungeon level " + worldMap.curLayer);
 
 		Gui.overlay.processActionMenu();
 		return ret;
 	}
 
 	public boolean ascend() {
-		return ascend(curlayer - 1);
+		return ascend(worldMap.curLayer - 1);
 	}
 
 	private void cleanUpPreviousLocations() {
-		if (curlayer != LAYER_OVERWORLD)
+		if (worldMap.curLayer != Location.LAYER_OVERWORLD)
 			return;
 
-		previousLocations.add(new MapID(new Pair(curxwpos, curywpos), LAYER_OVERWORLD));
+		previousLocations.add(new Pair(worldMap.curWorldPos));
 
 		if (previousLocations.size() < MAX_PREVIOUS_LOCATIONS)
 			return;
 
-		Utils.out("Removing the oldest loaded sector...");
-		MapID rootLocation = previousLocations.poll();
-		removeLocation(rootLocation);
-	}
-
-	public void removeLocation(MapID mapId) {
-		int layers = worldMap.getLayerCount(curxwpos, curywpos);
-		for (int i = layers - 1; i >= 0; --i)
-			worldMap.remove(mapId.setLayer(i));
+		Utils.out("Removing the oldest loaded location...");
+		Pair rootLocation = previousLocations.poll();
+		worldMap.remove(rootLocation);
 	}
 
 	public int getTileId(int x, int y) {
@@ -510,14 +493,6 @@ public class World {
 
 	public static int worldCoord(int q) {
 		return q * MadSand.TILESIZE;
-	}
-
-	int getWidth() {
-		return xsz;
-	}
-
-	int getHeight() {
-		return ysz;
 	}
 
 	private static int TIME_NIGHT_START = 22;
@@ -602,7 +577,7 @@ public class World {
 	}
 
 	private void realtimeRefresh() {
-		Map map = getCurLoc(LAYER_OVERWORLD);
+		Map map = getCurLoc(Location.LAYER_OVERWORLD);
 		map.updateCrops();
 		map.updateProductionStations();
 	}
@@ -647,7 +622,7 @@ public class World {
 
 	@JsonIgnore
 	public boolean isUnderGround() {
-		return curlayer != World.LAYER_OVERWORLD;
+		return worldMap.curLayer != Location.LAYER_OVERWORLD;
 	}
 
 	@JsonIgnore

@@ -6,7 +6,7 @@ import hitonoriol.madsand.world.worldgen.WorldGenPreset;
 
 public class WorldGenProp {
 
-	private static WorldGenPreset nullPreset = new WorldGenPreset();
+	public static WorldGenPreset nullPreset = new WorldGenPreset();
 	public static HashMap<Integer, WorldGenPreset> biomes = new HashMap<>();
 
 	public static WorldGenPreset getBiome(int biomeId) {

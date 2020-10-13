@@ -4,6 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map.Entry;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Resources;
@@ -16,25 +19,92 @@ import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.map.ProductionStation;
 
-public class WorldMap extends HashMap<MapID, Map> {
-	private static final long serialVersionUID = -4489829388439109446L;
-	private int DEFAULT_LAYERS = 2;
+public class WorldMap {
 
 	private Pair coords = new Pair();
-	private MapID mapID = new MapID();
-	public HashMap<MapID, Integer> layers = new HashMap<>(); // Default number of layers
 
+	int xsz, ysz;
+	public int curLayer = Location.LAYER_OVERWORLD;
+	public Pair curWorldPos = new Pair();
+
+	private HashMap<Pair, Location> locations = new HashMap<>();
+
+	public WorldMap(int sz) {
+		xsz = ysz = sz;
+		setCurWPos(xsz / 2, ysz / 2);
+	}
+
+	public WorldMap() {
+
+	}
+
+	public Location addMap(Pair coords, int layer, Map map) {
+		Location location;
+
+		if (!locations.containsKey(coords))
+			location = new Location();
+		else
+			location = locations.remove(coords);
+
+		location.putLayer(layer, map);
+
+		locations.put(coords, location);
+
+		return location;
+	}
+
+	public int wx() {
+		return curWorldPos.x;
+	}
+
+	public int wy() {
+		return curWorldPos.y;
+	}
+
+	@JsonIgnore
+	public void setCurWPos(int wx, int wy) {
+		curWorldPos.set(wx, wy);
+	}
+
+	public int getLayerCount(int wx, int wy) {
+		return locations.get(coords.set(wx, wy)).getLayerCount();
+	}
+
+	public Location get(Pair coords) {
+		return locations.get(coords);
+	}
+
+	public Location remove(Pair coords) {
+		return locations.remove(coords);
+	}
+
+	public Location remove() {
+		return remove(curWorldPos);
+	}
+
+	public boolean hasLocation(Pair coords) {
+		return locations.containsKey(coords);
+	}
+
+	/*
+	 * WorldMapSaver:
+	 */
 	final String LOOT_DELIM = "|";
 	final int CROP_BLOCK_LEN = 16;
 	final int BLOCK_SIZE = 2;
 	final int LONG_BLOCK_SIZE = 8;
 
+	public void jumpToLocation(World world, int x, int y, int layer) {
+		setCurWPos(x, y);
+		curLayer = layer;
+	}
+
 	byte[] sectorToBytes(int wx, int wy, int layer) {
 		try {
 			Utils.out("Saving sector " + wx + ", " + wy + " Layer: " + layer);
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			MapID loc = new MapID(new Pair(wx, wy), layer);
-			Map map = this.get(loc);
+			Pair loc = new Pair(wx, wy);
+			Map map = locations.get(loc).getLayer(layer);
 
 			Resources.mapper.writeValue(
 					new File(GameSaver.getNpcFile(wx, wy, layer)),
@@ -148,7 +218,6 @@ public class WorldMap extends HashMap<MapID, Map> {
 			throw (new Exception("Incompatible save format version!"));
 
 		int layers = loadNextBlock(stream, block);
-		setLayerCount(wx, wy, layers);
 
 		byte[] sectorContents;
 		for (int i = 0; i < layers; ++i) {
@@ -175,7 +244,7 @@ public class WorldMap extends HashMap<MapID, Map> {
 			int defObject = loadNextBlock(stream, block);
 			int biome = loadNextBlock(stream, block);
 
-			MapID loc = new MapID(new Pair(wx, wy), layer);
+			Pair loc = new Pair(wx, wy);
 			Map map = new Map(xsz, ysz);
 			map.purge();
 			map.editable = editable;
@@ -252,9 +321,8 @@ public class WorldMap extends HashMap<MapID, Map> {
 			stream.close();
 
 			// Add self to Location list
-			if (this.containsKey(loc))
-				this.remove(loc);
-			this.put(loc, map);
+			this.addMap(loc, layer, map);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			Utils.die();
@@ -269,30 +337,5 @@ public class WorldMap extends HashMap<MapID, Map> {
 	private int loadNextBlock(ByteArrayInputStream stream, byte[] buffer) throws Exception {
 		stream.read(buffer);
 		return GameSaver.decode2(buffer);
-	}
-
-	public void setLayerCount(int wx, int wy, int layers) {
-		this.layers.put(new MapID(new Pair(wx, wy), World.LAYER_OVERWORLD), layers);
-	}
-
-	public int getLayerCount(int wx, int wy) {
-		return layers.getOrDefault(mapID.set(coords.set(wx, wy), World.LAYER_OVERWORLD), DEFAULT_LAYERS);
-	}
-
-	public void increaseLayerCount(int wx, int wy) {
-		setLayerCount(wx, wy, getLayerCount(wx, wy) + 1);
-	}
-
-	public Map remove(Object key) {
-		Map removed = super.remove(key);
-		MapID id = (MapID) key;
-		if (id.layer == World.LAYER_OVERWORLD)
-			deleteLayerCountEntry(id.worldxy.x, id.worldxy.y);
-		return removed;
-	}
-
-	private void deleteLayerCountEntry(int wx, int wy) {
-		layers.remove(mapID.set(coords.set(wx, wy), World.LAYER_OVERWORLD));
-		Utils.out("Location (" + wx + ", " + wy + ") has been removed from worldMap!");
 	}
 }

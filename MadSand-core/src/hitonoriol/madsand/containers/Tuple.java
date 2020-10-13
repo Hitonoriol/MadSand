@@ -11,7 +11,11 @@ public class Tuple<T1, T2> {
 		set(l, r);
 	}
 
-	Tuple<T1, T2> set(T1 l, T2 r) {
+	public Tuple() {
+		set(null, null);
+	}
+
+	public Tuple<T1, T2> set(T1 l, T2 r) {
 		this.l = l;
 		this.r = r;
 		return this;

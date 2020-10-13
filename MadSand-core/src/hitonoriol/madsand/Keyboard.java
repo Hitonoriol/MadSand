@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.GameState;
+import hitonoriol.madsand.world.Location;
 import hitonoriol.madsand.world.World;
 
 public class Keyboard {
@@ -89,7 +90,7 @@ public class Keyboard {
 		if (Gdx.input.isKeyJustPressed(Keys.SPACE))
 			World.player.rest();
 
-		if (Gdx.input.isKeyJustPressed(Keys.N) && MadSand.world.curlayer == World.LAYER_OVERWORLD)
+		if (Gdx.input.isKeyJustPressed(Keys.N) && MadSand.world.curLayer() == Location.LAYER_OVERWORLD)
 			MadSand.world.travel();
 
 		if (Gdx.input.isKeyJustPressed(Keys.J))

@@ -5,23 +5,30 @@ import java.io.FilenameFilter;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.world.World;
 
-public class CreateWorldDialog extends Dialog {
+public class CreateWorldDialog extends GameDialog {
+	
+	float BTN_WIDTH = WIDTH/2;
+	float BTN_HEIGHT = 40;
+	
 	Skin skin = Gui.skin;
+	
+	Label nameLabel;
 
 	public CreateWorldDialog() {
-		super("", Gui.skin);
+		super(Gui.mainMenu);
 		createDialog();
 	}
 
@@ -42,8 +49,11 @@ public class CreateWorldDialog extends Dialog {
 		if (slots > MadSand.MAXSAVESLOTS)
 			slots = MadSand.MAXSAVESLOTS;
 
+		nameLabel = new Label("World name:", skin);
+		nameLabel.setAlignment(Align.center);
 		final TextField worldtxt = new TextField("World #" + (++slots), skin);
-		super.text("New game");
+		super.setTitle("New Game");
+		super.getTitleLabel().setAlignment(Align.center);
 		TextButton okbtn = new TextButton("Proceed", skin);
 		TextButton nobtn = new TextButton("Cancel", skin);
 
@@ -96,21 +106,14 @@ public class CreateWorldDialog extends Dialog {
 
 			}
 		});
-
-		worldtxt.setTextFieldListener(new TextField.TextFieldListener() {
-
-			public void keyTyped(TextField textField, char key) {
-			}
-
-		});
+		
+		worldtxt.setAlignment(Align.center);
 
 		super.row();
-		super.add(new Label("\n\n", skin)).width(Gdx.graphics.getWidth() / 2).row();
-		super.add(new Label("\n\nWorld name:\n", skin)).width(Gdx.graphics.getWidth() / 2).row();
-		super.add(worldtxt).width(Gdx.graphics.getWidth() / 2).row();
-		super.add(okbtn).width(Gdx.graphics.getWidth() / 2).row();
-		super.add(nobtn).width(Gdx.graphics.getWidth() / 2).row();
-		super.add(new Label("\n\n", skin)).width(Gdx.graphics.getWidth() / 2).row();
+		super.add(nameLabel).padTop(50).width(WIDTH).row();
+		super.add(worldtxt).width(WIDTH).padBottom(65).row();
+		super.add(okbtn).size(BTN_WIDTH, BTN_HEIGHT).row();
+		super.add(nobtn).size(BTN_WIDTH, BTN_HEIGHT).row();
 	}
 
 	public void show() {

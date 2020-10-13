@@ -29,7 +29,7 @@ import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
-import hitonoriol.madsand.world.World;
+import hitonoriol.madsand.world.Location;
 
 public class Player extends Entity {
 
@@ -580,9 +580,10 @@ public class Player extends Entity {
 	}
 
 	public void respawn() {
-		MadSand.world.curlayer = World.LAYER_OVERWORLD;
-		int wx = MadSand.world.curxwpos;
-		int wy = MadSand.world.curywpos;
+		MadSand.world.setLayer(Location.LAYER_OVERWORLD);
+		MadSand.world.getCurWPos();
+		int wx = MadSand.world.wx();
+		int wy = MadSand.world.wy();
 		Map map = MadSand.world.getCurLoc();
 		MadSand.state = GameState.GAME;
 		stats.food = stats.maxFood;
@@ -598,7 +599,7 @@ public class Player extends Entity {
 				x = stats.respawnX;
 				y = stats.respawnY;
 			} else {
-				MadSand.world.switchLocation(stats.respawnWX, stats.respawnWY, World.LAYER_OVERWORLD);
+				MadSand.world.switchLocation(stats.respawnWX, stats.respawnWY, Location.LAYER_OVERWORLD);
 			}
 		} else {
 			x = Utils.rand(0, map.getWidth());
@@ -672,7 +673,7 @@ public class Player extends Entity {
 
 		Gui.overlay.processActionMenu();
 
-		if ((MadSand.world.curlayer == World.LAYER_OVERWORLD) && canTravel())
+		if ((MadSand.world.curLayer() == Location.LAYER_OVERWORLD) && canTravel())
 			MadSand.print("Press [GRAY]N[WHITE] to travel to the next sector.");
 
 		return true;

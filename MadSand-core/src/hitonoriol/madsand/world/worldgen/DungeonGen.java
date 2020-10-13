@@ -10,6 +10,7 @@ import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.LootTable;
 import hitonoriol.madsand.map.Map;
+import hitonoriol.madsand.world.Location;
 import hitonoriol.madsand.world.World;
 
 public class DungeonGen extends DungeonGenerator {
@@ -90,7 +91,7 @@ public class DungeonGen extends DungeonGenerator {
 
 					if (map.spawnPoint.equals(Pair.nullPair)) {
 						map.spawnPoint = new Pair(x, y);
-						if (depth > World.LAYER_BASE_UNDERWORLD)
+						if (depth > Location.LAYER_BASE_DUNGEON)
 							map.addObject(x, y, dungeon.staircaseUpObject);
 					}
 				}

@@ -246,7 +246,7 @@ public class GameSaver {
 	}
 
 	public static boolean saveLocation() {
-		return saveLocation(MadSand.world.curxwpos, MadSand.world.curywpos);
+		return saveLocation(MadSand.world.wx(), MadSand.world.wy());
 	}
 
 	public static boolean loadLocation(int wx, int wy) {
@@ -265,7 +265,7 @@ public class GameSaver {
 	}
 
 	public static boolean loadLocation() {
-		return loadLocation(MadSand.world.curxwpos, MadSand.world.curywpos);
+		return loadLocation(MadSand.world.wx(), MadSand.world.wy());
 	}
 
 	private static boolean saveLog() {

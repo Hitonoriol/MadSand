@@ -1,4 +1,4 @@
-world.worldGen:generate(world:getCurMapID(), 0);
+world.worldGen:initPosition():setBiome(0):generate();
 
 local map = world:getCurLoc();
 local player = world.player;
