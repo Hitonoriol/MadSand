@@ -36,7 +36,7 @@ public class MadSand extends Game {
 
 	static int renderradius;
 
-	static final String SAVE_EXT = ".msf";
+	public static final String SAVE_EXT = ".msf";
 
 	public static final String SAVEDIR = "MadSand_Saves/";
 	static String QUESTFILE = SAVEDIR + "quests.json";
@@ -55,11 +55,11 @@ public class MadSand extends Game {
 	static String SKILLFILE = SAVEDIR + "defskills.xml";
 	public static final String MAPDIR = SAVEDIR + "worlds/";
 	public static final String SCRIPTDIR = SAVEDIR + "scripts/";
-	static final String PLAYERFILE = "/Player" + SAVE_EXT;
-	static final String LOGFILE = "/log" + SAVE_EXT;
-	static final String NPCSFILE = "NPCs";
-	static final String WORLDFILE = "/World" + SAVE_EXT;
-	static final String ERRFILE = "MadSandCritical.log";
+	public static final String PLAYERFILE = "/Player" + SAVE_EXT;
+	public static final String LOGFILE = "/log" + SAVE_EXT;
+	public static final String NPCSFILE = "NPCs";
+	public static final String WORLDFILE = "/World" + SAVE_EXT;
+	public static final String ERRFILE = "MadSandCritical.log";
 	public static final String ENCOUNTERDIR = "encounter/";
 
 	public static final int XDEF = 1280;
@@ -207,7 +207,7 @@ public class MadSand extends Game {
 		camera.viewportHeight = (Gdx.graphics.getHeight() / ZOOM);
 		camera.update();
 	}
-	
+
 	public static void setCamPosition(float x, float y) {
 		cameraX = x;
 		cameraY = y;
@@ -415,11 +415,8 @@ public class MadSand extends Game {
 			entity.stepx -= entity.movespeed;
 			entity.stepy -= entity.movespeed;
 
-			if (entity.stepx <= 1) {
-				entity.setStepping(false);
-				entity.stepx = TILESIZE;
-				entity.stepy = TILESIZE;
-			}
+			if (entity.stepx <= 1)
+				entity.stopMovement();
 
 		} else {
 			Utils.batch.draw(entity.getSprite(), entity.globalPos.x, entity.globalPos.y);

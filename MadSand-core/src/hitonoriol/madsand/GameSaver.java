@@ -18,8 +18,8 @@ import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.world.World;
 
 public class GameSaver {
-	static String SECTOR_DELIM = "!";
-	public final static long saveFormatVersion = 5;
+	public static String SECTOR_DELIM = "!";
+	public final static long saveFormatVersion = 6;
 
 	public static byte[] concat(byte[]... arrays) {
 		int totalLength = 0;
@@ -215,6 +215,7 @@ public class GameSaver {
 			String wfl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.WORLDFILE;
 
 			MadSand.world = Resources.mapper.readValue(getExternal(wfl), World.class);
+			MadSand.world.initWorld();
 			World.player = Resources.mapper.readValue(getExternal(fl), Player.class);
 			Player player = World.player;
 
@@ -236,7 +237,7 @@ public class GameSaver {
 	public static boolean saveLocation(int wx, int wy) {
 		try {
 			OutputStream os = new FileOutputStream(getSectorFile(wx, wy));
-			os.write(MadSand.world.worldMap.locationToBytes(wx, wy));
+			os.write(MadSand.world.worldMapSaver.locationToBytes(wx, wy));
 			os.close();
 			return true;
 		} catch (Exception e) {
@@ -255,7 +256,7 @@ public class GameSaver {
 			byte[] data = Files.readAllBytes(fileLocation);
 			Utils.out("Loading location " + wx + ", " + wy);
 
-			MadSand.world.worldMap.bytesToLocation(data, wx, wy);
+			MadSand.world.worldMapSaver.bytesToLocation(data, wx, wy);
 
 			return true;
 		} catch (Exception e) {

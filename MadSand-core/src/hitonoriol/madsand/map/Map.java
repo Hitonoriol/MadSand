@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Line;
@@ -83,18 +85,22 @@ public class Map {
 		biome = val;
 	}
 
+	@JsonIgnore
 	public HashMap<Pair, ProductionStation> getMapProductionStations() {
 		return mapProductionStations;
 	}
 
+	@JsonIgnore
 	public void setMapProductionStations(HashMap<Pair, ProductionStation> productionStations) {
 		mapProductionStations = productionStations;
 	}
 
+	@JsonIgnore
 	public HashMap<Pair, Npc> getNpcs() {
 		return mapNpcs;
 	}
 
+	@JsonIgnore
 	public void setNpcs(HashMap<Pair, Npc> npcs) {
 		mapNpcs = npcs;
 	}
@@ -120,10 +126,12 @@ public class Map {
 		this.ysz = ysz;
 	}
 
+	@JsonIgnore
 	public int getWidth() {
 		return xsz;
 	}
 
+	@JsonIgnore
 	public int getHeight() {
 		return ysz;
 	}

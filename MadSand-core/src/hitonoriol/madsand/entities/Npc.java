@@ -1,6 +1,8 @@
 package hitonoriol.madsand.entities;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Queue;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
@@ -25,7 +27,7 @@ import hitonoriol.madsand.world.World;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class Npc extends Entity {
 	public static int NULL_NPC = 0;
-	static double IDLE_NPC_MOVE_CHANCE = 30;
+	static double IDLE_NPC_MOVE_CHANCE = 27;
 
 	public int id;
 	public int rewardExp;
@@ -44,6 +46,8 @@ public class Npc extends Entity {
 	public TradeCategory tradeCategory;
 
 	public ProductionStation animalProductWorker;
+
+	private Queue<Direction> movementQueue = new ArrayDeque<>();
 
 	public Npc(int id) {
 		super();
@@ -138,8 +142,10 @@ public class Npc extends Entity {
 	@Override
 	public boolean move(Direction dir) {
 		super.turn(dir);
-		if (isStepping())
+		if (isStepping()) {
+			movementQueue.add(dir);
 			return false;
+		}
 		int originalX = this.x, originalY = this.y;
 
 		coords.set(x, y).addDirection(dir);
@@ -156,6 +162,19 @@ public class Npc extends Entity {
 																// despite how ugly this shit looks
 		setGridCoords(newX, newY);
 		return true;
+	}
+
+	private void pollMovementQueue() {
+		if (movementQueue.isEmpty())
+			return;
+
+		move(movementQueue.poll());
+	}
+	
+	@Override
+	public void stopMovement() {
+		super.stopMovement();
+		pollMovementQueue();
 	}
 
 	@Override

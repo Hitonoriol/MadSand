@@ -35,7 +35,7 @@ public abstract class Entity {
 
 	public int fov = 15;
 	public int maxFov, minFov;
-	
+
 	protected Pair coords = new Pair();
 
 	public Inventory inventory;
@@ -121,6 +121,11 @@ public abstract class Entity {
 
 	public void setStepping(boolean val) {
 		stepping = val;
+	}
+
+	public void stopMovement() {
+		stepping = false;
+		stepx = stepy = MadSand.TILESIZE;
 	}
 
 	public Inventory initInventory() {
@@ -374,7 +379,7 @@ public abstract class Entity {
 		if (!colliding(dir)) {
 			if (isOnMapBound(dir))
 				return false;
-			
+
 			if (dir == Direction.UP) {
 				++y;
 				globalPos.y += MadSand.TILESIZE;
@@ -406,21 +411,23 @@ public abstract class Entity {
 	}
 
 	public void turn(Direction dir) {
+		if (stepping)
+			return;
+
 		stats.look = dir;
-		if (!stepping && dir.isBase()) {
-			if (dir == Direction.UP) {
-				sprite = upSpr;
-			}
-			if (dir == Direction.DOWN) {
-				sprite = downSpr;
-			}
-			if (dir == Direction.LEFT) {
-				sprite = leftSpr;
-			}
-			if (dir == Direction.RIGHT) {
-				sprite = rightSpr;
-			}
-		}
+
+		if (dir == Direction.UP)
+			sprite = upSpr;
+
+		if (dir == Direction.DOWN)
+			sprite = downSpr;
+
+		if (dir == Direction.LEFT)
+			sprite = leftSpr;
+
+		if (dir == Direction.RIGHT)
+			sprite = rightSpr;
+
 	}
 
 	boolean walk(Direction dir) {

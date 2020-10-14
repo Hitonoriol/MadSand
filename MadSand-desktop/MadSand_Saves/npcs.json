@@ -76,7 +76,7 @@
 		"hp" : 300,
 		"strength" : 11,
 		"accuracy" : 50,
-		"dexterity" : 0,
+		"dexterity" : 5,
 		"rewardExp" : 0,
 		"loot" : "(100|21/2500)",
 		"faction" : "Partisans",

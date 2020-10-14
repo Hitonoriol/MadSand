@@ -41,6 +41,8 @@ public class World {
 
 	@JsonIgnore
 	public WorldGen worldGen;
+	@JsonIgnore
+	public WorldMapSaver worldMapSaver;
 
 	@JsonIgnore
 	public static Player player;
@@ -62,8 +64,8 @@ public class World {
 	public World(int sz) {
 		player = new Player();
 		worldMap = new WorldMap(sz);
-		worldGen = new WorldGen(worldMap);
-		
+		initWorld();
+
 		initRealtimeRefresher();
 	}
 
@@ -71,6 +73,11 @@ public class World {
 		this(DEFAULT_WORLDSIZE);
 	}
 
+	public void initWorld() {
+		worldMapSaver = new WorldMapSaver(worldMap);
+		worldGen = new WorldGen(worldMap);
+	}
+	
 	public void enter() {
 		realTimeRefresher.start();
 	}
@@ -122,23 +129,23 @@ public class World {
 	Map getLoc(int x, int y, int layer) {
 		return getLoc(coords.set(x, y), layer);
 	}
-	
+
 	public int wx() {
 		return worldMap.wx();
 	}
-	
+
 	public int wy() {
 		return worldMap.wy();
 	}
-	
+
 	public int curLayer() {
 		return worldMap.curLayer;
 	}
-	
+
 	public void setLayer(int layer) {
 		worldMap.curLayer = layer;
 	}
-	
+
 	@JsonIgnore
 	public Pair getCurWPos() {
 		return worldMap.curWorldPos;
@@ -149,6 +156,7 @@ public class World {
 		return getLoc(worldMap.curWorldPos, worldMap.curLayer);
 	}
 
+	@JsonIgnore
 	public Map getOverworld() {
 		return getLoc(worldMap.curWorldPos, Location.LAYER_OVERWORLD);
 	}
@@ -241,7 +249,7 @@ public class World {
 		if (layer > DUNGEON_LAYER_MAX)
 			return false;
 
-		worldMap.jumpToLocation(this, x, y, layer);
+		worldMap.jumpToLocation(x, y, layer);
 
 		if (locExists(coords.set(x, y), layer)) {
 			Utils.out("This sector already exists! Noice.");
@@ -374,11 +382,11 @@ public class World {
 		return switchLocation(worldMap.wx(), worldMap.wy(), layer);
 	}
 
-	public boolean descend() {
+	public boolean descend(int layer) {
 		if (worldMap.curLayer >= DUNGEON_LAYER_MAX)
 			return false;
 
-		boolean ret = switchLocation(worldMap.curLayer + 1);
+		boolean ret = switchLocation(layer);
 
 		Map loc = getCurLoc();
 		String place = null;
@@ -396,6 +404,10 @@ public class World {
 
 		MadSand.print("You descend to " + place + " level " + worldMap.curLayer);
 		return ret;
+	}
+
+	public boolean descend() {
+		return descend(worldMap.curLayer + 1);
 	}
 
 	public boolean ascend(int layer) {
