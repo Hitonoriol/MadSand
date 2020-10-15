@@ -15,7 +15,7 @@ public class WorldMap {
 	public int curLayer = Location.LAYER_OVERWORLD;
 	public Pair curWorldPos = new Pair();
 
-	HashMap<Pair, Location> locations = new HashMap<>();
+	public HashMap<Pair, Location> locations = new HashMap<>();
 
 	public WorldMap(int sz) {
 		xsz = ysz = sz;
@@ -23,6 +23,13 @@ public class WorldMap {
 	}
 
 	public WorldMap() {
+
+	}
+
+	public Location createLocation(int wx, int wy) {
+		Location location = new Location();
+		locations.put(new Pair(wx, wy), location);
+		return location;
 
 	}
 
@@ -39,6 +46,14 @@ public class WorldMap {
 		locations.put(coords, location);
 
 		return location;
+	}
+
+	@JsonIgnore
+	public int getCurLocationLayer() { // Returns layer with layer type's offset (currently only for Caves)
+		if (curLayer > Location.LAYER_BASE_CAVE)
+			return curLayer - Location.LAYER_BASE_CAVE;
+
+		return curLayer;
 	}
 
 	public int wx() {
@@ -58,8 +73,13 @@ public class WorldMap {
 		return locations.get(coords.set(wx, wy)).getLayerCount();
 	}
 
-	public Location get(Pair coords) {
+	public Location getLocation(Pair coords) {
 		return locations.get(coords);
+	}
+
+	@JsonIgnore
+	public Location getLocation() {
+		return getLocation(curWorldPos);
 	}
 
 	public Location remove(Pair coords) {
@@ -72,6 +92,16 @@ public class WorldMap {
 
 	public void jumpToLocation(int x, int y, int layer) {
 		setCurWPos(x, y);
+
+		if (layer != Location.LAYER_OVERWORLD) {
+			if (!getLocation(coords.set(x, y)).hasDungeon) {
+				if (curLayer >= Location.LAYER_BASE_CAVE && layer < Location.LAYER_BASE_CAVE)
+					layer = Location.LAYER_OVERWORLD;
+				else
+					layer = Location.LAYER_BASE_CAVE + layer;
+			}
+		}
+
 		curLayer = layer;
 	}
 

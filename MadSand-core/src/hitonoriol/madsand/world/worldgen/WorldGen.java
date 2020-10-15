@@ -33,7 +33,7 @@ public class WorldGen {
 		curLayer = layer;
 		return this;
 	}
-	
+
 	public WorldGen initPosition() {
 		return initPosition(worldMap.curWorldPos, worldMap.curLayer);
 	}
@@ -55,7 +55,7 @@ public class WorldGen {
 	}
 
 	public void generate() {
-		this.curLoc = worldMap.get(curMapCoords).getLayer(curLayer);
+		this.curLoc = worldMap.getLocation(curMapCoords).getLayer(curLayer);
 
 		Utils.out("Generating " + curMapCoords + " : " + curLayer);
 
@@ -65,8 +65,6 @@ public class WorldGen {
 			curLoc.setSize(width, height);
 
 		curLoc.purge();
-
-		int caveDepth = Location.LAYER_BASE_DUNGEON;
 
 		if (curLayer == Location.LAYER_OVERWORLD) {
 
@@ -81,11 +79,16 @@ public class WorldGen {
 			genBiomeTerrain();
 			genLakes();
 			genBiomeObjects();
-			genCave(caveDepth);
-		} else
-			caveDepth = curLayer;
+			rollDungeon();
 
-		genDungeon(caveDepth);
+		} else {
+
+			if (curLayer <= Location.LAYER_MAX_DUNGEON)
+				genDungeon();
+			else
+				genCave();
+
+		}
 
 		reset();
 	}
@@ -122,7 +125,7 @@ public class WorldGen {
 
 	private void genLakes() {
 		Utils.out("Generating lakes!");
-		Map curLoc = worldMap.get(curMapCoords).getLayer(curLayer);
+		Map curLoc = worldMap.getLocation(curMapCoords).getLayer(curLayer);
 		int w = curLoc.getWidth(), h = curLoc.getHeight();
 		LakePreset lake = curBiome.getBiomeLake();
 
@@ -157,8 +160,9 @@ public class WorldGen {
 		Utils.out("Done generating lakes!");
 	}
 
-	private void genCave(int layer) {
+	private void genCave() {
 		Utils.out("Generating underworld...");
+		getLocationBiome();
 		CavePreset cave = curBiome.getBiomeCave();
 		ArrayList<Integer> oreList = cave.caveOre;
 		int oreListSize = oreList.size();
@@ -166,7 +170,7 @@ public class WorldGen {
 		int maxOreFieldSize = cave.maxVeinSize;
 		int count = cave.maxVeinCount;
 		int cdef = cave.caveTile;
-		Map loc = worldMap.get(curMapCoords).getLayer(layer);
+		Map loc = worldMap.getLocation(curMapCoords).getLayer(curLayer);
 		loc.purge();
 		loc.fillTile(cdef);
 		loc.defObject = cave.caveObject;
@@ -199,24 +203,26 @@ public class WorldGen {
 		Utils.out("Done generating underworld!");
 	}
 
-	private void genDungeon(int layer) {
-		Map curLoc = worldMap.get(curMapCoords).getLayer(layer);
-		setCurBiome();
+	private void rollDungeon() {
+		worldMap.getLocation(curMapCoords).hasDungeon = Utils.percentRoll(curBiome.dungeonProbability);
+	}
+
+	private void genDungeon() {
+		Location loc = worldMap.getLocation(curMapCoords);
+
+		if (!loc.hasDungeon)
+			return;
+
+		Map curLoc = loc.getLayer(curLayer);
+
+		getLocationBiome();
 		curLoc.rollSize();
 
 		Utils.out("Generating dungeon!");
 
-		int prob = curBiome.dungeonProbability;
-		Utils.out("Probability: " + prob + "%");
-
-		if (layer == Location.LAYER_BASE_DUNGEON && !Utils.percentRoll(prob)) {
-			Utils.out("Well... Decided not to.");
-			return;
-		}
-
 		DungeonPreset dungeon = curBiome.getBiomeDungeon();
 		DungeonGen dungeonGen = new DungeonGen(curLoc);
-		dungeonGen.generate(dungeon, layer);
+		dungeonGen.generate(dungeon, curLayer);
 
 		Utils.out("Done generating dungeon!");
 	}
@@ -226,7 +232,7 @@ public class WorldGen {
 		return curBiome;
 	}
 
-	private WorldGenPreset setCurBiome() { // Sets current generator biome to the overworld biome
+	private WorldGenPreset getLocationBiome() { // Sets current generator biome to the overworld biome
 		return setCurBiome(MadSand.world.getOverworld().getBiome());
 	}
 

@@ -52,7 +52,7 @@ public class BuildDialog extends GameDialog {
 		buildTable.setBackground(Gui.darkBackgroundSizeable);
 		BuildDialogEntry buildEntry;
 		for (Entry<Integer, String> object : ObjectProp.buildRecipes.entrySet()) {
-			buildEntry = new BuildDialogEntry(object.getKey(), object.getValue());
+			buildEntry = new BuildDialogEntry(this, object.getKey(), object.getValue());
 			buildTable.add(buildEntry).size(buildEntry.WIDTH, buildEntry.HEIGHT).padBottom(PAD).row();
 		}
 		buildScroll = new AutoFocusScrollPane(buildTable);
@@ -73,13 +73,15 @@ class BuildDialogEntry extends Group {
 	final float WIDTH = 300;
 	final float HEIGHT = 170;
 	final float PAD = 10;
+	BuildDialog dialog;
 	Table container = new Table(Gui.skin);
 	Player player = World.player;
 	String recipe;
 	int id;
 
-	public BuildDialogEntry(int id, String recipe) {
+	public BuildDialogEntry(BuildDialog dialog, int id, String recipe) {
 		super();
+		this.dialog = dialog;
 		this.id = id;
 		this.recipe = recipe;
 
@@ -135,7 +137,7 @@ class BuildDialogEntry extends Group {
 					Gui.drawOkDialog("You don't have enough resources to build this!", Gui.overlay);
 				else {
 					MadSand.world.getCurLoc().addObject(player.x, player.y, player.stats.look, id);
-					remove();
+					dialog.remove();
 				}
 			}
 		});

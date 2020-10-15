@@ -206,7 +206,7 @@
 
 	"25" : {
 		"damage" : 0,
-		"onInteract" : "utils:ascend();",
+		"onInteract" : "world:ascend(world:getLocation().LAYER_OVERWORLD);",
 		"altItems" : null,
 		"name" : "Cave exit",
 		"foreground" : false

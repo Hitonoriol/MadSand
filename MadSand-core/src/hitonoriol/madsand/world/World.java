@@ -27,7 +27,6 @@ import hitonoriol.madsand.world.worldgen.WorldGen;
 public class World {
 	Map nullLoc = new Map(0, 0);
 	public static final int DEFAULT_WORLDSIZE = 10;
-	public static final int DUNGEON_LAYER_MAX = 50;
 	public static final int TILE_CAVE_EXIT = 25; //TODO move this to cave preset
 
 	private Pair coords = new Pair();
@@ -77,7 +76,7 @@ public class World {
 		worldMapSaver = new WorldMapSaver(worldMap);
 		worldGen = new WorldGen(worldMap);
 	}
-	
+
 	public void enter() {
 		realTimeRefresher.start();
 	}
@@ -108,7 +107,7 @@ public class World {
 		if (!locExists(loc))
 			return false;
 
-		return worldMap.get(loc).hasLayer(layer);
+		return worldMap.getLocation(loc).hasLayer(layer);
 	}
 
 	boolean createLoc(Pair loc, int layer, Map map) {
@@ -121,7 +120,7 @@ public class World {
 
 	Map getLoc(Pair wc, int layer) {
 		if (locExists(wc, layer)) {
-			return worldMap.get(wc).getLayer(layer);
+			return worldMap.getLocation(wc).getLayer(layer);
 		} else
 			return nullLoc;
 	}
@@ -149,6 +148,11 @@ public class World {
 	@JsonIgnore
 	public Pair getCurWPos() {
 		return worldMap.curWorldPos;
+	}
+
+	@JsonIgnore
+	public Location getLocation() {
+		return worldMap.getLocation();
 	}
 
 	@JsonIgnore
@@ -183,11 +187,7 @@ public class World {
 	}
 
 	boolean createBasicLoc(Pair wc, int mx, int my) {
-		if (!this.createLoc(wc, Location.LAYER_OVERWORLD, new Map(mx, my)))
-			return false;
-		if (!this.createLoc(wc, Location.LAYER_BASE_DUNGEON, new Map(mx, my)))
-			return false;
-		return true;
+		return this.createLoc(wc, Location.LAYER_OVERWORLD, new Map(mx, my));
 	}
 
 	boolean createBasicLoc(int wx, int wy) {
@@ -246,7 +246,7 @@ public class World {
 	public boolean switchLocation(int x, int y, int layer) {
 		int prevX = worldMap.wx(), prevY = worldMap.wy();
 		Utils.out("Switching location to " + x + ", " + y + " layer: " + layer);
-		if (layer > DUNGEON_LAYER_MAX)
+		if (layer > Location.LAYER_MAX)
 			return false;
 
 		worldMap.jumpToLocation(x, y, layer);
@@ -264,7 +264,7 @@ public class World {
 		else if (GameSaver.verifyNextSector(x, y))
 			GameSaver.loadLocation();
 		else
-			Utils.die("Congratulations! You broke switchLocation()!");
+			generate();
 
 		cleanUpPreviousLocations();
 
@@ -335,17 +335,9 @@ public class World {
 	}
 
 	public void travel() {
-		Map map = getCurLoc();
-		int x = player.x, y = player.y;
 		Direction direction = player.stats.look;
-		boolean canTravel = false;
 
-		canTravel = (x == map.getWidth() - 1 && direction == Direction.RIGHT);
-		canTravel |= (y == map.getHeight() - 1 && direction == Direction.UP);
-		canTravel |= (x < 1 && direction == Direction.LEFT);
-		canTravel |= (y < 1 && direction == Direction.DOWN);
-
-		if (canTravel) {
+		if (player.canTravel()) {
 
 			int travelItem = Globals.getInt(Globals.TRAVEL_ITEM);
 			Pair nextSector = coords.set(worldMap.wx(), worldMap.wy()).addDirection(direction);
@@ -383,7 +375,7 @@ public class World {
 	}
 
 	public boolean descend(int layer) {
-		if (worldMap.curLayer >= DUNGEON_LAYER_MAX)
+		if (worldMap.curLayer >= Location.LAYER_MAX)
 			return false;
 
 		boolean ret = switchLocation(layer);
@@ -402,7 +394,7 @@ public class World {
 			place = "cave";
 		}
 
-		MadSand.print("You descend to " + place + " level " + worldMap.curLayer);
+		MadSand.print("You descend to " + place + " level " + worldMap.getCurLocationLayer());
 		return ret;
 	}
 
@@ -470,7 +462,7 @@ public class World {
 	}
 
 	public void delObj(int x, int y) {
-		addObj(x, y, 0);
+		getCurLoc().delObject(x, y);
 	}
 
 	void addObj(int x, int y, int layer, int id) {
@@ -547,7 +539,7 @@ public class World {
 		if (!inEncounter)
 			curLoc.naturalRegeneration();
 
-		curLoc.spawnMobs(!isNight()); // Autospawn hostile mobs at night / friendly mobs during the day
+		curLoc.spawnMobs(!player.stats.luckRoll() || isNight());
 
 		MadSand.notice("Another hour passes...");
 		MadSand.notice("It's " + worldtime + ":00");
@@ -577,6 +569,7 @@ public class World {
 
 		for (Npc npc : queue)
 			npc.act();
+
 	}
 
 	public void updateLight() {

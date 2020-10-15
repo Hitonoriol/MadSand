@@ -116,7 +116,7 @@ public class WorldMapSaver {
 		byte[] layer;
 		long size;
 		try {
-			Location location = worldMap.get(coords.set(wx, wy));
+			Location location = worldMap.getLocation(coords.set(wx, wy));
 			//Header: format version, sector layer count
 			stream.write(GameSaver.encode8(GameSaver.saveFormatVersion));
 			stream.write(GameSaver.encode2(location.getLayerCount()));

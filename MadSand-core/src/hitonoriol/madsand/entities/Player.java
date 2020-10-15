@@ -351,10 +351,13 @@ public class Player extends Entity {
 			return;
 		}
 
-		if (obj.harvestHp > 0)
-			new ResourceProgressBar(obj).start();
-		else
-			gatherResources(obj);
+		if (getObjectResource(obj.id) != -1) {
+			if (obj.harvestHp > 0)
+				new ResourceProgressBar(obj).start();
+			else
+				gatherResources(obj);
+		} else
+			MadSand.print("You can't gather any resources from " + obj.name + " with your current tool");
 
 		MadSand.world.updateLight();
 		Gui.overlay.processActionMenu();
@@ -365,7 +368,7 @@ public class Player extends Entity {
 		if (obj.id == Map.nullObject.id)
 			return -1;
 
-		int item = MapObject.getAltItem(obj.id, ItemProp.getType(stats.hand().id).get());
+		int item = getObjectResource(obj.id);
 		int mhp = ObjectProp.getObject(obj.id).harvestHp;
 		Skill skill = obj.skill;
 		int curLvl = stats.skills.getLvl(skill);
@@ -412,6 +415,10 @@ public class Player extends Entity {
 			MadSand.print("You damaged " + obj.name);
 
 		return damage;
+	}
+
+	private int getObjectResource(int objectId) {
+		return MapObject.getAltItem(objectId, ItemProp.getType(stats.hand().id).get());
 	}
 
 	public void useItem() {
@@ -663,7 +670,15 @@ public class Player extends Entity {
 
 	public boolean canTravel() {
 		Map map = MadSand.world.getCurLoc();
-		return (x == map.getWidth() - 1 || y == map.getHeight() - 1 || x == 0 || y == 0);
+		Direction direction = stats.look;
+		boolean canTravel = false;
+
+		canTravel = (x == map.getWidth() - 1 && direction == Direction.RIGHT);
+		canTravel |= (y == map.getHeight() - 1 && direction == Direction.UP);
+		canTravel |= (x < 1 && direction == Direction.LEFT);
+		canTravel |= (y < 1 && direction == Direction.DOWN);
+
+		return canTravel;
 	}
 
 	@Override

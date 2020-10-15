@@ -181,20 +181,19 @@
 		"name" : "Opened door"
 	},
 	"13" : {
-		"hp" : 1,
+		"hp" : 2,
 		"harvestHp" : 15,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 0 ],
 			"10" : [ 25 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Mining",
 		"isWall" : true,
-		"name" : "Rock"
+		"name" : "Stone"
 	},
 	"14" : {
 		"hp" : 30,
@@ -216,7 +215,6 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 0 ],
 			"10" : [ 32 ]
 		},
 		"onInteract" : "-1",
@@ -308,13 +306,12 @@
 	},
 	"22" : {
 		"hp" : 1,
-		"harvestHp" : 15,
+		"harvestHp" : 20,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 0 ],
 			"10" : [ 23 ]
 		},
 		"onInteract" : "-1",
@@ -324,13 +321,12 @@
 	},
 	"23" : {
 		"hp" : 1,
-		"harvestHp" : 15,
+		"harvestHp" : 25,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 0 ],
 			"10" : [ 24 ]
 		},
 		"onInteract" : "-1",
@@ -1021,7 +1017,9 @@
 		"altItems" : null,
 		"onInteract" : "-1",
 		"skill" : "None",
-		"name" : "Alchemist table"
+		"isCraftingStation" : true,
+		"centered" : true,
+		"name" : "Sewing machine"
 	},
 	"76" : {
 		"hp" : 9,
@@ -1103,7 +1101,11 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : null,
-		"onInteract" : "-1",
+		"onInteract" : "
+			world:descend(world:getLocation().LAYER_BASE_CAVE + 1);
+			
+		",
+		"centered" : true,
 		"skill" : "None",
 		"name" : "Mine entrance"
 	},
@@ -1201,6 +1203,8 @@
 		"altItems" : null,
 		"onInteract" : "-1",
 		"skill" : "None",
+		"centered" : true,
+		"isProductionStation" : true,
 		"name" : "Wheelbarrow"
 	},
 	"91" : {

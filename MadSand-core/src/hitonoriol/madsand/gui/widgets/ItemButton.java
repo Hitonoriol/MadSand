@@ -31,13 +31,14 @@ public abstract class ItemButton extends Group {
 		buttonItem = item;
 		String buttonText = createButtonText();
 		itemLabel = new Label(buttonText, Gui.skin);
+		itemLabel.setWrap(true);
 		itemImage = new Image(Resources.item[item.id]);
 		itemImage.setSize(IMAGE_SIZE, IMAGE_SIZE);
 
 		buttonTable = new Table();
 		buttonTable.add(itemImage).align(Align.left);
-		buttonTable.add(itemLabel).align(Align.right);
-		buttonTable.row();
+		buttonTable.add(itemLabel).width(150).align(Align.center);
+		buttonTable.setFillParent(true);
 
 		highlight = new Image(Resources.noEquip);
 		highlight.setVisible(false);
@@ -49,7 +50,7 @@ public abstract class ItemButton extends Group {
 		super.setSize(WIDTH, HEIGHT);
 
 	}
-	
+
 	protected void setUpListeners() {
 		this.addListener(setMouseOverListener());
 		this.addListener(setButtonPressListener());

@@ -453,7 +453,7 @@ public abstract class Entity {
 		move(Direction.random());
 	}
 
-	int distanceTo(Entity entity) {
+	public int distanceTo(Entity entity) {
 		return (int) Line.calcDistance(x, y, entity.x, entity.y);
 	}
 

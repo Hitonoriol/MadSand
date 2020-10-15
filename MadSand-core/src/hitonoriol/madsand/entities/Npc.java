@@ -142,8 +142,10 @@ public class Npc extends Entity {
 	@Override
 	public boolean move(Direction dir) {
 		super.turn(dir);
+		boolean outOfView = distanceTo(World.player) > World.player.fov;
 		if (isStepping()) {
-			movementQueue.add(dir);
+			if (!outOfView)
+				movementQueue.add(dir);
 			return false;
 		}
 		int originalX = this.x, originalY = this.y;
@@ -161,6 +163,10 @@ public class Npc extends Entity {
 																// same location as player, so... this should work always
 																// despite how ugly this shit looks
 		setGridCoords(newX, newY);
+
+		if (outOfView)
+			stepping = false;
+
 		return true;
 	}
 
@@ -170,7 +176,7 @@ public class Npc extends Entity {
 
 		move(movementQueue.poll());
 	}
-	
+
 	@Override
 	public void stopMovement() {
 		super.stopMovement();

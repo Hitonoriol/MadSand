@@ -11,8 +11,16 @@ import hitonoriol.madsand.map.Map;
  */
 public class Location {
 	public static final int LAYER_OVERWORLD = 0;
+
 	public static final int LAYER_BASE_DUNGEON = 1;
-	public static final int LAYER_BASE_CAVE = 501;
+	public static final int LAYER_MAX_DUNGEON = 50;
+
+	public static final int LAYER_BASE_CAVE = 50; // Cave base value ( layer <n> of cave is BASE + <n> )
+	public static final int LAYER_MAX_CAVE = 100;
+
+	public static final int LAYER_MAX = 65535; // Layer number is saved as u16-bit int
+
+	public boolean hasDungeon = false;
 
 	HashMap<Integer, Map> layers = new HashMap<>();
 
