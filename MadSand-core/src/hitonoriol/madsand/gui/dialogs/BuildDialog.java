@@ -133,9 +133,10 @@ class BuildDialogEntry extends Group {
 				if (!object.equals(Map.nullObject))
 					Gui.drawOkDialog("The tile in front of you is not empty." + Resources.LINEBREAK
 							+ "You can only build on empty tiles.", Gui.overlay);
-				else if (!player.inventory.delItem(recipe))
+				else if (!player.inventory.itemsExist(recipe))
 					Gui.drawOkDialog("You don't have enough resources to build this!", Gui.overlay);
 				else {
+					player.inventory.delItem(recipe);
 					MadSand.world.getCurLoc().addObject(player.x, player.y, player.stats.look, id);
 					dialog.remove();
 				}

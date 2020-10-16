@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 
+import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.gui.dialogs.OkDialog;
 import hitonoriol.madsand.gui.stages.CraftMenu;
@@ -191,7 +192,7 @@ public class Gui {
 		tbl.add(label).width(Gdx.graphics.getWidth()).row();
 		stage.addActor(tbl);
 	}
-	
+
 	public static void openCraftMenu(int id) {
 		craftMenu.refreshCraftMenu(id);
 		MadSand.switchStage(GameState.CRAFT, Gui.craftMenu);
@@ -206,11 +207,35 @@ public class Gui {
 		overlay.hideTooltip();
 	}
 
-	public static void gameResumeFocus() {
-		dialogActive = gameUnfocused = false;
-		overlay.showTooltip();
+	public static void gameResumeFocus(GameDialog dialog) {
+		boolean noDialogsLeft = false;
+
+		if (dialog == null)
+			noDialogsLeft = !hasDialogs(overlay);
+		else
+			noDialogsLeft = dialog.isOnlyDialog();
+
+		if (noDialogsLeft) {
+			dialogActive = gameUnfocused = false;
+			overlay.showTooltip();
+		}
 	}
-	
+
+	public static boolean hasDialogs(Stage stage, GameDialog dialog) { // If stage has dialogs except <dialog>
+		for (Actor actor : stage.getActors())
+			if (actor != dialog && actor instanceof GameDialog)
+				return true;
+		return false;
+	}
+
+	public static boolean hasDialogs(Stage stage) { // If stage has any GameDialog
+		return hasDialogs(stage, null);
+	}
+
+	public static void gameResumeFocus() {
+		gameResumeFocus(null);
+	}
+
 	public static boolean isGameUnfocused() {
 		return gameUnfocused || dialogActive;
 	}

@@ -80,8 +80,7 @@ public class GameDialog extends Dialog {
 	@Override
 	public boolean remove() {
 		boolean ret = super.remove();
-		Gui.gameResumeFocus();
-		Gui.overlay.showTooltip();
+		Gui.gameResumeFocus(this);
 		Mouse.justClicked = false;
 		return ret;
 	}
@@ -91,6 +90,7 @@ public class GameDialog extends Dialog {
 		Dialog ret = super.show(stage);
 		Gui.gameUnfocus();
 		Gui.overlay.hideTooltip();
+
 		return ret;
 	}
 
@@ -124,7 +124,6 @@ public class GameDialog extends Dialog {
 	}
 
 	public void show() {
-		Gui.gameUnfocus();
 		show(stage);
 	}
 
@@ -139,6 +138,10 @@ public class GameDialog extends Dialog {
 
 	public static GameDialog generateDialogChain(String text, Stage stage) {
 		return new DialogChainGenerator(text).generateDialogChain(stage);
+	}
+
+	public boolean isOnlyDialog() { // If this dialog is the only one in stage
+		return !Gui.hasDialogs(stage, this);
 	}
 
 }

@@ -45,15 +45,19 @@ public class EquipmentSidebar extends Table {
 		super.pack();
 	}
 
+	public void clearSlot(EquipSlot slot) {
+		equipItem(slot, Item.nullItem);
+	}
+
 	public void init() {
 		for (EquipSlot slot : EquipSlot.values())
-			equipItem(slot, Item.nullItem);
+			clearSlot(slot);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void setSlot(EquipSlot slot, ItemUI item) {
 		item.setTopText(slot.text);
-		
+
 		equip[slot.number] = item;
 		Array<Cell> cells = super.getCells();
 		Cell<ItemUI> cell = cells.get(slot.number);
@@ -67,7 +71,7 @@ public class EquipmentSidebar extends Table {
 	public void refreshSlot(EquipSlot slot) {
 		equip[slot.number].refresh();
 	}
-	
+
 	public void equipItem(EquipSlot slot, Item item) {
 		ItemUI itemDisplay = getItemDisplay(item);
 
@@ -85,5 +89,12 @@ public class EquipmentSidebar extends Table {
 		}
 
 		setSlot(slot, itemDisplay);
+	}
+
+	public void refresh() {
+		for (ItemUI itemUI : equip)
+			if (!World.player.hasItem(itemUI.getItem()))
+				clearSlot(EquipSlot.slotByType(itemUI.getItem().type));
+
 	}
 }

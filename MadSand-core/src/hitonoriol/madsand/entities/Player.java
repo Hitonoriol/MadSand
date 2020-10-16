@@ -55,6 +55,10 @@ public class Player extends Entity {
 		Gui.overlay.equipmentSidebar.init();
 	}
 
+	public void refreshEquipment() {
+		Gui.overlay.equipmentSidebar.refresh();
+	}
+	
 	public Player() {
 		this("");
 	}
@@ -99,7 +103,7 @@ public class Player extends Entity {
 
 	public void checkHands(int id) {
 		int itemIdx = inventory.getSameCell(id);
-		if (itemIdx == -1) {
+		if (itemIdx == -1 && stats.hand().id == id) {
 			stats.setHand(Item.nullItem);
 			Gui.overlay.setHandDisplay(Item.nullItem);
 			return;
@@ -172,6 +176,7 @@ public class Player extends Entity {
 	@Override
 	void die() {
 		super.die();
+		refreshEquipment();
 		Gui.deathStage.setDeadText("You died\nYou survived " + getSurvivedTime() + " ticks");
 		Gui.darkness.setVisible(true);
 		Gdx.input.setInputProcessor(Gui.deathStage);
@@ -234,8 +239,9 @@ public class Player extends Entity {
 		Item itemToCraft = ItemProp.items.get(id);
 		int craftQuantity = ItemProp.getCraftQuantity(id);
 
-		if (inventory.delItem(itemToCraft.recipe)) {
+		if (inventory.itemsExist(itemToCraft.recipe)) {
 			increaseSkill(Skill.Crafting);
+			inventory.delItem(itemToCraft.recipe);
 
 			int bonus = stats.skills.getItemReward(Skill.Crafting) - 1;
 			int quantity = craftQuantity + bonus;
@@ -265,25 +271,27 @@ public class Player extends Entity {
 		ArrayList<Integer> questList = NpcProp.npcs.get(npc.id).questList;
 
 		Gui.overlay.closeGameContextMenu();
+		Gui.overlay.hideActionBtn();
 
 		switch (npc.type) {
 
 		case Trader:
 			tradeWithNpc(npc);
-			return;
+			break;
 
 		case FarmAnimal:
 			new ProductionStationUI(npc.animalProductWorker).show();
-			return;
+			break;
 
 		case Regular:
 			MadSand.print("Doesn't seem like " + name + " wants to talk.");
-			return;
+			break;
 
 		case QuestMaster:
 			npc.pause();
 			if (!quests.processQuests(questList, name))
 				MadSand.print(name + " has no more quests for you.");
+			break;
 
 		default:
 			break;
@@ -291,7 +299,6 @@ public class Player extends Entity {
 		}
 
 		doAction(stats.AP_MINOR);
-		Gui.overlay.processActionMenu();
 	}
 
 	public void tradeWithNpc(Direction direction) {
@@ -324,7 +331,6 @@ public class Player extends Entity {
 			return;
 
 		String action = ObjectProp.getOnInteract(obj.id);
-		doAction();
 
 		if (obj.isCraftingStation) {
 			Gui.openCraftMenu(obj.id);
@@ -337,6 +343,7 @@ public class Player extends Entity {
 
 		if (!action.equals(Resources.emptyField)) {
 			LuaUtils.execute(action);
+			doAction();
 			return;
 		}
 
@@ -377,9 +384,10 @@ public class Player extends Entity {
 			MadSand.notice(
 					"You are not experienced enough." + Resources.LINEBREAK + skill + " level required: " + obj.lvl
 							+ Resources.LINEBREAK + "Your " + skill + ": " + curLvl);
-			return 0;
+			return -2;
 		}
 
+		doAction();
 		damageHeldTool(skill);
 		changeStamina(-stats.GATHERING_STAMINA_COST);
 
@@ -524,6 +532,7 @@ public class Player extends Entity {
 			MadSand.print("You eat " + item.name);
 			heal(item.healAmount);
 			satiate(item.satiationAmount);
+			changeStamina(item.staminaAmount);
 			inventory.delItem(item, 1);
 			Gui.refreshOverlay();
 			return true;

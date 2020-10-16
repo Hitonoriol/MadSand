@@ -179,8 +179,12 @@ public class Item {
 
 	Item reinit() {
 		EquipStats stats = equipStats;
+		String name = this.name;
+
 		loadProperties();
+
 		this.equipStats = stats;
+		this.name = name;
 		return this;
 	}
 

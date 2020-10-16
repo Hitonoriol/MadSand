@@ -112,7 +112,8 @@ public class ResourceProgressBar extends TimedProgressBar {
 			return;
 
 		if (getVisualValue() >= getValue()) {
-			gatherResources();
+			if (gatherResources() < -1)
+				action.doAction();
 
 			if (object.hp <= 0 || initialObjectHp != object.hp)
 				action.doAction();

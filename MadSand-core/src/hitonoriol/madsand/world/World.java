@@ -337,24 +337,23 @@ public class World {
 	public void travel() {
 		Direction direction = player.stats.look;
 
-		if (player.canTravel()) {
+		if (!player.canTravel())
+			return;
 
-			int travelItem = Globals.getInt(Globals.TRAVEL_ITEM);
-			Pair nextSector = coords.set(worldMap.wx(), worldMap.wy()).addDirection(direction);
+		int travelItem = Globals.getInt(Globals.TRAVEL_ITEM);
+		Pair nextSector = coords.set(worldMap.wx(), worldMap.wy()).addDirection(direction);
 
-			if (!GameSaver.verifyNextSector(nextSector.x, nextSector.y)) {
-				if (!player.hasItem(travelItem)) {
-					Gui.drawOkDialog(
-							"You need at least 1 " + ItemProp.getItemName(travelItem)
-									+ " to travel to the next sector.",
-							Gui.overlay);
-					return;
-				} else
-					player.inventory.delItem(travelItem);
+		if (!GameSaver.verifyNextSector(nextSector.x, nextSector.y))
+			if (!player.hasItem(travelItem)) {
+				Gui.drawOkDialog(
+						"You need at least 1 " + ItemProp.getItemName(travelItem)
+								+ " to travel to the next sector.",
+						Gui.overlay);
+				return;
 			}
 
-			switchLocation(direction);
-		}
+		switchLocation(direction);
+		player.inventory.delItem(travelItem);
 
 	}
 

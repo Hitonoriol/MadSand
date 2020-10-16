@@ -1,7 +1,7 @@
 <skills>
 	<skill id="0" name="Level">
 		<required>100</required>
-		<multiplier>1.9</multiplier>
+		<multiplier>0.85</multiplier>
 	</skill>
 	<skill id="1" name="Crafting">
 		<required>5</required>

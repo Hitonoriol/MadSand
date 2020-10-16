@@ -68,6 +68,10 @@ public class ItemUI extends Group {
 			}
 		});
 	}
+	
+	public Item getItem() {
+		return item;
+	}
 
 	public ItemUI() {
 		this(Item.nullItem);

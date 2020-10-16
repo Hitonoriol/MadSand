@@ -598,7 +598,7 @@
 	},
 	"67" : {
 		"name" : "Flint pickaxe",
-		"recipe" : "9/12:8/7:69/3",
+		"recipe" : "9/10:8/5",
 		"dmg" : 3,
 		"hp" : 1536,
 		"cost" : 28,
@@ -1262,5 +1262,38 @@
 		"name" : "Travelling kit",
 		"cost" : 250,
 		"weight" : 1
+	},
+	"131" : {
+		"name" : "Plant fiber boots",
+		"recipe" : "75|68/10:69/1",
+		"cost" : 30,
+		"type" : "FootArmor",
+		"weight" : 0.15,
+		"lvl" : 1,
+		"equipStats" : {
+			"defense" : 1
+		}
+	},
+	"132" : {
+		"name" : "Plant fiber pants",
+		"recipe" : "75|68/15:69/1",
+		"cost" : 35,
+		"type" : "LegArmor",
+		"weight" : 0.11,
+		"lvl" : 1,
+		"equipStats" : {
+			"defense" : 1
+		}
+	},
+	"133" : {
+		"name" : "Plant fiber hat",
+		"recipe" : "75|68/10:69/1",
+		"cost" : 30,
+		"type" : "HeadArmor",
+		"weight" : 0.11,
+		"lvl" : 1,
+		"equipStats" : {
+			"defense" : 1
+		}
 	}
 }

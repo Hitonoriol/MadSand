@@ -2,7 +2,6 @@ package hitonoriol.madsand.entities.inventory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Vector;
 import java.util.Map.Entry;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -16,7 +15,7 @@ import hitonoriol.madsand.map.Loot;
 public class Inventory {
 	public static final double MAX_WEIGHT = Integer.MAX_VALUE;
 
-	public Vector<Item> items = new Vector<Item>();
+	public ArrayList<Item> items = new ArrayList<Item>();
 
 	public float curWeight, maxWeight;
 
@@ -87,6 +86,10 @@ public class Inventory {
 
 	public int getSameCell(Item item) {
 		return items.indexOf(item);
+	}
+	
+	public boolean itemExists(Item item) {
+		return items.contains(item);
 	}
 
 	public int getSameCell(int id) {

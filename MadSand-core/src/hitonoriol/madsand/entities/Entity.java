@@ -173,6 +173,10 @@ public abstract class Entity {
 		return inventory.getSameCell(id) != -1;
 	}
 
+	public boolean hasItem(Item item) {
+		return inventory.itemExists(item);
+	}
+
 	public void pickUpLoot() {
 
 		if (stats.dead)

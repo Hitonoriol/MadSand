@@ -15,6 +15,7 @@ public class Stats {
 	public final static float BASE_MAX_WEIGHT = 50;
 	public final static int BASE_FOOD_TICKS = 1;
 	final int HP_MULTIPLIER = 10; // maxHp = constitution * HP_MULTIPLIER
+	final float MIN_HP_AUTODAMAGE = 0.1f;
 
 	public int AP_WALK = 5; // action points consumed by walking
 	public int AP_ATTACK = 3;
@@ -221,11 +222,13 @@ public class Stats {
 		perTickFoodCheck();
 		perTickStaminaCheck();
 
-		if (stamina < maxstamina * staminaLow && !skills.skillRoll(Skill.Survival))
-			owner._damage(STAMINA_DMG);
+		if (hp > hp * MIN_HP_AUTODAMAGE) {
+			if (stamina < maxstamina * staminaLow && !skills.skillRoll(Skill.Survival))
+				owner._damage(STAMINA_DMG);
 
-		if (food <= 0)
-			owner._damage(STARVE_DMG);
+			if (food <= 0)
+				owner._damage(STARVE_DMG);
+		}
 
 		if (getSatiationPercent() >= satiatedPercent && skills.skillRoll(Skill.Survival))
 			owner._heal(FOOD_HEAL);
@@ -270,11 +273,13 @@ public class Stats {
 		return (Utils.rand(0, accuracy) == accuracy);
 	}
 
+	final float DEF_DENOMINATOR = 2.1f;
+
 	public int calcAttack(int defense) {
 		if (attackMissed())
 			return 0;
 
-		int atk = (strength - defense);
+		int atk = (int) (strength - (defense / DEF_DENOMINATOR));
 
 		if (atk <= 0)
 			atk = 1;

@@ -18,18 +18,21 @@ public class EquipStats {
 	public int accuracy;
 	public int intelligence;
 	public int defense;
-	
+
 	public ItemType type;
 	public Stat mainStat;
 
-	private static float multiplier = 2.1f;
+	private static float multiplier = 1.7f;
 
 	public EquipStats(int lvl, ItemType type) {
 		this.lvl = lvl;
-		
-		rollMax = (int) (lvl * multiplier + 1);
-		rollMin = lvl / 2 + 1;
-		
+
+		rollMax = (int) (lvl * multiplier);
+		rollMin = lvl / 3;
+
+		if (rollMin == 0)
+			rollMin = 1;
+
 		this.type = type;
 		mainStat = getMainStat();
 
@@ -55,8 +58,8 @@ public class EquipStats {
 	}
 
 	@JsonIgnore
-	private boolean isUnlucky() { // with each item lvl the chance to roll a debuff halves; idk how good is that, we'll see
-		return Utils.rand(0, lvl) == lvl;
+	private boolean isUnlucky() {
+		return Utils.rand(0, lvl * 2) == lvl;
 	}
 
 	private int rollStatValue() {
@@ -96,11 +99,11 @@ public class EquipStats {
 		Stat stats[] = Stat.values();
 		int value = rollStatValue();
 		Stat stat = null;
-		
+
 		do
 			stat = stats[Utils.rand(stats.length)];
-		while(stat.equals(mainStat));
-		
+		while (stat.equals(mainStat));
+
 		setStat(stat, value);
 		return value;
 	}

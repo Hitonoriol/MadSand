@@ -336,7 +336,7 @@
 	},
 	"24" : {
 		"hp" : 3,
-		"harvestHp" : -1,
+		"harvestHp" : 1,
 		"lvl" : -1,
 		"nocollide" : true,
 		"maskWidth" : 0,

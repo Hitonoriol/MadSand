@@ -106,7 +106,7 @@
 		"type" : "Regular",
 		"questList" : null,
 		"spawnOnce" : false,
-		"friendly" : true
+		"friendly" : false
 	},
 	"7" : {
 		"name" : "Old hunter",
