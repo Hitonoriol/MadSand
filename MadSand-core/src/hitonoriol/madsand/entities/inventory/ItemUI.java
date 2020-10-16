@@ -40,7 +40,7 @@ public class ItemUI extends Group {
 
 		refresh();
 
-		toolHpLabel.setPosition(itemQuantityLabel.getX() + size / 1.6f, itemQuantityLabel.getY() + 6);
+		toolHpLabel.setPosition(itemQuantityLabel.getX() + size / 1.95f, itemQuantityLabel.getY() + 6);
 
 		topLabel.setWidth(size);
 		topLabel.setAlignment(Align.center);

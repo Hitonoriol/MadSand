@@ -80,6 +80,7 @@ public class WorldGen {
 			genLakes();
 			genBiomeObjects();
 			rollDungeon();
+			initialMobSpawn();
 
 		} else {
 
@@ -91,6 +92,11 @@ public class WorldGen {
 		}
 
 		reset();
+	}
+
+	private void initialMobSpawn() {
+		for (int i = 0; i < curBiome.overworld.initialMobSpawn; ++i)
+			curLoc.spawnMobs(Utils.percentRoll(curBiome.overworld.friendlySpawnChance), true);
 	}
 
 	private void genBiomeTerrain() {

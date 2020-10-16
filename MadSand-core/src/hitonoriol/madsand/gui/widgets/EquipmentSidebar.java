@@ -75,6 +75,9 @@ public class EquipmentSidebar extends Table {
 	public void equipItem(EquipSlot slot, Item item) {
 		ItemUI itemDisplay = getItemDisplay(item);
 
+		if (slot == null)
+			return;
+		
 		switch (slot) {
 		case MainHand:
 			itemDisplay.addListener(new ClickListener(Buttons.LEFT) {

@@ -70,7 +70,7 @@
 	},
 	"10" : {
 		"name" : "Hewn rock",
-		"recipe" : "2/3",
+		"recipe" : "2/2",
 		"altObject" : 8,
 		"cost" : 7,
 		"type" : "PlaceableObject",

@@ -185,6 +185,10 @@ public class World {
 	Map putLoc(int x, int y, int layer, Map loc) {
 		return putLoc(new Pair(x, y), layer, loc);
 	}
+	
+	boolean createBasicLoc(Pair wc, int layer) {
+		return this.createLoc(wc, layer, new Map(DEFAULT_MAPSIZE, DEFAULT_MAPSIZE));
+	}
 
 	boolean createBasicLoc(Pair wc, int mx, int my) {
 		return this.createLoc(wc, Location.LAYER_OVERWORLD, new Map(mx, my));
@@ -204,7 +208,7 @@ public class World {
 		Utils.out("Generating new sector!");
 
 		if (!locExists(coords.set(wx, wy), layer))
-			createBasicLoc(wx, wy);
+			createBasicLoc(new Pair(wx, wy), layer);
 
 		clearCurLoc();
 

@@ -199,6 +199,50 @@
 	"rewardItems" : "51/1",
 	"removeOnCompletion" : "-1",
 	"repeatable" : false
+},
+
+"7" : {
+	"exp" : 40,
+	"name" : "Sewing machine & the first armor",
+	"startMsg" : "
+		#Richard# Hey, {PLAYER}! I don't think you are ready to go to the dungeon just yet. I need to show you something. [?]=>
+		#Richard# Here - you can build a sewing machine and make yourslf some clothes from plant fiber. They'll protect you from monsters you'll meet in the dungeon.[Understood]=>
+		* To build a sewing machine, open Build Menu and click on the Sewing Machine button (once you collect all the needed resources) [Ok]=>
+		#Richard# Hmm... Then, craft at least a Plant Fiber Shirt and talk to me again. See ya.
+	",
+
+	"endMsg" : "#Richard# Whoa, this shirt looks nice on you, {PLAYER}. Now you are 100% ready to kick some monster ass. I'm proud of you.",
+
+	"reqMsg" : "#Richard# Build a sewing machine and craft at least a Plant Fiber Shirt.",
+	"journalText" : "Build a sewing machine and craft at least a Plant Fiber Shirt",
+	"reqItems" : "105/1",
+	"deleteRequiredItems" : false,
+	"giveItems" : "n",
+	"rewardItems" : "21/25",
+	"removeOnCompletion" : "-1",
+	"repeatable" : false,
+	"previousQuest" : 3
+},
+
+"8" : {
+	"exp" : 15,
+	"name" : "Farm animals tutorial",
+	"startMsg" : "
+		#Old farmer# {PLAYER}, today I'll teach you about farm animals. =>
+		#Old farmer# You must've seen some chickens and cows walking around here. So, you can feed them some hay and they will produce something for you: cows will produce milk, chikens will give you some eggs and so on.[Cool]=>
+		#Old farmer# To get hay you must build a Wheelbarrow first, but if you don't have one already, I'll give you some hay to test things out. [Thanks]=>
+		#Old farmer# Well, go feed some cows and bring me 3 milk bottles. The rest is yours.
+	",
+
+	"endMsg" : "#Old farmer# Nice. Nothing beats some fresh milk... in the middle of nowhere. See you soon, {PLAYER}.",
+
+	"reqMsg" : "#Old farmer# Bring me 3 milk bottles.",
+	"journalText" : "Feed some cows and bring 3 milk bottles to the Old Farmer.",
+	"reqItems" : "126/3",
+	"giveItems" : "104/15",
+	"rewardItems" : "n",
+	"removeOnCompletion" : "-1",
+	"repeatable" : false
 }
 
 }

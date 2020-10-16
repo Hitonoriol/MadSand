@@ -273,7 +273,7 @@ public class Stats {
 		return (Utils.rand(0, accuracy) == accuracy);
 	}
 
-	final float DEF_DENOMINATOR = 2.1f;
+	final float DEF_DENOMINATOR = 3f;
 
 	public int calcAttack(int defense) {
 		if (attackMissed())
