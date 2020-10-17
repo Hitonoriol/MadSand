@@ -107,7 +107,7 @@ public class Mouse {
 			info += ("Object: " + object.name) + Resources.LINEBREAK;
 
 		if (station != null)
-			info += getProdStationInfo();
+			info += getProdStationInfo(station);
 
 		if (!crop.equals(Map.nullCrop))
 			info += getCropInfo();
@@ -121,12 +121,15 @@ public class Mouse {
 			if (!npc.friendly)
 				info += npc.spottedMsg();
 
+			if (npc.animalProductWorker != null)
+				info += getProdStationInfo(npc.animalProductWorker);
+
 		}
 
 		return info;
 	}
 
-	private static String getProdStationInfo() {
+	private static String getProdStationInfo(ProductionStation station) {
 		String info = "Status: ";
 		String productName = station.getProductName();
 		String rawMaterialName = station.getConsumableName();

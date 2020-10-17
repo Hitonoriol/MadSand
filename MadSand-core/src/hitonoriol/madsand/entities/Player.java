@@ -65,6 +65,7 @@ public class Player extends Entity {
 
 	public void addExp(int amount) {
 		stats.skills.increaseSkill(Skill.Level, amount);
+		Gui.refreshOverlay();
 	}
 
 	@Override
@@ -183,7 +184,7 @@ public class Player extends Entity {
 		super.die();
 		stats.equipment.unEquipAll();
 		refreshEquipment();
-		Gui.deathStage.setDeadText("You died\nYou survived " + getSurvivedTime() + " ticks");
+		Gui.deathStage.setDeadText("You died\nYou survived " + Utils.round(getSurvivedTime()) + " days");
 		Gui.darkness.setVisible(true);
 		Gdx.input.setInputProcessor(Gui.deathStage);
 		MadSand.state = GameState.DEAD;
@@ -784,8 +785,8 @@ public class Player extends Entity {
 		}
 	}
 
-	long getSurvivedTime() {
-		return MadSand.world.globalTick - stats.spawnTime;
+	float getSurvivedTime() {
+		return (float) (MadSand.world.globalTick - stats.spawnTime) / (float) MadSand.world.ticksPerHour;
 	}
 
 	public void registerLuaAction(String name) {

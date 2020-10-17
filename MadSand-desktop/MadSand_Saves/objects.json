@@ -144,7 +144,7 @@
 			"0" : [ 68 ]
 		},
 		"onInteract" : "-1",
-		"skill" : "None",
+		"skill" : "Harvesting",
 		"name" : "Cactus"
 	},
 	"11" : {
@@ -345,7 +345,7 @@
 			"0" : [ 68, 8 ]
 		},
 		"onInteract" : "-1",
-		"skill" : "None",
+		"skill" : "Harvesting",
 		"name" : "Tumbleweed"
 	},
 	"25" : {

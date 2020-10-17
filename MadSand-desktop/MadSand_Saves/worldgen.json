@@ -166,7 +166,13 @@
 			"objects" : [ {
 				"rollCount" : 300,
 				"idList" : [ 32, 38, 33 ]
-			} ]
+			} ],
+			"initialMobSpawn" : 15,
+			"initialFriendlyChance" : 80,
+			"hostileMobs": {"rollCount": 6, "idList": [6, 32, 29]},
+			"friendlyMobs": {"rollCount": 4, "idList": [35, 23]},
+			"hostileSpawnChance": 80,
+			"friendlySpawnChance": 60
 		},
 		"lake" : {
 			"lakeTile" : 0,
@@ -200,7 +206,13 @@
 			}, {
 				"rollCount" : 100,
 				"idList" : [ 39, 40 ]
-			} ]
+			} ],
+			"initialMobSpawn" : 30,
+			"initialFriendlyChance" : 40,
+			"hostileMobs": {"rollCount": 5, "idList": [20, 27, 26, 29, 2, 6]},
+			"friendlyMobs": {"rollCount": 4, "idList": [35, 30]},
+			"hostileSpawnChance": 75,
+			"friendlySpawnChance": 50
 		},
 		"lake" : {
 			"lakeTile" : 22,
