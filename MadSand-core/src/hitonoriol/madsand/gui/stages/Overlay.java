@@ -158,10 +158,10 @@ public class Overlay extends Stage {
 			} catch (Exception e) {
 				MadSand.print("Couldn't execute user input");
 				e.printStackTrace();
+			} finally {
+				gameLog.inputField.setText("");
+				unfocus(gameLog.inputField);
 			}
-
-			gameLog.inputField.setText("");
-			unfocus(gameLog.inputField);
 		}
 	}
 
@@ -239,9 +239,9 @@ public class Overlay extends Stage {
 		info += ("XP: " + stats.skills.getExpString(Skill.Level)) + Resources.Tab;
 		info += ("Food: " + stats.food + " / " + stats.maxFood) + Resources.Tab;
 		info += ("Location: Cell (" + player.x + ", " + player.y + ")" + getSectorString());
-		
+
 		info += Resources.LINEBREAK + Resources.Tab;
-		
+
 		info += "Stamina: " + Utils.round(stats.stamina) + "/" + Utils.round(stats.maxstamina);
 
 		overlayStatLabel.setText(info);

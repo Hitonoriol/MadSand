@@ -96,7 +96,7 @@ public class WorldGen {
 
 	private void initialMobSpawn() {
 		for (int i = 0; i < curBiome.overworld.initialMobSpawn; ++i)
-			curLoc.spawnMobs(Utils.percentRoll(curBiome.overworld.friendlySpawnChance), true);
+			curLoc.spawnMobs(Utils.percentRoll(curBiome.overworld.initialFriendlyChance), true);
 	}
 
 	private void genBiomeTerrain() {

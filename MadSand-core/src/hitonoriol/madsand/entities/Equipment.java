@@ -56,6 +56,10 @@ public class Equipment {
 		return equip(slot, item);
 	}
 
+	public Item previousEquipment(Item item) {
+		return getItem(EquipSlot.slotByType(item.type));
+	}
+
 	public boolean unEquip(EquipSlot slot) {
 		if (!equipped.containsKey(slot))
 			return false;
@@ -68,6 +72,11 @@ public class Equipment {
 			Gui.overlay.equipmentSidebar.equipItem(slot, Item.nullItem);
 
 		return equipped.remove(slot) != null;
+	}
+
+	public void unEquipAll() {
+		for (EquipSlot slot : EquipSlot.values())
+			unEquip(slot);
 	}
 
 	public boolean unEquip(Item item) {
@@ -85,6 +94,11 @@ public class Equipment {
 	public void setHand(Item item) {
 		unEquip(EquipSlot.MainHand);
 		equip(EquipSlot.MainHand, item);
+	}
+
+	public boolean itemEquipped(Item item) {
+		EquipSlot slot = EquipSlot.slotByType(item.type);
+		return (getItem(slot) == item);
 	}
 
 	@JsonIgnore

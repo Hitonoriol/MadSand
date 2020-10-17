@@ -49,9 +49,9 @@
 	},
 	"7" : {
 		"name" : "Berry",
-		"satiationAmount" : 25,
-		"staminaAmount" : 1,
-		"healAmount" : 1,
+		"satiationAmount" : 20,
+		"staminaAmount" : 1.5,
+		"healAmount" : 2,
 		"cost" : 7,
 		"type" : "Consumable",
 		"weight" : 0.05
@@ -114,7 +114,7 @@
 		"cost" : 32,
 		"type" : "HeadArmor",
 		"weight" : 1.1,
-		"lvl" : 1,
+		"lvl" : 3,
 		"equipStats" : {
 			"defense" : 4
 		}
@@ -296,9 +296,9 @@
 	},
 	"39" : {
 		"name" : "Cucumber",
-		"satiationAmount" : 15,
+		"satiationAmount" : 20,
 		"staminaAmount" : 2.5,
-		"healAmount" : 3,
+		"healAmount" : 2,
 		"cost" : 9,
 		"type" : "Consumable",
 		"weight" : 0.15
@@ -361,7 +361,7 @@
 	"44" : {
 		"name" : "Edible mushroom",
 		"satiationAmount" : 35,
-		"staminaAmount" : 3,
+		"staminaAmount" : 5,
 		"cost" : 11,
 		"type" : "Consumable",
 		"weight" : 0.1
@@ -376,36 +376,36 @@
 	},
 	"46" : {
 		"name" : "Potatoes",
-		"satiationAmount" : 35,
+		"satiationAmount" : 25,
 		"staminaAmount" : 3,
-		"healAmount" : 6,
+		"healAmount" : 3,
 		"cost" : 11,
 		"type" : "Consumable",
 		"weight" : 0.1
 	},
 	"47" : {
 		"name" : "Carrot",
-		"satiationAmount" : 35,
+		"satiationAmount" : 25,
 		"staminaAmount" : 3,
-		"healAmount" : 10,
+		"healAmount" : 3,
 		"cost" : 11,
 		"type" : "Consumable",
 		"weight" : 0.1
 	},
 	"48" : {
 		"name" : "Tomatoes",
-		"satiationAmount" : 35,
+		"satiationAmount" : 25,
 		"staminaAmount" : 3,
-		"healAmount" : 5,
+		"healAmount" : 3,
 		"cost" : 11,
 		"type" : "Consumable",
 		"weight" : 0.1
 	},
 	"49" : {
 		"name" : "Pepper",
-		"satiationAmount" : 35,
+		"satiationAmount" : 25,
 		"staminaAmount" : 3,
-		"healAmount" : 9,
+		"healAmount" : 3,
 		"cost" : 11,
 		"type" : "Consumable",
 		"weight" : 0.1
@@ -527,10 +527,10 @@
 	"57" : {
 		"name" : "Cooked meat",
 		"recipe" : "72|96/1",
-		"satiationAmount" : 50,
-		"healAmount" : 15,
+		"satiationAmount" : 40,
+		"healAmount" : 7,
+		"staminaAmount" : 7.5,
 		"cost" : 11,
-		"staminaAmount" : 5,
 		"type" : "Consumable",
 		"weight" : 0.4
 	},
@@ -538,7 +538,7 @@
 		"name" : "Pint of beer",
 		"recipe" : "65/3:66/3",
 		"satiationAmount" : 30,
-		"staminaAmount" : 1.5,
+		"staminaAmount" : 5,
 		"healAmount" : -5,
 		"cost" : 12,
 		"type" : "Consumable",
@@ -546,9 +546,9 @@
 	},
 	"59" : {
 		"name" : "Chicken leg",
-		"satiationAmount" : 45,
-		"staminaAmount" : 4,
-		"healAmount" : 10,
+		"satiationAmount" : 30,
+		"staminaAmount" : 5,
+		"healAmount" : 5,
 		"cost" : 15,
 		"type" : "Consumable",
 		"weight" : 0.3
@@ -884,16 +884,16 @@
 		"name" : "Apple",
 		"satiationAmount" : 15,
 		"staminaAmount" : 1,
-		"healAmount" : 3,
+		"healAmount" : 1,
 		"cost" : 5,
 		"type" : "Consumable",
 		"weight" : 0.09
 	},
 	"98" : {
 		"name" : "Cheese",
-		"satiationAmount" : 45,
+		"satiationAmount" : 35,
 		"staminaAmount" : 5,
-		"healAmount" : 10,
+		"healAmount" : 5,
 		"cost" : 30,
 		"type" : "Consumable",
 		"weight" : 0.6
@@ -902,7 +902,7 @@
 		"name" : "Grapes",
 		"satiationAmount" : 25,
 		"staminaAmount" : 2,
-		"healAmount" : 4,
+		"healAmount" : 3,
 		"cost" : 7,
 		"type" : "Consumable",
 		"weight" : 0.17
@@ -963,7 +963,7 @@
 	},
 	"108" : {
 		"name" : "Pineapple",
-		"satiationAmount" : 38,
+		"satiationAmount" : 30,
 		"staminaAmount" : 2.5,
 		"healAmount" : 7,
 		"cost" : 9,

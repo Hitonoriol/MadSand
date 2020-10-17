@@ -15,6 +15,7 @@ public class StatLabels {
 	public Label intStatLbl;
 	public Label luckStatLbl;
 	public Label dexStatLbl;
+	public Label defStatLbl;
 	public Label statSumLbl;
 	public Label freeStatPointsLbl;
 	public Label hpStatLbl, staminaStatLbl;
@@ -28,6 +29,7 @@ public class StatLabels {
 		intStatLbl = new Label("", skin);
 		luckStatLbl = new Label("", skin);
 		dexStatLbl = new Label("", skin);
+		defStatLbl = new Label("", skin);
 		statSumLbl = new Label("", skin);
 		hpStatLbl = new Label("", skin);
 		staminaStatLbl = new Label("", skin);
@@ -46,6 +48,7 @@ public class StatLabels {
 		intStatLbl.setText("Intelligence: " + stats.intelligence);
 		luckStatLbl.setText("Luck: " + stats.luck);
 		dexStatLbl.setText("Dexterity: " + stats.dexterity);
+		defStatLbl.setText("Defense: " + stats.defense);
 		statSumLbl.setText("\nStat sum: " + statSum);
 		freeStatPointsLbl.setText("Free stat points: " + (stats.maxStatSum - statSum));
 

@@ -37,8 +37,6 @@ public class Gui {
 	public static final float DEFWIDTH = 250f;
 	public static final float defLblWidth = Gdx.graphics.getWidth() / 4;
 
-	public static String noticeMsgColor = "[#16E1EA]";
-
 	public static boolean gameUnfocused = false;
 	public static boolean inventoryActive = false;
 	public static boolean dialogActive = false;

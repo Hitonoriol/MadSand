@@ -431,11 +431,11 @@ public class MadSand extends Game {
 	}
 
 	public static void print(String msg, String color) {
-		print(color + msg + "[]");
+		Gui.overlay.gameLog.print(msg, color);
 	}
 
 	public static void notice(String msg) {
-		print("* " + msg, Gui.noticeMsgColor);
+		Gui.overlay.gameLog.notice(msg);
 	}
 
 	public void render() {

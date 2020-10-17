@@ -10,6 +10,7 @@ public class OverworldPreset {
 	public ArrayList<RollList> regenerateObjects = new ArrayList<>();
 	public double chanceToRegenerate;
 
+	public float initialFriendlyChance = 0;	// probability to roll friendly mob during initial spawn
 	public int initialMobSpawn; // how many times to roll spawnlists on location generation
 	public RollList hostileMobs = new RollList();
 	public RollList friendlyMobs = new RollList();

@@ -20,11 +20,11 @@ public class ItemUI extends Group {
 	private ImageButton itemBtn; // button with item image
 
 	private Label topLabel;
-	private Label itemQuantityLabel;
+	protected Label itemQuantityLabel;
 	private Label toolHpLabel;
 	private Image highlight; // for mouseover highlighting of items
 
-	private Item item;
+	protected Item item;
 
 	protected ItemTooltip tooltip;
 

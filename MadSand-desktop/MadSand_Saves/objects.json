@@ -182,7 +182,7 @@
 	},
 	"13" : {
 		"hp" : 2,
-		"harvestHp" : 15,
+		"harvestHp" : 12,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,

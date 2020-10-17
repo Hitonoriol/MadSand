@@ -190,6 +190,9 @@ public class Map {
 	};
 
 	private MapAction objectAction = (int x, int y, int id) -> {
+		if (objectExists(x, y))
+			return false;
+
 		return addObject(x, y, id, true);
 	};
 

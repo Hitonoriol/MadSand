@@ -5,7 +5,6 @@ import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -91,7 +90,8 @@ public class InventoryUI {
 		}
 	}
 
-	void putNewItem(Group cell) {
+	void putNewItem(InventoryUICell cell) {
+		cell.refreshEquippedStatus();
 		++stacks;
 		if (stacks % ITEMS_PER_ROW == 1)
 			invTable.row();

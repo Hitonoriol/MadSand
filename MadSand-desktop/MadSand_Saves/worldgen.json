@@ -46,6 +46,7 @@
 			],
 			"chanceToRegenerate": 40,
 			"initialMobSpawn" : 5,
+			"initialFriendlyChance" : 85,
 			"hostileMobs": {"rollCount": 6, "idList": [19, 2, 6]},
 			"friendlyMobs": {"rollCount": 4, "idList": [30, 31, 37, 38, 39, 21, 22, 23, 24, 25, 35]},
 			"hostileSpawnChance": 80,
@@ -129,7 +130,8 @@
 				"idList": [10, 24]}
 			],
 			"chanceToRegenerate": 35,
-			"initialMobSpawn" : 5,
+			"initialFriendlyChance" : 40,
+			"initialMobSpawn" : 6,
 			"friendlyMobs": {"rollCount": 5, "idList": [30, 31]},
 			"hostileMobs": {"rollCount": 10, "idList": [15, 16, 17, 18, 32]},
 			"hostileSpawnChance": 90,

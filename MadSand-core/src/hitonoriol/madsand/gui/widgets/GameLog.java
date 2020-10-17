@@ -12,6 +12,10 @@ import hitonoriol.madsand.Gui;
 public class GameLog extends Table {
 	public static float INPUT_FIELD_WIDTH = 300;
 	private static final int LOG_LENGTH = 20;
+	
+	public static final String NOTICE_ALT_COLOR = "[#58FFB1]";
+	public static String NOTICE_COLOR = "[#16E1EA]";
+	boolean noticeColor = true; // flag to use alternating notice colors
 
 	Skin skin;
 	public TextField inputField;
@@ -84,6 +88,15 @@ public class GameLog extends Table {
 			}
 		} else
 			logLabels[lineNum].setText(printedLine + " x" + (++lineRepeat));
+	}
+	
+	public void print(String msg, String color) {
+		print(color + msg + "[]");
+	}
+	
+	public void notice(String msg) {
+		print("* " + msg, noticeColor ? NOTICE_COLOR : NOTICE_ALT_COLOR);
+		noticeColor = !noticeColor;
 	}
 
 	public String getLastPrintedLine() {

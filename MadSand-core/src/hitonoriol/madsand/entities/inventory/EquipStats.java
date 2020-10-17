@@ -163,6 +163,6 @@ public class EquipStats {
 
 	@JsonIgnore
 	public int getTotalBonus() {
-		return defense + constitution + dexterity + strength + accuracy + intelligence;
+		return constitution + dexterity + strength + accuracy + intelligence;
 	}
 }

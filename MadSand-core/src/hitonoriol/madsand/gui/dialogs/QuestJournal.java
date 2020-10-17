@@ -30,6 +30,7 @@ public class QuestJournal extends Dialog {
 	static float SCROLL_YPADDING = 25;
 
 	static float ENTRY_HEIGHT = 20;
+	static float PAD_BOTTOM = 5;
 
 	static float STATUS_LABEL_WIDTH = 125;
 	static float REQUIREMENT_LABEL_WIDTH = TABLE_WIDTH - STATUS_LABEL_WIDTH;
@@ -117,8 +118,8 @@ public class QuestJournal extends Dialog {
 			requirements = new Label(quest.journalText, skin);
 			requirements.setWrap(true);
 
-			questTable.add(getStatusLabel(id)).size(STATUS_LABEL_WIDTH, ENTRY_HEIGHT);
-			questTable.add(requirements).size(REQUIREMENT_LABEL_WIDTH, ENTRY_HEIGHT).row();
+			questTable.add(getStatusLabel(id)).size(STATUS_LABEL_WIDTH, ENTRY_HEIGHT).padBottom(PAD_BOTTOM);
+			questTable.add(requirements).width(REQUIREMENT_LABEL_WIDTH).padBottom(PAD_BOTTOM).row();
 		}
 
 	}

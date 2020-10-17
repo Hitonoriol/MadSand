@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Mouse;
+import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.enums.ItemType;
 import hitonoriol.madsand.world.World;
 
@@ -27,16 +29,44 @@ public class InventoryUICell extends ItemUI {
 	private TextButton useBtn;
 	private TextButton equipBtn;
 
+	static String equippedText = "[#387aff]E []";
+	private Label equippedLabel = new Label(equippedText, Gui.skin);
+	Player player = World.player;
+
 	public InventoryUICell(Item item) {
 		super(item);
 		initContextMenu(item);
 
+		refreshEquippedStatus();
+		equippedLabel.setPosition(itemQuantityLabel.getX(), itemQuantityLabel.getY() + itemQuantityLabel.getHeight());
+		super.addActor(equippedLabel);
+
 		this.addListener(new ClickListener(Buttons.LEFT) {
 			public void clicked(InputEvent event, float x, float y) {
+
 				if (!Gui.inventoryActive)
 					return;
 
+				if (item.type.isEquipment()) {
+					if (player.stats.equipment.itemEquipped(item)) {
+						player.unEquip(item);
+						unEquipItem();
+					} else {
+						Item prev = player.stats.equipment.previousEquipment(item);
+						player.equip(item);
+						player.inventory.refreshItem(prev);
+						equipItem();
+					}
+					return;
+				}
+
+				Item prevHand = player.stats.hand();
 				World.player.stats.setHand(item);
+				refreshEquippedStatus();
+				
+				if (!prevHand.equals(Item.nullItem))
+					player.inventory.refreshItem(prevHand);
+				
 				MadSand.print("You take " + item.name + " in your hand");
 				Gui.overlay.setHandDisplay(item);
 				World.player.doAction();
@@ -49,7 +79,7 @@ public class InventoryUICell extends ItemUI {
 			public void clicked(InputEvent event, float x, float y) {
 				if (!Gui.inventoryActive)
 					return;
-				
+
 				if (!invCellContextContainer.isVisible()) {
 					invCellContextContainer.setVisible(true);
 					Mouse.x = Gdx.input.getX();
@@ -107,6 +137,14 @@ public class InventoryUICell extends ItemUI {
 		}
 	}
 
+	public void equipItem() {
+		equippedLabel.setVisible(true);
+	}
+
+	public void unEquipItem() {
+		equippedLabel.setVisible(false);
+	}
+
 	private void closeContextMenu() {
 		invCellContextContainer.setVisible(false);
 	}
@@ -121,5 +159,9 @@ public class InventoryUICell extends ItemUI {
 
 	void hideContext() {
 		closeContextMenu();
+	}
+
+	public void refreshEquippedStatus() {
+		equippedLabel.setVisible(player.stats.equipment.itemEquipped(item) || player.stats.hand() == item);
 	}
 }

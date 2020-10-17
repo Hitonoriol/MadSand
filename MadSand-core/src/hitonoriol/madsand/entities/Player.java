@@ -58,7 +58,7 @@ public class Player extends Entity {
 	public void refreshEquipment() {
 		Gui.overlay.equipmentSidebar.refresh();
 	}
-	
+
 	public Player() {
 		this("");
 	}
@@ -121,6 +121,11 @@ public class Player extends Entity {
 		return ret;
 	}
 
+	public boolean unEquip(Item item) {
+		MadSand.print("You unequip " + item.name);
+		return stats.equipment.unEquip(item);
+	}
+
 	@Override
 	public boolean attack(Direction dir) {
 		boolean dead;
@@ -176,6 +181,7 @@ public class Player extends Entity {
 	@Override
 	void die() {
 		super.die();
+		stats.equipment.unEquipAll();
 		refreshEquipment();
 		Gui.deathStage.setDeadText("You died\nYou survived " + getSurvivedTime() + " ticks");
 		Gui.darkness.setVisible(true);

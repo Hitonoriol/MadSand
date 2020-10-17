@@ -162,7 +162,7 @@ public class Inventory {
 		}
 	}
 
-	private void refreshItem(Item item) {
+	void refreshItem(Item item) {
 		if (itemUI == null)
 			return;
 		if (item.id == 0)
@@ -172,6 +172,7 @@ public class Inventory {
 			itemUI.get(item).setText(item.quantity + "");
 			if (item.type.isTool())
 				itemUI.get(item).setHp(item.hp);
+			itemUI.get(item).refreshEquippedStatus();
 		} else {
 			InventoryUICell cell = new InventoryUICell(item);
 			itemUI.put(item, cell);
