@@ -16,6 +16,7 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.NpcType;
+import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.properties.WorldGenProp;
@@ -26,8 +27,6 @@ import hitonoriol.madsand.world.worldgen.WorldGenPreset;
 
 public class Map {
 	private int xsz, ysz;
-
-	public static int PLOWED_SOIL = 15;
 
 	public static int MIN_MAPSIZE = 100;
 	public static int MAX_MAPSIZE = 200;
@@ -576,7 +575,7 @@ public class Map {
 			return false;
 		if (objectExists(x, y))
 			return false;
-		if (getTile(x, y).id != PLOWED_SOIL)
+		if (getTile(x, y).id != ItemProp.getCropSoil(id))
 			return false;
 
 		Crop newCrop = new Crop(id, MadSand.world.globalRealtimeTick);
@@ -588,8 +587,9 @@ public class Map {
 	public boolean putCrop(int x, int y, Crop crop) {
 		if (!correctCoords(coords.set(x, y)))
 			return false;
-		if (getTile(x, y).id != PLOWED_SOIL)
+		if (getTile(x, y).id != ItemProp.getCropSoil(crop.id))
 			return false;
+
 		addObject(x, y, crop.objId);
 		mapCrops.put(new Pair(coords), crop);
 		return true;

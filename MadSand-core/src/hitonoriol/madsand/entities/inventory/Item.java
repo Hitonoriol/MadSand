@@ -16,7 +16,7 @@ import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.LootTable;
 import hitonoriol.madsand.enums.ItemType;
 import hitonoriol.madsand.enums.Skill;
-import hitonoriol.madsand.map.CropGrowthStageContainer;
+import hitonoriol.madsand.properties.CropContainer;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
 
@@ -48,7 +48,7 @@ public class Item {
 	public int lvl; // level of item (only for weapons/armor)
 
 	public EquipStats equipStats;
-	public CropGrowthStageContainer cropStages;
+	public CropContainer cropContainer;
 
 	public String uid = "";
 

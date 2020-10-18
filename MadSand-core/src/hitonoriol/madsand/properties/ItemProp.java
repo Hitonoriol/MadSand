@@ -68,6 +68,10 @@ public class ItemProp {
 	}
 
 	public static CropGrowthStageContainer getCropStages(int id) {
-		return items.get(id).cropStages;
+		return items.get(id).cropContainer.cropStages;
+	}
+	
+	public static int getCropSoil(int id) {
+		return items.get(id).cropContainer.soil;
 	}
 }

@@ -22,6 +22,7 @@ public class WorldGen {
 	private int curLayer;
 	private Map curLoc;
 	private int width, height;
+	private boolean friendlyOnly = false;
 
 	public WorldGen(WorldMap worldMap) {
 		this.worldMap = worldMap;
@@ -36,6 +37,11 @@ public class WorldGen {
 
 	public WorldGen initPosition() {
 		return initPosition(worldMap.curWorldPos, worldMap.curLayer);
+	}
+	
+	public WorldGen friendlyOnly() {
+		friendlyOnly = true;
+		return this;
 	}
 
 	public WorldGen setBiome(int biome) {
@@ -52,6 +58,7 @@ public class WorldGen {
 
 	public void reset() {
 		this.setSize(-1, -1).setBiome(-1);
+		friendlyOnly = false;
 	}
 
 	public void generate() {
@@ -96,7 +103,7 @@ public class WorldGen {
 
 	private void initialMobSpawn() {
 		for (int i = 0; i < curBiome.overworld.initialMobSpawn; ++i)
-			curLoc.spawnMobs(Utils.percentRoll(curBiome.overworld.initialFriendlyChance), true);
+			curLoc.spawnMobs(Utils.percentRoll(curBiome.overworld.initialFriendlyChance) || friendlyOnly, true);
 	}
 
 	private void genBiomeTerrain() {

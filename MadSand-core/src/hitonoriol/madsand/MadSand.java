@@ -17,6 +17,7 @@ import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.GameState;
+import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.map.Tile;
@@ -255,6 +256,14 @@ public class MadSand extends Game {
 		}
 	}
 
+	void drawLoot(int x, int y) {
+		Loot loot = world.getCurLoc().getLoot(x, y);
+		if (loot.contents.size() == 1)
+			Utils.batch.draw(Resources.item[loot.contents.get(0).id], x * TILESIZE, y * TILESIZE, TILESIZE, TILESIZE);
+		else
+			Utils.batch.draw(Resources.objects[OBJECT_LOOT], x * TILESIZE, y * TILESIZE);
+	}
+
 	void drawGame() {
 		Map loc = world.getCurLoc();
 		Npc npc;
@@ -321,7 +330,7 @@ public class MadSand extends Game {
 			}
 
 			if (player.standingOnLoot(x, y))
-				Utils.batch.draw(Resources.objects[OBJECT_LOOT], x * TILESIZE, y * TILESIZE);
+				drawLoot(x, y);
 
 			if (npc != Map.nullNpc)
 				drawEntity(npc);

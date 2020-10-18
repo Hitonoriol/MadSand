@@ -14,12 +14,14 @@ import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.ItemType;
 import hitonoriol.madsand.enums.NpcType;
 import hitonoriol.madsand.gui.OverlayMouseoverListener;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.map.Tile;
+import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.world.World;
@@ -32,6 +34,7 @@ public class ActionButton extends Table {
 	public ChangeListener npcInteractListener;
 	public ChangeListener objInteractListener;
 	public ChangeListener travelListener;
+	public ChangeListener useItemListener;
 
 	public TextButton interactButton;
 
@@ -48,6 +51,14 @@ public class ActionButton extends Table {
 		super.add(interactButton).width(WIDTH).row();
 
 		inGameBtnListener = new OverlayMouseoverListener();
+
+		useItemListener = new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				World.player.useItem();
+				setVisible(false);
+			}
+		};
 
 		npcInteractListener = new ChangeListener() {
 			@Override
@@ -99,6 +110,7 @@ public class ActionButton extends Table {
 		int tileItem = MapObject.getTileAltItem(tile.id, player.stats.hand().type.get());
 		MapObject object = loc.getObject(coords.x, coords.y);
 		Npc npc = loc.getNpc(coords.x, coords.y);
+		Item item = player.stats.hand();
 		String tileAction = TileProp.getOnInteract(tile.id);
 		String objAction = ObjectProp.getOnInteract(object.id);
 
@@ -110,7 +122,9 @@ public class ActionButton extends Table {
 
 		String tileMsg = "Interact with ";
 
-		if (player.canTravel())
+		if (item.type.equals(ItemType.Crop) && tile.id == ItemProp.getCropSoil(item.id))
+			activateInteractBtn(interactButton, "Plant " + item.name, useItemListener);
+		else if (player.canTravel())
 			activateInteractBtn(interactButton, "Travel to the next sector", travelListener);
 		else if (!tile.equals(Map.nullTile) // Tile interaction button
 				&& (!tileAction.equals(Resources.emptyField)

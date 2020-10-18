@@ -15,7 +15,7 @@ public class Stats {
 	public final static float BASE_MAX_WEIGHT = 50;
 	public final static int BASE_FOOD_TICKS = 1;
 	final int HP_MULTIPLIER = 10; // maxHp = constitution * HP_MULTIPLIER
-	final float MIN_HP_AUTODAMAGE = 0.1f;
+	final float MIN_HP_AUTODAMAGE_PERCENT = 10;
 
 	public int AP_WALK = 5; // action points consumed by walking
 	public int AP_ATTACK = 3;
@@ -41,7 +41,7 @@ public class Stats {
 	public int mhp;
 
 	public float GATHERING_STAMINA_COST = 0.05f;
-	public float staminaLow = 0.1f;
+	public float staminaLowPercent = 10;
 	public float stamina;
 	public float maxstamina;
 
@@ -192,6 +192,16 @@ public class Stats {
 		return PERCENT * ((double) food / (double) maxFood);
 	}
 
+	@JsonIgnore
+	public double getStaminaPercent() {
+		return PERCENT * ((double) stamina / (double) maxstamina);
+	}
+
+	@JsonIgnore
+	public double getHpPercent() {
+		return PERCENT * ((double) hp / (double) mhp);
+	}
+
 	public void check() {
 		skills.check();
 
@@ -222,8 +232,8 @@ public class Stats {
 		perTickFoodCheck();
 		perTickStaminaCheck();
 
-		if (hp > hp * MIN_HP_AUTODAMAGE) {
-			if (stamina < maxstamina * staminaLow && !skills.skillRoll(Skill.Survival))
+		if (getHpPercent() > MIN_HP_AUTODAMAGE_PERCENT) {
+			if (getStaminaPercent() < staminaLowPercent && !skills.skillRoll(Skill.Survival))
 				owner._damage(STAMINA_DMG);
 
 			if (food <= 0)

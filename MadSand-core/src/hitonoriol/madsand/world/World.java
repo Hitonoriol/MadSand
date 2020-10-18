@@ -359,7 +359,7 @@ public class World {
 			}
 
 		switchLocation(direction);
-
+		Gui.refreshOverlay();
 	}
 
 	public boolean inEncounter = false;

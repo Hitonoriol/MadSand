@@ -49,9 +49,9 @@
 	},
 	"7" : {
 		"name" : "Berry",
-		"satiationAmount" : 20,
-		"staminaAmount" : 1.5,
-		"healAmount" : 2,
+		"satiationAmount" : 25,
+		"staminaAmount" : 2,
+		"healAmount" : 1,
 		"cost" : 7,
 		"type" : "Consumable",
 		"weight" : 0.05
@@ -296,7 +296,7 @@
 	},
 	"39" : {
 		"name" : "Cucumber",
-		"satiationAmount" : 20,
+		"satiationAmount" : 10,
 		"staminaAmount" : 2.5,
 		"healAmount" : 2,
 		"cost" : 9,
@@ -310,18 +310,21 @@
 		"cost" : 18,
 		"type" : "Crop",
 		"weight" : 0.05,
-		"cropStages" : [ {
-			"stageLength" : 20,
-			"objectId" : 20
-		}, {
-			"stageLength" : 30,
-			"objectId" : 19
-		}, {
-			"stageLength" : 30,
-			"objectId" : 63
-		}, {
-			"objectId" : 21
-		} ]
+		"cropContainer": {
+			"soil" : 15,
+			"cropStages" : [ {
+				"stageLength" : 20,
+				"objectId" : 20
+			}, {
+				"stageLength" : 30,
+				"objectId" : 19
+			}, {
+				"stageLength" : 30,
+				"objectId" : 63
+			}, {
+				"objectId" : 21
+			} ]
+		}
 	},
 	"41" : {
 		"name" : "Stone hoe",
@@ -376,7 +379,7 @@
 	},
 	"46" : {
 		"name" : "Potatoes",
-		"satiationAmount" : 25,
+		"satiationAmount" : 15,
 		"staminaAmount" : 3,
 		"healAmount" : 3,
 		"cost" : 11,
@@ -385,7 +388,7 @@
 	},
 	"47" : {
 		"name" : "Carrot",
-		"satiationAmount" : 25,
+		"satiationAmount" : 15,
 		"staminaAmount" : 3,
 		"healAmount" : 3,
 		"cost" : 11,
@@ -394,7 +397,7 @@
 	},
 	"48" : {
 		"name" : "Tomatoes",
-		"satiationAmount" : 25,
+		"satiationAmount" : 15,
 		"staminaAmount" : 3,
 		"healAmount" : 3,
 		"cost" : 11,
@@ -403,7 +406,7 @@
 	},
 	"49" : {
 		"name" : "Pepper",
-		"satiationAmount" : 25,
+		"satiationAmount" : 15,
 		"staminaAmount" : 3,
 		"healAmount" : 3,
 		"cost" : 11,
@@ -412,7 +415,7 @@
 	},
 	"50" : {
 		"name" : "Corn",
-		"satiationAmount" : 40,
+		"satiationAmount" : 20,
 		"staminaAmount" : 3,
 		"healAmount" : 5,
 		"cost" : 12,
@@ -420,104 +423,119 @@
 		"weight" : 0.1
 	},
 	"51" : {
-		"name" : "Potato seed",
+		"name" : "Potato seeds",
 		"recipe" : "91|68/5",
 		"altObject" : 43,
 		"cost" : 24,
 		"type" : "Crop",
 		"weight" : 0.05,
-		"cropStages" : [ {
-			"stageLength" : 20,
-			"objectId" : 43
-		}, {
-			"stageLength" : 30,
-			"objectId" : 44
-		}, {
-			"stageLength" : 60,
-			"objectId" : 45
-		}, {
-			"objectId" : 46
-		} ]
+		"cropContainer": {
+			"soil" : 15,
+			"cropStages" : [ {
+				"stageLength" : 20,
+				"objectId" : 43
+			}, {
+				"stageLength" : 30,
+				"objectId" : 44
+			}, {
+				"stageLength" : 60,
+				"objectId" : 45
+			}, {
+				"objectId" : 46
+			} ]
+		}
 	},
 	"52" : {
-		"name" : "Carrot seed",
+		"name" : "Carrot seeds",
 		"recipe" : "91|68/5",
 		"altObject" : 47,
 		"cost" : 24,
 		"type" : "Crop",
 		"weight" : 0.05,
-		"cropStages" : [ {
-			"stageLength" : 20,
-			"objectId" : 47
-		}, {
-			"stageLength" : 30,
-			"objectId" : 48
-		}, {
-			"stageLength" : 60,
-			"objectId" : 49
-		}, {
-			"objectId" : 50
-		} ]
+		"cropContainer": {
+			"soil" : 15,
+			"cropStages" : [ {
+				"stageLength" : 20,
+				"objectId" : 47
+			}, {
+				"stageLength" : 30,
+				"objectId" : 48
+			}, {
+				"stageLength" : 60,
+				"objectId" : 49
+			}, {
+				"objectId" : 50
+			} ]
+		}
 	},
 	"53" : {
-		"name" : "Tomato seed",
+		"name" : "Tomato seeds",
 		"recipe" : "91|68/5",
 		"altObject" : 51,
 		"cost" : 24,
 		"type" : "Crop",
 		"weight" : 0.05,
-		"cropStages" : [ {
-			"stageLength" : 20,
-			"objectId" : 51
-		}, {
-			"stageLength" : 40,
-			"objectId" : 52
-		}, {
-			"stageLength" : 50,
-			"objectId" : 53
-		}, {
-			"objectId" : 54
-		} ]
+		"cropContainer": {
+			"soil" : 15,
+			"cropStages" : [ {
+				"stageLength" : 20,
+				"objectId" : 51
+			}, {
+				"stageLength" : 40,
+				"objectId" : 52
+			}, {
+				"stageLength" : 50,
+				"objectId" : 53
+			}, {
+				"objectId" : 54
+			} ]
+		}
 	},
 	"54" : {
-		"name" : "Pepper seed",
+		"name" : "Pepper seeds",
 		"recipe" : "91|68/5",
 		"altObject" : 55,
 		"cost" : 24,
 		"type" : "Crop",
 		"weight" : 0.05,
-		"cropStages" : [ {
-			"stageLength" : 30,
-			"objectId" : 55
-		}, {
-			"stageLength" : 60,
-			"objectId" : 56
-		}, {
-			"stageLength" : 60,
-			"objectId" : 57
-		}, {
-			"objectId" : 58
-		} ]
+		"cropContainer": {
+			"soil" : 15,
+			"cropStages" : [ {
+				"stageLength" : 30,
+				"objectId" : 55
+			}, {
+				"stageLength" : 60,
+				"objectId" : 56
+			}, {
+				"stageLength" : 60,
+				"objectId" : 57
+			}, {
+				"objectId" : 58
+			} ]
+		}
 	},
 	"55" : {
-		"name" : "Corn seed",
+		"name" : "Corn seeds",
 		"recipe" : "91|68/5",
 		"altObject" : 59,
 		"cost" : 24,
 		"type" : "Crop",
 		"weight" : 0.05,
-		"cropStages" : [ {
-			"stageLength" : 30,
-			"objectId" : 59
-		}, {
-			"stageLength" : 60,
-			"objectId" : 60
-		}, {
-			"stageLength" : 60,
-			"objectId" : 61
-		}, {
-			"objectId" : 62
-		} ]
+		"cropContainer": {
+			"soil" : 15,
+			"cropStages" : [ {
+				"stageLength" : 30,
+				"objectId" : 59
+			}, {
+				"stageLength" : 60,
+				"objectId" : 60
+			}, {
+				"stageLength" : 60,
+				"objectId" : 61
+			}, {
+				"objectId" : 62
+			} ]
+		}
 	},
 	"56" : {
 		"name" : "Coal",
@@ -882,7 +900,7 @@
 	},
 	"97" : {
 		"name" : "Apple",
-		"satiationAmount" : 15,
+		"satiationAmount" : 20,
 		"staminaAmount" : 1,
 		"healAmount" : 1,
 		"cost" : 5,
@@ -900,7 +918,7 @@
 	},
 	"99" : {
 		"name" : "Grapes",
-		"satiationAmount" : 25,
+		"satiationAmount" : 20,
 		"staminaAmount" : 2,
 		"healAmount" : 3,
 		"cost" : 7,
@@ -945,7 +963,7 @@
 	},
 	"106" : {
 		"name" : "Watermelon",
-		"satiationAmount" : 30,
+		"satiationAmount" : 25,
 		"staminaAmount" : 2.5,
 		"healAmount" : 3,
 		"cost" : 8,
@@ -954,7 +972,7 @@
 	},
 	"107" : {
 		"name" : "Melon",
-		"satiationAmount" : 33,
+		"satiationAmount" : 27,
 		"staminaAmount" : 2.5,
 		"healAmount" : 3,
 		"cost" : 8,
@@ -963,7 +981,7 @@
 	},
 	"108" : {
 		"name" : "Pineapple",
-		"satiationAmount" : 30,
+		"satiationAmount" : 25,
 		"staminaAmount" : 2.5,
 		"healAmount" : 7,
 		"cost" : 9,
@@ -1017,204 +1035,234 @@
 		"weight" : 0.05
 	},
 	"115" : {
-		"name" : "Watermelon seed",
+		"name" : "Watermelon seeds",
 		"recipe" : "91|68/5",
 		"altObject" : 115,
 		"cost" : 30,
 		"type" : "Crop",
 		"weight" : 0.05,
-		"cropStages" : [ {
-			"stageLength" : 70,
-			"objectId" : 115
-		}, {
-			"stageLength" : 80,
-			"objectId" : 116
-		}, {
-			"stageLength" : 90,
-			"objectId" : 117
-		}, {
-			"objectId" : 118
-		} ]
+		"cropContainer": {
+			"soil" : 15,
+			"cropStages" : [ {
+				"stageLength" : 70,
+				"objectId" : 115
+			}, {
+				"stageLength" : 80,
+				"objectId" : 116
+			}, {
+				"stageLength" : 90,
+				"objectId" : 117
+			}, {
+				"objectId" : 118
+			} ]
+		}
 	},
 	"116" : {
-		"name" : "Melon seed",
+		"name" : "Melon seeds",
 		"recipe" : "91|68/5",
 		"altObject" : 119,
 		"cost" : 30,
 		"type" : "Crop",
 		"weight" : 0.05,
-		"cropStages" : [ {
-			"stageLength" : 70,
-			"objectId" : 119
-		}, {
-			"stageLength" : 80,
-			"objectId" : 120
-		}, {
-			"stageLength" : 90,
-			"objectId" : 121
-		}, {
-			"objectId" : 122
-		} ]
+		"cropContainer": {
+			"soil" : 15,
+			"cropStages" : [ {
+				"stageLength" : 70,
+				"objectId" : 119
+			}, {
+				"stageLength" : 80,
+				"objectId" : 120
+			}, {
+				"stageLength" : 90,
+				"objectId" : 121
+			}, {
+				"objectId" : 122
+			} ]
+		}
 	},
 	"117" : {
-		"name" : "Pineapple seed",
+		"name" : "Pineapple seeds",
 		"recipe" : "91|68/5",
 		"altObject" : 123,
 		"cost" : 35,
 		"type" : "Crop",
 		"weight" : 0.05,
-		"cropStages" : [ {
-			"stageLength" : 80,
-			"objectId" : 123
-		}, {
-			"stageLength" : 90,
-			"objectId" : 124
-		}, {
-			"stageLength" : 100,
-			"objectId" : 125
-		}, {
-			"objectId" : 126
-		} ]
+		"cropContainer": {
+			"soil" : 15,
+			"cropStages" : [ {
+				"stageLength" : 80,
+				"objectId" : 123
+			}, {
+				"stageLength" : 90,
+				"objectId" : 124
+			}, {
+				"stageLength" : 100,
+				"objectId" : 125
+			}, {
+				"objectId" : 126
+			} ]
+		}
 	},
 	"118" : {
-		"name" : "Peas seed",
+		"name" : "Pea seeds",
 		"recipe" : "91|68/5",
 		"altObject" : 127,
 		"cost" : 20,
 		"type" : "Crop",
 		"weight" : 0.05,
-		"cropStages" : [ {
-			"stageLength" : 70,
-			"objectId" : 127
-		}, {
-			"stageLength" : 80,
-			"objectId" : 128
-		}, {
-			"stageLength" : 90,
-			"objectId" : 129
-		}, {
-			"objectId" : 130
-		} ]
+		"cropContainer": {
+			"soil" : 15,
+			"cropStages" : [ {
+				"stageLength" : 70,
+				"objectId" : 127
+			}, {
+				"stageLength" : 80,
+				"objectId" : 128
+			}, {
+				"stageLength" : 90,
+				"objectId" : 129
+			}, {
+				"objectId" : 130
+			} ]
+		}
 	},
 	"119" : {
-		"name" : "Wheat seed",
+		"name" : "Wheat seeds",
 		"recipe" : "91|68/5",
 		"altObject" : 131,
 		"cost" : 33,
 		"type" : "Crop",
 		"weight" : 0.05,
-		"cropStages" : [ {
-			"stageLength" : 100,
-			"objectId" : 131
-		}, {
-			"stageLength" : 100,
-			"objectId" : 132
-		}, {
-			"stageLength" : 100,
-			"objectId" : 133
-		}, {
-			"objectId" : 134
-		} ]
+		"cropContainer": {
+			"soil" : 15,
+			"cropStages" : [ {
+				"stageLength" : 100,
+				"objectId" : 131
+			}, {
+				"stageLength" : 100,
+				"objectId" : 132
+			}, {
+				"stageLength" : 100,
+				"objectId" : 133
+			}, {
+				"objectId" : 134
+			} ]
+		}
 	},
 	"120" : {
-		"name" : "Cocoa seed",
+		"name" : "Cocoa seeds",
 		"recipe" : "91|68/5",
 		"altObject" : 135,
 		"cost" : 40,
 		"type" : "Crop",
 		"weight" : 0.05,
-		"cropStages" : [ {
-			"stageLength" : 120,
-			"objectId" : 135
-		}, {
-			"stageLength" : 130,
-			"objectId" : 136
-		}, {
-			"stageLength" : 140,
-			"objectId" : 137
-		}, {
-			"objectId" : 138
-		} ]
+		"cropContainer": {
+			"soil" : 15,
+			"cropStages" : [ {
+				"stageLength" : 120,
+				"objectId" : 135
+			}, {
+				"stageLength" : 130,
+				"objectId" : 136
+			}, {
+				"stageLength" : 140,
+				"objectId" : 137
+			}, {
+				"objectId" : 138
+			} ]
+		}
 	},
 	"121" : {
-		"name" : "Eggplant seed",
+		"name" : "Eggplant seeds",
 		"recipe" : "91|68/5",
 		"altObject" : 139,
 		"cost" : 30,
 		"type" : "Crop",
 		"weight" : 0.05,
-		"cropStages" : [ {
-			"stageLength" : 70,
-			"objectId" : 139
-		}, {
-			"stageLength" : 80,
-			"objectId" : 140
-		}, {
-			"stageLength" : 90,
-			"objectId" : 141
-		}, {
-			"objectId" : 142
-		} ]
+		"cropContainer": {
+			"soil" : 15,
+			"cropStages" : [ {
+				"stageLength" : 70,
+				"objectId" : 139
+			}, {
+				"stageLength" : 80,
+				"objectId" : 140
+			}, {
+				"stageLength" : 90,
+				"objectId" : 141
+			}, {
+				"objectId" : 142
+			} ]
+		}
 	},
 	"122" : {
-		"name" : "Grape seed",
+		"name" : "Grape seeds",
 		"recipe" : "91|68/5",
 		"altObject" : 143,
 		"cost" : 35,
 		"type" : "Crop",
 		"weight" : 0.05,
-		"cropStages" : [ {
-			"stageLength" : 80,
-			"objectId" : 143
-		}, {
-			"stageLength" : 90,
-			"objectId" : 144
-		}, {
-			"stageLength" : 100,
-			"objectId" : 145
-		}, {
-			"objectId" : 146
-		} ]
+		"cropContainer": {
+			"soil" : 15,
+			"cropStages" : [ {
+				"stageLength" : 80,
+				"objectId" : 143
+			}, {
+				"stageLength" : 90,
+				"objectId" : 144
+			}, {
+				"stageLength" : 100,
+				"objectId" : 145
+			}, {
+				"objectId" : 146
+			} ]
+		}
 	},
 	"123" : {
-		"name" : "Radish seed",
+		"name" : "Radish seeds",
 		"recipe" : "91|68/5",
 		"altObject" : 147,
 		"cost" : 25,
 		"type" : "Crop",
 		"weight" : 0.05,
-		"cropStages" : [ {
-			"stageLength" : 60,
-			"objectId" : 147
-		}, {
-			"stageLength" : 70,
-			"objectId" : 148
-		}, {
-			"stageLength" : 80,
-			"objectId" : 149
-		}, {
-			"objectId" : 150
-		} ]
+		"cropContainer": {
+			"soil" : 15,
+			"cropStages" : [ {
+				"stageLength" : 60,
+				"objectId" : 147
+			}, {
+				"stageLength" : 70,
+				"objectId" : 148
+			}, {
+				"stageLength" : 80,
+				"objectId" : 149
+			}, {
+				"objectId" : 150
+			} ]
+		}
 	},
 	"124" : {
-		"name" : "Strawberry seed",
+		"name" : "Strawberry seeds",
 		"recipe" : "91|68/5",
 		"altObject" : 151,
 		"cost" : 50,
 		"type" : "Crop",
 		"weight" : 0.05,
-		"cropStages" : [ {
-			"stageLength" : 150,
-			"objectId" : 151
-		}, {
-			"stageLength" : 160,
-			"objectId" : 152
-		}, {
-			"stageLength" : 170,
-			"objectId" : 153
-		}, {
-			"objectId" : 154
-		} ]
+		"cropContainer": {
+			"soil" : 15,
+			"cropStages" : [ {
+				"stageLength" : 150,
+				"objectId" : 151
+			}, {
+				"stageLength" : 160,
+				"objectId" : 152
+			}, {
+				"stageLength" : 170,
+				"objectId" : 153
+			}, {
+				"objectId" : 154
+			} ]
+		}
 	},
 	"125" : {
 		"name" : "Egg",

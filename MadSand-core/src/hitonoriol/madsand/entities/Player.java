@@ -184,7 +184,7 @@ public class Player extends Entity {
 		super.die();
 		stats.equipment.unEquipAll();
 		refreshEquipment();
-		Gui.deathStage.setDeadText("You died\nYou survived " + Utils.round(getSurvivedTime()) + " days");
+		Gui.deathStage.setDeadText("You died\nYou survived " + Utils.round(getSurvivedTime()) + " hours");
 		Gui.darkness.setVisible(true);
 		Gdx.input.setInputProcessor(Gui.deathStage);
 		MadSand.state = GameState.DEAD;

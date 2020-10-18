@@ -237,7 +237,8 @@ public class Overlay extends Stage {
 		info += ("HP: " + stats.hp + "/" + stats.mhp) + Resources.Tab;
 		info += ("LVL: " + stats.skills.getLvl(Skill.Level)) + Resources.Tab;
 		info += ("XP: " + stats.skills.getExpString(Skill.Level)) + Resources.Tab;
-		info += ("Food: " + stats.food + " / " + stats.maxFood) + Resources.Tab;
+		info += ("Food: " + stats.food + "/" + stats.maxFood + " (" + Utils.round(stats.getSatiationPercent()) + "%)")
+				+ Resources.Tab;
 		info += ("Location: Cell (" + player.x + ", " + player.y + ")" + getSectorString());
 
 		info += Resources.LINEBREAK + Resources.Tab;

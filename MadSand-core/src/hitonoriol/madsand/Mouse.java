@@ -135,8 +135,10 @@ public class Mouse {
 		String rawMaterialName = station.getConsumableName();
 
 		if (station.canProduce()) {
-			info += "Producing " + productName;
+			info += "producing " + productName;
 			info += " (" + Utils.round(station.productStorage) + "/" + station.maxProductStorage + ")";
+			info += Resources.LINEBREAK;
+			info += rawMaterialName + " left: " + Utils.round(station.consumableMaterialStorage);
 		} else
 			info += "Idle";
 
