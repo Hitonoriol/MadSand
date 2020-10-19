@@ -162,7 +162,7 @@ public class Inventory {
 		}
 	}
 
-	void refreshItem(Item item) {
+	public void refreshItem(Item item) {
 		if (itemUI == null)
 			return;
 		if (item.id == 0)

@@ -12,7 +12,6 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.dialog.GameDialog;
-import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.SkillContainer;
 import hitonoriol.madsand.entities.Stats;
 import hitonoriol.madsand.enums.Skill;

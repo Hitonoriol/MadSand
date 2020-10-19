@@ -1,6 +1,5 @@
 package hitonoriol.madsand.gui.widgets;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
@@ -90,6 +89,6 @@ public class StatLabels {
 	}
 
 	private String applyColor(int stat) {
-		return "[LIME]" + stat + "[]";
+		return "[#99ffaa]" + stat + "[]";
 	}
 }

@@ -61,14 +61,18 @@ public class InventoryUICell extends ItemUI {
 				}
 
 				Item prevHand = player.stats.hand();
-				World.player.stats.setHand(item);
+				player.stats.setHand(item);
 				refreshEquippedStatus();
-				
+
 				if (!prevHand.equals(Item.nullItem))
 					player.inventory.refreshItem(prevHand);
-				
-				MadSand.print("You take " + item.name + " in your hand");
-				Gui.overlay.setHandDisplay(item);
+
+				if (!prevHand.equals(item)) {
+					MadSand.print("You take " + item.name + " in your hand");
+					Gui.overlay.setHandDisplay(item);
+				} else
+					player.freeHands();
+
 				World.player.doAction();
 				Gui.toggleInventory();
 			}

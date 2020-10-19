@@ -71,7 +71,6 @@ public class GameLog extends Table {
 		super.add(scroll).row();
 		super.add(inputField).width(WIDTH).align(Align.left).pad(3).height(30);
 		super.addListener(new OverlayMouseoverListener());
-		//super.setScrollingDisabled(true, false);
 	}
 
 	public void clear() {

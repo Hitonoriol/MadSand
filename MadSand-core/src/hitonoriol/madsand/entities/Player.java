@@ -591,10 +591,12 @@ public class Player extends Entity {
 	}
 
 	public void freeHands(boolean silent) {
-		if (!silent && stats.hand().id != Item.NULL_ITEM)
+		Item item = stats.hand();
+		if (!silent && item.id != Item.NULL_ITEM)
 			MadSand.print("You put " + stats.hand().name + " back to your inventory");
 		super.freeHands();
 		Gui.overlay.setHandDisplay(stats.hand());
+		inventory.refreshItem(item);
 	}
 
 	@Override

@@ -11,15 +11,17 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.enums.TradeAction;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
+import hitonoriol.madsand.properties.ItemProp;
 
 public class TradeInventoryUI {
 	TradeUIRefresher refresher;
-	
+
 	private AutoFocusScrollPane sellPane, buyPane;
 	private Table sellTable, buyTable;
 	private Table tradeUITable;
@@ -28,6 +30,7 @@ public class TradeInventoryUI {
 	private Label sellHeader, buyHeader;
 	private TextButton exitBtn;
 
+	Inventory playerInventory, traderInventory;
 	TradeInventory playerSell, traderSell; //Same as w\ the panes
 
 	private final float WIDTH = 800;
@@ -37,6 +40,8 @@ public class TradeInventoryUI {
 	public TradeInventoryUI(Inventory traderInventory, Inventory playerInventory) {
 		traderSell = new TradeInventory(traderInventory, playerInventory); //Buy from trader
 		playerSell = new TradeInventory(playerInventory, traderInventory); //Sell to trader
+		this.playerInventory = playerInventory;
+		this.traderInventory = traderInventory;
 
 		sellHeader = new Label("Sell", Gui.skin);
 		buyHeader = new Label("Buy", Gui.skin);
@@ -84,11 +89,11 @@ public class TradeInventoryUI {
 		containerTable.setVisible(false);
 
 		Gui.overlay.addActor(containerTable);
-		
+
 		refresher = new TradeUIRefresher() {
 			@Override
 			public void refreshUI() {
-				refresh();				
+				refresh();
 			}
 		};
 
@@ -116,6 +121,22 @@ public class TradeInventoryUI {
 		MadSand.switchStage(GameState.TRADE, Gui.overlay);
 	}
 
+	public void refreshCurrencyHeader(Inventory inventory, TradeAction action) {
+		Item currency = inventory.getItem(playerSell.currency);
+		int quantity = 0;
+		String text = action.name() + Resources.LINEBREAK;
+		text += action == TradeAction.Sell ? "Your " : "Trader's ";
+		text += ItemProp.getItemName(playerSell.currency) + "s: ";
+		if (!currency.equals(Item.nullItem))
+			quantity = currency.quantity;
+		text += quantity;
+
+		if (action == TradeAction.Sell)
+			sellHeader.setText(text);
+		else
+			buyHeader.setText(text);
+	}
+
 	public void refresh() {
 		Inventory playerInventory = playerSell.getSeller();
 		Inventory traderInventory = playerSell.getBuyer();
@@ -125,6 +146,8 @@ public class TradeInventoryUI {
 
 		refresh(sellTable, playerInventory, TradeAction.Sell, Align.topLeft);
 		refresh(buyTable, traderInventory, TradeAction.Buy, Align.topRight);
+		refreshCurrencyHeader(playerInventory, TradeAction.Sell);
+		refreshCurrencyHeader(traderInventory, TradeAction.Buy);
 	}
 
 	private void refresh(Table table, Inventory inventory, TradeAction tradeAction, int align) {
@@ -135,9 +158,10 @@ public class TradeInventoryUI {
 			tradeInventory = traderSell;
 
 		for (Item item : inventory.items) {
-			//Utils.out("Refreshing tradeInventoryUI: adding item id" + item.id + " quantity:" + item.quantity);
-			table.add(new TradeInventoryButton(tradeInventory, item, tradeAction, refresher)).align(align).row();
-			table.add().row();
+			if (item.id != tradeInventory.currency) {
+				table.add(new TradeInventoryButton(tradeInventory, item, tradeAction, refresher)).align(align).row();
+				table.add().row();
+			}
 		}
 	}
 
