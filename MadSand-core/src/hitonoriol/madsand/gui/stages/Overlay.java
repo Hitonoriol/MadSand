@@ -3,6 +3,7 @@ package hitonoriol.madsand.gui.stages;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -35,6 +36,7 @@ import hitonoriol.madsand.gui.widgets.GameContextMenu;
 import hitonoriol.madsand.gui.widgets.GameLog;
 import hitonoriol.madsand.gui.widgets.GameTooltip;
 import hitonoriol.madsand.gui.widgets.OverlayBottomMenu;
+import hitonoriol.madsand.gui.widgets.StatProgressBar;
 import hitonoriol.madsand.world.World;
 
 /*
@@ -46,6 +48,8 @@ public class Overlay extends Stage {
 	static float SIDEBAR_PADDING = 100;
 	static float SIDEBAR_XPADDING = 5;
 
+	Table overlayTable = new Table();
+
 	public CharacterInfoWindow statWindow;
 	public CharacterCreationDialog charCreateDialog;
 
@@ -56,6 +60,11 @@ public class Overlay extends Stage {
 	public OverlayBottomMenu bottomMenu;
 	public EquipmentSidebar equipmentSidebar;
 
+	public StatProgressBar hpBar;
+	public StatProgressBar foodBar;
+	public StatProgressBar staminaBar;
+	public StatProgressBar expBar;
+
 	static Label overlayStatLabel;
 	static final int OVSTAT_COUNT = 6;
 
@@ -63,13 +72,14 @@ public class Overlay extends Stage {
 		super();
 		skin = Gui.skin;
 		initMouseListeners();
-		initOverlayStats();
 
 		actionButton = new ActionButton();
 		gameTooltip = new GameTooltip();
 		gameContextMenu = new GameContextMenu();
 		gameLog = new GameLog();
 		bottomMenu = new OverlayBottomMenu(this);
+
+		initOverlayTable();
 
 		equipmentSidebar = new EquipmentSidebar();
 		equipmentSidebar.setPosition(this.getWidth() - SIDEBAR_XPADDING, equipmentSidebar.getHeight() + SIDEBAR_PADDING,
@@ -81,7 +91,6 @@ public class Overlay extends Stage {
 		super.addActor(bottomMenu);
 		super.addActor(gameTooltip);
 		super.addActor(gameContextMenu);
-		super.addActor(gameLog);
 		super.addActor(actionButton);
 	}
 
@@ -131,15 +140,34 @@ public class Overlay extends Stage {
 		});
 	}
 
-	private void initOverlayStats() {
-		// Init top stat panel
-		Table ovstatTbl = new Table();
-		ovstatTbl.setFillParent(true);
-		ovstatTbl.align(Align.topRight);
+	float ENTRY_PAD = 5;
+
+	private void initOverlayTable() {
+		Table topTable = new Table();
+		topTable.setSize(Gdx.graphics.getWidth(), StatProgressBar.HEIGHT);
+		topTable.setBackground(Gui.darkBackgroundSizeable);
+		topTable.align(Align.left);
+
+		expBar = StatProgressBar.createLevelBar();
+		hpBar = StatProgressBar.createHpBar();
+		staminaBar = StatProgressBar.createStaminaBar();
+		foodBar = new StatProgressBar("Food").setStyle(Color.ORANGE);
+
 		overlayStatLabel = new Label(" ", skin);
 		overlayStatLabel.setAlignment(Align.center);
-		ovstatTbl.add(overlayStatLabel).width(Gdx.graphics.getWidth() - GameLog.INPUT_FIELD_WIDTH);
-		super.addActor(ovstatTbl);
+
+		topTable.add(expBar).padLeft(ENTRY_PAD).padRight(ENTRY_PAD);
+		topTable.add(hpBar).padRight(ENTRY_PAD);
+		topTable.add(foodBar).padRight(ENTRY_PAD);
+		topTable.add(staminaBar).padRight(ENTRY_PAD);
+		topTable.add(overlayStatLabel).align(Align.center).height(StatProgressBar.HEIGHT + 5).row();
+
+		overlayTable.align(Align.topLeft);
+		overlayTable.add(topTable).width(Gdx.graphics.getWidth()).row();
+		overlayTable.add(gameLog).height(GameLog.HEIGHT).padTop(ENTRY_PAD).padLeft(ENTRY_PAD).align(Align.topLeft);
+
+		overlayTable.setFillParent(true);
+		super.addActor(overlayTable);
 	}
 
 	public void pollGameConsole() {
@@ -154,12 +182,12 @@ public class Overlay extends Stage {
 
 			try {
 				LuaUtils.execute(cmd);
-				gameLog.inputField.setVisible(!gameLog.inputField.isVisible());
 			} catch (Exception e) {
 				MadSand.print("Couldn't execute user input");
 				e.printStackTrace();
 			} finally {
 				gameLog.inputField.setText("");
+				gameLog.inputField.setVisible(!gameLog.inputField.isVisible());
 				unfocus(gameLog.inputField);
 			}
 		}
@@ -233,17 +261,15 @@ public class Overlay extends Stage {
 	public void refreshOverlay() {
 		Player player = World.player;
 		Stats stats = player.stats;
+
+		hpBar.setRange(0, stats.mhp).setValue(stats.hp);
+		foodBar.setRange(0, stats.maxFood).setValue(stats.food);
+		staminaBar.setRange(0, stats.maxstamina).setValue(stats.stamina);
+		expBar.setRange(0, stats.skills.get(Skill.Level).requiredExp).setStatText("LVL " + stats.skills.getLvl())
+				.setValue(stats.skills.getExp());
+
 		String info = Resources.Tab;
-		info += ("HP: " + stats.hp + "/" + stats.mhp) + Resources.Tab;
-		info += ("LVL: " + stats.skills.getLvl(Skill.Level)) + Resources.Tab;
-		info += ("XP: " + stats.skills.getExpString(Skill.Level)) + Resources.Tab;
-		info += ("Food: " + stats.food + "/" + stats.maxFood + " (" + Utils.round(stats.getSatiationPercent()) + "%)")
-				+ Resources.Tab;
 		info += ("Location: Cell (" + player.x + ", " + player.y + ")" + getSectorString());
-
-		info += Resources.LINEBREAK + Resources.Tab;
-
-		info += "Stamina: " + Utils.round(stats.stamina) + "/" + Utils.round(stats.maxstamina);
 
 		overlayStatLabel.setText(info);
 	}

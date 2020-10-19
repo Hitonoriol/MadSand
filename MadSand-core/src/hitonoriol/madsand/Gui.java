@@ -257,4 +257,18 @@ public class Gui {
 		return skin.newDrawable("background", color);
 	}
 
+	public static ProgressBarStyle createProgressBarStyle(float width, float height, Color color) {
+		Drawable knob = Gui.getColorDrawable(color);
+		knob.setMinWidth(5);
+		ProgressBarStyle style = new ProgressBarStyle(getColorDrawable(Color.GRAY), knob);
+
+		style.background.setMinWidth(width);
+		style.background.setMinHeight(height);
+
+		style.knob.setMinHeight(height);
+		style.knobBefore = style.knob;
+		style.knobBefore.setMinHeight(height);
+		return style;
+	}
+
 }

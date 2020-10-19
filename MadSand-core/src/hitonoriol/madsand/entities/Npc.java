@@ -204,7 +204,7 @@ public class Npc extends Entity {
 			if (atk == 0)
 				MadSand.print(stats.name + " misses!");
 			else {
-				MadSand.print(stats.name + " deals " + atk + " damage to you");
+				MadSand.warn(stats.name + " deals " + atk + " damage to you");
 				super.attackAnimation(player);
 			}
 			player.damage(atk);

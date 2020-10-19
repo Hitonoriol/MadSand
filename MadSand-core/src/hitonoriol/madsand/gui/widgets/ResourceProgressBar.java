@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 
@@ -79,6 +78,7 @@ public class ResourceProgressBar extends TimedProgressBar {
 			public void doAction() {
 				remove();
 				Gui.gameResumeFocus();
+				Gui.refreshOverlay();
 				Timer.instance().scheduleTask(new Timer.Task() {
 					@Override
 					public void run() {
@@ -163,18 +163,8 @@ public class ResourceProgressBar extends TimedProgressBar {
 	}
 
 	private void setStyle() {
-		if (style == null) {
-			Drawable knob = Gui.getColorDrawable(Color.DARK_GRAY);
-			knob.setMinWidth(5);
-			style = new ProgressBarStyle(Gui.getColorDrawable(Color.GRAY), knob);
-
-			style.background.setMinWidth(WIDTH);
-			style.background.setMinHeight(HEIGHT);
-
-			style.knob.setMinHeight(HEIGHT);
-			style.knobBefore = style.knob;
-			style.knobBefore.setMinHeight(HEIGHT);
-		}
+		if (style == null)
+			style = Gui.createProgressBarStyle(WIDTH, HEIGHT, Color.DARK_GRAY);
 
 		setStyle(style);
 	}

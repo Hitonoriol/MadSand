@@ -435,6 +435,10 @@ public class MadSand extends Game {
 		}
 	}
 
+	public static void warn(String msg) {
+		Gui.overlay.gameLog.warn(msg);
+	}
+
 	public static void print(String arg) {
 		Gui.overlay.gameLog.print(arg);
 	}

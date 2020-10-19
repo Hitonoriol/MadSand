@@ -1,5 +1,6 @@
 package hitonoriol.madsand.gui.widgets;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
@@ -42,13 +43,13 @@ public class StatLabels {
 
 	public void refreshStatLabels() {
 		int statSum = stats.getSum();
-		strStatLbl.setText("Strength: " + stats.strength);
-		accStatLbl.setText("Accuracy: " + stats.accuracy);
-		conStatLbl.setText("Constitution: " + stats.constitution);
-		intStatLbl.setText("Intelligence: " + stats.intelligence);
-		luckStatLbl.setText("Luck: " + stats.luck);
-		dexStatLbl.setText("Dexterity: " + stats.dexterity);
-		defStatLbl.setText("Defense: " + stats.defense);
+		setStatText(strStatLbl, strString, stats.strength);
+		setStatText(accStatLbl, accString, stats.accuracy);
+		setStatText(conStatLbl, conString, stats.constitution);
+		setStatText(intStatLbl, intString, stats.intelligence);
+		setStatText(luckStatLbl, luckString, stats.luck);
+		setStatText(dexStatLbl, dexString, stats.dexterity);
+		setStatText(defStatLbl, defString, stats.defense);
 		statSumLbl.setText("\nStat sum: " + statSum);
 		freeStatPointsLbl.setText("Free stat points: " + (stats.maxStatSum - statSum));
 
@@ -63,6 +64,7 @@ public class StatLabels {
 	public static String intString = "Intelligence";
 	public static String luckString = "Luck";
 	public static String dexString = "Dexterity";
+	public static String defString = "Defense";
 
 	public void refreshStatLabel(IntContainer value) {
 		if (value.name.equals(conString))
@@ -81,5 +83,13 @@ public class StatLabels {
 		stats.calcStats();
 		refreshStatLabels();
 
+	}
+
+	private void setStatText(Label label, String stat, int value) {
+		label.setText(stat + ": " + applyColor(value));
+	}
+
+	private String applyColor(int stat) {
+		return "[LIME]" + stat + "[]";
 	}
 }

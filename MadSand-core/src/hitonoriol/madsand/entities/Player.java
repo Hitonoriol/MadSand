@@ -117,7 +117,7 @@ public class Player extends Entity {
 		boolean ret = super.equip(item);
 
 		if (ret)
-			MadSand.print("You equip your " + item.name);
+			MadSand.print("You equip " + item.name);
 
 		return ret;
 	}
@@ -592,7 +592,7 @@ public class Player extends Entity {
 
 	public void freeHands(boolean silent) {
 		if (!silent && stats.hand().id != Item.NULL_ITEM)
-			MadSand.print("You put your " + stats.hand().name + " back to your inventory");
+			MadSand.print("You put " + stats.hand().name + " back to your inventory");
 		super.freeHands();
 		Gui.overlay.setHandDisplay(stats.hand());
 	}

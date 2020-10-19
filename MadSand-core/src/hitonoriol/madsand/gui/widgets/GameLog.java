@@ -8,25 +8,34 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.Resources;
+import hitonoriol.madsand.gui.OverlayMouseoverListener;
 
 public class GameLog extends Table {
-	public static float INPUT_FIELD_WIDTH = 300;
-	private static final int LOG_LENGTH = 20;
+	final float WIDTH = 335;
+	public final static float HEIGHT = 240;
 	
+	private static final int LOG_LENGTH = 20;
+
+	public static final String WARNING_COLOR = "[#ff9185]";
+
 	public static final String NOTICE_ALT_COLOR = "[#58FFB1]";
 	public static String NOTICE_COLOR = "[#16E1EA]";
+
 	boolean noticeColor = true; // flag to use alternating notice colors
 
 	Skin skin;
 	public TextField inputField;
 	public Label[] logLabels;
+	public Table logTable = new Table();
+	public AutoFocusScrollPane scroll;
 
 	public GameLog() {
 		super();
 		skin = Gui.skin;
 
 		inputField = new TextField("", skin);
-		inputField.setWidth(INPUT_FIELD_WIDTH);
+		inputField.setWidth(WIDTH);
 		inputField.setMessageText("");
 		inputField.setFocusTraversal(true);
 		inputField.setTextFieldListener(new TextField.TextFieldListener() {
@@ -40,8 +49,7 @@ public class GameLog extends Table {
 		});
 
 		// Setting up game log
-		super.align(Align.topLeft);
-		super.setFillParent(true);
+		logTable.align(Align.topLeft);
 		int tpm = 0;
 		logLabels = new Label[LOG_LENGTH];
 		int cxxc = 0;
@@ -51,14 +59,19 @@ public class GameLog extends Table {
 		}
 		while (tpm < LOG_LENGTH) {
 			logLabels[tpm].setWrap(true);
-			super.add(logLabels[tpm]).width(INPUT_FIELD_WIDTH).pad(3);
-			super.row();
+			logTable.add(logLabels[tpm]).width(WIDTH).pad(3);
+			logTable.row();
 			tpm++;
 		}
-		super.add(inputField).width(INPUT_FIELD_WIDTH).align(Align.left).pad(3).height(30);
+		logTable.setBackground(Resources.loadNinePatch("misc/darkness75.png"));
 		inputField.debug();
 		inputField.setVisible(false);
 
+		scroll = new AutoFocusScrollPane(logTable);
+		super.add(scroll).row();
+		super.add(inputField).width(WIDTH).align(Align.left).pad(3).height(30);
+		super.addListener(new OverlayMouseoverListener());
+		//super.setScrollingDisabled(true, false);
 	}
 
 	public void clear() {
@@ -89,14 +102,22 @@ public class GameLog extends Table {
 		} else
 			logLabels[lineNum].setText(printedLine + " x" + (++lineRepeat));
 	}
-	
+
 	public void print(String msg, String color) {
 		print(color + msg + "[]");
 	}
-	
+
 	public void notice(String msg) {
+		if (printedLine.contains(NOTICE_COLOR) || printedLine.contains(NOTICE_ALT_COLOR))
+			noticeColor = !noticeColor;
+		else
+			noticeColor = true;
+		
 		print("* " + msg, noticeColor ? NOTICE_COLOR : NOTICE_ALT_COLOR);
-		noticeColor = !noticeColor;
+	}
+
+	public void warn(String msg) {
+		print(msg, WARNING_COLOR);
 	}
 
 	public String getLastPrintedLine() {
