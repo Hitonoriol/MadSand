@@ -458,9 +458,9 @@ public class MadSand extends Game {
 
 			Mouse.mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
 			camera.unproject(Mouse.mouseinworld);
-			Mouse.updCoords();
 			Gui.overlay.pollGameConsole();
 			if (Gui.overlay.getKeyboardFocus() != Gui.overlay.getConsoleField() && !Gui.isGameUnfocused()) {
+				Mouse.updCoords();
 				Mouse.pollMouseMovement();
 				Keyboard.pollGameKeys();
 			}

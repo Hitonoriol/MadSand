@@ -73,6 +73,7 @@ public class QuestListDialog extends GameDialog {
 					buttonString += Resources.LINEBREAK + "(In Progress)";
 
 				questButton = new TextButton(buttonString, Gui.skin);
+				questButton.getLabel().setWrap(true);
 				scrollTable.add(questButton).width(BUTTON_WIDTH).pad(BUTTON_PAD).row();
 
 				questButton.addListener(new ChangeListener() {

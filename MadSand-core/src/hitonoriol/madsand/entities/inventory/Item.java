@@ -69,11 +69,12 @@ public class Item {
 		this(item.id);
 		quantity = item.quantity;
 		hp = item.hp;
+		name = item.name;
 
 		if (item.type.isUnique()) {
 			uid = item.uid;
 
-			if (item.type.isWeapon() || item.type.isArmor())
+			if (item.type.isEquipment())
 				equipStats = new EquipStats(item.equipStats);
 
 		}

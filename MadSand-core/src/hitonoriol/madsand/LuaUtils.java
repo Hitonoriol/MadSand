@@ -29,6 +29,8 @@ public class LuaUtils {
 		globals.set("world", luaWorld);
 		globals.set("tutorial", luaTutorial);
 		globals.set("utils", luaUtils);
+		
+		executeScript("globals.lua");
 
 		onAction = GameSaver.getExternal(MadSand.SCRIPTDIR + onActionScript, true);
 	}

@@ -1343,5 +1343,20 @@
 		"equipStats" : {
 			"defense" : 1
 		}
+	},
+	"134" : {
+		"name" : "Palm wood stick",
+		"cost" : 2,
+		"weight" : 0.05
+	},
+	"135" : {
+		"name" : "Pine wood stick",
+		"cost" : 2,
+		"weight" : 0.05
+	},
+	"136" : {
+		"name" : "Deathwood stick",
+		"cost" : 4,
+		"weight" : 0.07
 	}
 }

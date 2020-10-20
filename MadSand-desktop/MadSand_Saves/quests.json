@@ -203,10 +203,10 @@
 
 "7" : {
 	"exp" : 40,
-	"name" : "Sewing machine & the first armor",
+	"name" : "Toughening up",
 	"startMsg" : "
-		#Richard# Hey, {PLAYER}! I don't think you are ready to go to the dungeon just yet. I need to show you something. [?]=>
-		#Richard# Here - you can build a sewing machine and make yourslf some clothes from plant fiber. They'll protect you from monsters you'll meet in the dungeon.[Understood]=>
+		#Richard# Hey, {PLAYER}! I don't think you are ready to go to the dungeon just yet. I need to show you something. [Huh?]=>
+		#Richard# Here - you can build a sewing machine and make yourself some clothes from plant fiber. They'll protect you from monsters you'll meet in the dungeon.[Understood]=>
 		* To build a sewing machine, open Build Menu and click on the Sewing Machine button (once you collect all the needed resources) [Ok]=>
 		#Richard# Hmm... Then, craft at least a Plant Fiber Shirt and talk to me again. See ya.
 	",
@@ -221,7 +221,7 @@
 	"rewardItems" : "21/25",
 	"removeOnCompletion" : "-1",
 	"repeatable" : false,
-	"previousQuest" : 3
+	"previousQuest" : 2
 },
 
 "8" : {

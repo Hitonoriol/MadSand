@@ -188,6 +188,7 @@ public class Player extends Entity {
 		Gui.darkness.setVisible(true);
 		Gdx.input.setInputProcessor(Gui.deathStage);
 		MadSand.state = GameState.DEAD;
+		MadSand.warn("You died");
 	}
 
 	void damageHeldTool(Skill objectSkill) {
