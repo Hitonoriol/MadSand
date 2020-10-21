@@ -242,6 +242,8 @@ public class Stats {
 
 		if (getSatiationPercent() >= satiatedPercent && skills.skillRoll(Skill.Survival))
 			owner._heal(FOOD_HEAL);
+		
+		check();
 	}
 
 	private void perTickStaminaCheck() {

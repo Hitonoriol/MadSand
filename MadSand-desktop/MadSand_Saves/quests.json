@@ -26,7 +26,7 @@
 	"reqMsg" : "#Richard# Please, give me 15 wood pieces.",
 	"reqItems" : "1/15",
 	"giveItems" : "3/1",
-	"rewardItems" : "7/12",
+	"rewardItems" : "7/5",
 	"removeOnCompletion" : "n",
 	"repeatable" : false
 },

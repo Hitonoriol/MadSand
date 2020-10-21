@@ -13,10 +13,10 @@ map:spawnNpc(5, 55, 55);
 map:spawnNpc(36, 51, 58);
 map:addObject(55, 54, 6);
 
-map:spawnMobs("12", 1, 10);	--Spawn "Old farmer" NPC somewhere on the map
-
 map:delObject(50, 50);
 player:teleport(50, 50);
 world:updateLight();
+
+map:spawnMobs("12", 1, 7, 15);	--Spawn "Old farmer" NPC
 
 utils:print("Welcome to MadSand!");

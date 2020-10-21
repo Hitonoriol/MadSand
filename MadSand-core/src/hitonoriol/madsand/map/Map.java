@@ -153,16 +153,22 @@ public class Map {
 		return count;
 	}
 
-	public Pair getRandomPoint(int distanceFromPlayer) {
+	public Pair getRandomPoint(int distanceFromPlayer, int maxDistanceFromPlayer) {
 		Player player = World.player;
-		int x = player.x, y = player.y;
+		int x, y;
+		int distance;
 
-		while (Line.calcDistance(x, y, player.x, player.y) < distanceFromPlayer) {
+		do {
 			x = Utils.rand(xsz);
 			y = Utils.rand(ysz);
-		}
+			distance = (int) Line.calcDistance(x, y, player.x, player.y);
+		} while (distance < distanceFromPlayer || distance > maxDistanceFromPlayer);
 
 		return coords.set(x, y);
+	}
+
+	public Pair getRandomPoint(int distanceFromPlayer) {
+		return getRandomPoint(distanceFromPlayer, xsz * ysz);
 	}
 
 	public Map purge() {
@@ -617,7 +623,7 @@ public class Map {
 			return false;
 
 		Npc npc = new Npc(id, x, y);
-		
+
 		if (npc.spawnOnce)
 			World.player.addToKillCount(npc.id);
 
@@ -739,17 +745,25 @@ public class Map {
 		spawnMobs(friendly, false);
 	}
 
-	public void spawnMobs(String list, int count, int distanceFromPlayer) {
-		spawnFromRollList(new RollList(count, Utils.parseList(list)), 100, distanceFromPlayer);
+	public void spawnMobs(String list, int count, int minDst) {
+		spawnMobs(list, count, minDst, xsz * ysz);
 	}
 
-	private void spawnFromRollList(RollList list, double chance, int distanceFromPlayer) {
+	public void spawnMobs(String list, int count, int minDst, int maxDst) {
+		spawnFromRollList(new RollList(count, Utils.parseList(list)), 100, minDst, maxDst);
+	}
+
+	private void spawnFromRollList(RollList list, double chance, int distanceFromPlayer, int maxDistance) {
 		if (Utils.percentRoll(chance))
 			for (int i = 0; i < list.rollCount; ++i) {
 				do {
-					getRandomPoint(distanceFromPlayer);
+					getRandomPoint(distanceFromPlayer, maxDistance);
 				} while (!spawnNpc(Utils.randElement(list.idList), coords.x, coords.y));
 			}
+	}
+
+	private void spawnFromRollList(RollList list, double chance, int distanceFromPlayer) {
+		spawnFromRollList(list, chance, distanceFromPlayer, xsz * ysz);
 	}
 
 	private void spawnFromRollList(RollList list, double chance) {
