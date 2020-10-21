@@ -25,15 +25,18 @@ public class Item {
 	public static final int NULL_ITEM = 0;
 	private static final float DEFAULT_WEIGHT = 0.25f;
 
+	public int id;
 	public String name;
+	public int quantity;
+
 	public String recipe;
 	public int craftQuantity;
 	public String useAction;
 
 	public int dmg;
+
 	public int hp = -1;
-	public int id;
-	public int quantity;
+	public int maxHp = hp;
 
 	public int satiationAmount, healAmount, staminaAmount; // for consumables
 
@@ -200,6 +203,7 @@ public class Item {
 		this.cost = properties.cost;
 		this.dmg = properties.dmg;
 		this.hp = properties.hp;
+		this.maxHp = hp;
 		this.skill = properties.skill;
 		this.useAction = properties.useAction;
 		this.contents = properties.contents;
@@ -221,6 +225,11 @@ public class Item {
 
 		if (type.isWeapon())
 			equipStats.strength = properties.equipStats.strength;
+	}
+
+	@JsonIgnore
+	public float getHpPercent() {
+		return 100 * ((float) hp / (float) maxHp);
 	}
 
 	@JsonSetter("contents")

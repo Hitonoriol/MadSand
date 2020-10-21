@@ -1,6 +1,7 @@
 package hitonoriol.madsand.entities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
 
@@ -36,9 +37,8 @@ public class Player extends Entity {
 	public HashSet<Integer> unlockedItems = new HashSet<Integer>(); // set of items player obtained at least once
 	public ArrayList<Integer> craftRecipes = new ArrayList<Integer>(); // list of items which recipes are available to the player
 	public QuestWorker quests = new QuestWorker();
-	public HashSet<Integer> knownNpcs = new HashSet<Integer>();
-
 	public HashSet<String> luaActions = new HashSet<>(); //Set for one-time lua actions
+	public HashMap<Integer, Integer> killCount = new HashMap<>();
 
 	@JsonProperty("newlyCreated")
 	public boolean newlyCreated = true;
@@ -91,10 +91,6 @@ public class Player extends Entity {
 			return true;
 		}
 		return false;
-	}
-
-	public boolean knowsNpc(int id) {
-		return knownNpcs.contains(id);
 	}
 
 	void increaseSkill(Skill skill) {
@@ -159,7 +155,7 @@ public class Player extends Entity {
 			MadSand.notice("You kill " + npc.stats.name + "! [+" + npc.rewardExp + " exp]");
 			addExp(npc.rewardExp);
 
-			if (knownNpcs.add(npc.id)) // If killed for the first time
+			if (addToKillCount(npc.id)) // If killed for the first time
 				MadSand.print("You now know more about " + npc.stats.name + "s");
 
 			if (map.getHostileNpcCount() == 0 && MadSand.world.isUnderGround()) {
@@ -173,6 +169,20 @@ public class Player extends Entity {
 		doAction(stats.AP_ATTACK);
 		return dead;
 
+	}
+	
+	public int getKillCount(int id) {
+		return killCount.getOrDefault(id, 0);
+	}
+
+	public boolean addToKillCount(int id) {
+		boolean first = killCount.containsKey(id);
+		killCount.put(id, getKillCount(id) + 1);
+		return !first;
+	}
+	
+	public boolean knowsNpc(int id) {
+		return killCount.containsKey(id);
 	}
 
 	public boolean attack() {

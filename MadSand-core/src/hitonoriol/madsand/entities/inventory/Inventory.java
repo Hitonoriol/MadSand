@@ -171,7 +171,7 @@ public class Inventory {
 		if (itemUI.containsKey(item)) {
 			itemUI.get(item).setText(item.quantity + "");
 			if (item.type.isTool())
-				itemUI.get(item).setHp(item.hp);
+				itemUI.get(item).refreshHp();
 			itemUI.get(item).refreshEquippedStatus();
 		} else {
 			InventoryUICell cell = new InventoryUICell(item);

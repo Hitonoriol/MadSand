@@ -18,11 +18,11 @@ import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
-import hitonoriol.madsand.properties.QuestList;
+import hitonoriol.madsand.world.World;
 
 public class QuestJournal extends Dialog {
 
-	static float TABLE_WIDTH = 500;
+	static float TABLE_WIDTH = 600;
 	static float TABLE_HEIGHT = 300;
 	static float TITLE_YPADDING = 20;
 	static float CLOSE_BUTTON_YPADDING = 6;
@@ -33,16 +33,18 @@ public class QuestJournal extends Dialog {
 	static float PAD_BOTTOM = 5;
 
 	static float STATUS_LABEL_WIDTH = 125;
-	static float REQUIREMENT_LABEL_WIDTH = TABLE_WIDTH - STATUS_LABEL_WIDTH;
+	static float NAME_LABEL_WIDTH = 200;
+	static float OBJECTIVE_LABEL_WIDTH = TABLE_WIDTH - (STATUS_LABEL_WIDTH + NAME_LABEL_WIDTH);
 	static float HEADER_SCALE = 1.12f;
 
 	Skin skin;
 	static String titleString = "Quest Journal";
 	static String statusString = "Status";
-	static String reqString = "Requirements";
+	static String nameString = "Quest";
+	static String reqString = "Objectives";
 	static String closeText = "Close";
-	static String inProgressString = "In Progress";
-	static String completedString = "Completed";
+	static String inProgressString = "[ORANGE]In Progress[]";
+	static String completedString = "[LIME]Complete[]";
 	static String emptyJournalString = "Your journal is empty";
 
 	QuestWorker quests;
@@ -50,7 +52,7 @@ public class QuestJournal extends Dialog {
 	AutoFocusScrollPane questScroll;
 	Table questTable;
 	TextButton closeButton;
-	Label statusLabel, reqLabel;
+	Label statusLabel, nameLabel, reqLabel;
 	Label emptyJournalLabel;
 
 	public QuestJournal(String title, Skin skin) {
@@ -67,10 +69,12 @@ public class QuestJournal extends Dialog {
 		super.row();
 
 		statusLabel = new Label(statusString, skin);
+		nameLabel = new Label(nameString, skin);
 		reqLabel = new Label(reqString, skin);
 		emptyJournalLabel = new Label(emptyJournalString, skin);
 
 		statusLabel.setFontScale(HEADER_SCALE);
+		nameLabel.setFontScale(HEADER_SCALE);
 		reqLabel.setFontScale(HEADER_SCALE);
 
 		questTable = new Table();
@@ -96,36 +100,51 @@ public class QuestJournal extends Dialog {
 
 	public void refresh() {
 		questTable.clear();
+		questTable.align(Align.topLeft);
 		questTable.setSkin(skin);
 		questTable.add(statusLabel).size(STATUS_LABEL_WIDTH, ENTRY_HEIGHT).padBottom(HEADER_YPADDING);
-		questTable.add(reqLabel).size(REQUIREMENT_LABEL_WIDTH, ENTRY_HEIGHT).padBottom(HEADER_YPADDING).row();
+		questTable.add(nameLabel).size(NAME_LABEL_WIDTH, ENTRY_HEIGHT).padBottom(HEADER_YPADDING);
+		questTable.add(reqLabel).size(OBJECTIVE_LABEL_WIDTH, ENTRY_HEIGHT).padBottom(HEADER_YPADDING).row();
 
-		Label requirements;
-		Quest quest;
+		Label questName, questObjective;
 
-		List<Integer> allQuests = Stream.of(quests.questsInProgress, quests.completedQuests)
+		List<Quest> allQuests = Stream.of(quests.questsInProgress, quests.completedQuests)
 				.flatMap(x -> x.stream())
 				.collect(Collectors.toList());
 
 		if (allQuests.size() == 0) {
 			questTable.add();
-			questTable.add(emptyJournalLabel).align(Align.left).padTop(questScroll.getHeight() / 2);
+			questTable.add(emptyJournalLabel).colspan(3).padTop(questScroll.getHeight() / 2);
 			return;
 		}
 
-		for (int id : allQuests) {
-			quest = QuestList.quests.get(id);
-			requirements = new Label(quest.journalText, skin);
-			requirements.setWrap(true);
+		for (Quest quest : allQuests) {
+			quest.setPlayer(World.player);
+			questName = new Label(quest.name, skin);
+			questName.setWrap(true);
+			questName.setAlignment(Align.topLeft);
+			questObjective = new Label(quest.getObjectiveString(), skin);
+			questObjective.setWrap(true);
+			if (quest.isComplete)
+				questObjective.setText("[LIME]" + questObjective.getText());
 
-			questTable.add(getStatusLabel(id)).size(STATUS_LABEL_WIDTH, ENTRY_HEIGHT).padBottom(PAD_BOTTOM);
-			questTable.add(requirements).width(REQUIREMENT_LABEL_WIDTH).padBottom(PAD_BOTTOM).row();
+			questTable.add(getStatusLabel(quest.id)).size(STATUS_LABEL_WIDTH, ENTRY_HEIGHT).align(Align.topLeft)
+					.padBottom(PAD_BOTTOM);
+			questTable.add(questName).width(NAME_LABEL_WIDTH).align(Align.topLeft).padBottom(PAD_BOTTOM);
+			questTable.add(questObjective).width(OBJECTIVE_LABEL_WIDTH).padBottom(PAD_BOTTOM).align(Align.topLeft)
+					.row();
 		}
 
 	}
 
+	private Label createProgressLabel(boolean inProgress) {
+		Label label = inProgress ? new Label(inProgressString, skin) : new Label(completedString, skin);
+		label.setAlignment(Align.topLeft);
+		return label;
+	}
+
 	private Label getStatusLabel(int id) {
-		return quests.isQuestInProgress(id) ? new Label(inProgressString, skin) : new Label(completedString, skin);
+		return createProgressLabel(quests.isQuestInProgress(id));
 	}
 
 	public void show() {

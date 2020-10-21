@@ -1,7 +1,6 @@
 package hitonoriol.madsand.entities.quest;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -17,8 +16,8 @@ import hitonoriol.madsand.properties.QuestList;
 public class QuestWorker {
 
 	public int lastProceduralQuest = -1;
-	public HashSet<Integer> completedQuests = new HashSet<Integer>(); // sets of completed quests and the ones in progress
-	public HashSet<Integer> questsInProgress = new HashSet<Integer>();
+	public ArrayList<Quest> completedQuests = new ArrayList<>(); // sets of completed quests and the ones in progress
+	public ArrayList<Quest> questsInProgress = new ArrayList<>();
 	private Player player;
 
 	public QuestWorker(Player player) {
@@ -66,18 +65,18 @@ public class QuestWorker {
 		ArrayList<Integer> quests = new ArrayList<>();
 
 		for (int quest : mobQuestList)
-			if (isQuestAvailable(quest)) 
+			if (isQuestAvailable(quest))
 				quests.add(quest);
 
 		return quests;
 	}
 
 	public boolean isQuestInProgress(int id) {
-		return questsInProgress.contains(id);
+		return questsInProgress.contains(QuestList.quests.get(id));
 	}
 
 	public boolean isQuestCompleted(int id) {
-		return completedQuests.contains(id);
+		return completedQuests.contains(QuestList.quests.get(id));
 	}
 
 	private void startQuest(Quest quest) {
@@ -89,7 +88,8 @@ public class QuestWorker {
 		if (player.inventory.putItem(quest.giveItems) != -1)
 			MadSand.print("You get " + Item.queryToName(quest.giveItems));
 
-		questsInProgress.add(quest.id);
+		questsInProgress.add(quest);
+		quest.start(player);
 		GameDialog.generateDialogChain(quest.startMsg, Gui.overlay).show();
 	}
 
@@ -105,9 +105,9 @@ public class QuestWorker {
 		MadSand.notice("You get " + quest.exp + " EXP!");
 
 		if (!quest.repeatable)
-			completedQuests.add(quest.id);
+			completedQuests.add(quest);
 
-		questsInProgress.remove(quest.id);
+		questsInProgress.remove(quest);
 		Gui.refreshOverlay();
 		GameDialog.generateDialogChain(quest.endMsg, Gui.overlay).show();
 	}
@@ -115,10 +115,17 @@ public class QuestWorker {
 	public void processQuest(int id) {
 		Utils.out("Processing quest " + id);
 
-		Quest quest = QuestList.quests.get(id);
+		Quest quest = QuestList.quests.get(id); // "raw" quest
+
+		if (completedQuests.contains(quest)) // if modified instance of raw quest exists, use it instead
+			quest = completedQuests.get(completedQuests.indexOf(quest));
+		else if (questsInProgress.contains(quest))
+			quest = questsInProgress.get(questsInProgress.indexOf(quest));
+		
+		quest.setPlayer(player);
 
 		if (isQuestInProgress(id) && !isQuestCompleted(id)) {
-			if (player.inventory.itemsExist(quest.reqItems))
+			if (quest.isComplete())
 				completeQuest(quest);
 			else
 				GameDialog.generateDialogChain(quest.reqMsg, Gui.overlay).show();

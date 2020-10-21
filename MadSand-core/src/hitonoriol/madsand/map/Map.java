@@ -617,6 +617,9 @@ public class Map {
 			return false;
 
 		Npc npc = new Npc(id, x, y);
+		
+		if (npc.spawnOnce)
+			World.player.addToKillCount(npc.id);
 
 		return putNpc(npc);
 	}
@@ -630,9 +633,6 @@ public class Map {
 
 		if (!getNpc(coords.x, coords.y).equals(nullNpc))
 			return false;
-
-		if (npc.spawnOnce)
-			World.player.knownNpcs.add(npc.id);
 
 		mapNpcs.put(new Pair(coords), npc);
 		return true;

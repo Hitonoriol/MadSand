@@ -654,12 +654,14 @@
 	"72" : {
 		"name" : "Iron ingot",
 		"recipe" : "67|23/1:56/1",
+		"craftQuantity" : 2,
 		"cost" : 30,
 		"weight" : 0.7
 	},
 	"73" : {
 		"name" : "Gold ingot",
 		"recipe" : "67|24/1:56/1",
+		"craftQuantity" : 2,
 		"cost" : 45,
 		"weight" : 0.7
 	},

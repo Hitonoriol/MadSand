@@ -68,7 +68,7 @@ public class ItemUI extends Group {
 			}
 		});
 	}
-	
+
 	public Item getItem() {
 		return item;
 	}
@@ -85,8 +85,12 @@ public class ItemUI extends Group {
 		itemQuantityLabel.setText(str);
 	}
 
-	void setHp(int hp) {
-		toolHpLabel.setText("[GREEN]" + hp);
+	private void setHp(int hp) {
+		toolHpLabel.setText("[GREEN]" + hp + "%");
+	}
+
+	void refreshHp() {
+		setHp((int) item.getHpPercent());
 	}
 
 	public void refresh() {
@@ -96,6 +100,6 @@ public class ItemUI extends Group {
 			setText(item.quantity + "");
 
 		if (item.type.isTool())
-			setHp(item.hp);
+			refreshHp();
 	}
 }
