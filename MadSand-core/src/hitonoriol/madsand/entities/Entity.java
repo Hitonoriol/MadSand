@@ -314,15 +314,16 @@ public abstract class Entity {
 	}
 
 	boolean rest() {
-		if (++stats.actionPts >= stats.actionPtsMax) {
+		stats.actionPts += stats.AP_REGEN_RATE;
+		if (stats.actionPts >= stats.actionPtsMax) {
 			stats.actionPts = stats.actionPtsMax;
 			return true;
 		} else
 			return false;
 	}
 
-	boolean canAct(int ap) {
-		return (ap <= stats.actionPts);
+	boolean canAct() {
+		return (stats.actionPts > 0);
 	}
 
 	public int doAction() {
@@ -457,12 +458,12 @@ public abstract class Entity {
 		move(Direction.random());
 	}
 
-	public int distanceTo(Entity entity) {
-		return (int) Line.calcDistance(x, y, entity.x, entity.y);
+	public double distanceTo(Entity entity) {
+		return Line.calcDistance(x, y, entity.x, entity.y);
 	}
 
 	public boolean canSee(Entity entity) {
-		int dist = distanceTo(entity);
+		int dist = (int) distanceTo(entity);
 		Map loc = MadSand.world.getCurLoc();
 		boolean viewObstructed = false;
 

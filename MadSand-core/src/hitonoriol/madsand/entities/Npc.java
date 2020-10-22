@@ -38,7 +38,7 @@ public class Npc extends Entity {
 	public boolean spawnOnce;
 	private boolean pauseFlag = false;
 
-	public int attackDistance = 1;
+	public int attackDistance = 2; // Must be < than this
 	public boolean enemySpotted = false;
 
 	public NpcState state = NpcState.Idle;
@@ -236,7 +236,7 @@ public class Npc extends Entity {
 			break;
 
 		case Idle:
-			if (canAct(stats.AP_WALK) && Utils.percentRoll(IDLE_NPC_MOVE_CHANCE)) {
+			if (canAct() && Utils.percentRoll(IDLE_NPC_MOVE_CHANCE)) {
 				doAction(stats.AP_WALK);
 				randMove();
 			} else
@@ -244,7 +244,7 @@ public class Npc extends Entity {
 			break;
 
 		case FollowPlayer:
-			int dist = distanceTo(player);
+			double dist = distanceTo(player);
 
 			if (!enemySpotted && canSee(player))
 				enemySpotted = true;
@@ -255,23 +255,23 @@ public class Npc extends Entity {
 			if (!enemySpotted)
 				return;
 
-			Direction dir = Pair.getRelativeDirection(x, y, player.x, player.y, true);
+			Direction dir;
 
-			if (dist > attackDistance) {
-				if (canAct(stats.AP_WALK) && dir != null) {
-					doAction(stats.AP_WALK);
-					//Utils.out(stats.name + "spent ticks walking: " + ticksSpent);
-					move(dir);
-				} else
+			if (dist >= attackDistance) {
+				if (canAct())
+					do {
+						//Utils.out(stats.name + "spent ticks walking: " + ticksSpent);
+						dir = Pair.getRelativeDirection(x, y, player.x, player.y, true);
+						move(dir);
+					} while (doAction(stats.AP_WALK) < 1 && dir != null);
+				else
 					rest();
-				return;
 			}
 
-			dir = Pair.getRelativeDirection(x, y, player.x, player.y, false);
-			if (canAct(stats.AP_ATTACK)) {
-				turn(dir);
-
+			if (canAct()) {
 				do {
+					dir = Pair.getRelativeDirection(x, y, player.x, player.y, false);
+					turn(dir);
 					//Utils.out(stats.name + " spent ticks attacking: " + ticksSpent);
 					attack(stats.look);
 				} while ((doAction(stats.AP_ATTACK)) < 1);

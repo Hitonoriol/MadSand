@@ -282,7 +282,7 @@
 		"name" : "Bat",
 		"hp" : 22,
 		"strength" : 2,
-		"accuracy" : 15,
+		"accuracy" : 5,
 		"dexterity" : 8,
 		"rewardExp" : 6,
 		"loot" : null,

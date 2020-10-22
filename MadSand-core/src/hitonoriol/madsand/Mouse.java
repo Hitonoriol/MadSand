@@ -168,8 +168,10 @@ public class Mouse {
 		info += "NPCs on map: " + loc.getNpcCount() + Resources.LINEBREAK;
 		if (!object.equals(Map.nullObject))
 			info += "Object HP: " + object.hp + " | Object HarvestHp: " + object.harvestHp + Resources.LINEBREAK;
-		if (!npc.equals(Map.nullNpc))
+		if (!npc.equals(Map.nullNpc)) {
 			info += "Npc hp: " + npc.stats.hp + Resources.LINEBREAK;
+			info += "dex: " + npc.stats.dexterity+" | AP: " + npc.stats.actionPts + Resources.LINEBREAK;
+		}
 		info += lineDelimiter + Resources.LINEBREAK;
 		info += "[]";
 		return info;
