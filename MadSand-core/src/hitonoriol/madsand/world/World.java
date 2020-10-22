@@ -53,7 +53,7 @@ public class World {
 	public long globalRealtimeTick = 0; // global realtime tick counter, never resets
 
 	public int ticksPerHour = 150; // ticks per one hourTick() trigger
-	public int worldtime = 12; // time (00 - 23)
+	public int worldtime = 6; // time (00 - 23)
 	public int tick = 0; // tick counter, resets every <ticksPerHour> ticks
 	public long globalTick = 0; // global tick counter, never resets
 
@@ -185,7 +185,7 @@ public class World {
 	Map putLoc(int x, int y, int layer, Map loc) {
 		return putLoc(new Pair(x, y), layer, loc);
 	}
-	
+
 	boolean createBasicLoc(Pair wc, int layer) {
 		return this.createLoc(wc, layer, new Map(DEFAULT_MAPSIZE, DEFAULT_MAPSIZE));
 	}
@@ -299,7 +299,7 @@ public class World {
 
 		if (worldMap.curLayer != Location.LAYER_OVERWORLD)
 			return false;
-		
+
 		player.inventory.delItem(Globals.getInt(Globals.TRAVEL_ITEM));
 
 		coords.set(worldMap.wx(), worldMap.wy()).addDirection(dir);
@@ -497,6 +497,19 @@ public class World {
 
 		} else
 			return getDefaultTile();
+	}
+
+	private float M_HOUR = 60;
+	private int H_DAY = 24;
+
+	@JsonIgnore
+	public int getWorldTimeMinute() {
+		return (int) (M_HOUR * ((float) tick / (float) ticksPerHour));
+	}
+
+	@JsonIgnore
+	public int getWorldTimeDay() {
+		return (int) (globalTick / ticksPerHour) / H_DAY;
 	}
 
 	public static int worldCoord(int q) {

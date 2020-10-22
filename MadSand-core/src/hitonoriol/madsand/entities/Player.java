@@ -36,6 +36,7 @@ public class Player extends Entity {
 
 	public HashSet<Integer> unlockedItems = new HashSet<Integer>(); // set of items player obtained at least once
 	public ArrayList<Integer> craftRecipes = new ArrayList<Integer>(); // list of items which recipes are available to the player
+	public ArrayList<Integer> buildRecipes = new ArrayList<Integer>();
 	public QuestWorker quests = new QuestWorker();
 	public HashSet<String> luaActions = new HashSet<>(); //Set for one-time lua actions
 	public HashMap<Integer, Integer> killCount = new HashMap<>();

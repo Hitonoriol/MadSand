@@ -17,7 +17,6 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Mouse;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Stats;
@@ -65,7 +64,8 @@ public class Overlay extends Stage {
 	public StatProgressBar staminaBar;
 	public StatProgressBar expBar;
 
-	static Label overlayStatLabel;
+	Label overlayStatLabel;
+	Label timeLabel;
 	static final int OVSTAT_COUNT = 6;
 
 	public Overlay() {
@@ -153,6 +153,7 @@ public class Overlay extends Stage {
 		staminaBar = StatProgressBar.createStaminaBar();
 		foodBar = new StatProgressBar("Food").setStyle(Color.ORANGE);
 
+		timeLabel = new Label(" ", skin);
 		overlayStatLabel = new Label(" ", skin);
 		overlayStatLabel.setAlignment(Align.center);
 
@@ -160,7 +161,8 @@ public class Overlay extends Stage {
 		topTable.add(hpBar).padRight(ENTRY_PAD);
 		topTable.add(foodBar).padRight(ENTRY_PAD);
 		topTable.add(staminaBar).padRight(ENTRY_PAD);
-		topTable.add(overlayStatLabel).align(Align.center).height(StatProgressBar.HEIGHT + 5).row();
+		topTable.add(overlayStatLabel).align(Align.center).expandX().height(StatProgressBar.HEIGHT + 5);
+		topTable.add(timeLabel).align(Align.center).expandX().row();
 
 		overlayTable.align(Align.topLeft);
 		overlayTable.add(topTable).width(Gdx.graphics.getWidth()).row();
@@ -268,10 +270,26 @@ public class Overlay extends Stage {
 		expBar.setRange(0, stats.skills.get(Skill.Level).requiredExp).setStatText("LVL " + stats.skills.getLvl())
 				.setValue(stats.skills.getExp());
 
-		String info = Resources.Tab;
-		info += ("Location: Cell (" + player.x + ", " + player.y + ")" + getSectorString());
+		String info = ("Location: Cell (" + player.x + ", " + player.y + ")" + getSectorString());
 
+		timeLabel.setText(getTimeString());
 		overlayStatLabel.setText(info);
+	}
+
+	private String getTimeString() {
+		World world = MadSand.world;
+		String hour = fixTime(Utils.str(world.worldtime));
+		String minute = fixTime(Utils.str(world.getWorldTimeMinute()));
+		
+		String time = "Day " + world.getWorldTimeDay();
+		time += ", " + hour + ":" + minute;
+		return time;
+	}
+	
+	private String fixTime(String timeStr) {
+		if (timeStr.length() < 2)
+			return "0" + timeStr;
+		return timeStr;
 	}
 
 	private String getSectorString() {
