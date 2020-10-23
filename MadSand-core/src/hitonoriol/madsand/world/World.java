@@ -3,6 +3,7 @@ package hitonoriol.madsand.world;
 import java.io.File;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -562,21 +563,23 @@ public class World {
 		MadSand.notice("It's " + worldtime + ":00");
 	}
 
-	private void tick() {
+	public void timeTick(int n) {
+		for (int i = n; i > 0; --i)
+			timeTick();
+	}
+
+	private void timeTick() { // Called every whole tick player spends
 		player.stats.perTickCheck();
 		player.tileDmg();
-		getCurLoc().updateCrops();
 		++globalTick;
 
 		if (++tick >= ticksPerHour - 1) {
 			tick = 0;
 			hourTick();
 		}
-
-		updateNpcs();
 	}
 
-	private void updateNpcs() {
+	public void timeSubtick(float time) { // Gets called on every action player does, time = % of max AP(speed) 
 		Map loc = getCurLoc();
 		HashMap<Pair, Npc> npcs = loc.getNpcs();
 		ArrayList<Npc> queue = new ArrayList<Npc>();
@@ -584,18 +587,14 @@ public class World {
 		for (Entry<Pair, Npc> npc : npcs.entrySet())
 			queue.add(npc.getValue());
 
-		for (Npc npc : queue)
-			npc.act();
+		Collections.sort(queue, Npc.speedComparator);
 
+		for (Npc npc : queue)
+			npc.act(time);
 	}
 
 	public void updateLight() {
 		getCurLoc().updateLight(player.x, player.y, player.fov);
-	}
-
-	public void ticks(int n) {
-		for (int i = n; i > 0; --i)
-			tick();
 	}
 
 	private void realtimeRefresh() {

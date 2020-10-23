@@ -17,9 +17,9 @@ public class Stats {
 	final int HP_MULTIPLIER = 10; // maxHp = constitution * HP_MULTIPLIER
 	final float MIN_HP_AUTODAMAGE_PERCENT = 10;
 
-	public int AP_REGEN_RATE = 2; 
+	public int AP_REGEN_RATE = 2;
 	public int AP_WALK = 4; // action points consumed by walking
-	public int AP_ATTACK = 3;
+	public int AP_ATTACK = 4;
 	public int AP_MINOR = 1; // action points consumed by minor action
 
 	final static int STARVE_DMG = 1;
@@ -33,7 +33,7 @@ public class Stats {
 	static final int STAT_RAND_MAX = 8;
 	static final int STAT_RAND_MIN = 3;
 
-	public int actionPtsMax = 5;
+	public int actionPtsMax = 5; // Entity's speed
 	public int actionPts = actionPtsMax;
 
 	public long spawnTime = 0;
@@ -243,7 +243,7 @@ public class Stats {
 
 		if (getSatiationPercent() >= satiatedPercent && skills.skillRoll(Skill.Survival))
 			owner._heal(FOOD_HEAL);
-		
+
 		check();
 	}
 

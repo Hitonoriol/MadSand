@@ -184,7 +184,7 @@ public class Keyboard {
 		}
 
 		if (Gdx.input.isKeyJustPressed(Keys.F5))
-			MadSand.world.ticks(150);
+			MadSand.world.timeTick(150);
 
 	}
 

@@ -2,6 +2,7 @@ package hitonoriol.madsand.entities;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Queue;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -37,6 +38,9 @@ public class Npc extends Entity {
 	public boolean friendly;
 	public boolean spawnOnce;
 	private boolean pauseFlag = false;
+
+	public float timePassed; // time passed since last action
+	public float tickCharge = 0;
 
 	public int attackDistance = 2; // Must be < than this
 	public boolean enemySpotted = false;
@@ -217,10 +221,25 @@ public class Npc extends Entity {
 		MadSand.world.delNpc(this);
 	}
 
-	public void act() {
-		Player player = World.player;
-		tileDmg();
-		//stats.perTickCheck(); I don't think NPCs need this
+	boolean canAct(int ap) {
+		return tickCharge >= getActionLength(ap);
+	}
+
+	boolean canAct() {
+		return tickCharge > 0;
+	}
+
+	void skipAction() {
+		tickCharge -= timePassed;
+	}
+
+	public int doAction(int ap) {
+		tickCharge -= getActionLength(ap);
+		return super.doAction(ap);
+	}
+
+	public void act(float time) {
+		tickCharge += (timePassed = time);
 
 		if (pauseFlag) {
 			unPause();
@@ -230,55 +249,67 @@ public class Npc extends Entity {
 		if (!friendly)
 			state = NpcState.FollowPlayer;
 
+		act();
+	}
+
+	private void act() {
+		if (!canAct()) {
+			tickCharge = 0;
+			return;
+		}
+
+		Player player = World.player;
+		double dist = distanceTo(player);
+
 		switch (state) {
 
 		case Still:
-			break;
+			skipAction();
+			return;
 
 		case Idle:
-			if (canAct() && Utils.percentRoll(IDLE_NPC_MOVE_CHANCE)) {
-				doAction(stats.AP_WALK);
+			if (!canAct(stats.AP_WALK))
+				return;
+
+			if (Utils.percentRoll(IDLE_NPC_MOVE_CHANCE))
 				randMove();
-			} else
-				rest();
+			
+			doAction(stats.AP_WALK);
 			break;
 
 		case FollowPlayer:
-			double dist = distanceTo(player);
 
 			if (!enemySpotted && canSee(player))
 				enemySpotted = true;
 
-			if (enemySpotted && dist > fov)
+			if (enemySpotted && dist > fov * 1.5f)
 				enemySpotted = false;
 
-			if (!enemySpotted)
+			if (!enemySpotted) {
+				skipAction();
 				return;
+			}
 
 			Direction dir;
 
 			if (dist >= attackDistance) {
-				if (canAct())
-					do {
-						//Utils.out(stats.name + "spent ticks walking: " + ticksSpent);
-						dir = Pair.getRelativeDirection(x, y, player.x, player.y, true);
-						move(dir);
-					} while (doAction(stats.AP_WALK) < 1 && dir != null);
-				else
-					rest();
+
+				if (!canAct(stats.AP_WALK))
+					return;
+
+				dir = Pair.getRelativeDirection(x, y, player.x, player.y, true);
+				move(dir);
+				doAction(stats.AP_WALK);
+			} else {
+
+				if (!canAct(stats.AP_ATTACK))
+					return;
+
+				dir = Pair.getRelativeDirection(x, y, player.x, player.y, false);
+				turn(dir);
+				attack(stats.look);
+				doAction(stats.AP_ATTACK);
 			}
-
-			if (canAct()) {
-				do {
-					dir = Pair.getRelativeDirection(x, y, player.x, player.y, false);
-					turn(dir);
-					//Utils.out(stats.name + " spent ticks attacking: " + ticksSpent);
-					attack(stats.look);
-				} while ((doAction(stats.AP_ATTACK)) < 1);
-
-			} else
-				rest();
-
 			break;
 
 		default:
@@ -286,6 +317,7 @@ public class Npc extends Entity {
 			break;
 
 		}
+		act();
 	}
 
 	public String spottedMsg() {
@@ -300,5 +332,12 @@ public class Npc extends Entity {
 		ret += "Friendly: " + (friendly ? "yes" : "no") + Resources.LINEBREAK;
 		return ret;
 	}
+
+	public static Comparator<Npc> speedComparator = new Comparator<Npc>() {
+		@Override
+		public int compare(Npc o1, Npc o2) {
+			return o2.getSpeed() - o1.getSpeed();
+		}
+	};
 
 }

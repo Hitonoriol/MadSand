@@ -279,6 +279,10 @@ public abstract class Entity {
 		dropInventory();
 	}
 
+	float getActionLength(int ap) {
+		return (float) ap / (float) getSpeed();
+	}
+
 	int doAction(int ap) { // any action that uses AP \\ returns number of ticks spent
 		int tmp = stats.actionPts;
 		stats.actionPts -= ap;
@@ -320,10 +324,6 @@ public abstract class Entity {
 			return true;
 		} else
 			return false;
-	}
-
-	boolean canAct() {
-		return (stats.actionPts > 0);
 	}
 
 	public int doAction() {

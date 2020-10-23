@@ -171,7 +171,7 @@ public class Player extends Entity {
 		return dead;
 
 	}
-	
+
 	public int getKillCount(int id) {
 		return killCount.getOrDefault(id, 0);
 	}
@@ -181,7 +181,7 @@ public class Player extends Entity {
 		killCount.put(id, getKillCount(id) + 1);
 		return !first;
 	}
-	
+
 	public boolean knowsNpc(int id) {
 		return killCount.containsKey(id);
 	}
@@ -727,7 +727,8 @@ public class Player extends Entity {
 	@Override
 	public boolean rest() {
 		boolean ret = super.rest();
-		MadSand.world.ticks(1);
+		MadSand.world.timeTick(1);
+		MadSand.world.timeSubtick(getSpeed());
 		MadSand.print("You rest for 1 turn");
 		if (ret)
 			MadSand.print("You feel well-rested");
@@ -738,7 +739,8 @@ public class Player extends Entity {
 	@Override
 	public int doAction(int ap) {
 		int ticks = super.doAction(ap);
-		MadSand.world.ticks(ticks); // committing our action and then letting everything catch up to time we've spent
+		MadSand.world.timeTick(ticks); // committing our action and then letting world catch up to time we've spent
+		MadSand.world.timeSubtick(getActionLength(ap)); // letting NPCs catch up
 		Gui.overlay.refreshOverlay();
 		LuaUtils.execute(LuaUtils.onAction);
 		return ticks;
