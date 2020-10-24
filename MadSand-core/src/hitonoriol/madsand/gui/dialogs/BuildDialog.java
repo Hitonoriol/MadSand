@@ -38,6 +38,7 @@ public class BuildDialog extends GameDialog {
 	TextButton exitButton = new TextButton("Close", Gui.skin);
 
 	Table buildTable = new Table();
+	Label emptyLabel = new Label("You don't know how to build anything",Gui.skin);
 	AutoFocusScrollPane buildScroll;
 	float PAD = 50;
 
@@ -51,10 +52,18 @@ public class BuildDialog extends GameDialog {
 		super.add().padTop(15).row();
 		buildTable.setBackground(Gui.darkBackgroundSizeable);
 		BuildDialogEntry buildEntry;
+		Player player = World.player;
 		for (Entry<Integer, String> object : ObjectProp.buildRecipes.entrySet()) {
-			buildEntry = new BuildDialogEntry(this, object.getKey(), object.getValue());
-			buildTable.add(buildEntry).size(buildEntry.WIDTH, buildEntry.HEIGHT).padBottom(PAD).row();
+			if (player.buildRecipes.contains(object.getKey())) {
+				buildEntry = new BuildDialogEntry(this, object.getKey(), object.getValue());
+				buildTable.add(buildEntry).size(buildEntry.WIDTH, buildEntry.HEIGHT).padBottom(PAD).row();
+			}
 		}
+		
+		emptyLabel.setWrap(true);
+		emptyLabel.setAlignment(Align.center);
+		if (player.buildRecipes.isEmpty())
+			buildTable.add(emptyLabel).width(WIDTH);
 		buildScroll = new AutoFocusScrollPane(buildTable);
 		super.add(buildScroll).size(WIDTH, HEIGHT).row();
 		super.add(exitButton).size(100, 50);

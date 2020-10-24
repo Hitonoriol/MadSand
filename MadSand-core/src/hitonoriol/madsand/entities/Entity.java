@@ -284,12 +284,13 @@ public abstract class Entity {
 	}
 
 	int doAction(int ap) { // any action that uses AP \\ returns number of ticks spent
-		int tmp = stats.actionPts;
+		double tmp = stats.actionPts;
 		stats.actionPts -= ap;
-		int ticks = 0, absPts = Math.abs(stats.actionPts), absTmp = Math.abs(tmp);
+		int ticks = 0;
+		double absPts = Math.abs(stats.actionPts), absTmp = Math.abs(tmp);
 
 		if (stats.actionPts <= 0) {
-			ticks = (absPts / stats.actionPtsMax);
+			ticks = (int) (absPts / stats.actionPtsMax);
 			if (absPts < stats.actionPtsMax && stats.actionPts < 0)
 				ticks = 1;
 
@@ -485,8 +486,8 @@ public abstract class Entity {
 	}
 
 	@JsonIgnore
-	public int getSpeed() {
-		return stats.actionPtsMax;
+	public float getSpeed() {
+		return (float) stats.actionPtsMax;
 	}
 
 	@JsonIgnore

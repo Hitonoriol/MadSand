@@ -33,8 +33,8 @@ public class Stats {
 	static final int STAT_RAND_MAX = 8;
 	static final int STAT_RAND_MIN = 3;
 
-	public int actionPtsMax = 5; // Entity's speed
-	public int actionPts = actionPtsMax;
+	public double actionPtsMax = 5; // Entity's speed
+	public double actionPts = actionPtsMax;
 
 	public long spawnTime = 0;
 
@@ -154,7 +154,12 @@ public class Stats {
 		// AP_MINOR = ;
 		// AP_WALK = ;
 		// AP_ATTACK = ;
-		actionPtsMax = dexterity;
+		if (dexterity < 2)
+			actionPtsMax = 1;
+		else
+			actionPtsMax = (Utils.log(Math.pow(dexterity + 0.1, 1.7), 5)
+					/ (3 + ((2 * Math.sqrt(dexterity)) / dexterity)))
+					* 9.9;
 		actionPts = actionPtsMax;
 	}
 

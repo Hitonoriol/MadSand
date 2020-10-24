@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.IntContainer;
 import hitonoriol.madsand.entities.Stats;
 import hitonoriol.madsand.world.World;
@@ -85,7 +86,10 @@ public class StatLabels {
 	}
 
 	private void setStatText(Label label, String stat, int value) {
-		label.setText(stat + ": " + applyColor(value));
+		String text = stat + ": " + applyColor(value);
+		if (stat.equals(dexString))
+			text += " (speed: " + Utils.round(stats.actionPtsMax) + ")";
+		label.setText(text);
 	}
 
 	private String applyColor(int stat) {

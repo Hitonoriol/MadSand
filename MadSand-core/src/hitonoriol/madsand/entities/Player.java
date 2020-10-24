@@ -211,10 +211,10 @@ public class Player extends Entity {
 			Gui.overlay.equipmentSidebar.refreshSlot(EquipSlot.MainHand);
 	}
 
-	public void refreshAvailableRecipes() {
+	private void refreshRecipes(HashMap<Integer, ArrayList<Integer>> reqMap, ArrayList<Integer> recipes) {
 		HashSet<Integer> reqs, all;
 
-		for (Entry<Integer, ArrayList<Integer>> entry : ItemProp.craftReq.entrySet()) {
+		for (Entry<Integer, ArrayList<Integer>> entry : reqMap.entrySet()) {
 			reqs = new HashSet<Integer>(entry.getValue());
 			all = new HashSet<Integer>(unlockedItems);
 			int id = entry.getKey();
@@ -224,12 +224,20 @@ public class Player extends Entity {
 
 			all.retainAll(reqs);
 
-			if (all.equals(reqs) && !craftRecipes.contains(id)) {
-				MadSand.notice("You figure out how to craft " + ItemProp.getItemName(id) + "!");
+			if (all.equals(reqs) && !recipes.contains(id)) {
+				if (recipes == craftRecipes)
+					MadSand.notice("You figure out how to craft " + ItemProp.getItemName(id) + "!");
+				else if (recipes == buildRecipes)
+					MadSand.notice("You now know how to build " + ObjectProp.getName(id) + "!");
 				Utils.out("New recipe id: " + id + " unlocked! Adding to the list...");
-				craftRecipes.add(id);
+				recipes.add(id);
 			}
 		}
+	}
+
+	public void refreshAvailableRecipes() {
+		refreshRecipes(ItemProp.craftReq, craftRecipes);
+		refreshRecipes(ItemProp.buildReq, buildRecipes);
 	}
 
 	void damageHeldTool() {

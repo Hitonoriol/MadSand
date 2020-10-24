@@ -137,6 +137,10 @@ public class Utils {
 			return round(((float) seconds / S_DAY)) + " days";
 	}
 
+	public static double log(double value, double base) {
+		return Math.log(value) / Math.log(base);
+	}
+
 	public static int val(boolean bool) {
 		return bool ? 1 : 0;
 	}

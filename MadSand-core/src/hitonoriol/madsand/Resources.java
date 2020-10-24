@@ -276,6 +276,9 @@ public class Resources {
 		ObjectProp.buildRecipes = mapper.readValue(
 				new File(MadSand.BUILDRECIPE),
 				getMapType(Integer.class, String.class));
+		for (Entry<Integer, String> entry : ObjectProp.buildRecipes.entrySet())
+			ItemProp.buildReq.put(entry.getKey(), Item.parseCraftRequirements(entry.getValue()));
+
 	}
 
 	static Texture mapcursor;
@@ -360,7 +363,7 @@ public class Resources {
 	public static AnimationContainer createAnimation(TextureRegion[] strip, float duration) { // Create animation from loaded strip
 		return new AnimationContainer(duration, strip);
 	}
-	
+
 	public static AnimationContainer createAnimation(TextureRegion[] strip) {
 		return createAnimation(strip, ACTION_ANIM_DURATION);
 	}

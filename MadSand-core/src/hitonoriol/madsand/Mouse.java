@@ -170,7 +170,8 @@ public class Mouse {
 			info += "Object HP: " + object.hp + " | Object HarvestHp: " + object.harvestHp + Resources.LINEBREAK;
 		if (!npc.equals(Map.nullNpc)) {
 			info += "Npc hp: " + npc.stats.hp + Resources.LINEBREAK;
-			info += "dex: " + npc.stats.dexterity+" | tickCharge: " + npc.tickCharge + Resources.LINEBREAK;
+			info += "speed: " + npc.getSpeed() + "(" + npc.stats.dexterity + ")" + " | tickCharge: " + npc.tickCharge
+					+ Resources.LINEBREAK;
 		}
 		info += lineDelimiter + Resources.LINEBREAK;
 		info += "[]";

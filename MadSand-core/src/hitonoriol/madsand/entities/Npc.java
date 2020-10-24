@@ -273,7 +273,7 @@ public class Npc extends Entity {
 
 			if (Utils.percentRoll(IDLE_NPC_MOVE_CHANCE))
 				randMove();
-			
+
 			doAction(stats.AP_WALK);
 			break;
 
@@ -336,7 +336,7 @@ public class Npc extends Entity {
 	public static Comparator<Npc> speedComparator = new Comparator<Npc>() {
 		@Override
 		public int compare(Npc o1, Npc o2) {
-			return o2.getSpeed() - o1.getSpeed();
+			return Double.compare(o2.getSpeed(), o1.getSpeed());
 		}
 	};
 

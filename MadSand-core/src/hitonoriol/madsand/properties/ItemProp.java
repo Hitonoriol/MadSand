@@ -12,6 +12,7 @@ public class ItemProp {
 	public static HashMap<Integer, Item> items = new HashMap<>();
 	public static HashMap<Integer, ArrayList<Integer>> craftStationRecipes = new HashMap<>();
 	public static HashMap<Integer, ArrayList<Integer>> craftReq = new HashMap<>();
+	public static HashMap<Integer, ArrayList<Integer>> buildReq = new HashMap<>();
 
 	public static void addCraftStationRecipe(int id, int item) {
 		ArrayList<Integer> items;
