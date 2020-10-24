@@ -211,6 +211,45 @@ public class Player extends Entity {
 			Gui.overlay.equipmentSidebar.refreshSlot(EquipSlot.MainHand);
 	}
 
+	private void unlockRecipe(ArrayList<Integer> recipeList, int recipe) {
+		if (recipeList.contains(recipe))
+			return;
+
+		if (recipeList == craftRecipes)
+			MadSand.notice("You figure out how to craft " + ItemProp.getItemName(recipe) + "!");
+		else if (recipeList == buildRecipes)
+			MadSand.notice("You now know how to build " + ObjectProp.getName(recipe) + "!");
+		recipeList.add(recipe);
+	}
+
+	private String getRecipeProgress(ArrayList<Integer> recipeList) {
+		int unlocked = recipeList.size();
+		int totalRecipes = 0;
+		if (recipeList == craftRecipes)
+			totalRecipes = ItemProp.craftReq.size();
+		else if (recipeList == buildRecipes)
+			totalRecipes = ItemProp.buildReq.size();
+		return unlocked + "/" + totalRecipes + " ("
+				+ Utils.round(100 * ((float) unlocked / (float) totalRecipes)) + "%)";
+
+	}
+
+	public String craftRecipeProgress() {
+		return getRecipeProgress(craftRecipes);
+	}
+
+	public String buildRecipeProgress() {
+		return getRecipeProgress(buildRecipes);
+	}
+
+	public void unlockCraftRecipe(int recipe) {
+		unlockRecipe(craftRecipes, recipe);
+	}
+
+	public void unlockBuildRecipe(int recipe) {
+		unlockRecipe(buildRecipes, recipe);
+	}
+
 	private void refreshRecipes(HashMap<Integer, ArrayList<Integer>> reqMap, ArrayList<Integer> recipes) {
 		HashSet<Integer> reqs, all;
 
@@ -224,14 +263,9 @@ public class Player extends Entity {
 
 			all.retainAll(reqs);
 
-			if (all.equals(reqs) && !recipes.contains(id)) {
-				if (recipes == craftRecipes)
-					MadSand.notice("You figure out how to craft " + ItemProp.getItemName(id) + "!");
-				else if (recipes == buildRecipes)
-					MadSand.notice("You now know how to build " + ObjectProp.getName(id) + "!");
-				Utils.out("New recipe id: " + id + " unlocked! Adding to the list...");
-				recipes.add(id);
-			}
+			if (all.equals(reqs))
+				unlockRecipe(recipes, id);
+
 		}
 	}
 

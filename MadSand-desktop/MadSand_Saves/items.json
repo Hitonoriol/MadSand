@@ -365,6 +365,7 @@
 		"name" : "Edible mushroom",
 		"satiationAmount" : 35,
 		"staminaAmount" : 5,
+		"healAmount" : 4,
 		"cost" : 11,
 		"type" : "Consumable",
 		"weight" : 0.1

@@ -199,8 +199,9 @@
 	"name" : "Toughening up",
 	"startMsg" : "
 		#Richard# Hey, {PLAYER}! I don't think you are ready to go to the dungeon just yet. I need to show you something. [Huh?]=>
-		#Richard# Here - you can build a sewing machine and make yourself some clothes from plant fiber. They'll protect you from monsters you'll meet in the dungeon.[Understood]=>
-		* To build a sewing machine, open Build Menu and click on the Sewing Machine button (once you collect all the needed resources) [Ok]=>
+		#Richard# Here - you can build a sewing machine and make yourself some clothes from plant fiber. They'll protect you from monsters you'll meet in the dungeon.
+		About the resources you'll need... Hmm... Ah, yes! I think you'll need some sharp sticks, flint and small rocks. Not sure about the quantity.[Oh, ok]=>
+		* To build a sewing machine, open Build Menu and click on the Sewing Machine button (the button will appear in the menu once you've collected at least 1 of every required resource) [Ok]=>
 		#Richard# Hmm... Then, craft at least a Plant Fiber Shirt and talk to me again. See ya.
 	",
 

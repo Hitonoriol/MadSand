@@ -27,7 +27,7 @@ import hitonoriol.madsand.world.World;
 public class CraftMenu extends Stage {
 	private static float CRAFT_ENTRY_PADDING = 40;
 	private static float BACK_BUTTON_HEIGHT = 50;
-	private static float BACK_BUTTON_WIDTH = 100;
+	private static float BACK_BUTTON_WIDTH = 250;
 	private static float TITLE_PADDING = 30;
 
 	private static String titleString = "Crafting";
@@ -54,6 +54,7 @@ public class CraftMenu extends Stage {
 
 	public void refreshCraftMenu(int craftStationId) {
 		Utils.out("Refreshing craft menu id: " + craftStationId);
+		Label unlockProgressLabel = null;
 		craftTable.remove();
 		craftTable = new Table();
 		containerTable.remove();
@@ -62,9 +63,11 @@ public class CraftMenu extends Stage {
 		ArrayList<Integer> itemList;
 		String stationName = titleString;
 
-		if (craftStationId == 0)
+		if (craftStationId == 0) {
 			itemList = player.craftRecipes;
-		else {
+			unlockProgressLabel = new Label("Craft recipes unlocked: " + player.craftRecipeProgress(), Gui.skin);
+			unlockProgressLabel.setAlignment(Align.center);
+		} else {
 			itemList = ItemProp.craftStationRecipes.get(craftStationId);
 			stationName = ObjectProp.getName(craftStationId);
 		}
@@ -113,16 +116,18 @@ public class CraftMenu extends Stage {
 		containerTable.setBackground(Gui.darkBackgroundSizeable);
 		containerTable.setFillParent(true);
 		containerTable.add(titleLabel).align(Align.center).row();
+
+		if (craftStationId == 0)
+			containerTable.add(unlockProgressLabel).padTop(TITLE_PADDING / 3).row();
+
 		containerTable.add(scroll)
 				.size(MadSand.XDEF, MadSand.YDEF - (BACK_BUTTON_HEIGHT + titleLabel.getHeight() + TITLE_PADDING)).row();
 
 		TextButton backBtn = new TextButton("Back", skin);
 
 		backBtn.align(Align.center);
-		backBtn.setWidth(BACK_BUTTON_WIDTH);
-		backBtn.setHeight(BACK_BUTTON_HEIGHT);
 
-		containerTable.add(backBtn).align(Align.center).row();
+		containerTable.add(backBtn).size(BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT).align(Align.center).row();
 		super.addActor(containerTable);
 
 		backBtn.addListener(new ChangeListener() {

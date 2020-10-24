@@ -28,9 +28,6 @@ public class Mouse {
 
 	static Vector3 mouseinworld = new Vector3(0.0F, 0.0F, 0.0F);
 
-	public static int wclickx = 0; // Coords of the cell of map where the mouse click occurred
-	public static int wclicky = 0;
-
 	public static String lineDelimiter = "**********";
 
 	public static Map loc;

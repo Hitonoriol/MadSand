@@ -7,77 +7,81 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Mouse;
+import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.world.World;
 
 public class GameContextMenu extends Table {
 	Skin skin;
+	float WIDTH = 125;
+
+	int clickX, clickY;
 
 	public TextButton[] contextMenuButtons;
 
 	public GameContextMenu() {
 		super();
 		skin = Gui.skin;
-		contextMenuButtons = new TextButton[5];
-		float width = Gui.DEFWIDTH;
+	}
 
-		int cc = 0;
-		contextMenuButtons[0] = new TextButton("Interact", skin);
-		contextMenuButtons[0].addListener(new ChangeListener() {
+	private void refresh() {
+		super.clear();
+		Map map = MadSand.world.getCurLoc();
+		Player player = World.player;
+		Item hand = player.stats.hand();
+
+		if (!map.getObject(clickX, clickY).equals(Map.nullObject))
+			addButton("Interact", new ChangeListener() {
+				public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+					player.lookAtMouse(clickX, clickY, true);
+					player.interact();
+				}
+			});
+
+		if (!map.getNpc(clickX, clickY).equals(Map.nullNpc))
+			addButton("Attack", new ChangeListener() {
+				public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+					player.lookAtMouse(clickX, clickY, true);
+					player.attack();
+					closeGameContextMenu();
+				}
+			});
+
+		addButton("Turn", new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				World.player.lookAtMouse(Mouse.wclickx, Mouse.wclicky);
-				World.player.interact();
-			}
-
-		});
-		contextMenuButtons[3] = new TextButton("Use item", skin);
-		contextMenuButtons[3].addListener(new ChangeListener() {
-
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				World.player.useItem();
-			}
-
-		});
-		contextMenuButtons[4] = new TextButton("Put held item to backpack", skin);
-		contextMenuButtons[4].addListener(new ChangeListener() {
-
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				World.player.freeHands();
+				World.player.lookAtMouse(clickX, clickY);
 				closeGameContextMenu();
 			}
-
-		});
-		contextMenuButtons[1] = new TextButton("Attack", skin);
-		contextMenuButtons[1].addListener(new ChangeListener() {
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				World.player.lookAtMouse(Mouse.wx, Mouse.wy);
-				World.player.attack();
-			}
-		});
-		contextMenuButtons[2] = new TextButton("Turn", skin);
-		contextMenuButtons[2].addListener(new ChangeListener() {
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				World.player.lookAtMouse(Mouse.wx, Mouse.wy);
-			}
 		});
 
-		while (cc < 5) {
-			super.add(contextMenuButtons[cc]).width(width).height(20.0F);
-			super.row();
-			cc++;
-		}
+		if (!hand.equals(Item.nullItem))
+			addButton("Unequip " + hand.name, new ChangeListener() {
+				public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+					World.player.freeHands();
+					closeGameContextMenu();
+				}
+			});
+
 		super.setVisible(false);
 	}
 
-	private final static int CONTEXT_USE_BTN = 3;
+	private void addButton(String text, ChangeListener listener) {
+		TextButton button = new TextButton(text, skin);
+		button.addListener(listener);
+		button.getLabel().setWrap(true);
+		super.add(button).width(WIDTH).minHeight(20).row();
+	}
 
 	public void openGameContextMenu() {
-		contextMenuButtons[CONTEXT_USE_BTN].setText("Use " + World.player.stats.hand().name);
+		clickX = Mouse.wx;
+		clickY = Mouse.wy;
+		refresh();
 		Gui.overlay.hideTooltip();
 		super.setVisible(true);
 		super.setPosition(Mouse.x + 50, Mouse.y - 30);
-		Mouse.wclickx = Mouse.wx;
-		Mouse.wclicky = Mouse.wy;
 	}
 
 	public void closeGameContextMenu() {

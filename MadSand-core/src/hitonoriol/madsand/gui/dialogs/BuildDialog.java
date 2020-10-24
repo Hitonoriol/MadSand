@@ -39,6 +39,7 @@ public class BuildDialog extends GameDialog {
 
 	Table buildTable = new Table();
 	Label emptyLabel = new Label("You don't know how to build anything",Gui.skin);
+	Label unlockProgressLabel = new Label("",Gui.skin);
 	AutoFocusScrollPane buildScroll;
 	float PAD = 50;
 
@@ -50,6 +51,7 @@ public class BuildDialog extends GameDialog {
 	public BuildDialog() {
 		this(Gui.overlay);
 		super.add().padTop(15).row();
+		super.add(unlockProgressLabel).width(WIDTH).row();
 		buildTable.setBackground(Gui.darkBackgroundSizeable);
 		BuildDialogEntry buildEntry;
 		Player player = World.player;
@@ -60,10 +62,15 @@ public class BuildDialog extends GameDialog {
 			}
 		}
 		
+		unlockProgressLabel.setText("Build recipes unlocked: " + player.buildRecipeProgress());
+		unlockProgressLabel.setWrap(true);
+		unlockProgressLabel.setAlignment(Align.center);
 		emptyLabel.setWrap(true);
 		emptyLabel.setAlignment(Align.center);
+		
 		if (player.buildRecipes.isEmpty())
 			buildTable.add(emptyLabel).width(WIDTH);
+		
 		buildScroll = new AutoFocusScrollPane(buildTable);
 		super.add(buildScroll).size(WIDTH, HEIGHT).row();
 		super.add(exitButton).size(100, 50);
