@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.gui.OverlayMouseoverListener;
+import hitonoriol.madsand.gui.dialogs.BestiaryDialog;
 import hitonoriol.madsand.gui.dialogs.BuildDialog;
 import hitonoriol.madsand.gui.dialogs.QuestJournal;
 import hitonoriol.madsand.gui.stages.Overlay;
@@ -27,16 +28,13 @@ public class OverlayBottomMenu extends Table {
 	static float BUTTON_PADDING = 5;
 	static float TABLE_PADDING_LEFT = 25;
 
-	final String characterStatString = "Character [Q]";
-	final String inventoryString = "Inventory [E]";
-	final String journalString = "Journal [J]";
-	final String buildString = "Build [B]";
-
 	Skin skin;
+
 	TextButton characterStatButton;
 	TextButton inventoryButton;
 	TextButton journalButton;
 	TextButton buildButton;
+	TextButton bestiaryButton;
 
 	NinePatchDrawable background;
 
@@ -50,15 +48,17 @@ public class OverlayBottomMenu extends Table {
 		this.overlay = overlay;
 		mouseoverListener = new OverlayMouseoverListener();
 
-		characterStatButton = new TextButton(characterStatString, skin);
-		inventoryButton = new TextButton(inventoryString, skin);
-		journalButton = new TextButton(journalString, skin);
-		buildButton = new TextButton(buildString, skin);
+		characterStatButton = new TextButton("Character [Q]", skin);
+		inventoryButton = new TextButton("Inventory [E]", skin);
+		journalButton = new TextButton("Journal [J]", skin);
+		buildButton = new TextButton("Build [B]", skin);
+		bestiaryButton = new TextButton("Bestiary [X]", skin);
 
 		addButton(characterStatButton);
 		addButton(inventoryButton);
 		addButton(journalButton);
 		addButton(buildButton);
+		addButton(bestiaryButton);
 
 		background = new NinePatchDrawable(Gui.darkBackgroundSizeable);
 
@@ -72,6 +72,15 @@ public class OverlayBottomMenu extends Table {
 	}
 
 	private void initButtonListeners() {
+		bestiaryButton.addListener(new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				new BestiaryDialog(World.player).show();
+
+			}
+		});
+
 		characterStatButton.addListener(new ChangeListener() {
 
 			@Override

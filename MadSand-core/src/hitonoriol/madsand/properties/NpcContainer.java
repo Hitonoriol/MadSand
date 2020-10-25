@@ -15,7 +15,7 @@ public class NpcContainer {
 
 	public int lvl = 0;
 	public int hp, strength, accuracy;
-	public int dexterity = 5, defense;
+	public int dexterity = 2, defense;
 
 	public int rewardExp;
 	public LootTable loot;

@@ -624,9 +624,6 @@ public class Map {
 
 		Npc npc = new Npc(id, x, y);
 
-		if (npc.spawnOnce)
-			World.player.addToKillCount(npc.id);
-
 		return putNpc(npc);
 	}
 

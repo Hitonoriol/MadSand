@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.GameState;
+import hitonoriol.madsand.gui.dialogs.BestiaryDialog;
 import hitonoriol.madsand.world.Location;
 import hitonoriol.madsand.world.World;
 
@@ -95,6 +96,9 @@ public class Keyboard {
 
 		if (Gdx.input.isKeyJustPressed(Keys.J))
 			Gui.overlay.showJournal();
+		
+		if (Gdx.input.isKeyJustPressed(Keys.X))
+			new BestiaryDialog(World.player).show();
 		
 		if (Gdx.input.isKeyJustPressed(Keys.B))
 			Gui.overlay.showBuildMenu();
