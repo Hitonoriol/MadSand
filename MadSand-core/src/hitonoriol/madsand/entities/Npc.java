@@ -2,10 +2,10 @@ package hitonoriol.madsand.entities;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Queue;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -31,6 +31,7 @@ public class Npc extends Entity {
 	static double IDLE_NPC_MOVE_CHANCE = 27;
 
 	public int id;
+	public long uid;
 	public int rewardExp;
 	public ArrayList<Integer> questList = new ArrayList<Integer>();
 
@@ -56,6 +57,7 @@ public class Npc extends Entity {
 	public Npc(int id) {
 		super();
 		this.id = id;
+		this.uid = MadSand.world.npcCounter++;
 		loadProperties();
 		if (id != NULL_NPC)
 			loadSprite();
@@ -198,11 +200,20 @@ public class Npc extends Entity {
 		return new EqualsBuilder().append(id, rhs.id).isEquals();
 	}
 
-	boolean attack(Direction dir) {
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(18899, 63839)
+				.append(uid)
+				.toHashCode();
+	}
+
+	void attack(Direction dir) {
 		Pair coords = new Pair(x, y).addDirection(dir);
 		Player player = World.player;
+		if (player.stats.dead)
+			return;
 		if (!(player.x == coords.x && player.y == coords.y))
-			return false;
+			return;
 		else {
 			int atk = stats.calcAttack(player.getDefense());
 			if (atk == 0)
@@ -212,7 +223,6 @@ public class Npc extends Entity {
 				super.attackAnimation(player);
 			}
 			player.damage(atk);
-			return true;
 		}
 	}
 
@@ -332,12 +342,5 @@ public class Npc extends Entity {
 		ret += "Friendly: " + (friendly ? "yes" : "no") + Resources.LINEBREAK;
 		return ret;
 	}
-
-	public static Comparator<Npc> speedComparator = new Comparator<Npc>() {
-		@Override
-		public int compare(Npc o1, Npc o2) {
-			return Double.compare(o2.getSpeed(), o1.getSpeed());
-		}
-	};
 
 }

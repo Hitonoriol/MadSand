@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.Keyboard;
 import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
@@ -40,6 +41,7 @@ public class Player extends Entity {
 	public QuestWorker quests = new QuestWorker();
 	public HashSet<String> luaActions = new HashSet<>(); //Set for one-time lua actions
 	public HashMap<Integer, Integer> killCount = new HashMap<>();
+	private TimedAction scheduledAction;
 
 	@JsonProperty("newlyCreated")
 	public boolean newlyCreated = true;
@@ -62,6 +64,12 @@ public class Player extends Entity {
 
 	public Player() {
 		this("");
+	}
+
+	public void commitAction() {
+		if (scheduledAction != null)
+			scheduledAction.act();
+		scheduledAction = null;
 	}
 
 	public void addExp(int amount) {
@@ -124,15 +132,14 @@ public class Player extends Entity {
 		return stats.equipment.unEquip(item);
 	}
 
-	@Override
-	public boolean attack(Direction dir) {
+	private void performAttack(Direction dir) {
 		boolean dead;
 		turn(dir);
 		Map map = MadSand.world.getCurLoc();
 		Npc npc = map.getNpc(coords.set(x, y).addDirection(dir));
 
 		if (npc == Map.nullNpc)
-			return false;
+			return;
 
 		int atk = stats.calcAttack(npc.getDefense());
 
@@ -166,10 +173,16 @@ public class Player extends Entity {
 			}
 
 		}
+	}
 
-		doAction(stats.AP_ATTACK);
-		return dead;
-
+	@Override
+	public void attack(Direction dir) {
+		doAction(stats.AP_ATTACK, new TimedAction() {
+			@Override
+			public void act() {
+				performAttack(dir);
+			}
+		});
 	}
 
 	public int getKillCount(int id) {
@@ -186,8 +199,8 @@ public class Player extends Entity {
 		return killCount.containsKey(id);
 	}
 
-	public boolean attack() {
-		return attack(stats.look);
+	public void attack() {
+		attack(stats.look);
 	}
 
 	@Override
@@ -296,7 +309,7 @@ public class Player extends Entity {
 		}
 	}
 
-	public boolean craftItem(int id) {
+	private boolean performCraftItem(int id) {
 		Item itemToCraft = ItemProp.items.get(id);
 		int craftQuantity = ItemProp.getCraftQuantity(id);
 
@@ -313,13 +326,22 @@ public class Player extends Entity {
 
 			Gui.drawOkDialog("Crafted " + quantity + " " + itemToCraft.name + " successfully!", Gui.craftMenu);
 			MadSand.notice("You craft " + quantity + " " + itemToCraft.name);
-			doAction(stats.AP_MINOR);
 			return true;
 		}
 
 		Gui.drawOkDialog("Not enough resources to craft " + itemToCraft.name, Gui.craftMenu);
 
 		return false;
+	}
+
+	public void craftItem(int id) {
+		doAction(stats.AP_MINOR, new TimedAction() {
+
+			@Override
+			public void act() {
+				performCraftItem(id);
+			}
+		});
 	}
 
 	public void interact() {
@@ -350,7 +372,7 @@ public class Player extends Entity {
 
 		case QuestMaster:
 			npc.pause();
-			if (!quests.processQuests(questList, name))
+			if (!quests.processQuests(questList, npc))
 				MadSand.print(name + " has no more quests for you.");
 			break;
 
@@ -358,8 +380,6 @@ public class Player extends Entity {
 			break;
 
 		}
-
-		doAction(stats.AP_MINOR);
 	}
 
 	public void tradeWithNpc(Direction direction) {
@@ -376,7 +396,7 @@ public class Player extends Entity {
 		new TradeInventoryUI(npc.inventory, inventory).show();
 	}
 
-	private void interact(Direction direction) {
+	private void performInteraction(Direction direction) {
 		coords.set(x, y).addDirection(direction);
 
 		Map loc = MadSand.world.getCurLoc();
@@ -404,7 +424,6 @@ public class Player extends Entity {
 
 		if (!action.equals(Resources.emptyField)) {
 			LuaUtils.execute(action);
-			doAction();
 			return;
 		}
 
@@ -431,6 +450,15 @@ public class Player extends Entity {
 		Gui.overlay.processActionMenu();
 	}
 
+	private void interact(Direction direction) {
+		doAction(stats.AP_MINOR, new TimedAction() {
+			@Override
+			public void act() {
+				performInteraction(direction);
+			}
+		});
+	}
+
 	// returns amount of damage done to object's harvestHp
 	public int gatherResources(MapObject obj) {
 		if (obj.id == Map.nullObject.id)
@@ -448,7 +476,7 @@ public class Player extends Entity {
 			return -2;
 		}
 
-		doAction();
+		doAction(stats.AP_MINOR);
 		damageHeldTool(skill);
 		changeStamina(-stats.GATHERING_STAMINA_COST);
 
@@ -494,49 +522,37 @@ public class Player extends Entity {
 		useItem(stats.hand());
 	}
 
-	public boolean useItem(Item item) {
-
+	private void performUseItem(Item item) {
 		boolean itemUsed = false;
 		checkHands(item.id);
 
-		if (itemUsed = equip(item))
-			;
-
-		else if (itemUsed = useGrabBag(item))
-			;
-
-		else if (itemUsed = useTileInteractItem(item))
-			;
-
-		else if (itemUsed = useScriptedItem(item))
-			;
-
-		else if (itemUsed = useScriptedTile())
-			;
-
-		else if (itemUsed = useConsumableItem(item))
-			;
-
-		else if (itemUsed = plantCrop(item))
-			;
-
-		else if (itemUsed = usePlaceableObject(item))
-			;
-
-		else if (itemUsed = usePlaceableTile(item))
-			;
+		itemUsed = equip(item);
+		itemUsed |= useGrabBag(item);
+		itemUsed |= useTileInteractItem(item);
+		itemUsed |= useScriptedItem(item);
+		itemUsed |= useScriptedTile();
+		itemUsed |= useConsumableItem(item);
+		itemUsed |= plantCrop(item);
+		itemUsed |= usePlaceableObject(item);
+		itemUsed |= usePlaceableTile(item);
 
 		checkHands(item.id);
 
 		if (itemUsed) {
 			damageHeldTool();
-			doAction();
 
 			if (!item.type.isConsumable())
 				changeStamina(-item.weight);
 		}
+	}
 
-		return itemUsed;
+	public void useItem(Item item) {
+		doAction(stats.AP_MINOR, new TimedAction() {
+			@Override
+			public void act() {
+				performUseItem(item);
+			}
+		});
 
 	}
 
@@ -778,9 +794,12 @@ public class Player extends Entity {
 		return ret;
 	}
 
-	@Override
-	public int doAction(int ap) {
+	public int doAction(int ap, TimedAction action) {
+		if (scheduledAction != null)
+			return -1;
+
 		int ticks = super.doAction(ap);
+		scheduledAction = action;
 		MadSand.world.timeTick(ticks); // committing our action and then letting world catch up to time we've spent
 		MadSand.world.timeSubtick(getActionLength(ap)); // letting NPCs catch up
 		Gui.overlay.refreshOverlay();
@@ -797,19 +816,35 @@ public class Player extends Entity {
 		return tid;
 	}
 
+	private void performWalk(Direction dir) {
+		if (!super.walk(dir))
+			return;
+
+		MadSand.world.updateLight();
+		objectInFront();
+		lootMsg();
+		Gui.overlay.processActionMenu();
+	}
+
 	@Override
 	public boolean walk(Direction dir) {
-		if (super.walk(dir)) {
-			MadSand.world.updateLight();
 
-			objectInFront();
-			lootMsg();
-			Gui.overlay.processActionMenu();
-			return true;
-		}
+		if (Keyboard.inputIgnored())
+			return false;
 
-		return false;
+		if (canWalk(dir))
+			doAction(stats.AP_WALK, new TimedAction() {
+				@Override
+				public void act() {
+					performWalk(dir);
+				}
+			});
+		return true;
+	}
 
+	@Override
+	public void act(float time) {
+		commitAction();
 	}
 
 	public void attackHostile() {
@@ -873,5 +908,9 @@ public class Player extends Entity {
 		MadSand.state = GameState.INVENTORY;
 		Gui.inventoryActive = true;
 		Gui.overlay.hideTooltip();
+	}
+
+	private interface TimedAction {
+		void act();
 	}
 }

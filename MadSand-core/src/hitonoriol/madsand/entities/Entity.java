@@ -2,12 +2,14 @@ package hitonoriol.madsand.entities;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import hitonoriol.madsand.Keyboard;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
@@ -25,6 +27,13 @@ import hitonoriol.madsand.properties.TileProp;
 public abstract class Entity {
 	@JsonIgnore
 	private Sprite upSpr, downSpr, leftSpr, rightSpr;
+
+	public static Comparator<Entity> speedComparator = new Comparator<Entity>() {
+		@Override
+		public int compare(Entity o1, Entity o2) {
+			return Double.compare(o2.getSpeed(), o1.getSpeed());
+		}
+	};
 
 	@JsonIgnore
 	private Sprite sprite;
@@ -126,6 +135,8 @@ public abstract class Entity {
 	public void stopMovement() {
 		stepping = false;
 		stepx = stepy = MadSand.TILESIZE;
+		if (Keyboard.inputIgnored())
+			Keyboard.resumeInput();
 	}
 
 	public Inventory initInventory() {
@@ -143,9 +154,7 @@ public abstract class Entity {
 		inventory.setMaxWeight(stats.calcMaxInventoryWeight());
 	}
 
-	boolean attack(Direction dir) {
-		return false;
-	}
+	abstract void attack(Direction dir);
 
 	public boolean addItem(Item item) {
 		return inventory.putItem(item);
@@ -165,7 +174,7 @@ public abstract class Entity {
 		MadSand.world.getCurLoc().putLoot(coord.x, coord.y, new Item(item));
 		inventory.delItem(item);
 
-		doAction();
+		doAction(stats.AP_MINOR);
 		return true;
 	}
 
@@ -283,7 +292,7 @@ public abstract class Entity {
 		return (float) ap / (float) getSpeed();
 	}
 
-	int doAction(int ap) { // any action that uses AP \\ returns number of ticks spent
+	public int doAction(int ap) { // any action that uses AP \\ returns number of ticks spent
 		double tmp = stats.actionPts;
 		stats.actionPts -= ap;
 		int ticks = 0;
@@ -325,10 +334,6 @@ public abstract class Entity {
 			return true;
 		} else
 			return false;
-	}
-
-	public int doAction() {
-		return doAction(stats.AP_MINOR);
 	}
 
 	public void freeHands() {
@@ -436,8 +441,7 @@ public abstract class Entity {
 
 	}
 
-	boolean walk(Direction dir) {
-
+	boolean canWalk(Direction dir) {
 		if (dir.isDiagonal())
 			return false;
 
@@ -450,10 +454,19 @@ public abstract class Entity {
 		if (colliding(stats.look) || isOnMapBound(stats.look))
 			return false;
 
-		move(stats.look);
-		doAction(stats.AP_WALK);
 		return true;
 	}
+
+	boolean walk(Direction dir) {
+
+		if (!canWalk(dir))
+			return false;
+
+		move(stats.look);
+		return true;
+	}
+
+	public abstract void act(float time);
 
 	void randMove() {
 		move(Direction.random());
@@ -554,4 +567,5 @@ public abstract class Entity {
 	public void setIsPlayer(boolean val) {
 		stats.equipment.setIsPlayer(val);
 	}
+
 }

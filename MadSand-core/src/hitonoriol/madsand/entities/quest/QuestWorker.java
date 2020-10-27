@@ -8,6 +8,7 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.dialog.GameDialog;
+import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.gui.dialogs.QuestListDialog;
@@ -79,7 +80,7 @@ public class QuestWorker {
 		return completedQuests.contains(QuestList.quests.get(id));
 	}
 
-	private void startQuest(Quest quest) {
+	private void startQuest(Quest quest, long npcUID) {
 		Utils.out("Trying to start quest " + quest.id);
 
 		if (isQuestCompleted(quest.id))
@@ -89,7 +90,7 @@ public class QuestWorker {
 			MadSand.print("You get " + Item.queryToName(quest.giveItems));
 
 		questsInProgress.add(quest);
-		quest.start(player);
+		quest.start(player, npcUID);
 		GameDialog.generateDialogChain(quest.startMsg, Gui.overlay).show();
 	}
 
@@ -112,7 +113,7 @@ public class QuestWorker {
 		GameDialog.generateDialogChain(quest.endMsg, Gui.overlay).show();
 	}
 
-	public void processQuest(int id) {
+	public void processQuest(int id, long npcUID) {
 		Utils.out("Processing quest " + id);
 
 		Quest quest = QuestList.quests.get(id); // "raw" quest
@@ -121,7 +122,7 @@ public class QuestWorker {
 			quest = completedQuests.get(completedQuests.indexOf(quest));
 		else if (questsInProgress.contains(quest))
 			quest = questsInProgress.get(questsInProgress.indexOf(quest));
-		
+
 		quest.setPlayer(player);
 
 		if (isQuestInProgress(id) && !isQuestCompleted(id)) {
@@ -130,19 +131,23 @@ public class QuestWorker {
 			else
 				GameDialog.generateDialogChain(quest.reqMsg, Gui.overlay).show();
 		} else
-			startQuest(quest);
+			startQuest(quest, npcUID);
 
 	}
 
-	public boolean processQuests(ArrayList<Integer> mobQuestList, String npcName) {
+	public void processQuest(int id) {
+		processQuest(id, MadSand.world.getCurLoc().getNpc(player.lookingAt()).uid);
+	}
+
+	public boolean processQuests(ArrayList<Integer> mobQuestList, Npc npc) {
 		ArrayList<Integer> availableQuests = getAvailableQuests(mobQuestList);
 
 		if (availableQuests.size() == 0)
 			return false;
 		else if (availableQuests.size() == 1)
-			processQuest(availableQuests.get(0));
+			processQuest(availableQuests.get(0), npc.uid);
 		else
-			new QuestListDialog(this, availableQuests, npcName).show();
+			new QuestListDialog(this, availableQuests, npc.stats.name).show();
 
 		return true;
 	}

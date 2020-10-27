@@ -73,7 +73,7 @@ public class InventoryUICell extends ItemUI {
 				} else
 					player.freeHands();
 
-				World.player.doAction();
+				player.doAction(player.stats.AP_MINOR);
 				Gui.toggleInventory();
 			}
 		});

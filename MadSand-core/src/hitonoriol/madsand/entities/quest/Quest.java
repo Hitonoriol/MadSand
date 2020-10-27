@@ -8,8 +8,10 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.properties.ItemProp;
@@ -18,9 +20,11 @@ import hitonoriol.madsand.properties.NpcProp;
 public class Quest {
 	public int id;
 	public String name;
+	public int exp;
 	public int previousQuest = -1; // Quest id of quest after completion of which this quest becomes available
 
-	public int exp;
+	public Pair npcWorldPos;
+	public long npcUID;
 
 	public String startMsg; // Dialog chain string -- displayed on quest start
 	public String endMsg; // Dialog chain string -- displayed on completion of this quest
@@ -158,8 +162,10 @@ public class Quest {
 		return getItemObjectiveString() + getKillObjectiveString();
 	}
 
-	public void start(Player player) {
+	public void start(Player player, long npcUID) {
 		this.player = player;
+		this.npcUID = npcUID;
+		this.npcWorldPos = new Pair(MadSand.world.getCurWPos());
 		isComplete = false;
 		itemObjective = new HashMap<>();
 		killObjective = new HashMap<>();

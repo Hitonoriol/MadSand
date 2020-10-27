@@ -12,14 +12,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.Keyboard;
 import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.enums.NpcState;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
@@ -27,6 +30,7 @@ import hitonoriol.madsand.world.worldgen.WorldGen;
 
 public class World {
 	Map nullLoc = new Map(0, 0);
+	private static final float ACT_DELAY = 0.1f;
 	public static final int DEFAULT_WORLDSIZE = 10;
 	public static final int TILE_CAVE_EXIT = 25; //TODO move this to cave preset
 
@@ -49,6 +53,7 @@ public class World {
 
 	public WorldMap worldMap; // container of "Locations": maps grouped by world coords
 
+	private Timer actDelayTimer;
 	private Timer realTimeRefresher;
 	public int realtimeTickRate = 5; // seconds per 1 tick
 	public long globalRealtimeTick = 0; // global realtime tick counter, never resets
@@ -57,6 +62,7 @@ public class World {
 	public int worldtime = 6; // time (00 - 23)
 	public int tick = 0; // tick counter, resets every <ticksPerHour> ticks
 	public long globalTick = 0; // global tick counter, never resets
+	public long npcCounter = 0;
 
 	private long logoutTimeStamp;
 	public HashMap<String, String> luaStorage = new HashMap<>();
@@ -90,6 +96,8 @@ public class World {
 				realtimeTick();
 			}
 		}, realtimeTickRate, realtimeTickRate);
+
+		actDelayTimer = new Timer();
 	}
 
 	public long getLogoutTimeStamp() {
@@ -582,15 +590,40 @@ public class World {
 	public void timeSubtick(float time) { // Gets called on every action player does, time = % of max AP(speed) 
 		Map loc = getCurLoc();
 		HashMap<Pair, Npc> npcs = loc.getNpcs();
-		ArrayList<Npc> queue = new ArrayList<Npc>();
+		ArrayList<Entity> queue = new ArrayList<Entity>();
 
 		for (Entry<Pair, Npc> npc : npcs.entrySet())
 			queue.add(npc.getValue());
 
-		Collections.sort(queue, Npc.speedComparator);
+		queue.add(player);
 
-		for (Npc npc : queue)
-			npc.act(time);
+		Collections.sort(queue, Entity.speedComparator);
+
+		boolean pausePlayer = false;	// if a hostile mob acts before player, we pause player until the action is completed
+		boolean hostile;
+		for (Entity entity : queue) {
+
+			if ((player.canSee(entity) && entity != player) || (entity == player && pausePlayer)) {
+				hostile = false;
+				if (entity != player) {
+					hostile = ((Npc) entity).state == NpcState.FollowPlayer;
+					pausePlayer |= hostile;
+					
+					if (pausePlayer)
+						Keyboard.stopInput();
+				}
+
+				actDelayTimer.scheduleTask(new Timer.Task() {
+					@Override
+					public void run() {
+						entity.act(time);
+						if (!entity.isStepping())
+							Keyboard.resumeInput();
+					}
+				}, (hostile && pausePlayer) ? 0 : ACT_DELAY);
+			} else
+				entity.act(time);
+		}
 	}
 
 	public void updateLight() {

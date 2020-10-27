@@ -14,15 +14,34 @@ import hitonoriol.madsand.world.World;
 
 public class Keyboard {
 
+	private static boolean ignoreInput = false;
+
 	public static void pollGameKeys() {
-		pollMovementKeys();
-		pollTurnKeys();
-		pollActionKeys();
+		if (!ignoreInput) {
+			pollMovementKeys();
+			pollTurnKeys();
+			pollActionKeys();
+		}
+
 		pollDebugKeys();
 		pollInventoryKey();
 		pollFunctionKeys();
 	}
+	
+	public static boolean inputIgnored() {
+		return ignoreInput;
+	}
+	
+	public static void stopInput() {
+		Utils.out("stop");
+		ignoreInput = true;
+	}
 
+	public static void resumeInput() {
+		Utils.out("resume");
+		ignoreInput = false;
+	}
+	
 	public static void pollScreenshotKey() {
 		if (Gdx.input.isKeyJustPressed(Keys.F12))
 			Resources.takeScreenshot();
@@ -56,6 +75,18 @@ public class Keyboard {
 
 		if ((Gdx.input.isKeyJustPressed(Keys.L)))
 			GameSaver.loadWorld(MadSand.WORLDNAME);
+		
+		if (Gdx.input.isKeyJustPressed(Keys.J))
+			Gui.overlay.showJournal();
+
+		if (Gdx.input.isKeyJustPressed(Keys.X))
+			new BestiaryDialog(World.player).show();
+
+		if (Gdx.input.isKeyJustPressed(Keys.B))
+			Gui.overlay.showBuildMenu();
+
+		if (Gdx.input.isKeyJustPressed(Keys.Q))
+			Gui.overlay.toggleStatsWindow();
 	}
 
 	private static void pollTurnKeys() {
@@ -93,18 +124,6 @@ public class Keyboard {
 
 		if (Gdx.input.isKeyJustPressed(Keys.N) && MadSand.world.curLayer() == Location.LAYER_OVERWORLD)
 			MadSand.world.travel();
-
-		if (Gdx.input.isKeyJustPressed(Keys.J))
-			Gui.overlay.showJournal();
-		
-		if (Gdx.input.isKeyJustPressed(Keys.X))
-			new BestiaryDialog(World.player).show();
-		
-		if (Gdx.input.isKeyJustPressed(Keys.B))
-			Gui.overlay.showBuildMenu();
-		
-		if (Gdx.input.isKeyJustPressed(Keys.Q))
-			Gui.overlay.toggleStatsWindow();
 
 	}
 

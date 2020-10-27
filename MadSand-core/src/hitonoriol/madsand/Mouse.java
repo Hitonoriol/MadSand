@@ -226,6 +226,9 @@ public class Mouse {
 	}
 
 	public static void pollMouseMovement() {
+		if (Keyboard.inputIgnored())
+			return;
+
 		processClick();
 		if (Gdx.input.isButtonPressed(Buttons.LEFT) && !(diagonal && pointingAtObject) && !rest) {
 			World.player.lookAtMouse(wx, wy);
