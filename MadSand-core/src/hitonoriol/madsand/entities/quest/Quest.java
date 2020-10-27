@@ -39,6 +39,7 @@ public class Quest {
 	public boolean repeatable = false;
 	public boolean deleteRequiredItems = true; // Whether to delete items from reqItems list on quest completion or not
 	public boolean isComplete = false;
+	public boolean isProcedural = false;
 
 	Player player;
 	public HashMap<Integer, Integer> itemObjective; // {item id, quantity} pairs required to complete quest

@@ -16,7 +16,8 @@ import hitonoriol.madsand.properties.QuestList;
 
 public class QuestWorker {
 
-	public int lastProceduralQuest = -1;
+	public int lastProceduralQuest = 0;
+	public ArrayList<ProceduralQuest> proceduralQuests = new ArrayList<>();
 	public ArrayList<Quest> completedQuests = new ArrayList<>(); // sets of completed quests and the ones in progress
 	public ArrayList<Quest> questsInProgress = new ArrayList<>();
 	private Player player;
@@ -34,8 +35,12 @@ public class QuestWorker {
 		this.player = player;
 	}
 
+	public Quest questById(int id) {
+		return (id >= 0) ? QuestList.quests.get(id) : proceduralQuests.get(-id);
+	}
+
 	public int getPreviousQuest(int id) {
-		Quest quest = QuestList.quests.get(id);
+		Quest quest = questById(id);
 
 		if (quest.previousQuest == -1)
 			return -1;
@@ -44,7 +49,7 @@ public class QuestWorker {
 	}
 
 	public boolean isQuestAvailable(int id) {
-		Quest quest = QuestList.quests.get(id);
+		Quest quest = questById(id);
 		int prevQuestId = getPreviousQuest(id);
 
 		if (isQuestCompleted(id) && !quest.repeatable)
@@ -72,12 +77,26 @@ public class QuestWorker {
 		return quests;
 	}
 
+	public ArrayList<Integer> getAvailableQuests(long npcUID) {
+		ArrayList<Integer> quests = new ArrayList<>();
+
+		for (ProceduralQuest quest : proceduralQuests)
+			if (quest.npcUID == npcUID)
+				quests.add(-quest.id);
+
+		return quests;
+	}
+
+	public ProceduralQuest createNewProceduralQuest() {
+		return new ProceduralQuest(--lastProceduralQuest);
+	}
+
 	public boolean isQuestInProgress(int id) {
-		return questsInProgress.contains(QuestList.quests.get(id));
+		return questsInProgress.contains(questById(id));
 	}
 
 	public boolean isQuestCompleted(int id) {
-		return completedQuests.contains(QuestList.quests.get(id));
+		return completedQuests.contains(questById(id));
 	}
 
 	private void startQuest(Quest quest, long npcUID) {
@@ -116,7 +135,7 @@ public class QuestWorker {
 	public void processQuest(int id, long npcUID) {
 		Utils.out("Processing quest " + id);
 
-		Quest quest = QuestList.quests.get(id); // "raw" quest
+		Quest quest= questById(id);
 
 		if (completedQuests.contains(quest)) // if modified instance of raw quest exists, use it instead
 			quest = completedQuests.get(completedQuests.indexOf(quest));

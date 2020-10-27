@@ -646,6 +646,13 @@ public class Map {
 		return moveNpc(npc, x, y);
 	}
 
+	public Npc getNpc(long uid) {
+		for (Entry<Pair, Npc> entry : mapNpcs.entrySet())
+			if (entry.getValue().uid == uid)
+				return entry.getValue();
+		return nullNpc;
+	}
+
 	public Npc getNpc(int x, int y) {
 		if (!correctCoords(coords.set(x, y)))
 			return nullNpc;
