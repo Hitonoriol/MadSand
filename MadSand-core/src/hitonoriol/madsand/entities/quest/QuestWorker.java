@@ -16,7 +16,7 @@ import hitonoriol.madsand.properties.QuestList;
 
 public class QuestWorker {
 
-	public int lastProceduralQuest = 0;
+	public int lastProceduralQuest = 0; // Decrements for each new procedural quest
 	public ArrayList<ProceduralQuest> proceduralQuests = new ArrayList<>();
 	public ArrayList<Quest> completedQuests = new ArrayList<>(); // sets of completed quests and the ones in progress
 	public ArrayList<Quest> questsInProgress = new ArrayList<>();
@@ -36,7 +36,7 @@ public class QuestWorker {
 	}
 
 	public Quest questById(int id) {
-		return (id >= 0) ? QuestList.quests.get(id) : proceduralQuests.get(-id);
+		return (id >= 0) ? QuestList.quests.get(id) : proceduralQuests.get(-(id + 1));
 	}
 
 	public int getPreviousQuest(int id) {
@@ -87,8 +87,28 @@ public class QuestWorker {
 		return quests;
 	}
 
-	public ProceduralQuest createNewProceduralQuest() {
-		return new ProceduralQuest(--lastProceduralQuest);
+	private ProceduralQuest findProceduralQuest(long uid) {
+		for (ProceduralQuest quest : proceduralQuests)
+			if (quest.npcUID == uid)
+				return quest;
+		return null;
+	}
+
+	private boolean proceduralQuestExists(long uid) {
+		for (ProceduralQuest quest : proceduralQuests)
+			if (quest.npcUID == uid)
+				return true;
+		return false;
+	}
+
+	public ProceduralQuest createNewProceduralQuest(long npcUID) {
+		ProceduralQuest quest;
+		if (!proceduralQuestExists(npcUID)) {
+			quest = new ProceduralQuest(--lastProceduralQuest, npcUID);
+			proceduralQuests.add(quest);
+		} else
+			quest = findProceduralQuest(npcUID);
+		return quest;
 	}
 
 	public boolean isQuestInProgress(int id) {
@@ -135,7 +155,7 @@ public class QuestWorker {
 	public void processQuest(int id, long npcUID) {
 		Utils.out("Processing quest " + id);
 
-		Quest quest= questById(id);
+		Quest quest = questById(id);
 
 		if (completedQuests.contains(quest)) // if modified instance of raw quest exists, use it instead
 			quest = completedQuests.get(completedQuests.indexOf(quest));

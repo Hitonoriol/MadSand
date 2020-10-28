@@ -29,7 +29,7 @@ public class Loot {
 				ret += item.getString() + Item.BLOCK_DELIM;
 		}
 		if (ret == "")
-			return Item.EMPTY_ITEM_STRING;
+			return Item.EMPTY_ITEM;
 		return ret;
 	}
 
@@ -81,7 +81,7 @@ public class Loot {
 
 	public static int addLootQ(String temp, Inventory inventory, int x, int y, Map map) { // Don't look here
 		int i = 0;
-		if (temp.equals(Item.EMPTY_ITEM_STRING) || temp.equals(Item.EMPTY_ITEM_STRING + Item.BLOCK_DELIM))
+		if (temp.equals(Item.EMPTY_ITEM) || temp.equals(Item.EMPTY_ITEM + Item.BLOCK_DELIM))
 			return -1;
 		if (temp.indexOf(Item.BLOCK_DELIM) == -1)
 			temp += Item.BLOCK_DELIM;

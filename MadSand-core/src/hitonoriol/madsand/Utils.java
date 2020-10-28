@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -73,8 +74,8 @@ public class Utils {
 		System.exit(-1);
 	}
 
-	public static double round(double curWeight) {
-		return (Math.round(curWeight * 100) / 100.00);
+	public static double round(double num) {
+		return (Math.round(num * 100) / 100.00);
 	}
 
 	public static int rand(int min, int max) {
@@ -93,7 +94,7 @@ public class Utils {
 		return random.nextInt(max);
 	}
 
-	public static int randElement(ArrayList<Integer> list) {
+	public static <T> T randElement(List<T> list) {
 		return list.get(random.nextInt(list.size()));
 	}
 

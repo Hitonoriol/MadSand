@@ -1,5 +1,23 @@
 {
-	"currencyId" : "21",
-	"travelItem" : "130",
-	"drowningDamage" : "3"
+	"values" : {
+		"currencyId" : "21",
+		"travelItem" : "130",
+		"drowningDamage" : "3"
+	},
+	"idleNpcText" : [
+			"What a nice day! Isn't it, {PLAYER}?",
+			"Hello, {PLAYER}!",
+			"Why are you looking at me like that?",
+			"Ugh... There's absolutely nothing to do here. Oh, hi, {PLAYER}!"
+	],
+	"proceduralQuestText" : {
+		"Craft" : [
+				"Oh, it's you. Listen, {PLAYER}, I want to make a certain device... So I'll need you to craft ",
+				"Hey, can you craft something for me? I'm really in need of "
+				],
+		"Resource" : [
+				"Hello, {PLAYER}, I need you to gather some resources for me. To be more specific, I need ",
+				"Yo! Bring me "
+				]
+	}
 }

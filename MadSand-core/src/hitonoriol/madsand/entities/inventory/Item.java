@@ -59,7 +59,7 @@ public class Item {
 
 	public final static String ITEM_DELIM = "/";
 	public final static String BLOCK_DELIM = ":";
-	public final static String EMPTY_ITEM_STRING = "n";
+	public final static String EMPTY_ITEM = "n";
 	public final static String CRAFTSTATION_DELIM = "|";
 
 	public Item(int id) {
@@ -100,7 +100,7 @@ public class Item {
 	}
 
 	public Item(String query) {
-		if (query.equals(EMPTY_ITEM_STRING)) {
+		if (query.equals(EMPTY_ITEM)) {
 			this.id = 0;
 			loadProperties();
 			return;
@@ -255,7 +255,7 @@ public class Item {
 	@JsonIgnore
 	public String getString() {
 		if (id == 0)
-			return EMPTY_ITEM_STRING;
+			return EMPTY_ITEM;
 		else
 			return id + ITEM_DELIM + quantity;
 	}

@@ -1,29 +1,36 @@
 package hitonoriol.madsand.properties;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
-
-import com.fasterxml.jackson.databind.type.MapType;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
+import hitonoriol.madsand.entities.quest.ProceduralQuest;
 
 public class Globals {
 	public static String TRAVEL_ITEM = "travelItem";
 	public static String CURRENCY_FIELD = "currencyId";
 
-	private static HashMap<String, String> values = new HashMap<>();
+	private static Globals instance = new Globals();
+
+	public HashMap<String, String> values = new HashMap<>();
+	public ArrayList<String> idleNpcText = new ArrayList<>();
+	public HashMap<ProceduralQuest.Type, ArrayList<String>> proceduralQuestText = new HashMap<>();
 
 	public static void loadGlobals() throws Exception {
-		MapType globalMap = Resources.typeFactory.constructMapType(HashMap.class, String.class, String.class);
-		values = Resources.mapper.readValue(new File(MadSand.GLOBALSFILE), globalMap);
+		instance = Resources.mapper.readValue(new File(MadSand.GLOBALSFILE), Globals.class);
+	}
+
+	public static Globals instance() {
+		return instance;
 	}
 
 	public static int getInt(String name) {
-		return Integer.parseInt(values.get(name));
+		return Integer.parseInt(instance.values.get(name));
 	}
-	
+
 	public static String getString(String name) {
-		return values.get(name);
+		return instance.values.get(name);
 	}
 }

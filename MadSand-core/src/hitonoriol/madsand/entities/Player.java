@@ -16,6 +16,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.dialog.DialogChainGenerator;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.inventory.trade.TradeInventoryUI;
@@ -27,6 +28,7 @@ import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.map.Tile;
+import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.properties.ObjectProp;
@@ -41,6 +43,7 @@ public class Player extends Entity {
 	public QuestWorker quests = new QuestWorker();
 	public HashSet<String> luaActions = new HashSet<>(); //Set for one-time lua actions
 	public HashMap<Integer, Integer> killCount = new HashMap<>();
+	public HashMap<Faction, Float> reputation = new HashMap<>();
 	private TimedAction scheduledAction;
 
 	@JsonProperty("newlyCreated")
@@ -351,6 +354,7 @@ public class Player extends Entity {
 
 	private void interact(Npc npc) {
 		String name = npc.stats.name;
+		Faction faction = npc.stats.faction;
 		ArrayList<Integer> questList = NpcProp.npcs.get(npc.id).questList;
 
 		Gui.overlay.closeGameContextMenu();
@@ -367,7 +371,17 @@ public class Player extends Entity {
 			break;
 
 		case Regular:
-			MadSand.print("Doesn't seem like " + name + " wants to talk.");
+			if (faction == Faction.Animals || faction == Faction.Monsters)
+				MadSand.print("Doesn't seem like " + name + " wants to talk.");
+			else {
+				if (stats.luckRoll()) {
+					quests.processQuest(quests.createNewProceduralQuest(npc.uid).id);
+				} else {
+					new DialogChainGenerator("#" + npc.stats.name + "#" +
+							Utils.randElement(Globals.instance().idleNpcText))
+									.generate(Gui.overlay).show();
+				}
+			}
 			break;
 
 		case QuestMaster:

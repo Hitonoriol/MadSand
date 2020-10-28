@@ -274,7 +274,7 @@ public class Inventory {
 	}
 
 	public boolean delItem(String query) {
-		if (query.equals(Item.EMPTY_ITEM_STRING))
+		if (query.equals(Item.EMPTY_ITEM))
 			return false;
 
 		int i = 0;
@@ -347,7 +347,7 @@ public class Inventory {
 
 	public int putItem(String query) {
 
-		if (query.equals(Item.EMPTY_ITEM_STRING))
+		if (query.equals(Item.EMPTY_ITEM))
 			return -1;
 
 		return Loot.addLootQ(query, this, 0, 0, null); // Don't ask about this, this is a long story

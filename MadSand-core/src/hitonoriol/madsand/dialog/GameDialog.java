@@ -137,7 +137,7 @@ public class GameDialog extends Dialog {
 	}
 
 	public static GameDialog generateDialogChain(String text, Stage stage) {
-		return new DialogChainGenerator(text).generateDialogChain(stage);
+		return new DialogChainGenerator(text).generate(stage);
 	}
 
 	public boolean isOnlyDialog() { // If this dialog is the only one in stage

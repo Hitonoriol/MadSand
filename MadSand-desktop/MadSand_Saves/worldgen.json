@@ -48,7 +48,7 @@
 			"initialMobSpawn" : 5,
 			"initialFriendlyChance" : 85,
 			"hostileMobs": {"rollCount": 6, "idList": [19, 2, 6]},
-			"friendlyMobs": {"rollCount": 4, "idList": [30, 31, 37, 38, 39, 21, 22, 23, 24, 25, 35]},
+			"friendlyMobs": {"rollCount": 4, "idList": [3, 4, 7, 30, 31, 37, 38, 39, 21, 22, 23, 24, 25, 35]},
 			"hostileSpawnChance": 80,
 			"friendlySpawnChance": 60
 		},

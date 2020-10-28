@@ -93,7 +93,7 @@ public class DialogChainGenerator {
 		}
 
 		dialog.setTitle(title);
-		dialog.setText(removeDialogRegex(dialogBody));
+		dialog.setText(unescapeChars(removeDialogRegex(dialogBody)));
 
 		return nextDialogButton;
 	}
@@ -123,7 +123,15 @@ public class DialogChainGenerator {
 		return text.trim();
 	}
 
-	public GameDialog generateDialogChain(Stage stage) { // generates a chain of dialogs
+	public static String LBRACKET = "-(", RBRACKET = ")-";
+
+	private String unescapeChars(String string) {
+		string = string.replace(LBRACKET, "[");
+		string = string.replace(RBRACKET, "]");
+		return string;
+	}
+
+	public GameDialog generate(Stage stage) { // generates a chain of dialogs
 		StringTokenizer dialogTokens = new StringTokenizer(dialogChainString, DIALOG_TEXT_DELIMITER);
 
 		GameDialog dialog; // Current dialog
