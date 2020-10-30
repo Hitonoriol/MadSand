@@ -1361,5 +1361,15 @@
 		"name" : "Deathwood stick",
 		"cost" : 4,
 		"weight" : 0.07
+	},
+	"137" : {
+		"name" : "Important letter",
+		"cost" : 0,
+		"weight" : 0
+	},
+	"138" : {
+		"name" : "Leather bag",
+		"cost" : 0,
+		"weight" : 0
 	}
 }

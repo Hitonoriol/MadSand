@@ -14,6 +14,7 @@ public class Globals {
 
 	private static Globals instance = new Globals();
 
+	public ArrayList<Integer> fetchQuestItems = new ArrayList<>();
 	public HashMap<String, String> values = new HashMap<>();
 	public ArrayList<String> idleNpcText = new ArrayList<>();
 	public HashMap<ProceduralQuest.Type, ArrayList<String>> proceduralQuestText = new HashMap<>();

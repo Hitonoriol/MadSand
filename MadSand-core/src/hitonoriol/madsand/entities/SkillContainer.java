@@ -116,10 +116,10 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 	// How many times to roll for drops
 	public int getItemDropRolls(Skill skill) {
 		int lvl = getLvl(skill);
-		
+
 		if (lvl < 2)
 			return 1;
-		
+
 		if (Utils.percentRoll(getSkillRollPercent(skill)))
 			return Utils.rand(1, getLvl(skill));
 
@@ -133,7 +133,10 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 
 	// Get roll percent for Skill
 	public double getSkillRollPercent(Skill skill) {
-		return magicFormula((double) getLvl(skill));
+		double additionalPercent = 0;
+		if (skill == Skill.Survival)
+			additionalPercent = 10;
+		return magicFormula((double) getLvl(skill)) + additionalPercent;
 	}
 
 	// Currently used to determine amount of "skill-damage" done to objects on interaction 

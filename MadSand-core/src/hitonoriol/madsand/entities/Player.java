@@ -375,7 +375,7 @@ public class Player extends Entity {
 				MadSand.print("Doesn't seem like " + name + " wants to talk.");
 			else {
 				if (stats.luckRoll()) {
-					quests.processQuest(quests.createNewProceduralQuest(npc.uid).id);
+					quests.startProceduralQuest(npc.uid);
 				} else {
 					new DialogChainGenerator("#" + npc.stats.name + "#" +
 							Utils.randElement(Globals.instance().idleNpcText))
@@ -871,6 +871,11 @@ public class Player extends Entity {
 			attack();
 			return;
 		}
+	}
+	
+	public void damage(int to) {
+		super.damage(to);
+		Gui.refreshOverlay();
 	}
 
 	public void changeStamina(float by) {

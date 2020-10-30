@@ -287,6 +287,10 @@ public class Stats {
 		return (roll != luck);
 	}
 
+	public boolean critRoll() {
+		return Utils.percentRoll(Math.log(Math.pow(accuracy + 0.1, 7)));
+	}
+
 	public boolean attackMissed() {
 		return (Utils.rand(0, accuracy) == accuracy);
 	}
@@ -301,6 +305,11 @@ public class Stats {
 
 		if (atk <= 0)
 			atk = 1;
+
+		if (critRoll())
+			atk += atk * 0.25;
+		else
+			atk = Utils.rand(atk / 2, atk);
 
 		return atk;
 	}

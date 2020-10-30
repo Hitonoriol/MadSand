@@ -4,6 +4,7 @@
 		"travelItem" : "130",
 		"drowningDamage" : "3"
 	},
+	"fetchQuestItems" : [137, 138],
 	"idleNpcText" : [
 			"What a nice day! Isn't it, {PLAYER}?",
 			"Hello, {PLAYER}!",
@@ -18,6 +19,14 @@
 		"Resource" : [
 				"Hello, {PLAYER}, I need you to gather some resources for me. To be more specific, I need ",
 				"Yo! Bring me "
+				],
+		"Kill" : [
+				"Please, help me! These bastards... They won't let me sleep! Kill ",
+				"Say, {PLAYER}, will you deal with one problem for me? I need you to eliminate "
+				],
+		"Fetch" : [
+				"Aaah! God, I lost something very important somewhere around here! Can you find and bring back my",
+				"What's up, {PLAYER}! Uhm... How do I say... I drank a little too much this night and lost something somewhere in this sector. Go find my "
 				]
 	}
 }

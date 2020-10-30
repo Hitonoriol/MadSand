@@ -1,12 +1,17 @@
 package hitonoriol.madsand.entities.quest;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.BiPredicate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.dialog.DialogChainGenerator;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.Player;
@@ -17,9 +22,10 @@ import hitonoriol.madsand.properties.QuestList;
 public class QuestWorker {
 
 	public int lastProceduralQuest = 0; // Decrements for each new procedural quest
-	public ArrayList<ProceduralQuest> proceduralQuests = new ArrayList<>();
 	public ArrayList<Quest> completedQuests = new ArrayList<>(); // sets of completed quests and the ones in progress
 	public ArrayList<Quest> questsInProgress = new ArrayList<>();
+	public ArrayList<ProceduralQuest> proceduralQuests = new ArrayList<>();
+	List<List<? extends Quest>> questLists;
 	private Player player;
 
 	public QuestWorker(Player player) {
@@ -33,10 +39,37 @@ public class QuestWorker {
 	@JsonIgnore
 	public void setPlayer(Player player) {
 		this.player = player;
+		questLists = Arrays.asList(proceduralQuests, questsInProgress, completedQuests);
+	}
+
+	private ProceduralQuest findQuest(List<? extends Quest> list, long val,
+			BiPredicate<ProceduralQuest, Long> criterion) {
+		for (Quest quest : list)
+			if (quest.id < 0 && criterion.test((ProceduralQuest) quest, val))
+				return (ProceduralQuest) quest;
+		return null;
+	}
+
+	private ProceduralQuest findQuest(long val, BiPredicate<ProceduralQuest, Long> criterion) {
+		ProceduralQuest quest;
+		for (List<? extends Quest> questList : questLists) {
+			Collections.sort(questList, Quest.startTimeComparator);
+			quest = findQuest(questList, val, criterion);
+			if ((quest) != null)
+				return quest;
+		}
+		return null;
 	}
 
 	public Quest questById(int id) {
-		return (id >= 0) ? QuestList.quests.get(id) : proceduralQuests.get(-(id + 1));
+		if (id >= 0)
+			return QuestList.quests.get(id);
+
+		Quest quest = findQuest(id, (ProceduralQuest squest, Long sid) -> squest.id == sid.longValue());
+
+		Utils.out("is proced: " + (quest instanceof ProceduralQuest));
+
+		return quest;
 	}
 
 	public int getPreviousQuest(int id) {
@@ -77,41 +110,42 @@ public class QuestWorker {
 		return quests;
 	}
 
-	public ArrayList<Integer> getAvailableQuests(long npcUID) {
-		ArrayList<Integer> quests = new ArrayList<>();
-
-		for (ProceduralQuest quest : proceduralQuests)
-			if (quest.npcUID == npcUID)
-				quests.add(-quest.id);
-
-		return quests;
-	}
-
 	private ProceduralQuest findProceduralQuest(long uid) {
-		for (ProceduralQuest quest : proceduralQuests)
-			if (quest.npcUID == uid)
-				return quest;
-		return null;
+		return findQuest(uid, (ProceduralQuest quest, Long suid) -> quest.npcUID == suid.longValue());
 	}
 
-	private boolean proceduralQuestExists(long uid) {
-		for (ProceduralQuest quest : proceduralQuests)
-			if (quest.npcUID == uid)
-				return true;
-		return false;
-	}
-
-	public ProceduralQuest createNewProceduralQuest(long npcUID) {
-		ProceduralQuest quest;
-		if (!proceduralQuestExists(npcUID)) {
+	private ProceduralQuest createNewProceduralQuest(long npcUID) {
+		ProceduralQuest quest = findProceduralQuest(npcUID);
+		if (quest == null) {
 			quest = new ProceduralQuest(--lastProceduralQuest, npcUID);
 			proceduralQuests.add(quest);
-		} else
+		} else {
 			quest = findProceduralQuest(npcUID);
+			if (isQuestCompleted(quest.id)) {
+				if (quest.timeSinceCreated() < ProceduralQuest.QUEST_TIMEOUT)
+					return ProceduralQuest.timeoutQuest;
+				else {
+					quest = new ProceduralQuest(--lastProceduralQuest, npcUID);
+					proceduralQuests.add(quest);
+				}
+			}
+		}
 		return quest;
 	}
 
+	public void startProceduralQuest(long uid) {
+		ProceduralQuest quest = createNewProceduralQuest(uid);
+		long waitTime = (MadSand.world.globalRealtimeTick - quest.timeSinceCreated()) * MadSand.world.realtimeTickRate;
+		if (quest.equals(ProceduralQuest.timeoutQuest))
+			new DialogChainGenerator("You want another task? Well, you'll have to wait another "
+					+ Utils.timeString(waitTime) + " for me to come up with something for you.")
+							.generate(Gui.overlay).show();
+		else
+			processQuest(quest.id);
+	}
+
 	public boolean isQuestInProgress(int id) {
+		Utils.out("inProgress " + id + ": " + questsInProgress.contains(questById(id)));
 		return questsInProgress.contains(questById(id));
 	}
 
@@ -129,6 +163,8 @@ public class QuestWorker {
 			MadSand.print("You get " + Item.queryToName(quest.giveItems));
 
 		questsInProgress.add(quest);
+		proceduralQuests.remove(quest);
+
 		quest.start(player, npcUID);
 		GameDialog.generateDialogChain(quest.startMsg, Gui.overlay).show();
 	}

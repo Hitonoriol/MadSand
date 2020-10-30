@@ -95,6 +95,9 @@ public class Utils {
 	}
 
 	public static <T> T randElement(List<T> list) {
+		if (list.size() == 1)
+			return list.get(0);
+
 		return list.get(random.nextInt(list.size()));
 	}
 

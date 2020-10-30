@@ -1,5 +1,6 @@
 package hitonoriol.madsand.entities.quest;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -7,6 +8,10 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.*;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
@@ -17,6 +22,8 @@ import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.NpcProp;
 
+@JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
+@JsonSubTypes({ @Type(ProceduralQuest.class) })
 public class Quest {
 	public int id;
 	public String name;
@@ -36,6 +43,8 @@ public class Quest {
 	public String rewardItems = Item.EMPTY_ITEM; // Item string -- Items to give on quest completion
 	public String removeOnCompletion = Item.EMPTY_ITEM; // Item string -- Items to remove on quest completion
 
+	public long startTime;
+
 	public boolean repeatable = false;
 	public boolean deleteRequiredItems = true; // Whether to delete items from reqItems list on quest completion or not
 	public boolean isComplete = false;
@@ -45,6 +54,14 @@ public class Quest {
 	public HashMap<Integer, Integer> itemObjective; // {item id, quantity} pairs required to complete quest
 	public HashMap<Integer, Integer> killObjective; // {Npc id, number of kills} pairs required to complete quest
 	public HashMap<Integer, Integer> kills; //	{Npc id, kills} state of player's kill counter on quest start 
+
+	public static Comparator<Quest> startTimeComparator = new Comparator<Quest>() {
+
+		@Override
+		public int compare(Quest o1, Quest o2) {
+			return Long.compare(o1.startTime, o2.startTime);
+		}
+	};
 
 	public Quest(int id) {
 		this.id = id;
@@ -141,6 +158,8 @@ public class Quest {
 	private boolean initObjective(String query, HashMap<Integer, Integer> objective) {
 		if (query == null)
 			return false;
+		if (!query.contains(Item.ITEM_DELIM))
+			return false;
 		if (!query.contains(Item.BLOCK_DELIM))
 			reqItems += Item.BLOCK_DELIM;
 		String blocks[] = query.split(Item.BLOCK_DELIM);
@@ -167,6 +186,7 @@ public class Quest {
 		this.player = player;
 		this.npcUID = npcUID;
 		this.npcWorldPos = new Pair(MadSand.world.getCurWPos());
+		this.startTime = MadSand.world.globalRealtimeTick;
 		isComplete = false;
 		itemObjective = new HashMap<>();
 		killObjective = new HashMap<>();
