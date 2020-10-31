@@ -3,7 +3,9 @@ package hitonoriol.madsand.entities;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -238,6 +240,24 @@ public class Player extends Entity {
 		recipeList.add(recipe);
 	}
 
+	private boolean unlockRandomRecipe(HashMap<Integer, ArrayList<Integer>> reqMap, ArrayList<Integer> recipes) {
+		Set<Integer> availableRecipes;
+
+		if (recipes == craftRecipes)
+			availableRecipes = new HashSet<>(craftRecipes);
+		else
+			availableRecipes = new HashSet<>(buildRecipes);
+
+		List<Integer> notUnlocked = new ArrayList<>(reqMap.keySet());
+		notUnlocked.removeAll(availableRecipes);
+
+		if (notUnlocked.isEmpty())
+			return false;
+
+		unlockRecipe(recipes, Utils.randElement(notUnlocked));
+		return true;
+	}
+
 	private String getRecipeProgress(ArrayList<Integer> recipeList) {
 		int unlocked = recipeList.size();
 		int totalRecipes = 0;
@@ -248,6 +268,11 @@ public class Player extends Entity {
 		return unlocked + "/" + totalRecipes + " ("
 				+ Utils.round(100 * ((float) unlocked / (float) totalRecipes)) + "%)";
 
+	}
+
+	public void unlockRandomBuildRecipe() {
+		if (!unlockRandomRecipe(ItemProp.buildReq, buildRecipes))
+			MadSand.notice("No recipes were unlocked. You already know everything!");
 	}
 
 	public String craftRecipeProgress() {
@@ -872,7 +897,7 @@ public class Player extends Entity {
 			return;
 		}
 	}
-	
+
 	public void damage(int to) {
 		super.damage(to);
 		Gui.refreshOverlay();

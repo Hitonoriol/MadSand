@@ -67,8 +67,6 @@ public class QuestWorker {
 
 		Quest quest = findQuest(id, (ProceduralQuest squest, Long sid) -> squest.id == sid.longValue());
 
-		Utils.out("is proced: " + (quest instanceof ProceduralQuest));
-
 		return quest;
 	}
 

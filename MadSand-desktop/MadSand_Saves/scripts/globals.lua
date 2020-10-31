@@ -12,3 +12,9 @@ show_tutorial = function(name, condition)
 		player:registerLuaAction(name);
 	end
 end
+
+obj_delete_looked_at = function()
+	local coords = player:lookingAt();
+	local dx = coords.x; local dy = coords.y;
+	world:getCurLoc():delObject(dx, dy);
+end

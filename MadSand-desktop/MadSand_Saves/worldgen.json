@@ -3,46 +3,26 @@
 		"biomeName" : "Plains",
 		"overworld" : {
 			"defaultTile" : 0,
-			"tiles" : [ {
-				"rollCount" : 350,
-				"idList" : [ 1, 2 ]
-			}, {
-				"rollCount" : 2,
-				"idList" : [ 45 ]
-			} ],
+			"tiles" : [
+				{ "rollCount" : 350, "idList" : [ 1, 2 ] },
+				{ "rollCount" : 2, "idList" : [ 45 ] }
+			],
 			
-			"objects" : [ {
-				"rollCount" : 100,
-				"idList" : [ 2, 30, 35, 36 ]
-			}, {
-				"rollCount" : 50,
-				"idList" : [ 1, 27, 28 ]
-			}, {
-				"rollCount" : 50,
-				"idList" : [ 37, 4 ]
-			}, {
-				"rollCount" : 40,
-				"idList" : [ 42, 41 ]
-			}, {
-				"rollCount" : 1,
-				"idList" : [ 82 ]
-			} ],
+			"objects" : [
+				{ "rollCount" : 100, "idList" : [ 2, 30, 35, 36 ] },
+				{ "rollCount" : 50, "idList" : [ 1, 27, 28 ] },
+				{ "rollCount" : 50, "idList" : [ 37, 4 ] },
+				{ "rollCount" : 40, "idList" : [ 42, 41 ] },
+				{ "rollCount" : 1, "idList" : [ 82 ] },
+				{ "rollCount" : 1, "idList" : [ 93 ] }
+			],
 			
 			"regenerateObjects": [
-				{"rollCount": 10,
-				"idList": [4, 37]},
-				
-				{"rollCount": 5,
-				"idList": [2, 35, 36]},
-				
-				{"rollCount": 4,
-				"idList": [1, 27, 28]},
-				
-				{"rollCount": 1,
-				"idList": [21, 58, 54, 62]},
-				
-				{"rollCount": 3,
-				"idList": [41, 42]}
+				{ "rollCount": 10, "idList": [4, 37] },
+				{ "rollCount": 5, "idList": [2, 35, 36] },
+				{ "rollCount": 4, "idList": [1, 27, 28] },
+				{ "rollCount": 1, "idList": [21, 58, 54, 62] },
+				{ "rollCount": 3, "idList": [41, 42] }
 			],
 			"chanceToRegenerate": 40,
 			"initialMobSpawn" : 5,
@@ -110,24 +90,18 @@
 		"biomeName" : "Desert",
 		"overworld" : {
 			"defaultTile" : 40,
-			"tiles" : [ {
-				"rollCount" : 400,
-				"idList" : [ 41, 43, 44 ]
-			}, {
-				"rollCount" : 1,
-				"idList" : [ 17 ]
-			} ],
-			"objects" : [ {
-				"rollCount" : 160,
-				"idList" : [ 10, 24 ]
-			}, {
-				"rollCount" : 30,
-				"idList" : [ 31 ]
-			} ],
+			"tiles" : [
+				{ "rollCount" : 400, "idList" : [ 41, 43, 44 ] },
+				{ "rollCount" : 1, "idList" : [ 17 ] }
+			],
+			"objects" : [
+				{ "rollCount" : 160, "idList" : [ 10, 24 ] },
+				{ "rollCount" : 30, "idList" : [ 31 ] },
+				{ "rollCount" : 1, "idList" : [ 93 ] }
+			],
 			
 			"regenerateObjects": [
-				{"rollCount": 20,
-				"idList": [10, 24]}
+				{"rollCount": 20, "idList": [10, 24]}
 			],
 			"chanceToRegenerate": 35,
 			"initialFriendlyChance" : 40,
@@ -159,14 +133,13 @@
 		"biomeName" : "Cold plains",
 		"overworld" : {
 			"defaultTile" : 20,
-			"tiles" : [ {
-				"rollCount" : 400,
-				"idList" : [ 21 ]
-			} ],
-			"objects" : [ {
-				"rollCount" : 300,
-				"idList" : [ 32, 38, 33 ]
-			} ],
+			"tiles" : [
+				{ "rollCount" : 400, "idList" : [ 21 ] }
+			],
+			"objects" : [
+				{ "rollCount" : 300, "idList" : [ 32, 38, 33 ] },
+				{ "rollCount" : 1, "idList" : [ 93 ] }
+			],
 			"initialMobSpawn" : 15,
 			"initialFriendlyChance" : 80,
 			"hostileMobs": {"rollCount": 6, "idList": [6, 32, 29]},
@@ -196,17 +169,14 @@
 		"biomeName" : "Dead lands",
 		"overworld" : {
 			"defaultTile" : 24,
-			"tiles" : [ {
-				"rollCount" : 400,
-				"idList" : [ 10, 11 ]
-			} ],
-			"objects" : [ {
-				"rollCount" : 150,
-				"idList" : [ 34, 33 ]
-			}, {
-				"rollCount" : 100,
-				"idList" : [ 39, 40 ]
-			} ],
+			"tiles" : [
+				{ "rollCount" : 400, "idList" : [ 10, 11 ] }
+			],
+			"objects" : [
+				{ "rollCount" : 150, "idList" : [ 34, 33 ] },
+				{ "rollCount" : 100, "idList" : [ 39, 40 ] },
+				{ "rollCount" : 1, "idList" : [ 93 ] }
+			],
 			"initialMobSpawn" : 15,
 			"initialFriendlyChance" : 65,
 			"hostileMobs": {"rollCount": 5, "idList": [20, 27, 26, 29, 2, 6]},

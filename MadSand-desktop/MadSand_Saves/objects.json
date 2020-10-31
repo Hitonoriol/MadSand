@@ -1240,9 +1240,9 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : null,
-		"onInteract" : "-1",
+		"onInteract" : "player:unlockRandomBuildRecipe(); obj_delete_looked_at();",
 		"skill" : "None",
-		"name" : "Wooden crate"
+		"name" : "Recipe crate"
 	},
 	"94" : {
 		"hp" : 15,
