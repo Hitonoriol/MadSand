@@ -13,7 +13,6 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Mouse;
-import hitonoriol.madsand.containers.Tuple;
 import hitonoriol.madsand.world.World;
 
 public class GameDialog extends Dialog {
@@ -31,8 +30,7 @@ public class GameDialog extends Dialog {
 	protected Label textLbl;
 	private Stage stage;
 
-	@SafeVarargs
-	public GameDialog(String title, String text, Stage stage, Tuple<String, GameDialog>... replies) {
+	public GameDialog(String title, String text, Stage stage) {
 		super(title, Gui.skin);
 		Table titleTbl = super.getTitleTable();
 		Label titleLbl = super.getTitleLabel();
@@ -46,10 +44,6 @@ public class GameDialog extends Dialog {
 		textLbl.setWrap(true);
 		add(textLbl).width(WIDTH).height(HEIGHT).pad(PADDING).padTop(TEXT_YPADDING).row();
 		this.stage = stage;
-		if (replies.length > 0)
-			for (Tuple<String, GameDialog> reply : replies) {
-				chainReply(reply.l, reply.r);
-			}
 	}
 
 	public GameDialog(String text, Stage stage) {
@@ -73,8 +67,9 @@ public class GameDialog extends Dialog {
 		textLbl.setText(replaceDialogConstants(text));
 	}
 
-	public void setTitle(String text) {
+	public GameDialog setTitle(String text) {
 		super.getTitleLabel().setText(text);
+		return this;
 	}
 
 	@Override
@@ -120,7 +115,7 @@ public class GameDialog extends Dialog {
 	}
 
 	public void addButton(TextButton button) {
-		add(button).width(BTN_WIDTH).height(BTN_HEIGHT).pad(PADDING).row();
+		add(button).width(BTN_WIDTH).height(BTN_HEIGHT).padBottom(PADDING / 2).row();
 	}
 
 	public void show() {

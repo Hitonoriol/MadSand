@@ -134,15 +134,20 @@ public class Npc extends Entity {
 			return;
 
 		inventory.setMaxWeight(Integer.MAX_VALUE);
-
-		int tier = NpcProp.tradeLists.rollTier();
-		int currencyId = Globals.getInt(Globals.CURRENCY_FIELD);
-		int maxCoins = BASE_TRADER_COINS + tier * TIER_COIN_MULTIPLIER;
-		int quantity = Utils.rand(BASE_TRADER_COINS / 2, maxCoins);
-
-		inventory.putItem(NpcProp.tradeLists.roll(tradeCategory, tier));
-		inventory.putItem(new Item(currencyId, quantity));
+		stats.skills.setLvl(NpcProp.tradeLists.rollTier());
+		inventory.putItem(NpcProp.tradeLists.roll(tradeCategory, stats.skills.getLvl()));
+		addCurrency();
 		canTrade = true;
+	}
+	
+	public int rollTraderCurrency() {
+		int maxCoins = BASE_TRADER_COINS + stats.skills.getLvl() * TIER_COIN_MULTIPLIER;
+		return Utils.rand(BASE_TRADER_COINS / 2, maxCoins);
+	}
+	
+	private void addCurrency() {
+		int currencyId = Globals.getInt(Globals.CURRENCY_FIELD);
+		inventory.putItem(new Item(currencyId, rollTraderCurrency()));
 	}
 
 	@Override

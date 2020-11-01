@@ -9,7 +9,9 @@ import java.util.function.BiPredicate;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
 import hitonoriol.madsand.dialog.GameDialog;
@@ -121,7 +123,7 @@ public class QuestWorker {
 			quest = findProceduralQuest(npcUID);
 			if (isQuestCompleted(quest.id)) {
 				if (quest.timeSinceCreated() < ProceduralQuest.QUEST_TIMEOUT)
-					return ProceduralQuest.timeoutQuest;
+					return quest;
 				else {
 					quest = new ProceduralQuest(--lastProceduralQuest, npcUID);
 					proceduralQuests.add(quest);
@@ -131,15 +133,22 @@ public class QuestWorker {
 		return quest;
 	}
 
-	public void startProceduralQuest(long uid) {
+	public ProceduralQuest startProceduralQuest(long uid) {
 		ProceduralQuest quest = createNewProceduralQuest(uid);
-		long waitTime = (MadSand.world.globalRealtimeTick - quest.timeSinceCreated()) * MadSand.world.realtimeTickRate;
-		if (quest.equals(ProceduralQuest.timeoutQuest))
-			new DialogChainGenerator("You want another task? Well, you'll have to wait another "
+		long waitTime = (ProceduralQuest.QUEST_TIMEOUT - quest.timeSinceCreated()) * MadSand.world.realtimeTickRate;
+
+		if (waitTime > 0) {
+			new DialogChainGenerator("You want another task?" + Resources.LINEBREAK +
+					"Well, you'll have to wait another "
 					+ Utils.timeString(waitTime) + " for me to come up with something for you.")
-							.generate(Gui.overlay).show();
-		else
+							.generate(Gui.overlay)
+							.setTitle(quest.getNpc().stats.name)
+							.show();
+			quest = ProceduralQuest.timeoutQuest;
+		} else
 			processQuest(quest.id);
+
+		return quest;
 	}
 
 	public boolean isQuestInProgress(int id) {
@@ -172,6 +181,9 @@ public class QuestWorker {
 
 		if (quest.deleteRequiredItems)
 			player.inventory.delItem(quest.reqItems);
+
+		if (!quest.execOnCompletion.equals(""))
+			LuaUtils.execute(quest.execOnCompletion);
 
 		player.inventory.delItem(quest.removeOnCompletion);
 		player.inventory.putItem(quest.rewardItems);

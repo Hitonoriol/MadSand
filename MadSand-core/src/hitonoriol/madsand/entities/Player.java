@@ -25,6 +25,7 @@ import hitonoriol.madsand.entities.inventory.trade.TradeInventoryUI;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.enums.*;
 import hitonoriol.madsand.gui.dialogs.ProductionStationUI;
+import hitonoriol.madsand.gui.dialogs.TraderDialog;
 import hitonoriol.madsand.gui.widgets.ResourceProgressBar;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
@@ -388,7 +389,7 @@ public class Player extends Entity {
 		switch (npc.type) {
 
 		case Trader:
-			tradeWithNpc(npc);
+			new TraderDialog(this, npc).show();
 			break;
 
 		case FarmAnimal:

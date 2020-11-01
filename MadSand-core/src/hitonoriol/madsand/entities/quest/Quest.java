@@ -42,6 +42,7 @@ public class Quest {
 	public String giveItems = Item.EMPTY_ITEM; // Item string -- Items to give after the quest start
 	public String rewardItems = Item.EMPTY_ITEM; // Item string -- Items to give on quest completion
 	public String removeOnCompletion = Item.EMPTY_ITEM; // Item string -- Items to remove on quest completion
+	public String execOnCompletion = ""; // Lua script to be executed on quest completion
 
 	public long startTime;
 

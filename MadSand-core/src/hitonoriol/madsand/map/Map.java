@@ -442,12 +442,14 @@ public class Map {
 			return false;
 	}
 
-	private void randPlace(MapAction action, int id) {
+	private Pair randPlace(MapAction action, int id) {
 		coords = Pair.nullPair;
 
 		do
 			coords.random(xsz, ysz);
 		while (!action.changeMap(coords.x, coords.y, id));
+		
+		return coords;
 
 	}
 
@@ -463,8 +465,8 @@ public class Map {
 		randPlace(tileAction, id);
 	}
 
-	public void randPlaceLoot(int id) {
-		randPlace(lootAction, id);
+	public Pair randPlaceLoot(int id) {
+		return randPlace(lootAction, id);
 	}
 
 	public MapObject getObject(int x, int y, Direction dir) {

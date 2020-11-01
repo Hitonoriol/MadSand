@@ -84,7 +84,7 @@ public class TradeListContainer extends HashMap<TradeCategory, ArrayList<TradeIt
 		double baseChance;
 		for (int i = 0; i <= MAX_TIER; ++i) {
 			baseChance = (1 / (i + 1));
-			if (Utils.percentRoll(baseChance * 0.9))
+			if (Utils.percentRoll(baseChance * 0.85))
 				return i;
 		}
 		return 0;

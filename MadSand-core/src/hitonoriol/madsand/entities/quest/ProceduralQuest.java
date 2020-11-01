@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
 import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.inventory.Item;
@@ -36,14 +37,16 @@ public class ProceduralQuest extends Quest {
 	private final int MAX_RESOURCE_REQS = 3;
 	private final int MAX_ITEM_Q = 10;
 
-	public static ProceduralQuest timeoutQuest = new ProceduralQuest(666, 666);
+	public static ProceduralQuest timeoutQuest = new ProceduralQuest();
 
 	public Type type;
 
 	public ProceduralQuest(int id, long npcUID) {
 		super(id);
 		super.npcUID = npcUID;
-		generate();
+
+		if (id != 0)
+			generate();
 	}
 
 	public ProceduralQuest() {
@@ -165,9 +168,9 @@ public class ProceduralQuest extends Quest {
 		List<Integer> fetchItem = new ArrayList<>();
 		fetchItem.add(Utils.randElement(Globals.instance().fetchQuestItems));
 		HashMap<Property, String> quest = randomQuest(fetchItem, 1, 1, (int id) -> ItemProp.getItemName(id));
-		MadSand.world.getCurLoc().randPlaceLoot(fetchItem.get(0));
+		Pair coords = MadSand.world.getCurLoc().randPlaceLoot(fetchItem.get(0));
 		super.reqItems += quest.get(Property.RequirementString);
-		super.startMsg += quest.get(Property.StartMessage);
+		super.startMsg += quest.get(Property.StartMessage) + ". I think it's somewhere near (" + coords + ").";
 	}
 
 	private void randomKillQuest() {
