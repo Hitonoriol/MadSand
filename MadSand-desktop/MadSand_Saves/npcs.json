@@ -14,7 +14,7 @@
 		"friendly" : true
 	},
 	"1" : {
-		"name" : "Trader",
+		"name" : "{RANDOM_NAME_M} the Trader",
 		"hp" : 30,
 		"strength" : 1,
 		"accuracy" : 2,
@@ -76,7 +76,7 @@
 		"friendly" : true
 	},
 	"5" : {
-		"name" : "Richard",
+		"name" : "{RANDOM_NAME_M} the Loner",
 		"hp" : 300,
 		"strength" : 11,
 		"accuracy" : 50,
@@ -123,7 +123,7 @@
 		"friendly" : true
 	},
 	"8" : {
-		"name" : "Shopkeeper",
+		"name" : "{RANDOM_NAME_F} the Shopkeeper",
 		"hp" : 100,
 		"tradeCategory": "Random",
 		"strength" : 11,

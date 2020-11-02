@@ -14,6 +14,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.NpcState;
@@ -91,7 +92,7 @@ public class Npc extends Entity {
 		stats.dexterity = properties.dexterity;
 		stats.calcStats();
 
-		stats.name = properties.name;
+		stats.name = GameTextSubstitutor.replace(properties.name);
 		stats.hp = properties.hp;
 		stats.mhp = stats.hp;
 		stats.strength = properties.strength;
@@ -139,12 +140,12 @@ public class Npc extends Entity {
 		addCurrency();
 		canTrade = true;
 	}
-	
+
 	public int rollTraderCurrency() {
 		int maxCoins = BASE_TRADER_COINS + stats.skills.getLvl() * TIER_COIN_MULTIPLIER;
 		return Utils.rand(BASE_TRADER_COINS / 2, maxCoins);
 	}
-	
+
 	private void addCurrency() {
 		int currencyId = Globals.getInt(Globals.CURRENCY_FIELD);
 		inventory.putItem(new Item(currencyId, rollTraderCurrency()));

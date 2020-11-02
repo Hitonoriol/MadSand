@@ -173,7 +173,10 @@ public class QuestWorker {
 		proceduralQuests.remove(quest);
 
 		quest.start(player, npcUID);
-		GameDialog.generateDialogChain(quest.startMsg, Gui.overlay).show();
+		new DialogChainGenerator(quest.startMsg)
+				.setAllTitles(quest.getNpc().stats.name)
+				.generate(Gui.overlay)
+				.show();
 	}
 
 	private void completeQuest(Quest quest) {
@@ -195,7 +198,10 @@ public class QuestWorker {
 
 		questsInProgress.remove(quest);
 		Gui.refreshOverlay();
-		GameDialog.generateDialogChain(quest.endMsg, Gui.overlay).show();
+		new DialogChainGenerator(quest.endMsg)
+				.setAllTitles(quest.getNpc().stats.name)
+				.generate(Gui.overlay)
+				.show();
 	}
 
 	public void processQuest(int id, long npcUID) {

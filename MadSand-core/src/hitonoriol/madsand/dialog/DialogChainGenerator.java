@@ -15,7 +15,6 @@ import hitonoriol.madsand.Utils;
 
 public class DialogChainGenerator {
 	public static final String DEFAULT_BTN_TEXT = "[Proceed]";
-	public static final String DEFAULT_TITLE_TEXT = "";
 
 	public static final String DIALOG_TEXT_DELIMITER = "=>";
 
@@ -30,6 +29,7 @@ public class DialogChainGenerator {
 	public static Pattern buttonPattern = Pattern.compile(DIALOG_BUTTON_REGEX);
 
 	private String dialogChainString;
+	private String defaultTitle;
 
 	/*
 	 * Chain dialog generator Syntax:
@@ -50,8 +50,6 @@ public class DialogChainGenerator {
 		String buttonString;
 
 		String title = getFirstMatch(titlePattern, dialogBody);
-		if (title.equals(""))
-			title = DEFAULT_TITLE_TEXT;
 
 		String buttonTokens[];
 		TextButton scriptButton;
@@ -92,6 +90,13 @@ public class DialogChainGenerator {
 			}
 		}
 
+		if (title == null) {
+			if (defaultTitle != null)
+				title = defaultTitle;
+			else
+				title = "";
+		}
+
 		dialog.setTitle(title);
 		dialog.setText(unescapeChars(removeDialogRegex(dialogBody)));
 
@@ -103,7 +108,7 @@ public class DialogChainGenerator {
 		if (matcher.find())
 			return matcher.group(1);
 		else
-			return "";
+			return null;
 	}
 
 	private String removeDialogRegex(String text) {
@@ -129,6 +134,11 @@ public class DialogChainGenerator {
 		string = string.replace(LBRACKET, "[");
 		string = string.replace(RBRACKET, "]");
 		return string;
+	}
+
+	public DialogChainGenerator setAllTitles(String title) {
+		defaultTitle = title;
+		return this;
 	}
 
 	public GameDialog generate(Stage stage) { // generates a chain of dialogs

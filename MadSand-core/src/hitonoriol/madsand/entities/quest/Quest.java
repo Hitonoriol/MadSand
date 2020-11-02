@@ -17,6 +17,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.properties.ItemProp;
@@ -181,6 +182,11 @@ public class Quest {
 	@JsonIgnore
 	public String getObjectiveString() {
 		return getItemObjectiveString() + getKillObjectiveString();
+	}
+	
+	@JsonIgnore
+	public Npc getNpc() { // Returns nullNpc if quest npc does not exist or is not in the current location
+		return MadSand.world.getCurLoc().getNpc(npcUID);
 	}
 
 	public void start(Player player, long npcUID) {

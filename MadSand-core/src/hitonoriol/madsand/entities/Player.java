@@ -19,6 +19,7 @@ import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
+import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.inventory.trade.TradeInventoryUI;
@@ -70,6 +71,12 @@ public class Player extends Entity {
 
 	public Player() {
 		this("");
+	}
+
+	@JsonIgnore
+	public void setName(String name) {
+		super.setName(name);
+		GameTextSubstitutor.add(GameTextSubstitutor.PLAYER_NAME, name);
 	}
 
 	public void commitAction() {

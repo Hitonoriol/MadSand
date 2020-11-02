@@ -13,7 +13,6 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Mouse;
-import hitonoriol.madsand.world.World;
 
 public class GameDialog extends Dialog {
 	public static final float BTN_WIDTH = Gdx.graphics.getWidth() / 4;
@@ -64,7 +63,7 @@ public class GameDialog extends Dialog {
 	}
 
 	public void setText(String text) {
-		textLbl.setText(replaceDialogConstants(text));
+		textLbl.setText(GameTextSubstitutor.replace(text));
 	}
 
 	public GameDialog setTitle(String text) {
@@ -120,15 +119,6 @@ public class GameDialog extends Dialog {
 
 	public void show() {
 		show(stage);
-	}
-
-	public static final String DIALOG_PLAYER_NAME_CONSTANT = "{PLAYER}";
-	public static final String DIALOG_LINEBREAK_CONSTANT = "{br}";
-
-	public String replaceDialogConstants(String text) {
-		text = text.replace(DIALOG_PLAYER_NAME_CONSTANT, World.player.stats.name);
-		text = text.replace(DIALOG_LINEBREAK_CONSTANT, "\n");
-		return text;
 	}
 
 	public static GameDialog generateDialogChain(String text, Stage stage) {

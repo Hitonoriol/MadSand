@@ -6,14 +6,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
-import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Faction;
 import hitonoriol.madsand.enums.TradeCategory;
@@ -196,11 +193,6 @@ public class ProceduralQuest extends Quest {
 
 	private String getStartMsg() {
 		return Utils.randElement(Globals.instance().proceduralQuestText.get(type));
-	}
-
-	@JsonIgnore
-	public Npc getNpc() { // Returns nullNpc if quest npc does not exist or is not in the current location
-		return MadSand.world.getCurLoc().getNpc(npcUID);
 	}
 
 	private interface NameGetter {

@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Timer;
 import hitonoriol.madsand.containers.AnimationContainer;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.PairFloat;
+import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.Player;
@@ -111,6 +112,7 @@ public class MadSand extends Game {
 		setErrFile();
 		Utils.init();
 		Gui.init();
+		GameTextSubstitutor.init();
 
 		initNewGame();
 		world.generate();
