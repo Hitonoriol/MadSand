@@ -15,9 +15,11 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.dialog.GameDialog;
+import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
+import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.world.World;
 
 public class QuestJournal extends Dialog {
@@ -33,8 +35,9 @@ public class QuestJournal extends Dialog {
 	static float PAD_BOTTOM = 5;
 
 	static float STATUS_LABEL_WIDTH = 125;
-	static float NAME_LABEL_WIDTH = 200;
-	static float OBJECTIVE_LABEL_WIDTH = TABLE_WIDTH - (STATUS_LABEL_WIDTH + NAME_LABEL_WIDTH);
+	static float NAME_LABEL_WIDTH = 170;
+	static float OBJECTIVE_LABEL_WIDTH = 200;
+	static float NPC_INFO_LABEL_WIDTH = 200;
 	static float HEADER_SCALE = 1.12f;
 
 	Skin skin;
@@ -52,7 +55,7 @@ public class QuestJournal extends Dialog {
 	AutoFocusScrollPane questScroll;
 	Table questTable;
 	TextButton closeButton;
-	Label statusLabel, nameLabel, reqLabel;
+	Label statusLabel, nameLabel, reqLabel, npcLocationLabel;
 	Label emptyJournalLabel;
 
 	public QuestJournal(String title, Skin skin) {
@@ -71,14 +74,16 @@ public class QuestJournal extends Dialog {
 		statusLabel = new Label(statusString, skin);
 		nameLabel = new Label(nameString, skin);
 		reqLabel = new Label(reqString, skin);
+		npcLocationLabel = new Label("Turn in to", skin);
 		emptyJournalLabel = new Label(emptyJournalString, skin);
 
 		statusLabel.setFontScale(HEADER_SCALE);
 		nameLabel.setFontScale(HEADER_SCALE);
 		reqLabel.setFontScale(HEADER_SCALE);
+		npcLocationLabel.setFontScale(HEADER_SCALE);
 
 		questTable = new Table();
-		questTable.setSize(TABLE_WIDTH, TABLE_HEIGHT);
+		questTable.setHeight(TABLE_HEIGHT);
 		questTable.setBackground(Gui.darkBackgroundSizeable);
 		questTable.align(Align.top);
 
@@ -87,7 +92,7 @@ public class QuestJournal extends Dialog {
 		questScroll.setScrollingDisabled(true, false);
 
 		closeButton = new TextButton(closeText, skin);
-		super.add(questScroll).size(TABLE_WIDTH, TABLE_HEIGHT).padTop(SCROLL_YPADDING).row();
+		super.add(questScroll).minSize(TABLE_WIDTH, TABLE_HEIGHT).padTop(SCROLL_YPADDING).row();
 		super.add(closeButton).size(GameDialog.BTN_WIDTH, GameDialog.BTN_HEIGHT).padBottom(CLOSE_BUTTON_YPADDING).row();
 
 		closeButton.addListener(new ChangeListener() {
@@ -104,9 +109,8 @@ public class QuestJournal extends Dialog {
 		questTable.setSkin(skin);
 		questTable.add(statusLabel).size(STATUS_LABEL_WIDTH, ENTRY_HEIGHT).padBottom(HEADER_YPADDING);
 		questTable.add(nameLabel).size(NAME_LABEL_WIDTH, ENTRY_HEIGHT).padBottom(HEADER_YPADDING);
-		questTable.add(reqLabel).size(OBJECTIVE_LABEL_WIDTH, ENTRY_HEIGHT).padBottom(HEADER_YPADDING).row();
-
-		Label questName, questObjective;
+		questTable.add(reqLabel).size(OBJECTIVE_LABEL_WIDTH, ENTRY_HEIGHT).padBottom(HEADER_YPADDING);
+		questTable.add(npcLocationLabel).size(NPC_INFO_LABEL_WIDTH, ENTRY_HEIGHT).padBottom(HEADER_YPADDING).row();
 
 		List<Quest> allQuests = Stream.of(quests.questsInProgress, quests.completedQuests)
 				.flatMap(x -> x.stream())
@@ -117,6 +121,8 @@ public class QuestJournal extends Dialog {
 			return;
 		}
 
+		Label questName, questObjective, npcInfo;
+		Npc npc;
 		for (Quest quest : allQuests) {
 			quest.setPlayer(World.player);
 			questName = new Label(quest.name, skin);
@@ -124,14 +130,24 @@ public class QuestJournal extends Dialog {
 			questName.setAlignment(Align.topLeft);
 			questObjective = new Label(quest.getObjectiveString(), skin);
 			questObjective.setWrap(true);
+			npcInfo = new Label("", skin);
+			npcInfo.setWrap(true);
+
+			npc = quest.getNpc();
+			if (npc == Map.nullNpc)
+				npcInfo.setText("NPC at sector (" + quest.npcWorldPos + ")");
+			else
+				npcInfo.setText(npc.stats.name + " at cell (" + npc.x + ", " + npc.y + ") of current sector");
+
 			if (quest.isComplete)
 				questObjective.setText("[LIME]" + questObjective.getText());
 
 			questTable.add(getStatusLabel(quest.id)).size(STATUS_LABEL_WIDTH, ENTRY_HEIGHT).align(Align.topLeft)
 					.padBottom(PAD_BOTTOM);
 			questTable.add(questName).width(NAME_LABEL_WIDTH).align(Align.topLeft).padBottom(PAD_BOTTOM);
-			questTable.add(questObjective).width(OBJECTIVE_LABEL_WIDTH).padBottom(PAD_BOTTOM).align(Align.topLeft)
-					.row();
+			questTable.add(questObjective).width(OBJECTIVE_LABEL_WIDTH).padBottom(PAD_BOTTOM).align(Align.topLeft);
+			questTable.add(npcInfo).width(NPC_INFO_LABEL_WIDTH).padBottom(PAD_BOTTOM).align(Align.topLeft);
+			questTable.row();
 		}
 
 	}
