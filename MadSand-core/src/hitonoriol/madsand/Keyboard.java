@@ -33,12 +33,10 @@ public class Keyboard {
 	}
 	
 	public static void stopInput() {
-		Utils.out("stop");
 		ignoreInput = true;
 	}
 
 	public static void resumeInput() {
-		Utils.out("resume");
 		ignoreInput = false;
 	}
 	

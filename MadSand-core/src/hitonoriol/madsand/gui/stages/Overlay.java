@@ -1,5 +1,10 @@
 package hitonoriol.madsand.gui.stages;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
@@ -21,6 +26,7 @@ import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Stats;
 import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.enums.EquipSlot;
 import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.enums.Skill;
@@ -35,6 +41,7 @@ import hitonoriol.madsand.gui.widgets.GameContextMenu;
 import hitonoriol.madsand.gui.widgets.GameLog;
 import hitonoriol.madsand.gui.widgets.GameTooltip;
 import hitonoriol.madsand.gui.widgets.OverlayBottomMenu;
+import hitonoriol.madsand.gui.widgets.QuestArrow;
 import hitonoriol.madsand.gui.widgets.StatProgressBar;
 import hitonoriol.madsand.world.World;
 
@@ -63,6 +70,8 @@ public class Overlay extends Stage {
 	public StatProgressBar foodBar;
 	public StatProgressBar staminaBar;
 	public StatProgressBar expBar;
+
+	List<QuestArrow> questArrows = new ArrayList<>();
 
 	Label overlayStatLabel;
 	Label timeLabel;
@@ -260,6 +269,37 @@ public class Overlay extends Stage {
 		gameTooltip.show();
 	}
 
+	private void refreshQuestArrows() {
+		Player player = World.player;
+		Iterator<QuestArrow> it = questArrows.iterator();
+		QuestArrow arrow;
+		boolean objectiveDone;
+		HashSet<Integer> hasArrow = new HashSet<>();
+		
+		while (it.hasNext()) {
+			arrow = it.next();
+			objectiveDone = arrow.quest.isComplete();
+			if (!player.quests.isQuestInProgress(arrow.quest.id) || !objectiveDone) {
+				Utils.out("removin.. not in progr");
+				arrow.remove();
+				it.remove();
+			} else if (objectiveDone){
+				hasArrow.add(arrow.quest.id);
+				arrow.update();
+				Utils.out("updatin");
+			}
+		}
+
+		for (Quest quest : player.quests.questsInProgress) {
+			if (quest.isComplete() && !hasArrow.contains(quest.id)) {
+				arrow = new QuestArrow(quest);
+				questArrows.add(arrow);
+				super.addActor(arrow);
+				arrow.update();
+			}
+		}
+	}
+
 	public void refreshOverlay() {
 		Player player = World.player;
 		Stats stats = player.stats;
@@ -274,18 +314,20 @@ public class Overlay extends Stage {
 
 		timeLabel.setText(getTimeString());
 		overlayStatLabel.setText(info);
+
+		refreshQuestArrows();
 	}
 
 	private String getTimeString() {
 		World world = MadSand.world;
 		String hour = fixTime(Utils.str(world.worldtime));
 		String minute = fixTime(Utils.str(world.getWorldTimeMinute()));
-		
+
 		String time = "Day " + world.getWorldTimeDay();
 		time += ", " + hour + ":" + minute;
 		return time;
 	}
-	
+
 	private String fixTime(String timeStr) {
 		if (timeStr.length() < 2)
 			return "0" + timeStr;

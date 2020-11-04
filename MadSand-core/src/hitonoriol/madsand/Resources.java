@@ -81,6 +81,7 @@ public class Resources {
 	static Animation<TextureRegion> lanim;
 	static Animation<TextureRegion> ranim;
 
+	public static Texture questArrow;
 	static Texture placeholder;
 	public static TextureRegionDrawable noEquip;
 
@@ -115,6 +116,7 @@ public class Resources {
 		animsheet = loadTexture("player/anim.png");
 		visitedMask = loadTexture("light/light_visited.png");
 		placeholder = loadTexture("misc/placeholder.png");
+		questArrow = loadTexture("misc/arrow.png");
 		noEquip = new TextureRegionDrawable(new TextureRegion(placeholder));
 
 		loadPlayerAnimation();

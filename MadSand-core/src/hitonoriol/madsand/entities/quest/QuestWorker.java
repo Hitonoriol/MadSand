@@ -42,6 +42,9 @@ public class QuestWorker {
 	public void setPlayer(Player player) {
 		this.player = player;
 		questLists = Arrays.asList(proceduralQuests, questsInProgress, completedQuests);
+		for (List<? extends Quest> questList : questLists)
+			for (Quest quest : questList)
+				quest.setPlayer(player);
 	}
 
 	private ProceduralQuest findQuest(List<? extends Quest> list, long val,
