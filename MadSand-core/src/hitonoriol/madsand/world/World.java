@@ -18,6 +18,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.Player;
@@ -86,6 +87,7 @@ public class World {
 
 	public void enter() {
 		realTimeRefresher.start();
+		GameTextSubstitutor.add(GameTextSubstitutor.PLAYER_NAME, player.stats.name);
 	}
 
 	private void initRealtimeRefresher() {

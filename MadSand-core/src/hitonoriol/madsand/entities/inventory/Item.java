@@ -41,7 +41,7 @@ public class Item {
 	public int satiationAmount, healAmount, staminaAmount; // for consumables
 
 	public int altObject, cost;
-	public ItemType type = ItemType.Item;
+	public ItemType type = ItemType.None;
 	public Skill skill = Skill.None;
 	public float weight = DEFAULT_WEIGHT;
 

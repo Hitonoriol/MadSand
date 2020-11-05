@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Resources;
+import hitonoriol.madsand.enums.ItemType;
 import hitonoriol.madsand.properties.TileProp;
 
 public class Tile {
@@ -16,7 +17,7 @@ public class Tile {
 
 	public int damage;
 	public String onInteract;
-	public HashMap<Integer, Vector<Integer>> altItems;
+	public HashMap<ItemType, Vector<Integer>> altItems;
 	public String name;
 
 	public boolean foreground = false;

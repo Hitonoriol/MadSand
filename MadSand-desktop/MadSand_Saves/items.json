@@ -90,7 +90,7 @@
 		"name" : "Stone sword",
 		"recipe" : "2/7:8/5",
 		"cost" : 15,
-		"type" : "Weapon",
+		"type" : "MeleeWeapon",
 		"weight" : 0.8,
 		"lvl" : 1,
 		"equipStats" : {
@@ -101,7 +101,7 @@
 		"name" : "Iron sword",
 		"recipe" : "155|23/15:8/10",
 		"cost" : 29,
-		"type" : "Weapon",
+		"type" : "MeleeWeapon",
 		"weight" : 1.0,
 		"lvl" : 2,
 		"equipStats" : {
@@ -178,7 +178,7 @@
 		"name" : "Hardened iron sword",
 		"recipe" : "155|13/1:72/10",
 		"cost" : 90,
-		"type" : "Weapon",
+		"type" : "MeleeWeapon",
 		"weight" : 1.9,
 		"lvl" : 3,
 		"equipStats" : {
@@ -670,7 +670,7 @@
 		"name" : "Spear",
 		"recipe" : "72/5:8/5",
 		"cost" : 57,
-		"type" : "Weapon",
+		"type" : "MeleeWeapon",
 		"weight" : 0.8,
 		"lvl" : 2,
 		"equipStats" : {
@@ -795,7 +795,7 @@
 	"85" : {
 		"name" : "Toy Sword",
 		"cost" : 19,
-		"type" : "Weapon",
+		"type" : "MeleeWeapon",
 		"weight" : 0.6,
 		"lvl" : 1,
 		"equipStats" : {
@@ -806,7 +806,7 @@
 		"name" : "Spiked Club",
 		"recipe" : "70/5:1/1",
 		"cost" : 20,
-		"type" : "Weapon",
+		"type" : "MeleeWeapon",
 		"weight" : 1.1,
 		"lvl" : 1,
 		"equipStats" : {
@@ -838,7 +838,7 @@
 		"name" : "Iron Flail",
 		"recipe" : "155|72/17",
 		"cost" : 125,
-		"type" : "Weapon",
+		"type" : "MeleeWeapon",
 		"weight" : 2,
 		"lvl" : 3,
 		"equipStats" : {
@@ -848,7 +848,7 @@
 	"90" : {
 		"name" : "Rapier",
 		"cost" : 150,
-		"type" : "Weapon",
+		"type" : "MeleeWeapon",
 		"weight" : 1.7,
 		"lvl" : 3,
 		"equipStats" : {
@@ -858,7 +858,7 @@
 	"91" : {
 		"name" : "Saber",
 		"cost" : 150,
-		"type" : "Weapon",
+		"type" : "MeleeWeapon",
 		"weight" : 1.9,
 		"lvl" : 3,
 		"equipStats" : {
@@ -868,7 +868,7 @@
 	"92" : {
 		"name" : "Royal Shortsword",
 		"cost" : 190,
-		"type" : "Weapon",
+		"type" : "MeleeWeapon",
 		"weight" : 2.25,
 		"lvl" : 4,
 		"equipStats" : {
@@ -878,7 +878,7 @@
 	"93" : {
 		"name" : "Waraxe",
 		"cost" : 235,
-		"type" : "Weapon",
+		"type" : "MeleeWeapon",
 		"weight" : 4,
 		"lvl" : 5,
 		"equipStats" : {

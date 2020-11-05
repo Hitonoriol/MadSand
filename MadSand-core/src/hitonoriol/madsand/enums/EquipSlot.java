@@ -36,7 +36,7 @@ public enum EquipSlot {
 		case OffhandWeapon:
 			return Offhand;
 
-		case Weapon:
+		case MeleeWeapon:
 			return MainHand;
 
 		default:

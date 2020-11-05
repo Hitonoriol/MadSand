@@ -85,8 +85,8 @@ public class CharacterInfoWindow {
 		Table skillTable = new Table();
 		skillTable.align(Align.left);
 
-		for (int i = 1; i < Skill.len(); ++i) {
-			skill = Skill.get(i);
+		for (int i = 1; i < Skill.values().length; ++i) {
+			skill = Skill.values()[i];
 
 			if (skill == Skill.Level)
 				continue;

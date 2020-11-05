@@ -19,7 +19,6 @@ import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
-import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.inventory.trade.TradeInventoryUI;
@@ -76,7 +75,6 @@ public class Player extends Entity {
 	@JsonIgnore
 	public void setName(String name) {
 		super.setName(name);
-		GameTextSubstitutor.add(GameTextSubstitutor.PLAYER_NAME, name);
 	}
 
 	public void commitAction() {
@@ -165,8 +163,8 @@ public class Player extends Entity {
 				npc.friendly = false;
 
 			super.attackAnimation(npc);
-
 			npc.damage(atk);
+			stats.skills.increaseSkill(Skill.Melee);
 		}
 
 		dead = npc.stats.dead;
@@ -546,7 +544,7 @@ public class Player extends Entity {
 				rewardCount = stats.skills.getItemReward(skill);
 				objLoot = new Item(item, rewardCount);
 				addItem(objLoot);
-				item = MapObject.getAltItem(obj.id, ItemProp.getType(stats.hand().id).get());
+				item = MapObject.getAltItem(obj.id, stats.hand().type);
 			}
 
 			increaseSkill(skill);
@@ -562,7 +560,7 @@ public class Player extends Entity {
 	}
 
 	private int getObjectResource(int objectId) {
-		return MapObject.getAltItem(objectId, ItemProp.getType(stats.hand().id).get());
+		return MapObject.getAltItem(objectId, stats.hand().type);
 	}
 
 	public void useItem() {
@@ -691,7 +689,7 @@ public class Player extends Entity {
 
 	private boolean useTileInteractItem(Item item) {
 		int ptile = MadSand.world.getTileId(x, y);
-		int altItem = MapObject.getTileAltItem(ptile, item.type.get());
+		int altItem = MapObject.getTileAltItem(ptile, item.type);
 
 		if (altItem != -1) {
 			MadSand.world.getCurLoc().delTile(x, y);

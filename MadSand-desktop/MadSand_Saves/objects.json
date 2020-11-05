@@ -6,7 +6,6 @@
 		"nocollide" : false,
 		"maskWidth" : 0,
 		"maskHeight" : 0,
-		"altItems" : null,
 		"onInteract" : "-1",
 		"skill" : "None",
 		"name" : "Nothing"
@@ -19,7 +18,7 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 2 ]
+			"None" : [ 2 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Mining",
@@ -34,8 +33,8 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 8 ],
-			"8" : [ 1 ]
+			"None" : [ 8 ],
+			"Axe" : [ 1 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Woodcutting",
@@ -61,10 +60,10 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 7, 8, 65, 66, 7 ]
+			"None" : [ 7, 8, 65, 66, 7 ]
 		},
 		"onInteract" : "-1",
-		"skill" : "Harvesting",
+		"skill" : "Gathering",
 		"name" : "Berry bush"
 	},
 	"5" : {
@@ -125,8 +124,8 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 0 ],
-			"8" : [ 1 ]
+			"None" : [ 0 ],
+			"Axe" : [ 1 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Woodcutting",
@@ -141,10 +140,10 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 68 ]
+			"None" : [ 68 ]
 		},
 		"onInteract" : "-1",
-		"skill" : "Harvesting",
+		"skill" : "Gathering",
 		"name" : "Cactus"
 	},
 	"11" : {
@@ -188,7 +187,7 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"10" : [ 25 ]
+			"Pickaxe" : [ 25 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Mining",
@@ -215,7 +214,7 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"10" : [ 32 ]
+			"Pickaxe" : [ 32 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "None",
@@ -230,8 +229,8 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 0 ],
-			"10" : [ 33 ]
+			"None" : [ 0 ],
+			"Pickaxe" : [ 33 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "None",
@@ -246,8 +245,8 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 0 ],
-			"10" : [ 34 ]
+			"None" : [ 0 ],
+			"Pickaxe" : [ 34 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "None",
@@ -298,7 +297,7 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 39, 40 ]
+			"None" : [ 39, 40 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Farming",
@@ -312,7 +311,7 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"10" : [ 23 ]
+			"Pickaxe" : [ 23 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Mining",
@@ -327,7 +326,7 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"10" : [ 24 ]
+			"Pickaxe" : [ 24 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Mining",
@@ -342,10 +341,10 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 68, 8 ]
+			"None" : [ 68, 8 ]
 		},
 		"onInteract" : "-1",
-		"skill" : "Harvesting",
+		"skill" : "Gathering",
 		"name" : "Tumbleweed"
 	},
 	"25" : {
@@ -356,8 +355,8 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 0 ],
-			"10" : [ 56 ]
+			"None" : [ 0 ],
+			"Pickaxe" : [ 56 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Mining",
@@ -385,7 +384,7 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 2 ]
+			"None" : [ 2 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Mining",
@@ -399,7 +398,7 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 2 ]
+			"None" : [ 2 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Mining",
@@ -413,7 +412,7 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 8 ]
+			"None" : [ 8 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Woodcutting",
@@ -428,8 +427,8 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 8 ],
-			"8" : [ 1 ]
+			"None" : [ 8 ],
+			"Axe" : [ 1 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Woodcutting",
@@ -444,8 +443,8 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 134 ],
-			"8" : [ 1 ]
+			"None" : [ 134 ],
+			"Axe" : [ 1 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Woodcutting",
@@ -460,8 +459,8 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 135 ],
-			"8" : [ 1 ]
+			"None" : [ 135 ],
+			"Axe" : [ 1 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Woodcutting",
@@ -475,8 +474,8 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 8 ],
-			"8" : [ 1 ]
+			"None" : [ 8 ],
+			"Axe" : [ 1 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Woodcutting",
@@ -491,8 +490,8 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 136 ],
-			"8" : [ 1 ]
+			"None" : [ 136 ],
+			"Axe" : [ 1 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Woodcutting",
@@ -507,8 +506,8 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 8 ],
-			"8" : [ 1 ]
+			"None" : [ 8 ],
+			"Axe" : [ 1 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Woodcutting",
@@ -523,8 +522,8 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 8 ],
-			"8" : [ 1 ]
+			"None" : [ 8 ],
+			"Axe" : [ 1 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Woodcutting",
@@ -538,10 +537,10 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 8, 65, 66, 68 ]
+			"None" : [ 8, 65, 66, 68 ]
 		},
 		"onInteract" : "-1",
-		"skill" : "Harvesting",
+		"skill" : "Gathering",
 		"name" : "Bush"
 	},
 	"38" : {
@@ -552,8 +551,8 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 8 ],
-			"8" : [ 1 ]
+			"None" : [ 8 ],
+			"Axe" : [ 1 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Woodcutting",
@@ -591,10 +590,10 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 44 ]
+			"None" : [ 44 ]
 		},
 		"onInteract" : "-1",
-		"skill" : "Harvesting",
+		"skill" : "Gathering",
 		"name" : "Edible mushrooms"
 	},
 	"42" : {
@@ -605,10 +604,10 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 45 ]
+			"None" : [ 45 ]
 		},
 		"onInteract" : "-1",
-		"skill" : "Harvesting",
+		"skill" : "Gathering",
 		"name" : "Amanita"
 	},
 	"43" : {
@@ -655,7 +654,7 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 46, 51 ]
+			"None" : [ 46, 51 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Farming",
@@ -705,7 +704,7 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 47, 54 ]
+			"None" : [ 47, 54 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Farming",
@@ -755,7 +754,7 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 48, 53 ]
+			"None" : [ 48, 53 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Farming",
@@ -805,7 +804,7 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 49, 54 ]
+			"None" : [ 49, 54 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Farming",
@@ -855,7 +854,7 @@
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
-			"0" : [ 50, 55 ]
+			"None" : [ 50, 55 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Farming",
@@ -1543,7 +1542,7 @@
 		"nocollide" : true,
 		"onInteract" : "-1",
 		"altItems" : {
-			"0" : [ 106, 115 ]
+			"None" : [ 106, 115 ]
 		},
 		"skill" : "Farming",
 		"name" : "Watermelon"
@@ -1578,7 +1577,7 @@
 		"nocollide" : true,
 		"onInteract" : "-1",
 		"altItems" : {
-			"0" : [ 107, 116 ]
+			"None" : [ 107, 116 ]
 		},
 		"skill" : "Farming",
 		"name" : "Melon"
@@ -1613,7 +1612,7 @@
 		"nocollide" : true,
 		"onInteract" : "-1",
 		"altItems" : {
-			"0" : [ 108, 117 ]
+			"None" : [ 108, 117 ]
 		},
 		"skill" : "Farming",
 		"name" : "Pineapple"
@@ -1648,7 +1647,7 @@
 		"nocollide" : true,
 		"onInteract" : "-1",
 		"altItems" : {
-			"0" : [ 109, 118 ]
+			"None" : [ 109, 118 ]
 		},
 		"skill" : "Farming",
 		"name" : "Peas"
@@ -1683,7 +1682,7 @@
 		"nocollide" : true,
 		"onInteract" : "-1",
 		"altItems" : {
-			"0" : [ 110, 119 ]
+			"None" : [ 110, 119 ]
 		},
 		"skill" : "Farming",
 		"name" : "Wheat"
@@ -1718,7 +1717,7 @@
 		"nocollide" : true,
 		"onInteract" : "-1",
 		"altItems" : {
-			"0" : [ 111, 120 ]
+			"None" : [ 111, 120 ]
 		},
 		"skill" : "Farming",
 		"name" : "Cocoa"
@@ -1753,7 +1752,7 @@
 		"nocollide" : true,
 		"onInteract" : "-1",
 		"altItems" : {
-			"0" : [ 112, 121 ]
+			"None" : [ 112, 121 ]
 		},
 		"skill" : "Farming",
 		"name" : "Eggplant"
@@ -1788,7 +1787,7 @@
 		"nocollide" : true,
 		"onInteract" : "-1",
 		"altItems" : {
-			"0" : [ 99, 122 ]
+			"None" : [ 99, 122 ]
 		},
 		"skill" : "Farming",
 		"name" : "Grapes"
@@ -1823,7 +1822,7 @@
 		"nocollide" : true,
 		"onInteract" : "-1",
 		"altItems" : {
-			"0" : [ 113, 123 ]
+			"None" : [ 113, 123 ]
 		},
 		"skill" : "Farming",
 		"name" : "Radish"
@@ -1858,7 +1857,7 @@
 		"nocollide" : true,
 		"onInteract" : "-1",
 		"altItems" : {
-			"0" : [ 114, 124 ]
+			"None" : [ 114, 124 ]
 		},
 		"skill" : "Farming",
 		"name" : "Strawberry"

@@ -23,8 +23,8 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 		SkillValue skillVal;
 		Tuple<Integer, Double> rs;
 		Resources.loadSkillReqs();
-		for (int i = 0; i < Skill.len(); ++i) {
-			skill = Skill.get(i);
+		for (int i = 0; i < Skill.values().length; ++i) {
+			skill = Skill.values()[i];
 			skillVal = new SkillValue();
 
 			if (reqList.containsKey(skill)) {
@@ -38,8 +38,8 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 	}
 
 	public void check() {
-		for (int i = 0; i < Skill.len(); ++i)
-			check(Skill.get(i));
+		for (Skill skill : Skill.values())
+			check(skill);
 	}
 
 	public boolean check(Skill skill, boolean verbose) {

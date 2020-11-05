@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.enums.ItemType;
 import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
@@ -34,7 +35,7 @@ public class MapObject {
 	public boolean centered = false;
 
 	public int maskWidth = 0, maskHeight = 0; // Collision mask dimensions for objects larger than 1x1 cell
-	public HashMap<Integer, Vector<Integer>> altItems;
+	public HashMap<ItemType, Vector<Integer>> altItems;
 	public String onInteract;
 	public Skill skill;
 	public String name;
@@ -98,23 +99,23 @@ public class MapObject {
 		return takeDamage(0);
 	}
 
-	private static int getAltItem(int id, int hand, HashMap<Integer, Vector<Integer>> container) {
-		HashMap<Integer, Vector<Integer>> items = container;
+	private static int getAltItem(int id, ItemType hand, HashMap<ItemType, Vector<Integer>> container) {
+		HashMap<ItemType, Vector<Integer>> items = container;
 		if (items == null)
 			return -1;
 		if (!items.containsKey(hand))
-			hand = 0;
+			hand = ItemType.None;
 		if (!items.containsKey(hand) || items.get(hand) == null)
 			return -1;
 		Vector<Integer> aitems = items.get(hand);
 		return aitems.get(Utils.random.nextInt(aitems.size()));
 	}
 
-	public static int getAltItem(int id, int hand) {
+	public static int getAltItem(int id, ItemType hand) {
 		return getAltItem(id, hand, ObjectProp.getObject(id).altItems);
 	}
 
-	public static int getTileAltItem(int id, int hand) {
+	public static int getTileAltItem(int id, ItemType hand) {
 		return getAltItem(id, hand, TileProp.getTileProp(id).altItems);
 	}
 

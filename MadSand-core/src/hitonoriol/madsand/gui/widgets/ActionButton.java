@@ -107,7 +107,7 @@ public class ActionButton extends Table {
 		Tile tile = loc.getTile(coords.x, coords.y);
 		coords.addDirection(player.stats.look);
 
-		int tileItem = MapObject.getTileAltItem(tile.id, player.stats.hand().type.get());
+		int tileItem = MapObject.getTileAltItem(tile.id, player.stats.hand().type);
 		MapObject object = loc.getObject(coords.x, coords.y);
 		Npc npc = loc.getNpc(coords.x, coords.y);
 		Item item = player.stats.hand();
