@@ -29,13 +29,17 @@ public class LuaUtils {
 		globals.set("world", luaWorld);
 		globals.set("tutorial", luaTutorial);
 		globals.set("utils", luaUtils);
-		
+
 		executeScript("globals.lua");
 
 		onAction = GameSaver.getExternal(MadSand.SCRIPTDIR + onActionScript, true);
 	}
 
-	private static LuaValue loadScript(String file) {
+	public static void register(String luaName, LuaValue object) {
+		globals.set(luaName, object);
+	}
+
+	public static LuaValue loadScript(String file) {
 		return globals.loadfile(MadSand.SCRIPTDIR + file);
 	}
 
@@ -82,7 +86,7 @@ public class LuaUtils {
 	public static void showDialog(String query) {
 		GameDialog.generateDialogChain(query, Gui.overlay).show();
 	}
-	
+
 	public static void showOkDialog(String text) {
 		Gui.drawOkDialog(text, Gui.overlay);
 	}
@@ -94,7 +98,7 @@ public class LuaUtils {
 	public static void notice(String msg) {
 		MadSand.notice(msg);
 	}
-	
+
 	public static int oneOf(String stringList) {
 		return Utils.oneOf(stringList);
 	}

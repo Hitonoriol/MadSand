@@ -7,16 +7,8 @@ for i = 1,4 do
 	map:spawnMobs(true, true);
 end
 
-map:fillTile(50, 50, 10, 10, 23);
-map:erodeTileRectangle(50, 50, 10, 10, 1, 0);
-map:spawnNpc(5, 55, 55);
-map:spawnNpc(36, 51, 58);
-map:addObject(55, 54, 6);
-
-map:delObject(50, 50);
-player:teleport(50, 50);
-world:updateLight();
-
-map:spawnMobs("12", 1, 7, 15);	--Spawn "Old farmer" NPC
+local structure = map:addStructure("plain-camp");	-- Create starting location
+player:teleport(structure.x, structure.y);		-- Teleport player to the origin of the structure
+map:spawnMobs("12", 1, 7, 15);				-- Spawn "Old farmer" NPC from 7 to 15 tiles away from player
 
 utils:print("Welcome to MadSand!");

@@ -448,7 +448,7 @@ public class Map {
 		do
 			coords.random(xsz, ysz);
 		while (!action.changeMap(coords.x, coords.y, id));
-		
+
 		return coords;
 
 	}
@@ -795,6 +795,16 @@ public class Map {
 			for (RollList rollList : overworld.regenerateObjects)
 				rollObjects(rollList);
 
+	}
+
+	public Pair addStructure(String name) {
+		MapStructure structure = new MapStructure(coords.random(xsz, ysz)).setName(name);
+
+		do {
+			structure.setCoords(coords.random(xsz, ysz));
+		} while (!structure.build());
+
+		return new Pair(coords);
 	}
 
 	public Pair locateTile(int id) {

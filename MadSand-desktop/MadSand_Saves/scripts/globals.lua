@@ -18,3 +18,13 @@ obj_delete_looked_at = function()
 	local dx = coords.x; local dy = coords.y;
 	world:getCurLoc():delObject(dx, dy);
 end
+
+verify_structure = function(x, y, w, h)
+	local map = world:getCurLoc();
+	
+	if (x + w > map:getWidth()) or (y + h > map:getHeight()) then
+		return false;
+	end
+	
+	return true;
+end
