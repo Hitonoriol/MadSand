@@ -8,6 +8,7 @@ import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.Faction;
 import hitonoriol.madsand.enums.Skill;
+import hitonoriol.madsand.enums.Stat;
 
 public class Stats {
 	final static double PERCENT = 100.0;
@@ -16,6 +17,8 @@ public class Stats {
 	public final static int BASE_FOOD_TICKS = 1;
 	final int HP_MULTIPLIER = 10; // maxHp = constitution * HP_MULTIPLIER
 	final float MIN_HP_AUTODAMAGE_PERCENT = 10;
+
+	public StatContainer baseStats;
 
 	public int AP_REGEN_RATE = 2;
 	public int AP_WALK = 4; // action points consumed by walking
@@ -26,12 +29,7 @@ public class Stats {
 	final static int STAMINA_DMG = 1;
 	final static int FOOD_HEAL = 1;
 
-	static int STAT_MIN_SUM = 20; //for roll() method
-	public int maxStatSum = 20; // Changes every levelup
 	private int statBonus = 0; // Total equipment stat bonus
-
-	static final int STAT_RAND_MAX = 8;
-	static final int STAT_RAND_MIN = 3;
 
 	public double actionPtsMax = 5; // Entity's speed
 	public double actionPts = actionPtsMax;
@@ -45,14 +43,6 @@ public class Stats {
 	public float staminaLowPercent = 10;
 	public float stamina;
 	public float maxstamina;
-
-	public int defense = 0;
-	public int accuracy = 2;
-	public int constitution;
-	public int strength = 3;
-	public int luck = 1;
-	public int dexterity = 1;
-	public int intelligence = 1;
 
 	public int air = 3;
 
@@ -87,13 +77,31 @@ public class Stats {
 
 	public Stats(boolean isPlayer) {
 		equipment = new Equipment(this, isPlayer);
+		baseStats = new StatContainer();
+	}
+
+	public int get(Stat stat) {
+		return baseStats.get(stat);
+	}
+
+	public void set(Stat stat, int value) {
+		baseStats.set(stat, value);
+	}
+	
+	public void roll(int lvl) {
+		baseStats.roll(lvl);
+		calcStats();
+	}
+
+	public void roll() {
+		roll(0);
 	}
 
 	public void calcStats() {
-		hp = constitution * HP_MULTIPLIER;
+		hp = get(Stat.Constitution) * HP_MULTIPLIER;
 		mhp = hp;
 
-		stamina = ((dexterity + constitution) / 2) * 5;
+		stamina = ((get(Stat.Dexterity) + get(Stat.Constitution)) / 2) * 5;
 		maxstamina = stamina;
 
 		calcActionCosts();
@@ -121,14 +129,7 @@ public class Stats {
 			return;
 
 		EquipStats bonus = item.equipStats;
-
-		constitution += bonus.constitution;
-		dexterity += bonus.dexterity;
-		strength += bonus.strength;
-		accuracy += bonus.accuracy;
-		intelligence += bonus.intelligence;
-		defense += bonus.defense;
-
+		baseStats.add(bonus.stats);
 		statBonus += bonus.getTotalBonus();
 		calcStats();
 	}
@@ -138,14 +139,7 @@ public class Stats {
 			return;
 
 		EquipStats bonus = item.equipStats;
-
-		constitution -= bonus.constitution;
-		dexterity -= bonus.dexterity;
-		strength -= bonus.strength;
-		accuracy -= bonus.accuracy;
-		intelligence -= bonus.intelligence;
-		defense -= bonus.defense;
-
+		baseStats.sub(bonus.stats);
 		statBonus -= bonus.getTotalBonus();
 		calcStats();
 	}
@@ -154,6 +148,7 @@ public class Stats {
 		// AP_MINOR = ;
 		// AP_WALK = ;
 		// AP_ATTACK = ;
+		int dexterity = get(Stat.Dexterity);
 		if (dexterity < 2)
 			actionPtsMax = 1;
 		else
@@ -163,34 +158,9 @@ public class Stats {
 		actionPts = actionPtsMax;
 	}
 
-	public void roll(int lvl) {
-		int sum = 0;
-		int maxSum = STAT_RAND_MAX + lvl;
-		while (sum < STAT_MIN_SUM || sum > maxStatSum + lvl * 6) {
-			strength = Utils.rand(STAT_RAND_MIN, maxSum);
-			constitution = Utils.rand(STAT_RAND_MIN, maxSum);
-			accuracy = Utils.rand(STAT_RAND_MIN, maxSum);
-			luck = Utils.rand(STAT_RAND_MIN, maxSum);
-			dexterity = Utils.rand(STAT_RAND_MIN, maxSum);
-			intelligence = Utils.rand(STAT_RAND_MIN, maxSum);
-			sum = getSum();
-		}
-
-		calcStats();
-	}
-
-	public void roll() {
-		roll(0);
-	}
-
 	@JsonIgnore
 	public int getSum() {
-		return (strength +
-				constitution +
-				accuracy +
-				luck +
-				dexterity +
-				intelligence) - statBonus;
+		return baseStats.getSum() - statBonus;
 	}
 
 	@JsonIgnore
@@ -283,15 +253,17 @@ public class Stats {
 	}
 
 	public boolean luckRoll() {
+		int luck = get(Stat.Constitution);
 		int roll = Utils.rand(0, luck);
 		return (roll != luck);
 	}
 
 	public boolean critRoll() {
-		return Utils.percentRoll(Math.log(Math.pow(accuracy + 0.1, 7)));
+		return Utils.percentRoll(Math.log(Math.pow(get(Stat.Accuracy) + 0.1, 7)));
 	}
 
 	public boolean attackMissed() {
+		int accuracy = get(Stat.Constitution);
 		return (Utils.rand(0, accuracy) == accuracy);
 	}
 
@@ -301,7 +273,7 @@ public class Stats {
 		if (attackMissed())
 			return 0;
 
-		int atk = (int) (strength - (defense / DEF_DENOMINATOR));
+		int atk = (int) (get(Stat.Strength) - (defense / DEF_DENOMINATOR));
 
 		if (atk <= 0)
 			atk = 1;
@@ -315,11 +287,11 @@ public class Stats {
 	}
 
 	public float calcMaxInventoryWeight() {
-		return BASE_MAX_WEIGHT + (strength + dexterity) * WEIGHT_MULTIPLIER;
+		return BASE_MAX_WEIGHT + (get(Stat.Strength) + get(Stat.Dexterity)) * WEIGHT_MULTIPLIER;
 	}
 
 	public boolean rollEncounter() {
-		double chance = (100 / (luck + dexterity * 0.75));
+		double chance = (100 / (get(Stat.Luck) + get(Stat.Dexterity) * 0.75));
 		Utils.out("Encounter chance: " + chance);
 		return Utils.percentRoll(chance);
 	}

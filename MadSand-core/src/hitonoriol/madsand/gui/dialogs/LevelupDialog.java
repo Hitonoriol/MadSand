@@ -14,7 +14,7 @@ public class LevelupDialog extends PlayerStatDialog {
 	static String okButtonText = "Done";
 
 	private LevelupDialog(Stage stage, StatLabels statLabels, String title) {
-		super(stage, statLabels, title, World.player.stats.maxStatSum - 1);
+		super(stage, statLabels, title, World.player.stats.baseStats.maxStatSum - 1);
 	}
 
 	public LevelupDialog() {

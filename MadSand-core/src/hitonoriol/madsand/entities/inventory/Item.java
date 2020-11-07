@@ -16,6 +16,7 @@ import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.LootTable;
 import hitonoriol.madsand.enums.ItemType;
 import hitonoriol.madsand.enums.Skill;
+import hitonoriol.madsand.enums.Stat;
 import hitonoriol.madsand.properties.CropContainer;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
@@ -224,7 +225,7 @@ public class Item {
 		}
 
 		if (type.isWeapon())
-			equipStats.strength = properties.equipStats.strength;
+			equipStats.stats.set(Stat.Strength, properties.equipStats.stats);
 	}
 
 	@JsonIgnore

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.entities.StatContainer;
 import hitonoriol.madsand.enums.ItemType;
 import hitonoriol.madsand.enums.Stat;
 
@@ -12,13 +13,7 @@ public class EquipStats {
 
 	public int rollMax, rollMin;
 
-	public int constitution;
-	public int dexterity;
-	public int strength;
-	public int accuracy;
-	public int intelligence;
-	public int defense;
-
+	public StatContainer stats = new StatContainer();
 	public ItemType type;
 	public Stat mainStat;
 
@@ -44,13 +39,7 @@ public class EquipStats {
 		lvl = eStats.lvl;
 		rollMax = eStats.rollMax;
 		rollMin = eStats.rollMin;
-
-		constitution = eStats.constitution;
-		dexterity = eStats.dexterity;
-		strength = eStats.strength;
-		accuracy = eStats.accuracy;
-		intelligence = eStats.intelligence;
-		defense = eStats.defense;
+		stats.set(eStats.stats);
 	}
 
 	public EquipStats() {
@@ -70,31 +59,6 @@ public class EquipStats {
 		return (int) (ret * f);
 	}
 
-	private void setStat(Stat stat, int value) {
-		switch (stat) {
-		case Accuracy:
-			accuracy = value;
-			break;
-		case Constitution:
-			constitution = value;
-			break;
-		case Defense:
-			defense = value;
-			break;
-		case Dexterity:
-			dexterity = value;
-			break;
-		case Intelligence:
-			intelligence = value;
-			break;
-		case Strength:
-			strength = value;
-			break;
-		default:
-			break;
-		}
-	}
-
 	private int rollRandomStat() {
 		Stat stats[] = Stat.values();
 		int value = rollStatValue();
@@ -104,7 +68,7 @@ public class EquipStats {
 			stat = stats[Utils.rand(stats.length)];
 		while (stat.equals(mainStat));
 
-		setStat(stat, value);
+		this.stats.set(stat, value);
 		return value;
 	}
 
@@ -125,7 +89,7 @@ public class EquipStats {
 			value = rollStatValue();
 		while (value == 0);
 
-		setStat(mainStat, value);
+		stats.set(mainStat, value);
 	}
 
 	public EquipStats rollBonusStats() {
@@ -146,23 +110,13 @@ public class EquipStats {
 	@JsonIgnore
 	public String getString() {
 		String ret = "";
-		if (defense != 0)
-			ret += "Defense " + asStatString(defense) + Resources.LINEBREAK;
-		if (constitution != 0)
-			ret += "Constitution " + asStatString(constitution) + Resources.LINEBREAK;
-		if (dexterity != 0)
-			ret += "Dexterity " + asStatString(dexterity) + Resources.LINEBREAK;
-		if (strength != 0)
-			ret += "Strength " + asStatString(strength) + Resources.LINEBREAK;
-		if (accuracy != 0)
-			ret += "Accuracy " + asStatString(accuracy) + Resources.LINEBREAK;
-		if (intelligence != 0)
-			ret += "Intelligence " + asStatString(intelligence) + Resources.LINEBREAK;
+		for (Stat stat : Stat.values())
+			ret += stat.name() + " " + asStatString(stats.get(stat)) + Resources.LINEBREAK;
 		return ret;
 	}
 
 	@JsonIgnore
 	public int getTotalBonus() {
-		return constitution + dexterity + strength + accuracy + intelligence;
+		return stats.getSum();
 	}
 }

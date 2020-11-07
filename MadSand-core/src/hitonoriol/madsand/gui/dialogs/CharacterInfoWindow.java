@@ -70,13 +70,10 @@ public class CharacterInfoWindow {
 		dialog.add().width(width).row();
 
 		dialog.add(statsLbl).width(width).padLeft(headerLeftPadding).padBottom(headerBottomPadding).row();
-		dialog.add(statLabels.conStatLbl).width(width).row();
-		dialog.add(statLabels.strStatLbl).width(width).row();
-		dialog.add(statLabels.accStatLbl).width(width).row();
-		dialog.add(statLabels.defStatLbl).width(width).row();
-		dialog.add(statLabels.intStatLbl).width(width).row();
-		dialog.add(statLabels.luckStatLbl).width(width).row();
-		dialog.add(statLabels.dexStatLbl).width(width).row();
+
+		for (StatLabels.StatLabel label : statLabels.labels)
+			dialog.add(label).width(width).row();
+
 		dialog.add(skillsLbl).width(width).padLeft(headerLeftPadding).padBottom(headerBottomPadding).row();
 
 		Skill skill;

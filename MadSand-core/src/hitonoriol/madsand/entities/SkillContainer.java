@@ -48,7 +48,7 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 			MadSand.notice(skill.toString() + " increased!");
 
 			if (skill.equals(Skill.Level)) {
-				++World.player.stats.maxStatSum;
+				World.player.stats.baseStats.increaseMaxStatSum();
 				Gui.overlay.levelUpDialog();
 			}
 		}

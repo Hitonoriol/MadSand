@@ -19,6 +19,7 @@ import hitonoriol.madsand.containers.PairFloat;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.enums.Stat;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
@@ -270,7 +271,12 @@ public abstract class Entity {
 
 	@JsonIgnore
 	public int getDefense() {
-		return stats.defense;
+		return stats.baseStats.get(Stat.Defense);
+	}
+
+	@JsonIgnore
+	public int getLvl() {
+		return stats.skills.getLvl();
 	}
 
 	void dropInventory() {

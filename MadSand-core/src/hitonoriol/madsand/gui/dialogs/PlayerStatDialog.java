@@ -10,16 +10,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.containers.IntContainer;
 import hitonoriol.madsand.dialog.GameDialog;
-import hitonoriol.madsand.entities.Stats;
+import hitonoriol.madsand.entities.StatContainer;
+import hitonoriol.madsand.enums.Stat;
 import hitonoriol.madsand.gui.widgets.StatLabels;
 import hitonoriol.madsand.world.World;
+import me.xdrop.jrand.JRand;
 
 public class PlayerStatDialog extends GameDialog {
 
 	static int DEFAULT_STAT_SUM = 6;
-	int maxStatSum = World.player.stats.maxStatSum;
+	int maxStatSum = World.player.stats.baseStats.maxStatSum;
 	int minStatSum;
 	protected StatLabels statLabels;
 	String titleString;
@@ -46,18 +47,15 @@ public class PlayerStatDialog extends GameDialog {
 		title.setText(titleString);
 		title.setAlignment(Align.center);
 
-		nameField = new TextField("Player", Gui.skin);
+		nameField = new TextField(JRand.name().gen(), Gui.skin);
 		statLabels.refreshStatLabels();
 		super.add(new Label("\nCharacter name:", Gui.skin)).width(width).row();
 
 		super.add(nameField).width(width).row();
 
-		addStatEntry(statLabels.conStatLbl);
-		addStatEntry(statLabels.strStatLbl);
-		addStatEntry(statLabels.accStatLbl);
-		addStatEntry(statLabels.intStatLbl);
-		addStatEntry(statLabels.luckStatLbl);
-		addStatEntry(statLabels.dexStatLbl);
+		for (StatLabels.StatLabel label : statLabels.labels)
+			if (!label.stat.excludeFromSum())
+				addStatEntry(label);
 
 		super.add(statLabels.statSumLbl).width(width).row();
 		super.add(statLabels.freeStatPointsLbl).width(width).row();
@@ -68,8 +66,8 @@ public class PlayerStatDialog extends GameDialog {
 	float BUTTON_PADDING = 4;
 	float LABEL_WIDTH = Gui.defLblWidth - ((BUTTON_WIDTH + BUTTON_PADDING) * 2);
 
-	private void addStatEntry(Label label) {
-		IntContainer stat = getStatByLabel(label);
+	private void addStatEntry(StatLabels.StatLabel label) {
+		Stat stat = label.stat;
 		Table group = new Table();
 
 		TextButton incButton = getStatButton(stat, true);
@@ -87,39 +85,20 @@ public class PlayerStatDialog extends GameDialog {
 		super.row();
 	}
 
-	private IntContainer getStatByLabel(Label label) {
-		IntContainer stat = new IntContainer();
-		Stats stats = World.player.stats;
-
-		if (label == statLabels.conStatLbl)
-			stat.set(StatLabels.conString, stats.constitution);
-		else if (label == statLabels.strStatLbl)
-			stat.set(StatLabels.strString, stats.strength);
-		else if (label == statLabels.accStatLbl)
-			stat.set(StatLabels.accString, stats.accuracy);
-		else if (label == statLabels.intStatLbl)
-			stat.set(StatLabels.intString, stats.intelligence);
-		else if (label == statLabels.luckStatLbl)
-			stat.set(StatLabels.luckString, stats.luck);
-		else if (label == statLabels.dexStatLbl)
-			stat.set(StatLabels.dexString, stats.dexterity);
-
-		return stat;
-	}
-
-	private TextButton getStatButton(IntContainer stat, boolean inc) {
+	private TextButton getStatButton(Stat stat, boolean inc) {
 		TextButton button = new TextButton(inc ? "+" : "-", Gui.skin);
 		ChangeListener listener = new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				int statSum = statLabels.stats.getSum();
+				StatContainer stats = statLabels.stats.baseStats;
 				if (inc) {
 					if (statSum < maxStatSum)
-						++stat.value;
+						stats.increase(stat);
 				} else {
-					if (statSum > minStatSum && stat.value > 1)
-						--stat.value;
+					if (statSum > minStatSum && stats.get(stat) > 1)
+						stats.decrease(stat);
 				}
-				statLabels.refreshStatLabel(stat);
+				statLabels.refreshStatLabels();
 			}
 		};
 

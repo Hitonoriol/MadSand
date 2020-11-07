@@ -1,22 +1,19 @@
 package hitonoriol.madsand.gui.widgets;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Utils;
-import hitonoriol.madsand.containers.IntContainer;
 import hitonoriol.madsand.entities.Stats;
+import hitonoriol.madsand.enums.Stat;
 import hitonoriol.madsand.world.World;
 
 public class StatLabels {
-	public Label conStatLbl;
-	public Label strStatLbl;
-	public Label accStatLbl;
-	public Label intStatLbl;
-	public Label luckStatLbl;
-	public Label dexStatLbl;
-	public Label defStatLbl;
+	public List<StatLabel> labels = new ArrayList<>();
 	public Label statSumLbl;
 	public Label freeStatPointsLbl;
 	public Label hpStatLbl, staminaStatLbl;
@@ -24,13 +21,10 @@ public class StatLabels {
 	public Stats stats = World.player.stats;
 
 	public StatLabels(Skin skin) {
-		conStatLbl = new Label("", skin);
-		strStatLbl = new Label("", skin);
-		accStatLbl = new Label("", skin);
-		intStatLbl = new Label("", skin);
-		luckStatLbl = new Label("", skin);
-		dexStatLbl = new Label("", skin);
-		defStatLbl = new Label("", skin);
+
+		for (Stat stat : Stat.values())
+			labels.add(new StatLabel(stat));
+
 		statSumLbl = new Label("", skin);
 		hpStatLbl = new Label("", skin);
 		staminaStatLbl = new Label("", skin);
@@ -41,58 +35,54 @@ public class StatLabels {
 		this(Gui.skin);
 	}
 
+	public StatLabel getLabel(Stat stat) {
+		for (StatLabel label : labels)
+			if (label.stat == stat)
+				return label;
+		return null;
+	}
+
 	public void refreshStatLabels() {
 		int statSum = stats.getSum();
-		setStatText(strStatLbl, strString, stats.strength);
-		setStatText(accStatLbl, accString, stats.accuracy);
-		setStatText(conStatLbl, conString, stats.constitution);
-		setStatText(intStatLbl, intString, stats.intelligence);
-		setStatText(luckStatLbl, luckString, stats.luck);
-		setStatText(dexStatLbl, dexString, stats.dexterity);
-		setStatText(defStatLbl, defString, stats.defense);
+		stats.calcStats();
+
+		for (StatLabel label : labels)
+			label.refresh();
+
 		statSumLbl.setText("\nStat sum: " + statSum);
-		freeStatPointsLbl.setText("Free stat points: " + (stats.maxStatSum - statSum));
+		freeStatPointsLbl.setText("Free stat points: " + (stats.baseStats.getFreePoints()));
 
 		hpStatLbl.setText("HP: " + stats.hp + "/" + stats.mhp);
 		staminaStatLbl.setText("Stamina: " + stats.stamina + "/" + stats.maxstamina);
 		Gui.refreshOverlay();
 	}
 
-	public static String conString = "Constitution";
-	public static String strString = "Strength";
-	public static String accString = "Accuracy";
-	public static String intString = "Intelligence";
-	public static String luckString = "Luck";
-	public static String dexString = "Dexterity";
-	public static String defString = "Defense";
-
-	public void refreshStatLabel(IntContainer value) {
-		if (value.name.equals(conString))
-			stats.constitution = value.value;
-		if (value.name.equals(strString))
-			stats.strength = value.value;
-		if (value.name.equals(accString))
-			stats.accuracy = value.value;
-		if (value.name.equals(intString))
-			stats.intelligence = value.value;
-		if (value.name.equals(luckString))
-			stats.luck = value.value;
-		if (value.name.equals(dexString))
-			stats.dexterity = value.value;
-
-		stats.calcStats();
-		refreshStatLabels();
-
+	public void refreshStatLabel(Stat stat) {
+		for (StatLabel label : labels)
+			if (label.stat == stat)
+				label.refresh();
 	}
 
-	private void setStatText(Label label, String stat, int value) {
-		String text = stat + ": " + applyColor(value);
-		if (stat.equals(dexString))
-			text += " (speed: " + Utils.round(stats.actionPtsMax) + ")";
-		label.setText(text);
-	}
+	//public void refreshStatLabel(IntContainer value) {}
 
-	private String applyColor(int stat) {
-		return "[#99ffaa]" + stat + "[]";
+	public class StatLabel extends Label {
+		public Stat stat;
+
+		public StatLabel(Stat stat) {
+			super("", Gui.skin);
+			this.stat = stat;
+		}
+
+		public StatLabel refresh() {
+			String text = stat.name() + ": " + applyColor(stats.get(stat));
+			if (stat == Stat.Dexterity)
+				text += " (speed: " + Utils.round(stats.actionPtsMax) + ")";
+			super.setText(text);
+			return this;
+		}
+
+		private String applyColor(int stat) {
+			return "[#99ffaa]" + stat + "[]";
+		}
 	}
 }

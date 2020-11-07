@@ -9,6 +9,7 @@ import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.enums.NpcType;
+import hitonoriol.madsand.enums.Stat;
 import hitonoriol.madsand.gui.widgets.GameTooltip;
 import hitonoriol.madsand.map.Crop;
 import hitonoriol.madsand.map.Loot;
@@ -167,7 +168,7 @@ public class Mouse {
 			info += "Object HP: " + object.hp + " | Object HarvestHp: " + object.harvestHp + Resources.LINEBREAK;
 		if (!npc.equals(Map.nullNpc)) {
 			info += "Npc hp: " + npc.stats.hp + Resources.LINEBREAK;
-			info += "speed: " + npc.getSpeed() + "(" + npc.stats.dexterity + ")" + " | tickCharge: " + npc.tickCharge
+			info += "speed: " + npc.getSpeed() + "(" + npc.stats.get(Stat.Dexterity) + ")" + " | tickCharge: " + npc.tickCharge
 					+ Resources.LINEBREAK;
 		}
 		info += lineDelimiter + Resources.LINEBREAK;

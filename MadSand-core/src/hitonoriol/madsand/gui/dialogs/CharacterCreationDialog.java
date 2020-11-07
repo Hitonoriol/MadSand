@@ -42,7 +42,7 @@ public class CharacterCreationDialog {
 		cbtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				
-				if (stats.maxStatSum - stats.getSum() > 0) {
+				if (stats.baseStats.getFreePoints() > 0) {
 					Gui.drawOkDialog("You still have unassigned stat points left!", Gui.overlay);
 					return;
 				}

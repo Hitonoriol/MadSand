@@ -19,6 +19,7 @@ import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.NpcState;
 import hitonoriol.madsand.enums.NpcType;
+import hitonoriol.madsand.enums.Stat;
 import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.map.ProductionStation;
 import hitonoriol.madsand.properties.Globals;
@@ -89,14 +90,14 @@ public class Npc extends Entity {
 		NpcContainer properties = NpcProp.npcs.get(id);
 		stats.roll(properties.lvl);
 		stats.skills.setLvl(properties.lvl);
-		stats.dexterity = properties.dexterity;
+		stats.set(Stat.Dexterity, properties.dexterity);
 		stats.calcStats();
 
 		stats.name = GameTextSubstitutor.replace(properties.name);
 		stats.hp = properties.hp;
 		stats.mhp = stats.hp;
-		stats.strength = properties.strength;
-		stats.accuracy = properties.accuracy;
+		stats.set(Stat.Strength, properties.strength);
+		stats.set(Stat.Accuracy, properties.accuracy);
 		rewardExp = properties.rewardExp;
 		stats.faction = properties.faction;
 		canTrade = properties.canTrade;
