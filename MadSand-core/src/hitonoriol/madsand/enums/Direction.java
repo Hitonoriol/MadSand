@@ -5,6 +5,8 @@ import hitonoriol.madsand.Utils;
 public enum Direction {
 	UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT;
 
+	public static Direction[] baseValues = { UP, DOWN, LEFT, RIGHT };
+
 	public boolean isBase() {
 		return !isDiagonal();
 	}

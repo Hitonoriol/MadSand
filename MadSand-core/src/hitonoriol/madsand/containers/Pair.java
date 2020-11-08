@@ -23,11 +23,16 @@ public class Pair {
 	}
 
 	public Pair(Pair pair) {
-		this(pair.x, pair.y);
+		set(pair);
 	}
 
 	public Pair() {
 		this(0, 0);
+	}
+
+	public Pair set(Pair pair) {
+		set(pair.x, pair.y);
+		return this;
 	}
 
 	public Pair set(int x, int y) {
@@ -36,20 +41,18 @@ public class Pair {
 		return this;
 	}
 
-	public Pair add(Pair arg) {
-		this.x += arg.x;
-		this.y += arg.y;
-		return this;
-	}
-
 	Pair add(int x, int y) {
-		return add(new Pair(x, y));
+		return set(this.x + x, this.y + y);
+	}
+	
+	public Pair add(Pair arg) {
+		return add(arg.x, arg.y);
 	}
 
 	public Pair random(int xMax, int yMax) {
 		return this.set(Utils.rand(xMax), Utils.rand(yMax));
 	}
-	
+
 	public static Pair getInstance() {
 		return instance;
 	}
@@ -102,7 +105,7 @@ public class Pair {
 		Direction ret = null;
 		int dx = cellX - originX;
 		int dy = cellY - originY;
-		
+
 		if (dy > 0)
 			ret = Direction.UP;
 		else if (dy < 0)
@@ -146,6 +149,10 @@ public class Pair {
 
 		Pair rhs = (Pair) obj;
 		return new EqualsBuilder().append(x, rhs.x).append(y, rhs.y).isEquals();
+	}
+
+	public boolean equals(int x, int y) {
+		return (this.x == x && this.y == y);
 	}
 
 	final String PAIR_STRING_DELIMITER = ", ";

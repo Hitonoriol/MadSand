@@ -7,6 +7,7 @@ import java.util.Queue;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -21,7 +22,9 @@ import hitonoriol.madsand.enums.NpcState;
 import hitonoriol.madsand.enums.NpcType;
 import hitonoriol.madsand.enums.Stat;
 import hitonoriol.madsand.enums.TradeCategory;
+import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.ProductionStation;
+import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.NpcContainer;
 import hitonoriol.madsand.properties.NpcProp;
@@ -53,6 +56,9 @@ public class Npc extends Entity {
 	public TradeCategory tradeCategory;
 
 	public ProductionStation animalProductWorker;
+	DefaultGraphPath<Node> path;
+	Pair prevDestination = new Pair();
+	int pathIdx = 0;
 
 	private Queue<Direction> movementQueue = new ArrayDeque<>();
 
@@ -60,6 +66,7 @@ public class Npc extends Entity {
 		super();
 		this.id = id;
 		this.uid = MadSand.world.npcCounter++;
+		path = new DefaultGraphPath<Node>();
 		loadProperties();
 		if (id != NULL_NPC)
 			loadSprite();
@@ -76,6 +83,21 @@ public class Npc extends Entity {
 
 	public Npc() {
 		id = NULL_NPC;
+	}
+
+	public Node findPath(int x, int y) {
+		Map map = MadSand.world.getCurLoc();
+
+		if (!prevDestination.equals(x, y)) {
+			path.clear();
+			pathIdx = 0;
+			prevDestination.set(x, y);
+			map.searchPath(this.x, this.y, x, y, path);
+		} else if (pathIdx + 1 >= path.getCount()) {
+			return null;
+		}
+
+		return path.get(++pathIdx);
 	}
 
 	public void pause() {
@@ -314,11 +336,14 @@ public class Npc extends Entity {
 				if (!canAct(stats.AP_WALK))
 					return;
 
-				dir = Pair.getRelativeDirection(x, y, player.x, player.y, true);
-				move(dir);
+				Node closestNode = findPath(player.x, player.y);
+				if (closestNode != null) {
+					//Utils.out("My coords: " + x + ", " + y + "; " + closestNode.toString());
+					dir = Pair.getRelativeDirection(x, y, closestNode.x, closestNode.y, true);
+					move(dir);
+				}
 				doAction(stats.AP_WALK);
 			} else {
-
 				if (!canAct(stats.AP_ATTACK))
 					return;
 

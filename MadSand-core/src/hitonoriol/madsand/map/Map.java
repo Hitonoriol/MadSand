@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
+import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.MadSand;
@@ -16,6 +18,10 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.NpcType;
+import hitonoriol.madsand.pathfinding.Graph;
+import hitonoriol.madsand.pathfinding.Node;
+import hitonoriol.madsand.pathfinding.DistanceHeuristic;
+import hitonoriol.madsand.pathfinding.NodeMap;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
@@ -53,6 +59,11 @@ public class Map {
 	private HashMap<Pair, Npc> mapNpcs;
 	private HashMap<Pair, ProductionStation> mapProductionStations;
 
+	IndexedAStarPathFinder<Node> pathFinder;
+	Graph graph;
+	DistanceHeuristic heuristic;
+	NodeMap nodeMap;
+
 	Pair coords = new Pair(0, 0);
 
 	public Map(int xsz, int ysz) {
@@ -64,6 +75,72 @@ public class Map {
 	public Map() {
 		rollSize();
 		purge();
+	}
+
+	public void refreshGraph() {
+		MapObject object;
+		graph.clear();
+		nodeMap.clear();
+		for (int x = 0; x < xsz; ++x) {
+			for (int y = 0; y < ysz; ++y) {
+				object = getObject(x, y);
+				if (object.equals(nullObject) || object.nocollide)
+					graph.addNode(nodeMap.putNew(x, y));
+			}
+		}
+
+		for (int x = 0; x < xsz; ++x) {
+			for (int y = 0; y < ysz; ++y)
+				linkToNeighbors(x, y);
+		}
+		refreshPathFinder();
+	}
+
+	private void linkToNeighbors(int x, int y) {
+		Node node = nodeMap.get(x, y);
+		if (node == null)
+			return;
+
+		Pair nCoords = new Pair();
+		for (Direction dir : Direction.baseValues) {
+			nCoords.set(x, y).addDirection(dir);
+			addNodeNeighbor(node, nCoords.x, nCoords.y);
+		}
+	}
+
+	// Unlink node at x, y from all its neighbors
+	private void unlinkFromNeighbors(int x, int y) {
+		Node node = nodeMap.get(x, y);
+
+		if (node == null)
+			return;
+
+		for (Direction dir : Direction.baseValues)
+			removeNodeNeighbor(nodeMap.get(coords.set(x, y).addDirection(dir)), x, y);
+
+	}
+
+	private void refreshPathFinder() {
+		pathFinder = new IndexedAStarPathFinder<Node>(graph, true);
+	}
+
+	private void removeNodeNeighbor(Node node, int x, int y) {
+		if (!correctCoords(coords.set(x, y)) || node == null)
+			return;
+
+		node.removeNeighbor(nodeMap.get(x, y));
+	}
+
+	private void addNodeNeighbor(Node aNode, int x, int y) {
+		if (!correctCoords(coords.set(x, y)))
+			return;
+
+		aNode.addNeighbor(nodeMap.get(x, y));
+
+	}
+
+	public boolean searchPath(int startX, int startY, int endX, int endY, DefaultGraphPath<Node> path) {
+		return pathFinder.searchNodePath(nodeMap.get(startX, startY), nodeMap.get(endX, endY), heuristic, path);
 	}
 
 	public void rollSize(int min, int max) {
@@ -178,6 +255,10 @@ public class Map {
 		mapNpcs = new HashMap<>();
 		mapCrops = new HashMap<>();
 		mapProductionStations = new HashMap<>();
+
+		nodeMap = new NodeMap(xsz, ysz);
+		graph = new Graph();
+		heuristic = new DistanceHeuristic();
 		return this;
 	}
 
@@ -360,10 +441,18 @@ public class Map {
 	}
 
 	public boolean delObject(int x, int y) {
-		if (correctCoords(coords.set(x, y)))
-			return delObject(coords);
+		if (!correctCoords(coords.set(x, y)))
+			return false;
 
-		return false;
+		boolean removed = delObject(coords);
+
+		if (removed && graph.getNodeCount() > 0) {
+			graph.addNode(nodeMap.putNew(x, y));
+			linkToNeighbors(x, y);
+			refreshPathFinder();
+		}
+
+		return removed;
 	}
 
 	private boolean addObject(Pair coords, MapObject object) {
@@ -389,6 +478,17 @@ public class Map {
 
 			if (object.isProductionStation)
 				mapProductionStations.put(coords, new ProductionStation(id));
+
+			if (graph.getNodeCount() > 0) {
+				if (!object.nocollide) {
+					unlinkFromNeighbors(x, y);
+					graph.remove(nodeMap.remove(x, y));
+				} else {
+					graph.addNode(nodeMap.putNew(x, y));
+					linkToNeighbors(x, y);
+				}
+				refreshPathFinder();
+			}
 
 			return true;
 		}

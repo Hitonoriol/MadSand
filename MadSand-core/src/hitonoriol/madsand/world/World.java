@@ -88,6 +88,7 @@ public class World {
 	public void enter() {
 		realTimeRefresher.start();
 		GameTextSubstitutor.add(GameTextSubstitutor.PLAYER_NAME, player.stats.name);
+		getCurLoc().refreshGraph();
 	}
 
 	private void initRealtimeRefresher() {
@@ -285,6 +286,7 @@ public class World {
 
 		player.updCoords();
 		updateLight();
+		getCurLoc().refreshGraph();
 		return true;
 	}
 
