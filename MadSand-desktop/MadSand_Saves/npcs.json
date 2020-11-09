@@ -31,7 +31,7 @@
 	},
 	"2" : {
 		"name" : "Troll",
-		"hp" : 20,
+		"hp" : 16,
 		"strength" : 3,
 		"accuracy" : 2,
 		"dexterity" : 4,
@@ -92,7 +92,7 @@
 	},
 	"6" : {
 		"name" : "Orc",
-		"hp" : 22,
+		"hp" : 20,
 		"strength" : 3,
 		"accuracy" : 3,
 		"dexterity" : 3,
@@ -210,7 +210,7 @@
 	},
 	"14" : {
 		"name" : "Rat",
-		"hp" : 15,
+		"hp" : 13,
 		"strength" : 2,
 		"accuracy" : 3,
 		"dexterity" : 4,
@@ -224,7 +224,7 @@
 	},
 	"15" : {
 		"name" : "Scorpion",
-		"hp" : 17,
+		"hp" : 15,
 		"strength" : 3,
 		"accuracy" : 4,
 		"dexterity" : 6,
@@ -280,7 +280,7 @@
 	},
 	"19" : {
 		"name" : "Bat",
-		"hp" : 17,
+		"hp" : 12,
 		"strength" : 2,
 		"accuracy" : 2,
 		"dexterity" : 8,
@@ -378,7 +378,7 @@
 	},
 	"26" : {
 		"name" : "Sapphire Demon",
-		"hp" : 40,
+		"hp" : 18,
 		"strength" : 4,
 		"accuracy" : 25,
 		"dexterity" : 10,
@@ -392,7 +392,7 @@
 	},
 	"27" : {
 		"name" : "Ghost",
-		"hp" : 35,
+		"hp" : 25,
 		"strength" : 4,
 		"accuracy" : 5,
 		"dexterity" : 6,
@@ -406,7 +406,7 @@
 	},
 	"28" : {
 		"name" : "Green mold",
-		"hp" : 30,
+		"hp" : 11,
 		"strength" : 1,
 		"accuracy" : 1,
 		"dexterity" : 5,
@@ -420,7 +420,7 @@
 	},
 	"29" : {
 		"name" : "Undead warrior",
-		"hp" : 46,
+		"hp" : 25,
 		"strength" : 4,
 		"accuracy" : 10,
 		"dexterity" : 5,
@@ -434,10 +434,10 @@
 	},
 	"30" : {
 		"name" : "Giant moth",
-		"hp" : 25,
-		"strength" : 4,
+		"hp" : 20,
+		"strength" : 3,
 		"accuracy" : 4,
-		"dexterity" : 6,
+		"dexterity" : 5,
 		"rewardExp" : 11,
 		"loot" : "
 		(15|60/1)
@@ -453,7 +453,7 @@
 	"31" : {
 		"name" : "Pink giant moth",
 		"hp" : 20,
-		"strength" : 3,
+		"strength" : 2,
 		"accuracy" : 5,
 		"dexterity" : 6,
 		"rewardExp" : 5,
@@ -469,10 +469,10 @@
 	},
 	"32" : {
 		"name" : "Mutated turtle",
-		"hp" : 40,
-		"strength" : 5,
-		"accuracy" : 12,
-		"dexterity" : 6,
+		"hp" : 21,
+		"strength" : 4,
+		"accuracy" : 3,
+		"dexterity" : 4,
 		"rewardExp" : 20,
 		"loot" : null,
 		"faction" : "Monsters",
@@ -483,10 +483,10 @@
 	},
 	"33" : {
 		"name" : "Yellow mold",
-		"hp" : 30,
+		"hp" : 11,
 		"strength" : 1,
 		"accuracy" : 1,
-		"dexterity" : 0,
+		"dexterity" : 2,
 		"rewardExp" : 8,
 		"loot" : null,
 		"faction" : "Monsters",
@@ -497,10 +497,10 @@
 	},
 	"34" : {
 		"name" : "Red mold",
-		"hp" : 30,
+		"hp" : 11,
 		"strength" : 1,
 		"accuracy" : 1,
-		"dexterity" : 0,
+		"dexterity" : 2,
 		"rewardExp" : 8,
 		"loot" : null,
 		"faction" : "Monsters",

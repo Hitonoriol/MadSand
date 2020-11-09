@@ -79,10 +79,8 @@ public class Utils {
 	}
 
 	public static int rand(int min, int max) {
-		if (max < min) {
-			Utils.out("***bruh momentum: rand max < min, returning min");
+		if (max <= min) 
 			return min;
-		}
 
 		return random.nextInt((max - min) + 1) + min;
 	}

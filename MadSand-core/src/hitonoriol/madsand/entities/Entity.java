@@ -175,7 +175,7 @@ public abstract class Entity {
 		MadSand.world.getCurLoc().putLoot(coord.x, coord.y, new Item(item));
 		inventory.delItem(item);
 
-		doAction(stats.AP_MINOR);
+		doAction(stats.minorCost);
 		return true;
 	}
 
@@ -294,11 +294,11 @@ public abstract class Entity {
 		dropInventory();
 	}
 
-	float getActionLength(int ap) {
-		return (float) ap / (float) getSpeed();
+	float getActionLength(double ap) {
+		return (float) (ap / getSpeed());
 	}
 
-	public int doAction(int ap) { // any action that uses AP \\ returns number of ticks spent
+	public int doAction(double ap) { // any action that uses AP \\ returns number of ticks spent
 		double tmp = stats.actionPts;
 		stats.actionPts -= ap;
 		int ticks = 0;
@@ -334,7 +334,7 @@ public abstract class Entity {
 	}
 
 	boolean rest() {
-		stats.actionPts += stats.AP_REGEN_RATE;
+		stats.actionPts += stats.apRegenRate;
 		if (stats.actionPts >= stats.actionPtsMax) {
 			stats.actionPts = stats.actionPtsMax;
 			return true;

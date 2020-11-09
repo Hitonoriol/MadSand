@@ -15,31 +15,30 @@ public class Stats {
 	public final static float WEIGHT_MULTIPLIER = 7.5f;
 	public final static float BASE_MAX_WEIGHT = 50;
 	public final static int BASE_FOOD_TICKS = 1;
-	final int HP_MULTIPLIER = 10; // maxHp = constitution * HP_MULTIPLIER
+	public static final int HP_MULTIPLIER = 10; // maxHp = constitution * HP_MULTIPLIER
 	final float MIN_HP_AUTODAMAGE_PERCENT = 10;
-
-	public StatContainer baseStats;
-
-	public int AP_REGEN_RATE = 2;
-	public int AP_WALK = 4; // action points consumed by walking
-	public int AP_ATTACK = 4;
-	public int AP_MINOR = 1; // action points consumed by minor action
-
 	final static int STARVE_DMG = 1;
 	final static int STAMINA_DMG = 1;
 	final static int FOOD_HEAL = 1;
 
-	private int statBonus = 0; // Total equipment stat bonus
+	public StatContainer baseStats;
 
+	public int apRegenRate = 2;
+	
+	public double walkCost = 4.5; // action points consumed by walking
+	public double attackCost = 4.25;
+	public double minorCost = 1; // action points consumed by minor action
 	public double actionPtsMax = 5; // Entity's speed
 	public double actionPts = actionPtsMax;
+
+	private int statBonus = 0; // Total equipment stat bonus
 
 	public long spawnTime = 0;
 
 	public int hp;
 	public int mhp;
 
-	public float GATHERING_STAMINA_COST = 0.05f;
+	public float minorStaminaCost = 0.05f;
 	public float staminaLowPercent = 10;
 	public float stamina;
 	public float maxstamina;

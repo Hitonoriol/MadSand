@@ -188,7 +188,7 @@ public class Player extends Entity {
 
 	@Override
 	public void attack(Direction dir) {
-		doAction(stats.AP_ATTACK, new TimedAction() {
+		doAction(stats.attackCost, new TimedAction() {
 			@Override
 			public void act() {
 				performAttack(dir);
@@ -369,7 +369,7 @@ public class Player extends Entity {
 	}
 
 	public void craftItem(int id) {
-		doAction(stats.AP_MINOR, new TimedAction() {
+		doAction(stats.minorCost, new TimedAction() {
 
 			@Override
 			public void act() {
@@ -496,7 +496,7 @@ public class Player extends Entity {
 	}
 
 	private void interact(Direction direction) {
-		doAction(stats.AP_MINOR, new TimedAction() {
+		doAction(stats.minorCost, new TimedAction() {
 			@Override
 			public void act() {
 				performInteraction(direction);
@@ -521,9 +521,9 @@ public class Player extends Entity {
 			return -2;
 		}
 
-		doAction(stats.AP_MINOR);
+		doAction(stats.minorCost);
 		damageHeldTool(skill);
-		changeStamina(-stats.GATHERING_STAMINA_COST);
+		changeStamina(-stats.minorStaminaCost);
 
 		if (!stats.luckRoll()) {
 			MadSand.print("You fail to interact with " + obj.name);
@@ -592,7 +592,7 @@ public class Player extends Entity {
 	}
 
 	public void useItem(Item item) {
-		doAction(stats.AP_MINOR, new TimedAction() {
+		doAction(stats.minorCost, new TimedAction() {
 			@Override
 			public void act() {
 				performUseItem(item);
@@ -839,7 +839,7 @@ public class Player extends Entity {
 		return ret;
 	}
 
-	public int doAction(int ap, TimedAction action) {
+	public int doAction(double ap, TimedAction action) {
 		if (scheduledAction != null)
 			return -1;
 
@@ -878,7 +878,7 @@ public class Player extends Entity {
 			return false;
 
 		if (canWalk(dir))
-			doAction(stats.AP_WALK, new TimedAction() {
+			doAction(stats.walkCost, new TimedAction() {
 				@Override
 				public void act() {
 					performWalk(dir);

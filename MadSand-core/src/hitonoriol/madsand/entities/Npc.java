@@ -56,7 +56,7 @@ public class Npc extends Entity {
 	public TradeCategory tradeCategory;
 
 	public ProductionStation animalProductWorker;
-	DefaultGraphPath<Node> path;
+	DefaultGraphPath<Node> path = new DefaultGraphPath<Node>();
 	Pair prevDestination = new Pair();
 	int pathIdx = 0;
 
@@ -66,7 +66,6 @@ public class Npc extends Entity {
 		super();
 		this.id = id;
 		this.uid = MadSand.world.npcCounter++;
-		path = new DefaultGraphPath<Node>();
 		loadProperties();
 		if (id != NULL_NPC)
 			loadSprite();
@@ -108,19 +107,32 @@ public class Npc extends Entity {
 		pauseFlag = false;
 	}
 
+	private float DEX_PER_LVL = 0.25f;
+	private float HP_PER_LVL = 7.5f;
+	private float STR_PER_LVL = 0.5f;
+	private float ACC_PER_LVL = 0.4f;
+
+	private float ATTACK_SPD_PER_LVL = 0.1f;
+
 	void loadProperties() {
 		NpcContainer properties = NpcProp.npcs.get(id);
-		stats.roll(properties.lvl);
-		stats.skills.setLvl(properties.lvl);
-		stats.set(Stat.Dexterity, properties.dexterity);
+
+		int maxLvl = World.player.getLvl() + 3;
+		int lvl = Utils.rand(properties.lvl, maxLvl);
+
+		stats.roll(lvl);
+		stats.skills.setLvl(lvl);
+		stats.set(Stat.Dexterity, (int) (properties.dexterity + lvl * DEX_PER_LVL));
 		stats.calcStats();
 
 		stats.name = GameTextSubstitutor.replace(properties.name);
-		stats.hp = properties.hp;
+		stats.hp = (int) (properties.hp + lvl * HP_PER_LVL);
 		stats.mhp = stats.hp;
-		stats.set(Stat.Strength, properties.strength);
-		stats.set(Stat.Accuracy, properties.accuracy);
-		rewardExp = properties.rewardExp;
+		stats.set(Stat.Strength, (int) (properties.strength + lvl * STR_PER_LVL));
+		stats.set(Stat.Accuracy, (int) (properties.accuracy + lvl * ACC_PER_LVL));
+		stats.attackCost += lvl * ATTACK_SPD_PER_LVL;
+
+		rewardExp = properties.rewardExp + lvl;
 		stats.faction = properties.faction;
 		canTrade = properties.canTrade;
 
@@ -260,7 +272,7 @@ public class Npc extends Entity {
 		MadSand.world.delNpc(this);
 	}
 
-	boolean canAct(int ap) {
+	boolean canAct(double ap) {
 		return tickCharge >= getActionLength(ap);
 	}
 
@@ -307,13 +319,13 @@ public class Npc extends Entity {
 			return;
 
 		case Idle:
-			if (!canAct(stats.AP_WALK))
+			if (!canAct(stats.walkCost))
 				return;
 
 			if (Utils.percentRoll(IDLE_NPC_MOVE_CHANCE))
 				randMove();
 
-			doAction(stats.AP_WALK);
+			doAction(stats.walkCost);
 			break;
 
 		case FollowPlayer:
@@ -333,7 +345,7 @@ public class Npc extends Entity {
 
 			if (dist >= attackDistance) {
 
-				if (!canAct(stats.AP_WALK))
+				if (!canAct(stats.walkCost))
 					return;
 
 				Node closestNode = findPath(player.x, player.y);
@@ -342,15 +354,15 @@ public class Npc extends Entity {
 					dir = Pair.getRelativeDirection(x, y, closestNode.x, closestNode.y, true);
 					move(dir);
 				}
-				doAction(stats.AP_WALK);
+				doAction(stats.walkCost);
 			} else {
-				if (!canAct(stats.AP_ATTACK))
+				if (!canAct(stats.attackCost))
 					return;
 
 				dir = Pair.getRelativeDirection(x, y, player.x, player.y, false);
 				turn(dir);
 				attack(stats.look);
-				doAction(stats.AP_ATTACK);
+				doAction(stats.attackCost);
 			}
 			break;
 
