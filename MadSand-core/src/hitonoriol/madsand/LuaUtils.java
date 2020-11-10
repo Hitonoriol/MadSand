@@ -22,13 +22,10 @@ public class LuaUtils {
 	public static void init() {
 		globals = JsePlatform.standardGlobals();
 
-		LuaValue luaWorld = CoerceJavaToLua.coerce(MadSand.world);
-		LuaValue luaTutorial = CoerceJavaToLua.coerce(new Tutorial());
-		LuaValue luaUtils = CoerceJavaToLua.coerce(new LuaUtils());
-
-		globals.set("world", luaWorld);
-		globals.set("tutorial", luaTutorial);
-		globals.set("utils", luaUtils);
+		globals.set("world", CoerceJavaToLua.coerce(MadSand.world));
+		globals.set("tutorial", CoerceJavaToLua.coerce(new Tutorial()));
+		globals.set("utils", CoerceJavaToLua.coerce(new LuaUtils()));
+		globals.set("pair", CoerceJavaToLua.coerce(Pair.getInstance()));
 
 		executeScript("globals.lua");
 

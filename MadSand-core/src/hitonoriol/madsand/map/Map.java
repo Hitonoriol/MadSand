@@ -312,6 +312,55 @@ public class Map {
 		return this;
 	}
 
+	private Map drawLine(MapAction action, int x1, int y1, int x2, int y2, int id) {
+		Line line = new Line(x1, y1, x2, y2);
+
+		for (Point point : line)
+			action.changeMap(point.x, point.y, id);
+
+		return this;
+	}
+
+	private Map drawCircle(MapAction action, int x0, int y0, int radius, int id) {
+		int x, y;
+		coords.set(Pair.nullPair);
+		for (int i = 0; i < 360; ++i) {
+			x = (int) (radius + i * Math.cos(i));
+			y = (int) (radius + i * Math.sin(i));
+
+			if (coords.equals(x, y) || !correctCoords(x, y))
+				continue;
+
+			coords.set(x, y);
+
+			action.changeMap(x, y, id);
+		}
+		return this;
+	}
+
+	private Map drawTriangle(MapAction action, Pair p1, Pair p2, Pair p3, int id) {
+		drawLine(action, p1.x, p1.y, p2.x, p2.y, id);
+		drawLine(action, p1.x, p1.y, p3.x, p3.y, id);
+		drawLine(action, p2.x, p2.y, p3.x, p3.y, id);
+		return this;
+	}
+	
+	public Map drawObjectTriangle(Pair p1, Pair p2, Pair p3, int id) {
+		return drawTriangle(objectAction, p1, p2, p3, id);
+	}
+	
+	public Map drawObjectCircle(int x0, int y0, int radius, int id) {
+		return drawCircle(objectAction, x0, y0, radius, id);
+	}
+
+	public Map drawTileCircle(int x0, int y0, int radius, int id) {
+		return drawCircle(tileAction, x0, y0, radius, id);
+	}
+
+	public Map drawTileTriangle(Pair p1, Pair p2, Pair p3, int id) {
+		return drawTriangle(tileAction, p1, p2, p3, id);
+	}
+
 	public Map erodeTileRectangle(int x, int y, int w, int h, int id) {
 		return drawRect(erodeTileAction, x, y, w, h, id, false);
 	}
@@ -354,11 +403,15 @@ public class Map {
 		return fillObject(defObject);
 	}
 
-	private boolean correctCoords(Pair coords) {
-		if (coords.x <= xsz && coords.y <= ysz && coords.x >= 0 && coords.y >= 0)
+	private boolean correctCoords(int x, int y) {
+		if (x <= xsz && y <= ysz && x >= 0 && y >= 0)
 			return true;
 		else
 			return false;
+	}
+
+	private boolean correctCoords(Pair coords) {
+		return correctCoords(coords.x, coords.y);
 	}
 
 	private boolean addTile(Pair coords, Tile tile) {

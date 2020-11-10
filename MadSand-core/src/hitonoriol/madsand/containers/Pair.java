@@ -44,7 +44,7 @@ public class Pair {
 	Pair add(int x, int y) {
 		return set(this.x + x, this.y + y);
 	}
-	
+
 	public Pair add(Pair arg) {
 		return add(arg.x, arg.y);
 	}
@@ -160,6 +160,10 @@ public class Pair {
 	@Override
 	public String toString() {
 		return x + PAIR_STRING_DELIMITER + y;
+	}
+
+	public static Pair make(int x, int y) {
+		return new Pair(x, y);
 	}
 
 	public class PairKeyDeserializer extends KeyDeserializer {
