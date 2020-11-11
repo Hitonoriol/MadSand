@@ -24,6 +24,8 @@
 				{ "rollCount": 1, "idList": [21, 58, 54, 62] },
 				{ "rollCount": 3, "idList": [41, 42] }
 			],
+			"structures" : ["gen/stone-shrine"],
+			"maxStructures" : 5,
 			"chanceToRegenerate": 40,
 			"initialMobSpawn" : 5,
 			"initialFriendlyChance" : 85,

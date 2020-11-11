@@ -15,14 +15,17 @@ import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.entities.TradeListContainer;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.NpcType;
+import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.pathfinding.Graph;
 import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.pathfinding.DistanceHeuristic;
 import hitonoriol.madsand.pathfinding.NodeMap;
 import hitonoriol.madsand.properties.ItemProp;
+import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.properties.WorldGenProp;
@@ -674,6 +677,13 @@ public class Map {
 	public void putLoot(int x, int y, ArrayList<Item> loot) {
 		for (Item item : loot)
 			putLoot(x, y, item);
+	}
+	
+	public void putLoot(int x, int y, TradeCategory category, int maxRolls) {
+		TradeListContainer trade = NpcProp.tradeLists;
+		ArrayList<Item> items = trade.roll(category, trade.rollTier());
+		for (int i = 0; i < maxRolls && i < items.size(); ++i)
+			putLoot(x, y, items.get(i));
 	}
 
 	public void updateLight(int wx, int wy, int r) {

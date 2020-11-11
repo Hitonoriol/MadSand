@@ -16,4 +16,7 @@ public class OverworldPreset {
 	public RollList friendlyMobs = new RollList();
 
 	public double hostileSpawnChance, friendlySpawnChance;
+	
+	public ArrayList<String> structures = new ArrayList<>();
+	public int maxStructures;
 }

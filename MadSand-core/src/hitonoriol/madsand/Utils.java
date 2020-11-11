@@ -14,6 +14,8 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.util.Random;
 import java.util.StringTokenizer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Utils {
 	public static boolean debugMode = false;
@@ -52,6 +54,10 @@ public class Utils {
 		return randElement(parseList(stringList));
 	}
 
+	public static String oneOfStrings(String stringList) {
+		return randElement(Stream.of(stringList.split(",", -1)).collect(Collectors.toList()));
+	}
+
 	static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
 
 	public static void out(String arg) {
@@ -79,7 +85,7 @@ public class Utils {
 	}
 
 	public static int rand(int min, int max) {
-		if (max <= min) 
+		if (max <= min)
 			return min;
 
 		return random.nextInt((max - min) + 1) + min;

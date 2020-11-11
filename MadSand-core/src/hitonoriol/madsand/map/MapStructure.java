@@ -4,11 +4,12 @@ import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
 import hitonoriol.madsand.LuaUtils;
+import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 
 public class MapStructure {
 	public int x, y;
-	public int width, height;
+	// width & height are specified in each structure's script separately
 	LuaValue script;
 
 	public MapStructure(int x, int y) {
@@ -41,6 +42,11 @@ public class MapStructure {
 	}
 
 	public boolean build() {
-		return script.call(CoerceJavaToLua.coerce(this)).toboolean();
+		try {
+			return script.call(CoerceJavaToLua.coerce(this)).toboolean();
+		} catch (Exception e) { // This means that assert(x + w <= [map width] && y + h <= [map height]) failed
+			Utils.out("Oopsie, couldn't build structure: " + script);
+			return false;
+		}
 	}
 }

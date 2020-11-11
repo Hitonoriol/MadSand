@@ -7,6 +7,7 @@ import org.luaj.vm2.lib.jse.JsePlatform;
 
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.GameDialog;
+import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.properties.Tutorial;
 
 public class LuaUtils {
@@ -25,9 +26,10 @@ public class LuaUtils {
 		globals.set("world", CoerceJavaToLua.coerce(MadSand.world));
 		globals.set("tutorial", CoerceJavaToLua.coerce(new Tutorial()));
 		globals.set("utils", CoerceJavaToLua.coerce(new LuaUtils()));
+		globals.set("val_utils", CoerceJavaToLua.coerce(new Utils()));
 		globals.set("pair", CoerceJavaToLua.coerce(Pair.getInstance()));
 
-		executeScript("globals.lua");
+		executeScript("globals.lua", MadSand.SCRIPTDIR);
 
 		onAction = GameSaver.getExternal(MadSand.SCRIPTDIR + onActionScript, true);
 	}
@@ -98,5 +100,10 @@ public class LuaUtils {
 
 	public static int oneOf(String stringList) {
 		return Utils.oneOf(stringList);
+	}
+
+	public static TradeCategory lootCategory(String name) {
+		Utils.out("gettin tradecategory: " + name);
+		return TradeCategory.valueOf(name);
 	}
 }

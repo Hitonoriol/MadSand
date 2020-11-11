@@ -38,7 +38,7 @@ public class WorldGen {
 	public WorldGen initPosition() {
 		return initPosition(worldMap.curWorldPos, worldMap.curLayer);
 	}
-	
+
 	public WorldGen friendlyOnly() {
 		friendlyOnly = true;
 		return this;
@@ -86,6 +86,7 @@ public class WorldGen {
 			genBiomeTerrain();
 			genLakes();
 			genBiomeObjects();
+			genBiomeStructures();
 			rollDungeon();
 			initialMobSpawn();
 
@@ -99,6 +100,17 @@ public class WorldGen {
 		}
 
 		reset();
+	}
+
+	private void genBiomeStructures() {
+		ArrayList<String> structures = curBiome.overworld.structures;
+
+		if (structures.isEmpty())
+			return;
+
+		int rolls = Utils.rand(curBiome.overworld.maxStructures + 1);
+		for (int i = 0; i < rolls; ++i)
+			curLoc.addStructure(Utils.randElement(structures));
 	}
 
 	private void initialMobSpawn() {
