@@ -53,6 +53,7 @@ public class TradeListContainer extends HashMap<TradeCategory, ArrayList<TradeIt
 		super.put(category, valList);
 	}
 
+	
 	public ArrayList<Item> roll(TradeCategory category, int tier) {
 		ArrayList<Item> items = new ArrayList<>();
 		boolean all = category.equals(TradeCategory.All);

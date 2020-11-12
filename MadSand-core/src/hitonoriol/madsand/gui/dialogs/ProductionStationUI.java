@@ -112,25 +112,34 @@ public class ProductionStationUI extends GameDialog {
 		refresh();
 		initSliderListeners();
 		initButtonListeners();
+		boolean endless = station.isEndless();
 
 		super.add(produceLabel).width(ENTRY_WIDTH).padTop(TITLE_PAD / 3).row();
-		super.add(consumeLabel).width(ENTRY_WIDTH).row();
+		if (!endless)
+			super.add(consumeLabel).width(ENTRY_WIDTH).row();
 
 		super.add(productStorageLabel).colspan(2).padTop(PAD_VERTICAL - 5).row();
-		super.add(consumableStorageLabel).colspan(2).padBottom(PAD_VERTICAL * 2).row();
+		if (!endless)
+			super.add(consumableStorageLabel).colspan(2).padBottom(PAD_VERTICAL * 2).row();
 
 		super.add(new Label(upgradeLblString, Gui.skin)).colspan(2).align(Align.center).row();
 		super.add(upgradeButton).size(ENTRY_WIDTH, ENTRY_HEIGHT).padBottom(PAD_VERTICAL * 2).colspan(2)
 				.align(Align.center).row();
 
 		super.add(new Label(takeProductString + producedMaterial, Gui.skin));
-		super.add(new Label(addConsumableString + consumedMaterial, Gui.skin)).row();
+		if (!endless)
+			super.add(new Label(addConsumableString + consumedMaterial, Gui.skin));
+		super.row();
 
 		super.add(productSlider).size(ENTRY_WIDTH, ENTRY_HEIGHT);
-		super.add(consumableSlider).size(ENTRY_WIDTH, ENTRY_HEIGHT).row();
+		if (!endless)
+			super.add(consumableSlider).size(ENTRY_WIDTH, ENTRY_HEIGHT);
+		super.row();
 
 		super.add(takeProductButton).size(ENTRY_WIDTH, ENTRY_HEIGHT);
-		super.add(addConsumableButton).size(ENTRY_WIDTH, ENTRY_HEIGHT).row();
+		if (!endless)
+			super.add(addConsumableButton).size(ENTRY_WIDTH, ENTRY_HEIGHT);
+		super.row();
 
 		super.add(closeButton).colspan(2).size(BUTTON_WIDTH, BUTTON_HEIGHT).padTop(PAD_VERTICAL / 2)
 				.align(Align.center);

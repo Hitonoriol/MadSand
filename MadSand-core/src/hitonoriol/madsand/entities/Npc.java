@@ -164,6 +164,7 @@ public class Npc extends Entity {
 
 	private static int BASE_TRADER_COINS = 500;
 	private static int TIER_COIN_MULTIPLIER = 300;
+	private static float SELL_PRICE_COEF = 0.5f;
 
 	private void initTrader() {
 		if (!type.equals(NpcType.Trader) || tradeCategory == null)
@@ -171,7 +172,15 @@ public class Npc extends Entity {
 
 		inventory.setMaxWeight(Integer.MAX_VALUE);
 		stats.skills.setLvl(NpcProp.tradeLists.rollTier());
-		inventory.putItem(NpcProp.tradeLists.roll(tradeCategory, stats.skills.getLvl()));
+		ArrayList<Item> items = NpcProp.tradeLists.roll(tradeCategory, stats.skills.getLvl());
+
+		int markup;
+		for (Item item : items) {
+			markup = (int) (item.cost * SELL_PRICE_COEF);
+			item.cost += markup + Utils.rand(markup);
+		}
+
+		inventory.putItem(items);
 		addCurrency();
 		canTrade = true;
 	}

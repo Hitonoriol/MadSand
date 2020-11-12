@@ -67,6 +67,10 @@ public class ProductionStation {
 		return consumableMaterialStorage - consumptionRate >= 0;
 	}
 
+	public boolean isEndless() {
+		return consumptionRate <= 0;
+	}
+
 	public boolean canProduce() {
 		return hasFreeStorage() && hasRawMaterial();
 	}
