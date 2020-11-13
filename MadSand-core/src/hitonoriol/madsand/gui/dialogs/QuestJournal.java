@@ -117,7 +117,7 @@ public class QuestJournal extends Dialog {
 				.collect(Collectors.toList());
 
 		if (allQuests.size() == 0) {
-			questTable.add(emptyJournalLabel).align(Align.center).colspan(3).padTop(questScroll.getHeight() / 2);
+			questTable.add(emptyJournalLabel).align(Align.center).colspan(4).padTop(questScroll.getHeight() / 2);
 			return;
 		}
 

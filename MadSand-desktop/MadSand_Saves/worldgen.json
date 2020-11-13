@@ -14,7 +14,8 @@
 				{ "rollCount" : 50, "idList" : [ 37, 4 ] },
 				{ "rollCount" : 40, "idList" : [ 42, 41 ] },
 				{ "rollCount" : 1, "idList" : [ 82 ] },
-				{ "rollCount" : 1, "idList" : [ 93 ] }
+				{ "rollCount" : 1, "idList" : [ 93 ] },
+				{ "rollCount" : 1, "idList" : [ 157 ] }
 			],
 			
 			"regenerateObjects": [

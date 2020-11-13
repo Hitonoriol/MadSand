@@ -511,6 +511,7 @@
 	},
 	"35" : {
 		"name" : "Crow",
+		"loot" : "(97|141/2:153/5)",
 		"hp" : 15,
 		"strength" : 3,
 		"accuracy" : 5,
@@ -542,18 +543,21 @@
 	},
 	"37" : {
 		"name" : "Chicken",
+		"loot" : "(95|141/2:153/5)",
 		"hp" : 10,
 		"type" : "FarmAnimal",
 		"friendly" : true
 	},
 	"38" : {
 		"name" : "Cow",
+		"loot" : "(95|96/3:22/4)",
 		"hp" : 50,
 		"type" : "FarmAnimal",
 		"friendly" : true
 	},
 	"39" : {
 		"name" : "Sheep",
+		"loot" : "(95|96/2:22/3)",
 		"hp" : 25,
 		"type" : "FarmAnimal",
 		"friendly" : true

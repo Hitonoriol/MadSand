@@ -474,10 +474,6 @@ public abstract class Entity {
 
 	public abstract void act(float time);
 
-	void randMove() {
-		move(Direction.random());
-	}
-
 	public double distanceTo(Entity entity) {
 		return Line.calcDistance(x, y, entity.x, entity.y);
 	}

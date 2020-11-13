@@ -38,7 +38,7 @@ public class Stats {
 	public int hp;
 	public int mhp;
 
-	public float minorStaminaCost = 0.05f;
+	public float minorStaminaCost = 0.09f;
 	public float staminaLowPercent = 10;
 	public float stamina;
 	public float maxstamina;
@@ -227,7 +227,7 @@ public class Stats {
 		if (getSatiationPercent() < reqSatiationPercent)
 			return;
 
-		stamina += (survivalPercent * 0.2);
+		stamina += (survivalPercent * 0.02);
 		check();
 
 	}

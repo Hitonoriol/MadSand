@@ -280,18 +280,17 @@ public class Overlay extends Stage {
 			arrow = it.next();
 			objectiveDone = arrow.quest.isComplete();
 			if (!player.quests.isQuestInProgress(arrow.quest.id) || !objectiveDone) {
-				Utils.out("removin.. not in progr");
 				arrow.remove();
 				it.remove();
 			} else if (objectiveDone){
 				hasArrow.add(arrow.quest.id);
 				arrow.update();
-				Utils.out("updatin");
 			}
 		}
 
 		for (Quest quest : player.quests.questsInProgress) {
 			if (quest.isComplete() && !hasArrow.contains(quest.id)) {
+				quest.completionNotice();
 				arrow = new QuestArrow(quest);
 				questArrows.add(arrow);
 				super.addActor(arrow);

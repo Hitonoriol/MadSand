@@ -363,7 +363,7 @@
 	},
 	"44" : {
 		"name" : "Edible mushroom",
-		"satiationAmount" : 35,
+		"satiationAmount" : 15,
 		"staminaAmount" : 5,
 		"healAmount" : 4,
 		"cost" : 11,
@@ -564,7 +564,7 @@
 		"weight" : 0.5
 	},
 	"59" : {
-		"name" : "Chicken leg",
+		"name" : "Cooked poultry",
 		"satiationAmount" : 30,
 		"staminaAmount" : 5,
 		"healAmount" : 5,
@@ -1371,5 +1371,94 @@
 		"name" : "Leather bag",
 		"cost" : 0,
 		"weight" : 0
+	},
+	"139" : {
+		"name" : "Flour",
+		"recipe" : "72|110/1",
+		"craftQuantity" : 3,
+		"cost" : 2,
+		"weight" : 0.1
+	},
+	"140" : {
+		"name" : "Bread",
+		"recipe" : "72|139/2",
+		"satiationAmount" : 35,
+		"staminaAmount" : 5,
+		"healAmount" : 5,
+		"cost" : 9,
+		"type" : "Consumable",
+		"weight" : 0.25
+	},
+	"141" : {
+		"name" : "Raw poultry",
+		"cost" : 4,
+		"weight" : 0.1
+	},
+	
+	"142" : {
+		"name" : "Herring",
+		"cost" : 4,
+		"weight" : 0.33
+	},
+	"143" : {
+		"name" : "Carp",
+		"cost" : 6,
+		"weight" : 0.47
+	},
+	"144" : {
+		"name" : "Eel",
+		"cost" : 8,
+		"weight" : 0.4
+	},
+	"145" : {
+		"name" : "Angelfish",
+		"cost" : 10,
+		"weight" : 0.35
+	},
+	"146" : {
+		"name" : "Clownfish",
+		"cost" : 11,
+		"weight" : 0.35
+	},
+	"147" : {
+		"name" : "Jellyfish",
+		"cost" : 7,
+		"weight" : 0.4
+	},
+	"148" : {
+		"name" : "Octopus",
+		"cost" : 10,
+		"weight" : 0.45
+	},
+	"149" : {
+		"name" : "Turtle",
+		"cost" : 12,
+		"weight" : 0.75
+	},
+	"150" : {
+		"name" : "Fish bones",
+		"cost" : 1,
+		"weight" : 0.1
+	},
+	"151" : {
+		"name" : "Old boot",
+		"cost" : 1,
+		"weight" : 0.19
+	},
+	
+	"152" : {
+		"name" : "Algae covered box",
+		"cost" : 0,
+		"weight" : 2,
+		"type" : "GrabBag",
+		"contents" : "	(75|150/5:151/5)
+				(50|142/3:143/3)
+				(25|144/3:145/3:146/3)
+				(10|147/2:148/2:149/2)"
+	},
+	"153" : {
+		"name" : "Feather",
+		"cost" : 2,
+		"weight" : 0.01
 	}
 }

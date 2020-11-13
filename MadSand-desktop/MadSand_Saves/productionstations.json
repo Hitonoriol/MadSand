@@ -32,6 +32,30 @@
 		"productionRate" : 0.2,
 		"consumptionRate": 0.2
 	},
+	"156" : {
+		"producedMaterial" : 1,
+		"maxLvl" : 100,
+		"upgradeRequirement" : 11,
+		"upgradeProductionMultiplier" : 0.15,
+		"maxProductStorage" : 50,
+		"productionRate" : 0.02
+	},
+	"157" : {
+		"producedMaterial" : 44,
+		"maxLvl" : 100,
+		"upgradeRequirement" : 10,
+		"upgradeProductionMultiplier" : 0.15,
+		"maxProductStorage" : 20,
+		"productionRate" : 0.05
+	},
+	"158" : {
+		"producedMaterial" : 96,
+		"maxLvl" : 100,
+		"upgradeRequirement" : 15,
+		"upgradeProductionMultiplier" : 0.2,
+		"maxProductStorage" : 35,
+		"productionRate" : 0.075
+	},
 	"-37" : {
 		"producedMaterial" : 125,
 		"consumedMaterial" : 104,

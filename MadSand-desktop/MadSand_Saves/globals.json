@@ -11,6 +11,11 @@
 			"Why are you looking at me like that?",
 			"Ugh... There's absolutely nothing to do here. Oh, hi, {PLAYER}!"
 	],
+	"traderGreetings" : [
+			"Greetings, adventurer. What brings you here today?",
+			"Need anything in particular or just browsing?",
+			"Good day, stranger. Are you in the mood for spending some coins here or nah?"
+	],
 	"proceduralQuestText" : {
 		"Craft" : [
 				"Oh, it's you. Listen, {PLAYER}, I want to make a certain device... So I'll need you to craft ",

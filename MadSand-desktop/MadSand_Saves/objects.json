@@ -1874,5 +1874,44 @@
 		"skill" : "None",
 		"isCraftingStation" : true,
 		"name" : "Iron Anvil"
+	},
+	"156" : {
+		"hp" : 20,
+		"harvestHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "Survival",
+		"isProductionStation": true,
+		"name" : "Woodcutting place"
+	},
+	"157" : {
+		"hp" : 20,
+		"harvestHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "Survival",
+		"isProductionStation": true,
+		"name" : "Mushroom basket"
+	},
+	"158" : {
+		"hp" : 20,
+		"harvestHp" : -1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : null,
+		"onInteract" : "-1",
+		"skill" : "Survival",
+		"isProductionStation": true,
+		"name" : "Beartrap"
 	}
 }

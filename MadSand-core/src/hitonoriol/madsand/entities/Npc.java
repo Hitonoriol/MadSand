@@ -293,9 +293,13 @@ public class Npc extends Entity {
 		tickCharge -= timePassed;
 	}
 
-	public int doAction(int ap) {
+	public int doAction(double ap) {
 		tickCharge -= getActionLength(ap);
 		return super.doAction(ap);
+	}
+
+	void randMove() {
+		move(Direction.random());
 	}
 
 	public void act(float time) {
@@ -359,7 +363,6 @@ public class Npc extends Entity {
 
 				Node closestNode = findPath(player.x, player.y);
 				if (closestNode != null) {
-					//Utils.out("My coords: " + x + ", " + y + "; " + closestNode.toString());
 					dir = Pair.getRelativeDirection(x, y, closestNode.x, closestNode.y, true);
 					move(dir);
 				}

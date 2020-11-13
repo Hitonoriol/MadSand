@@ -38,8 +38,8 @@ public class BuildDialog extends GameDialog {
 	TextButton exitButton = new TextButton("Close", Gui.skin);
 
 	Table buildTable = new Table();
-	Label emptyLabel = new Label("You don't know how to build anything",Gui.skin);
-	Label unlockProgressLabel = new Label("",Gui.skin);
+	Label emptyLabel = new Label("You don't know how to build anything", Gui.skin);
+	Label unlockProgressLabel = new Label("", Gui.skin);
 	AutoFocusScrollPane buildScroll;
 	float PAD = 50;
 
@@ -61,16 +61,16 @@ public class BuildDialog extends GameDialog {
 				buildTable.add(buildEntry).size(buildEntry.WIDTH, buildEntry.HEIGHT).padBottom(PAD).row();
 			}
 		}
-		
+
 		unlockProgressLabel.setText("Build recipes unlocked: " + player.buildRecipeProgress());
 		unlockProgressLabel.setWrap(true);
 		unlockProgressLabel.setAlignment(Align.center);
 		emptyLabel.setWrap(true);
 		emptyLabel.setAlignment(Align.center);
-		
+
 		if (player.buildRecipes.isEmpty())
 			buildTable.add(emptyLabel).width(WIDTH);
-		
+
 		buildScroll = new AutoFocusScrollPane(buildTable);
 		super.add(buildScroll).size(WIDTH, HEIGHT).row();
 		super.add(exitButton).size(100, 50);
@@ -127,7 +127,8 @@ class BuildDialogEntry extends Group {
 
 		if (station != null) {
 			container.add("Produces " + ItemProp.getItemName(station.producedMaterial)).padBottom(PAD).row();
-			container.add("Consumes " + ItemProp.getItemName(station.consumedMaterial)).padBottom(PAD).row();
+			if (!station.isEndless())
+				container.add("Consumes " + ItemProp.getItemName(station.consumedMaterial)).padBottom(PAD).row();
 		} else if (isCraftingStation)
 			container.add("Crafting station").padBottom(PAD).row();
 	}

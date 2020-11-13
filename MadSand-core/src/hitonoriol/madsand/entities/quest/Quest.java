@@ -183,10 +183,15 @@ public class Quest {
 	public String getObjectiveString() {
 		return getItemObjectiveString() + getKillObjectiveString();
 	}
-	
+
 	@JsonIgnore
 	public Npc getNpc() { // Returns nullNpc if quest npc does not exist or is not in the current location
 		return MadSand.world.getCurLoc().getNpc(npcUID);
+	}
+
+	public void completionNotice() {
+		MadSand.notice("You've just completed all objectives for the \"" + name + "\". "
+				+ "Return to " + getNpc().stats.name + " to claim your reward.");
 	}
 
 	public void start(Player player, long npcUID) {

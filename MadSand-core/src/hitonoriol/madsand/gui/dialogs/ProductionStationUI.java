@@ -112,19 +112,30 @@ public class ProductionStationUI extends GameDialog {
 		refresh();
 		initSliderListeners();
 		initButtonListeners();
+		createLayout();
+	}
+
+	private void createLayout() {
 		boolean endless = station.isEndless();
+
+		if (endless) {
+			produceLabel.setWrap(true);
+			produceLabel.setAlignment(Align.center);
+		}
 
 		super.add(produceLabel).width(ENTRY_WIDTH).padTop(TITLE_PAD / 3).row();
 		if (!endless)
 			super.add(consumeLabel).width(ENTRY_WIDTH).row();
 
 		super.add(productStorageLabel).colspan(2).padTop(PAD_VERTICAL - 5).row();
-		if (!endless)
+		if (!endless) {
 			super.add(consumableStorageLabel).colspan(2).padBottom(PAD_VERTICAL * 2).row();
 
-		super.add(new Label(upgradeLblString, Gui.skin)).colspan(2).align(Align.center).row();
-		super.add(upgradeButton).size(ENTRY_WIDTH, ENTRY_HEIGHT).padBottom(PAD_VERTICAL * 2).colspan(2)
-				.align(Align.center).row();
+			super.add(new Label(upgradeLblString, Gui.skin)).colspan(2).align(Align.center).row();
+			super.add(upgradeButton).size(ENTRY_WIDTH, ENTRY_HEIGHT).padBottom(PAD_VERTICAL * 2).colspan(2)
+					.align(Align.center).row();
+		} else
+			super.add().padBottom(PAD_VERTICAL * 2).row();
 
 		super.add(new Label(takeProductString + producedMaterial, Gui.skin));
 		if (!endless)

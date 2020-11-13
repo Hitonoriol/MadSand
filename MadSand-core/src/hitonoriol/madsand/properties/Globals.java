@@ -14,10 +14,12 @@ public class Globals {
 
 	private static Globals instance = new Globals();
 
-	public ArrayList<Integer> fetchQuestItems = new ArrayList<>();
-	public HashMap<String, String> values = new HashMap<>();
-	public ArrayList<String> idleNpcText = new ArrayList<>();
-	public HashMap<ProceduralQuest.Type, ArrayList<String>> proceduralQuestText = new HashMap<>();
+	public ArrayList<String> traderGreetings;
+	
+	public ArrayList<Integer> fetchQuestItems;
+	public HashMap<String, String> values;
+	public ArrayList<String> idleNpcText;
+	public HashMap<ProceduralQuest.Type, ArrayList<String>> proceduralQuestText;
 
 	public static void loadGlobals() throws Exception {
 		instance = Resources.mapper.readValue(new File(MadSand.GLOBALSFILE), Globals.class);

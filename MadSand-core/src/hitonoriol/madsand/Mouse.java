@@ -136,7 +136,8 @@ public class Mouse {
 			info += "producing " + productName;
 			info += " (" + Utils.round(station.productStorage) + "/" + station.maxProductStorage + ")";
 			info += Resources.LINEBREAK;
-			info += rawMaterialName + " left: " + Utils.round(station.consumableMaterialStorage);
+			if (!station.isEndless())
+				info += rawMaterialName + " left: " + Utils.round(station.consumableMaterialStorage);
 		} else
 			info += "Idle";
 
@@ -168,7 +169,8 @@ public class Mouse {
 			info += "Object HP: " + object.hp + " | Object HarvestHp: " + object.harvestHp + Resources.LINEBREAK;
 		if (!npc.equals(Map.nullNpc)) {
 			info += "Npc hp: " + npc.stats.hp + Resources.LINEBREAK;
-			info += "speed: " + npc.getSpeed() + "(" + npc.stats.get(Stat.Dexterity) + ")" + " | tickCharge: " + npc.tickCharge
+			info += "speed: " + npc.getSpeed() + "(" + npc.stats.get(Stat.Dexterity) + ")" + " | tickCharge: "
+					+ npc.tickCharge
 					+ Resources.LINEBREAK;
 		}
 		info += lineDelimiter + Resources.LINEBREAK;

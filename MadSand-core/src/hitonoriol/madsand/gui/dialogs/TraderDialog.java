@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
+import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Npc;
@@ -26,7 +27,7 @@ public class TraderDialog extends GameDialog {
 	}
 
 	public TraderDialog(Player player, Npc npc) {
-		super(npc.stats.name, "Greetings, adventurer. What brings you here today?", Gui.overlay);
+		super(npc.stats.name, Utils.randElement(Globals.instance().traderGreetings), Gui.overlay);
 		this.npc = npc;
 
 		TextButton tradeButton = new TextButton("What do you have for sale?", Gui.skin);
