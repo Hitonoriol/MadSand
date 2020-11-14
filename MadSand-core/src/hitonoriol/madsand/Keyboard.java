@@ -174,8 +174,10 @@ public class Keyboard {
 		if (Gdx.input.isKeyJustPressed(Keys.Y))
 			World.player.teleport(Mouse.wx, Mouse.wy);
 
-		if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT) && Gdx.input.isKeyJustPressed(Keys.R))
+		if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT) && Gdx.input.isKeyJustPressed(Keys.R)) {
 			MadSand.world.generate();
+			MadSand.worldEntered();
+		}
 
 		if (Gdx.input.isKeyPressed(Keys.NUMPAD_3)) {
 			MadSand.ZOOM += 0.01f;

@@ -333,13 +333,8 @@ public abstract class Entity {
 		return stats.equip(item);
 	}
 
-	boolean rest() {
-		stats.actionPts += stats.apRegenRate;
-		if (stats.actionPts >= stats.actionPtsMax) {
-			stats.actionPts = stats.actionPtsMax;
-			return true;
-		} else
-			return false;
+	void rest() {
+		stats.actionPts = stats.actionPtsMax;
 	}
 
 	public void freeHands() {

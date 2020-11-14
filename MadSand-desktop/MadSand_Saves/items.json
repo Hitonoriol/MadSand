@@ -363,20 +363,20 @@
 	},
 	"44" : {
 		"name" : "Edible mushroom",
-		"satiationAmount" : 15,
-		"staminaAmount" : 5,
-		"healAmount" : 4,
-		"cost" : 11,
+		"satiationAmount" : 10,
+		"staminaAmount" : 2.5,
+		"healAmount" : 2,
+		"cost" : 3,
 		"type" : "Consumable",
-		"weight" : 0.1
+		"weight" : 0.05
 	},
 	"45" : {
 		"name" : "Amanita",
 		"satiationAmount" : -10,
 		"healAmount" : -18,
-		"cost" : 9,
+		"cost" : 7,
 		"type" : "Consumable",
-		"weight" : 0.1
+		"weight" : 0.05
 	},
 	"46" : {
 		"name" : "Potatoes",
@@ -1311,6 +1311,7 @@
 	},
 	"130" : {
 		"name" : "Travelling kit",
+		"recipe" : "75|22/5",
 		"cost" : 250,
 		"weight" : 1
 	},

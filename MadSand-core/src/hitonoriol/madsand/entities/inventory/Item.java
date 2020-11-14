@@ -49,7 +49,7 @@ public class Item {
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	public LootTable contents;
 
-	public int lvl; // level of item (only for weapons/armor)
+	public int lvl; // level of item
 
 	public EquipStats equipStats;
 	public CropContainer cropContainer;
@@ -130,7 +130,9 @@ public class Item {
 
 	String getInfoString() {
 		String info = "";
-		info += name + Resources.LINEBREAK + Resources.LINEBREAK;
+		info += name
+				+ (type.isEquipment() ? (" [ORANGE][[Lvl " + lvl + "][]") : "")
+				+ Resources.LINEBREAK + Resources.LINEBREAK;
 
 		if (type.isArmor() || type.isWeapon()) {
 			info += equipStats.getString() + Resources.LINEBREAK;

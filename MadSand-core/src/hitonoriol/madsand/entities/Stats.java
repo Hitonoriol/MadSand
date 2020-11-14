@@ -23,10 +23,8 @@ public class Stats {
 
 	public StatContainer baseStats;
 
-	public int apRegenRate = 2;
-	
 	public double walkCost = 4.5; // action points consumed by walking
-	public double attackCost = 4.25;
+	public double attackCost = 5;
 	public double minorCost = 1; // action points consumed by minor action
 	public double actionPtsMax = 5; // Entity's speed
 	public double actionPts = actionPtsMax;
@@ -86,7 +84,7 @@ public class Stats {
 	public void set(Stat stat, int value) {
 		baseStats.set(stat, value);
 	}
-	
+
 	public void roll(int lvl) {
 		baseStats.roll(lvl);
 		calcStats();
@@ -252,7 +250,7 @@ public class Stats {
 	}
 
 	public boolean luckRoll() {
-		int luck = get(Stat.Constitution);
+		int luck = get(Stat.Luck);
 		int roll = Utils.rand(0, luck);
 		return (roll != luck);
 	}
@@ -262,25 +260,26 @@ public class Stats {
 	}
 
 	public boolean attackMissed() {
-		int accuracy = get(Stat.Constitution);
-		return (Utils.rand(0, accuracy) == accuracy);
+		double probability = (1 / Math.log(get(Stat.Accuracy) + 1) * 45.0);
+		return Utils.percentRoll(probability);
 	}
 
-	final float DEF_DENOMINATOR = 3f;
-
+	float defPercent = 0.333f;
+	float minAttackPercent = 0.3f;
+	float critPercent = 0.25f;
 	public int calcAttack(int defense) {
 		if (attackMissed())
 			return 0;
 
-		int atk = (int) (get(Stat.Strength) - (defense / DEF_DENOMINATOR));
+		int atk = (int) (get(Stat.Strength) - (defense * defPercent));
 
 		if (atk <= 0)
 			atk = 1;
 
 		if (critRoll())
-			atk += atk * 0.25;
+			atk += atk * critPercent;
 		else
-			atk = Utils.rand(atk / 2, atk);
+			atk = Utils.rand((int) (atk * minAttackPercent), atk);
 
 		return atk;
 	}

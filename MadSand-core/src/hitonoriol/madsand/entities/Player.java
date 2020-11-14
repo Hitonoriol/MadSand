@@ -828,15 +828,13 @@ public class Player extends Entity {
 	}
 
 	@Override
-	public boolean rest() {
-		boolean ret = super.rest();
+	public void rest() {
+		double ap = stats.actionPts;
+		super.rest();
 		MadSand.world.timeTick(1);
-		MadSand.world.timeSubtick(getSpeed());
-		MadSand.print("You rest for 1 turn");
-		if (ret)
-			MadSand.print("You feel well-rested");
+		MadSand.world.timeSubtick(getActionLength(ap));
+		MadSand.print("You rest a bit");
 		Gui.refreshOverlay();
-		return ret;
 	}
 
 	public int doAction(double ap, TimedAction action) {

@@ -111,7 +111,7 @@ public class Mouse {
 			info += getCropInfo();
 
 		if (!npc.equals(Map.nullNpc)) {
-			info += ("You look at " + " " + npc.stats.name) + Resources.LINEBREAK;
+			info += (npc.stats.name + " (Level " + npc.getLvl() + ")") + Resources.LINEBREAK;
 
 			if (World.player.knowsNpc(npc.id))
 				info += npc.getInfoString();

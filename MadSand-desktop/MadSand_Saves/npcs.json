@@ -31,11 +31,12 @@
 	},
 	"2" : {
 		"name" : "Troll",
-		"hp" : 16,
+		"lvl" : 2,
+		"hp" : 14,
 		"strength" : 3,
 		"accuracy" : 2,
-		"dexterity" : 4,
-		"rewardExp" : 4,
+		"dexterity" : 3,
+		"rewardExp" : 7,
 		"loot" : "
 		(40|95/4:96/2)
 		(10|21/7)
@@ -92,11 +93,12 @@
 	},
 	"6" : {
 		"name" : "Orc",
-		"hp" : 20,
+		"lvl" : 2,
+		"hp" : 15,
 		"strength" : 3,
 		"accuracy" : 3,
 		"dexterity" : 3,
-		"rewardExp" : 5,
+		"rewardExp" : 8,
 		"loot" : "
 		(40|95/4:96/2)
 		(10|21/10)
@@ -280,10 +282,11 @@
 	},
 	"19" : {
 		"name" : "Bat",
-		"hp" : 12,
+		"lvl" : 2,
+		"hp" : 9,
 		"strength" : 2,
 		"accuracy" : 2,
-		"dexterity" : 8,
+		"dexterity" : 7,
 		"rewardExp" : 6,
 		"loot" : null,
 		"faction" : "Monsters",
@@ -434,7 +437,7 @@
 	},
 	"30" : {
 		"name" : "Giant moth",
-		"hp" : 20,
+		"hp" : 17,
 		"strength" : 3,
 		"accuracy" : 4,
 		"dexterity" : 5,
@@ -452,7 +455,7 @@
 	},
 	"31" : {
 		"name" : "Pink giant moth",
-		"hp" : 20,
+		"hp" : 15,
 		"strength" : 2,
 		"accuracy" : 5,
 		"dexterity" : 6,
@@ -545,6 +548,8 @@
 		"name" : "Chicken",
 		"loot" : "(95|141/2:153/5)",
 		"hp" : 10,
+		"strength" : 1,
+		"accuracy" : 1,
 		"type" : "FarmAnimal",
 		"friendly" : true
 	},
@@ -552,6 +557,8 @@
 		"name" : "Cow",
 		"loot" : "(95|96/3:22/4)",
 		"hp" : 50,
+		"strength" : 2,
+		"accuracy" : 2,
 		"type" : "FarmAnimal",
 		"friendly" : true
 	},
@@ -559,6 +566,8 @@
 		"name" : "Sheep",
 		"loot" : "(95|96/2:22/3)",
 		"hp" : 25,
+		"strength" : 1,
+		"accuracy" : 6,
 		"type" : "FarmAnimal",
 		"friendly" : true
 	}

@@ -107,12 +107,14 @@ public class Npc extends Entity {
 		pauseFlag = false;
 	}
 
-	private float DEX_PER_LVL = 0.25f;
-	private float HP_PER_LVL = 7.5f;
-	private float STR_PER_LVL = 0.5f;
+	private float DEX_PER_LVL = 0.125f;
+	private float HP_PER_LVL = 3.5f;
+	private float STR_PER_LVL = 0.25f;
 	private float ACC_PER_LVL = 0.4f;
 
+	// Action cost penalties
 	private float ATTACK_SPD_PER_LVL = 0.1f;
+	private float MOVE_SPD_PER_LVL = 0.15f;
 
 	void loadProperties() {
 		NpcContainer properties = NpcProp.npcs.get(id);
@@ -122,6 +124,7 @@ public class Npc extends Entity {
 
 		stats.roll(lvl);
 		stats.skills.setLvl(lvl);
+		lvl -= properties.lvl; // Stats start increasing if lvl is > than npc's default level
 		stats.set(Stat.Dexterity, (int) (properties.dexterity + lvl * DEX_PER_LVL));
 		stats.calcStats();
 
@@ -131,6 +134,7 @@ public class Npc extends Entity {
 		stats.set(Stat.Strength, (int) (properties.strength + lvl * STR_PER_LVL));
 		stats.set(Stat.Accuracy, (int) (properties.accuracy + lvl * ACC_PER_LVL));
 		stats.attackCost += lvl * ATTACK_SPD_PER_LVL;
+		stats.walkCost += lvl * MOVE_SPD_PER_LVL;
 
 		rewardExp = properties.rewardExp + lvl;
 		stats.faction = properties.faction;

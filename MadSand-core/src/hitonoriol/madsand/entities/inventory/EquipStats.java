@@ -110,8 +110,10 @@ public class EquipStats {
 	@JsonIgnore
 	public String getString() {
 		String ret = "";
+		int statValue;
 		for (Stat stat : Stat.values())
-			ret += stat.name() + " " + asStatString(stats.get(stat)) + Resources.LINEBREAK;
+			if ((statValue = stats.get(stat)) != 0)
+				ret += stat.name() + " " + asStatString(statValue) + Resources.LINEBREAK;
 		return ret;
 	}
 
