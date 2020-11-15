@@ -337,10 +337,6 @@ public abstract class Entity {
 		stats.actionPts = stats.actionPtsMax;
 	}
 
-	public void freeHands() {
-		stats.setHand(Item.nullItem);
-	}
-
 	public void updCoords() {
 		Map map = MadSand.world.getCurLoc();
 		if (x >= map.getWidth())

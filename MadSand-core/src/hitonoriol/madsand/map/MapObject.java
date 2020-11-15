@@ -1,7 +1,7 @@
 package hitonoriol.madsand.map;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Vector;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
@@ -35,7 +35,7 @@ public class MapObject {
 	public boolean centered = false;
 
 	public int maskWidth = 0, maskHeight = 0; // Collision mask dimensions for objects larger than 1x1 cell
-	public HashMap<ItemType, Vector<Integer>> altItems;
+	public HashMap<ItemType, ArrayList<Integer>> altItems;
 	public String onInteract;
 	public Skill skill;
 	public String name;
@@ -99,15 +99,15 @@ public class MapObject {
 		return takeDamage(0);
 	}
 
-	private static int getAltItem(int id, ItemType hand, HashMap<ItemType, Vector<Integer>> container) {
-		HashMap<ItemType, Vector<Integer>> items = container;
+	private static int getAltItem(int id, ItemType hand, HashMap<ItemType, ArrayList<Integer>> container) {
+		HashMap<ItemType, ArrayList<Integer>> items = container;
 		if (items == null)
 			return -1;
 		if (!items.containsKey(hand))
 			hand = ItemType.None;
 		if (!items.containsKey(hand) || items.get(hand) == null)
 			return -1;
-		Vector<Integer> aitems = items.get(hand);
+		ArrayList<Integer> aitems = items.get(hand);
 		return aitems.get(Utils.random.nextInt(aitems.size()));
 	}
 

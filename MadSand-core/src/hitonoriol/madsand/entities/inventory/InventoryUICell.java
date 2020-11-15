@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Mouse;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.enums.ItemType;
@@ -60,18 +59,8 @@ public class InventoryUICell extends ItemUI {
 					return;
 				}
 
-				Item prevHand = player.stats.hand();
-				player.stats.setHand(item);
+				player.takeInHand(item);
 				refreshEquippedStatus();
-
-				if (!prevHand.equals(Item.nullItem))
-					player.inventory.refreshItem(prevHand);
-
-				if (!prevHand.equals(item)) {
-					MadSand.print("You take " + item.name + " in your hand");
-					Gui.overlay.setHandDisplay(item);
-				} else
-					player.freeHands();
 
 				player.doAction(player.stats.minorCost);
 				Gui.toggleInventory();

@@ -1,0 +1,23 @@
+package hitonoriol.madsand.map;
+
+import java.util.ArrayList;
+
+import com.fasterxml.jackson.annotation.JsonSetter;
+
+import hitonoriol.madsand.entities.LootTable;
+import hitonoriol.madsand.entities.inventory.Item;
+
+public class FishingSpot {
+	public int lvl;
+	public LootTable fish;
+
+	public ArrayList<Item> catchFish() {
+		return fish.roll();
+	}
+
+	@JsonSetter("fish")
+	public void setFish(String lootString) {
+		if (lootString != null)
+			fish = LootTable.parse(lootString);
+	}
+}

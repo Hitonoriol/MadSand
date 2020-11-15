@@ -138,6 +138,21 @@ public class Player extends Entity {
 		return ret;
 	}
 
+	public void takeInHand(Item item) {
+		EquipSlot slot = item.type.handSlot();
+		Item prevHand = stats.equipment.getItem(slot);
+		stats.equipment.equip(slot, item);
+
+		if (!prevHand.equals(Item.nullItem))
+			inventory.refreshItem(prevHand);
+
+		if (!prevHand.equals(item))
+			MadSand.print("You take " + item.name + " in your hand");
+		else
+			freeHands(slot);
+
+	}
+
 	public boolean unEquip(Item item) {
 		MadSand.print("You unequip " + item.name);
 		return stats.equipment.unEquip(item);
@@ -705,18 +720,24 @@ public class Player extends Entity {
 		return false;
 	}
 
-	public void freeHands(boolean silent) {
-		Item item = stats.hand();
+	public void freeHands(EquipSlot slot, boolean silent) {
+		Item item = stats.equipment.getItem(slot);
 		if (!silent && item.id != Item.NULL_ITEM)
 			MadSand.print("You put " + stats.hand().name + " back to your inventory");
-		super.freeHands();
-		Gui.overlay.setHandDisplay(stats.hand());
+		stats.equipment.equip(slot, Item.nullItem);
 		inventory.refreshItem(item);
 	}
 
-	@Override
+	public void freeHands(EquipSlot slot) {
+		freeHands(slot, false);
+	}
+
+	public void freeHands(boolean silent) {
+		this.freeHands(EquipSlot.MainHand, silent);
+	}
+
 	public void freeHands() {
-		this.freeHands(false);
+		this.freeHands(EquipSlot.MainHand, false);
 	}
 
 	public void respawn() {

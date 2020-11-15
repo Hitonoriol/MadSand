@@ -131,7 +131,7 @@ public class Item {
 	String getInfoString() {
 		String info = "";
 		info += name
-				+ (type.isEquipment() ? (" [ORANGE][[Lvl " + lvl + "][]") : "")
+				+ (type.isUnique() ? (" [ORANGE][[Lvl " + lvl + "][]") : "")
 				+ Resources.LINEBREAK + Resources.LINEBREAK;
 
 		if (type.isArmor() || type.isWeapon()) {

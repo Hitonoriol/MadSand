@@ -1,7 +1,7 @@
 package hitonoriol.madsand.map;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Vector;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
@@ -17,8 +17,9 @@ public class Tile {
 
 	public int damage;
 	public String onInteract;
-	public HashMap<ItemType, Vector<Integer>> altItems;
+	public HashMap<ItemType, ArrayList<Integer>> altItems;
 	public String name;
+	public FishingSpot fishingSpot;
 
 	public boolean foreground = false;
 
@@ -34,11 +35,16 @@ public class Tile {
 		this.name = tileProp.name;
 		this.foreground = tileProp.foreground;
 		this.damage = tileProp.damage;
+		this.fishingSpot = tileProp.fishingSpot;
 	}
 
 	public Tile() {
 		this.id = 0;
 		this.onInteract = Resources.emptyField;
+	}
+
+	public boolean hasFishingSpot() {
+		return fishingSpot != null;
 	}
 
 	@Override

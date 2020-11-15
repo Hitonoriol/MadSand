@@ -33,7 +33,7 @@ public class Equipment {
 		this.isPlayer = isPlayer;
 	}
 
-	private boolean equip(EquipSlot slot, Item item) {
+	boolean equip(EquipSlot slot, Item item) {
 		if (equipped.containsKey(slot))
 			equipped.remove(slot);
 

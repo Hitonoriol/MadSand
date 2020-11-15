@@ -887,6 +887,8 @@
 	},
 	"94" : {
 		"name" : "Fishing Rod",
+		"lvl" : 1,
+		"type" : "FishingRod",
 		"recipe" : "8/5:69/5",
 		"cost" : 20,
 		"weight" : 0.7
@@ -1461,5 +1463,10 @@
 		"name" : "Feather",
 		"cost" : 2,
 		"weight" : 0.01
+	},
+	"154" : {
+		"name" : "Worm",
+		"cost" : 2,
+		"type" : "FishingBait"
 	}
 }
