@@ -17,7 +17,9 @@ public class FishingSpot {
 
 	@JsonSetter("fish")
 	public void setFish(String lootString) {
-		if (lootString != null)
+		if (lootString != null) {
 			fish = LootTable.parse(lootString);
+			fish.exclusiveRoll = true;
+		}
 	}
 }

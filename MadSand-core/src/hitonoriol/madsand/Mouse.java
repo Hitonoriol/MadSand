@@ -69,7 +69,7 @@ public class Mouse {
 		else
 			station = null;
 
-		pointingAtObject = (npc != Map.nullNpc) || (object != Map.nullObject);
+		pointingAtObject = (npc != Map.nullNpc) || (object != Map.nullObject) || (tile.hasFishingSpot());
 
 		tooltipContainer.moveTo(x, y);
 

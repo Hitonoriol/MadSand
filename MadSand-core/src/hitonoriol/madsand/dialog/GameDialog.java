@@ -71,6 +71,10 @@ public class GameDialog extends Dialog {
 		return this;
 	}
 
+	public void centerTitle() {
+		super.getTitleLabel().setAlignment(Align.center);
+	}
+
 	@Override
 	public boolean remove() {
 		boolean ret = super.remove();

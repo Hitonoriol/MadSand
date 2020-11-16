@@ -1467,6 +1467,7 @@
 	"154" : {
 		"name" : "Worm",
 		"cost" : 2,
+		"weight" : 0.01,
 		"type" : "FishingBait"
 	}
 }

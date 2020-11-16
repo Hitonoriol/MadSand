@@ -24,9 +24,11 @@ import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.inventory.trade.TradeInventoryUI;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.enums.*;
+import hitonoriol.madsand.gui.dialogs.FishingUI;
 import hitonoriol.madsand.gui.dialogs.ProductionStationUI;
 import hitonoriol.madsand.gui.dialogs.TraderDialog;
 import hitonoriol.madsand.gui.widgets.ResourceProgressBar;
+import hitonoriol.madsand.map.FishingSpot;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
@@ -456,17 +458,30 @@ public class Player extends Entity {
 		new TradeInventoryUI(npc.inventory, inventory).show();
 	}
 
+	private void fish(FishingSpot spot) {
+		if (stats.offHand().type != ItemType.FishingBait) {
+			MadSand.notice("You don't have any bait equipped!");
+			return;
+		}
+
+		new FishingUI(spot).show();
+	}
+
 	private void performInteraction(Direction direction) {
 		coords.set(x, y).addDirection(direction);
 
 		Map loc = MadSand.world.getCurLoc();
 		MapObject obj = MadSand.world.getCurLoc().getObject(coords.x, coords.y);
 		Npc npc = loc.getNpc(coords.x, coords.y);
+		Tile tileInFront = loc.getTile(coords.x, coords.y);
 
 		if (!npc.equals(Map.nullNpc)) {
 			interact(npc);
 			return;
 		}
+
+		if (stats.hand().type == ItemType.FishingRod && tileInFront.hasFishingSpot())
+			fish(tileInFront.fishingSpot);
 
 		if (obj.id == Map.nullObject.id)
 			return;

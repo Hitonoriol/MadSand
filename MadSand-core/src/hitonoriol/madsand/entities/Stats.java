@@ -6,6 +6,7 @@ import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.inventory.EquipStats;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.enums.EquipSlot;
 import hitonoriol.madsand.enums.Faction;
 import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.enums.Stat;
@@ -106,6 +107,10 @@ public class Stats {
 
 	public Item hand() {
 		return equipment.getHand();
+	}
+
+	public Item offHand() {
+		return equipment.getItem(EquipSlot.Offhand);
 	}
 
 	@JsonIgnore
@@ -267,6 +272,7 @@ public class Stats {
 	float defPercent = 0.333f;
 	float minAttackPercent = 0.3f;
 	float critPercent = 0.25f;
+
 	public int calcAttack(int defense) {
 		if (attackMissed())
 			return 0;
