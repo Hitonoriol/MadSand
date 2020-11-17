@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import hitonoriol.madsand.Keyboard;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.containers.PairFloat;
@@ -536,19 +535,14 @@ public abstract class Entity {
 	}
 
 	@JsonGetter("Equipment")
-	public ArrayList<String> getEquipment() { // For serializer
-		ArrayList<String> list = stats.equipment.getUidList();
-		return list;
+	public ArrayList<Integer> getEquipment() { // For serializer
+		return stats.equipment.getIndexList(inventory);
 	}
 
 	@JsonSetter("Equipment")
-	public void setEquipment(ArrayList<String> list) { // For deserializer
-		int len = list.size();
-		for (int i = 0; i < len - 1; ++i)
-			stats.equip(inventory.getItem(list.get(i)));
-
-		int handId = Utils.val(list.get(len - 1));
-		stats.setHand(inventory.getItem(handId));
+	public void setEquipment(ArrayList<Integer> list) { // For deserializer
+		for (int itemIdx : list)
+			equip(inventory.getItemByIndex(itemIdx));
 	}
 
 	@JsonGetter("isPlayer")

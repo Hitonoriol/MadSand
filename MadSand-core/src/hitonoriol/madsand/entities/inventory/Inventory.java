@@ -134,6 +134,13 @@ public class Inventory {
 
 		return ret;
 	}
+	
+	public Item getItemByIndex(int idx) {
+		if (idx < 0 || idx >= items.size())
+			return Item.nullItem;
+		
+		return items.get(idx);
+	}
 
 	void clear() {
 		items.clear();

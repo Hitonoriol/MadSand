@@ -136,6 +136,8 @@ public class Player extends Entity {
 
 		if (ret)
 			MadSand.print("You equip " + item.name);
+		else
+			takeInHand(item);
 
 		return ret;
 	}
@@ -738,7 +740,7 @@ public class Player extends Entity {
 	public void freeHands(EquipSlot slot, boolean silent) {
 		Item item = stats.equipment.getItem(slot);
 		if (!silent && item.id != Item.NULL_ITEM)
-			MadSand.print("You put " + stats.hand().name + " back to your inventory");
+			MadSand.print("You put " + item.name + " back to your inventory");
 		stats.equipment.equip(slot, Item.nullItem);
 		inventory.refreshItem(item);
 	}

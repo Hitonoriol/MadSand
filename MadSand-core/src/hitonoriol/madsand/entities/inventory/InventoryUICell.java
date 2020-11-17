@@ -155,6 +155,7 @@ public class InventoryUICell extends ItemUI {
 	}
 
 	public void refreshEquippedStatus() {
-		equippedLabel.setVisible(player.stats.equipment.itemEquipped(item) || player.stats.hand() == item);
+		equippedLabel.setVisible(player.stats.equipment.itemEquipped(item)
+				|| player.stats.hand() == item || player.stats.offHand() == item);
 	}
 }

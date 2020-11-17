@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.EquipSlot;
 
@@ -106,18 +107,11 @@ public class Equipment {
 		return equipmentWeight;
 	}
 
-	public ArrayList<String> getUidList() { //For serializer
-		EquipSlot slots[] = EquipSlot.values();
-		int len = slots.length;
-		ArrayList<String> list = new ArrayList<>(len);
-		Item item;
+	public ArrayList<Integer> getIndexList(Inventory inventory) { //For serializer
+		ArrayList<Integer> list = new ArrayList<>();
 
-		for (int i = 0; i < len - 1; ++i) {
-			item = getItem(EquipSlot.getByNumber(i));
-			list.add(item.uid);
-		}
-
-		list.add(getHand().id + "");
+		for (EquipSlot slot : EquipSlot.values())
+			list.add(inventory.items.indexOf(getItem(slot)));
 
 		return list;
 	}
