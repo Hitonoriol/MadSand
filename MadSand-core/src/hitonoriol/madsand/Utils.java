@@ -91,6 +91,11 @@ public class Utils {
 		return random.nextInt((max - min) + 1) + min;
 	}
 
+	public static int signRand(int min, int max) {
+		int num = rand(min, max);
+		return random.nextBoolean() ? num : -num;
+	}
+
 	public static int rand(int max) {
 		if (max < 1)
 			max = 1;

@@ -362,6 +362,12 @@ public class Player extends Entity {
 		}
 	}
 
+	public boolean addItem(ArrayList<Item> items) {
+		for (Item item : items)
+			addItem(item);
+		return true;
+	}
+
 	private boolean performCraftItem(int id) {
 		Item itemToCraft = ItemProp.items.get(id);
 		int craftQuantity = ItemProp.getCraftQuantity(id);

@@ -68,6 +68,7 @@ public class Resources {
 	static TextureRegion[][] tmpAnim;
 
 	static Texture animsheet;
+	public static NinePatchDrawable transparency = loadNinePatch("misc/transparency.png");
 
 	static float playerAnimDuration = 0.2f;
 
