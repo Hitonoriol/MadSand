@@ -1,0 +1,14 @@
+{
+	"Crafting" : {
+		"requiredExp" : 5,
+		"lvUpMultiplier" : 1.0
+	},
+	"Fishing" : {
+		"requiredExp" : 15,
+		"lvUpMultiplier" : 0.35
+	},
+	"Level" : {
+		"requiredExp" : 100,
+		"lvUpMultiplier" : 0.9
+	}
+}

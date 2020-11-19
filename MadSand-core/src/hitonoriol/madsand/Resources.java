@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import org.w3c.dom.Document;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Cursor;
@@ -32,8 +30,8 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import hitonoriol.madsand.containers.AnimationContainer;
 import hitonoriol.madsand.containers.Pair;
-import hitonoriol.madsand.containers.Tuple;
 import hitonoriol.madsand.entities.SkillContainer;
+import hitonoriol.madsand.entities.SkillValue;
 import hitonoriol.madsand.entities.TradeListContainer;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.quest.Quest;
@@ -56,8 +54,6 @@ public class Resources {
 
 	static final int ANIM_FRAME_SIZE = 32;
 	static final float ACTION_ANIM_DURATION = 0.15f;
-
-	static Document skilldoc;
 
 	public static Texture[] item;
 	public static Texture[] objects;
@@ -138,6 +134,7 @@ public class Resources {
 		loadTradeLists();
 		loadTutorial();
 		loadActionAnimations();
+		loadSkillReqs();
 
 		Utils.out("Done loading resources.");
 	}
@@ -286,28 +283,8 @@ public class Resources {
 
 	static Texture mapcursor;
 
-	public static void loadSkillReqs() {
-		if (SkillContainer.reqList.size() > 0)
-			return;
-		skilldoc = XMLUtils.XMLString(GameSaver.getExternal(MadSand.SKILLFILE));
-		int i = 0;
-		int skills = XMLUtils.countKeys(skilldoc, "skill");
-		Skill skill;
-		String skillStr;
-		int req;
-		double mul;
-		while (i < skills) {
-			skillStr = XMLUtils.getAttr(skilldoc, "skill", Utils.str(i), "name");
-			if (skillStr.equals("-1")) {
-				++i;
-				continue;
-			}
-			skill = Skill.valueOf(skillStr);
-			req = Utils.val(XMLUtils.getKey(skilldoc, "skill", Utils.str(i), "required"));
-			mul = Double.parseDouble(XMLUtils.getKey(skilldoc, "skill", Utils.str(i), "multiplier"));
-			SkillContainer.reqList.put(skill, Tuple.makeTuple(req, mul));
-			++i;
-		}
+	public static void loadSkillReqs() throws Exception{
+		SkillContainer.reqList = mapper.readValue(new File(MadSand.SKILLFILE), getMapType(Skill.class, SkillValue.class));
 	}
 
 	static final int PLAYER_ANIM_WIDTH = 35;

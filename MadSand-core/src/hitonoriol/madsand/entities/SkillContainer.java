@@ -4,9 +4,7 @@ import java.util.HashMap;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
-import hitonoriol.madsand.containers.Tuple;
 import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.world.World;
 
@@ -16,20 +14,19 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 
 	final int BONUS_DENOMINATOR = 25; // skill lvl/this = bonus percent of something for some actions
 	final int ITEM_BONUS_DENOMINATOR = 5; // level/this = quantity of bonus items from action
-	public static HashMap<Skill, Tuple<Integer, Double>> reqList = new HashMap<Skill, Tuple<Integer, Double>>();
+	public static HashMap<Skill, SkillValue> reqList = new HashMap<Skill, SkillValue>();
 
 	public SkillContainer() {
 		Skill skill;
 		SkillValue skillVal;
-		Tuple<Integer, Double> rs;
-		Resources.loadSkillReqs();
+		SkillValue rs;
 		for (int i = 0; i < Skill.values().length; ++i) {
 			skill = Skill.values()[i];
 			skillVal = new SkillValue();
 
 			if (reqList.containsKey(skill)) {
 				rs = reqList.get(skill);
-				skillVal = new SkillValue(rs.l, rs.r);
+				skillVal = new SkillValue(rs.requiredExp, rs.lvUpMultiplier);
 			} else
 				skillVal = new SkillValue();
 

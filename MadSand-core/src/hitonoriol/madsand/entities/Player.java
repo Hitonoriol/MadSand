@@ -609,7 +609,9 @@ public class Player extends Entity {
 		boolean itemUsed = false;
 		checkHands(item.id);
 
-		itemUsed = equip(item);
+		if (stats.equipment.getItem(EquipSlot.slotByTypeAll(item.type)) != item)
+			itemUsed = equip(item);
+
 		itemUsed |= useGrabBag(item);
 		itemUsed |= useTileInteractItem(item);
 		itemUsed |= useScriptedItem(item);

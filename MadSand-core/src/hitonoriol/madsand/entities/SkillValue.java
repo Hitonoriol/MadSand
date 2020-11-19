@@ -1,5 +1,8 @@
 package hitonoriol.madsand.entities;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class SkillValue {
 	final static double DEFAULT_MULTIPLIER = 0.3;
 	final static int DEFAULT_REQUIRED_EXP = 30;

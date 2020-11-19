@@ -43,4 +43,13 @@ public enum EquipSlot {
 			return null;
 		}
 	}
+
+	// Returns slot for any item (if item is not an equipment, one of the hand slots will be returned)
+	public static EquipSlot slotByTypeAll(ItemType type) {
+		EquipSlot slot = slotByType(type);
+		if (slot == null)
+			return type.handSlot();
+		else
+			return slot;
+	}
 }

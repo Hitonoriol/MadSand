@@ -35,7 +35,7 @@ import me.xdrop.jrand.JRand;
 
 public class FishingUI extends GameDialog {
 
-	static float WIDTH = 525, HEIGHT = 475;
+	static float WIDTH = 525, HEIGHT = 500;
 	static float BAR_WIDTH = WIDTH - 125, BAR_HEIGHT = 25;
 
 	int FISH_OFFSET_MAX = 200;

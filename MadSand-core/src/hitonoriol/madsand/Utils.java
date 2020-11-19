@@ -143,7 +143,7 @@ public class Utils {
 		else if (seconds < S_HOUR)
 			return round(((float) seconds / S_MINUTE)) + " minutes";
 
-		else if (seconds < 86400)
+		else if (seconds < S_DAY)
 			return round(((float) seconds / S_HOUR)) + " hours";
 
 		else
