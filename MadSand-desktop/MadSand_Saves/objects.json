@@ -444,7 +444,7 @@
 		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 134 ],
-			"Axe" : [ 1 ]
+			"Axe" : [ 156 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Woodcutting",
@@ -453,14 +453,14 @@
 	"32" : {
 		"hp" : 11,
 		"harvestHp" : 4,
-		"lvl" : -1,
+		"lvl" : 1,
 		"nocollide" : false,
 		"centered" : true,
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 135 ],
-			"Axe" : [ 1 ]
+			"Axe" : [ 155 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Woodcutting",
@@ -484,14 +484,14 @@
 	"34" : {
 		"hp" : 11,
 		"harvestHp" : 4,
-		"lvl" : 2,
+		"lvl" : 3,
 		"nocollide" : false,
 		"centered" : true,
 		"maskWidth" : 0,
 		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 136 ],
-			"Axe" : [ 1 ]
+			"Axe" : [ 157 ]
 		},
 		"onInteract" : "-1",
 		"skill" : "Woodcutting",

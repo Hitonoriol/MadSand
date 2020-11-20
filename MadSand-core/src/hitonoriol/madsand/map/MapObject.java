@@ -37,7 +37,7 @@ public class MapObject {
 	public int maskWidth = 0, maskHeight = 0; // Collision mask dimensions for objects larger than 1x1 cell
 	public HashMap<ItemType, ArrayList<Integer>> altItems;
 	public String onInteract;
-	public Skill skill;
+	public Skill skill = Skill.None;
 	public String name;
 
 	public MapObject(int id) {

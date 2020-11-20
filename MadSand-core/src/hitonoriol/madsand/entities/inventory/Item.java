@@ -20,6 +20,7 @@ import hitonoriol.madsand.enums.Stat;
 import hitonoriol.madsand.properties.CropContainer;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
+import hitonoriol.madsand.world.World;
 
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class Item {
@@ -210,6 +211,8 @@ public class Item {
 		this.skill = properties.skill;
 		this.useAction = properties.useAction;
 		this.contents = properties.contents;
+		
+		boolean isSpecial = false;
 
 		if (type.equals(ItemType.Consumable)) {
 			healAmount = properties.healAmount;
@@ -222,11 +225,16 @@ public class Item {
 
 		if (type.isWeapon() || type.isArmor()) {
 			this.lvl = properties.lvl;
+
+			if (isSpecial = World.player.stats.luckRoll()) {
+				++this.lvl;
+				name += " of " + Utils.randWord();
+			}
+
 			equipStats = new EquipStats(lvl, type);
-			name += " of " + Utils.randWord();
 		}
 
-		if (type.isWeapon())
+		if (type.isWeapon() && !isSpecial)
 			equipStats.stats.set(Stat.Strength, properties.equipStats.stats);
 	}
 

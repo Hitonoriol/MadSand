@@ -255,9 +255,7 @@ public class Stats {
 	}
 
 	public boolean luckRoll() {
-		int luck = get(Stat.Luck);
-		int roll = Utils.rand(0, luck);
-		return (roll != luck);
+		return Utils.percentRoll(Utils.log(Math.pow(get(Stat.Luck), 1.75), 8) + 10);
 	}
 
 	public boolean critRoll() {
@@ -295,8 +293,7 @@ public class Stats {
 	}
 
 	public boolean rollEncounter() {
-		double chance = (100 / (get(Stat.Luck) + get(Stat.Dexterity) * 0.75));
-		Utils.out("Encounter chance: " + chance);
+		double chance = 15;
 		return Utils.percentRoll(chance);
 	}
 }

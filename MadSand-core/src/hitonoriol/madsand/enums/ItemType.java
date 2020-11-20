@@ -36,7 +36,8 @@ public enum ItemType {
 		return this == Hoe ||
 				this == Pickaxe ||
 				this == Shovel ||
-				this == Axe;
+				this == Axe ||
+				this == FishingRod;
 	}
 
 	public boolean isUnique() { //Unique = non-stackable

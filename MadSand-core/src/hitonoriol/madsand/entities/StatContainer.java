@@ -7,16 +7,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.enums.Stat;
 
-public class StatContainer {
+public class StatContainer extends HashMap<Stat, Integer>{
 	static final int STAT_RAND_MAX = 8;
 	static final int STAT_RAND_MIN = 3;
 	static int STAT_MIN_SUM = 20; //for roll() method
 
-	public HashMap<Stat, Integer> stats = new HashMap<>();
 	public int maxStatSum = 20;
 
 	public StatContainer() {
-
+		super();
 	}
 
 	public StatContainer(StatContainer stats) {
@@ -24,11 +23,11 @@ public class StatContainer {
 	}
 
 	public int get(Stat stat) {
-		return stats.getOrDefault(stat, 0);
+		return super.getOrDefault(stat, 0);
 	}
 
 	public void set(Stat stat, int value) {
-		stats.put(stat, value);
+		super.put(stat, value);
 	}
 
 	public void set(StatContainer stats) {

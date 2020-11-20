@@ -7,6 +7,10 @@
 		"requiredExp" : 15,
 		"lvUpMultiplier" : 0.35
 	},
+	"Woodcutting" : {
+		"requiredExp" : 15,
+		"lvUpMultiplier" : 0.1
+	},
 	"Level" : {
 		"requiredExp" : 100,
 		"lvUpMultiplier" : 0.9

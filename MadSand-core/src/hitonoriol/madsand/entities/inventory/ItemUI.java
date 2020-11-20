@@ -101,5 +101,6 @@ public class ItemUI extends Group {
 
 		if (item.type.isTool())
 			refreshHp();
+
 	}
 }

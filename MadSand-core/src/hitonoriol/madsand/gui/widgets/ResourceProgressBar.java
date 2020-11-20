@@ -53,7 +53,8 @@ public class ResourceProgressBar extends TimedProgressBar {
 	}
 
 	public ResourceProgressBar(MapObject object) {
-		this(BASE_DELAY - (D_MULTIPLIER * (float) World.player.stats.skills.getSkillRollPercent(object.skill)));
+		this(BASE_DELAY
+				- (D_MULTIPLIER * (float) SkillContainer.magicFormula(World.player.stats.skills.getLvl(object.skill))));
 		super.setAnimateDuration(delay);
 		nextValue = delay;
 

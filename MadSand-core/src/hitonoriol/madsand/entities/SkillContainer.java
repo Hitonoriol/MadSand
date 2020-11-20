@@ -133,6 +133,10 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 		double additionalPercent = 0;
 		if (skill == Skill.Survival)
 			additionalPercent = 10;
+		else if (skill.isResourceSkill())
+			additionalPercent = 35;
+		else if (skill == Skill.None)
+			return 100;
 		return magicFormula((double) getLvl(skill)) + additionalPercent;
 	}
 
@@ -146,7 +150,7 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 		return skillRoll(skill) ? Utils.rand(1, getLvl(skill)) : 0;
 	}
 
-	private static double magicFormula(double skillLvl) {
+	public static double magicFormula(double skillLvl) {
 		if (skillLvl < 1)
 			return 1;
 

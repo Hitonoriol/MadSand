@@ -11,12 +11,14 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 
@@ -35,7 +37,7 @@ import me.xdrop.jrand.JRand;
 
 public class FishingUI extends GameDialog {
 
-	static float WIDTH = 525, HEIGHT = 500;
+	static float WIDTH = 525, HEIGHT = 485;
 	static float BAR_WIDTH = WIDTH - 125, BAR_HEIGHT = 25;
 
 	int FISH_OFFSET_MAX = 200;
@@ -69,7 +71,7 @@ public class FishingUI extends GameDialog {
 		maxFish += World.player.stats.skills.getLvl(Skill.Fishing);
 		super.setTitle("Fishing").centerTitle();
 		catchBar.setTriggerMode(false);
-		catchBar.setVisualInterpolation(Interpolation.smooth);
+		catchBar.setVisualInterpolation(Interpolation.fade);
 		catchBar.setStyle(barStyle);
 		resetCatchBar();
 		super.add(catchBar).size(BAR_WIDTH, BAR_HEIGHT).padTop(15).row();
@@ -81,8 +83,11 @@ public class FishingUI extends GameDialog {
 		gameContainer.addActor(bobber);
 		bobber.setPosition((WIDTH / 2) + bobber.getImageWidth() / 2, HEIGHT / 2);
 
+		Label infoLabel = new Label("[LMB] Catch", Gui.skin);
+		infoLabel.setAlignment(Align.center);
 		super.add(gameContainer).size(WIDTH, HEIGHT).row();
-		super.add(closeButton).width(200).height(45).pad(10);
+		super.add(infoLabel).pad(10).row();
+		super.add(closeButton).width(200).height(40).padBottom(10);
 
 		closeButton.addListener(new ChangeListener() {
 			@Override
@@ -118,7 +123,11 @@ public class FishingUI extends GameDialog {
 		Player player = World.player;
 		player.addItem(spot.catchFish());
 		player.stats.skills.increaseSkill(Skill.Fishing);
-		player.inventory.delItem(player.stats.offHand(), 1);
+
+		if (!player.stats.skills.skillRoll(Skill.Fishing))
+			player.inventory.delItem(player.stats.offHand(), 1);
+
+		World.player.stats.equipment.refreshUI();
 
 		if (!player.hasItem(baitId)) {
 			MadSand.warn("You're out of bait!");

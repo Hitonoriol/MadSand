@@ -122,9 +122,11 @@ public class Player extends Entity {
 
 	public void checkHands(int id) {
 		int itemIdx = inventory.getSameCell(id);
-		if (itemIdx == -1 && stats.hand().id == id) {
-			stats.setHand(Item.nullItem);
-			Gui.overlay.setHandDisplay(Item.nullItem);
+		if (itemIdx == -1) {
+			if (stats.hand().id == id)
+				stats.setHand(Item.nullItem);
+			else if (stats.offHand().id == id)
+				stats.equipment.unEquip(EquipSlot.Offhand);
 			return;
 		} else
 			Gui.overlay.equipmentSidebar.refreshSlot(EquipSlot.MainHand);
@@ -563,7 +565,7 @@ public class Player extends Entity {
 		damageHeldTool(skill);
 		changeStamina(-stats.minorStaminaCost);
 
-		if (!stats.luckRoll()) {
+		if (!stats.skills.skillRoll(skill) && !stats.luckRoll()) {
 			MadSand.print("You fail to interact with " + obj.name);
 			return -1;
 		}
