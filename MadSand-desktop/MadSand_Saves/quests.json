@@ -243,6 +243,29 @@
 	"rewardItems" : "n",
 	"removeOnCompletion" : "-1",
 	"repeatable" : false
+},
+
+"9" : {
+	"@type" : "Quest",
+	"exp" : 30,
+	"name" : "Fishing tutorial",
+	"startMsg" : "
+		Ahoy, {PLAYER}! Ye know, 'tis been a pretty long time since I... materialized here, 'n I really miss th' scent o' good ole fish!
+		So ye know wha'? Go catch 5 Herrin's 'n brin' them t' me.[Okay...]=>
+		Here's some worms that ye can use as bait.
+		As fer th' fishin' rod... Ye can craft it from sticks 'n plant threads.
+		I believe in ye, mate.=>
+		## * To fish in a body of water you need to equip a fishing rod and some kind of bait (for example, worms). Then you have to approach a water tile click on it to start fishing. [Cool]
+	",
+
+	"endMsg" : "Thank ye. Here's some gold fer ye.",
+
+	"reqMsg" : "Brin' me 5 herrin's.",
+	"reqItems" : "142/5",
+	"giveItems" : "154/15",
+	"rewardItems" : "21/40",
+	"removeOnCompletion" : "-1",
+	"repeatable" : false
 }
 
 }

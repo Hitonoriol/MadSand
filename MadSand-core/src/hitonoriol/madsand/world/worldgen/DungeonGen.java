@@ -29,9 +29,11 @@ public class DungeonGen extends DungeonGenerator {
 		ArrayList<DungeonFloorContents> contents = dungeon.dungeonContents;
 
 		int floorNumber = depth;
-		for (DungeonFloorContents floor : contents) {
-			if (floor.fromFloor < floorNumber)
-				floorNumber = floor.fromFloor;
+		DungeonFloorContents floor;
+		for (int i = 0; i < contents.size(); ++i) {
+			floor = contents.get(i);
+			if (floor.fromFloor <= depth)
+				floorNumber = i;
 		}
 
 		DungeonContents curDungeonFloor = contents.get(floorNumber).contents;

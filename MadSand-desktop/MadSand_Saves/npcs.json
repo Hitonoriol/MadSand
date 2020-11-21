@@ -71,8 +71,8 @@
 		"rewardExp" : 36,
 		"loot" : null,
 		"faction" : "Partisans",
-		"type" : "Regular",
-		"questList" : null,
+		"type" : "QuestMaster",
+		"questList" : [ 9 ],
 		"spawnOnce" : false,
 		"friendly" : true
 	},
