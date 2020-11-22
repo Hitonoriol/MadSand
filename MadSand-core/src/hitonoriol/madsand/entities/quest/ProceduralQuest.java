@@ -171,7 +171,7 @@ public class ProceduralQuest extends Quest {
 	}
 
 	private void randomKillQuest() {
-		OverworldPreset biome = WorldGenProp.getBiome(MadSand.world.getOverworld().getBiome()).overworld;
+		OverworldPreset biome = WorldGenProp.getBiome(MadSand.world.getLocBiome()).overworld;
 		ArrayList<Integer> mobs = new ArrayList<>();
 		mobs.addAll(biome.friendlyMobs.idList);
 		mobs.addAll(biome.hostileMobs.idList);

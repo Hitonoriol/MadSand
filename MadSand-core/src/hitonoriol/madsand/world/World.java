@@ -40,8 +40,6 @@ public class World {
 	private int MAX_PREVIOUS_LOCATIONS = 2; // Max amount of maps allowed to be in WorldMap at the same time
 	private ArrayDeque<Pair> previousLocations = new ArrayDeque<>(); // Maps that are currently loaded in WorldMap
 
-	public static final int BORDER = 1;// map border - old shit, not really useful anymore
-
 	public static int DEFAULT_MAPSIZE = Map.MIN_MAPSIZE;
 
 	@JsonIgnore
@@ -181,8 +179,8 @@ public class World {
 		return getLoc(worldMap.curWorldPos, layer);
 	}
 
-	int getLocBiome() {
-		return getCurLoc(Location.LAYER_OVERWORLD).getBiome();
+	public int getLocBiome() {
+		return getLocation().biome;
 	}
 
 	int getDefaultTile() {

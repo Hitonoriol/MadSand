@@ -55,7 +55,6 @@ public class WorldMapSaver {
 			stream.write(GameSaver.encode2(map.spawnPoint.y));
 			stream.write(GameSaver.encode2(map.defTile));
 			stream.write(GameSaver.encode2(map.defObject));
-			stream.write(GameSaver.encode2(map.getBiome()));
 			MapObject obj = new MapObject();
 
 			ByteArrayOutputStream lootStream = new ByteArrayOutputStream();
@@ -197,7 +196,6 @@ public class WorldMapSaver {
 			map.setNpcs(npcs);
 
 			// Load tiles & objects
-			map.setBiome(biome);
 			map.defTile = defTile;
 			map.defObject = defObject;
 

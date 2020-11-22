@@ -20,7 +20,8 @@ public class WorldGen {
 	private int curBiomeId;
 	private Pair curMapCoords;
 	private int curLayer;
-	private Map curLoc;
+	private Location curLocation;
+	private Map curMap;
 	private int width, height;
 	private boolean friendlyOnly = false;
 
@@ -62,16 +63,17 @@ public class WorldGen {
 	}
 
 	public void generate() {
-		this.curLoc = worldMap.getLocation(curMapCoords).getLayer(curLayer);
+		curLocation = worldMap.getLocation(curMapCoords);
+		this.curMap = curLocation.getLayer(curLayer);
 
 		Utils.out("Generating " + curMapCoords + " : " + curLayer);
 
 		if (width < 1 || height < 1)
-			curLoc.rollSize();
+			curMap.rollSize();
 		else
-			curLoc.setSize(width, height);
+			curMap.setSize(width, height);
 
-		curLoc.purge();
+		curMap.purge();
 
 		if (curLayer == Location.LAYER_OVERWORLD) {
 
@@ -79,7 +81,7 @@ public class WorldGen {
 				setBiome(chooseRandomBiome());
 
 			Utils.out("Biome: " + curBiomeId);
-			curLoc.setBiome(curBiomeId);
+			curLocation.biome = curBiomeId;
 
 			setBiome(curBiomeId);
 
@@ -110,18 +112,18 @@ public class WorldGen {
 
 		int rolls = Utils.rand(curBiome.overworld.maxStructures + 1);
 		for (int i = 0; i < rolls; ++i)
-			curLoc.addStructure(Utils.randElement(structures));
+			curMap.addStructure(Utils.randElement(structures));
 	}
 
 	private void initialMobSpawn() {
 		for (int i = 0; i < curBiome.overworld.initialMobSpawn; ++i)
-			curLoc.spawnMobs(Utils.percentRoll(curBiome.overworld.initialFriendlyChance) || friendlyOnly, true);
+			curMap.spawnMobs(Utils.percentRoll(curBiome.overworld.initialFriendlyChance) || friendlyOnly, true);
 	}
 
 	private void genBiomeTerrain() {
 		int defaultTile = curBiome.getDefaultTile();
-		curLoc.defTile = defaultTile;
-		curLoc.fillTile();
+		curMap.defTile = defaultTile;
+		curMap.fillTile();
 		Utils.out("Default tile: " + defaultTile);
 
 		ArrayList<RollList> tileGenList = curBiome.getBiomeTiles();
@@ -133,7 +135,7 @@ public class WorldGen {
 			for (int i = 0; i < tileRollList.rollCount; ++i) {
 				tileIdList = tileRollList.idList;
 				listSize = tileIdList.size();
-				curLoc.randPlaceTile(tileIdList.get(Utils.random.nextInt(listSize)));
+				curMap.randPlaceTile(tileIdList.get(Utils.random.nextInt(listSize)));
 			}
 		}
 	}
@@ -143,7 +145,7 @@ public class WorldGen {
 		ArrayList<RollList> objectGenList = curBiome.getBiomeObjects();
 
 		for (RollList objectRollList : objectGenList)
-			curLoc.rollObjects(objectRollList);
+			curMap.rollObjects(objectRollList);
 
 		Utils.out("Done generating biome objects!");
 	}
@@ -258,7 +260,7 @@ public class WorldGen {
 	}
 
 	private WorldGenPreset getLocationBiome() { // Sets current generator biome to the overworld biome
-		return setCurBiome(MadSand.world.getOverworld().getBiome());
+		return setCurBiome(MadSand.world.getLocBiome());
 	}
 
 	public int chooseRandomBiome() {

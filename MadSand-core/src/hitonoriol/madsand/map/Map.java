@@ -29,6 +29,7 @@ import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.properties.WorldGenProp;
+import hitonoriol.madsand.world.Location;
 import hitonoriol.madsand.world.World;
 import hitonoriol.madsand.world.worldgen.OverworldPreset;
 import hitonoriol.madsand.world.worldgen.RollList;
@@ -40,7 +41,6 @@ public class Map {
 	public static int MIN_MAPSIZE = 100;
 	public static int MAX_MAPSIZE = 200;
 
-	private int biome = -1;
 	public int defTile = 0;
 	public int defObject = 0;
 
@@ -154,14 +154,6 @@ public class Map {
 
 	public void rollSize() {
 		rollSize(MIN_MAPSIZE, MAX_MAPSIZE);
-	}
-
-	public int getBiome() {
-		return biome;
-	}
-
-	public void setBiome(int val) {
-		biome = val;
 	}
 
 	@JsonIgnore
@@ -347,11 +339,11 @@ public class Map {
 		drawLine(action, p2.x, p2.y, p3.x, p3.y, id);
 		return this;
 	}
-	
+
 	public Map drawObjectTriangle(Pair p1, Pair p2, Pair p3, int id) {
 		return drawTriangle(objectAction, p1, p2, p3, id);
 	}
-	
+
 	public Map drawObjectCircle(int x0, int y0, int radius, int id) {
 		return drawCircle(objectAction, x0, y0, radius, id);
 	}
@@ -678,7 +670,7 @@ public class Map {
 		for (Item item : loot)
 			putLoot(x, y, item);
 	}
-	
+
 	public void putLoot(int x, int y, TradeCategory category, int maxRolls) {
 		TradeListContainer trade = NpcProp.tradeLists;
 		ArrayList<Item> items = trade.roll(category, trade.rollTier());
@@ -894,7 +886,10 @@ public class Map {
 	}
 
 	public void spawnMobs(boolean friendly, boolean force) {
-		WorldGenPreset preset = WorldGenProp.getBiome(getBiome());
+		if (MadSand.world.curLayer() != Location.LAYER_OVERWORLD)
+			return;
+
+		WorldGenPreset preset = WorldGenProp.getBiome(MadSand.world.getLocBiome());
 		OverworldPreset overworld = preset.overworld;
 		double forceVal = force ? 100 : 0;
 		int maxNpcs = getMaxNpcs();
@@ -940,8 +935,10 @@ public class Map {
 	}
 
 	public void naturalRegeneration() {
+		if (MadSand.world.curLayer() != Location.LAYER_OVERWORLD)
+			return;
 
-		WorldGenPreset preset = WorldGenProp.getBiome(getBiome());
+		WorldGenPreset preset = WorldGenProp.getBiome(MadSand.world.getLocBiome());
 		OverworldPreset overworld = preset.overworld;
 
 		if (overworld.regenerateObjects == null)

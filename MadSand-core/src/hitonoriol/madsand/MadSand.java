@@ -163,8 +163,8 @@ public class MadSand extends Game {
 	static int countRcells() {
 		int i = 0;
 		int ii = 0, cl = 0;
-		while (i < World.DEFAULT_MAPSIZE + World.BORDER) {
-			while (ii < World.DEFAULT_MAPSIZE + World.BORDER) {
+		while (i < World.DEFAULT_MAPSIZE) {
+			while (ii < World.DEFAULT_MAPSIZE) {
 				if (Line.calcDistance(TEST_POINT * TILESIZE, TEST_POINT * TILESIZE, i * TILESIZE,
 						ii * TILESIZE) <= renderradius) {
 					cl++;
@@ -180,8 +180,8 @@ public class MadSand extends Game {
 	private static PairFloat[] getAllRcells(PairFloat[] cl) {
 		int i = 0;
 		int ii = 0, clc = 0;
-		while (i < World.DEFAULT_MAPSIZE + World.BORDER) {
-			while (ii < World.DEFAULT_MAPSIZE + World.BORDER) {
+		while (i < World.DEFAULT_MAPSIZE) {
+			while (ii < World.DEFAULT_MAPSIZE) {
 				if (Line.calcDistance(TEST_POINT * TILESIZE, TEST_POINT * TILESIZE, i * TILESIZE,
 						ii * TILESIZE) <= renderradius) {
 					cl[clc] = new PairFloat(TEST_POINT - ii, TEST_POINT - i);
