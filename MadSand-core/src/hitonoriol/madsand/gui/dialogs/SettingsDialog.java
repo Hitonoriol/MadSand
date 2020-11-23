@@ -33,7 +33,7 @@ public class SettingsDialog extends Dialog {
 		final Label renderv = new Label("", skin);
 		final Slider renderslide = new Slider(5, 100, 1, false, skin);
 		if (new File("MadSand_Saves/lastrend.dat").exists())
-			radius = (Integer.parseInt(GameSaver.getExternal("lastrend.dat")));
+			radius = (Integer.parseInt(GameSaver.readFile("lastrend.dat")));
 		renderslide.setValue(radius);
 		renderv.setText("Render radius (" + (int) renderslide.getValue() + ")");
 		TextButton cbtn = new TextButton("Set", skin);
@@ -55,7 +55,7 @@ public class SettingsDialog extends Dialog {
 		cbtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				MadSand.setRenderRadius(Math.round(renderslide.getValue()));
-				GameSaver.saveToExternal("lastrend.dat", Math.round(renderslide.getValue()) + "");
+				GameSaver.writeFile("lastrend.dat", Math.round(renderslide.getValue()) + "");
 				remove();
 			}
 

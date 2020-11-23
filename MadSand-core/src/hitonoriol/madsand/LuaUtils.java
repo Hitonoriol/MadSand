@@ -31,7 +31,7 @@ public class LuaUtils {
 
 		executeScript("globals.lua", MadSand.SCRIPTDIR);
 
-		onAction = GameSaver.getExternal(MadSand.SCRIPTDIR + onActionScript, true);
+		onAction = GameSaver.readFile(MadSand.SCRIPTDIR + onActionScript, true);
 	}
 
 	public static void register(String luaName, LuaValue object) {

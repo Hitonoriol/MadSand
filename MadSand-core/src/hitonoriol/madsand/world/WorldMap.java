@@ -15,7 +15,7 @@ public class WorldMap {
 	public int curLayer = Location.LAYER_OVERWORLD;
 	public Pair curWorldPos = new Pair();
 
-	public HashMap<Pair, Location> locations = new HashMap<>();
+	HashMap<Pair, Location> locations = new HashMap<>();
 
 	public WorldMap(int sz) {
 		xsz = ysz = sz;

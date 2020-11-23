@@ -29,6 +29,68 @@ public class WorldMapSaver {
 		this.worldMap = worldMap;
 	}
 
+	public byte[] locationToBytes(int wx, int wy) {
+		Pair coords = new Pair();
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		byte[] layer;
+		long size;
+		try {
+			Location location = worldMap.getLocation(coords.set(wx, wy));
+			//Header: format version, sector layer count
+			stream.write(GameSaver.encode8(GameSaver.saveFormatVersion));
+			stream.write(GameSaver.encode2(location.getLayerCount()));
+
+			//Save all layers of sector
+			for (Entry<Integer, Map> entry : location.layers.entrySet()) {
+				layer = sectorToBytes(wx, wy, entry.getKey());
+				size = layer.length;
+				stream.write(GameSaver.encode2(entry.getKey()));
+				stream.write(GameSaver.encode8(size));
+				stream.write(layer);
+			}
+
+			return stream.toByteArray();
+		} catch (Exception e) {
+			e.printStackTrace();
+			Utils.die();
+			return null;
+		}
+	}
+
+	public void saveLocationInfo(int wx, int wy) throws Exception {
+		Resources.mapper.writeValue(GameSaver.getLocationFile(wx, wy), worldMap.getLocation(new Pair(wx, wy)));
+	}
+
+	public void bytesToLocation(byte[] location, int wx, int wy) throws Exception {
+		ByteArrayInputStream stream = new ByteArrayInputStream(location);
+		long layersz;
+		long saveVersion;
+		byte[] block = new byte[BLOCK_SIZE];
+		byte[] longBlock = new byte[LONG_BLOCK_SIZE];
+
+		saveVersion = loadNextLongBlock(stream, longBlock);
+		if (saveVersion != GameSaver.saveFormatVersion)
+			throw (new Exception("Incompatible save format version!"));
+
+		int layers = loadNextBlock(stream, block);
+		int layer;
+
+		byte[] sectorContents;
+		for (int i = 0; i < layers; ++i) {
+			layer = loadNextBlock(stream, block);
+			layersz = loadNextLongBlock(stream, longBlock);
+			sectorContents = new byte[(int) layersz];
+			stream.read(sectorContents);
+			bytesToSector(sectorContents, wx, wy, layer);
+		}
+
+	}
+
+	public void loadLocationInfo(int wx, int wy) throws Exception {
+		Location location = Resources.mapper.readValue(GameSaver.getLocationFile(wx, wy), Location.class);
+		worldMap.locations.put(new Pair(wx, wy), location);
+	}
+
 	byte[] sectorToBytes(int wx, int wy, int layer) {
 		try {
 			Utils.out("Saving sector " + wx + ", " + wy + " Layer: " + layer);
@@ -47,7 +109,7 @@ public class WorldMapSaver {
 			int xsz = map.getWidth();
 			int ysz = map.getHeight();
 			// header: isEditable, width, height,spawnpoint(x, y) - for dungeon levels,
-			// default tile, default object, biome
+			// default tile, default object
 			stream.write(GameSaver.encode2(Utils.val(map.editable)));
 			stream.write(GameSaver.encode2(xsz));
 			stream.write(GameSaver.encode2(ysz));
@@ -109,59 +171,6 @@ public class WorldMapSaver {
 		}
 	}
 
-	public byte[] locationToBytes(int wx, int wy) {
-		Pair coords = new Pair();
-		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		byte[] layer;
-		long size;
-		try {
-			Location location = worldMap.getLocation(coords.set(wx, wy));
-			//Header: format version, sector layer count
-			stream.write(GameSaver.encode8(GameSaver.saveFormatVersion));
-			stream.write(GameSaver.encode2(location.getLayerCount()));
-
-			//Save all layers of sector
-			for (Entry<Integer, Map> entry : location.layers.entrySet()) {
-				layer = sectorToBytes(wx, wy, entry.getKey());
-				size = layer.length;
-				stream.write(GameSaver.encode2(entry.getKey()));
-				stream.write(GameSaver.encode8(size));
-				stream.write(layer);
-			}
-
-			return stream.toByteArray();
-		} catch (Exception e) {
-			e.printStackTrace();
-			Utils.die();
-			return null;
-		}
-	}
-
-	public void bytesToLocation(byte[] location, int wx, int wy) throws Exception {
-		ByteArrayInputStream stream = new ByteArrayInputStream(location);
-		long layersz;
-		long saveVersion;
-		byte[] block = new byte[BLOCK_SIZE];
-		byte[] longBlock = new byte[LONG_BLOCK_SIZE];
-
-		saveVersion = loadNextLongBlock(stream, longBlock);
-		if (saveVersion != GameSaver.saveFormatVersion)
-			throw (new Exception("Incompatible save format version!"));
-
-		int layers = loadNextBlock(stream, block);
-		int layer;
-
-		byte[] sectorContents;
-		for (int i = 0; i < layers; ++i) {
-			layer = loadNextBlock(stream, block);
-			layersz = loadNextLongBlock(stream, longBlock);
-			sectorContents = new byte[(int) layersz];
-			stream.read(sectorContents);
-			bytesToSector(sectorContents, wx, wy, layer);
-		}
-
-	}
-
 	void bytesToSector(byte[] sector, int wx, int wy, int layer) {
 		try {
 			ByteArrayInputStream stream = new ByteArrayInputStream(sector);
@@ -175,7 +184,6 @@ public class WorldMapSaver {
 			int spawnY = loadNextBlock(stream, block);
 			int defTile = loadNextBlock(stream, block);
 			int defObject = loadNextBlock(stream, block);
-			int biome = loadNextBlock(stream, block);
 
 			Pair loc = new Pair(wx, wy);
 			Map map = new Map(xsz, ysz);

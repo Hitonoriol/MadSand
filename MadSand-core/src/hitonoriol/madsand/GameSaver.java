@@ -19,7 +19,7 @@ import hitonoriol.madsand.world.World;
 
 public class GameSaver {
 	public static String SECTOR_DELIM = "!";
-	public final static long saveFormatVersion = 6;
+	public final static long saveFormatVersion = 7;
 
 	public static byte[] concat(byte[]... arrays) {
 		int totalLength = 0;
@@ -69,14 +69,13 @@ public class GameSaver {
 	public static boolean deleteDirectory(File dir) {
 		File[] allContents = dir.listFiles();
 		if (allContents != null) {
-			for (File file : allContents) {
+			for (File file : allContents)
 				deleteDirectory(file);
-			}
 		}
 		return dir.delete();
 	}
 
-	public static void saveToExternal(String name, String text) {
+	public static void writeFile(String name, String text) {
 		try {
 			File file = new File(name);
 			PrintWriter pw = new PrintWriter(file);
@@ -87,7 +86,7 @@ public class GameSaver {
 		}
 	}
 
-	public static String getExternal(String name, boolean withNewline) {
+	public static String readFile(String name, boolean withNewline) {
 		try {
 			File file = new File(name);
 			BufferedReader br = new BufferedReader(new FileReader(file));
@@ -105,8 +104,8 @@ public class GameSaver {
 		}
 	}
 
-	public static String getExternal(String name) {
-		return getExternal(name, false);
+	public static String readFile(String name) {
+		return readFile(name, false);
 	}
 
 	public static String getProdStationFile(int wx, int wy, int layer) {
@@ -118,12 +117,20 @@ public class GameSaver {
 		return getSectorString(wx, wy) + SECTOR_DELIM + layer;
 	}
 
-	static String getSectorString(int wx, int wy) {
+	public static String getSectorString(int wx, int wy) {
 		return SECTOR_DELIM + wx + SECTOR_DELIM + wy;
 	}
 
+	static String getWorldXYPath(String file, int wx, int wy) {
+		return MadSand.MAPDIR + MadSand.WORLDNAME + "/" + file + getSectorString(wx, wy) + MadSand.SAVE_EXT;
+	}
+
+	public static File getLocationFile(int wx, int wy) {
+		return new File(getWorldXYPath("location", wx, wy));
+	}
+
 	static File getSectorFile(int wx, int wy) {
-		return new File(MadSand.MAPDIR + MadSand.WORLDNAME + "/sector" + getSectorString(wx, wy) + MadSand.SAVE_EXT);
+		return new File(getWorldXYPath("sector", wx, wy));
 	}
 
 	public static String getNpcFile(int wx, int wy, int layer) {
@@ -214,9 +221,9 @@ public class GameSaver {
 			String fl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.PLAYERFILE;
 			String wfl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.WORLDFILE;
 
-			MadSand.world = Resources.mapper.readValue(getExternal(wfl), World.class);
+			MadSand.world = Resources.mapper.readValue(readFile(wfl), World.class);
 			MadSand.world.initWorld();
-			World.player = Resources.mapper.readValue(getExternal(fl), Player.class);
+			World.player = Resources.mapper.readValue(readFile(fl), Player.class);
 			Player player = World.player;
 
 			player.inventory.initUI();
@@ -239,6 +246,7 @@ public class GameSaver {
 			OutputStream os = new FileOutputStream(getSectorFile(wx, wy));
 			os.write(MadSand.world.worldMapSaver.locationToBytes(wx, wy));
 			os.close();
+			MadSand.world.worldMapSaver.saveLocationInfo(wx, wy);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -256,6 +264,7 @@ public class GameSaver {
 			byte[] data = Files.readAllBytes(fileLocation);
 			Utils.out("Loading location " + wx + ", " + wy);
 
+			MadSand.world.worldMapSaver.loadLocationInfo(wx, wy);
 			MadSand.world.worldMapSaver.bytesToLocation(data, wx, wy);
 
 			return true;

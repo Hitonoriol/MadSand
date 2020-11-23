@@ -150,8 +150,8 @@ public class MainMenu extends Stage {
 		String verFile = "MadSandData/version.dat";
 		String ver;
 
-		if (!GameSaver.getExternal(verFile).equals(""))
-			ver = "\n[GREEN]" + (GameSaver.getExternal(verFile));
+		if (!GameSaver.readFile(verFile).equals(""))
+			ver = "\n[GREEN]" + (GameSaver.readFile(verFile));
 		else
 			ver = "\n[GREEN]Version file not found";
 
