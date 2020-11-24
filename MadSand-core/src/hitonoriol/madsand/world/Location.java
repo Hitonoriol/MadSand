@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import hitonoriol.madsand.enums.Faction;
 import hitonoriol.madsand.map.Map;
 
 /*
@@ -19,6 +20,8 @@ public class Location {
 
 	public int biome = -1;
 	public boolean hasDungeon = false;
+	public Faction faction = Faction.None;
+	public Settlement settlement;
 
 	HashMap<Integer, Map> layers = new HashMap<>();
 
@@ -51,6 +54,11 @@ public class Location {
 	@JsonIgnore
 	public void setLayers(HashMap<Integer, Map> layers) {
 		this.layers = layers;
+	}
+
+	@JsonIgnore
+	public boolean isSettlement() {
+		return settlement != null;
 	}
 
 }

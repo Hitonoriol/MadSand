@@ -9,6 +9,7 @@ import hitonoriol.madsand.enums.Faction;
 import hitonoriol.madsand.enums.NpcState;
 import hitonoriol.madsand.enums.NpcType;
 import hitonoriol.madsand.enums.TradeCategory;
+import hitonoriol.madsand.enums.WorkerType;
 
 public class NpcContainer {
 	public String name;
@@ -24,6 +25,7 @@ public class NpcContainer {
 	public NpcType type = NpcType.Regular;
 	public TradeCategory tradeCategory;
 	public NpcState defaultState;
+	public WorkerType worker;
 
 	public ArrayList<Integer> questList;
 

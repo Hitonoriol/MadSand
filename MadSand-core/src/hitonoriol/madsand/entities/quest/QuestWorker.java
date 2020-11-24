@@ -14,9 +14,9 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
-import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.entities.Reputation;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.gui.dialogs.QuestListDialog;
 import hitonoriol.madsand.properties.QuestList;
@@ -194,6 +194,7 @@ public class QuestWorker {
 		player.inventory.delItem(quest.removeOnCompletion);
 		player.inventory.putItem(quest.rewardItems);
 		player.addExp(quest.exp);
+		player.reputation.change(quest.getNpc().stats.faction, Reputation.QUEST_REWARD);
 		MadSand.notice("You get " + quest.exp + " EXP!");
 
 		if (!quest.repeatable)
@@ -222,8 +223,12 @@ public class QuestWorker {
 		if (isQuestInProgress(id) && !isQuestCompleted(id)) {
 			if (quest.isComplete())
 				completeQuest(quest);
-			else
-				GameDialog.generateDialogChain(quest.reqMsg, Gui.overlay).show();
+			else {
+				new DialogChainGenerator(quest.reqMsg)
+						.setAllTitles(quest.getNpc().stats.name)
+						.generate(Gui.overlay)
+						.show();
+			}
 		} else
 			startQuest(quest, npcUID);
 

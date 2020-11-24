@@ -48,7 +48,8 @@ public class Player extends Entity {
 	public QuestWorker quests = new QuestWorker();
 	public HashSet<String> luaActions = new HashSet<>(); //Set for one-time lua actions
 	public HashMap<Integer, Integer> killCount = new HashMap<>();
-	public HashMap<Faction, Float> reputation = new HashMap<>();
+	public Reputation reputation = new Reputation();
+
 	private TimedAction scheduledAction;
 
 	@JsonProperty("newlyCreated")
@@ -194,6 +195,7 @@ public class Player extends Entity {
 
 			MadSand.notice("You kill " + npc.stats.name + "! [+" + npc.rewardExp + " exp]");
 			addExp(npc.rewardExp);
+			reputation.change(npc.stats.faction, Reputation.KILL_PENALTY);
 
 			if (addToKillCount(npc.id)) // If killed for the first time
 				MadSand.print("You now know more about " + npc.stats.name + "s");
