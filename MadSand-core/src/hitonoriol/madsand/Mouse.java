@@ -8,6 +8,7 @@ import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.enums.GameState;
+import hitonoriol.madsand.enums.NpcState;
 import hitonoriol.madsand.enums.NpcType;
 import hitonoriol.madsand.enums.Stat;
 import hitonoriol.madsand.gui.widgets.GameTooltip;
@@ -112,6 +113,9 @@ public class Mouse {
 
 		if (!npc.equals(Map.nullNpc)) {
 			info += (npc.stats.name + " (Level " + npc.getLvl() + ")") + Resources.LINEBREAK;
+			info += ((npc.friendly || npc.state != NpcState.Hostile)
+					? "Neutral"
+					: "Hostile") + Resources.LINEBREAK;
 
 			if (World.player.knowsNpc(npc.id))
 				info += npc.getInfoString();
@@ -212,7 +216,7 @@ public class Mouse {
 			}
 
 			if (pointingAtObject && !npc.equals(Map.nullNpc)) {
-				if (!npc.friendly) {
+				if (npc.state == NpcState.Hostile) {
 					World.player.attack();
 					return;
 				}

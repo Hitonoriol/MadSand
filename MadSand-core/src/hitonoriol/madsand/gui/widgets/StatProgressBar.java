@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.Utils;
 
 public class StatProgressBar extends Group {
 
@@ -17,6 +18,7 @@ public class StatProgressBar extends Group {
 	String stat;
 	ProgressBar progressBar;
 	Label statLabel = new Label("", Gui.skin);
+	boolean round = true;
 
 	public StatProgressBar(String stat) {
 		super();
@@ -32,6 +34,10 @@ public class StatProgressBar extends Group {
 		super.addActor(statLabel);
 	}
 
+	public StatProgressBar() {
+		this("");
+	}
+
 	public StatProgressBar setStatText(String stat) {
 		this.stat = stat;
 		return this;
@@ -42,19 +48,31 @@ public class StatProgressBar extends Group {
 		return this;
 	}
 
+	public StatProgressBar roundValues(boolean round) {
+		this.round = round;
+		return this;
+	}
+
 	public StatProgressBar setValue(float value) {
-		statLabel.setText(stat + ": " + Math.round(value) + "/" + Math.round(progressBar.getMaxValue()));
+		String valStr;
+
+		if (round)
+			valStr = Math.round(value) + "/" + Math.round(progressBar.getMaxValue());
+		else
+			valStr = Utils.round(value) + "/" + Utils.round(progressBar.getMaxValue());
+
+		statLabel.setText((stat.isEmpty() ? "" : (stat + ": ")) + valStr);
 		progressBar.setValue(value);
 		return this;
 	}
-	
+
 	public StatProgressBar setProgressSize(float width, float height) {
 		progressBar.setSize(width, height);
 		statLabel.setSize(width, height);
 		super.setSize(width, height);
 		return this;
 	}
-	
+
 	public StatProgressBar setStyle(ProgressBarStyle style) {
 		progressBar.setStyle(style);
 		return this;
@@ -65,15 +83,15 @@ public class StatProgressBar extends Group {
 		progressBar.setStyle(style);
 		return this;
 	}
-	
+
 	public static StatProgressBar createHpBar() {
 		return new StatProgressBar("HP").setStyle(Color.LIME);
 	}
-	
+
 	public static StatProgressBar createStaminaBar() {
 		return new StatProgressBar("Stamina").setStyle(Color.SALMON);
 	}
-	
+
 	public static StatProgressBar createLevelBar() {
 		return new StatProgressBar("LVL").setStyle(Color.GOLDENROD);
 	}

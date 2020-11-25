@@ -1,5 +1,5 @@
 package hitonoriol.madsand.enums;
 
 public enum NpcState {
-	Still, Idle, FollowPlayer 
+	Still, Idle, Hostile 
 }

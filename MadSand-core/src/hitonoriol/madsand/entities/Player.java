@@ -175,14 +175,12 @@ public class Player extends Entity {
 			return;
 
 		int atk = stats.calcAttack(npc.getDefense());
+		npc.provoke();
 
 		if (atk == 0)
 			MadSand.print("You miss " + npc.stats.name);
 		else {
 			MadSand.print("You deal " + atk + " damage to " + npc.stats.name);
-
-			if (npc.friendly)
-				npc.friendly = false;
 
 			super.attackAnimation(npc);
 			npc.damage(atk);

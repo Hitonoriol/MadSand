@@ -608,7 +608,7 @@ public class World {
 			if ((player.canSee(entity) && entity != player) || (entity == player && pausePlayer)) {
 				hostile = false;
 				if (entity != player) {
-					hostile = ((Npc) entity).state == NpcState.FollowPlayer;
+					hostile = ((Npc) entity).state == NpcState.Hostile;
 					pausePlayer |= hostile;
 					
 					if (pausePlayer)

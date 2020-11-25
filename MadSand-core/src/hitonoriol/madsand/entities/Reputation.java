@@ -5,7 +5,7 @@ import java.util.HashMap;
 import hitonoriol.madsand.enums.Faction;
 
 public class Reputation {
-	final static float RANGE = 100;
+	public final static float RANGE = 100;
 	final static float HOSTILE_THR = -5;
 
 	public static float KILL_PENALTY = -0.25f;

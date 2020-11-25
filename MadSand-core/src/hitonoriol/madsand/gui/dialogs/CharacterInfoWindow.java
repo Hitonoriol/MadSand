@@ -12,9 +12,12 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.dialog.GameDialog;
+import hitonoriol.madsand.entities.Reputation;
 import hitonoriol.madsand.entities.SkillContainer;
 import hitonoriol.madsand.entities.Stats;
+import hitonoriol.madsand.enums.Faction;
 import hitonoriol.madsand.enums.Skill;
+import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.gui.widgets.StatLabels;
 import hitonoriol.madsand.gui.widgets.StatProgressBar;
 import hitonoriol.madsand.world.World;
@@ -28,11 +31,12 @@ public class CharacterInfoWindow {
 	private final static float headerBottomPadding = 5f;
 	private final static float headerScale = 1.11f;
 
+	final static float LINE_PAD = 5;
 	final static float BAR_WIDTH = 150;
 	final static float BAR_HEIGHT = 19;
 	static ProgressBarStyle skillStyle = Gui.createProgressBarStyle(BAR_WIDTH, BAR_HEIGHT, Color.LIME);
+	static ProgressBarStyle repStyle = Gui.createProgressBarStyle(BAR_WIDTH, BAR_HEIGHT, Color.ORANGE);
 
-	Label statsLbl, skillsLbl;
 	GameDialog dialog;
 	StatLabels statLabels;
 	Skin skin = Gui.skin;
@@ -40,23 +44,21 @@ public class CharacterInfoWindow {
 	public CharacterInfoWindow() {
 		statLabels = new StatLabels();
 		dialog = new GameDialog(Gui.overlay);
-		statsLbl = new Label("Stats:", skin);
-		skillsLbl = new Label("\nSkills:", skin);
-		skillsLbl.setFontScale(headerScale);
-		statsLbl.setFontScale(headerScale);
 		createDialog();
 	}
 
 	public void createDialog() {
-		//dialog.debugAll();
+		Table scrollTable = new Table();
+		AutoFocusScrollPane dialogScroll = new AutoFocusScrollPane(scrollTable);
 		Stats stats = World.player.stats;
 		float width = Gui.defLblWidth;
 		Label nameLbl = new Label(World.player.stats.name, skin);
 		Label levelLbl = new Label("Level: " + World.player.stats.skills.getLvl(Skill.Level) + " ("
 				+ World.player.stats.skills.getExpString(Skill.Level) + ")", skin);
-
 		levelLbl.setFontScale(headerScale);
 		nameLbl.setFontScale(headerScale);
+
+		// Dialog Title (Player's name & Level progressbar)
 		dialog.add(nameLbl).row();
 		dialog.setBackground(Gui.darkBackground);
 		dialog.add().row();
@@ -69,21 +71,75 @@ public class CharacterInfoWindow {
 				.row();
 		dialog.add().width(width).row();
 
-		dialog.add(statsLbl).width(width).padLeft(headerLeftPadding).padBottom(headerBottomPadding).row();
-
+		// Stat list
+		addTitle(scrollTable, "Stats:");
 		for (StatLabels.StatLabel label : statLabels.labels)
-			dialog.add(label).width(width).row();
+			scrollTable.add(label).width(width).padBottom(LINE_PAD).row();
 
-		dialog.add(skillsLbl).width(width).padLeft(headerLeftPadding).padBottom(headerBottomPadding).row();
+		// Skill list
+		addTitle(scrollTable, "Skills:");
+		scrollTable.add(createSkillTable()).width(width).row();
 
-		Skill skill;
+		// Reputation list
+		addTitle(scrollTable, "Reputation:");
+		scrollTable.add(createRepTable()).width(width).row();
+
+		TextButton ok = new TextButton("Close", skin);
+
+		dialog.add(dialogScroll).width(GameDialog.WIDTH).height(400).row();
+		dialog.add(ok).width(width).padTop(35).padBottom(LINE_PAD).row();
+
+		ok.addListener(new ChangeListener() {
+			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+				Gui.overlay.toggleStatsWindow();
+			}
+
+		});
+	}
+
+	private void addTitle(Table table, String text) {
+		Label label = new Label(text, Gui.skin);
+		label.setFontScale(headerScale);
+		table.add(new Label("", Gui.skin)).row();
+		table.add(label)
+				.width(Gui.defLblWidth)
+				.padLeft(headerLeftPadding)
+				.padBottom(headerBottomPadding).row();
+	}
+
+	private Table createRepTable() {
+		Table repTable = new Table(Gui.skin);
+		repTable.align(Align.left);
+		for (Faction faction : Faction.values()) {
+			if (faction == Faction.None)
+				continue;
+
+			repTable.add(faction.name() + ": ")
+					.width(130)
+					.align(Align.left)
+					.padBottom(LINE_PAD);
+
+			repTable.add(new StatProgressBar()
+					.setStyle(repStyle)
+					.setRange(-Reputation.RANGE, Reputation.RANGE)
+					.roundValues(false)
+					.setStatText("") // TODO: Reputation levels
+					.setValue(World.player.reputation.get(faction))
+					.setProgressSize(BAR_WIDTH, BAR_HEIGHT))
+					.size(BAR_WIDTH, BAR_HEIGHT)
+					.padBottom(LINE_PAD)
+					.row();
+		}
+		return repTable;
+	}
+
+	private Table createSkillTable() {
 		Label skillLbl;
 		SkillContainer skills = World.player.stats.skills;
 		Table skillTable = new Table();
 		skillTable.align(Align.left);
 
-		for (int i = 1; i < Skill.values().length; ++i) {
-			skill = Skill.values()[i];
+		for (Skill skill : Skill.values()) {
 
 			if (skill == Skill.Level)
 				continue;
@@ -93,7 +149,7 @@ public class CharacterInfoWindow {
 			skillTable.add(skillLbl)
 					.width(130)
 					.align(Align.left)
-					.padBottom(5);
+					.padBottom(LINE_PAD);
 			skillTable.add(new StatProgressBar(skill.name())
 					.setStyle(skillStyle)
 					.setRange(0, skills.get(skill).requiredExp)
@@ -101,21 +157,11 @@ public class CharacterInfoWindow {
 					.setValue(skills.getExp(skill))
 					.setProgressSize(BAR_WIDTH, BAR_HEIGHT))
 					.size(BAR_WIDTH, BAR_HEIGHT)
-					.padBottom(5);
+					.padBottom(LINE_PAD);
 			skillTable.row();
 		}
-		dialog.add(skillTable).width(width).row();
 
-		TextButton ok = new TextButton("Close", skin);
-		ok.addListener(new ChangeListener() {
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				dialog.remove();
-				dialog.clearActions();
-				Gui.overlay.toggleStatsWindow();
-			}
-
-		});
-		dialog.add(ok).width(width).padTop(35).padBottom(5).row();
+		return skillTable;
 	}
 
 	public void show() {

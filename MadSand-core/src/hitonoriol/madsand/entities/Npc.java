@@ -18,6 +18,7 @@ import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.enums.Faction;
 import hitonoriol.madsand.enums.NpcState;
 import hitonoriol.madsand.enums.NpcType;
 import hitonoriol.madsand.enums.Stat;
@@ -43,6 +44,7 @@ public class Npc extends Entity {
 	public boolean canTrade = false;
 	public boolean friendly;
 	public boolean spawnOnce;
+	public boolean provoked = false;
 	private boolean pauseFlag = false;
 
 	public float timePassed; // time passed since last action
@@ -199,6 +201,11 @@ public class Npc extends Entity {
 		inventory.putItem(new Item(currencyId, rollTraderCurrency()));
 	}
 
+	public void provoke() {
+		if (!provoked)
+			provoked = true;
+	}
+
 	@Override
 	public boolean move(Direction dir) {
 		super.turn(dir);
@@ -307,15 +314,25 @@ public class Npc extends Entity {
 	}
 
 	public void act(float time) {
+		boolean badRep = World.player.reputation.isHostile(stats.faction);
 		tickCharge += (timePassed = time);
 
 		if (pauseFlag) {
 			unPause();
 			return;
 		}
+		
+		if (stats.faction == Faction.None)
+			badRep = false;
 
-		if (!friendly)
-			state = NpcState.FollowPlayer;
+		if ((!friendly || provoked) && state != NpcState.Hostile)
+			state = NpcState.Hostile;
+
+		if (badRep && state != NpcState.Hostile)
+			state = NpcState.Hostile;
+
+		if (!badRep && state == NpcState.Hostile && !provoked)
+			state = NpcState.Idle;
 
 		act();
 	}
@@ -345,7 +362,7 @@ public class Npc extends Entity {
 			doAction(stats.walkCost);
 			break;
 
-		case FollowPlayer:
+		case Hostile:
 
 			if (!enemySpotted && canSee(player))
 				enemySpotted = true;
