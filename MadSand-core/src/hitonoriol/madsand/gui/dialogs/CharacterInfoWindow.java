@@ -141,7 +141,7 @@ public class CharacterInfoWindow {
 
 		for (Skill skill : Skill.values()) {
 
-			if (skill == Skill.Level)
+			if (skill == Skill.Level || skill == Skill.None)
 				continue;
 
 			skillLbl = new Label(skill + ": ", skin);

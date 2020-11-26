@@ -116,9 +116,15 @@ public class Player extends Entity {
 		return false;
 	}
 
-	void increaseSkill(Skill skill) {
-		stats.skills.increaseSkill(skill);
+	void increaseSkill(Skill skill, int by) {
+		if (by < 1)
+			by = 1;
+		stats.skills.increaseSkill(skill, by);
 		stats.skills.increaseSkill(Skill.Level);
+	}
+
+	void increaseSkill(Skill skill) {
+		increaseSkill(skill, 1);
 	}
 
 	public void checkHands(int id) {
@@ -587,7 +593,7 @@ public class Player extends Entity {
 				item = MapObject.getAltItem(obj.id, stats.hand().type);
 			}
 
-			increaseSkill(skill);
+			increaseSkill(skill, obj.lvl);
 		}
 
 		if (!damaged)

@@ -18,7 +18,6 @@ import hitonoriol.madsand.containers.PairFloat;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Direction;
-import hitonoriol.madsand.enums.Stat;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
@@ -270,7 +269,7 @@ public abstract class Entity {
 
 	@JsonIgnore
 	public int getDefense() {
-		return stats.baseStats.get(Stat.Defense);
+		return stats.getDefense();
 	}
 
 	@JsonIgnore
@@ -492,7 +491,10 @@ public abstract class Entity {
 
 	@JsonIgnore
 	public float getSpeed() {
-		return (float) stats.actionPtsMax;
+		float speed = (float) stats.actionPtsMax;
+		if (speed < 1)
+			return 1;
+		return speed;
 	}
 
 	@JsonIgnore

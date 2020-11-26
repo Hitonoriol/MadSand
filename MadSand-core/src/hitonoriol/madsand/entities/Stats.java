@@ -34,12 +34,12 @@ public class Stats {
 
 	public long spawnTime = 0;
 
-	public int hp;
+	public int hp = 0;
 	public int mhp;
 
 	public float minorStaminaCost = 0.09f;
 	public float staminaLowPercent = 10;
-	public float stamina;
+	public float stamina = 0;
 	public float maxstamina;
 
 	public int air = 3;
@@ -89,6 +89,7 @@ public class Stats {
 	public void roll(int lvl) {
 		baseStats.roll(lvl);
 		calcStats();
+		restore();
 	}
 
 	public void roll() {
@@ -96,13 +97,19 @@ public class Stats {
 	}
 
 	public void calcStats() {
-		hp = get(Stat.Constitution) * HP_MULTIPLIER;
-		mhp = hp;
+		mhp = get(Stat.Constitution) * HP_MULTIPLIER;
+		maxstamina = ((get(Stat.Dexterity) + get(Stat.Constitution)) / 2) * 5;
 
-		stamina = ((get(Stat.Dexterity) + get(Stat.Constitution)) / 2) * 5;
-		maxstamina = stamina;
+		if (hp == 0 || stamina == 0)
+			restore();
 
 		calcActionCosts();
+		check();
+	}
+
+	public void restore() {
+		hp = mhp;
+		stamina = maxstamina;
 	}
 
 	public Item hand() {
@@ -269,13 +276,15 @@ public class Stats {
 
 	float defPercent = 0.333f;
 	float minAttackPercent = 0.3f;
-	float critPercent = 0.25f;
+	float critPercent = 0.45f;
+	float atkSkillPercent = 0.5f;
+	float evasionSkillPercent = 0.3f;
 
 	public int calcAttack(int defense) {
 		if (attackMissed())
 			return 0;
 
-		int atk = (int) (get(Stat.Strength) - (defense * defPercent));
+		int atk = (int) ((get(Stat.Strength) + skills.getLvl(Skill.Melee) * atkSkillPercent) - (defense * defPercent));
 
 		if (atk <= 0)
 			atk = 1;
@@ -286,6 +295,11 @@ public class Stats {
 			atk = Utils.rand((int) (atk * minAttackPercent), atk);
 
 		return atk;
+	}
+	
+	@JsonIgnore
+	public int getDefense() {
+		return (int) (get(Stat.Defense) + skills.getLvl(Skill.Evasion) * evasionSkillPercent);
 	}
 
 	public float calcMaxInventoryWeight() {

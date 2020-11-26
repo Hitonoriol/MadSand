@@ -1,7 +1,7 @@
 package hitonoriol.madsand.enums;
 
 public enum Skill {
-	None, Level, Melee, Woodcutting, Gathering, Mining, Digging, Survival, Crafting, Farming, Fishing;
+	None, Level, Melee, Evasion, Woodcutting, Gathering, Mining, Digging, Survival, Crafting, Farming, Fishing;
 
 	public boolean isResourceSkill() {
 		return this == Woodcutting || this == Gathering || this == Mining || this == Digging || this == Farming;

@@ -21,6 +21,7 @@ import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.Faction;
 import hitonoriol.madsand.enums.NpcState;
 import hitonoriol.madsand.enums.NpcType;
+import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.enums.Stat;
 import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.map.Map;
@@ -129,6 +130,7 @@ public class Npc extends Entity {
 		lvl -= properties.lvl; // Stats start increasing if lvl is > than npc's default level
 		stats.set(Stat.Dexterity, (int) (properties.dexterity + lvl * DEX_PER_LVL));
 		stats.calcStats();
+		stats.restore();
 
 		stats.name = GameTextSubstitutor.replace(properties.name);
 		stats.hp = (int) (properties.hp + lvl * HP_PER_LVL);
@@ -277,9 +279,10 @@ public class Npc extends Entity {
 			return;
 		else {
 			int atk = stats.calcAttack(player.getDefense());
-			if (atk == 0)
+			if (atk == 0) {
 				MadSand.print(stats.name + " misses!");
-			else {
+				player.increaseSkill(Skill.Evasion);
+			} else {
 				MadSand.warn(stats.name + " deals " + atk + " damage to you");
 				super.attackAnimation(player);
 			}
@@ -321,7 +324,7 @@ public class Npc extends Entity {
 			unPause();
 			return;
 		}
-		
+
 		if (stats.faction == Faction.None)
 			badRep = false;
 
