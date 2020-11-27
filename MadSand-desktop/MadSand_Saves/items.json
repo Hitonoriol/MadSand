@@ -16,7 +16,7 @@
 	"3" : {
 		"name" : "Stone axe",
 		"recipe" : "2/5:8/5",
-		"dmg" : 2,
+		"dmg" : 1,
 		"hp" : 256,
 		"cost" : 14,
 		"type" : "Axe",
@@ -634,14 +634,15 @@
 		"weight" : 0.01
 	},
 	"67" : {
-		"name" : "Flint pickaxe",
-		"recipe" : "9/10:8/5",
-		"dmg" : 3,
+		"name" : "Iron pickaxe",
+		"recipe" : "155|72/5:8/5",
+		"dmg" : 2,
+		"lvl" : 1,
 		"hp" : 1536,
-		"cost" : 28,
+		"cost" : 32,
 		"type" : "Pickaxe",
 		"skill" : "Mining",
-		"weight" : 0.7
+		"weight" : 0.9
 	},
 	"68" : {
 		"name" : "Plant fiber",
@@ -1548,5 +1549,16 @@
 		"name" : "Deathwood",
 		"cost" : 9,
 		"weight" : 0.15
+	},
+	"158" : {
+		"name" : "Iron axe",
+		"recipe" : "155|72/5:8/5",
+		"lvl" : 1,
+		"dmg" : 2,
+		"hp" : 1256,
+		"cost" : 32,
+		"type" : "Axe",
+		"skill" : "Woodcutting",
+		"weight" : 0.9
 	}
 }

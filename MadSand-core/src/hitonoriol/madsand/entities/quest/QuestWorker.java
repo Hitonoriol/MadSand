@@ -117,7 +117,7 @@ public class QuestWorker {
 		return findQuest(uid, (ProceduralQuest quest, Long suid) -> quest.npcUID == suid.longValue());
 	}
 
-	private ProceduralQuest createNewProceduralQuest(long npcUID) {
+	private ProceduralQuest getProceduralQuest(long npcUID) {
 		ProceduralQuest quest = findProceduralQuest(npcUID);
 		if (quest == null) {
 			quest = new ProceduralQuest(--lastProceduralQuest, npcUID);
@@ -137,10 +137,10 @@ public class QuestWorker {
 	}
 
 	public ProceduralQuest startProceduralQuest(long uid) {
-		ProceduralQuest quest = createNewProceduralQuest(uid);
+		ProceduralQuest quest = getProceduralQuest(uid);
 		long waitTime = (ProceduralQuest.QUEST_TIMEOUT - quest.timeSinceCreated()) * MadSand.world.realtimeTickRate;
 
-		if (waitTime > 0) {
+		if (waitTime > 0 && quest.isComplete) {
 			new DialogChainGenerator("You want another task?" + Resources.LINEBREAK +
 					"Well, you'll have to wait another "
 					+ Utils.timeString(waitTime) + " for me to come up with something for you.")

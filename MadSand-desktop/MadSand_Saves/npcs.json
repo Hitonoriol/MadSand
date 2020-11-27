@@ -535,7 +535,7 @@
 		"dexterity" : 50,
 		"rewardExp" : 1000,
 		"loot" : null,
-		"faction" : "Monsters",
+		"faction" : "Partisans",
 		"type" : "Trader",
 		"canTrade" : true,
 		"defaultState": "Still",
