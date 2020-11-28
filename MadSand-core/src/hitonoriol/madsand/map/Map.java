@@ -967,20 +967,33 @@ public class Map {
 		return new Pair(coords);
 	}
 
-	public Pair locateTile(int id) {
-		Tile tile = TileProp.tiles.get(id);
+	@SuppressWarnings("unchecked")
+	private <T> Pair locate(T thing) {
+		HashMap<Pair, T> mapThings;
 
-		if (!mapTiles.containsValue(tile))
+		if (thing instanceof Tile)
+			mapThings = (HashMap<Pair, T>) mapTiles;
+		else if (thing instanceof MapObject)
+			mapThings = (HashMap<Pair, T>) mapObjects;
+		else
 			return Pair.nullPair;
 
-		for (Entry<Pair, Tile> entry : mapTiles.entrySet()) {
+		if (!mapThings.containsValue(thing))
+			return Pair.nullPair;
 
-			if (entry.getValue().equals(tile))
-				return (entry.getKey());
-
-		}
+		for (Entry<Pair, T> entry : mapThings.entrySet())
+			if (entry.getValue().equals(thing))
+				return entry.getKey();
 
 		return Pair.nullPair;
+	}
+
+	public Pair locateTile(int id) {
+		return locate(TileProp.tiles.get(id));
+	}
+
+	public Pair locateObject(int id) {
+		return locate(ObjectProp.getObject(id));
 	}
 
 	/*

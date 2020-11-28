@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.enums.Faction;
 import hitonoriol.madsand.map.Map;
 
@@ -18,6 +19,7 @@ public class Location {
 	public static final int LAYER_MAX_CAVE = 100;
 	public static final int LAYER_MAX = 65535; // Layer number is saved as u16-bit int
 
+	public String name = "Wilderness";
 	public int biome = -1;
 	public boolean hasDungeon = false;
 	public Faction faction = Faction.None;
@@ -32,8 +34,22 @@ public class Location {
 		layers.put(layer, map);
 	}
 
+	public void createSettlement(String name) {
+		setName(name);
+		settlement = new Settlement();
+	}
+
+	public void createSettlement() {
+		createSettlement(Utils.randWord());
+	}
+
 	public boolean hasLayer(int layer) {
 		return layers.containsKey(layer);
+	}
+
+	@JsonIgnore
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@JsonIgnore

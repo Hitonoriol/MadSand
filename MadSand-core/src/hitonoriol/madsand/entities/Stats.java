@@ -33,6 +33,7 @@ public class Stats {
 	private int statBonus = 0; // Total equipment stat bonus
 
 	public long spawnTime = 0;
+	public long spawnRealTime = 0;
 
 	public int hp = 0;
 	public int mhp;

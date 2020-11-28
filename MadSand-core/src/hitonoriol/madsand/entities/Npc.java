@@ -69,6 +69,8 @@ public class Npc extends Entity {
 		super();
 		this.id = id;
 		this.uid = MadSand.world.npcCounter++;
+		stats.spawnTime = MadSand.world.globalTick;
+		stats.spawnRealTime = MadSand.world.globalRealtimeTick;
 		loadProperties();
 		if (id != NULL_NPC)
 			loadSprite();

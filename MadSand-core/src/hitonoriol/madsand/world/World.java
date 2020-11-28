@@ -601,7 +601,7 @@ public class World {
 
 		Collections.sort(queue, Entity.speedComparator);
 
-		boolean pausePlayer = false;	// if a hostile mob acts before player, we pause player until the action is completed
+		boolean pausePlayer = false; // if a hostile mob acts before player, we pause player until the action is completed
 		boolean hostile;
 		for (Entity entity : queue) {
 
@@ -610,7 +610,7 @@ public class World {
 				if (entity != player) {
 					hostile = ((Npc) entity).state == NpcState.Hostile;
 					pausePlayer |= hostile;
-					
+
 					if (pausePlayer)
 						Keyboard.stopInput();
 				}
@@ -633,9 +633,14 @@ public class World {
 	}
 
 	private void realtimeRefresh() {
-		Map map = getCurLoc(Location.LAYER_OVERWORLD);
+		Location loc = getLocation();
+		Map map = loc.getLayer(Location.LAYER_OVERWORLD);
 		map.updateCrops();
 		map.updateProductionStations();
+
+		if (loc.isSettlement())
+			loc.settlement.timeTick();
+
 	}
 
 	private void realtimeTick() {

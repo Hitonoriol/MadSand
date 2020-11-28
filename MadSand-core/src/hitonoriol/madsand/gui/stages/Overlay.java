@@ -275,14 +275,14 @@ public class Overlay extends Stage {
 		QuestArrow arrow;
 		boolean objectiveDone;
 		HashSet<Integer> hasArrow = new HashSet<>();
-		
+
 		while (it.hasNext()) {
 			arrow = it.next();
 			objectiveDone = arrow.quest.isComplete();
 			if (!player.quests.isQuestInProgress(arrow.quest.id) || !objectiveDone) {
 				arrow.remove();
 				it.remove();
-			} else if (objectiveDone){
+			} else if (objectiveDone) {
 				hasArrow.add(arrow.quest.id);
 				arrow.update();
 			}
@@ -309,7 +309,8 @@ public class Overlay extends Stage {
 		expBar.setRange(0, stats.skills.get(Skill.Level).requiredExp).setStatText("LVL " + stats.skills.getLvl())
 				.setValue(stats.skills.getExp());
 
-		String info = ("Location: Cell (" + player.x + ", " + player.y + ")" + getSectorString());
+		String info = (MadSand.world.getLocation().name +
+				", Cell (" + player.x + ", " + player.y + ")" + getSectorString());
 
 		timeLabel.setText(getTimeString());
 		overlayStatLabel.setText(info);
