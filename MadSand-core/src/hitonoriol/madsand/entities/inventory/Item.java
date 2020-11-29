@@ -166,14 +166,8 @@ public class Item {
 	public int getSkillDamage(Skill skill) {
 		if (skill != this.skill)
 			return 1;
-		else {
-			int damage = dmg / Skill.SKILL_DMG_DENOMINATOR;
-
-			if (damage != 0)
-				damage = Utils.rand(1, damage);
-
-			return damage;
-		}
+		else
+			return Utils.rand(1, dmg / Skill.SKILL_DMG_DENOMINATOR);
 	}
 
 	boolean damage(int amt) {
@@ -211,7 +205,7 @@ public class Item {
 		this.skill = properties.skill;
 		this.useAction = properties.useAction;
 		this.contents = properties.contents;
-		
+
 		boolean isSpecial = false;
 
 		if (type.equals(ItemType.Consumable)) {

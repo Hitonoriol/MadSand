@@ -70,8 +70,6 @@ public class World {
 		player = new Player();
 		worldMap = new WorldMap(sz);
 		initWorld();
-
-		initRealtimeRefresher();
 	}
 
 	public World() {
@@ -89,7 +87,12 @@ public class World {
 		getCurLoc().refreshGraph();
 	}
 
-	private void initRealtimeRefresher() {
+	public void initRealtimeRefresher() {
+		if (realTimeRefresher != null) {
+			realTimeRefresher.clear();
+			realTimeRefresher.stop();
+		}
+
 		realTimeRefresher = new Timer();
 		realTimeRefresher.scheduleTask(new Timer.Task() {
 			@Override

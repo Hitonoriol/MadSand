@@ -550,7 +550,8 @@ public class Player extends Entity {
 		});
 	}
 
-	// returns amount of damage done to object's harvestHp
+	private float BASE_RES_FAIL = 40;	// Base resource gathering fail probability
+	// returns amount of damage done to object's harvestHp or negative value on fail
 	public int gatherResources(MapObject obj) {
 		if (obj.id == Map.nullObject.id)
 			return -1;
@@ -571,7 +572,7 @@ public class Player extends Entity {
 		damageHeldTool(skill);
 		changeStamina(-stats.minorStaminaCost);
 
-		if (!stats.skills.skillRoll(skill) && !stats.luckRoll()) {
+		if (Utils.percentRoll(BASE_RES_FAIL) && !stats.skills.skillRoll(skill) && !stats.luckRoll()) {
 			MadSand.print("You fail to interact with " + obj.name);
 			return -1;
 		}

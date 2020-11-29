@@ -266,6 +266,7 @@ public class GameSaver {
 
 			MadSand.world.worldMapSaver.loadLocationInfo(wx, wy);
 			MadSand.world.worldMapSaver.bytesToLocation(data, wx, wy);
+			MadSand.world.initRealtimeRefresher();
 
 			return true;
 		} catch (Exception e) {
