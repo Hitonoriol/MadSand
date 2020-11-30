@@ -333,11 +333,13 @@ public class Npc extends Entity {
 		if ((!friendly || provoked) && state != NpcState.Hostile)
 			state = NpcState.Hostile;
 
-		if (badRep && state != NpcState.Hostile)
-			state = NpcState.Hostile;
+		if (friendly) { // Reputation affects only Neutral(friendly) NPCs
+			if (badRep && state != NpcState.Hostile)
+				state = NpcState.Hostile;
 
-		if (!badRep && state == NpcState.Hostile && !provoked)
-			state = NpcState.Idle;
+			if (!badRep && state == NpcState.Hostile && !provoked)
+				state = NpcState.Idle;
+		}
 
 		act();
 	}

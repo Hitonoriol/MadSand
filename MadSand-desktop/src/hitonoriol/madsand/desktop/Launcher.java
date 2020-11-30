@@ -1,13 +1,13 @@
 package hitonoriol.madsand.desktop;
 
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
+import java.io.File;
 import java.io.PrintStream;
 
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 
 public class Launcher {
@@ -15,7 +15,6 @@ public class Launcher {
 	static LwjglApplicationConfiguration config;
 
 	public static void main(String[] args) throws Exception {
-		System.setOut(new PrintStream(new BufferedOutputStream(new FileOutputStream("MadSandOutput.txt")), true));
 		config = new LwjglApplicationConfiguration();
 		config.resizable = false;
 
@@ -39,7 +38,7 @@ public class Launcher {
 	final static String debugFlag = "debug";
 	final static String fullscreenFlag = "fullscreen";
 
-	private static void applyArgs(String[] args) {
+	private static void applyArgs(String[] args) throws Exception{
 		if (args.length == 0)
 			return;
 
@@ -50,5 +49,10 @@ public class Launcher {
 
 		if (config.fullscreen)
 			config.setFromDisplayMode(LwjglApplicationConfiguration.getDesktopDisplayMode());
+		
+		if (!Utils.debugMode) {
+			System.setOut(new PrintStream(new File(Resources.OUTFILE)));
+			System.setErr(new PrintStream(new File(Resources.ERRFILE)));
+		}
 	}
 }

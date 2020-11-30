@@ -188,7 +188,7 @@ public class GameSaver {
 		Gui.drawOkDialog(
 				"Couldn't to load this world. \n"
 						+ "Maybe it was saved in older/newer version of the game or some files are corrupted.\n"
-						+ "Check " + MadSand.ERRFILE + " for details.",
+						+ "Check " + Resources.ERRFILE + " for details.",
 				Gui.mainMenu);
 		// MadSand.justStarted = false;
 	}
@@ -266,7 +266,6 @@ public class GameSaver {
 
 			MadSand.world.worldMapSaver.loadLocationInfo(wx, wy);
 			MadSand.world.worldMapSaver.bytesToLocation(data, wx, wy);
-			MadSand.world.initRealtimeRefresher();
 
 			return true;
 		} catch (Exception e) {

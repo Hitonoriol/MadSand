@@ -538,7 +538,6 @@ public class Player extends Entity {
 			MadSand.print("You can't gather any resources from " + obj.name + " with your current tool");
 
 		MadSand.world.updateLight();
-		Gui.overlay.processActionMenu();
 	}
 
 	private void interact(Direction direction) {
@@ -874,8 +873,6 @@ public class Player extends Entity {
 		if (!super.move(dir))
 			return false;
 
-		Gui.overlay.processActionMenu();
-
 		if ((MadSand.world.curLayer() == Location.LAYER_OVERWORLD) && canTravel())
 			MadSand.print("Press [GRAY]N[WHITE] to travel to the next sector.");
 
@@ -921,7 +918,6 @@ public class Player extends Entity {
 		MadSand.world.updateLight();
 		objectInFront();
 		lootMsg();
-		Gui.overlay.processActionMenu();
 	}
 
 	@Override

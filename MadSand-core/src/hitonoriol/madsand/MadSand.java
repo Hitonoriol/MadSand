@@ -24,8 +24,6 @@ import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.world.World;
 
-import java.io.File;
-import java.io.PrintStream;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -61,7 +59,6 @@ public class MadSand extends Game {
 	public static final String LOGFILE = "/log" + SAVE_EXT;
 	public static final String NPCSFILE = "NPCs";
 	public static final String WORLDFILE = "/World" + SAVE_EXT;
-	public static final String ERRFILE = "MadSandCritical.log";
 	public static final String ENCOUNTERDIR = "encounter/";
 
 	public static final int XDEF = 1280;
@@ -109,7 +106,6 @@ public class MadSand extends Game {
 		setRenderRadius(DEFAULT_FOV);
 		setRenderRadius();
 		Utils.out("Render area: " + renderArea.length);
-		setErrFile();
 		Utils.init();
 		Gui.init();
 		GameTextSubstitutor.init();
@@ -586,14 +582,5 @@ public class MadSand extends Game {
 
 	public void dispose() {
 		Utils.out("End");
-	}
-
-	void setErrFile() {
-		try {
-			PrintStream ge = new PrintStream(new File(ERRFILE));
-			System.setErr(ge);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }

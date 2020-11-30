@@ -72,7 +72,7 @@ public class Utils {
 	}
 
 	public static void die(String... msg) {
-		out("Seems like some fatal error occured. Check " + MadSand.ERRFILE + " for details.");
+		out("Seems like some fatal error occured. Check " + Resources.ERRFILE + " for details.");
 		if (msg.length > 0) {
 			for (String m : msg)
 				out(m);

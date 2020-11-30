@@ -377,5 +377,8 @@ public class Resources {
 		PixmapIO.writePNG(Gdx.files.local(System.currentTimeMillis() + ".png"), pixmap);
 		pixmap.dispose();
 	}
+	
+	public static final String ERRFILE = "MadSandCritical.log";
+	public static final String OUTFILE = "MadSandOutput.log";
 
 }

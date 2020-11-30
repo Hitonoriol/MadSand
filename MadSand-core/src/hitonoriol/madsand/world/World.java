@@ -82,12 +82,13 @@ public class World {
 	}
 
 	public void enter() {
+		initRealtimeRefresher();
 		realTimeRefresher.start();
 		GameTextSubstitutor.add(GameTextSubstitutor.PLAYER_NAME, player.stats.name);
 		getCurLoc().refreshGraph();
 	}
 
-	public void initRealtimeRefresher() {
+	private void initRealtimeRefresher() {
 		if (realTimeRefresher != null) {
 			realTimeRefresher.clear();
 			realTimeRefresher.stop();
@@ -629,6 +630,14 @@ public class World {
 			} else
 				entity.act(time);
 		}
+		
+		Timer.instance().scheduleTask(new Timer.Task() {
+			
+			@Override
+			public void run() {
+				Gui.overlay.processActionMenu();
+			}
+		}, ACT_DELAY + 0.01f);
 	}
 
 	public void updateLight() {
