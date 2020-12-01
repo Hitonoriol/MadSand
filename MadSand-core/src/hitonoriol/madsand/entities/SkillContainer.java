@@ -132,7 +132,7 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 	public double getSkillRollPercent(Skill skill) {
 		double additionalPercent = 0;
 		if (skill == Skill.Survival)
-			additionalPercent = 10;
+			additionalPercent = 6.5f;
 		else if (skill.isResourceSkill())
 			additionalPercent = 35;
 		else if (skill == Skill.None)

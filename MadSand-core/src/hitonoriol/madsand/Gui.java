@@ -102,7 +102,7 @@ public class Gui {
 
 		ws.background = skin.newDrawable("background", Color.LIGHT_GRAY);
 
-		ws.stageBackground = transparency;
+		ws.stageBackground = darkBackground;
 		ws.titleFontColor = Color.WHITE;
 		ws.titleFont = fontMedium;
 		skin.add("default", ws);

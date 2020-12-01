@@ -30,8 +30,8 @@ public class ResourceProgressBar extends TimedProgressBar {
 
 	float HEIGHT = 20;
 	float WIDTH = 175;
-	float YPADDING = 26;
-	float LABEL_PADDING = 10;
+	float YPADDING = 45;
+	float LABEL_PADDING = 2.5f;
 
 	Label progressLabel;
 
@@ -150,9 +150,8 @@ public class ResourceProgressBar extends TimedProgressBar {
 		Player player = World.player;
 		Vector3 coords = new Vector3(player.x * MadSand.TILESIZE, player.y * MadSand.TILESIZE, 0);
 
-		coords.y -= YPADDING;
-
 		MadSand.camera.project(coords);
+		coords.y -= YPADDING;
 		super.setPosition(centerRelative(coords.x, getWidth(), player.getSpriteWidth()), coords.y);
 		progressLabel.setPosition(centerRelative(coords.x, progressLabel.getWidth(), player.getSpriteWidth()),
 				coords.y - LABEL_PADDING);

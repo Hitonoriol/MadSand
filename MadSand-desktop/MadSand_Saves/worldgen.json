@@ -31,9 +31,9 @@
 			"chanceToRegenerate": 40,
 			"initialMobSpawn" : 5,
 			"initialFriendlyChance" : 85,
-			"hostileMobs": {"rollCount": 6, "idList": [19, 2, 6]},
-			"friendlyMobs": {"rollCount": 4, "idList": [3, 7, 30, 31, 37, 38, 39, 21, 22, 23, 24, 25, 35]},
-			"hostileSpawnChance": 80,
+			"hostileMobs": {"rollCount": 5, "idList": [19, 2, 6]},
+			"friendlyMobs": {"rollCount": 5, "idList": [3, 7, 30, 31, 37, 38, 39, 21, 22, 23, 24, 25, 35, 41, 43, 45, 40]},
+			"hostileSpawnChance": 75,
 			"friendlySpawnChance": 60
 		},
 		"lake" : {
@@ -135,8 +135,8 @@
 			"chanceToRegenerate": 35,
 			"initialFriendlyChance" : 40,
 			"initialMobSpawn" : 6,
-			"friendlyMobs": {"rollCount": 5, "idList": [30, 31]},
-			"hostileMobs": {"rollCount": 10, "idList": [15, 16, 17, 18, 32]},
+			"friendlyMobs": {"rollCount": 6, "idList": [30, 31, 44, 48, 50, 51, 47]},
+			"hostileMobs": {"rollCount": 5, "idList": [15, 16, 17, 18, 32, 42, 46]},
 			"hostileSpawnChance": 90,
 			"friendlySpawnChance": 50
 		},
@@ -172,7 +172,7 @@
 			"initialMobSpawn" : 15,
 			"initialFriendlyChance" : 80,
 			"hostileMobs": {"rollCount": 6, "idList": [6, 32, 29]},
-			"friendlyMobs": {"rollCount": 4, "idList": [35, 23]},
+			"friendlyMobs": {"rollCount": 4, "idList": [35, 23, 49]},
 			"hostileSpawnChance": 80,
 			"friendlySpawnChance": 60
 		},

@@ -1560,5 +1560,18 @@
 		"type" : "Axe",
 		"skill" : "Woodcutting",
 		"weight" : 0.9
+	},
+	"159" : {
+		"name" : "Boxing gloves",
+		"cost" : 50,
+		"recipe" : "75|127/10:69/3",
+		"type" : "OffhandWeapon",
+		"weight" : 0.25,
+		"lvl" : 1,
+		"equipStats" : {
+			"stats":{
+			"Strength" : 1
+			}
+		}
 	}
 }

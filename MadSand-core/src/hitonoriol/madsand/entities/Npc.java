@@ -112,10 +112,13 @@ public class Npc extends Entity {
 		pauseFlag = false;
 	}
 
+	private int MAX_LVL_GAP = 3;
+
 	private float DEX_PER_LVL = 0.125f;
 	private float HP_PER_LVL = 3.5f;
 	private float STR_PER_LVL = 0.25f;
 	private float ACC_PER_LVL = 0.4f;
+	private float EXP_PER_LVL = 3.4f;
 
 	// Action cost penalties
 	private float ATTACK_SPD_PER_LVL = 0.1f;
@@ -124,7 +127,7 @@ public class Npc extends Entity {
 	void loadProperties() {
 		NpcContainer properties = NpcProp.npcs.get(id);
 
-		int maxLvl = World.player.getLvl() + 3;
+		int maxLvl = World.player.getLvl() + MAX_LVL_GAP;
 		int lvl = Utils.rand(properties.lvl, maxLvl);
 
 		stats.roll(lvl);
@@ -142,7 +145,11 @@ public class Npc extends Entity {
 		stats.attackCost += lvl * ATTACK_SPD_PER_LVL;
 		stats.walkCost += lvl * MOVE_SPD_PER_LVL;
 
-		rewardExp = properties.rewardExp + lvl;
+		rewardExp = properties.rewardExp + (int) (lvl * EXP_PER_LVL);
+
+		if (lvl == maxLvl)
+			stats.name = Utils.randWord() + " the " + stats.name;
+
 		stats.faction = properties.faction;
 		canTrade = properties.canTrade;
 

@@ -17,7 +17,7 @@ public class LootTable {
 	public SortedMap<Float, LootTableEntry> lootTable = new TreeMap<Float, LootTableEntry>(new Comparator<Float>() {
 		@Override
 		public int compare(Float o1, Float o2) {
-			return o2.compareTo(o1);
+			return o1.compareTo(o2);
 		}
 	});
 
