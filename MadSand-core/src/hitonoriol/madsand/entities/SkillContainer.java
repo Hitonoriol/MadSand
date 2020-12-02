@@ -10,7 +10,7 @@ import hitonoriol.madsand.world.World;
 
 public class SkillContainer extends HashMap<Skill, SkillValue> {
 	public final static int MAX_SKILL_LVL = 100; // max effective lvl (possible to get higher lvls, but lvl bonuses won't increase further than this)
-	public final static double MAX_SKILL_ROLL_PERCENT = magicFormula(MAX_SKILL_LVL);
+	public final static double MAX_SKILL_ROLL_PERCENT = skillLvlPercent(MAX_SKILL_LVL);
 
 	final int BONUS_DENOMINATOR = 25; // skill lvl/this = bonus percent of something for some actions
 	final int ITEM_BONUS_DENOMINATOR = 5; // level/this = quantity of bonus items from action
@@ -132,12 +132,13 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 	public double getSkillRollPercent(Skill skill) {
 		double additionalPercent = 0;
 		if (skill == Skill.Survival)
-			additionalPercent = 6.5f;
+			additionalPercent = 2.5f;
 		else if (skill.isResourceSkill())
 			additionalPercent = 35;
 		else if (skill == Skill.None)
 			return 100;
-		return magicFormula((double) getLvl(skill)) + additionalPercent;
+		additionalPercent += calcSkillPercent(1 + ((double)getExp(skill) / (double)get(skill).requiredExp));
+		return skillLvlPercent((double) getLvl(skill)) + additionalPercent;
 	}
 
 	// Currently used to determine amount of "skill-damage" done to objects on interaction 
@@ -150,7 +151,7 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 		return skillRoll(skill) ? Utils.rand(1, getLvl(skill)) : 0;
 	}
 
-	public static double magicFormula(double skillLvl) {
+	public static double skillLvlPercent(double skillLvl) {
 		if (skillLvl < 1)
 			return 1;
 
@@ -158,9 +159,13 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 			skillLvl += 0.4;
 
 		if (skillLvl >= MAX_SKILL_LVL)
-			return skillLvl = MAX_SKILL_LVL;
+			skillLvl = MAX_SKILL_LVL;
 
-		return Math.log(Math.pow(skillLvl + 0.05, 22.0)) * 0.6; // Is capped at ~64%(MAX_SKILL_ROLL_PERCENT) when lvl == 100, & increases smoothly
+		return calcSkillPercent(skillLvl); // Is capped at ~64%(MAX_SKILL_ROLL_PERCENT) when lvl == 100, & increases smoothly
+	}
+	
+	private static double calcSkillPercent(double val) {
+		return Math.log(Math.pow(val + 0.05, 22.0)) * 0.6;
 	}
 
 	public String getExpString(Skill skill) {

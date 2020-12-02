@@ -271,6 +271,11 @@ public class Map {
 	};
 
 	private MapAction objectAction = (int x, int y, int id) -> {
+		if (id == 0) {
+			delObject(x, y);
+			return true;
+		}
+
 		if (objectExists(x, y))
 			return false;
 
@@ -964,6 +969,7 @@ public class Map {
 			structure.setCoords(coords.random(xsz, ysz));
 		} while (!structure.build());
 
+		Utils.out("Successfully generated " + name + " at " + coords);
 		return new Pair(coords);
 	}
 
@@ -1000,7 +1006,7 @@ public class Map {
 	 * Get maximum count of objects on map by its size
 	 */
 	private float MAX_OBJECT_PERCENT = 0.15f; // Max percent of map allowed to be filled with objects
-	private float MAX_NPC_PERCENT = 0.05f;
+	private float MAX_NPC_PERCENT = 0.02f;
 
 	private int maxObjects = -1;
 

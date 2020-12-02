@@ -205,6 +205,7 @@ public class FishingUI extends GameDialog {
 	private class Fish extends Image {
 		float ANIM_MAX = 2f, ANIM_MIN = 1.3f;
 		float FADE_DUR = 0.4f;
+		float FADE_SIZEBY = -0.9f;
 		int SIZE_DELTA = 30;
 		int SWIM_DELTA = 15;
 		float MIN_CATCH_LIFETIME = 4.5f;
@@ -221,6 +222,7 @@ public class FishingUI extends GameDialog {
 			super.addAction(Actions.alpha(0));
 			super.setPosition(WIDTH / 2 + Utils.signRand(FISH_OFFSET_MIN, FISH_OFFSET_MAX),
 					HEIGHT / 2 + Utils.signRand(FISH_OFFSET_MIN, FISH_OFFSET_MAX));
+			super.setOrigin(Align.center);
 
 			animDuration = JRand.flt().range(ANIM_MIN, ANIM_MAX).gen();
 			lifeTime = -animDuration;
@@ -264,6 +266,7 @@ public class FishingUI extends GameDialog {
 		float ready() {
 			activeFish = this;
 			super.addAction(Actions.color(Color.RED, catchTime, Interpolation.smooth));
+			super.addAction(Actions.scaleBy(FADE_SIZEBY, FADE_SIZEBY, catchTime, Interpolation.smooth));
 			catchBar.addAction(Actions.color(Color.RED, catchTime, Interpolation.smoother));
 			catchBar.setVisible(true);
 			catchBar.setDelay(catchTime);

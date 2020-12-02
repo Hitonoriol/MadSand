@@ -15,7 +15,7 @@ public class Globals {
 	private static Globals instance = new Globals();
 
 	public ArrayList<String> traderGreetings;
-	
+
 	public ArrayList<Integer> fetchQuestItems;
 	public HashMap<String, String> values;
 	public ArrayList<String> idleNpcText;

@@ -383,5 +383,13 @@
 		"altItems" : null,
 		"name" : "Trapdoor",
 		"foreground" : false
+	},
+	
+	"46" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Asphalt",
+		"foreground" : false
 	}
 }

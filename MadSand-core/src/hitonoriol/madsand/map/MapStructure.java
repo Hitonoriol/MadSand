@@ -4,12 +4,17 @@ import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
 import hitonoriol.madsand.LuaUtils;
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 
 public class MapStructure {
 	public int x, y;
-	// width & height are specified in each structure's script separately
+
+	// width & height are specified in each structure's script separately and then passed to the java object
+	public int xMax, yMax;
+	public int width, height;
+
 	LuaValue script;
 
 	public MapStructure(int x, int y) {
@@ -31,9 +36,37 @@ public class MapStructure {
 	}
 
 	public MapStructure setCoords(Pair coords) {
-		this.x = coords.x;
-		this.y = coords.y;
-		return this;
+		return setCoords(coords.x, coords.y);
+	}
+
+	public void setSize(int width, int height) {
+		this.width = width;
+		this.height = height;
+		xMax = x + width - 1;
+		yMax = y + height - 1;
+	}
+
+	public int randX() {
+		return Utils.rand(x, xMax);
+	}
+
+	public int randY() {
+		return Utils.rand(y, yMax);
+	}
+
+	public Pair getFreeTile() {
+		Pair coords = new Pair();
+		Map map = MadSand.world.getCurLoc();
+
+		do {
+			coords.set(randX(), randY());
+		} while (map.objectExists(coords.x, coords.y) || !map.getNpc(coords).equals(Map.nullNpc));
+
+		return coords;
+	}
+	
+	public void clear() {
+		MadSand.world.getCurLoc().fillObject(x, y, width, height, 0);
 	}
 
 	public MapStructure setName(String file) {

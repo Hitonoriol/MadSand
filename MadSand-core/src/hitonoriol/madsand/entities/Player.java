@@ -80,6 +80,25 @@ public class Player extends Entity {
 		super.setName(name);
 	}
 
+	public void joinFaction(Faction faction) {
+		if (stats.faction != Faction.None)
+			return;
+
+		stats.faction = faction;
+		if (reputation.get(faction) < 0)
+			reputation.set(faction, 0);
+		
+		MadSand.print("You join " + faction.name());
+	}
+
+	public void leaveFaction(Faction faction) {
+		float rep = reputation.get(faction);
+		reputation.change(faction, rep - (rep * Reputation.LEAVE_PENALTY));
+		stats.faction = Faction.None;
+		
+		MadSand.notice("You leave " + faction.name());
+	}
+
 	public void commitAction() {
 		if (scheduledAction != null)
 			scheduledAction.act();
@@ -549,8 +568,9 @@ public class Player extends Entity {
 		});
 	}
 
-	private float BASE_RES_FAIL = 40;	// Base resource gathering fail probability
+	private float BASE_RES_FAIL = 40; // Base resource gathering fail probability
 	// returns amount of damage done to object's harvestHp or negative value on fail
+
 	public int gatherResources(MapObject obj) {
 		if (obj.id == Map.nullObject.id)
 			return -1;
@@ -569,7 +589,7 @@ public class Player extends Entity {
 
 		doAction(stats.minorCost);
 		damageHeldTool(skill);
-		changeStamina(-stats.minorStaminaCost);
+		changeStamina(-stats.calcStaminaCost());
 
 		if (Utils.percentRoll(BASE_RES_FAIL) && !stats.skills.skillRoll(skill) && !stats.luckRoll()) {
 			MadSand.print("You fail to interact with " + obj.name);

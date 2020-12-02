@@ -1913,5 +1913,13 @@
 		"skill" : "Survival",
 		"isProductionStation": true,
 		"name" : "Beartrap"
+	},
+	"159" : {
+		"hp" : 100,
+		"harvestHp" : -1,
+		"nocollide" : false,
+		"onInteract" : "-1",
+		"skill" : "None",
+		"name" : "Gas pump"
 	}
 }

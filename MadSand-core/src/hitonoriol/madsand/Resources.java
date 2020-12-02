@@ -350,7 +350,6 @@ public class Resources {
 
 	public static TextureRegion[] loadAnimationStrip(String file, int frameSize) { // load 1xN animation strip from file
 		TextureRegion[][] animStrip = TextureRegion.split(loadTexture(file), frameSize, frameSize);
-		Utils.out("Loading animstrip w len: " + animStrip[0].length);
 		return getAnimationStrip(animStrip, 0, animStrip[0].length);
 	}
 

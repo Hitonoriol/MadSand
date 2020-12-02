@@ -38,7 +38,7 @@ public class Stats {
 	public int hp = 0;
 	public int mhp;
 
-	public float minorStaminaCost = 0.09f;
+	public float STAMINA_BASE_COST = 0.1f;
 	public float staminaLowPercent = 10;
 	public float stamina = 0;
 	public float maxstamina;
@@ -266,6 +266,10 @@ public class Stats {
 		return Utils.percentRoll(Utils.log(Math.pow(get(Stat.Luck), 1.75), 8) + 10);
 	}
 
+	public float calcStaminaCost() {
+		return (float) (STAMINA_BASE_COST - (STAMINA_BASE_COST * skills.getSkillRollPercent(Skill.Survival) * 0.01));
+	}
+
 	public boolean critRoll() {
 		return Utils.percentRoll(Math.log(Math.pow(get(Stat.Accuracy) + 0.1, 7)));
 	}
@@ -297,7 +301,7 @@ public class Stats {
 
 		return atk;
 	}
-	
+
 	@JsonIgnore
 	public int getDefense() {
 		return (int) (get(Stat.Defense) + skills.getLvl(Skill.Evasion) * evasionSkillPercent);

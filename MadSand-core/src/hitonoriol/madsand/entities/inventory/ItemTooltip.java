@@ -3,6 +3,7 @@ package hitonoriol.madsand.entities.inventory;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Tooltip;
+import com.badlogic.gdx.scenes.scene2d.ui.TooltipManager;
 
 import hitonoriol.madsand.Gui;
 
@@ -29,6 +30,12 @@ public class ItemTooltip extends Tooltip<Table>{
 
 		super.setActor(tooltipTbl);
 		super.setInstant(true);
+		
+		TooltipManager manager = super.getManager();
+		manager.animations = false;
+		manager.initialTime = 0;
+		manager.resetTime = 0;
+		manager.subsequentTime = 0;
 	}
 
 }
