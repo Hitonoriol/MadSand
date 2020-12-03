@@ -1470,8 +1470,8 @@
 	},
 	"143" : {
 		"name" : "Carp",
-		"cost" : 6,
-		"weight" : 0.47
+		"cost" : 4,
+		"weight" : 0.33
 	},
 	"144" : {
 		"name" : "Eel",
@@ -1573,5 +1573,50 @@
 			"Strength" : 1
 			}
 		}
+	},
+	"160" : {
+		"name" : "Pufferfish",
+		"cost" : 10,
+		"weight" : 0.4
+	},
+	"161" : {
+		"name" : "Swordfish",
+		"cost" : 10,
+		"weight" : 0.45
+	},
+	"162" : {
+		"name" : "Dolphin",
+		"cost" : 12,
+		"weight" : 3.5
+	},
+	"163" : {
+		"name" : "Seal",
+		"cost" : 15,
+		"weight" : 5
+	},
+	"164" : {
+		"name" : "Killer whale",
+		"cost" : 17,
+		"weight" : 5.75
+	},
+	"165" : {
+		"name" : "Blue whale",
+		"cost" : 20,
+		"weight" : 10
+	},
+	"166" : {
+		"name" : "Shark",
+		"cost" : 13,
+		"weight" : 3.5
+	},
+	"167" : {
+		"name" : "Yellow fish",
+		"cost" : 8,
+		"weight" : 0.35
+	},
+	"168" : {
+		"name" : "Blue fish",
+		"cost" : 8,
+		"weight" : 0.35
 	}
 }

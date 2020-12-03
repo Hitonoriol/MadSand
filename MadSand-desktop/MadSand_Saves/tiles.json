@@ -42,8 +42,9 @@
 		"damage" : 0,
 		"onInteract" : "-1",
 		"altItems" : null,
-		"name" : "???",
-		"foreground" : false
+		"name" : "Saltwater",
+		"fishingSpot" : {"lvl" : 2, "fish" : "(100|167/1:168/1)(20|160/1:161/1)(10|162/1:166/1)"},
+		"foreground" : true
 	},
 
 	"5" : {
@@ -347,8 +348,9 @@
 		"damage" : 0,
 		"onInteract" : "-1",
 		"altItems" : null,
-		"name" : "???",
-		"foreground" : false
+		"name" : "Deep saltwater",
+		"fishingSpot" : {"lvl" : 3, "fish" : "(100|167/1:168/1)(5|163/1)(2.5|164/1)(0.75|165/1)"},
+		"foreground" : true
 	},
 
 	"43" : {

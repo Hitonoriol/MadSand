@@ -22,6 +22,7 @@ public class PlayerStatDialog extends GameDialog {
 	static int DEFAULT_STAT_SUM = 6;
 	int maxStatSum = World.player.stats.baseStats.maxStatSum;
 	int minStatSum;
+	boolean restoreOnChange = false;
 	protected StatLabels statLabels;
 	String titleString;
 	TextField nameField;
@@ -99,6 +100,11 @@ public class PlayerStatDialog extends GameDialog {
 						stats.decrease(stat);
 				}
 				statLabels.refreshStatLabels();
+
+				if (restoreOnChange)
+					statLabels.stats.restore();
+				
+				Gui.refreshOverlay();
 			}
 		};
 

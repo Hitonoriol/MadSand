@@ -96,7 +96,7 @@
 "3" : {
 	"@type" : "Quest",
 	"exp" : 50,
-	"name" : "The Dungeon",
+	"name" : "The Dungeon Key",
 	"startMsg" : "
 		Listen, {PLAYER}, yesterday I heard some loud noises from underground. I think it's the dungeon. Again. [Dungeon?]=>
 		Oh well, I forgot you didn't remember anything... I'll explain later. What's important now is the key's location. [A key? To the dungeon?]=>
@@ -142,12 +142,12 @@
 		## * To go underground, you have to unlock dungeon trapdoor and then stand on a \"hole in the ground\" tile and press \"use\" button or the on-screen pop-up button. => 
 		Almost forgot, here you go - my last Dungeon Search scroll. Take it. Use it to find the Dungeon Entrance. Good luck, {PLAYER}! =>
 		## * To use a scroll, open your inventory, click on it with RMB and press \"Use\" button.=>
-		I'll be waiting for you here. If you survive - bring me some trophies... Yes! Bring me 10 leather pieces you get from the monsters you kill there.
+		Kill 10 rats and report back. I'll be waiting for you here. Good luck.
 	",
 
 	"endMsg" : "Thank you, {PLAYER}! Take your reward and return to me when you are ready for the next task.",
 
-	"reqMsg" : "Kill at least 10 rats and give me 10 leather pieces you get from them.",
+	"reqMsg" : "Kill 10 rats in the dungeon.",
 	"reqKills" : "14/10",
 	"giveItems" : "75/1",
 	"rewardItems" : "21/200",

@@ -26,13 +26,15 @@ public class CharacterCreationDialog {
 	void rollStats() {
 		stats.roll();
 		statLabels.refreshStatLabels();
+		Gui.refreshOverlay();
 	}
 
 	void createCharDialog() {
 		float width = Gui.defLblWidth;
 		rollStats();
 		dialog = new PlayerStatDialog(Gui.overlay, statLabels, titleString);
-		
+		dialog.restoreOnChange = true;
+
 		TextButton rbtn = new TextButton("Reroll", Gui.skin);
 		TextButton cbtn = new TextButton("Create", Gui.skin);
 		dialog.add(rbtn).width(width).row();
@@ -41,12 +43,12 @@ public class CharacterCreationDialog {
 
 		cbtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				
+
 				if (stats.baseStats.getFreePoints() > 0) {
 					Gui.drawOkDialog("You still have unassigned stat points left!", Gui.overlay);
 					return;
 				}
-				
+
 				if (!dialog.nameField.getText().trim().equals("")) {
 					World.player.setName(dialog.nameField.getText());
 					World.player.reinit();

@@ -177,11 +177,11 @@
 			"friendlySpawnChance": 60
 		},
 		"lake" : {
-			"lakeTile" : 0,
-			"lakeModifier" : 0.0,
-			"lakeRadius" : 0,
-			"lakeFrom" : 0.0,
-			"lakeTo" : 0.0
+			"lakeTile" : 4,
+			"lakeModifier" : 1.0,
+			"lakeRadius" : 4,
+			"lakeFrom" : 1.0,
+			"lakeTo" : 27.0
 		},
 		"cave" : {
 			"caveTile" : 5,

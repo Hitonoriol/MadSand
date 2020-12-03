@@ -29,6 +29,6 @@
 	If you deplete stamina, you won't be able to do any stamina-dependent activities until your stamina is at least partially replenished. [Oh. I see.] =>
 	You'll also start losing 1 hp per time tick while your stamina is 0.",
 	
-	"Travel" : "To travel to an unexplored area you will need a Travelling kit. You can buy one from a trader. [Nice]=>
+	"Travel" : "To travel to an unexplored area you will need a Travelling kit. You can buy one from a trader or craft it from leather. [Nice]=>
 		You don't need a Travelling kit to travel between already explored sectors, though."
 }
