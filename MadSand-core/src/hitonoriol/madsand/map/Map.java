@@ -553,7 +553,7 @@ public class Map {
 		return addObject(x, y, id, true);
 	}
 
-	boolean addObject(Pair coord, int id) {
+	public boolean addObject(Pair coord, int id) {
 		return addObject(coord.x, coord.y, id);
 	}
 
@@ -787,6 +787,10 @@ public class Map {
 		Npc npc = new Npc(id, x, y);
 
 		return putNpc(npc);
+	}
+
+	public boolean spawnNpc(int id, Pair coords) {
+		return spawnNpc(id, coords.x, coords.y);
 	}
 
 	public boolean putNpc(Npc npc) {

@@ -169,8 +169,8 @@ public class WorldGen {
 
 		int x = 0;
 		int y = 0;
-		float from = ((float) lake.lakeFrom) / 10f;
-		float to = ((float) lake.lakeTo) / 100f;
+		float from = lake.lakeFrom;
+		float to = lake.lakeTo;
 
 		while (x < w - 1) {
 			while (y < h - 1) {

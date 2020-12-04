@@ -720,5 +720,53 @@
 		"rewardExp" : 5,
 		"type" : "Regular",
 		"friendly" : true
+	},
+	"52" : {
+		"name" : "Beetle",
+		"faction" : "Monsters",
+		"loot" : "(95.5|21/7)",
+		"hp" : 9,
+		"strength" : 3,
+		"dexterity" : 6,
+		"accuracy" : 6,
+		"rewardExp" : 7,
+		"type" : "Regular",
+		"friendly" : false
+	},
+	"53" : {
+		"name" : "Maggot",
+		"faction" : "Monsters",
+		"loot" : "(95.5|21/7)",
+		"hp" : 7,
+		"strength" : 3,
+		"dexterity" : 4,
+		"accuracy" : 4,
+		"rewardExp" : 5,
+		"type" : "Regular",
+		"friendly" : false
+	},
+	"54" : {
+		"name" : "Bee",
+		"faction" : "Monsters",
+		"loot" : "(95.5|21/8)",
+		"hp" : 10,
+		"strength" : 3,
+		"dexterity" : 5,
+		"accuracy" : 6,
+		"rewardExp" : 7,
+		"type" : "Regular",
+		"friendly" : false
+	},
+	"55" : {
+		"name" : "Mantis",
+		"faction" : "Monsters",
+		"loot" : "(95.5|21/7)",
+		"hp" : 10,
+		"strength" : 3,
+		"dexterity" : 6,
+		"accuracy" : 5,
+		"rewardExp" : 7,
+		"type" : "Regular",
+		"friendly" : false
 	}
 }

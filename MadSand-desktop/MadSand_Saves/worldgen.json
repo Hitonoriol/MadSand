@@ -40,8 +40,8 @@
 			"lakeTile" : 8,
 			"lakeModifier" : 1.0,
 			"lakeRadius" : 4,
-			"lakeFrom" : 1.0,
-			"lakeTo" : 27.0
+			"lakeFrom" : 0.1,
+			"lakeTo" : 0.27
 		},
 		"cave" : {
 			"caveTile" : 5,
@@ -73,7 +73,7 @@
 					"specialRoomWalls" : [104, 105, 26, 108, 109, 110, 111],
 					"specialMobs" : [8, 36, 24, 25],
 					"specialMobsMax" : 10,
-					"mobs" : [ 14, 15 ],
+					"mobs" : [ 14, 15, 52, 53 ],
 					"maxMobs" : 50,
 					"loot" : "	(95|2/10:59/3:60/1:21/100)
 							(20|82/1:83/1:80/1:16/1:105/1:76/1:86/1:85/1:12/1)
@@ -97,7 +97,7 @@
 					"specialRoomWalls" : [108, 109],
 					"specialMobs" : [1, 8],
 					"specialMobsMax" : 5,
-					"mobs" : [ 14, 15, 16, 17, 18 ],
+					"mobs" : [ 14, 15, 16, 17, 18, 54, 55 ],
 					"maxMobs" : 50,
 					"loot" : "	(95|2/10:59/3:60/1:21/100)
 							(20|82/1:83/1:80/1:16/1:105/1:76/1:86/1:85/1:12/1)
@@ -180,8 +180,8 @@
 			"lakeTile" : 4,
 			"lakeModifier" : 1.0,
 			"lakeRadius" : 4,
-			"lakeFrom" : 1.0,
-			"lakeTo" : 27.0
+			"lakeFrom" : 0.1,
+			"lakeTo" : 0.27
 		},
 		"cave" : {
 			"caveTile" : 5,
@@ -217,8 +217,8 @@
 			"lakeTile" : 22,
 			"lakeModifier" : 1.0,
 			"lakeRadius" : 5,
-			"lakeFrom" : 1.0,
-			"lakeTo" : 27.0
+			"lakeFrom" : 0.1,
+			"lakeTo" : 0.27
 		},
 		"cave" : {
 			"caveTile" : 5,

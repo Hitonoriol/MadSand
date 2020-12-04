@@ -42,6 +42,7 @@ public class DungeonGen extends DungeonGenerator {
 		LootTable loot = curDungeonFloor.loot;
 
 		map.rollSize(curDungeonFloor.minSize, curDungeonFloor.maxSize);
+		map.fillTile();
 		map.editable = false;
 		int w = map.getWidth(), h = map.getHeight();
 		final Grid grid = new Grid(w, h);

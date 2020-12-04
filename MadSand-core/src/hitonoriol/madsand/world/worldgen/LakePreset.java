@@ -4,5 +4,5 @@ public class LakePreset {
 	public int lakeTile;
 	public int lakeRadius;
 	public float lakeModifier;
-	public double lakeFrom, lakeTo;
+	public float lakeFrom, lakeTo;
 }
