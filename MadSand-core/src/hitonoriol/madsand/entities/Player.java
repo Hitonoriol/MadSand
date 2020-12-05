@@ -25,6 +25,7 @@ import hitonoriol.madsand.entities.inventory.trade.TradeInventoryUI;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.enums.*;
 import hitonoriol.madsand.gui.dialogs.FishingUI;
+import hitonoriol.madsand.gui.dialogs.GrabBagDialog;
 import hitonoriol.madsand.gui.dialogs.ProductionStationUI;
 import hitonoriol.madsand.gui.dialogs.TraderDialog;
 import hitonoriol.madsand.gui.widgets.ResourceProgressBar;
@@ -87,7 +88,7 @@ public class Player extends Entity {
 		stats.faction = faction;
 		if (reputation.get(faction) < 0)
 			reputation.set(faction, 0);
-		
+
 		MadSand.print("You join " + faction.name());
 	}
 
@@ -95,7 +96,7 @@ public class Player extends Entity {
 		float rep = reputation.get(faction);
 		reputation.change(faction, rep - (rep * Reputation.LEAVE_PENALTY));
 		stats.faction = Faction.None;
-		
+
 		MadSand.notice("You leave " + faction.name());
 	}
 
@@ -367,7 +368,7 @@ public class Player extends Entity {
 		refreshRecipes(ItemProp.buildReq, buildRecipes);
 	}
 
-	void damageHeldTool() {
+	public void damageHeldTool() {
 		damageHeldTool(Skill.None);
 	}
 
@@ -678,6 +679,10 @@ public class Player extends Entity {
 			addItem(rolledItem);
 
 		inventory.delItem(item, 1);
+		new GrabBagDialog(item.name, items).show();
+		
+		if (items.isEmpty())
+			MadSand.warn("You opened " + item.name + ", but it was empty");
 
 		return true;
 	}

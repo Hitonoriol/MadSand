@@ -61,6 +61,10 @@ public class GameDialog extends Dialog {
 		this(title, text, stage);
 		addOkButton(okText);
 	}
+	
+	public void skipLine() {
+		add("").row();
+	}
 
 	public void setText(String text) {
 		textLbl.setText(GameTextSubstitutor.replace(text));

@@ -28,6 +28,7 @@ import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.enums.ItemType;
 import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.gui.widgets.TimedProgressBar;
 import hitonoriol.madsand.gui.widgets.TimedProgressBar.TimedAction;
@@ -123,6 +124,7 @@ public class FishingUI extends GameDialog {
 		Player player = World.player;
 		player.addItem(spot.catchFish());
 		player.stats.skills.increaseSkill(Skill.Fishing);
+		player.damageHeldTool();
 
 		if (!player.stats.skills.skillRoll(Skill.Fishing))
 			player.inventory.delItem(player.stats.offHand(), 1);
@@ -131,8 +133,12 @@ public class FishingUI extends GameDialog {
 
 		if (!player.hasItem(baitId)) {
 			MadSand.warn("You're out of bait!");
+			player.refreshEquipment();
 			remove();
 		}
+
+		if (player.stats.hand().type != ItemType.FishingRod)
+			remove();
 	}
 
 	private boolean spawnRoll() {

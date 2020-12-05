@@ -16,7 +16,7 @@ import hitonoriol.madsand.Resources;
 
 public class ItemUI extends Group {
 	static float TOP_LABEL_YPADDING = 8;
-	protected final int size = 80;
+	public static final int SIZE = 80;
 	private ImageButton itemBtn; // button with item image
 
 	private Label topLabel;
@@ -40,18 +40,18 @@ public class ItemUI extends Group {
 
 		refresh();
 
-		toolHpLabel.setPosition(itemQuantityLabel.getX() + size / 1.95f, itemQuantityLabel.getY() + 6);
+		toolHpLabel.setPosition(itemQuantityLabel.getX() + SIZE / 1.95f, itemQuantityLabel.getY() + 6);
 
-		topLabel.setWidth(size);
+		topLabel.setWidth(SIZE);
 		topLabel.setAlignment(Align.center);
-		topLabel.setPosition(size, size - TOP_LABEL_YPADDING, Align.topRight);
+		topLabel.setPosition(SIZE, SIZE - TOP_LABEL_YPADDING, Align.topRight);
 
 		super.addActor(itemBtn);
 		super.addActor(itemQuantityLabel);
 		super.addActor(toolHpLabel);
 		super.addActor(topLabel);
 		super.addActor(highlight);
-		super.setSize(size, size);
+		super.setSize(SIZE, SIZE);
 
 		highlight.setVisible(false);
 
