@@ -1921,5 +1921,14 @@
 		"onInteract" : "-1",
 		"skill" : "None",
 		"name" : "Gas pump"
+	},
+	"160" : {
+		"hp" : 1,
+		"harvestHp" : 1,
+		"lvl" : -1,
+		"nocollide" : true,
+		"centered" : true,
+		"onInteract" : "-1",
+		"name" : "Tree sapling"
 	}
 }

@@ -1619,5 +1619,28 @@
 		"name" : "Blue fish",
 		"cost" : 8,
 		"weight" : 0.35
+	},
+	"169" : {
+		"name" : "Tree seeds",
+		"recipe" : "91|68/5",
+		"altObject" : 160,
+		"cost" : 50,
+		"type" : "Crop",
+		"weight" : 0.05,
+		"cropContainer": {
+			"soil" : 0,
+			"cropStages" : [ {
+				"stageLength" : 200,
+				"objectId" : 160
+			}, {
+				"stageLength" : 200,
+				"objectId" : 160
+			}, {
+				"stageLength" : 200,
+				"objectId" : 160
+			}, {
+				"objectId" : 2
+			} ]
+		}
 	}
 }

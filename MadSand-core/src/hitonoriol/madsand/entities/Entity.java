@@ -18,6 +18,7 @@ import hitonoriol.madsand.containers.PairFloat;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.enums.Faction;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
@@ -151,6 +152,10 @@ public abstract class Entity {
 	public void reinit() {
 		initInventory();
 		inventory.setMaxWeight(stats.calcMaxInventoryWeight());
+	}
+
+	public boolean memberOf(Faction faction) {
+		return stats.faction == faction;
 	}
 
 	abstract void attack(Direction dir);

@@ -121,6 +121,10 @@ public class Utils {
 
 		return (randPercent() < percent);
 	}
+	
+	public static boolean percentRoll(double rollResult, double percent) {
+		return rollResult < percent;
+	}
 
 	public static long now() {
 		return Instant.now().getEpochSecond();

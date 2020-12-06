@@ -26,7 +26,7 @@
 				{ "rollCount": 1, "idList": [21, 58, 54, 62] },
 				{ "rollCount": 3, "idList": [41, 42] }
 			],
-			"structures" : ["gen/stone-shrine", "gen/abandoned-gas-station"],
+			"structures" : ["gen/stone-shrine", "gen/abandoned-gas-station", "gen/crop-plot"],
 			"maxStructures" : 5,
 			"chanceToRegenerate": 40,
 			"initialMobSpawn" : 5,
@@ -132,6 +132,7 @@
 			"regenerateObjects": [
 				{"rollCount": 20, "idList": [10, 24]}
 			],
+			"structures" : ["gen/abandoned-gas-station"],
 			"chanceToRegenerate": 35,
 			"initialFriendlyChance" : 40,
 			"initialMobSpawn" : 6,
@@ -169,6 +170,7 @@
 				{ "rollCount" : 300, "idList" : [ 32, 38, 33 ] },
 				{ "rollCount" : 1, "idList" : [ 93 ] }
 			],
+			"structures" : ["gen/abandoned-gas-station"],
 			"initialMobSpawn" : 15,
 			"initialFriendlyChance" : 80,
 			"hostileMobs": {"rollCount": 6, "idList": [6, 32, 29]},

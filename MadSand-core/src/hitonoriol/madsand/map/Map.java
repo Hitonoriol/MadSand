@@ -291,6 +291,13 @@ public class Map {
 		return true;
 	};
 
+	private MapAction cropAction = (int x, int y, int id) -> {
+		if (objectExists(x, y))
+			return false;
+
+		return putCrop(x, y, id);
+	};
+
 	private static double ERODE_PROBABILITY = 30;
 	private MapAction erodeTileAction = (int x, int y, int id) -> {
 		if (Utils.percentRoll(ERODE_PROBABILITY))
@@ -401,6 +408,10 @@ public class Map {
 
 	public Map fillObject() {
 		return fillObject(defObject);
+	}
+
+	public Map fillCrop(int x, int y, int w, int h, int id) {
+		return drawRect(cropAction, x, y, w, h, id, true);
 	}
 
 	private boolean correctCoords(int x, int y) {

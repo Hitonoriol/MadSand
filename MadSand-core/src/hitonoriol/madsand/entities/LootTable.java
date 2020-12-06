@@ -23,10 +23,11 @@ public class LootTable {
 
 	private ArrayList<Item> roll(ArrayList<Item> itemList) {
 		Item item;
+		double roll = Utils.randPercent();
 
 		for (Entry<Float, LootTableEntry> entry : lootTable.entrySet()) {
 			item = Item.nullItem;
-			if (!rollEntry(entry.getKey()))
+			if (!Utils.percentRoll(roll, entry.getKey()))
 				continue;
 			else {
 				item = entry.getValue().rollItem();
@@ -54,10 +55,6 @@ public class LootTable {
 
 	public ArrayList<Item> roll() {
 		return roll(rollCount);
-	}
-
-	private boolean rollEntry(float probability) {
-		return Utils.percentRoll(probability);
 	}
 
 	static final String ENTRY_PROBABILITY_DELIM = "\\|";
