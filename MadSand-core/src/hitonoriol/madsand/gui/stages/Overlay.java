@@ -181,6 +181,8 @@ public class Overlay extends Stage {
 		super.addActor(overlayTable);
 	}
 
+	String prevConsoleInput;
+
 	public void pollGameConsole() {
 		if (!Utils.debugMode)
 			return;
@@ -197,10 +199,17 @@ public class Overlay extends Stage {
 				MadSand.print("Couldn't execute user input");
 				e.printStackTrace();
 			} finally {
+				prevConsoleInput = gameLog.inputField.getText();
 				gameLog.inputField.setText("");
 				gameLog.inputField.setVisible(!gameLog.inputField.isVisible());
 				unfocus(gameLog.inputField);
 			}
+		}
+
+		if (Gdx.input.isKeyJustPressed(Keys.UP)) {
+			String tmp = gameLog.inputField.getText();
+			gameLog.inputField.setText(prevConsoleInput);
+			prevConsoleInput = tmp;
 		}
 	}
 

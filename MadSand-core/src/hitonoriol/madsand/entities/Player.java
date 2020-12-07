@@ -549,7 +549,7 @@ public class Player extends Entity {
 			return;
 		}
 
-		if (getObjectResource(obj.id) != -1) {
+		if (getObjectResource(obj.id) != -1 || stats.hand().type == ItemType.Hammer) {
 			if (obj.harvestHp > 0)
 				new ResourceProgressBar(obj).start();
 			else
@@ -580,6 +580,9 @@ public class Player extends Entity {
 		int mhp = ObjectProp.getObject(obj.id).harvestHp;
 		Skill skill = obj.skill;
 		int curLvl = stats.skills.getLvl(skill);
+		
+		if (stats.hand().type == ItemType.Hammer)
+			item = -1;
 
 		if (curLvl < obj.lvl) {
 			MadSand.notice(

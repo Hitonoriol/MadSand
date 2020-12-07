@@ -13,7 +13,7 @@
 				{ "rollCount" : 100, "idList" : [ 2, 30, 35, 36 ] },
 				{ "rollCount" : 50, "idList" : [ 1, 27, 28 ] },
 				{ "rollCount" : 50, "idList" : [ 37, 4 ] },
-				{ "rollCount" : 40, "idList" : [ 42, 41 ] },
+				{ "rollCount" : 40, "idList" : [ 42, 41, 161, 162 ] },
 				{ "rollCount" : 1, "idList" : [ 82 ] },
 				{ "rollCount" : 1, "idList" : [ 93 ] },
 				{ "rollCount" : 1, "idList" : [ 156 ] }
@@ -168,6 +168,7 @@
 			],
 			"objects" : [
 				{ "rollCount" : 300, "idList" : [ 32, 38, 33 ] },
+				{ "rollCount" : 30, "idList" : [ 42, 41 ] },
 				{ "rollCount" : 1, "idList" : [ 93 ] }
 			],
 			"structures" : ["gen/abandoned-gas-station"],

@@ -1930,5 +1930,33 @@
 		"centered" : true,
 		"onInteract" : "-1",
 		"name" : "Tree sapling"
+	},
+	"161" : {
+		"hp" : 1,
+		"harvestHp" : 2,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"None" : [ 68 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Gathering",
+		"name" : "Rose"
+	},
+	"162" : {
+		"hp" : 1,
+		"harvestHp" : 2,
+		"lvl" : -1,
+		"nocollide" : true,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"altItems" : {
+			"None" : [ 68 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Gathering",
+		"name" : "Lilly"
 	}
 }

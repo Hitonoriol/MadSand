@@ -1642,5 +1642,15 @@
 				"objectId" : 2
 			} ]
 		}
+	},
+	"170" : {
+		"name" : "Stone hammer",
+		"recipe" : "2/7:8/5",
+		"dmg" : 1,
+		"hp" : 256,
+		"cost" : 16,
+		"type" : "Hammer",
+		"skill" : "None",
+		"weight" : 0.95
 	}
 }
