@@ -37,11 +37,9 @@
 			"friendlySpawnChance": 60
 		},
 		"lake" : {
-			"lakeTile" : 8,
 			"lakeModifier" : 1.0,
 			"lakeRadius" : 4,
-			"lakeFrom" : 0.1,
-			"lakeTo" : 0.27
+			"intervals" : [{"from" : 0.075, "to" : 0.27, "tile" : 8}, {"from" : 0.285, "to" : 0.315, "tile" : 4}]
 		},
 		"cave" : {
 			"caveTile" : 5,
@@ -142,11 +140,7 @@
 			"friendlySpawnChance": 50
 		},
 		"lake" : {
-			"lakeTile" : 0,
-			"lakeModifier" : 0.0,
-			"lakeRadius" : 0,
-			"lakeFrom" : 0.0,
-			"lakeTo" : 0.0
+			"intervals" : []
 		},
 		"cave" : {
 			"caveTile" : 5,
@@ -180,11 +174,9 @@
 			"friendlySpawnChance": 60
 		},
 		"lake" : {
-			"lakeTile" : 4,
 			"lakeModifier" : 1.0,
 			"lakeRadius" : 4,
-			"lakeFrom" : 0.1,
-			"lakeTo" : 0.27
+			"intervals" : [{"from" : 0.1, "to" : 0.27, "tile" : 4}]
 		},
 		"cave" : {
 			"caveTile" : 5,
@@ -217,11 +209,9 @@
 			"friendlySpawnChance": 50
 		},
 		"lake" : {
-			"lakeTile" : 22,
 			"lakeModifier" : 1.0,
 			"lakeRadius" : 5,
-			"lakeFrom" : 0.1,
-			"lakeTo" : 0.27
+			"intervals" : [{"from" : 0.1, "to" : 0.27, "tile" : 22}]
 		},
 		"cave" : {
 			"caveTile" : 5,

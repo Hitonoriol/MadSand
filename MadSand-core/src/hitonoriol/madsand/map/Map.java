@@ -276,6 +276,9 @@ public class Map {
 			return true;
 		}
 
+		if (getTile(x, y).foreground)
+			return false;
+
 		if (objectExists(x, y))
 			return false;
 

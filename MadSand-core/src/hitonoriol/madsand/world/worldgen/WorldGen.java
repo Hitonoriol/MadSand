@@ -10,6 +10,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.map.Map;
+import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.properties.WorldGenProp;
 import hitonoriol.madsand.world.WorldMap;
 import hitonoriol.madsand.world.Location;
@@ -154,37 +155,36 @@ public class WorldGen {
 		Utils.out("Generating lakes!");
 		Map curLoc = worldMap.getLocation(curMapCoords).getLayer(curLayer);
 		int w = curLoc.getWidth(), h = curLoc.getHeight();
-		LakePreset lake = curBiome.getBiomeLake();
+		LakePreset lakes = curBiome.getBiomeLake();
 
-		if (lake.lakeTile <= 0)
+		if (lakes.intervals.isEmpty())
 			return;
 
 		final Grid grid = new Grid(w, h);
 		final NoiseGenerator noiseGenerator = new NoiseGenerator();
 
-		noiseGenerator.setRadius(lake.lakeRadius);
-		noiseGenerator.setModifier(lake.lakeModifier);
+		noiseGenerator.setRadius(lakes.lakeRadius);
+		noiseGenerator.setModifier(lakes.lakeModifier);
 		noiseGenerator.setSeed(Generators.rollSeed());
 		noiseGenerator.generate(grid);
 
-		int x = 0;
-		int y = 0;
-		float from = lake.lakeFrom;
-		float to = lake.lakeTo;
-
-		while (x < w - 1) {
-			while (y < h - 1) {
-
-				if (grid.get(x, y) >= from && grid.get(x, y) <= to)
-					curLoc.addTile(x, y, lake.lakeTile);
-
-				y++;
-			}
-			x++;
-			y = 0;
-		}
+		for (LakePreset.Interval lake : lakes.intervals)
+			genLake(curLoc, grid, lake);
 
 		Utils.out("Done generating lakes!");
+	}
+
+	private void genLake(Map map, Grid grid, LakePreset.Interval lake) {
+		int tiles = 0;
+		for (int x = 0; x < grid.getWidth() - 1; ++x) {
+			for (int y = 0; y < grid.getHeight() - 1; ++y) {
+				if (grid.get(x, y) >= lake.from && grid.get(x, y) <= lake.to) {
+					map.addTile(x, y, lake.tile);
+					++tiles;
+				}
+			}
+		}
+		Utils.out("Generated " + tiles + " " + TileProp.getName(lake.tile) + " tiles");
 	}
 
 	private void genCave() {
