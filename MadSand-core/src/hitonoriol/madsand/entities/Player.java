@@ -210,6 +210,7 @@ public class Player extends Entity {
 
 			super.attackAnimation(npc);
 			npc.damage(atk);
+			damageHeldTool();
 			stats.skills.increaseSkill(Skill.Melee);
 		}
 
@@ -276,6 +277,10 @@ public class Player extends Entity {
 	void damageHeldTool(Skill objectSkill) {
 		if (inventory.damageTool(stats.hand(), objectSkill)) {
 			MadSand.notice("Your " + stats.hand().name + " broke");
+
+			if (stats.hand().type.isEquipment())
+				unEquip(stats.hand());
+
 			inventory.delItem(stats.hand());
 			freeHands(true);
 		} else
@@ -580,7 +585,7 @@ public class Player extends Entity {
 		int mhp = ObjectProp.getObject(obj.id).harvestHp;
 		Skill skill = obj.skill;
 		int curLvl = stats.skills.getLvl(skill);
-		
+
 		if (stats.hand().type == ItemType.Hammer)
 			item = -1;
 
@@ -683,7 +688,7 @@ public class Player extends Entity {
 
 		inventory.delItem(item, 1);
 		new GrabBagDialog(item.name, items).show();
-		
+
 		if (items.isEmpty())
 			MadSand.warn("You opened " + item.name + ", but it was empty");
 

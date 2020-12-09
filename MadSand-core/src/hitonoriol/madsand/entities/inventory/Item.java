@@ -26,6 +26,7 @@ import hitonoriol.madsand.world.World;
 public class Item {
 	public static final int NULL_ITEM = 0;
 	private static final float DEFAULT_WEIGHT = 0.25f;
+	private static final int EQUIPMENT_HP_PER_LVL = 500;
 
 	public int id;
 	public String name;
@@ -151,7 +152,7 @@ public class Item {
 	}
 
 	public boolean damageTool(Skill skill) {
-		if (type.isTool())
+		if (type.isTool() || type.isEquipment())
 			return damage();
 		else
 			return false;
@@ -226,10 +227,13 @@ public class Item {
 			}
 
 			equipStats = new EquipStats(lvl, type);
+			hp = ((lvl == 0 ? 1 : lvl) * EQUIPMENT_HP_PER_LVL);
+			maxHp = hp;
 		}
 
 		if (type.isWeapon() && !isSpecial)
 			equipStats.stats.set(Stat.Strength, properties.equipStats.stats);
+
 	}
 
 	@JsonIgnore
