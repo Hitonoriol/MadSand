@@ -1958,5 +1958,37 @@
 		"onInteract" : "-1",
 		"skill" : "Gathering",
 		"name" : "Lilly"
+	},
+	"163" : {
+		"hp" : 1,
+		"harvestHp" : 1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"onInteract" : "-1",
+		"name" : "Box of potatoes"
+	},
+	"164" : {
+		"hp" : 1,
+		"harvestHp" : 1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"onInteract" : "-1",
+		"name" : "Box of carrots"
+	},
+	"164" : {
+		"hp" : 1,
+		"harvestHp" : 1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"onInteract" : "-1",
+		"name" : "Box of apples"
+	},
+	"166" : {
+		"hp" : 1,
+		"harvestHp" : 1,
+		"lvl" : -1,
+		"nocollide" : false,
+		"onInteract" : "-1",
+		"name" : "Wheat bag"
 	}
 }
