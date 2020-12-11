@@ -355,6 +355,10 @@ public class Map {
 		return this;
 	}
 
+	public Map drawObjectLine(int x1, int y1, int x2, int y2, int id) {
+		return drawLine(objectAction, x1, y1, x2, y2, id);
+	}
+
 	public Map drawObjectTriangle(Pair p1, Pair p2, Pair p3, int id) {
 		return drawTriangle(objectAction, p1, p2, p3, id);
 	}

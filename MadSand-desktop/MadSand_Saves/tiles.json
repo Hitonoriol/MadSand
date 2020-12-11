@@ -393,5 +393,21 @@
 		"altItems" : null,
 		"name" : "Asphalt",
 		"foreground" : false
+	},
+	
+	"47" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Gravel",
+		"foreground" : false
+	},
+	
+	"48" : {
+		"damage" : 0,
+		"onInteract" : "-1",
+		"altItems" : null,
+		"name" : "Stone tile",
+		"foreground" : false
 	}
 }

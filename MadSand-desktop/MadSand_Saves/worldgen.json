@@ -26,7 +26,7 @@
 				{ "rollCount": 1, "idList": [21, 58, 54, 62] },
 				{ "rollCount": 3, "idList": [41, 42] }
 			],
-			"structures" : ["gen/stone-shrine", "gen/abandoned-gas-station", "gen/crop-plot"],
+			"structures" : ["gen/stone-shrine", "gen/abandoned-gas-station", "gen/crop-plot", "gen/market-stand"],
 			"maxStructures" : 5,
 			"chanceToRegenerate": 40,
 			"initialMobSpawn" : 5,
@@ -39,7 +39,7 @@
 		"lake" : {
 			"lakeModifier" : 1.0,
 			"lakeRadius" : 4,
-			"intervals" : [{"from" : 0.075, "to" : 0.27, "tile" : 8}, {"from" : 0.285, "to" : 0.315, "tile" : 4}]
+			"intervals" : [{"from" : 0.075, "to" : 0.27, "tile" : 8}, {"from" : 0.285, "to" : 0.3125, "tile" : 4}]
 		},
 		"cave" : {
 			"caveTile" : 5,

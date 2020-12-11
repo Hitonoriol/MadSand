@@ -8,4 +8,4 @@ end
 
 s_origin:setSize(s_width, s_height);
 
-return s_origin, s_width, s_height;
+return s_origin;
