@@ -1961,34 +1961,50 @@
 	},
 	"163" : {
 		"hp" : 1,
-		"harvestHp" : 1,
+		"harvestHp" : 3,
 		"lvl" : -1,
 		"nocollide" : false,
 		"onInteract" : "-1",
+		"altItems" : {
+			"None" : [ 46 ]
+		},
+		"skill" : "Gathering",
 		"name" : "Box of potatoes"
 	},
 	"164" : {
 		"hp" : 1,
-		"harvestHp" : 1,
+		"harvestHp" : 3,
 		"lvl" : -1,
 		"nocollide" : false,
 		"onInteract" : "-1",
+		"altItems" : {
+			"None" : [ 47 ]
+		},
+		"skill" : "Gathering",
 		"name" : "Box of carrots"
 	},
 	"165" : {
 		"hp" : 1,
-		"harvestHp" : 1,
+		"harvestHp" : 3,
 		"lvl" : -1,
 		"nocollide" : false,
 		"onInteract" : "-1",
+		"altItems" : {
+			"None" : [ 97 ]
+		},
+		"skill" : "Gathering",
 		"name" : "Box of apples"
 	},
 	"166" : {
 		"hp" : 1,
-		"harvestHp" : 1,
+		"harvestHp" : 3,
 		"lvl" : -1,
 		"nocollide" : false,
 		"onInteract" : "-1",
+		"altItems" : {
+			"None" : [ 110 ]
+		},
+		"skill" : "Gathering",
 		"name" : "Wheat bag"
 	}
 }
