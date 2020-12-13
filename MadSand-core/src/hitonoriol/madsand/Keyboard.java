@@ -70,9 +70,6 @@ public class Keyboard {
 
 		if ((Gdx.input.isKeyJustPressed(Keys.G)))
 			GameSaver.saveWorld();
-
-		if ((Gdx.input.isKeyJustPressed(Keys.L)))
-			GameSaver.loadWorld(MadSand.WORLDNAME);
 		
 		if (Gdx.input.isKeyJustPressed(Keys.J))
 			Gui.overlay.showJournal();

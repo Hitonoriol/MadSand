@@ -56,6 +56,11 @@ public class Location {
 	public Map getLayer(int layer) {
 		return layers.get(layer);
 	}
+	
+	@JsonIgnore
+	public Map getOverworld() {
+		return layers.get(LAYER_OVERWORLD);
+	}
 
 	@JsonIgnore
 	public int getLayerCount() {

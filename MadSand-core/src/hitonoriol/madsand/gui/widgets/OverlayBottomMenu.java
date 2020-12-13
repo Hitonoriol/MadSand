@@ -35,6 +35,7 @@ public class OverlayBottomMenu extends Table {
 	TextButton journalButton;
 	TextButton buildButton;
 	TextButton bestiaryButton;
+	TextButton landButton;
 
 	NinePatchDrawable background;
 
@@ -48,17 +49,12 @@ public class OverlayBottomMenu extends Table {
 		this.overlay = overlay;
 		mouseoverListener = new OverlayMouseoverListener();
 
-		characterStatButton = new TextButton("Character [Q]", skin);
-		inventoryButton = new TextButton("Inventory [E]", skin);
-		journalButton = new TextButton("Journal [J]", skin);
-		buildButton = new TextButton("Build [B]", skin);
-		bestiaryButton = new TextButton("Bestiary [X]", skin);
-
-		addButton(characterStatButton);
-		addButton(inventoryButton);
-		addButton(journalButton);
-		addButton(buildButton);
-		addButton(bestiaryButton);
+		addButton(characterStatButton = new TextButton("Character [Q]", skin));
+		addButton(inventoryButton = new TextButton("Inventory [E]", skin));
+		addButton(journalButton = new TextButton("Journal [J]", skin));
+		addButton(buildButton = new TextButton("Build [B]", skin));
+		addButton(bestiaryButton = new TextButton("Bestiary [X]", skin));
+		addButton(landButton = new TextButton("Land [L]", skin));
 
 		background = new NinePatchDrawable(Gui.darkBackgroundSizeable);
 
