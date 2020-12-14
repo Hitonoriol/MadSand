@@ -9,9 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.gui.OverlayMouseoverListener;
 import hitonoriol.madsand.gui.dialogs.BestiaryDialog;
 import hitonoriol.madsand.gui.dialogs.BuildDialog;
+import hitonoriol.madsand.gui.dialogs.LandDialog;
 import hitonoriol.madsand.gui.dialogs.QuestJournal;
 import hitonoriol.madsand.gui.stages.Overlay;
 import hitonoriol.madsand.world.World;
@@ -35,7 +37,7 @@ public class OverlayBottomMenu extends Table {
 	TextButton journalButton;
 	TextButton buildButton;
 	TextButton bestiaryButton;
-	TextButton landButton;
+	public TextButton landButton;
 
 	NinePatchDrawable background;
 
@@ -112,6 +114,15 @@ public class OverlayBottomMenu extends Table {
 				new BuildDialog().show();
 			}
 
+		});
+		
+		landButton.addListener(new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				new LandDialog(MadSand.world.getLocation()).show();
+			}
+			
 		});
 	}
 

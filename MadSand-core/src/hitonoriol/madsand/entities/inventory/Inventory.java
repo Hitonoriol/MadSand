@@ -87,7 +87,7 @@ public class Inventory {
 	public int getSameCell(Item item) {
 		return items.indexOf(item);
 	}
-	
+
 	public boolean itemExists(Item item) {
 		return items.contains(item);
 	}
@@ -134,11 +134,11 @@ public class Inventory {
 
 		return ret;
 	}
-	
+
 	public Item getItemByIndex(int idx) {
 		if (idx < 0 || idx >= items.size())
 			return Item.nullItem;
-		
+
 		return items.get(idx);
 	}
 
@@ -210,18 +210,16 @@ public class Inventory {
 	void damageTool(Item item) {
 		damageTool(item, Skill.None);
 	}
-	
-	
 
 	/*
 	 * This method discards "overflowing" items,
 	 * use <Entity>.addItem(...) for extra items to drop
 	 */
 	public boolean putItem(Item item) {
-		
+
 		if (item.quantity < 1)
 			return true;
-		
+
 		Item updItem;
 
 		float newWeight = item.getWeight() + curWeight;

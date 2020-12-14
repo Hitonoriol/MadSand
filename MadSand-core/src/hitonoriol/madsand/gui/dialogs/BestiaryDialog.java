@@ -3,13 +3,10 @@ package hitonoriol.madsand.gui.dialogs;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
@@ -33,7 +30,6 @@ public class BestiaryDialog extends GameDialog {
 
 	Table scrollTable = new Table();
 	AutoFocusScrollPane scroll;
-	TextButton closeButton = new TextButton("Close", Gui.skin);
 	Label emptyLabel = new Label("You haven't killed any monsters yet", Gui.skin);
 
 	private BestiaryDialog(Stage stage) {
@@ -68,14 +64,7 @@ public class BestiaryDialog extends GameDialog {
 		}
 
 		super.add(scroll).size(WIDTH, HEIGHT).pad(ENTRY_PAD).row();
-		super.add(closeButton).size(175, 40);
-
-		closeButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				remove();
-			}
-		});
+		super.addCloseButton(175, 40);
 	}
 
 	int STAT_KILLS = 10;

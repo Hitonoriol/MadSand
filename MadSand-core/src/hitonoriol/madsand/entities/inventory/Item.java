@@ -269,7 +269,7 @@ public class Item {
 			return id + ITEM_DELIM + quantity;
 	}
 
-	float getWeight() {
+	public float getWeight() {
 		return weight * quantity;
 	}
 

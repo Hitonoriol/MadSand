@@ -28,6 +28,7 @@ public class GameDialog extends Dialog {
 
 	protected Label textLbl;
 	private Stage stage;
+	private float cWidth = -1, cHeight = -1;
 
 	public GameDialog(String title, String text, Stage stage) {
 		super(title, Gui.skin);
@@ -61,7 +62,7 @@ public class GameDialog extends Dialog {
 		this(title, text, stage);
 		addOkButton(okText);
 	}
-	
+
 	public void skipLine() {
 		add("").row();
 	}
@@ -127,6 +128,53 @@ public class GameDialog extends Dialog {
 
 	public void show() {
 		show(stage);
+	}
+
+	public Cell<TextButton> addCloseButton(float width, float height) {
+		TextButton closeButton = new TextButton("Close", Gui.skin);
+		Cell<TextButton> cell = super.add(closeButton).size(width, height);
+
+		closeButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				remove();
+			}
+		});
+
+		return cell;
+	}
+
+	public Cell<TextButton> addCloseButton() {
+		return addCloseButton(150, 30);
+	}
+
+	public void setPrefSize(float width, float height) {
+		setPrefHeight(height);
+		setPrefWidth(width);
+	}
+
+	public void setPrefHeight(float height) {
+		cHeight = height;
+	}
+
+	public void setPrefWidth(float width) {
+		cWidth = width;
+	}
+
+	@Override
+	public float getPrefWidth() {
+		if (cWidth <= 0)
+			return super.getPrefWidth();
+		else
+			return cWidth;
+	}
+
+	@Override
+	public float getPrefHeight() {
+		if (cHeight <= 0)
+			return super.getPrefHeight();
+		else
+			return cHeight;
 	}
 
 	public static GameDialog generateDialogChain(String text, Stage stage) {

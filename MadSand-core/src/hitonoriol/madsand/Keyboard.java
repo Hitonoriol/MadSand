@@ -68,6 +68,9 @@ public class Keyboard {
 			MadSand.state = GameState.NMENU;
 		}
 
+		if ((Gdx.input.isKeyJustPressed(Keys.L)))
+			Gui.overlay.bottomMenu.landButton.toggle();
+		
 		if ((Gdx.input.isKeyJustPressed(Keys.G)))
 			GameSaver.saveWorld();
 		

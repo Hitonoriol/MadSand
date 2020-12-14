@@ -17,6 +17,7 @@ public class Settlement {
 	private int SIZE_UPGRADE_BY = 25;
 
 	public boolean playerOwned = false;
+	public long leaderUid = -1; // If the settlement is not player-owned, it must have an NPC leader
 	public int lvl = 1;
 	public Inventory warehouse = new Inventory(WAREHOUSE_DEF_WEIGHT);
 	public HashMap<WorkerType, Integer> workers = new HashMap<>();
@@ -38,9 +39,14 @@ public class Settlement {
 
 		return true;
 	}
-	
+
 	public int getSizeUpgradeCost() {
 		return lvl * SIZE_UPGRADE_COST;
+	}
+
+	@JsonIgnore
+	public Location getLocation() {
+		return location;
 	}
 
 	public void timeTick() {
