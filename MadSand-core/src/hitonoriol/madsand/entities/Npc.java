@@ -124,6 +124,7 @@ public class Npc extends Entity {
 	private float ATTACK_SPD_PER_LVL = 0.1f;
 	private float MOVE_SPD_PER_LVL = 0.15f;
 
+	private String NAMED_NPC_STR = " the ";
 	void loadProperties() {
 		NpcContainer properties = NpcProp.npcs.get(id);
 
@@ -147,8 +148,8 @@ public class Npc extends Entity {
 
 		rewardExp = properties.rewardExp + (int) (lvl * EXP_PER_LVL);
 
-		if (lvl == maxLvl)
-			stats.name = Utils.randWord() + " the " + stats.name;
+		if (lvl == maxLvl && !stats.name.contains(NAMED_NPC_STR))
+			stats.name = Utils.randWord() + NAMED_NPC_STR + stats.name;
 
 		stats.faction = properties.faction;
 		canTrade = properties.canTrade;

@@ -98,6 +98,10 @@ public class MapObject {
 	boolean takeDamage() {
 		return takeDamage(0);
 	}
+	
+	public int rollDrop(ItemType heldItemType) {
+		return getAltItem(this.id, heldItemType);
+	}
 
 	private static int getAltItem(int id, ItemType hand, HashMap<ItemType, ArrayList<Integer>> container) {
 		HashMap<ItemType, ArrayList<Integer>> items = container;

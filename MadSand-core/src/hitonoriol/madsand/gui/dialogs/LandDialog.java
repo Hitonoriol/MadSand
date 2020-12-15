@@ -61,7 +61,7 @@ public class LandDialog extends GameDialog {
 			sb.append(
 					"* " + item.quantity + " " + item.name + " (" + Utils.round(item.getWeight()) + ")"
 							+ Resources.LINEBREAK);
-		return sb.toString();
+		return settlement.warehouse.items.isEmpty() ? "Empty" : sb.toString();
 	}
 
 }

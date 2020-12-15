@@ -19,6 +19,7 @@ import hitonoriol.madsand.entities.TradeListContainer;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.NpcType;
+import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.pathfinding.Graph;
 import hitonoriol.madsand.pathfinding.Node;
@@ -1022,6 +1023,14 @@ public class Map {
 
 	public Pair locateObject(int id) {
 		return locate(ObjectProp.getObject(id));
+	}
+
+	public Pair locateObject(Skill skill) {
+		for (Entry<Pair, MapObject> entry : mapObjects.entrySet()) {
+			if (entry.getValue().skill == skill)
+				return entry.getKey();
+		}
+		return Pair.nullPair;
 	}
 
 	/*
