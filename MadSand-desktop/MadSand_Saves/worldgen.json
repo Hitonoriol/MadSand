@@ -113,6 +113,7 @@
 			]
 		}
 	},
+
 	"1" : {
 		"biomeName" : "Desert",
 		"overworld" : {
@@ -131,6 +132,7 @@
 				{"rollCount": 20, "idList": [10, 24]}
 			],
 			"structures" : ["gen/abandoned-gas-station"],
+			"maxStructures" : 2,
 			"chanceToRegenerate": 35,
 			"initialFriendlyChance" : 40,
 			"initialMobSpawn" : 6,
@@ -153,6 +155,7 @@
 		"dungeon" : {
 		}
 	},
+
 	"2" : {
 		"biomeName" : "Cold plains",
 		"overworld" : {
@@ -165,7 +168,8 @@
 				{ "rollCount" : 30, "idList" : [ 42, 41 ] },
 				{ "rollCount" : 1, "idList" : [ 93 ] }
 			],
-			"structures" : ["gen/abandoned-gas-station"],
+			"structures" : ["gen/abandoned-gas-station", "gen/igloo"],
+			"maxStructures" : 3,
 			"initialMobSpawn" : 15,
 			"initialFriendlyChance" : 80,
 			"hostileMobs": {"rollCount": 6, "idList": [6, 32, 29]},
@@ -189,6 +193,7 @@
 		"dungeon" : {
 		}
 	},
+
 	"3" : {
 		"biomeName" : "Dead lands",
 		"overworld" : {

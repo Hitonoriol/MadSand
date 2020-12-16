@@ -2006,5 +2006,19 @@
 		},
 		"skill" : "Gathering",
 		"name" : "Wheat bag"
+	},
+	"167" : {
+		"hp" : 5,
+		"nocollide" : false,
+		"onInteract" : "-1",
+		"isWall" : true,
+		"name" : "Ice"
+	},
+	"168" : {
+		"hp" : 8,
+		"nocollide" : false,
+		"onInteract" : "-1",
+		"isWall" : true,
+		"name" : "Sandstone"
 	}
 }

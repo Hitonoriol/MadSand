@@ -138,7 +138,8 @@ public class QuestWorker {
 
 	public ProceduralQuest startProceduralQuest(long uid) {
 		ProceduralQuest quest = getProceduralQuest(uid);
-		long waitTime = (ProceduralQuest.QUEST_TIMEOUT - quest.timeSinceCreated()) * MadSand.world.realtimeTickRate;
+		long waitTime = (long) ((ProceduralQuest.QUEST_TIMEOUT - quest.timeSinceCreated())
+				* MadSand.world.realtimeTickRate);
 
 		if (waitTime > 0 && quest.isComplete) {
 			new DialogChainGenerator("You want another task?" + Resources.LINEBREAK +

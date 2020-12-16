@@ -334,11 +334,13 @@ public class Map {
 
 	private Map drawCircle(MapAction action, int x0, int y0, int radius, int id) {
 		int x, y;
-		coords.set(Pair.nullPair);
-		for (int i = 0; i < 360; ++i) {
-			x = (int) (radius + i * Math.cos(i));
-			y = (int) (radius + i * Math.sin(i));
-
+		Pair coords = new Pair();
+		double angle;
+		for (float i = 0; i < 360; ++i) {
+			angle = Math.toRadians(i);
+			x = x0 + (int) (radius * Math.cos(angle));
+			y = y0 + (int) (radius * Math.sin(angle));
+			
 			if (coords.equals(x, y) || !correctCoords(x, y))
 				continue;
 
@@ -986,6 +988,7 @@ public class Map {
 	}
 
 	public Pair addStructure(String name) {
+		Pair coords = new Pair();
 		MapStructure structure = new MapStructure(coords.random(xsz, ysz)).setName(name);
 
 		do {

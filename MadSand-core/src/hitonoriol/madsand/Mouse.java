@@ -156,7 +156,7 @@ public class Mouse {
 	}
 
 	private static String getCropInfo() {
-		long time = crop.getHarvestTime() * MadSand.world.realtimeTickRate;
+		long time = (long) (crop.getHarvestTime() * MadSand.world.realtimeTickRate);
 		String info = (time <= 0)
 				? ("* Ready to harvest!")
 				: ("[#58FFB1]* Will fully grow in " + Utils.timeString(time) + "[]");

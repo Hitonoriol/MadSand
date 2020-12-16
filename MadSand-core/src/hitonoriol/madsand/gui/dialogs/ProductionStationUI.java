@@ -160,7 +160,7 @@ public class ProductionStationUI extends GameDialog {
 
 	public void show() {
 		super.show();
-		int tickRate = MadSand.world.realtimeTickRate;
+		float tickRate = MadSand.world.realtimeTickRate;
 		Timer.instance().scheduleTask(refreshTask, tickRate, tickRate);
 	}
 

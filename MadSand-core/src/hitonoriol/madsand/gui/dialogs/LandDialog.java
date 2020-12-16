@@ -5,14 +5,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Faction;
+import hitonoriol.madsand.enums.WorkerType;
 import hitonoriol.madsand.properties.WorldGenProp;
 import hitonoriol.madsand.world.Location;
 import hitonoriol.madsand.world.Settlement;
+import hitonoriol.madsand.world.Settlement.WorkerContainer;
 
 public class LandDialog extends GameDialog {
 
@@ -51,8 +54,30 @@ public class LandDialog extends GameDialog {
 
 	private void addSettlementInfo(Table container) {
 		container.add("Settlement " + location.name).row();
+
+		container.add("Workers:").row();
+		container.add(getWorkerList()).row();
+		container.add("").row();
+
 		container.add("Warehouse:").row();
 		container.add(getWarehouseContents()).row();
+	}
+
+	private String getWorkerList() {
+		StringBuilder sb = new StringBuilder();
+
+		WorkerContainer workers;
+		for (WorkerType type : WorkerType.values()) {
+			if ((workers = settlement.getWorkers(type)).quantity == 0)
+				continue;
+
+			sb.append(type.name() + ": " + workers.quantity + " ");
+			sb.append("(" + Utils.round(workers.getGatheringRate() / MadSand.world.realtimeTickRate)
+					+ " actions per sec)");
+			sb.append(Resources.LINEBREAK);
+		}
+
+		return sb.toString();
 	}
 
 	private String getWarehouseContents() {

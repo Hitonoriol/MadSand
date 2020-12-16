@@ -54,7 +54,7 @@ public class World {
 
 	private Timer actDelayTimer;
 	private Timer realTimeRefresher;
-	public int realtimeTickRate = 5; // seconds per 1 tick
+	public float realtimeTickRate = 5; // seconds per 1 tick
 	public long globalRealtimeTick = 0; // global realtime tick counter, never resets
 
 	public int ticksPerHour = 150; // ticks per one hourTick() trigger
@@ -661,7 +661,7 @@ public class World {
 	}
 
 	private void offlineReward(long offlineTime) {
-		long offlineTicks = offlineTime / realtimeTickRate;
+		long offlineTicks = (long) (offlineTime / realtimeTickRate);
 		globalRealtimeTick += offlineTicks;
 		LuaUtils.executeScript(LuaUtils.offlineRewardScript, offlineTime);
 

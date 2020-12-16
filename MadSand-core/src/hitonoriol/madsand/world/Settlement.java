@@ -65,18 +65,12 @@ public class Settlement {
 	}
 
 	public void timeTick() {
-		/*
-		 * TODO(?)
-		 * 
-		 * Gather materials / manufacture items:
-		 * (?) Locate objects with needed resources and damage them
-		 * the same way as during the real resource gathering.
-		 * 
-		 */
+
 		Map map = location.getOverworld();
 		Pair objCoords;
 		Skill workerSkill;
 		WorkerContainer allWorkers;
+		boolean itemAdded;
 		for (WorkerType type : WorkerType.values()) {
 			workerSkill = type.getSkill();
 			allWorkers = getWorkers(type);
@@ -89,9 +83,14 @@ public class Settlement {
 				continue;
 
 			if (allWorkers.gatherResources().itemCharge > 1f)
-				warehouse.putItem(map.getObject(objCoords.x, objCoords.y).rollDrop(ItemType.bySkill(workerSkill)),
+				itemAdded = warehouse.putItem(
+						map.getObject(objCoords.x, objCoords.y).rollDrop(ItemType.bySkill(workerSkill)),
 						allWorkers.getResourceQuantity());
+			else
+				continue;
 
+			if (!itemAdded)
+				break;
 		}
 	}
 
@@ -99,12 +98,16 @@ public class Settlement {
 		public static float ITEMS_PER_LVL = 0.15f; // Items per lvl per realtimeTick
 
 		int lvl = 1;
-		int quantity = 0;
+		public int quantity = 0;
 		float itemCharge = 0;
 
 		public WorkerContainer gatherResources() {
-			itemCharge += (float) lvl * (float) quantity * ITEMS_PER_LVL;
+			itemCharge += getGatheringRate();
 			return this;
+		}
+		
+		public float getGatheringRate() {
+			return (float) lvl * (float) quantity * ITEMS_PER_LVL;
 		}
 
 		public int getResourceQuantity() {

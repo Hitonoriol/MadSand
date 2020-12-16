@@ -2,7 +2,7 @@ local structure = assert(loadfile(structure_header)(..., 8 + math.random(0, 2), 
 local map = world:getCurLoc();
 structure:clear();
 map:fillTile(structure.x, structure.y, structure.width, structure.height, 46);
-map:erodeTileRectangle(structure.x, structure.y, structure.width, structure.height, 1, 0);
+map:erodeTileRectangle(structure.x, structure.y, structure.width, structure.height, 1, map.defTile);
 
 for i = 0, 3 do
 	map:addObject(structure:getFreeTile(), 159);
