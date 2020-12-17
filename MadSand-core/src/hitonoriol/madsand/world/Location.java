@@ -34,13 +34,22 @@ public class Location {
 		layers.put(layer, map);
 	}
 
-	public void createSettlement(String name) {
-		setName(name);
-		settlement = new Settlement();
+	@JsonIgnore
+	public Settlement getSettlement() {
+		if (settlement != null)
+			settlement.setLocation(this);
+
+		return settlement;
 	}
 
-	public void createSettlement() {
-		createSettlement(Utils.randWord());
+	public Settlement createSettlement(String name) {
+		setName(name);
+		settlement = new Settlement();
+		return getSettlement();
+	}
+
+	public Settlement createSettlement() {
+		return createSettlement(Utils.randWord());
 	}
 
 	public boolean hasLayer(int layer) {
@@ -56,7 +65,7 @@ public class Location {
 	public Map getLayer(int layer) {
 		return layers.get(layer);
 	}
-	
+
 	@JsonIgnore
 	public Map getOverworld() {
 		return layers.get(LAYER_OVERWORLD);

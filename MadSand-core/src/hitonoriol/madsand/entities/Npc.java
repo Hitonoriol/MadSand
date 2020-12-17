@@ -209,7 +209,7 @@ public class Npc extends Entity {
 	}
 
 	private void addCurrency() {
-		int currencyId = Globals.getInt(Globals.CURRENCY_FIELD);
+		int currencyId = Globals.getInt(Globals.CURRENCY);
 		inventory.putItem(new Item(currencyId, rollTraderCurrency()));
 	}
 

@@ -258,7 +258,7 @@ public class Item {
 
 	@JsonIgnore
 	public boolean isCurrency() {
-		return id == Globals.getInt(Globals.CURRENCY_FIELD);
+		return id == Globals.getInt(Globals.CURRENCY);
 	}
 
 	@JsonIgnore

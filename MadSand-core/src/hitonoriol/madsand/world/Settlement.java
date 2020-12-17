@@ -28,11 +28,12 @@ public class Settlement {
 
 	@JsonIgnore
 	public void setLocation(Location location) {
-		this.location = location;
+		if (this.location == null)
+			this.location = location;
 	}
 
 	public boolean upgradeSize() {
-		Item upgradeCost = new Item(Globals.getInt(Globals.CURRENCY_FIELD), getSizeUpgradeCost());
+		Item upgradeCost = new Item(Globals.getInt(Globals.CURRENCY), getSizeUpgradeCost());
 		if (!warehouse.itemExists(upgradeCost))
 			return false;
 
@@ -94,6 +95,11 @@ public class Settlement {
 		}
 	}
 
+	@JsonIgnore
+	public void setPlayerOwned() {
+		playerOwned = true;
+	}
+
 	public static class WorkerContainer { // Info about all workers of certain type
 		public static float ITEMS_PER_LVL = 0.15f; // Items per lvl per realtimeTick
 
@@ -105,7 +111,7 @@ public class Settlement {
 			itemCharge += getGatheringRate();
 			return this;
 		}
-		
+
 		public float getGatheringRate() {
 			return (float) lvl * (float) quantity * ITEMS_PER_LVL;
 		}

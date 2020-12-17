@@ -10,7 +10,7 @@ import hitonoriol.madsand.entities.quest.ProceduralQuest;
 
 public class Globals {
 	public static String TRAVEL_ITEM = "travelItem";
-	public static String CURRENCY_FIELD = "currencyId";
+	public static String CURRENCY = "currencyId";
 
 	private static Globals instance = new Globals();
 

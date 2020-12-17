@@ -68,7 +68,7 @@ public class TraderDialog extends GameDialog {
 	}
 
 	private void addQuestReward(ProceduralQuest quest) {
-		int currency = Globals.getInt(Globals.CURRENCY_FIELD);
+		int currency = Globals.getInt(Globals.CURRENCY);
 		int curQuantity = npc.rollTraderCurrency();
 		String currencyName = ItemProp.getItemName(currency);
 		quest.endMsg += Resources.LINEBREAK +

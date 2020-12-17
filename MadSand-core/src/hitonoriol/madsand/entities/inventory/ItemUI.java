@@ -1,5 +1,7 @@
 package hitonoriol.madsand.entities.inventory;
 
+import java.util.List;
+
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -8,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 
@@ -102,5 +105,21 @@ public class ItemUI extends Group {
 		if (item.type.isTool() || item.type.isEquipment())
 			refreshHp();
 
+	}
+
+	public static Table createItemList(List<Item> items, int itemsPerRow) {
+		Table itemTable = new Table(Gui.skin);
+		int i = 1;
+		for (Item item : items) {
+			itemTable.add(new ItemUI(item)).size(ItemUI.SIZE);
+			if (i % itemsPerRow == 0)
+				itemTable.row();
+			++i;
+		}
+		return itemTable;
+	}
+
+	public static Table createItemList(List<Item> items) {
+		return createItemList(items, 3);
 	}
 }

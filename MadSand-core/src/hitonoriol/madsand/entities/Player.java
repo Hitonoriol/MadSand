@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
@@ -50,6 +51,7 @@ public class Player extends Entity {
 	public HashSet<String> luaActions = new HashSet<>(); //Set for one-time lua actions
 	public HashMap<Integer, Integer> killCount = new HashMap<>();
 	public Reputation reputation = new Reputation();
+	public int settlementsEstablished = 0;
 
 	private TimedAction scheduledAction;
 
@@ -1001,6 +1003,25 @@ public class Player extends Entity {
 			Loot loot = MadSand.world.getCurLoc().getLoot(x, y);
 			MadSand.print("You see [" + loot.getInfo() + "] lying on the floor");
 		}
+	}
+
+	static int SETTLEMENT_COST = 500;
+	static int SETTLEMENT_RES_COST = 20;
+
+	public ArrayList<Item> getSettlementCreationReq() {
+		ArrayList<Item> items = new ArrayList<>();
+		// Require coins
+		int creationCost = (settlementsEstablished + 1) * SETTLEMENT_COST;
+		items.add(new Item(Globals.getInt(Globals.CURRENCY), creationCost));
+
+		// Not-so-random material of tier #<settlementsEstablished>
+		Item requiredResource = new Item(
+				NpcProp.tradeLists.getTradeItemList(TradeCategory.Materials, settlementsEstablished)
+						.getRandomId(new Random(settlementsEstablished)));
+		requiredResource.quantity = SETTLEMENT_RES_COST * (settlementsEstablished + 1);
+		items.add(requiredResource);
+
+		return items;
 	}
 
 	public void objectInFront() {

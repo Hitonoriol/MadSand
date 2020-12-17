@@ -1,6 +1,7 @@
 package hitonoriol.madsand.entities;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.inventory.Item;
@@ -34,8 +35,12 @@ public class TradeItemList {
 		this(0);
 	}
 
-	private int getRandomId() {
-		return items.get(Utils.random.nextInt(items.size()));
+	public int getRandomId(Random random) {
+		return items.get(random.nextInt(items.size()));
+	}
+
+	public int getRandomId() {
+		return getRandomId(Utils.random);
 	}
 
 	private void rollItemQuantity(Item item) {

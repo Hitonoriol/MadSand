@@ -2,6 +2,7 @@ package hitonoriol.madsand.entities.inventory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -90,6 +91,10 @@ public class Inventory {
 
 	public boolean itemExists(Item item) {
 		return items.contains(item);
+	}
+
+	public boolean hasItem(int id, int quantity) {
+		return getSameCell(id, quantity) != -1;
 	}
 
 	public int getSameCell(int id) {
@@ -245,7 +250,7 @@ public class Inventory {
 		return false;
 	}
 
-	public boolean putItem(ArrayList<Item> items) {
+	public boolean putItem(List<Item> items) {
 		for (Item item : items)
 			putItem(item);
 		return true;
@@ -299,6 +304,12 @@ public class Inventory {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	public boolean delItem(List<Item> items) {
+		for (Item item : items)
+			delItem(item);
+		return true;
 	}
 
 	public boolean delItem(Item item, int quantity) {

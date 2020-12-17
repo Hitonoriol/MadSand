@@ -45,7 +45,7 @@ public class TradeConfirmDialog extends Dialog {
 	private static String titleBuyText = "Buy ";
 	private static String titleSellText = "Sell ";
 
-	private static String currencyName = ItemProp.getItemName(Globals.getInt(Globals.CURRENCY_FIELD));
+	private static String currencyName = ItemProp.getItemName(Globals.getInt(Globals.CURRENCY));
 
 	private Label titleLabel; // Dialog title
 	private Label chooseLabel; // Label above the slider

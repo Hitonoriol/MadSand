@@ -16,7 +16,7 @@ public class TradeInventory {
 	}
 
 	public TradeInventory(Inventory seller, Inventory buyer) {
-		this(seller, buyer, Globals.getInt(Globals.CURRENCY_FIELD));
+		this(seller, buyer, Globals.getInt(Globals.CURRENCY));
 	}
 
 	public void setCurrency(int id) {
