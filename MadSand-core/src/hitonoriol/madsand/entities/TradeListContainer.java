@@ -53,7 +53,6 @@ public class TradeListContainer extends HashMap<TradeCategory, ArrayList<TradeIt
 		super.put(category, valList);
 	}
 
-	
 	public ArrayList<Item> roll(TradeCategory category, int tier) {
 		ArrayList<Item> items = new ArrayList<>();
 		boolean all = category.equals(TradeCategory.All);
@@ -82,11 +81,12 @@ public class TradeListContainer extends HashMap<TradeCategory, ArrayList<TradeIt
 	}
 
 	public int rollTier() {
-		double baseChance;
-		for (int i = 0; i <= MAX_TIER; ++i) {
-			baseChance = (1 / (i + 1));
-			if (Utils.percentRoll(baseChance * 0.85))
-				return i;
+		double tierChance;
+		Utils.out();
+		for (float i = MAX_TIER; i >= 0; --i) {
+			tierChance = (1d / Math.exp(Math.pow(i, 0.6))) * 90d;
+			if (Utils.percentRoll(tierChance))
+				return (int) i;
 		}
 		return 0;
 	}

@@ -11,9 +11,18 @@ Available bindings:
 
 	* Map editing:
 		local map = world:getCurLoc();
-		* map:addTile(x, y, tile_id) -- place tile
-		* map:addObject(x, y, object_id) -- place map object
-		* map:delObject(x, y)	-- delete map object
+		Basic editing:
+			* map:addTile/addObject(x, y, id) -- place tile/object
+			* map:delTile/delObject(x, y)	-- delete object/tile
+			* map:fillTile/fillObject([id]) -- fill the whole map with specified tile/object or with default tile/object if id is not specified
+			* map:erodeTileRectangle(x, y, width, height, [depth], id) -- replace tiles on the border of a rectangle area with specified tile with 30% chance
+		Shapes:
+			* map:drawTileRectangle/drawObjectRectangle(x, y, width, height, id)
+			* map:fillTile/fillObject(x, y, width, height, id) -- fills rectangle region of map with tile/object
+			* map:drawObjectLine(x1, y1, x2, y2, id)
+			* map:drawTileCircle/drawObjectCircle(x0, y0, radius, id)
+			* map:fillTileCircle/fillObjectCircle(x0, y0, radius, id)
+			* map:drawTileTriangle/drawObjectTriangle(p1, p2, p3, id) -- Points p1, p2, p3 must be of type Pair (use pair:make(x, y) to create one from lua)
 
 	* Misc Map-related stuff:
 		* utils:locateTile(id) -- returns a pair(x, y) of coordinates of specified tile

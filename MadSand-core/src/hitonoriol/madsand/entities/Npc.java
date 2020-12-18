@@ -46,6 +46,7 @@ public class Npc extends Entity {
 	public boolean friendly;
 	public boolean spawnOnce;
 	public boolean provoked = false;
+	public boolean canGiveQuests;
 	private boolean pauseFlag = false;
 
 	public float timePassed; // time passed since last action
@@ -125,6 +126,8 @@ public class Npc extends Entity {
 	private float MOVE_SPD_PER_LVL = 0.15f;
 
 	private String NAMED_NPC_STR = " the ";
+	private int CAN_GIVE_QUESTS_CHANCE = 20;
+
 	void loadProperties() {
 		NpcContainer properties = NpcProp.npcs.get(id);
 
@@ -164,6 +167,9 @@ public class Npc extends Entity {
 
 		if (properties.questList != null)
 			questList = new ArrayList<>(properties.questList);
+
+		if (properties.type == NpcType.Regular || properties.type == NpcType.Trader)
+			canGiveQuests = Utils.percentRoll(CAN_GIVE_QUESTS_CHANCE);
 
 		friendly = properties.friendly;
 		spawnOnce = properties.spawnOnce;

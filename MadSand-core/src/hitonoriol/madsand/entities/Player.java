@@ -454,7 +454,10 @@ public class Player extends Entity {
 		switch (npc.type) {
 
 		case Trader:
-			new TraderDialog(this, npc).show();
+			if (npc.canGiveQuests)
+				new TraderDialog(this, npc).show();
+			else
+				tradeWithNpc(npc);
 			break;
 
 		case FarmAnimal:
@@ -462,10 +465,10 @@ public class Player extends Entity {
 			break;
 
 		case Regular:
-			if (faction == Faction.Animals || faction == Faction.Monsters)
-				MadSand.print("Doesn't seem like " + name + " wants to talk.");
+			if (!faction.isHuman())
+				MadSand.print("Doesn't seem like " + name + " can talk.");
 			else {
-				if (stats.luckRoll()) {
+				if (npc.canGiveQuests && stats.luckRoll()) {
 					quests.startProceduralQuest(npc.uid);
 				} else {
 					new DialogChainGenerator("#" + npc.stats.name + "#" +

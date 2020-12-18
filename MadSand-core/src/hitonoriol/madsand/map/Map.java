@@ -332,7 +332,7 @@ public class Map {
 		return this;
 	}
 
-	private Map drawCircle(MapAction action, int x0, int y0, int radius, int id) {
+	private Map drawCircle(MapAction action, int x0, int y0, int radius, int id, boolean fill) {
 		int x, y;
 		Pair coords = new Pair();
 		double angle;
@@ -340,13 +340,17 @@ public class Map {
 			angle = Math.toRadians(i);
 			x = x0 + (int) (radius * Math.cos(angle));
 			y = y0 + (int) (radius * Math.sin(angle));
-			
+
 			if (coords.equals(x, y) || !correctCoords(x, y))
 				continue;
 
 			coords.set(x, y);
 
-			action.changeMap(x, y, id);
+			if (fill)
+				for (Point point : new Line(x0, y0, x, y))
+					action.changeMap(point.x, point.y, id);
+			else
+				action.changeMap(x, y, id);
 		}
 		return this;
 	}
@@ -367,11 +371,11 @@ public class Map {
 	}
 
 	public Map drawObjectCircle(int x0, int y0, int radius, int id) {
-		return drawCircle(objectAction, x0, y0, radius, id);
+		return drawCircle(objectAction, x0, y0, radius, id, false);
 	}
 
 	public Map drawTileCircle(int x0, int y0, int radius, int id) {
-		return drawCircle(tileAction, x0, y0, radius, id);
+		return drawCircle(tileAction, x0, y0, radius, id, false);
 	}
 
 	public Map drawTileTriangle(Pair p1, Pair p2, Pair p3, int id) {
@@ -410,6 +414,14 @@ public class Map {
 
 	public Map fillObject(int x, int y, int w, int h, int id) {
 		return drawRect(objectAction, x, y, w, h, id, true);
+	}
+	
+	public Map fillObjectCircle(int x0, int y0, int radius, int id) {
+		return drawCircle(objectAction, x0, y0, radius, id, true);
+	}
+
+	public Map fillTileCircle(int x0, int y0, int radius, int id) {
+		return drawCircle(tileAction, x0, y0, radius, id, true);
 	}
 
 	public Map fillObject(int id) {

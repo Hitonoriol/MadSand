@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
@@ -48,12 +49,16 @@ public class Settlement {
 		return workers.getOrDefault(type, new WorkerContainer());
 	}
 
-	public void addWorker(WorkerType type) {
+	public void addWorker(WorkerType type, int quantity) {
 		WorkerContainer allWorkers = getWorkers(type);
-		++allWorkers.quantity;
+		allWorkers.quantity += quantity;
 
 		if (!workers.containsKey(type))
 			workers.put(type, allWorkers);
+	}
+
+	public void addWorker(WorkerType type) {
+		addWorker(type, 1);
 	}
 
 	public int getSizeUpgradeCost() {
@@ -93,6 +98,11 @@ public class Settlement {
 			if (!itemAdded)
 				break;
 		}
+	}
+
+	public void randPopulate() {
+		for (WorkerType type : WorkerType.values())
+			addWorker(type, Utils.rand(10));
 	}
 
 	@JsonIgnore
