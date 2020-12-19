@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
+import com.badlogic.gdx.math.Vector2;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.MadSand;
@@ -355,6 +356,28 @@ public class Map {
 		return this;
 	}
 
+	private void fillTriangle(MapAction action, Pair p1, Pair p2, Pair p3, int id) {
+		int maxX = Math.max(p1.x, Math.max(p2.x, p3.x));
+		int minX = Math.min(p1.x, Math.min(p2.x, p3.x));
+		int maxY = Math.max(p1.y, Math.max(p2.y, p3.y));
+		int minY = Math.min(p1.y, Math.min(p2.y, p3.y));
+
+		Vector2 vs1 = new Vector2(p2.x - p1.x, p2.y - p1.y);
+		Vector2 vs2 = new Vector2(p3.x - p1.x, p3.y - p1.y);
+		Vector2 q = new Vector2();
+		for (int x = minX; x <= maxX; x++) {
+			for (int y = minY; y <= maxY; y++) {
+				q.set(x - p1.x, y - p1.y);
+
+				float s = q.crs(vs2) / vs1.crs(vs2);
+				float t = vs1.crs(q) / vs1.crs(vs2);
+
+				if ((s >= 0) && (t >= 0) && (s + t <= 1))
+					action.changeMap(x, y, id);
+			}
+		}
+	}
+
 	private Map drawTriangle(MapAction action, Pair p1, Pair p2, Pair p3, int id) {
 		drawLine(action, p1.x, p1.y, p2.x, p2.y, id);
 		drawLine(action, p1.x, p1.y, p3.x, p3.y, id);
@@ -415,13 +438,21 @@ public class Map {
 	public Map fillObject(int x, int y, int w, int h, int id) {
 		return drawRect(objectAction, x, y, w, h, id, true);
 	}
-	
+
 	public Map fillObjectCircle(int x0, int y0, int radius, int id) {
 		return drawCircle(objectAction, x0, y0, radius, id, true);
 	}
 
 	public Map fillTileCircle(int x0, int y0, int radius, int id) {
 		return drawCircle(tileAction, x0, y0, radius, id, true);
+	}
+
+	public void fillTileTriangle(Pair p1, Pair p2, Pair p3, int id) {
+		fillTriangle(tileAction, p1, p2, p3, id);
+	}
+
+	public void fillObjectTriangle(Pair p1, Pair p2, Pair p3, int id) {
+		fillTriangle(objectAction, p1, p2, p3, id);
 	}
 
 	public Map fillObject(int id) {
@@ -628,15 +659,31 @@ public class Map {
 			return false;
 	}
 
-	private Pair randPlace(MapAction action, int id) {
-		coords = Pair.nullPair;
-
+	private void brutePlace(Runnable coordModifier, MapAction action, int id) {
 		do
-			coords.random(xsz, ysz);
+			coordModifier.run();
 		while (!action.changeMap(coords.x, coords.y, id));
+	}
 
+	private void randPlaceInTriangle(MapAction action, int id, Pair p1, Pair p2, Pair p3) {
+		brutePlace(() -> coords.randomInTriangle(p1, p2, p3), action, id);
+	}
+
+	private void randPlaceInCircle(MapAction action, int id, int x0, int y0, int radius) {
+		brutePlace(() -> coords.randomInCircle(x0, y0, radius), action, id);
+	}
+
+	private Pair randPlace(MapAction action, int id) {
+		brutePlace(() -> coords.random(xsz, ysz), action, id);
 		return coords;
+	}
 
+	public void randPlaceLootInTriangle(int id, Pair p1, Pair p2, Pair p3) {
+		randPlaceInTriangle(lootAction, id, p1, p2, p3);
+	}
+
+	public void randPlaceLootInCircle(int id, int x0, int y0, int radius) {
+		randPlaceInCircle(lootAction, id, x0, y0, radius);
 	}
 
 	public void randPlaceObject(int id) {

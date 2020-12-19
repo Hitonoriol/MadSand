@@ -131,8 +131,8 @@
 			"regenerateObjects": [
 				{"rollCount": 20, "idList": [10, 24]}
 			],
-			"structures" : ["gen/abandoned-gas-station"],
-			"maxStructures" : 2,
+			"structures" : ["gen/abandoned-gas-station", "gen/pyramid"],
+			"maxStructures" : 3,
 			"chanceToRegenerate": 35,
 			"initialFriendlyChance" : 40,
 			"initialMobSpawn" : 6,

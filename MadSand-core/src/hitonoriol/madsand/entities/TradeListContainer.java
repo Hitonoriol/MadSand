@@ -82,7 +82,6 @@ public class TradeListContainer extends HashMap<TradeCategory, ArrayList<TradeIt
 
 	public int rollTier() {
 		double tierChance;
-		Utils.out();
 		for (float i = MAX_TIER; i >= 0; --i) {
 			tierChance = (1d / Math.exp(Math.pow(i, 0.6))) * 90d;
 			if (Utils.percentRoll(tierChance))

@@ -2008,9 +2008,12 @@
 		"name" : "Wheat bag"
 	},
 	"167" : {
-		"hp" : 5,
+		"hp" : 6,
 		"nocollide" : false,
 		"onInteract" : "-1",
+		"altItems" : {
+			"Pickaxe" : [ 172 ]
+		},
 		"isWall" : true,
 		"name" : "Ice"
 	},
@@ -2018,6 +2021,9 @@
 		"hp" : 8,
 		"nocollide" : false,
 		"onInteract" : "-1",
+		"altItems" : {
+			"Pickaxe" : [ 171 ]
+		},
 		"isWall" : true,
 		"name" : "Sandstone"
 	}

@@ -53,6 +53,21 @@ public class Pair {
 		return this.set(Utils.rand(xMax), Utils.rand(yMax));
 	}
 
+	public Pair randomInCircle(int x0, int y0, int radius) {
+		double angle = Math.toRadians(Utils.rand(0, 360));
+		int r = Utils.rand(radius);
+		this.x = (int) (x0 + r * Math.cos(angle));
+		this.y = (int) (y0 + r * Math.sin(angle));
+		return this;
+	}
+
+	public Pair randomInTriangle(Pair p1, Pair p2, Pair p3) {
+		double r1 = Utils.random.nextDouble(), r2 = Utils.random.nextDouble();
+		this.x = (int) ((1 - Math.sqrt(r1)) * p1.x + (Math.sqrt(r1) * (1 - r2)) * p2.x + (Math.sqrt(r1) * r2) * p3.x);
+		this.y = (int) ((1 - Math.sqrt(r1)) * p1.y + (Math.sqrt(r1) * (1 - r2)) * p2.y + (Math.sqrt(r1) * r2) * p3.y);
+		return this;
+	}
+
 	public static Pair getInstance() {
 		return instance;
 	}

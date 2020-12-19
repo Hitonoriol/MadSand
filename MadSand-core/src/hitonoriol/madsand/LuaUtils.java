@@ -8,6 +8,7 @@ import org.luaj.vm2.lib.jse.JsePlatform;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.enums.TradeCategory;
+import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.properties.Tutorial;
 
 public class LuaUtils {
@@ -103,7 +104,14 @@ public class LuaUtils {
 	}
 
 	public static TradeCategory lootCategory(String name) {
-		Utils.out("gettin tradecategory: " + name);
 		return TradeCategory.valueOf(name);
+	}
+
+	public static int rollLoot(TradeCategory category, int tier) {
+		return NpcProp.tradeLists.roll(category, tier < 0 ? NpcProp.tradeLists.rollTier() : tier).get(0).id;
+	}
+
+	public static int rollLoot(TradeCategory category) {
+		return rollLoot(category, -1);
 	}
 }

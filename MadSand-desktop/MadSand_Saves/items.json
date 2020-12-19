@@ -1652,5 +1652,15 @@
 		"type" : "Hammer",
 		"skill" : "None",
 		"weight" : 0.95
+	},
+	"171" : {
+		"name" : "Sandstone",
+		"cost" : 3,
+		"weight" : 0.75
+	},
+	"172" : {
+		"name" : "Ice",
+		"cost" : 3,
+		"weight" : 0.5
 	}
 }
