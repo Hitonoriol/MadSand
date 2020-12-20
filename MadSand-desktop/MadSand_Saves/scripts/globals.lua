@@ -2,6 +2,7 @@
 
 script_dir = ...;
 structure_header = script_dir .. "structure/structure.lua";
+root_package = "hitonoriol.madsand";
 
 player = world.player;
 stats = player.stats;
@@ -30,4 +31,8 @@ verify_structure = function(x, y, w, h)
 	end
 	
 	return true;
+end
+
+package = function(name)
+	return root_package .. "." .. name;
 end

@@ -8,6 +8,7 @@ for i = 1,4 do
 end
 
 local structure = map:addStructure("plain-camp");	-- Create starting location
+
 player:teleport(structure.x, structure.y);		-- Teleport player to the origin of the structure
 map:spawnMobs("12", 1, 7, 15);				-- Spawn "Old farmer" NPC
 map:spawnMobs("4", 1, 10, 15);				-- Spawn "Pirate" NPC

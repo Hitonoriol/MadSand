@@ -652,6 +652,10 @@ public class Map {
 		return ret;
 	}
 
+	public MapObject getObject(Pair coords) {
+		return getObject(coords.x, coords.y);
+	}
+
 	boolean objectExists(int x, int y) {
 		if (correctCoords(coords.set(x, y))) {
 			return !getObject(x, y).equals(nullObject);

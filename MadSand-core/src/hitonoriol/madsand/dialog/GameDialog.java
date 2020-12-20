@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.Mouse;
 
 public class GameDialog extends Dialog {
@@ -120,6 +121,17 @@ public class GameDialog extends Dialog {
 			}
 		});
 		addButton(okBtn);
+	}
+
+	public void addLuaButton(String buttonText, String luaCode) {
+		TextButton button = new TextButton(buttonText, Gui.skin);
+		button.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				LuaUtils.execute(luaCode);
+			}
+		});
+		addButton(button);
 	}
 
 	public void addButton(TextButton button) {

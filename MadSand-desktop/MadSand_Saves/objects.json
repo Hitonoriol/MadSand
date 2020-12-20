@@ -67,15 +67,14 @@
 		"name" : "Berry bush"
 	},
 	"5" : {
-		"hp" : 30,
+		"hp" : 7,
 		"harvestHp" : -1,
 		"lvl" : -1,
-		"nocollide" : false,
 		"maskWidth" : 0,
 		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
+		"onInteract" : "luajava.newInstance(
+							package('minigames.blackjack.BlackJackUI'),
+							world:getCurLoc():getObject(player:lookingAt())):show()",
 		"name" : "Video Blackjack machine"
 	},
 	"6" : {
@@ -2026,5 +2025,34 @@
 		},
 		"isWall" : true,
 		"name" : "Sandstone"
+	},
+	"169" : {
+		"hp" : 3,
+		"harvestHp" : 3,
+		"lvl" : 1,
+		"altItems" : {
+			"None" : [ 104 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Gathering",
+		"name" : "Haystack"
+	},
+	"170" : {
+		"hp" : 3,
+		"harvestHp" : 3,
+		"lvl" : 1,
+		"altItems" : {
+			"None" : [ 104 ]
+		},
+		"onInteract" : "-1",
+		"skill" : "Gathering",
+		"name" : "Haybale"
+	},
+	"171" : {
+		"hp" : 30,
+		"harvestHp" : -1,
+		"lvl" : -1,
+		"onInteract" : "-1",
+		"name" : "Cauldron"
 	}
 }

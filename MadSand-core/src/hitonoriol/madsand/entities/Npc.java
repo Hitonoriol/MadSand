@@ -35,7 +35,7 @@ import hitonoriol.madsand.world.World;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class Npc extends Entity {
 	public static int NULL_NPC = 0;
-	static double IDLE_NPC_MOVE_CHANCE = 27;
+	static double IDLE_MOVE_CHANCE = 20;
 
 	public int id;
 	public long uid;
@@ -126,7 +126,7 @@ public class Npc extends Entity {
 	private float MOVE_SPD_PER_LVL = 0.15f;
 
 	private String NAMED_NPC_STR = " the ";
-	private int CAN_GIVE_QUESTS_CHANCE = 20;
+	private int CAN_GIVE_QUESTS_CHANCE = 30;
 
 	void loadProperties() {
 		NpcContainer properties = NpcProp.npcs.get(id);
@@ -217,6 +217,10 @@ public class Npc extends Entity {
 	private void addCurrency() {
 		int currencyId = Globals.getInt(Globals.CURRENCY);
 		inventory.putItem(new Item(currencyId, rollTraderCurrency()));
+	}
+	
+	public boolean isNeutral () {
+		return friendly || state != NpcState.Hostile;
 	}
 
 	public void provoke() {
@@ -377,7 +381,7 @@ public class Npc extends Entity {
 			if (!canAct(stats.walkCost))
 				return;
 
-			if (Utils.percentRoll(IDLE_NPC_MOVE_CHANCE))
+			if (Utils.percentRoll(IDLE_MOVE_CHANCE))
 				randMove();
 
 			doAction(stats.walkCost);

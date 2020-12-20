@@ -113,15 +113,17 @@ public class Mouse {
 
 		if (!npc.equals(Map.nullNpc)) {
 			info += (npc.stats.name + " (Level " + npc.getLvl() + ")") + Resources.LINEBREAK;
-			info += ((npc.friendly || npc.state != NpcState.Hostile)
+			info += ((npc.isNeutral())
 					? "Neutral"
 					: "Hostile") + Resources.LINEBREAK;
 
 			if (World.player.knowsNpc(npc.id))
 				info += npc.getInfoString();
 
-			if (!npc.friendly)
+			if (npc.state == NpcState.Hostile)
 				info += npc.spottedMsg();
+			else if (npc.canGiveQuests && npc.isNeutral())
+				info += "* Might need some help";
 
 			if (npc.animalProductWorker != null)
 				info += getProdStationInfo(npc.animalProductWorker);

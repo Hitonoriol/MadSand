@@ -54,17 +54,24 @@ public class MapStructure {
 		return Utils.rand(y, yMax);
 	}
 
+	private int maxAttempts = 1000;
+
 	public Pair getFreeTile() {
 		Pair coords = new Pair();
 		Map map = MadSand.world.getCurLoc();
-
+		int attempt = 0;
 		do {
 			coords.set(randX(), randY());
+
+			if (attempt > maxAttempts)
+				break;
+
+			++attempt;
 		} while (map.objectExists(coords.x, coords.y) || !map.getNpc(coords).equals(Map.nullNpc));
 
 		return coords;
 	}
-	
+
 	public void clear() {
 		MadSand.world.getCurLoc().fillObject(x, y, width, height, 0);
 	}

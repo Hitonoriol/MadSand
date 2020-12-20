@@ -601,24 +601,28 @@
 	},
 	"61" : {
 		"name" : "Buckler",
+		"lvl": 1,
 		"cost" : 79,
 		"type": "Shield",
 		"weight" : 1.1
 	},
 	"62" : {
 		"name" : "Royal shield",
+		"lvl": 1,
 		"cost" : 110,
 		"type": "Shield",
 		"weight" : 1.1
 	},
 	"63" : {
 		"name" : "Golden shield",
+		"lvl": 1,
 		"cost" : 199,
 		"type": "Shield",
 		"weight" : 1.7
 	},
 	"64" : {
 		"name" : "Executor's shield",
+		"lvl": 1,
 		"cost" : 231,
 		"type": "Shield",
 		"weight" : 1.8
