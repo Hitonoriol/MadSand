@@ -67,7 +67,7 @@
 		"name" : "Berry bush"
 	},
 	"5" : {
-		"hp" : 7,
+		"hp" : 11,
 		"harvestHp" : -1,
 		"lvl" : -1,
 		"maskWidth" : 0,

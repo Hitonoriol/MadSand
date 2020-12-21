@@ -124,6 +124,10 @@ public abstract class Entity {
 		};
 	}
 
+	public boolean at(int x, int y) {
+		return this.x == x && this.y == y;
+	}
+
 	public boolean isStepping() {
 		return stepping;
 	}

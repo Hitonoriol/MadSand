@@ -486,10 +486,17 @@ public class Map {
 		if (!correctCoords(coords.set(x, y)))
 			return false;
 
+		int prevTile = getTile(x, y).id;
 		if (force)
-			mapTiles.remove(coords);
+			forceDelTile(coords);
+		else if (prevTile != defTile && prevTile != nullTile.id)
+			return false;
 
 		return addTile(new Pair(coords), new Tile(id));
+	}
+
+	private boolean forceDelTile(Pair coords) {
+		return mapTiles.remove(coords) != null;
 	}
 
 	private boolean delTile(Pair coords) {
@@ -503,7 +510,7 @@ public class Map {
 	}
 
 	public boolean addTile(int x, int y, int id) {
-		return addTile(x, y, id, false);
+		return addTile(x, y, id, true);
 	}
 
 	public boolean addTile(int x, int y, Direction dir, int id) {
@@ -553,7 +560,7 @@ public class Map {
 		}
 	}
 
-	private boolean delObject(Pair coords) {
+	public boolean delObject(Pair coords) {
 		return mapObjects.remove(coords) != null;
 	}
 
@@ -1127,14 +1134,22 @@ public class Map {
 		return maxNpcs;
 	}
 
-	public void rollObjects(RollList objectRollList) {
+	public void rollObjects(RollList objectRollList, int rolls) {
 		ArrayList<Integer> objectIdList;
 		int listSize;
-		for (int i = 0; i < objectRollList.rollCount; ++i) {
+
+		if (rolls < 0)
+			rolls = objectRollList.rollCount;
+
+		for (int i = 0; i < rolls; ++i) {
 			objectIdList = objectRollList.idList;
 			listSize = objectIdList.size();
 			randPlaceObject(objectIdList.get(Utils.random.nextInt(listSize)));
 		}
+	}
+
+	public void rollObjects(RollList objectRollList) {
+		rollObjects(objectRollList, -1);
 	}
 
 }

@@ -26,7 +26,7 @@
 				{ "rollCount": 1, "idList": [21, 58, 54, 62] },
 				{ "rollCount": 3, "idList": [41, 42] }
 			],
-			"structures" : ["gen/stone-shrine", "gen/abandoned-gas-station", "gen/crop-plot", "gen/market-stand"],
+			"structures" : ["gen/stone-shrine", "gen/abandoned-gas-station", "gen/crop-plot", "gen/market-stand", "gen/casino"],
 			"maxStructures" : 5,
 			"chanceToRegenerate": 40,
 			"initialMobSpawn" : 5,
@@ -206,6 +206,8 @@
 				{ "rollCount" : 100, "idList" : [ 39, 40 ] },
 				{ "rollCount" : 1, "idList" : [ 93 ] }
 			],
+			"structures" : ["gen/abandoned-gas-station", "gen/casino"],
+			"maxStructures" : 2,
 			"initialMobSpawn" : 15,
 			"initialFriendlyChance" : 65,
 			"hostileMobs": {"rollCount": 5, "idList": [20, 27, 26, 29, 2, 6]},

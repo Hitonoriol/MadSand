@@ -24,6 +24,7 @@ public class WorldGen {
 	private Location curLocation;
 	private Map curMap;
 	private int width, height;
+	private float scaleBy;
 	private boolean friendlyOnly = false;
 
 	public WorldGen(WorldMap worldMap) {
@@ -67,12 +68,15 @@ public class WorldGen {
 		curLocation = worldMap.getLocation(curMapCoords);
 		this.curMap = curLocation.getLayer(curLayer);
 
-		Utils.out("Generating " + curMapCoords + " : " + curLayer);
+		Utils.out("Generating " + curMapCoords + ": " + curLayer);
 
 		if (width < 1 || height < 1)
 			curMap.rollSize();
 		else
 			curMap.setSize(width, height);
+
+		scaleBy = (float) (curMap.getWidth() * curMap.getHeight()) / (float) Math.pow(Map.MIN_MAPSIZE, 2.075);
+		Utils.out("Scaling rollLists by: " + scaleBy);
 
 		curMap.purge();
 
@@ -133,7 +137,7 @@ public class WorldGen {
 		int listSize;
 
 		for (RollList tileRollList : tileGenList) {
-			for (int i = 0; i < tileRollList.rollCount; ++i) {
+			for (int i = 0; i < tileRollList.rollCount * scaleBy; ++i) {
 				tileIdList = tileRollList.idList;
 				listSize = tileIdList.size();
 				curMap.randPlaceTile(tileIdList.get(Utils.random.nextInt(listSize)));
@@ -146,7 +150,7 @@ public class WorldGen {
 		ArrayList<RollList> objectGenList = curBiome.getBiomeObjects();
 
 		for (RollList objectRollList : objectGenList)
-			curMap.rollObjects(objectRollList);
+			curMap.rollObjects(objectRollList, (int) (objectRollList.rollCount * scaleBy));
 
 		Utils.out("Done generating biome objects!");
 	}

@@ -196,6 +196,10 @@ public class Gui {
 		MadSand.switchStage(GameState.CRAFT, Gui.craftMenu);
 	}
 
+	public static void drawOkDialog(String title, String msg, Stage stage) {
+		new OkDialog(title, msg, stage).show();
+	}
+	
 	public static void drawOkDialog(String msg, Stage stage) {
 		new OkDialog(msg, stage).show();
 	}

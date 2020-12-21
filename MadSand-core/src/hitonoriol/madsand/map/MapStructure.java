@@ -7,6 +7,7 @@ import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.world.World;
 
 public class MapStructure {
 	public int x, y;
@@ -67,7 +68,9 @@ public class MapStructure {
 				break;
 
 			++attempt;
-		} while (map.objectExists(coords.x, coords.y) || !map.getNpc(coords).equals(Map.nullNpc));
+		} while (World.player.at(coords.x, coords.y) ||
+				map.objectExists(coords.x, coords.y) ||
+				!map.getNpc(coords).equals(Map.nullNpc));
 
 		return coords;
 	}

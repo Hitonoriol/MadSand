@@ -26,6 +26,7 @@ public class BlackJackUI extends GameDialog {
 	static TextureRegion[][] cards;
 
 	int currency = Globals.getInt(Globals.CURRENCY);
+	String currencyName = ItemProp.getItemName(currency);
 	int CARD_WIDTH = 81, CARD_HEIGHT = 117;
 	int BTN_WIDTH = 150, BTN_HEIGHT = 30;
 	int PAD = 5;
@@ -51,7 +52,7 @@ public class BlackJackUI extends GameDialog {
 		super.skipLine();
 
 		super.add("Dealer").padBottom(PAD).row();
-		super.add(dealerCards).size(CARD_WIDTH * 6, CARD_HEIGHT).row();
+		super.add(dealerCards).size(CARD_WIDTH * 7, CARD_HEIGHT).row();
 		super.skipLine();
 		super.skipLine();
 
@@ -95,7 +96,7 @@ public class BlackJackUI extends GameDialog {
 					public void run() {
 						play(PlayerAction.Stand);
 						buttonTable.setVisible(false);
-						if (blackjack.gameEnded()) 
+						if (blackjack.gameEnded())
 							this.cancel();
 					}
 				}, 0, 0.85f);
@@ -115,15 +116,18 @@ public class BlackJackUI extends GameDialog {
 		buttonTable.setVisible(false);
 		betButton.setVisible(true);
 		GameResult result = blackjack.gameResult;
-		String resultStr;
+		String resultStr = "";
+		if (result == GameResult.BlackJack || result == GameResult.Bust)
+			resultStr += result.name() + ": ";
+
 		if (result.isWin())
-			resultStr = "You win!";
+			resultStr += "You win " + blackjack.bank + " " + currencyName + "s!";
 		else if (result == GameResult.Push)
 			resultStr = "Draw game!";
 		else
 			resultStr = "You lose!";
 
-		resultLabel.setText(result.name() + ": " + resultStr);
+		resultLabel.setText(resultStr);
 	}
 
 	private void stopGame() {
@@ -137,6 +141,16 @@ public class BlackJackUI extends GameDialog {
 	}
 
 	private void startGame() {
+		object.takeFullDamage();
+		if (object.id == MapObject.NULL_OBJECT_ID) {
+			remove();
+			Gui.drawOkDialog("Oops",
+					"As you were about to press one of the machine's buttons it exploded into pieces!",
+					Gui.overlay);
+			Gui.overlay.processActionMenu();
+			return;
+		}
+
 		stopGame();
 		SliderDialog betDialog = new SliderDialog(
 				World.player.inventory.getItem(currency).quantity);
@@ -161,7 +175,7 @@ public class BlackJackUI extends GameDialog {
 		};
 
 		betDialog.setSliderTitle("Place your bet:")
-				.setOnUpdateText(ItemProp.getItemName(currency) + "s")
+				.setOnUpdateText(currencyName + "s")
 				.setConfirmListener(gameStart)
 				.setTitle("Bet")
 				.show();

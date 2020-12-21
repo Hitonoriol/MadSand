@@ -409,5 +409,14 @@
 		"altItems" : null,
 		"name" : "Stone tile",
 		"foreground" : false
+	},
+	
+	"49" : {
+		"name" : "Stone tile"
+	},
+	
+	"50" : {
+		"name" : "Stone tile"
 	}
+	
 }

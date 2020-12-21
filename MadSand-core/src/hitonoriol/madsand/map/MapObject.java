@@ -95,10 +95,14 @@ public class MapObject {
 		return dmg;
 	}
 
+	public void takeFullDamage() {
+		takeDamage(harvestHp + 1);
+	}
+
 	boolean takeDamage() {
 		return takeDamage(0);
 	}
-	
+
 	public int rollDrop(ItemType heldItemType) {
 		return getAltItem(this.id, heldItemType);
 	}
@@ -133,7 +137,7 @@ public class MapObject {
 		MapObject rhs = (MapObject) obj;
 		return new EqualsBuilder().append(id, rhs.id).isEquals();
 	}
-	
+
 	@JsonIgnore
 	public float getRenderOffset() {
 		return Resources.objects[id].getWidth() / 4;

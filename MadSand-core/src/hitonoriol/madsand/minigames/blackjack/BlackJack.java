@@ -29,9 +29,10 @@ public class BlackJack {
 		if (action == PlayerAction.Hit)
 			player.draw(deck);
 
-		if (!dealer.lastCard().isVisible())
+		boolean lastCardVisible;
+		if ((lastCardVisible = !dealer.lastCard().isVisible()) && action == PlayerAction.Stand)
 			dealer.setVisible();
-		else
+		else if (!lastCardVisible)
 			dealer.draw(deck);
 
 		checkScores(action);
