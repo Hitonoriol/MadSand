@@ -75,7 +75,7 @@ public class WorldGen {
 		else
 			curMap.setSize(width, height);
 
-		scaleBy = (float) (curMap.getWidth() * curMap.getHeight()) / (float) Math.pow(Map.MIN_MAPSIZE, 2.075);
+		scaleBy = curMap.getScaleFactor();
 		Utils.out("Scaling rollLists by: " + scaleBy);
 
 		curMap.purge();
@@ -109,13 +109,17 @@ public class WorldGen {
 		reset();
 	}
 
+	static float STRUCTURE_SCALE_FACTOR = 0.35f;
+
 	private void genBiomeStructures() {
 		ArrayList<String> structures = curBiome.overworld.structures;
 
 		if (structures.isEmpty())
 			return;
 
-		int rolls = Utils.rand(curBiome.overworld.maxStructures + 1);
+		int maxStructures = (int) (curBiome.overworld.maxStructures * Math.max(scaleBy * STRUCTURE_SCALE_FACTOR, 1));
+		int rolls = Utils.rand(curBiome.overworld.minStructures, maxStructures);
+		Utils.out("Generating " + rolls + " structures (" + maxStructures + " max)");
 		for (int i = 0; i < rolls; ++i)
 			curMap.addStructure(Utils.randElement(structures));
 	}
@@ -135,9 +139,8 @@ public class WorldGen {
 
 		ArrayList<Integer> tileIdList;
 		int listSize;
-
 		for (RollList tileRollList : tileGenList) {
-			for (int i = 0; i < tileRollList.rollCount * scaleBy; ++i) {
+			for (int i = 0; i < tileRollList.getRollCount(scaleBy); ++i) {
 				tileIdList = tileRollList.idList;
 				listSize = tileIdList.size();
 				curMap.randPlaceTile(tileIdList.get(Utils.random.nextInt(listSize)));
@@ -150,7 +153,7 @@ public class WorldGen {
 		ArrayList<RollList> objectGenList = curBiome.getBiomeObjects();
 
 		for (RollList objectRollList : objectGenList)
-			curMap.rollObjects(objectRollList, (int) (objectRollList.rollCount * scaleBy));
+			curMap.rollObjects(objectRollList);
 
 		Utils.out("Done generating biome objects!");
 	}

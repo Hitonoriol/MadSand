@@ -6,7 +6,7 @@
 			"tiles" : [
 				{ "rollCount" : 350, "idList" : [ 1, 2 ] },
 				{ "rollCount" : 100, "idList" : [ 3 ] },
-				{ "rollCount" : 1, "idList" : [ 45 ] }
+				{ "scalable" : false, "rollCount" : 1, "idList" : [ 45 ] }
 			],
 			
 			"objects" : [
@@ -14,9 +14,9 @@
 				{ "rollCount" : 50, "idList" : [ 1, 27, 28 ] },
 				{ "rollCount" : 50, "idList" : [ 37, 4 ] },
 				{ "rollCount" : 40, "idList" : [ 42, 41, 161, 162 ] },
-				{ "rollCount" : 1, "idList" : [ 82 ] },
-				{ "rollCount" : 1, "idList" : [ 93 ] },
-				{ "rollCount" : 1, "idList" : [ 156 ] }
+				{ "scalable" : false, "rollCount" : 1, "idList" : [ 82 ] },
+				{ "scalable" : false, "rollCount" : 1, "idList" : [ 93 ] },
+				{ "scalable" : false, "rollCount" : 1, "idList" : [ 156 ] }
 			],
 			
 			"regenerateObjects": [
@@ -28,6 +28,7 @@
 			],
 			"structures" : ["gen/stone-shrine", "gen/abandoned-gas-station", "gen/crop-plot", "gen/market-stand", "gen/casino"],
 			"maxStructures" : 5,
+			"minStructures" : 1,
 			"chanceToRegenerate": 40,
 			"initialMobSpawn" : 5,
 			"initialFriendlyChance" : 85,

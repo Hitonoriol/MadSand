@@ -41,7 +41,7 @@ public class Map {
 	private int xsz, ysz;
 
 	public static int MIN_MAPSIZE = 100;
-	public static int MAX_MAPSIZE = 200;
+	public static int MAX_MAPSIZE = 500;
 
 	public int defTile = 0;
 	public int defObject = 0;
@@ -207,6 +207,16 @@ public class Map {
 	@JsonIgnore
 	public int getHeight() {
 		return ysz;
+	}
+
+	@JsonIgnore
+	public int getArea() {
+		return xsz * ysz;
+	}
+
+	@JsonIgnore
+	public float getScaleFactor() {
+		return (float) getArea() / (float) Math.pow(MIN_MAPSIZE, 2.075);
 	}
 
 	public int getObjectCount() {
@@ -992,9 +1002,8 @@ public class Map {
 		WorldGenPreset preset = WorldGenProp.getBiome(MadSand.world.getLocBiome());
 		OverworldPreset overworld = preset.overworld;
 		double forceVal = force ? 100 : 0;
-		int maxNpcs = getMaxNpcs();
 
-		if (getNpcCount() >= maxNpcs)
+		if (getNpcCount() >= getMaxNpcs())
 			return;
 
 		Utils.out("Auto-spawning mobs, friendly = " + friendly);
@@ -1019,7 +1028,7 @@ public class Map {
 
 	private void spawnFromRollList(RollList list, double chance, int distanceFromPlayer, int maxDistance) {
 		if (Utils.percentRoll(chance))
-			for (int i = 0; i < list.rollCount; ++i) {
+			for (int i = 0; i < list.getRollCount(getScaleFactor()); ++i) {
 				do {
 					getRandomPoint(distanceFromPlayer, maxDistance);
 				} while (!spawnNpc(Utils.randElement(list.idList), coords.x, coords.y));
@@ -1116,7 +1125,7 @@ public class Map {
 
 	public int getMaxObjects() {
 		if (maxObjects == -1) {
-			maxObjects = (int) (xsz * ysz * MAX_OBJECT_PERCENT);
+			maxObjects = (int) (getArea() * MAX_OBJECT_PERCENT);
 			Utils.out("Max objects for current location: " + maxObjects);
 		}
 
@@ -1127,29 +1136,22 @@ public class Map {
 
 	public int getMaxNpcs() {
 		if (maxNpcs == -1) {
-			maxNpcs = (int) (xsz * ysz * MAX_NPC_PERCENT);
+			maxNpcs = (int) (getArea() * MAX_NPC_PERCENT);
 			Utils.out("Max auto-spawned npcs: " + maxNpcs);
 		}
 
 		return maxNpcs;
 	}
 
-	public void rollObjects(RollList objectRollList, int rolls) {
+	public void rollObjects(RollList objectRollList) {
 		ArrayList<Integer> objectIdList;
 		int listSize;
 
-		if (rolls < 0)
-			rolls = objectRollList.rollCount;
-
-		for (int i = 0; i < rolls; ++i) {
+		for (int i = 0; i < objectRollList.getRollCount(getScaleFactor()); ++i) {
 			objectIdList = objectRollList.idList;
 			listSize = objectIdList.size();
 			randPlaceObject(objectIdList.get(Utils.random.nextInt(listSize)));
 		}
-	}
-
-	public void rollObjects(RollList objectRollList) {
-		rollObjects(objectRollList, -1);
 	}
 
 }
