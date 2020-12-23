@@ -410,6 +410,10 @@ public class Map {
 	public Map drawTileCircle(int x0, int y0, int radius, int id) {
 		return drawCircle(tileAction, x0, y0, radius, id, false);
 	}
+	
+	public Map erodeTileCircle(int x0, int y0, int radius, int id) {
+		return drawCircle(erodeTileAction, x0, y0, radius, id, false);
+	}
 
 	public Map drawTileTriangle(Pair p1, Pair p2, Pair p3, int id) {
 		return drawTriangle(tileAction, p1, p2, p3, id);
@@ -760,6 +764,10 @@ public class Map {
 				mapLoot.put(coords, new Loot(new Item(id, q)));
 
 		}
+	}
+
+	public void putLoot(int x, int y, int id) {
+		putLoot(x, y, id, 1);
 	}
 
 	public void putLoot(int x, int y, Item item) {

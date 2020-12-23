@@ -579,7 +579,7 @@ public class Player extends Entity {
 		});
 	}
 
-	private float BASE_RES_FAIL = 40; // Base resource gathering fail probability
+	private float BASE_RES_FAIL = 35; // Base resource gathering fail probability
 	// returns amount of damage done to object's harvestHp or negative value on fail
 
 	public int gatherResources(MapObject obj) {

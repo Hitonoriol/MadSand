@@ -327,13 +327,13 @@ public class MadSand extends Game {
 				continue;
 			}
 
+			renderObject(object, x, y);
+			
 			if (player.standingOnLoot(x, y))
 				drawLoot(x, y);
-
+			
 			if (npc != Map.nullNpc)
 				drawEntity(npc);
-
-			renderObject(object, x, y);
 
 			if (x == player.x && y == player.y)
 				if (!player.isInBackground())

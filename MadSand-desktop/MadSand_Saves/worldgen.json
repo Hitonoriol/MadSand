@@ -207,7 +207,7 @@
 				{ "rollCount" : 100, "idList" : [ 39, 40 ] },
 				{ "rollCount" : 1, "idList" : [ 93 ] }
 			],
-			"structures" : ["gen/abandoned-gas-station", "gen/casino"],
+			"structures" : ["gen/abandoned-gas-station", "gen/casino", "gen/ancient-altar"],
 			"maxStructures" : 2,
 			"initialMobSpawn" : 15,
 			"initialFriendlyChance" : 65,
