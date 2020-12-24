@@ -1,6 +1,7 @@
-package hitonoriol.madsand.minigames.blackjack;
+package hitonoriol.madsand.minigames;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class Hand {
@@ -10,7 +11,7 @@ public abstract class Hand {
 		cards.add(deck.nextCard());
 		return this;
 	}
-	
+
 	public void hide() {
 		lastCard().hide();
 	}
@@ -25,6 +26,12 @@ public abstract class Hand {
 
 	public void clear() {
 		cards.clear();
+	}
+
+	public List<Card> createSortedList() {
+		List<Card> sortedList = new ArrayList<>(cards);
+		Collections.sort(sortedList);
+		return sortedList;
 	}
 
 	public abstract int evaluate();

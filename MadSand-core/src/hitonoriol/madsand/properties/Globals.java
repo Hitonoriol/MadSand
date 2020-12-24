@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
+import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.quest.ProceduralQuest;
 
 public class Globals {
@@ -35,5 +36,9 @@ public class Globals {
 
 	public static String getString(String name) {
 		return instance.values.get(name);
+	}
+	
+	public static Item getCurrency() {
+		return ItemProp.getItem(getInt(CURRENCY));
 	}
 }

@@ -1,5 +1,8 @@
 package hitonoriol.madsand.minigames.blackjack;
 
+import hitonoriol.madsand.minigames.Deck;
+import hitonoriol.madsand.minigames.Hand;
+
 public class BlackJack {
 	public static int BLACKJACK = 21;
 	public static int DEALER_STOP_SCORE = 17;

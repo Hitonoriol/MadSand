@@ -1,4 +1,4 @@
-package hitonoriol.madsand.minigames.blackjack;
+package hitonoriol.madsand.minigames;
 
 import java.util.ArrayList;
 import java.util.Collections;

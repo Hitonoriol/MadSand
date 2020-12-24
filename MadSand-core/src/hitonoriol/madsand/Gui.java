@@ -36,6 +36,7 @@ import hitonoriol.madsand.world.World;
 public class Gui {
 	public static final float DEFWIDTH = 250f;
 	public static final float defLblWidth = Gdx.graphics.getWidth() / 4;
+	public static int BTN_WIDTH = 150, BTN_HEIGHT = 30;
 
 	public static boolean gameUnfocused = false;
 	public static boolean inventoryActive = false;
@@ -199,7 +200,7 @@ public class Gui {
 	public static void drawOkDialog(String title, String msg, Stage stage) {
 		new OkDialog(title, msg, stage).show();
 	}
-	
+
 	public static void drawOkDialog(String msg, Stage stage) {
 		new OkDialog(msg, stage).show();
 	}

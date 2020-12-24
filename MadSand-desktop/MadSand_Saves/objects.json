@@ -2054,5 +2054,16 @@
 		"lvl" : -1,
 		"onInteract" : "-1",
 		"name" : "Cauldron"
+	},
+	"172" : {
+		"hp" : 11,
+		"harvestHp" : -1,
+		"lvl" : -1,
+		"maskWidth" : 0,
+		"maskHeight" : 0,
+		"onInteract" : "luajava.newInstance(
+							package('minigames.videopoker.VideoPokerUI'),
+							world:getCurLoc():getObject(player:lookingAt())):show()",
+		"name" : "Video Poker machine"
 	}
 }

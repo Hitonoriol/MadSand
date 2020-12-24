@@ -1,5 +1,8 @@
 package hitonoriol.madsand.minigames.blackjack;
 
+import hitonoriol.madsand.minigames.Card;
+import hitonoriol.madsand.minigames.Hand;
+
 public class BlackJackHand extends Hand {
 
 	static int ACE_SCORE = 11;

@@ -18,8 +18,8 @@ local door_coords = pair:make(structure.x + structure.width/2, structure.y);
 map:delObject(door_coords);
 map:addObject(door_coords, val_utils:oneOf("11,12"));
 
-for i = 0, math.random(3) do
-	map:addObject(structure:getFreeTile(), 5);
+for i = 0, math.random(4) do
+	map:addObject(structure:getFreeTile(), val_utils:oneOf("5,172"));
 end
 
 return true;

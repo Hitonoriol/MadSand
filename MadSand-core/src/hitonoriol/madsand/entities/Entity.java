@@ -174,8 +174,7 @@ public abstract class Entity {
 	}
 
 	public boolean dropItem(Item item) {
-
-		if (inventory.getSameCell(item) == -1)
+		if (!hasItem(item))
 			return false;
 
 		Pair coord = new Pair(x, y).addDirection(stats.look);
@@ -191,11 +190,10 @@ public abstract class Entity {
 	}
 
 	public boolean hasItem(Item item) {
-		return inventory.itemExists(item);
+		return hasItem(item.id);
 	}
 
 	public void pickUpLoot() {
-
 		if (stats.dead)
 			return;
 
