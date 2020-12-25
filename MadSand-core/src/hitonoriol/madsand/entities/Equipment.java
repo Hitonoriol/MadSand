@@ -14,24 +14,10 @@ import hitonoriol.madsand.enums.EquipSlot;
 public class Equipment {
 	private HashMap<EquipSlot, Item> equipped = new HashMap<>();
 	private float equipmentWeight = 0;
-	private Stats stats;
-	private boolean isPlayer = false;
+	private PlayerStats stats;
 
-	public Equipment(Stats stats) {
+	public Equipment(PlayerStats stats) {
 		this.stats = stats;
-	}
-
-	public Equipment(Stats stats, boolean isPlayer) {
-		this(stats);
-		this.isPlayer = isPlayer;
-	}
-
-	public boolean getIsPlayer() {
-		return isPlayer;
-	}
-
-	public void setIsPlayer(boolean isPlayer) {
-		this.isPlayer = isPlayer;
 	}
 
 	boolean equip(EquipSlot slot, Item item) {
@@ -40,8 +26,7 @@ public class Equipment {
 
 		equipped.put(slot, item);
 
-		if (isPlayer)
-			Gui.overlay.equipmentSidebar.equipItem(slot, item);
+		Gui.overlay.equipmentSidebar.equipItem(slot, item);
 
 		equipmentWeight += item.weight;
 		stats.applyBonus(item);
@@ -69,8 +54,7 @@ public class Equipment {
 		equipmentWeight -= item.weight;
 		stats.removeBonus(item);
 
-		if (isPlayer)
-			Gui.overlay.equipmentSidebar.equipItem(slot, Item.nullItem);
+		Gui.overlay.equipmentSidebar.equipItem(slot, Item.nullItem);
 
 		return equipped.remove(slot) != null;
 	}
@@ -125,11 +109,7 @@ public class Equipment {
 	}
 
 	public void refreshUI() {
-		if (!isPlayer)
-			return;
-
 		for (Entry<EquipSlot, Item> entry : equipped.entrySet())
 			Gui.overlay.equipmentSidebar.equipItem(entry.getKey(), entry.getValue());
-
 	}
 }

@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Utils;
-import hitonoriol.madsand.entities.Stats;
+import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.enums.Stat;
 import hitonoriol.madsand.world.World;
 
@@ -18,7 +18,7 @@ public class StatLabels {
 	public Label freeStatPointsLbl;
 	public Label hpStatLbl, staminaStatLbl;
 
-	public Stats stats = World.player.stats;
+	public PlayerStats stats = World.player.stats;
 
 	public StatLabels(Skin skin) {
 

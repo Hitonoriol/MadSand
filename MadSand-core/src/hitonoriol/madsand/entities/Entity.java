@@ -1,14 +1,10 @@
 package hitonoriol.madsand.entities;
 
 import java.awt.Point;
-import java.util.ArrayList;
 import java.util.Comparator;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSetter;
-
 import hitonoriol.madsand.Keyboard;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
@@ -60,7 +56,7 @@ public abstract class Entity {
 	boolean stepping = false;
 
 	public Entity(String name) {
-		stats = new Stats();
+		stats = isPlayer() ? new PlayerStats() : new Stats();
 		stats.name = name;
 		initStatActions();
 		initInventory();
@@ -68,6 +64,14 @@ public abstract class Entity {
 
 	public Entity() {
 		this("");
+	}
+
+	public Stats stats() {
+		return stats;
+	}
+
+	public boolean isPlayer() {
+		return this instanceof Player;
 	}
 
 	@JsonIgnore
@@ -96,32 +100,7 @@ public abstract class Entity {
 	}
 
 	public void initStatActions() {
-		stats.owner = new StatAction() {
-			@Override
-			public void _die() {
-				die();
-			}
-
-			@Override
-			public void _damage(int amt) {
-				damage(amt);
-			}
-
-			@Override
-			public void _heal(int amt) {
-				heal(amt);
-			}
-
-			@Override
-			public Item _getItem(int id) {
-				return inventory.getItem(id);
-			}
-
-			@Override
-			public void _changeStamina(float by) {
-				changeStamina(by);
-			}
-		};
+		stats.setOwner(this);
 	}
 
 	public boolean at(int x, int y) {
@@ -244,11 +223,6 @@ public abstract class Entity {
 		return standingOnLoot(x, y);
 	}
 
-	public void changeStamina(float by) {
-		stats.stamina += by;
-		stats.check();
-	}
-
 	public void damage(int to) {
 		stats.hp -= to;
 		stats.check();
@@ -261,28 +235,13 @@ public abstract class Entity {
 
 	}
 
-	void satiate(int amt) {
-		stats.food += amt;
-		stats.check();
-	}
-
-	void increaseStamina(int to) {
-		if (stats.stamina + to < stats.maxstamina) {
-			stats.stamina += to;
-		} else {
-			stats.stamina = stats.maxstamina;
-		}
-	}
-
 	@JsonIgnore
 	public int getDefense() {
 		return stats.getDefense();
 	}
 
 	@JsonIgnore
-	public int getLvl() {
-		return stats.skills.getLvl();
-	}
+	public abstract int getLvl();
 
 	void dropInventory() {
 		Item item;
@@ -332,10 +291,6 @@ public abstract class Entity {
 		}
 
 		return ticks;
-	}
-
-	boolean equip(Item item) {
-		return stats.equip(item);
 	}
 
 	void rest() {
@@ -541,27 +496,6 @@ public abstract class Entity {
 		ret += "Faction: " + stats.faction + Resources.LINEBREAK;
 		ret += "Health: " + getHealthState() + Resources.LINEBREAK;
 		return ret;
-	}
-
-	@JsonGetter("Equipment")
-	public ArrayList<Integer> getEquipment() { // For serializer
-		return stats.equipment.getIndexList(inventory);
-	}
-
-	@JsonSetter("Equipment")
-	public void setEquipment(ArrayList<Integer> list) { // For deserializer
-		for (int itemIdx : list)
-			equip(inventory.getItemByIndex(itemIdx));
-	}
-
-	@JsonGetter("isPlayer")
-	public boolean isPlayer() {
-		return stats.equipment.getIsPlayer();
-	}
-
-	@JsonSetter("isPlayer")
-	public void setIsPlayer(boolean val) {
-		stats.equipment.setIsPlayer(val);
 	}
 
 }

@@ -24,7 +24,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Mouse;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.entities.Stats;
+import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.enums.EquipSlot;
@@ -310,7 +310,7 @@ public class Overlay extends Stage {
 
 	public void refreshOverlay() {
 		Player player = World.player;
-		Stats stats = player.stats;
+		PlayerStats stats = player.stats;
 
 		hpBar.setRange(0, stats.mhp).setValue(stats.hp);
 		foodBar.setRange(0, stats.maxFood).setValue(stats.food);

@@ -9,6 +9,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import hitonoriol.madsand.MadSand;
@@ -39,6 +40,7 @@ public class Npc extends Entity {
 
 	public int id;
 	public long uid;
+	public int lvl;
 	public int rewardExp;
 	public ArrayList<Integer> questList = new ArrayList<Integer>();
 
@@ -135,7 +137,7 @@ public class Npc extends Entity {
 		int lvl = Utils.rand(properties.lvl, maxLvl);
 
 		stats.roll(lvl);
-		stats.skills.setLvl(lvl);
+		this.lvl = lvl;
 		lvl -= properties.lvl; // Stats start increasing if lvl is > than npc's default level
 		stats.set(Stat.Dexterity, (int) (properties.dexterity + lvl * DEX_PER_LVL));
 		stats.calcStats();
@@ -195,8 +197,8 @@ public class Npc extends Entity {
 			return;
 
 		inventory.setMaxWeight(Integer.MAX_VALUE);
-		stats.skills.setLvl(NpcProp.tradeLists.rollTier());
-		ArrayList<Item> items = NpcProp.tradeLists.roll(tradeCategory, stats.skills.getLvl());
+		lvl = NpcProp.tradeLists.rollTier();
+		ArrayList<Item> items = NpcProp.tradeLists.roll(tradeCategory, lvl);
 
 		int markup;
 		for (Item item : items) {
@@ -210,7 +212,7 @@ public class Npc extends Entity {
 	}
 
 	public int rollTraderCurrency() {
-		int maxCoins = BASE_TRADER_COINS + stats.skills.getLvl() * TIER_COIN_MULTIPLIER;
+		int maxCoins = BASE_TRADER_COINS + lvl * TIER_COIN_MULTIPLIER;
 		return Utils.rand(BASE_TRADER_COINS / 2, maxCoins);
 	}
 
@@ -218,8 +220,13 @@ public class Npc extends Entity {
 		int currencyId = Globals.getInt(Globals.CURRENCY);
 		inventory.putItem(new Item(currencyId, rollTraderCurrency()));
 	}
-	
-	public boolean isNeutral () {
+
+	@JsonIgnore
+	public int getLvl() {
+		return lvl;
+	}
+
+	public boolean isNeutral() {
 		return friendly || state != NpcState.Hostile;
 	}
 

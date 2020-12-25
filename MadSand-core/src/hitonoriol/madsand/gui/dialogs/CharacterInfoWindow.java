@@ -12,9 +12,9 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.dialog.GameDialog;
+import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.Reputation;
 import hitonoriol.madsand.entities.SkillContainer;
-import hitonoriol.madsand.entities.Stats;
 import hitonoriol.madsand.enums.Faction;
 import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
@@ -50,7 +50,7 @@ public class CharacterInfoWindow {
 	public void createDialog() {
 		Table scrollTable = new Table();
 		AutoFocusScrollPane dialogScroll = new AutoFocusScrollPane(scrollTable);
-		Stats stats = World.player.stats;
+		PlayerStats stats = World.player.stats;
 		float width = Gui.defLblWidth;
 		Label nameLbl = new Label(World.player.stats.name, skin);
 		Label levelLbl = new Label("Level: " + World.player.stats.skills.getLvl(Skill.Level) + " ("

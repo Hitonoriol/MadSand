@@ -9,8 +9,10 @@ import java.util.Random;
 import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Keyboard;
@@ -43,6 +45,8 @@ import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.world.Location;
 
 public class Player extends Entity {
+	@JsonIgnore
+	public PlayerStats stats; // Reference to the same Stats object as super.stats
 
 	public HashSet<Integer> unlockedItems = new HashSet<Integer>(); // set of items player obtained at least once
 	public ArrayList<Integer> craftRecipes = new ArrayList<Integer>(); // list of items which recipes are available to the player
@@ -61,21 +65,25 @@ public class Player extends Entity {
 	@JsonIgnore
 	public Player(String name) {
 		super(name);
+		stats = stats();
 		super.setSprites(Resources.playerUpSpr, Resources.playerDownSpr, Resources.playerLeftSpr,
 				Resources.playerRightSpr);
-		stats.equipment.setIsPlayer(true);
 		initInventory();
 		setFov(fov);
 		quests.setPlayer(this);
 		Gui.overlay.equipmentSidebar.init();
 	}
 
-	public void refreshEquipment() {
-		Gui.overlay.equipmentSidebar.refresh();
-	}
-
 	public Player() {
 		this("");
+	}
+
+	public PlayerStats stats() {
+		return (PlayerStats) super.stats();
+	}
+
+	public void refreshEquipment() {
+		Gui.overlay.equipmentSidebar.refresh();
 	}
 
 	@JsonIgnore
@@ -161,9 +169,8 @@ public class Player extends Entity {
 			Gui.overlay.equipmentSidebar.refreshSlot(EquipSlot.MainHand);
 	}
 
-	@Override
 	public boolean equip(Item item) {
-		boolean ret = super.equip(item);
+		boolean ret = stats.equip(item);
 
 		if (ret)
 			MadSand.print("You equip " + item.name);
@@ -254,6 +261,25 @@ public class Player extends Entity {
 		boolean first = killCount.containsKey(id);
 		killCount.put(id, getKillCount(id) + 1);
 		return !first;
+	}
+
+	void satiate(int amt) {
+		stats.food += amt;
+		stats.check();
+	}
+
+	void increaseStamina(int to) {
+		if (stats.stamina + to < stats.maxstamina) {
+			stats.stamina += to;
+		} else {
+			stats.stamina = stats.maxstamina;
+		}
+	}
+
+	public void changeStamina(float by) {
+		stats.stamina += by;
+		stats.check();
+		Gui.overlay.refreshOverlay();
 	}
 
 	public boolean knowsNpc(int id) {
@@ -996,16 +1022,16 @@ public class Player extends Entity {
 		Gui.refreshOverlay();
 	}
 
-	public void changeStamina(float by) {
-		super.changeStamina(by);
-		Gui.overlay.refreshOverlay();
-	}
-
 	public void lootMsg() {
 		if (standingOnLoot()) {
 			Loot loot = MadSand.world.getCurLoc().getLoot(x, y);
 			MadSand.print("You see [" + loot.getInfo() + "] lying on the floor");
 		}
+	}
+
+	@JsonIgnore
+	public int getLvl() {
+		return stats.skills.getLvl();
 	}
 
 	static int SETTLEMENT_COST = 500;
@@ -1064,6 +1090,27 @@ public class Player extends Entity {
 		MadSand.state = GameState.INVENTORY;
 		Gui.inventoryActive = true;
 		Gui.overlay.hideTooltip();
+	}
+
+	@JsonGetter("equipment")
+	public ArrayList<Integer> getEquipment() {
+		return stats.equipment.getIndexList(inventory);
+	}
+
+	@JsonSetter("equipment")
+	public void setEquipment(ArrayList<Integer> list) {
+		for (int itemIdx : list)
+			equip(inventory.getItemByIndex(itemIdx));
+	}
+
+	@JsonSetter("stats")
+	public void setStats(PlayerStats stats) {
+		super.stats = this.stats = stats;
+	}
+
+	@JsonGetter("stats")
+	public PlayerStats getStats() {
+		return stats;
 	}
 
 	private interface TimedAction {

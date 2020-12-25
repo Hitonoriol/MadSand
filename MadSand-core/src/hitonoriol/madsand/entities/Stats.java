@@ -1,16 +1,18 @@
 package hitonoriol.madsand.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.*;
 
 import hitonoriol.madsand.Utils;
-import hitonoriol.madsand.entities.inventory.EquipStats;
-import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Direction;
-import hitonoriol.madsand.enums.EquipSlot;
 import hitonoriol.madsand.enums.Faction;
-import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.enums.Stat;
 
+@JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
+@JsonSubTypes({ @Type(PlayerStats.class) })
 public class Stats {
 	final static double PERCENT = 100.0;
 	public final static float WEIGHT_MULTIPLIER = 7.5f;
@@ -30,35 +32,13 @@ public class Stats {
 	public double actionPtsMax = 5; // Entity's speed
 	public double actionPts = actionPtsMax;
 
-	private int statBonus = 0; // Total equipment stat bonus
-
 	public long spawnTime = 0;
 	public long spawnRealTime = 0;
 
 	public int hp = 0;
 	public int mhp;
 
-	public float STAMINA_BASE_COST = 0.1f;
-	public float staminaLowPercent = 10;
-	public float stamina = 0;
-	public float maxstamina;
-
 	public int air = 3;
-
-	public boolean hasRespawnPoint = false;
-	public int respawnX = -1;
-	public int respawnY = -1;
-	public int respawnWX = -1, respawnWY = -1;
-
-	public SkillContainer skills = new SkillContainer();
-
-	@JsonIgnore
-	public Equipment equipment;
-
-	public double satiatedPercent = 90;
-	public final int maxFood = 1000;
-	public int foodTicks = skills.getLvl(Skill.Survival);
-	public int food = maxFood;
 
 	public Faction faction = Faction.None;
 	public Direction look = Direction.DOWN;
@@ -68,15 +48,20 @@ public class Stats {
 	public boolean dead = false;
 
 	@JsonIgnore
-	public StatAction owner;
+	protected Entity owner;
 
-	public Stats() {
-		this(false);
+	public Stats(Entity owner) {
+		baseStats = new StatContainer();
+		setOwner(owner);
 	}
 
-	public Stats(boolean isPlayer) {
-		equipment = new Equipment(this, isPlayer);
-		baseStats = new StatContainer();
+	public Stats() {
+		this(null);
+	}
+
+	@JsonIgnore
+	public void setOwner(Entity owner) {
+		this.owner = owner;
 	}
 
 	public int get(Stat stat) {
@@ -99,9 +84,8 @@ public class Stats {
 
 	public void calcStats() {
 		mhp = get(Stat.Constitution) * HP_MULTIPLIER;
-		maxstamina = ((get(Stat.Dexterity) + get(Stat.Constitution)) / 2) * 5;
 
-		if (hp == 0 || stamina == 0)
+		if (hp == 0)
 			restore();
 
 		calcActionCosts();
@@ -110,54 +94,9 @@ public class Stats {
 
 	public void restore() {
 		hp = mhp;
-		stamina = maxstamina;
-	}
-
-	public Item hand() {
-		return equipment.getHand();
-	}
-
-	public Item offHand() {
-		return equipment.getItem(EquipSlot.Offhand);
-	}
-
-	@JsonIgnore
-	public void setHand(Item item) {
-		equipment.setHand(item);
-	}
-
-	public boolean equip(Item item) {
-		return equipment.equip(item);
-	}
-
-	public boolean unequip(Item item) {
-		return equipment.unEquip(item);
-	}
-
-	public void applyBonus(Item item) {
-		if (!item.type.isEquipment())
-			return;
-
-		EquipStats bonus = item.equipStats;
-		baseStats.add(bonus.stats);
-		statBonus += bonus.getTotalBonus();
-		calcStats();
-	}
-
-	public void removeBonus(Item item) {
-		if (!item.type.isEquipment())
-			return;
-
-		EquipStats bonus = item.equipStats;
-		baseStats.sub(bonus.stats);
-		statBonus -= bonus.getTotalBonus();
-		calcStats();
 	}
 
 	public void calcActionCosts() {
-		// AP_MINOR = ;
-		// AP_WALK = ;
-		// AP_ATTACK = ;
 		int dexterity = get(Stat.Dexterity);
 		if (dexterity < 2)
 			actionPtsMax = 1;
@@ -170,104 +109,22 @@ public class Stats {
 
 	@JsonIgnore
 	public int getSum() {
-		return baseStats.getSum() - statBonus;
-	}
-
-	@JsonIgnore
-	public double getSatiationPercent() {
-		return PERCENT * ((double) food / (double) maxFood);
-	}
-
-	@JsonIgnore
-	public double getStaminaPercent() {
-		return PERCENT * ((double) stamina / (double) maxstamina);
-	}
-
-	@JsonIgnore
-	public double getHpPercent() {
-		return PERCENT * ((double) hp / (double) mhp);
+		return baseStats.getSum();
 	}
 
 	public void check() {
-		skills.check();
-
-		if (food > maxFood)
-			food = maxFood;
-
-		if (food < 0)
-			food = 0;
-
-		if (stamina > maxstamina)
-			stamina = maxstamina;
-
-		if (stamina < 0)
-			stamina = 0;
-
 		if (hp > mhp)
 			hp = mhp;
 
 		if (hp <= 0) {
 			hp = 0;
 			dead = true;
-			owner._die();
+			owner.die();
 		}
-	}
-
-	public void perTickCheck() {
-
-		perTickFoodCheck();
-		perTickStaminaCheck();
-
-		if (getHpPercent() > MIN_HP_AUTODAMAGE_PERCENT) {
-			if (getStaminaPercent() < staminaLowPercent && !skills.skillRoll(Skill.Survival))
-				owner._damage(STAMINA_DMG);
-
-			if (food <= 0)
-				owner._damage(STARVE_DMG);
-		}
-
-		if (getSatiationPercent() >= satiatedPercent && skills.skillRoll(Skill.Survival))
-			owner._heal(FOOD_HEAL);
-
-		check();
-	}
-
-	private void perTickStaminaCheck() {
-		double survivalPercent = skills.getSkillRollPercent(Skill.Survival);
-		double reqSatiationPercent = 95.0 - survivalPercent;
-		if (getSatiationPercent() < reqSatiationPercent)
-			return;
-
-		stamina += (survivalPercent * 0.02);
-		check();
-
-	}
-
-	/*
-	 * Max food ticks = Survival skill level + base food ticks
-	 * 
-	 * Decrement food ticks on unsuccessful skill roll
-	 * When food ticks < 0, decrement food level
-	 */
-	private void perTickFoodCheck() {
-
-		if (!skills.skillRoll(Skill.Survival)) {
-			--foodTicks;
-
-			if (foodTicks < 0) {
-				--food;
-				foodTicks = skills.getLvl(Skill.Survival) + BASE_FOOD_TICKS;
-			}
-		}
-
 	}
 
 	public boolean luckRoll() {
 		return Utils.percentRoll(Utils.log(Math.pow(get(Stat.Luck), 1.75), 8) + 10);
-	}
-
-	public float calcStaminaCost() {
-		return (float) (STAMINA_BASE_COST - (STAMINA_BASE_COST * skills.getSkillRollPercent(Skill.Survival) * 0.01));
 	}
 
 	public boolean critRoll() {
@@ -282,14 +139,16 @@ public class Stats {
 	float defPercent = 0.333f;
 	float minAttackPercent = 0.3f;
 	float critPercent = 0.45f;
-	float atkSkillPercent = 0.5f;
-	float evasionSkillPercent = 0.3f;
+
+	protected int getBaseAttack() {
+		return get(Stat.Strength);
+	}
 
 	public int calcAttack(int defense) {
 		if (attackMissed())
 			return 0;
 
-		int atk = (int) ((get(Stat.Strength) + skills.getLvl(Skill.Melee) * atkSkillPercent) - (defense * defPercent));
+		int atk = (int) (getBaseAttack() - (defense * defPercent));
 
 		if (atk <= 0)
 			atk = 1;
@@ -304,7 +163,7 @@ public class Stats {
 
 	@JsonIgnore
 	public int getDefense() {
-		return (int) (get(Stat.Defense) + skills.getLvl(Skill.Evasion) * evasionSkillPercent);
+		return get(Stat.Defense);
 	}
 
 	public float calcMaxInventoryWeight() {
