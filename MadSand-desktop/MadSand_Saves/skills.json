@@ -12,7 +12,7 @@
 		"lvUpMultiplier" : 0.1
 	},
 	"Level" : {
-		"requiredExp" : 100,
+		"requiredExp" : 85,
 		"lvUpMultiplier" : 0.9
 	}
 }

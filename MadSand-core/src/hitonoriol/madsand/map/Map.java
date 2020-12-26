@@ -410,7 +410,7 @@ public class Map {
 	public Map drawTileCircle(int x0, int y0, int radius, int id) {
 		return drawCircle(tileAction, x0, y0, radius, id, false);
 	}
-	
+
 	public Map erodeTileCircle(int x0, int y0, int radius, int id) {
 		return drawCircle(erodeTileAction, x0, y0, radius, id, false);
 	}
@@ -1074,13 +1074,21 @@ public class Map {
 
 	}
 
+	public boolean addStructure(MapStructure structure) {
+		return structure.build();
+	}
+
+	public boolean addStructure(String name, int x, int y) {
+		return addStructure(new MapStructure(x, y).setName(name));
+	}
+
 	public Pair addStructure(String name) {
 		Pair coords = new Pair();
 		MapStructure structure = new MapStructure(coords.random(xsz, ysz)).setName(name);
 
-		do {
-			structure.setCoords(coords.random(xsz, ysz));
-		} while (!structure.build());
+		do
+			coords.random(xsz, ysz);
+		while (!addStructure(structure.setCoords(coords)));
 
 		Utils.out("Successfully generated " + name + " at " + coords);
 		return new Pair(coords);

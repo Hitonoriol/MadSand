@@ -23,6 +23,9 @@ Available bindings:
 			* map:drawTileCircle/drawObjectCircle(x0, y0, radius, id)
 			* map:fillTileCircle/fillObjectCircle(x0, y0, radius, id)
 			* map:drawTileTriangle/drawObjectTriangle(p1, p2, p3, id) -- Points p1, p2, p3 must be of type Pair (use pair:make(x, y) to create one from lua)
+		Structures:
+			* map:addStructure(name) -- place specified structure from scripts/structure/ somewhere on map. Returns Pair with structure's coords.
+			* map:addStructure(name, x, y) -- place structure on specified map coords. Returns false if structure didn't fit into the map and true otherwise.
 
 	* Misc Map-related stuff:
 		* utils:locateTile(id) -- returns a pair(x, y) of coordinates of specified tile

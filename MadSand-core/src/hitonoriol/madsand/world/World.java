@@ -183,6 +183,7 @@ public class World {
 		return getLoc(worldMap.curWorldPos, layer);
 	}
 
+	@JsonIgnore
 	public int getLocBiome() {
 		return getLocation().biome;
 	}

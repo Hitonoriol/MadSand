@@ -49,9 +49,9 @@ public abstract class Entity {
 	@JsonIgnore
 	public int movespeed = 2; // on-screen move speed (for smooth movement)
 	@JsonIgnore
-	public int stepy = MadSand.TILESIZE;
+	public float stepy = MadSand.TILESIZE;
 	@JsonIgnore
-	public int stepx = MadSand.TILESIZE;
+	public float stepx = MadSand.TILESIZE;
 
 	boolean stepping = false;
 

@@ -51,7 +51,7 @@ public class Npc extends Entity {
 	public boolean canGiveQuests;
 	private boolean pauseFlag = false;
 
-	public float timePassed; // time passed since last action
+	private float timePassed; // time passed since last action
 	public float tickCharge = 0;
 
 	public int attackDistance = 2; // Must be < than this
@@ -170,7 +170,7 @@ public class Npc extends Entity {
 		if (properties.questList != null)
 			questList = new ArrayList<>(properties.questList);
 
-		if (properties.type == NpcType.Regular || properties.type == NpcType.Trader)
+		if (stats.faction.isHuman() && (properties.type == NpcType.Regular || properties.type == NpcType.Trader))
 			canGiveQuests = Utils.percentRoll(CAN_GIVE_QUESTS_CHANCE);
 
 		friendly = properties.friendly;
@@ -330,7 +330,7 @@ public class Npc extends Entity {
 		return tickCharge > 0;
 	}
 
-	void skipAction() {
+	private void skipAction() {
 		tickCharge -= timePassed;
 	}
 

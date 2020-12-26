@@ -170,6 +170,15 @@ public class Player extends Entity {
 	}
 
 	public boolean equip(Item item) {
+		int lvl = getLvl();
+		int minLvl = lvl == 0 ? item.lvl - 1 : item.lvl;
+		if (lvl < minLvl) {
+			Gui.drawOkDialog(
+					"Your level is too low! You need to be at least level " + item.lvl + " to equip this item.",
+					Gui.overlay);
+			return false;
+		}
+
 		boolean ret = stats.equip(item);
 
 		if (ret)
@@ -677,9 +686,6 @@ public class Player extends Entity {
 		boolean itemUsed = false;
 		checkHands(item.id);
 
-		if (stats.equipment.getItem(EquipSlot.slotByTypeAll(item.type)) != item)
-			itemUsed = equip(item);
-
 		itemUsed |= useGrabBag(item);
 		itemUsed |= useTileInteractItem(item);
 		itemUsed |= useScriptedItem(item);
@@ -688,6 +694,9 @@ public class Player extends Entity {
 		itemUsed |= plantCrop(item);
 		itemUsed |= usePlaceableObject(item);
 		itemUsed |= usePlaceableTile(item);
+
+		if (!itemUsed && stats.equipment.getItem(EquipSlot.slotByTypeAll(item.type)) != item)
+			itemUsed = equip(item);
 
 		checkHands(item.id);
 

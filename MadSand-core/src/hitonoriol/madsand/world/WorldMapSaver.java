@@ -120,7 +120,6 @@ public class WorldMapSaver {
 			MapObject obj = new MapObject();
 
 			ByteArrayOutputStream lootStream = new ByteArrayOutputStream();
-
 			ByteArrayOutputStream cropStream = new ByteArrayOutputStream();
 			String loot;
 			Crop crop;

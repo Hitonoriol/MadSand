@@ -52,18 +52,20 @@ public class InventoryUICell extends ItemUI {
 						unEquipItem();
 					} else {
 						Item prev = player.stats.equipment.previousEquipment(item);
-						player.equip(item);
+						if (!player.equip(item))
+							return;
 						player.inventory.refreshItem(prev);
 						equipItem();
 					}
-					return;
+				} else if (item.type.isConsumable()) {
+					player.useItem(item);
+				} else {
+					player.takeInHand(item);
+					refreshEquippedStatus();
+					Gui.toggleInventory();
 				}
 
-				player.takeInHand(item);
-				refreshEquippedStatus();
-
 				player.doAction(player.stats.minorCost);
-				Gui.toggleInventory();
 			}
 		});
 
