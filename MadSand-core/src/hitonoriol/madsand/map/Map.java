@@ -163,7 +163,6 @@ public class Map {
 		return mapProductionStations;
 	}
 
-	@JsonIgnore
 	public void setMapProductionStations(HashMap<Pair, ProductionStation> productionStations) {
 		mapProductionStations = productionStations;
 	}
@@ -173,17 +172,27 @@ public class Map {
 		return mapNpcs;
 	}
 
-	@JsonIgnore
 	public void setNpcs(HashMap<Pair, Npc> npcs) {
 		mapNpcs = npcs;
 	}
 
+	@JsonIgnore
 	HashMap<Pair, Tile> getTiles() {
 		return mapTiles;
 	}
 
+	@JsonIgnore
 	HashMap<Pair, MapObject> getObjects() {
 		return mapObjects;
+	}
+
+	@JsonIgnore
+	public HashMap<Pair, Loot> getLoot() {
+		return mapLoot;
+	}
+
+	public void setLoot(HashMap<Pair, Loot> loot) {
+		mapLoot = loot;
 	}
 
 	void setTiles(HashMap<Pair, Tile> tiles) {
@@ -219,14 +228,17 @@ public class Map {
 		return (float) getArea() / (float) Math.pow(MIN_MAPSIZE, 2.075);
 	}
 
+	@JsonIgnore
 	public int getObjectCount() {
 		return mapObjects.size();
 	}
 
+	@JsonIgnore
 	public int getNpcCount() {
 		return mapNpcs.size();
 	}
 
+	@JsonIgnore
 	public int getHostileNpcCount() {
 		int count = 0;
 
@@ -756,14 +768,7 @@ public class Map {
 	}
 
 	public void putLoot(int x, int y, int id, int q) {
-		if (correctCoords(coords.set(x, y))) {
-
-			if (mapLoot.get(coords) != null)
-				mapLoot.get(coords).add(id, q);
-			else
-				mapLoot.put(coords, new Loot(new Item(id, q)));
-
-		}
+		putLoot(x, y, new Item(id, q));
 	}
 
 	public void putLoot(int x, int y, int id) {
@@ -775,7 +780,7 @@ public class Map {
 			if (mapLoot.get(coords) != null)
 				mapLoot.get(coords).add(item);
 			else
-				mapLoot.put(coords, new Loot(item));
+				mapLoot.put(new Pair(coords), new Loot(item));
 
 		}
 	}
@@ -1139,6 +1144,7 @@ public class Map {
 
 	private int maxObjects = -1;
 
+	@JsonIgnore
 	public int getMaxObjects() {
 		if (maxObjects == -1) {
 			maxObjects = (int) (getArea() * MAX_OBJECT_PERCENT);
@@ -1150,6 +1156,7 @@ public class Map {
 
 	private int maxNpcs = -1;
 
+	@JsonIgnore
 	public int getMaxNpcs() {
 		if (maxNpcs == -1) {
 			maxNpcs = (int) (getArea() * MAX_NPC_PERCENT);

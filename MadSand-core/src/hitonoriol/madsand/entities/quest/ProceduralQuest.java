@@ -167,7 +167,7 @@ public class ProceduralQuest extends Quest {
 		HashMap<Property, String> quest = randomQuest(fetchItem, 1, 1, (int id) -> ItemProp.getItemName(id));
 		Pair coords = MadSand.world.getCurLoc().randPlaceLoot(fetchItem.get(0));
 		super.reqItems += quest.get(Property.RequirementString);
-		super.startMsg += quest.get(Property.StartMessage) + ". I think it's somewhere near (" + coords + ").";
+		super.startMsg += quest.get(Property.StartMessage).trim() + ". I think it's somewhere near (" + coords + ").";
 	}
 
 	private void randomKillQuest() {

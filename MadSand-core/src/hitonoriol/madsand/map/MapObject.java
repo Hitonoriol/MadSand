@@ -13,18 +13,21 @@ import hitonoriol.madsand.enums.ItemType;
 import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
+import me.xdrop.jrand.JRand;
+import me.xdrop.jrand.generators.basics.FloatGenerator;
 
 public class MapObject {
 	public static final int CLEANUP_FLAG = -1337;
-	@JsonIgnore
 	public static final int NULL_OBJECT_ID = 0;
-	@JsonIgnore
 	public static final int COLLISION_MASK_ID = 666;
+	
+	public static float MIN_HP = 0.55f, MAX_HP = 1.75f;
+	static FloatGenerator hpRangeGen = JRand.flt().range(MIN_HP, MAX_HP);
 
 	@JsonIgnore
 	public int id;
 
-	public int hp;
+	public int hp, maxHp;
 	public int harvestHp;
 	public int lvl;
 
@@ -44,7 +47,8 @@ public class MapObject {
 		this.id = id;
 		MapObject objectProp = ObjectProp.getObject(id);
 		this.name = objectProp.name;
-		this.hp = objectProp.hp;
+		this.maxHp = objectProp.hp;
+		rollHp();
 		this.harvestHp = objectProp.harvestHp;
 		this.skill = objectProp.skill;
 		this.lvl = objectProp.lvl;
@@ -60,6 +64,11 @@ public class MapObject {
 
 	public MapObject() {
 		this.id = 0;
+	}
+	
+	private void rollHp() {
+		maxHp = (int) Math.max(maxHp * hpRangeGen.gen(), 1f);
+		hp = maxHp;
 	}
 
 	@JsonIgnore

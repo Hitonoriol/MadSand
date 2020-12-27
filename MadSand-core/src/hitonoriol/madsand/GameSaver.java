@@ -19,7 +19,7 @@ import hitonoriol.madsand.world.World;
 
 public class GameSaver {
 	public static String SECTOR_DELIM = "!";
-	public final static long saveFormatVersion = 7;
+	public final static long saveFormatVersion = 8;
 
 	public static byte[] concat(byte[]... arrays) {
 		int totalLength = 0;

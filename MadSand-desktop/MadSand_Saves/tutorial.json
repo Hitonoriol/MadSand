@@ -2,33 +2,36 @@
 	"GameStart" : "
 		#Tutorial# Welcome to MadSand, {PLAYER}![What? How do you know my name?]=>
 		#Tutorial# This game *someday will be* an open-world survival roguelike.{br}
-			It's in its early stage of development, so feel free to explore and provide feedback and suggestions 
+			It's in early stage of development, so feel free to explore and provide feedback and suggestions 
 			about what you see in the game or what you want to see in the future.[Mkaaay...]=>
 		#Tutorial# If I were you, I'd start from exploring and interacting with things. [Oh, ok]=>
-		#Tutorial# To interact with Object or NPC, approach it and click it with LMB or right click it and choose \"interact\" option, or, 
+		#Tutorial# To interact with an Object or NPC, approach it and click it with LMB or right click it and choose \"interact\" option, or, 
 			for keyboard lovers - turn your character to it using arrow keys and press enter. [Understood]=>
-		#Tutorial# Via interaction with objects you can gather resources that are useful for crafting items. 
+		#Tutorial# Via interaction with objects you can gather resources that can be crafted into something or sold to a trader. 
 			You'll have to gather all the needed components for a certain item to unlock a craft recipe for it.[Cool, I'll try it]=>
-		#Tutorial# And if you decide to interact with an NPC, you can talk to it or take a quest.=>
+		#Tutorial# And if you decide to interact with an NPC, you can talk to them by left clicking. Some NPCs can give you various tasks and some can trade with you.=>
 		#Tutorial# And almost forgot, here are the controls:[Show 'em to me!]=>
 		#Controls#
 			* WASD or LMB click - walk around{br}
-			* LMB click on yourself - skip a turn and restore 1 action point{br}
-			* Arrows or middle mouse button - turn around without moving{br}
-			* Arrows or \"Attack\" button in RMB menu - attack a creature (be careful, they'll fight back){br}
-			* E - inventory{br}
-			* Q - player stats menu{br}
-			* Enter or LMB - interact with object/NPC{br}
-			* U - use consumable, placeable block or placeable tile (or a special tool, for example, hoe){br}
-			* G - save current world
+			* Middle mouse button or Arrow keys - turn around without moving{br}
+			* LMB click or Enter - interact with an object/NPC{br}
+			* LMB click - attack a hostile creature{br}
+			* Arrows or \"Attack\" button in RMB menu - attack a neutral creature (be careful, they'll become hostile and will fight back){br}
+			* LMB click on yourself or Space - rest for a turn{br}
+			* U - use currently held placeable block or placeable tile (or a special tool, for example, hoe){br}
+			* G or \"Save game\" button in ESC menu  - save current world{br}
 		[Woah, thanks!]
 	",
 	
-	"LowStamina" : "Easy there, {PLAYER}! You are about to deplete your stamina! [Oops. What's dat?] =>
-	Stamina is used to gather resources, or use items. It regenerates once per time tick when your satiation level (food) is above certain percent. 
-	If you deplete stamina, you won't be able to do any stamina-dependent activities until your stamina is at least partially replenished. [Oh. I see.] =>
-	You'll also start losing 1 hp per time tick while your stamina is 0.",
+	"LowStamina" : "
+		Easy there, {PLAYER}! You are about to deplete your stamina! [Oops. What's dat?] =>
+		Stamina is used to gather resources, or use items. It regenerates once per time tick when your satiation level (food) is above certain percent. 
+		If you deplete stamina, you won't be able to do any stamina-dependent activities until your stamina is at least partially replenished. [Oh. I see.] =>
+		You'll also start losing 1 hp per time tick while your stamina is 0.
+	",
 	
-	"Travel" : "To travel to an unexplored area you will need a Travelling kit. You can buy one from a trader or craft it from leather. [Nice]=>
-		You don't need a Travelling kit to travel between already explored sectors, though."
+	"Travel" : "
+		To travel to an unexplored area you will need a Travelling kit. You can buy one from a trader or craft it from leather. [Nice]=>
+		You don't need a Travelling kit to travel between already explored sectors, though.
+	"
 }

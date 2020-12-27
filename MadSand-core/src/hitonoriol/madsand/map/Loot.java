@@ -2,11 +2,12 @@ package hitonoriol.madsand.map;
 
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
 
 public class Loot {
-	int nodes = 0;
 	public ArrayList<Item> contents = new ArrayList<Item>();
 	private String lootStr;
 
@@ -18,19 +19,11 @@ public class Loot {
 		this(new Item());
 	}
 
+	@JsonIgnore
 	public String getInfo() {
+		if (lootStr == null)
+			genInfo();
 		return lootStr;
-	}
-
-	public String getContents() { // parsable string in format <id>/<quantity>:<id>/<quantity>:...
-		String ret = "";
-		for (Item item : contents) {
-			if (item != Item.nullItem)
-				ret += item.getString() + Item.BLOCK_DELIM;
-		}
-		if (ret == "")
-			return Item.EMPTY_ITEM;
-		return ret;
 	}
 
 	private void genInfo() { // generates human-readable contents of loot cell
@@ -56,7 +49,6 @@ public class Loot {
 
 	public Loot remove(int idx) {
 		contents.remove(idx);
-		--nodes;
 		genInfo();
 		return this;
 	}
@@ -69,12 +61,11 @@ public class Loot {
 	}
 
 	public Loot add(Item item) {
-		
+
 		if (item.equals(Item.nullItem))
 			return Map.nullLoot;
 
 		contents.add(item);
-		++nodes;
 		genInfo();
 		return this;
 	}
@@ -107,9 +98,5 @@ public class Loot {
 		}
 
 		return 0;
-	}
-
-	public static int addLootQ(String query, int x, int y, Map map) { // and this thing puts items to map by their query
-		return addLootQ(query, null, x, y, map);
 	}
 }

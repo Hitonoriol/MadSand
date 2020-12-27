@@ -266,6 +266,14 @@ public class Player extends Entity {
 		return killCount.getOrDefault(id, 0);
 	}
 
+	@JsonIgnore
+	public int getKillCount() {
+		int totalKills = 0;
+		for (int id : killCount.keySet())
+			totalKills += getKillCount(id);
+		return totalKills;
+	}
+
 	public boolean addToKillCount(int id) {
 		boolean first = killCount.containsKey(id);
 		killCount.put(id, getKillCount(id) + 1);

@@ -97,6 +97,7 @@ public class WorldMapSaver {
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			Pair loc = new Pair(wx, wy);
 			Map map = worldMap.locations.get(loc).getLayer(layer);
+			byte mapProperties[] = Resources.mapper.writeValueAsString(map).getBytes();
 
 			Resources.mapper.writeValue(
 					new File(GameSaver.getNpcFile(wx, wy, layer)),
@@ -108,20 +109,18 @@ public class WorldMapSaver {
 
 			int xsz = map.getWidth();
 			int ysz = map.getHeight();
-			// header: isEditable, width, height,spawnpoint(x, y) - for dungeon levels,
-			// default tile, default object
-			stream.write(GameSaver.encode2(Utils.val(map.editable)));
+			// header: width, height
 			stream.write(GameSaver.encode2(xsz));
 			stream.write(GameSaver.encode2(ysz));
-			stream.write(GameSaver.encode2(map.spawnPoint.x));
-			stream.write(GameSaver.encode2(map.spawnPoint.y));
-			stream.write(GameSaver.encode2(map.defTile));
-			stream.write(GameSaver.encode2(map.defObject));
-			MapObject obj = new MapObject();
 
+			// Misc map properties as a json string
+			stream.write(GameSaver.encode8(mapProperties.length));
+			stream.write(mapProperties);
+
+			MapObject obj = new MapObject();
 			ByteArrayOutputStream lootStream = new ByteArrayOutputStream();
 			ByteArrayOutputStream cropStream = new ByteArrayOutputStream();
-			String loot;
+			byte loot[];
 			Crop crop;
 			int cropBlocks = 0;
 			for (int y = 0; y < ysz; ++y) {
@@ -134,11 +133,7 @@ public class WorldMapSaver {
 					obj = map.getObject(x, y);
 					stream.write(GameSaver.encode2(obj.id));
 					stream.write(GameSaver.encode2(obj.hp));
-
-					// Save loot
-					loot = map.getLoot(x, y).getContents();
-					lootStream.write(GameSaver.encode2(loot.length()));
-					lootStream.write(loot.getBytes());
+					stream.write(GameSaver.encode2(obj.maxHp));
 
 					// Save crops
 					crop = map.getCrop(x, y);
@@ -152,7 +147,14 @@ public class WorldMapSaver {
 					++cropBlocks;
 				}
 			}
-			byte[] cropCount = GameSaver.encode2(cropBlocks);
+
+			// Save loot
+			loot = Resources.mapper.writeValueAsString(map.getLoot()).getBytes();
+			lootStream.write(GameSaver.encode8(loot.length));
+			lootStream.write(loot);
+
+			// Get all bytes from streams & concat them into one array
+			byte[] cropCount = GameSaver.encode8(cropBlocks);
 			byte[] _crops = cropStream.toByteArray();
 			cropStream.close();
 
@@ -176,19 +178,15 @@ public class WorldMapSaver {
 			byte[] block = new byte[BLOCK_SIZE];
 			byte[] longBlock = new byte[LONG_BLOCK_SIZE];
 			// Read header
-			boolean editable = Utils.bool(loadNextBlock(stream, block));
 			int xsz = loadNextBlock(stream, block);
 			int ysz = loadNextBlock(stream, block);
-			int spawnX = loadNextBlock(stream, block);
-			int spawnY = loadNextBlock(stream, block);
-			int defTile = loadNextBlock(stream, block);
-			int defObject = loadNextBlock(stream, block);
+			byte mapProperties[] = new byte[(int) loadNextLongBlock(stream, longBlock)];
+			stream.read(mapProperties);
 
 			Pair loc = new Pair(wx, wy);
-			Map map = new Map(xsz, ysz);
+			Map map = Resources.mapper.readValue(new String(mapProperties), Map.class);
+			map.setSize(xsz, ysz);
 			map.purge();
-			map.editable = editable;
-			map.spawnPoint = new Pair(spawnX, spawnY);
 
 			// Load NPCs
 			HashMap<Pair, Npc> npcs = Resources.mapper.readValue(
@@ -203,19 +201,13 @@ public class WorldMapSaver {
 			map.setNpcs(npcs);
 
 			// Load tiles & objects
-			map.defTile = defTile;
-			map.defObject = defObject;
-
 			for (int y = 0; y < ysz; ++y) {
 				for (int x = 0; x < xsz; ++x) {
-					stream.read(block);
-					map.addTile(x, y, GameSaver.decode2(block), true);
-					stream.read(block);
-					map.getTile(x, y).visited = GameSaver.decode2(block) != 0;
-					stream.read(block);
-					map.addObject(x, y, GameSaver.decode2(block));
-					stream.read(block);
-					map.getObject(x, y).hp = GameSaver.decode2(block);
+					map.addTile(x, y, loadNextBlock(stream, block), true);
+					map.getTile(x, y).visited = loadNextBlock(stream, block) != 0;
+					map.addObject(x, y, loadNextBlock(stream, block));
+					map.getObject(x, y).hp = loadNextBlock(stream, block);
+					map.getObject(x, y).maxHp = loadNextBlock(stream, block);
 				}
 			}
 
@@ -223,27 +215,17 @@ public class WorldMapSaver {
 			HashMap<Pair, ProductionStation> prodStations = Resources.mapper.readValue(
 					new File(GameSaver.getProdStationFile(wx, wy, layer)),
 					Resources.getMapType(Pair.class, ProductionStation.class));
-
 			map.setMapProductionStations(prodStations);
 
 			// Load loot
-			String loot;
-			byte[] _len = new byte[BLOCK_SIZE];
-			int len;
-			byte[] node;
-			for (int y = 0; y < ysz; ++y) {
-				for (int x = 0; x < xsz; ++x) {
-					stream.read(_len);
-					len = GameSaver.decode2(_len);
-					node = new byte[len];
-					stream.read(node);
-					loot = new String(node);
-					Loot.addLootQ(loot, x, y, map);
-				}
-			}
+			byte[] lootNode = new byte[(int) loadNextLongBlock(stream, longBlock)];
+			stream.read(lootNode);
+			HashMap<Pair, Loot> mapLoot = Resources.mapper.readValue(new String(lootNode),
+					Resources.getMapType(Pair.class, Loot.class));
+			map.setLoot(mapLoot);
 
 			//Load crops
-			int cropsCount = loadNextBlock(stream, block);
+			int cropsCount = (int) loadNextLongBlock(stream, longBlock);
 			int x, y, id, stage;
 			long ptime;
 			Crop crop;

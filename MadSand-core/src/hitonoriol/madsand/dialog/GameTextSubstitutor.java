@@ -15,7 +15,7 @@ public class GameTextSubstitutor {
 	static final String RAND_NAME_F = "RANDOM_NAME_F";
 
 	public static final String PLAYER_NAME = "PLAYER";
-	static final String LINEBREAK = "br";
+	public static final String LINEBREAK = "br";
 
 	private HashMap<String, String> globalConstants = new HashMap<>();
 	StringSubstitutor substitutor = new StringSubstitutor(globalConstants, "{", "}");
@@ -40,7 +40,6 @@ public class GameTextSubstitutor {
 	}
 
 	private void createRandomEntries(String str) {
-
 		if (str.contains(RAND_NAME)) {
 			String token = RAND_NAME;
 			FirstnameGenerator nameGen;

@@ -95,6 +95,9 @@ public class Npc extends Entity {
 	public Node findPath(int x, int y) {
 		Map map = MadSand.world.getCurLoc();
 
+		if (path.nodes.size == 0)
+			return null;
+
 		if (!prevDestination.equals(x, y)) {
 			path.clear();
 			pathIdx = 0;
