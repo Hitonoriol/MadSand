@@ -46,7 +46,12 @@ public class Inventory {
 
 	public void refreshUITitle() {
 		if (itemUI != null)
-			inventoryUI.setMass(curWeight, maxWeight);
+			inventoryUI.setHeader(getWeightString());
+	}
+
+	@JsonIgnore
+	public String getWeightString() {
+		return "[" + Utils.round(curWeight) + "/" + maxWeight + "] kg";
 	}
 
 	public void refreshContents() {
@@ -158,7 +163,7 @@ public class Inventory {
 		if (item.id == 0)
 			return;
 		if (itemUI.containsKey(item)) {
-			inventoryUI.setMass(curWeight, maxWeight);
+			refreshUITitle();
 			Group rcell = itemUI.get(item);
 			Cell<Group> cell = inventoryUI.invTable.getCell(rcell);
 			clearContextMenus();
@@ -179,7 +184,7 @@ public class Inventory {
 			return;
 		if (item.id == 0)
 			return;
-		inventoryUI.setMass(curWeight, maxWeight);
+		refreshUITitle();
 		if (itemUI.containsKey(item)) {
 			itemUI.get(item).setText(item.quantity + "");
 			if (item.type.isTool())
@@ -261,6 +266,9 @@ public class Inventory {
 	}
 
 	public boolean putItem(int id, int quantity) {
+		if (id == Item.NULL_ITEM)
+			return true;
+
 		Item item = new Item(id, quantity);
 		return putItem(item);
 	}

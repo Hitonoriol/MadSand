@@ -20,7 +20,7 @@ public class MapObject {
 	public static final int CLEANUP_FLAG = -1337;
 	public static final int NULL_OBJECT_ID = 0;
 	public static final int COLLISION_MASK_ID = 666;
-	
+
 	public static float MIN_HP = 0.55f, MAX_HP = 1.75f;
 	static FloatGenerator hpRangeGen = JRand.flt().range(MIN_HP, MAX_HP);
 
@@ -65,7 +65,7 @@ public class MapObject {
 	public MapObject() {
 		this.id = 0;
 	}
-	
+
 	private void rollHp() {
 		maxHp = (int) Math.max(maxHp * hpRangeGen.gen(), 1f);
 		hp = maxHp;
@@ -114,6 +114,10 @@ public class MapObject {
 
 	public int rollDrop(ItemType heldItemType) {
 		return getAltItem(this.id, heldItemType);
+	}
+
+	public double getHpPercent() {
+		return Utils.round((double) hp / (double) maxHp) * 100d;
 	}
 
 	private static int getAltItem(int id, ItemType hand, HashMap<ItemType, ArrayList<Integer>> container) {

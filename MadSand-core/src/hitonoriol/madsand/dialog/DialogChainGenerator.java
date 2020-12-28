@@ -83,7 +83,6 @@ public class DialogChainGenerator {
 					@Override
 					public void changed(ChangeEvent event, Actor actor) {
 						dialog.remove();
-
 					}
 				});
 

@@ -1,4 +1,8 @@
 {
+"Trash": [
+	{ "tier": 0, "minRolls": 3, "maxRolls": 10, "items": [151, 150] }
+],
+
 "Food": [
 	
 	{ "tier": 0, "minRolls": 10, "maxRolls": 15, "items": [44, 39, 46, 47, 48, 49, 50, 7, 97] },

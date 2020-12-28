@@ -34,7 +34,6 @@ public class Location {
 		layers.put(layer, map);
 	}
 
-	@JsonIgnore
 	public Settlement getSettlement() {
 		if (settlement != null)
 			settlement.setLocation(this);
@@ -89,6 +88,13 @@ public class Location {
 	@JsonIgnore
 	public boolean isSettlement() {
 		return settlement != null;
+	}
+
+	@JsonIgnore
+	public boolean isPlayerOwnedSettlement() {
+		if (!isSettlement())
+			return false;
+		return settlement.playerOwned;
 	}
 
 }

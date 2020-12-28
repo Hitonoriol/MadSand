@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 
 public class InventoryUI {
@@ -108,10 +107,6 @@ public class InventoryUI {
 
 	boolean isVisible() {
 		return invContainer.isVisible();
-	}
-
-	void setMass(double curWeight, double maxWeight) {
-		setHeader("[" + Utils.round(curWeight) + "/" + maxWeight + "] kg");
 	}
 
 	void setHeader(String str) {

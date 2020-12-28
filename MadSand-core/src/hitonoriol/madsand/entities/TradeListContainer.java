@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.TradeCategory;
+import hitonoriol.madsand.properties.NpcProp;
 
 /*
  * Container for TradeItemList 
@@ -78,6 +79,14 @@ public class TradeListContainer extends HashMap<TradeCategory, ArrayList<TradeIt
 		}
 
 		return items;
+	}
+	
+	public int rollId(TradeCategory category, int tier) {
+		return roll(category, tier < 0 ? NpcProp.tradeLists.rollTier() : tier).get(0).id;
+	}
+
+	public int rollId(TradeCategory category) {
+		return rollId(category, 0);
 	}
 
 	public int rollTier() {

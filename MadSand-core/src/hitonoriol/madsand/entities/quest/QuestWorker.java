@@ -156,7 +156,6 @@ public class QuestWorker {
 	}
 
 	public boolean isQuestInProgress(int id) {
-		Utils.out("inProgress " + id + ": " + questsInProgress.contains(questById(id)));
 		return questsInProgress.contains(questById(id));
 	}
 

@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.Mouse;
+import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 
 public class GameDialog extends Dialog {
 	public static final float BTN_WIDTH = Gdx.graphics.getWidth() / 4;
@@ -27,6 +28,7 @@ public class GameDialog extends Dialog {
 	public static final float HEIGHT = 250;
 	public static final float PADDING = 10;
 
+	private AutoFocusScrollPane textScroll;
 	protected Label textLbl;
 	private Stage stage;
 	private float cWidth = -1, cHeight = -1;
@@ -43,7 +45,9 @@ public class GameDialog extends Dialog {
 		setText(text);
 		textLbl.setAlignment(Align.topLeft);
 		textLbl.setWrap(true);
-		add(textLbl).width(WIDTH).height(HEIGHT).pad(PADDING).padTop(TEXT_YPADDING).row();
+		add(textScroll = new AutoFocusScrollPane(textLbl)).size(WIDTH, HEIGHT)
+				.pad(PADDING)
+				.padTop(TEXT_YPADDING).row();
 		this.stage = stage;
 	}
 
@@ -53,8 +57,8 @@ public class GameDialog extends Dialog {
 
 	public GameDialog(Stage stage) {
 		this("", "", stage);
-		Cell<Label> cell = getCell(textLbl);
-		textLbl.remove();
+		Cell<AutoFocusScrollPane> cell = getCell(textScroll);
+		textScroll.remove();
 		getCells().removeValue(cell, true);
 		invalidate();
 	}

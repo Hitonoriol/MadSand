@@ -1,18 +1,23 @@
 package hitonoriol.madsand.world;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.ItemType;
 import hitonoriol.madsand.enums.Skill;
+import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.enums.WorkerType;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.properties.Globals;
+import hitonoriol.madsand.properties.NpcProp;
 
 public class Settlement {
 	private static float WAREHOUSE_DEF_WEIGHT = 50;
@@ -45,20 +50,23 @@ public class Settlement {
 		return true;
 	}
 
+	public boolean isOccupied(long npcUid) {
+		for (WorkerType type : WorkerType.workers)
+			if (getWorkers(type).isOccupied(npcUid))
+				return true;
+		return false;
+	}
+
 	public WorkerContainer getWorkers(WorkerType type) {
 		return workers.getOrDefault(type, new WorkerContainer());
 	}
 
-	public void addWorker(WorkerType type, int quantity) {
+	public void addWorker(WorkerType type, long uid) {
 		WorkerContainer allWorkers = getWorkers(type);
-		allWorkers.quantity += quantity;
+		allWorkers.add(uid);
 
 		if (!workers.containsKey(type))
 			workers.put(type, allWorkers);
-	}
-
-	public void addWorker(WorkerType type) {
-		addWorker(type, 1);
 	}
 
 	public int getSizeUpgradeCost() {
@@ -71,27 +79,30 @@ public class Settlement {
 	}
 
 	public void timeTick() {
-
 		Map map = location.getOverworld();
 		Pair objCoords;
 		Skill workerSkill;
-		WorkerContainer allWorkers;
+		WorkerContainer workers;
 		boolean itemAdded;
+		int producedItem;
 		for (WorkerType type : WorkerType.values()) {
 			workerSkill = type.getSkill();
-			allWorkers = getWorkers(type);
+			workers = getWorkers(type);
+			producedItem = 0;
 
-			if (allWorkers.quantity == 0 || workerSkill == Skill.None)
+			if (workers.getQuantity() == 0)
 				continue;
 
-			objCoords = map.locateObject(type.getSkill());
-			if (objCoords == Pair.nullPair)
-				continue;
+			if (workerSkill != Skill.None) {
+				objCoords = map.locateObject(type.getSkill());
+				if (objCoords == Pair.nullPair)
+					continue;
+				producedItem = map.getObject(objCoords.x, objCoords.y).rollDrop(ItemType.bySkill(workerSkill));
+			} else if (type == WorkerType.Sweeper)
+				producedItem = NpcProp.tradeLists.rollId(TradeCategory.Trash);
 
-			if (allWorkers.gatherResources().itemCharge > 1f)
-				itemAdded = warehouse.putItem(
-						map.getObject(objCoords.x, objCoords.y).rollDrop(ItemType.bySkill(workerSkill)),
-						allWorkers.getResourceQuantity());
+			if (workers.gatherResources().itemCharge > 1f)
+				itemAdded = warehouse.putItem(producedItem, workers.getResourceQuantity());
 			else
 				continue;
 
@@ -100,9 +111,15 @@ public class Settlement {
 		}
 	}
 
-	public void randPopulate() {
+	public void randPopulate() {	// TODO
 		for (WorkerType type : WorkerType.values())
-			addWorker(type, Utils.rand(10));
+			addWorker(type, 0);
+	}
+
+	public WorkerType recruitWorker(long uid) {
+		WorkerType type = WorkerType.roll();
+		addWorker(type, uid);
+		return type;
 	}
 
 	@JsonIgnore
@@ -110,22 +127,46 @@ public class Settlement {
 		playerOwned = true;
 	}
 
+	@JsonIgnore
+	public String getLeaderName() {
+		return playerOwned ? World.player.stats.name : MadSand.world.getCurLoc().getNpc(leaderUid).stats.name;
+	}
+
 	public static class WorkerContainer { // Info about all workers of certain type
 		public static float ITEMS_PER_LVL = 0.15f; // Items per lvl per realtimeTick
 
-		int lvl = 1;
-		public int quantity = 0;
-		float itemCharge = 0;
+		public int lvl = 1;
+		public float itemCharge = 0;
+		public Set<Long> npcs = new HashSet<>();
+
+		public void add(long npcUid) {
+			npcs.add(npcUid);
+		}
+
+		public void remove(long npcUid) {
+			npcs.remove(npcUid);
+		}
+
+		public boolean isOccupied(long npcUid) {
+			return npcs.contains(npcUid);
+		}
+
+		@JsonIgnore
+		public int getQuantity() {
+			return npcs.size();
+		}
 
 		public WorkerContainer gatherResources() {
 			itemCharge += getGatheringRate();
 			return this;
 		}
 
+		@JsonIgnore
 		public float getGatheringRate() {
-			return (float) lvl * (float) quantity * ITEMS_PER_LVL;
+			return (float) lvl * (float) getQuantity() * ITEMS_PER_LVL;
 		}
 
+		@JsonIgnore
 		public int getResourceQuantity() {
 			int quantity = (int) Math.floor(itemCharge);
 			itemCharge -= quantity;

@@ -3,8 +3,9 @@ package hitonoriol.madsand.enums;
 import hitonoriol.madsand.Utils;
 
 public enum TradeCategory {
-	All, // include all categories
-	Random, // -- Roll a random category
+	All, // Include all categories
+	Random, // Roll a random category
+	Trash, // useless items
 
 	Food,
 	Potions,

@@ -108,7 +108,7 @@ public class LuaUtils {
 	}
 
 	public static int rollLoot(TradeCategory category, int tier) {
-		return NpcProp.tradeLists.roll(category, tier < 0 ? NpcProp.tradeLists.rollTier() : tier).get(0).id;
+		return NpcProp.tradeLists.rollId(category, tier);
 	}
 
 	public static int rollLoot(TradeCategory category) {

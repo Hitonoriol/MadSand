@@ -147,12 +147,15 @@ public class ActionButton extends Table {
 			});
 
 		} else if (!npc.equals(Map.nullNpc) && !Gui.dialogActive && npc.friendly) { //NPC interaction button
-			String npcString = npc.stats.name;
+			String npcString;
 
-			if (!npc.type.equals(NpcType.Trader))
-				npcString = "Talk to " + npcString;
+			if (npc.type == NpcType.Regular && npc.stats.faction.isHuman())
+				npcString = "Talk to ";
+			else if (npc.type == NpcType.Trader)
+				npcString = "Trade with ";
 			else
-				npcString = "Trade with " + npcString;
+				npcString = "Interact with ";
+			npcString += npc.stats.name;
 
 			activateInteractBtn(interactButton, npcString, npcInteractListener);
 

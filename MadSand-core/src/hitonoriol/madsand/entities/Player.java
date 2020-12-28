@@ -9,6 +9,9 @@ import java.util.Random;
 import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -22,6 +25,7 @@ import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
+import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.inventory.trade.TradeInventoryUI;
@@ -488,7 +492,6 @@ public class Player extends Entity {
 
 	private void interact(Npc npc) {
 		String name = npc.stats.name;
-		Faction faction = npc.stats.faction;
 		ArrayList<Integer> questList = NpcProp.npcs.get(npc.id).questList;
 
 		Gui.overlay.closeGameContextMenu();
@@ -508,17 +511,7 @@ public class Player extends Entity {
 			break;
 
 		case Regular:
-			if (!faction.isHuman())
-				MadSand.print("Doesn't seem like " + name + " can talk.");
-			else {
-				if (npc.canGiveQuests && stats.luckRoll()) {
-					quests.startProceduralQuest(npc.uid);
-				} else {
-					new DialogChainGenerator("#" + npc.stats.name + "#" +
-							Utils.randElement(Globals.instance().idleNpcText))
-									.generate(Gui.overlay).show();
-				}
-			}
+			talkToNpc(npc);
 			break;
 
 		case QuestMaster:
@@ -531,6 +524,49 @@ public class Player extends Entity {
 			break;
 
 		}
+	}
+
+	private void talkToNpc(Npc npc) {
+		Location location = MadSand.world.getLocation();
+		if (!npc.stats.faction.isHuman()) {
+			MadSand.print("Doesn't seem like " + npc.stats.name + " can talk");
+			return;
+		}
+		GameDialog npcDialog = new DialogChainGenerator(Utils.randElement(Globals.instance().idleNpcText))
+				.setAllTitles(npc.stats.name)
+				.generate(Gui.overlay);
+
+		if (npc.canGiveQuests) {
+			TextButton questButton = new TextButton("Do you need any help?", Gui.skin);
+			npcDialog.addButton(questButton);
+			questButton.addListener(new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					npcDialog.remove();
+					quests.startProceduralQuest(npc.uid);
+				}
+			});
+		}
+
+		if (location.isPlayerOwnedSettlement()) {
+			TextButton recruitButton = new TextButton("Would you like to work for me?", Gui.skin);
+			if (!location.settlement.isOccupied(npc.uid))
+				npcDialog.addButton(recruitButton);
+
+			recruitButton.addListener(new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					npcDialog.remove();
+					WorkerType worker = location.settlement.recruitWorker(npc.uid);
+					new DialogChainGenerator(
+							"Sure. I'll be the best " + worker.name() + " of the " + location.name + " settlement!")
+									.setAllTitles(npc.stats.name)
+									.generate(Gui.overlay).show();
+				}
+			});
+		}
+
+		npcDialog.show();
 	}
 
 	public void tradeWithNpc(Direction direction) {
