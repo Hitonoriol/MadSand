@@ -631,9 +631,9 @@ public class World {
 			} else
 				entity.act(time);
 		}
-		
+
 		Timer.instance().scheduleTask(new Timer.Task() {
-			
+
 			@Override
 			public void run() {
 				Gui.overlay.processActionMenu();
@@ -652,8 +652,7 @@ public class World {
 		map.updateProductionStations();
 
 		if (loc.isSettlement())
-			loc.settlement.timeTick();
-
+			loc.getSettlement().timeTick();
 	}
 
 	private void realtimeTick() {

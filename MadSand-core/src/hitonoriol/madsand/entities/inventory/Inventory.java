@@ -74,11 +74,10 @@ public class Inventory {
 		refreshWeight();
 	}
 
-	void refreshWeight() {
+	public void refreshWeight() {
 		curWeight = 0;
-		for (Item item : items) {
+		for (Item item : items)
 			curWeight += item.getWeight();
-		}
 		refreshUITitle();
 	}
 
@@ -231,7 +230,6 @@ public class Inventory {
 			return true;
 
 		Item updItem;
-
 		float newWeight = item.getWeight() + curWeight;
 		int existingIdx = getSameCell(item.id);
 

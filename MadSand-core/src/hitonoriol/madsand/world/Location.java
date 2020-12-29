@@ -2,7 +2,9 @@ package hitonoriol.madsand.world;
 
 import java.util.HashMap;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.enums.Faction;
@@ -11,6 +13,7 @@ import hitonoriol.madsand.map.Map;
 /*
  * {MapObjects, Tiles, NPCs, ...} --> Map --> Location --> WorldMap --> World
  */
+
 public class Location {
 	public static final int LAYER_OVERWORLD = 0;
 	public static final int LAYER_BASE_DUNGEON = 1;
@@ -34,11 +37,20 @@ public class Location {
 		layers.put(layer, map);
 	}
 
+	@JsonGetter("settlement")
 	public Settlement getSettlement() {
 		if (settlement != null)
-			settlement.setLocation(this);
+			if (settlement.getLocation() == null) {
+				settlement.setLocation(this);
+				settlement.warehouse.refreshWeight();
+			}
 
 		return settlement;
+	}
+
+	@JsonSetter("settlement")
+	public void setSettlement(Settlement settlement) {
+		this.settlement = settlement;
 	}
 
 	public Settlement createSettlement(String name) {
@@ -55,9 +67,12 @@ public class Location {
 		return layers.containsKey(layer);
 	}
 
-	@JsonIgnore
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	@JsonIgnore

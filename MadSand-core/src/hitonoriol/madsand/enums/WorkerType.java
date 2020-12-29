@@ -30,20 +30,26 @@ public enum WorkerType {
 	}
 
 	public static WorkerType roll() {
-		double roll = Utils.randPercent();
 		for (WorkerType type : workers) {
-			if (Utils.percentRoll(roll, type.probability))
+			if (Utils.percentRoll(type.probability))
 				return type;
 		}
 		return Sweeper;
 	}
 
 	public Skill getSkill() {
-		if (this == Miner)
+		switch (this) {
+		case Miner:
 			return Skill.Mining;
-		else if (this == Woodcutter)
+
+		case Woodcutter:
 			return Skill.Woodcutting;
-		else
+
+		case Digger:
+			return Skill.Digging;
+
+		default:
 			return Skill.None;
+		}
 	}
 }

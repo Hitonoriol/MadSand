@@ -51,10 +51,14 @@ public class Settlement {
 	}
 
 	public boolean isOccupied(long npcUid) {
+		return getOccupation(npcUid) != null;
+	}
+	
+	public WorkerType getOccupation(long npcUid) {
 		for (WorkerType type : WorkerType.workers)
 			if (getWorkers(type).isOccupied(npcUid))
-				return true;
-		return false;
+				return type;
+		return null;				
 	}
 
 	public WorkerContainer getWorkers(WorkerType type) {
@@ -77,10 +81,24 @@ public class Settlement {
 	public Location getLocation() {
 		return location;
 	}
+	
+	private Pair objectCoords;
+
+	private int skillWorkTick(Skill skill) {
+		Map map = location.getOverworld();
+
+		if (skill == Skill.Digging)
+			return map.getTile(objectCoords = map.locateDiggableTile()).rollDrop(ItemType.Shovel);
+		else if (skill.isResourceSkill())
+			return map.getObject(objectCoords = map.locateObject(skill)).rollDrop(ItemType.bySkill(skill));
+
+		return -1;
+
+	}
 
 	public void timeTick() {
 		Map map = location.getOverworld();
-		Pair objCoords;
+		objectCoords = Pair.nullPair;
 		Skill workerSkill;
 		WorkerContainer workers;
 		boolean itemAdded;
@@ -94,12 +112,13 @@ public class Settlement {
 				continue;
 
 			if (workerSkill != Skill.None) {
-				objCoords = map.locateObject(type.getSkill());
-				if (objCoords == Pair.nullPair)
+				producedItem = skillWorkTick(workerSkill);
+				if (objectCoords == Pair.nullPair)
 					continue;
-				producedItem = map.getObject(objCoords.x, objCoords.y).rollDrop(ItemType.bySkill(workerSkill));
 			} else if (type == WorkerType.Sweeper)
 				producedItem = NpcProp.tradeLists.rollId(TradeCategory.Trash);
+			else if (type == WorkerType.Hunter)
+				producedItem = NpcProp.tradeLists.rollId(TradeCategory.Food);
 
 			if (workers.gatherResources().itemCharge > 1f)
 				itemAdded = warehouse.putItem(producedItem, workers.getResourceQuantity());
@@ -111,7 +130,7 @@ public class Settlement {
 		}
 	}
 
-	public void randPopulate() {	// TODO
+	public void randPopulate() { // TODO
 		for (WorkerType type : WorkerType.values())
 			addWorker(type, 0);
 	}

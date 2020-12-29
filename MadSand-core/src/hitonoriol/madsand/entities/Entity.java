@@ -70,6 +70,7 @@ public abstract class Entity {
 		return stats;
 	}
 
+	@JsonIgnore
 	public boolean isPlayer() {
 		return this instanceof Player;
 	}

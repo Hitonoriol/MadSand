@@ -4,9 +4,9 @@
 ],
 
 "Food": [
-	
-	{ "tier": 0, "minRolls": 10, "maxRolls": 15, "items": [44, 39, 46, 47, 48, 49, 50, 7, 97] },
-	{ "tier": 1, "minRolls": 7, "maxRolls": 10, "items": [4, 57, 58, 59, 98] }
+	{ "tier": 0, "minRolls": 10, "maxRolls": 15, "items": [96, 141] },
+	{ "tier": 1, "minRolls": 10, "maxRolls": 15, "items": [44, 39, 46, 47, 48, 49, 50, 7, 97] },
+	{ "tier": 2, "minRolls": 7, "maxRolls": 10, "items": [4, 57, 58, 59, 98] }
 ],
 
 "Potions": [

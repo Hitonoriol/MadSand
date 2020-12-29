@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Resources;
+import hitonoriol.madsand.Utils;
 
 public class ItemUI extends Group {
 	static float TOP_LABEL_YPADDING = 8;

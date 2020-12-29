@@ -2,7 +2,10 @@ package hitonoriol.madsand.map;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 
 import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
@@ -19,6 +22,7 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.TradeListContainer;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.enums.ItemType;
 import hitonoriol.madsand.enums.NpcType;
 import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.enums.TradeCategory;
@@ -556,6 +560,10 @@ public class Map {
 			return ret;
 		} else
 			return nullTile;
+	}
+
+	public Tile getTile(Pair coords) {
+		return getTile(coords.x, coords.y);
 	}
 
 	Tile getTile(int x, int y, Direction dir) {
@@ -1126,6 +1134,23 @@ public class Map {
 
 	public Pair locateObject(int id) {
 		return locate(ObjectProp.getObject(id));
+	}
+
+	public Pair locateDiggableTile() {
+		List<Entry<Pair, Tile>> entryList = new ArrayList<>();
+		Iterator<Entry<Pair, Tile>> it = mapTiles.entrySet().iterator();
+		Entry<Pair, Tile> tileEntry;
+		while (it.hasNext())
+			if ((tileEntry = it.next()).getValue().id != defTile)
+				entryList.add(tileEntry);
+		Collections.shuffle(entryList);
+		Tile tile;
+		for (Entry<Pair, Tile> entry : entryList) {
+			tile = entry.getValue();
+			if (tile.rollDrop(ItemType.Shovel) != -1)
+				return entry.getKey();
+		}
+		return Pair.nullPair;
 	}
 
 	public Pair locateObject(Skill skill) {

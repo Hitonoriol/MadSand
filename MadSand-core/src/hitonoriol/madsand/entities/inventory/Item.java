@@ -269,8 +269,9 @@ public class Item {
 			return id + ITEM_DELIM + quantity;
 	}
 
+	@JsonIgnore
 	public float getWeight() {
-		return weight * quantity;
+		return weight * (float) quantity;
 	}
 
 	@Override

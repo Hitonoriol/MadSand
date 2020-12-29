@@ -532,8 +532,13 @@ public class Player extends Entity {
 			MadSand.print("Doesn't seem like " + npc.stats.name + " can talk");
 			return;
 		}
+		String dialogTitle = npc.stats.name;
+		if (location.isSettlement()) {
+			WorkerType occupation = location.settlement.getOccupation(npc.uid);
+			dialogTitle += ((occupation != null) ? " (" + occupation.name() + ")" : "");
+		}
 		GameDialog npcDialog = new DialogChainGenerator(Utils.randElement(Globals.instance().idleNpcText))
-				.setAllTitles(npc.stats.name)
+				.setAllTitles(dialogTitle)
 				.generate(Gui.overlay);
 
 		if (npc.canGiveQuests) {
@@ -1090,6 +1095,7 @@ public class Player extends Entity {
 	static int SETTLEMENT_COST = 500;
 	static int SETTLEMENT_RES_COST = 20;
 
+	@JsonIgnore
 	public ArrayList<Item> getSettlementCreationReq() {
 		ArrayList<Item> items = new ArrayList<>();
 		// Require coins

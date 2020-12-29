@@ -43,6 +43,10 @@ public class Tile {
 		this.onInteract = Resources.emptyField;
 	}
 
+	public int rollDrop(ItemType heldItem) {
+		return MapObject.getTileAltItem(id, heldItem);
+	}
+
 	public boolean hasFishingSpot() {
 		return fishingSpot != null;
 	}

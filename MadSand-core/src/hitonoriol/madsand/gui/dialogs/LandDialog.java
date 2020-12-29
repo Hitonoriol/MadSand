@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -29,6 +30,8 @@ import hitonoriol.madsand.world.Settlement.WorkerContainer;
 
 public class LandDialog extends GameDialog {
 
+	static int ITEMS_PER_ROW = 6;
+	static float ITEM_SCALE = 0.1f;
 	static float PAD = 5;
 
 	private Location location;
@@ -110,6 +113,7 @@ public class LandDialog extends GameDialog {
 		});
 	}
 
+	@SuppressWarnings("unchecked")
 	private void addSettlementInfo(Table container) {
 		container.add(location.name + " settlement ").row();
 		container.add("Leader: " + settlement.getLeaderName()).row();
@@ -121,6 +125,12 @@ public class LandDialog extends GameDialog {
 
 		container.add("Warehouse " + settlement.warehouse.getWeightString() + ":").row();
 		container.add(getWarehouseContents()).row();
+		Table warehouseTbl = ItemUI.createItemList(settlement.warehouse.items, ITEMS_PER_ROW);
+		for (Cell<Actor> cell : warehouseTbl.getCells()) {
+			cell.getActor().scaleBy(-ITEM_SCALE);
+			cell.size(ItemUI.SIZE * (1f - ITEM_SCALE));
+		}
+		container.add(warehouseTbl).row();
 	}
 
 	private String getWorkerList() {
@@ -133,7 +143,7 @@ public class LandDialog extends GameDialog {
 
 			sb.append("* " + type.name() + ": " + workers.getQuantity() + " ");
 			sb.append("(" + Utils.round(workers.getGatheringRate() / MadSand.world.realtimeTickRate) + " actions/sec) ")
-					.append("[[" + Utils.round(workers.itemCharge * 100f) + "% done]")
+					.append("[[" + Utils.round(workers.itemCharge * 100f) + "%]")
 					.append(Resources.LINEBREAK);
 		}
 		if (settlement.workers.isEmpty())
