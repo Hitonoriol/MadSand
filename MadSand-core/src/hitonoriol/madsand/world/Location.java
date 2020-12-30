@@ -6,9 +6,12 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.enums.Faction;
 import hitonoriol.madsand.map.Map;
+import hitonoriol.madsand.world.Settlement.Status;
 
 /*
  * {MapObjects, Tiles, NPCs, ...} --> Map --> Location --> WorldMap --> World
@@ -110,6 +113,36 @@ public class Location {
 		if (!isSettlement())
 			return false;
 		return settlement.playerOwned;
+	}
+
+	public static Settlement.Status isSettlement(int wx, int wy) {
+		World world = MadSand.world;
+		Location tmpLoc;
+		Pair coords = new Pair(wx, wy);
+		boolean locLoaded = false;
+		Settlement.Status status;
+		try {
+			if (world.locExists(coords))
+				tmpLoc = world.worldMap.getLocation(coords);
+			else {
+				tmpLoc = world.worldMapSaver.loadLocationInfo(wx, wy);
+				locLoaded = true;
+			}
+
+			if (tmpLoc.isPlayerOwnedSettlement())
+				status = Status.PlayerOwned;
+			else if (tmpLoc.isSettlement())
+				status = Status.NpcOwned;
+			else
+				status = Status.DoesNotExist;
+
+			if (locLoaded)
+				world.worldMap.remove(coords);
+			return status;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Status.Unknown;
+		}
 	}
 
 }

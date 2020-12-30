@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
@@ -1159,6 +1161,10 @@ public class Map {
 				return entry.getKey();
 		}
 		return Pair.nullPair;
+	}
+
+	public Stream<Npc> pickNpcs(Predicate<Npc> predicate) {
+		return mapNpcs.values().stream().filter(predicate);
 	}
 
 	/*

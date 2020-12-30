@@ -2,13 +2,16 @@ package hitonoriol.madsand.world;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.ItemType;
@@ -53,12 +56,12 @@ public class Settlement {
 	public boolean isOccupied(long npcUid) {
 		return getOccupation(npcUid) != null;
 	}
-	
+
 	public WorkerType getOccupation(long npcUid) {
 		for (WorkerType type : WorkerType.workers)
 			if (getWorkers(type).isOccupied(npcUid))
 				return type;
-		return null;				
+		return null;
 	}
 
 	public WorkerContainer getWorkers(WorkerType type) {
@@ -81,7 +84,7 @@ public class Settlement {
 	public Location getLocation() {
 		return location;
 	}
-	
+
 	private Pair objectCoords;
 
 	private int skillWorkTick(Skill skill) {
@@ -130,9 +133,17 @@ public class Settlement {
 		}
 	}
 
-	public void randPopulate() { // TODO
-		for (WorkerType type : WorkerType.values())
-			addWorker(type, 0);
+	public void randPopulate() {
+		location.getOverworld()
+				.pickNpcs(npc -> npc.stats.faction.isHuman())
+				.filter(npc -> {
+					if (leaderUid == -1) {
+						leaderUid = npc.uid;
+						return false;
+					}
+					return true;
+				})
+				.forEach(npc -> addWorker(WorkerType.roll(), npc.uid));
 	}
 
 	public WorkerType recruitWorker(long uid) {
@@ -190,6 +201,14 @@ public class Settlement {
 			int quantity = (int) Math.floor(itemCharge);
 			itemCharge -= quantity;
 			return quantity;
+		}
+	}
+
+	public static enum Status {
+		PlayerOwned, NpcOwned, DoesNotExist, Unknown;
+
+		public boolean exists() {
+			return this == PlayerOwned || this == NpcOwned;
 		}
 	}
 }

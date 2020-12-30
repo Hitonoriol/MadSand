@@ -86,9 +86,10 @@ public class WorldMapSaver {
 
 	}
 
-	public void loadLocationInfo(int wx, int wy) throws Exception {
+	public Location loadLocationInfo(int wx, int wy) throws Exception {
 		Location location = Resources.mapper.readValue(GameSaver.getLocationFile(wx, wy), Location.class);
 		worldMap.locations.put(new Pair(wx, wy), location);
+		return location;
 	}
 
 	byte[] sectorToBytes(int wx, int wy, int layer) {
