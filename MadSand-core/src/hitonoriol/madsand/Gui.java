@@ -89,9 +89,9 @@ public class Gui {
 		TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
 		textButtonStyle.up = skin.newDrawable("background", Color.GRAY);
 		textButtonStyle.down = skin.newDrawable("background", Color.DARK_GRAY);
-		textButtonStyle.over = skin.newDrawable("background", Color.LIGHT_GRAY);
+		textButtonStyle.over = skin.newDrawable("background", new Color(0xa5a5a5ff));
 		textButtonStyle.font = skin.getFont("default");
-		textButtonStyle.disabled = skin.newDrawable("background", Color.BLACK);
+		textButtonStyle.disabled = skin.newDrawable("background", new Color(0x3f3f3fdc));
 		skin.add("default", textButtonStyle);
 
 		Label.LabelStyle labelStyle = new Label.LabelStyle();
@@ -244,7 +244,7 @@ public class Gui {
 	}
 
 	public static void refreshOverlay() {
-		overlay.refreshOverlay();
+		overlay.refresh();
 	}
 
 	public static float horizontalCenter(Actor actor) {

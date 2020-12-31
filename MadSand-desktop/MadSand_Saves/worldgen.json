@@ -1,6 +1,8 @@
 {
 	"0" : {
 		"biomeName" : "Plains",
+		"settlementProbability" : 15,
+		"ownedByFactionProbability" : 17.5,
 		"overworld" : {
 			"defaultTile" : 0,
 			"tiles" : [
@@ -26,7 +28,8 @@
 				{ "rollCount": 1, "idList": [21, 58, 54, 62] },
 				{ "rollCount": 3, "idList": [41, 42] }
 			],
-			"structures" : ["gen/stone-shrine", "gen/abandoned-gas-station", "gen/crop-plot", "gen/market-stand", "gen/casino"],
+			"structures" : ["gen/stone-shrine", "gen/abandoned-gas-station", "gen/crop-plot", "gen/market-stand", "gen/casino",
+							"gen/animal-farm"],
 			"maxStructures" : 5,
 			"minStructures" : 1,
 			"chanceToRegenerate": 40,
@@ -196,6 +199,8 @@
 
 	"3" : {
 		"biomeName" : "Dead lands",
+		"settlementProbability" : 1,
+		"ownedByFactionProbability" : 2.5,
 		"overworld" : {
 			"defaultTile" : 24,
 			"tiles" : [

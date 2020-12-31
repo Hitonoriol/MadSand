@@ -49,8 +49,12 @@ public class Pair {
 		return add(arg.x, arg.y);
 	}
 
+	public Pair random(int xMin, int xMax, int yMin, int yMax) {
+		return this.set(Utils.rand(xMin, xMax), Utils.rand(yMin, yMax));
+	}
+
 	public Pair random(int xMax, int yMax) {
-		return this.set(Utils.rand(xMax), Utils.rand(yMax));
+		return random(0, xMax, 0, yMax);
 	}
 
 	public Pair randomInCircle(int x0, int y0, int radius) {

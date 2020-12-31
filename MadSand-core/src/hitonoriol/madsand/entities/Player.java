@@ -300,7 +300,7 @@ public class Player extends Entity {
 	public void changeStamina(float by) {
 		stats.stamina += by;
 		stats.check();
-		Gui.overlay.refreshOverlay();
+		Gui.overlay.refresh();
 	}
 
 	public boolean knowsNpc(int id) {
@@ -1019,7 +1019,7 @@ public class Player extends Entity {
 		scheduledAction = action;
 		MadSand.world.timeTick(ticks); // committing our action and then letting world catch up to time we've spent
 		MadSand.world.timeSubtick(getActionLength(ap)); // letting NPCs catch up
-		Gui.overlay.refreshOverlay();
+		Gui.overlay.refresh();
 		LuaUtils.execute(LuaUtils.onAction);
 		return ticks;
 	}

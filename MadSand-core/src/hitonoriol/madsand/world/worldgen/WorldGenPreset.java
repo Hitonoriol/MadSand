@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class WorldGenPreset {
 	public String biomeName;
+	public double settlementProbability = 10;
+	public double ownedByFactionProbability = 12.5;
 
 	// Biome tile & object sets
 	public OverworldPreset overworld = new OverworldPreset();

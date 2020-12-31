@@ -100,7 +100,7 @@ public class LoadWorldDialog extends GameDialog {
 						MadSand.worldEntered();
 					}
 
-					Gui.overlay.refreshOverlay();
+					Gui.overlay.refresh();
 				}
 			});
 

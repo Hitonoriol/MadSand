@@ -15,6 +15,7 @@ public class MapStructure {
 	// width & height are specified in each structure's script separately and then passed to the java object
 	public int xMax, yMax;
 	public int width, height;
+	public Map map = MadSand.world.getCurLoc();
 
 	LuaValue script;
 
@@ -55,7 +56,7 @@ public class MapStructure {
 		return Utils.rand(y, yMax);
 	}
 
-	private int maxAttempts = 1000;
+	private int maxAttempts = 10000;
 
 	public Pair getFreeTile() {
 		Pair coords = new Pair();
@@ -75,8 +76,12 @@ public class MapStructure {
 		return coords;
 	}
 
+	public void fillTile(int id) {
+		map.fillTile(x, y, width, height, id);
+	}
+
 	public void clear() {
-		MadSand.world.getCurLoc().fillObject(x, y, width, height, 0);
+		map.fillObject(x, y, width, height, 0);
 	}
 
 	public MapStructure setName(String file) {

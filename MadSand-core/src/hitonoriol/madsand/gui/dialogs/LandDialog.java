@@ -108,6 +108,7 @@ public class LandDialog extends GameDialog {
 				location.createSettlement().setPlayerOwned();
 				++player.settlementsEstablished;
 				settlement = location.settlement;
+				Gui.overlay.refresh();
 				refreshDialogContents();
 			}
 		});

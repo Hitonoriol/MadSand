@@ -308,7 +308,7 @@ public class Overlay extends Stage {
 		}
 	}
 
-	public void refreshOverlay() {
+	public void refresh() {
 		Player player = World.player;
 		PlayerStats stats = player.stats;
 

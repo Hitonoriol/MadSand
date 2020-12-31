@@ -78,7 +78,7 @@
 		"name" : "Video Blackjack machine"
 	},
 	"6" : {
-		"hp" : 20,
+		"hp" : 5,
 		"harvestHp" : -1,
 		"lvl" : -1,
 		"nocollide" : false,
@@ -103,7 +103,7 @@
 		"name" : "Chest"
 	},
 	"8" : {
-		"hp" : 30,
+		"hp" : 10,
 		"harvestHp" : -1,
 		"lvl" : -1,
 		"nocollide" : false,
@@ -146,7 +146,7 @@
 		"name" : "Cactus"
 	},
 	"11" : {
-		"hp" : 30,
+		"hp" : 5,
 		"harvestHp" : -1,
 		"lvl" : -1,
 		"nocollide" : false,
@@ -155,7 +155,6 @@
 		"altItems" : null,
 		"onInteract" : "
 			local player_look = world.player:lookingAt();
-			print('player_look:' .. player_look.x .. ' ' .. player_look.y);
 			utils:delObject(player_look.x, player_look.y);
 			utils:addObject(player_look.x, player_look.y, 12);
 		",
@@ -163,7 +162,7 @@
 		"name" : "Closed door"
 	},
 	"12" : {
-		"hp" : 30,
+		"hp" : 5,
 		"harvestHp" : -1,
 		"lvl" : -1,
 		"nocollide" : true,
@@ -194,28 +193,22 @@
 		"name" : "Stone"
 	},
 	"14" : {
-		"hp" : 30,
-		"harvestHp" : -1,
-		"lvl" : -1,
+		"hp" : 3,
+		"harvestHp" : 3,
+		"lvl" : 2,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
-		"name" : "???"
+		"skill" : "Woodcutting",
+		"name" : "Bamboo"
 	},
 	"15" : {
 		"hp" : 1,
 		"harvestHp" : 15,
 		"lvl" : -1,
 		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"Pickaxe" : [ 32 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "None",
 		"isWall" : true,
 		"name" : "Stone wall"
@@ -2008,7 +2001,6 @@
 	},
 	"167" : {
 		"hp" : 6,
-		"nocollide" : false,
 		"onInteract" : "-1",
 		"altItems" : {
 			"Pickaxe" : [ 172 ]
@@ -2044,12 +2036,11 @@
 		"altItems" : {
 			"None" : [ 104 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Gathering",
 		"name" : "Haybale"
 	},
 	"171" : {
-		"hp" : 30,
+		"hp" : 10,
 		"harvestHp" : -1,
 		"lvl" : -1,
 		"onInteract" : "-1",
@@ -2065,5 +2056,19 @@
 							package('minigames.videopoker.VideoPokerUI'),
 							world:getCurLoc():getObject(player:lookingAt())):show()",
 		"name" : "Video Poker machine"
+	},
+	"173" : {
+		"hp" : 3,
+		"harvestHp" : 6,
+		"nocollide" : true,
+		"name" : "Fence",
+		"altItems" : {
+			"None" : [ 8 ]
+		}
+	},
+	"174" : {
+		"hp" : 3,
+		"name" : "Clay wall",
+		"isWall" : true
 	}
 }

@@ -2,16 +2,12 @@ package hitonoriol.madsand.world;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.function.Predicate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
-import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.ItemType;
@@ -150,6 +146,14 @@ public class Settlement {
 		WorkerType type = WorkerType.roll();
 		addWorker(type, uid);
 		return type;
+	}
+
+	@JsonIgnore
+	public int getPopulation() {
+		int population = leaderUid > -1 ? 1 : 0;
+		for (WorkerContainer worker : workers.values())
+			population += worker.getQuantity();
+		return population;
 	}
 
 	@JsonIgnore

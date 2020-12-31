@@ -91,6 +91,11 @@ public class Utils {
 		return random.nextInt((max - min) + 1) + min;
 	}
 
+	public static <T extends Enum<?>> T pick(Class<T> clazz) {
+		int i = random.nextInt(clazz.getEnumConstants().length);
+		return clazz.getEnumConstants()[i];
+	}
+
 	public static int signRand(int min, int max) {
 		int num = rand(min, max);
 		return random.nextBoolean() ? num : -num;
@@ -121,7 +126,7 @@ public class Utils {
 
 		return (randPercent() < percent);
 	}
-	
+
 	public static boolean percentRoll(double rollResult, double percent) {
 		return rollResult < percent;
 	}

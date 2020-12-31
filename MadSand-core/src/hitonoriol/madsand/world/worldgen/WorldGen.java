@@ -9,6 +9,7 @@ import com.github.czyzby.noise4j.map.generator.util.Generators;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.enums.Faction;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.properties.WorldGenProp;
@@ -25,7 +26,7 @@ public class WorldGen {
 	private Map curMap;
 	private int width, height;
 	private float scaleBy;
-	private boolean friendlyOnly = false;
+	private boolean friendlyOnly, skipLandPropGen;
 
 	public WorldGen(WorldMap worldMap) {
 		this.worldMap = worldMap;
@@ -40,6 +41,11 @@ public class WorldGen {
 
 	public WorldGen initPosition() {
 		return initPosition(worldMap.curWorldPos, worldMap.curLayer);
+	}
+
+	public WorldGen skipLandPropGen() {
+		skipLandPropGen = true;
+		return this;
 	}
 
 	public WorldGen friendlyOnly() {
@@ -62,6 +68,7 @@ public class WorldGen {
 	public void reset() {
 		this.setSize(-1, -1).setBiome(-1);
 		friendlyOnly = false;
+		skipLandPropGen = false;
 	}
 
 	public void generate() {
@@ -96,6 +103,7 @@ public class WorldGen {
 			genBiomeStructures();
 			rollDungeon();
 			initialMobSpawn();
+			rollLandProperties();
 
 		} else {
 
@@ -107,6 +115,19 @@ public class WorldGen {
 		}
 
 		reset();
+	}
+
+	private void rollLandProperties() {
+		if (skipLandPropGen)
+			return;
+
+		if (Utils.percentRoll(curBiome.ownedByFactionProbability))
+			curLocation.faction = Utils.randElement(Faction.humanFactions);
+
+		if (Utils.percentRoll(curBiome.settlementProbability)) {
+			curLocation.createSettlement().randPopulate();
+			Utils.out("Created an NPC-owned settlement! Population: " + curLocation.settlement.getPopulation());
+		}
 	}
 
 	static float STRUCTURE_SCALE_FACTOR = 0.35f;
