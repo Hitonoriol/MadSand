@@ -1,6 +1,6 @@
 package hitonoriol.madsand;
 
-import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -51,6 +51,26 @@ import hitonoriol.madsand.properties.WorldGenProp;
 import hitonoriol.madsand.world.worldgen.WorldGenPreset;
 
 public class Resources {
+
+	static String QUEST_FILE = "quests.json";
+	static String WORLDGEN_FILE = "worldgen.json";
+	static String ENCOUNTER_FILE = "encounters.json";
+	static String TUTORIAL_FILE = "tutorial.json";
+	static String TRADELIST_FILE = "tradelists.json";
+	static String TILE_FILE = "tiles.json";
+	static String OBJECT_FILE = "objects.json";
+	static String PRODSTATION_FILE = "productionstations.json";
+	static String NPC_FILE = "npcs.json";
+	static String ITEM_FILE = "items.json";
+	public static String GLOBALS_FILE = "globals.json";
+	public static String BUILDRECIPE_FILE = "buildrecipes.json";
+	static String SKILL_FILE = "skills.json";
+
+	public static final String SCRIPT_DIR = "scripts/";
+	public static final String ENCOUNTER_DIR = "encounter/";
+
+	public static final String ERR_FILE = "MadSandCritical.log";
+	public static final String OUT_FILE = "MadSandOutput.log";
 
 	static final int ANIM_FRAME_SIZE = 32;
 	static final float ACTION_ANIM_DURATION = 0.15f;
@@ -118,7 +138,7 @@ public class Resources {
 
 		loadPlayerAnimation();
 
-		Cursor mouseCursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.local(MadSand.SAVEDIR + "cursor.png")), 0, 0);
+		Cursor mouseCursor = Gdx.graphics.newCursor(loadPixmap("cursor.png"), 0, 0);
 		Gdx.graphics.setCursor(mouseCursor);
 
 		initObjectMapper();
@@ -154,17 +174,18 @@ public class Resources {
 	}
 
 	private static void loadTradeLists() throws Exception {
-		NpcProp.tradeLists = Resources.mapper.readValue(new File(MadSand.TRADELISTFILE), TradeListContainer.class);
+		NpcProp.tradeLists = Resources.mapper.readValue(readInternal(Resources.TRADELIST_FILE),
+				TradeListContainer.class);
 	}
 
 	private static void loadTutorial() throws Exception {
 		MapType tutorialMap = Resources.typeFactory.constructMapType(HashMap.class, String.class, String.class);
-		Tutorial.strings = Resources.mapper.readValue(new File(MadSand.TUTORIALFILE), tutorialMap);
+		Tutorial.strings = Resources.mapper.readValue(readInternal(Resources.TUTORIAL_FILE), tutorialMap);
 	}
 
 	private static void loadQuests() throws Exception {
 		MapType questMap = Resources.typeFactory.constructMapType(HashMap.class, Integer.class, Quest.class);
-		QuestList.quests = Resources.mapper.readValue(new File(MadSand.QUESTFILE), questMap);
+		QuestList.quests = Resources.mapper.readValue(readInternal(Resources.QUEST_FILE), questMap);
 
 		for (Entry<Integer, Quest> entry : QuestList.quests.entrySet())
 			entry.getValue().id = entry.getKey();
@@ -175,7 +196,7 @@ public class Resources {
 
 	private static void loadNpcs() throws Exception {
 		MapType npcMap = Resources.typeFactory.constructMapType(HashMap.class, Integer.class, NpcContainer.class);
-		NpcProp.npcs = Resources.mapper.readValue(new File(MadSand.NPCFILE), npcMap);
+		NpcProp.npcs = Resources.mapper.readValue(readInternal(Resources.NPC_FILE), npcMap);
 		npcCount = NpcProp.npcs.size();
 		Utils.out(npcCount + " NPCs");
 
@@ -184,14 +205,14 @@ public class Resources {
 		int i = 0;
 		for (Entry<Integer, NpcContainer> npcEntry : NpcProp.npcs.entrySet()) {
 			i = npcEntry.getKey();
-			npc[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "npc/" + i + ".png"));
+			npc[i] = loadTexture("npc/" + i + ".png");
 		}
 
 	}
 
 	private static void loadMapTiles() throws Exception {
 		MapType tileMap = Resources.typeFactory.constructMapType(HashMap.class, Integer.class, Tile.class);
-		TileProp.tiles = Resources.mapper.readValue(new File(MadSand.TILEFILE), tileMap);
+		TileProp.tiles = Resources.mapper.readValue(readInternal(Resources.TILE_FILE), tileMap);
 
 		tileCount = TileProp.tiles.size();
 		tile = new Texture[tileCount];
@@ -202,14 +223,14 @@ public class Resources {
 		for (Entry<Integer, Tile> tileEntry : TileProp.tiles.entrySet()) {
 			i = tileEntry.getKey();
 
-			tile[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "terrain/" + i + ".png"));
+			tile[i] = loadTexture("terrain/" + i + ".png");
 			tileEntry.getValue().id = i;
 		}
 	}
 
 	private static void loadMapObjects() throws Exception {
 		MapType objectMap = Resources.typeFactory.constructMapType(HashMap.class, Integer.class, MapObject.class);
-		ObjectProp.objects = Resources.mapper.readValue(new File(MadSand.OBJECTFILE), objectMap);
+		ObjectProp.objects = Resources.mapper.readValue(readInternal(Resources.OBJECT_FILE), objectMap);
 
 		mapObjectCount = ObjectProp.objects.size();
 		objects = new Texture[mapObjectCount + 1];
@@ -220,14 +241,14 @@ public class Resources {
 		for (Entry<Integer, MapObject> objectEntry : ObjectProp.objects.entrySet()) {
 			i = objectEntry.getKey();
 
-			objects[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "obj/" + i + ".png"));
+			objects[i] = loadTexture("obj/" + i + ".png");
 			objectEntry.getValue().id = i;
 		}
 	}
 
 	private static void loadItems() throws Exception {
 		MapType itemMap = Resources.typeFactory.constructMapType(HashMap.class, Integer.class, Item.class);
-		ItemProp.items = Resources.mapper.readValue(new File(MadSand.ITEMSFILE), itemMap);
+		ItemProp.items = Resources.mapper.readValue(readInternal(Resources.ITEM_FILE), itemMap);
 		itemCount = ItemProp.items.size();
 		item = new Texture[itemCount];
 
@@ -238,7 +259,7 @@ public class Resources {
 			i = entry.getKey();
 			valItem = entry.getValue();
 
-			item[i] = new Texture(Gdx.files.local(MadSand.SAVEDIR + "inv/" + i + ".png"));
+			item[i] = loadTexture("inv/" + i + ".png");
 			valItem.id = i;
 
 			// Load item's craft recipe if it has one
@@ -256,25 +277,27 @@ public class Resources {
 		}
 
 		Utils.out(craftableItemCount + " craftable items");
-
 	}
 
 	private static void loadWorldGen() throws Exception {
 		MapType worldGenMap = Resources.typeFactory.constructMapType(HashMap.class, Integer.class,
 				WorldGenPreset.class);
-		WorldGenProp.biomes = Resources.mapper.readValue(new File(MadSand.GENFILE), worldGenMap);
+		WorldGenProp.biomes = Resources.mapper.readValue(readInternal(Resources.WORLDGEN_FILE), worldGenMap);
 		biomeCount = WorldGenProp.biomes.size();
+
+		WorldGenProp.encounters = Resources.mapper.readValue(readInternal(Resources.ENCOUNTER_FILE),
+				typeFactory.constructParametricType(ArrayList.class, String.class));
 
 		Utils.out(biomeCount + " biomes");
 	}
 
 	private static void loadProductionStations() throws Exception {
 		ObjectProp.productionStations = mapper.readValue(
-				new File(MadSand.PRODSTATIONFILE),
+				readInternal(Resources.PRODSTATION_FILE),
 				getMapType(Integer.class, ProductionStation.class));
 
 		ObjectProp.buildRecipes = mapper.readValue(
-				new File(MadSand.BUILDRECIPE),
+				readInternal(Resources.BUILDRECIPE_FILE),
 				getMapType(Integer.class, String.class));
 		for (Entry<Integer, String> entry : ObjectProp.buildRecipes.entrySet())
 			ItemProp.buildReq.put(entry.getKey(), Item.parseCraftRequirements(entry.getValue()));
@@ -283,8 +306,9 @@ public class Resources {
 
 	static Texture mapcursor;
 
-	public static void loadSkillReqs() throws Exception{
-		SkillContainer.reqList = mapper.readValue(new File(MadSand.SKILLFILE), getMapType(Skill.class, SkillValue.class));
+	public static void loadSkillReqs() throws Exception {
+		SkillContainer.reqList = mapper.readValue(readInternal(Resources.SKILL_FILE),
+				getMapType(Skill.class, SkillValue.class));
 	}
 
 	static final int PLAYER_ANIM_WIDTH = 35;
@@ -315,7 +339,7 @@ public class Resources {
 
 	public static BitmapFont createFont(int size) {
 		BitmapFont font = new BitmapFont();
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.local(MadSand.SAVEDIR + FONT_PATH));
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
 		FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		param.characters = FONT_CHARS;
 		param.size = size;
@@ -328,6 +352,10 @@ public class Resources {
 		return font;
 	}
 
+	public static String readInternal(String file) {
+		return Gdx.files.internal(file).readString();
+	}
+
 	public static MapType getMapType(Class<?> key, Class<?> value) {
 		return Resources.typeFactory.constructMapType(HashMap.class, key, value);
 	}
@@ -337,7 +365,11 @@ public class Resources {
 	}
 
 	public static Texture loadTexture(String file) {
-		return new Texture(Gdx.files.local(MadSand.SAVEDIR + file));
+		return new Texture(Gdx.files.internal(file));
+	}
+
+	public static Pixmap loadPixmap(String file) {
+		return new Pixmap(Gdx.files.internal(file));
 	}
 
 	public static AnimationContainer createAnimation(TextureRegion[] strip, float duration) { // Create animation from loaded strip
@@ -376,8 +408,4 @@ public class Resources {
 		PixmapIO.writePNG(Gdx.files.local(System.currentTimeMillis() + ".png"), pixmap);
 		pixmap.dispose();
 	}
-	
-	public static final String ERRFILE = "MadSandCritical.log";
-	public static final String OUTFILE = "MadSandOutput.log";
-
 }

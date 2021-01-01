@@ -39,32 +39,15 @@ public class MadSand extends Game {
 	public static final String SAVE_EXT = ".msf";
 
 	public static final String SAVEDIR = "MadSand_Saves/";
-	static String QUESTFILE = SAVEDIR + "quests.json";
-	static String GENFILE = SAVEDIR + "worldgen.json";
-	static String TUTORIALFILE = SAVEDIR + "tutorial.json";
-	static String TRADELISTFILE = SAVEDIR + "tradelists.json";
-
-	static String TILEFILE = SAVEDIR + "tiles.json";
-	static String OBJECTFILE = SAVEDIR + "objects.json";
-	static String PRODSTATIONFILE = SAVEDIR + "productionstations.json";
-	static String NPCFILE = SAVEDIR + "npcs.json";
-	static String ITEMSFILE = SAVEDIR + "items.json";
-	public static String GLOBALSFILE = SAVEDIR + "globals.json";
-	public static String BUILDRECIPE = SAVEDIR + "buildrecipes.json";
-
-	static String SKILLFILE = SAVEDIR + "skills.json";
 	public static final String MAPDIR = SAVEDIR + "worlds/";
-	public static final String SCRIPTDIR = SAVEDIR + "scripts/";
 	public static final String PLAYERFILE = "/Player" + SAVE_EXT;
 	public static final String LOGFILE = "/log" + SAVE_EXT;
 	public static final String NPCSFILE = "NPCs";
 	public static final String WORLDFILE = "/World" + SAVE_EXT;
-	public static final String ENCOUNTERDIR = "encounter/";
-
+	public static String WORLDNAME = "";
+	
 	public static final int XDEF = 1280;
 	public static final int YDEF = 720;
-
-	public static String WORLDNAME = "";
 
 	public static final float DEFAULT_ZOOM = 1.5F;
 	public static float ZOOM = DEFAULT_ZOOM;

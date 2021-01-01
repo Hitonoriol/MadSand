@@ -1,7 +1,7 @@
 --Is executed once to init all global vars and functions that can be used by any script executed after this one
 
 script_dir = ...;
-structure_header = script_dir .. "structure/structure.lua";
+structure_header = "structure/structure.lua";
 root_package = "hitonoriol.madsand";
 
 player = world.player;

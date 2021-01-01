@@ -9,6 +9,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.properties.Globals;
 
 public class Launcher {
 
@@ -16,11 +17,13 @@ public class Launcher {
 
 	public static void main(String[] args) throws Exception {
 		config = new LwjglApplicationConfiguration();
+		config.title = "MadSand " + Globals.VERSION;
 		config.resizable = false;
 
-		config.addIcon("icon-256.png", FileType.Internal);
-		config.addIcon("icon-64.png", FileType.Internal);
-		config.addIcon("icon-32.png", FileType.Internal);
+		config.addIcon("icons/icon-32.png", FileType.Internal);
+		config.addIcon("icons/icon-64.png", FileType.Internal);
+		config.addIcon("icons/icon-128.png", FileType.Internal);
+		config.addIcon("icons/icon-256.png", FileType.Internal);
 
 		// config.setFromDisplayMode(LwjglApplicationConfiguration.getDesktopDisplayMode());
 
@@ -38,7 +41,7 @@ public class Launcher {
 	final static String debugFlag = "debug";
 	final static String fullscreenFlag = "fullscreen";
 
-	private static void applyArgs(String[] args) throws Exception{
+	private static void applyArgs(String[] args) throws Exception {
 		if (args.length == 0)
 			return;
 
@@ -49,10 +52,10 @@ public class Launcher {
 
 		if (config.fullscreen)
 			config.setFromDisplayMode(LwjglApplicationConfiguration.getDesktopDisplayMode());
-		
+
 		if (!Utils.debugMode) {
-			System.setOut(new PrintStream(new File(Resources.OUTFILE)));
-			System.setErr(new PrintStream(new File(Resources.ERRFILE)));
+			System.setOut(new PrintStream(new File(Resources.OUT_FILE)));
+			System.setErr(new PrintStream(new File(Resources.ERR_FILE)));
 		}
 	}
 }

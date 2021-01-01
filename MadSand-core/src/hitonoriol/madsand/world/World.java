@@ -1,12 +1,12 @@
 package hitonoriol.madsand.world;
 
-import java.io.File;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Timer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -27,6 +27,7 @@ import hitonoriol.madsand.enums.NpcState;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
+import hitonoriol.madsand.properties.WorldGenProp;
 import hitonoriol.madsand.world.worldgen.WorldGen;
 
 public class World {
@@ -240,9 +241,8 @@ public class World {
 
 		Pair coords = worldMap.curWorldPos;
 		String locationScriptPath = LuaUtils.getSectorScriptPath(coords.x, coords.y);
-		File locationScript = new File(MadSand.SCRIPTDIR + locationScriptPath);
 
-		if (!locationScript.exists())
+		if (!Gdx.files.internal(Resources.SCRIPT_DIR + locationScriptPath).exists())
 			return false;
 
 		LuaUtils.executeScript(locationScriptPath);
@@ -383,11 +383,9 @@ public class World {
 	private void switchToEncounter() {
 		inEncounter = true;
 		clearCurLoc();
-		File encounterDir = new File(MadSand.SCRIPTDIR + MadSand.ENCOUNTERDIR);
-		File[] files = encounterDir.listFiles();
-		File encounterScript = files[Utils.rand(files.length)];
 
-		LuaUtils.executeScript(MadSand.ENCOUNTERDIR + encounterScript.getName());
+		LuaUtils.executeScript(Resources.ENCOUNTER_DIR + Utils.randElement(WorldGenProp.encounters) + ".lua");
+		getCurLoc().refreshGraph();
 	}
 
 	public boolean switchLocation(int layer) {

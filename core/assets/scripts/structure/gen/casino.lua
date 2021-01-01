@@ -1,4 +1,4 @@
-local structure = assert(loadfile(structure_header)(..., 4 + math.random(5), 4 + math.random(5)));
+local structure = assert(utils:loadScript(structure_header)(..., 4 + math.random(5), 4 + math.random(5)));
 local map = world:getCurLoc();
 structure:clear();
 local first_tile, second_tile = 49, 50;

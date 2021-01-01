@@ -30,9 +30,9 @@ public class LuaUtils {
 		globals.set("val_utils", CoerceJavaToLua.coerce(new Utils()));
 		globals.set("pair", CoerceJavaToLua.coerce(Pair.getInstance()));
 
-		executeScript("globals.lua", MadSand.SCRIPTDIR);
+		executeScript("globals.lua", Resources.SCRIPT_DIR);
 
-		onAction = GameSaver.readFile(MadSand.SCRIPTDIR + onActionScript, true);
+		onAction = Resources.readInternal(Resources.SCRIPT_DIR + onActionScript);
 	}
 
 	public static void register(String luaName, LuaValue object) {
@@ -40,7 +40,7 @@ public class LuaUtils {
 	}
 
 	public static LuaValue loadScript(String file) {
-		return globals.loadfile(MadSand.SCRIPTDIR + file);
+		return globals.load(Resources.readInternal(Resources.SCRIPT_DIR + file));
 	}
 
 	public static LuaValue executeScript(String file, Object arg) {

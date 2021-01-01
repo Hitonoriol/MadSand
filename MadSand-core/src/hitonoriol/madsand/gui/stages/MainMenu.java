@@ -18,6 +18,7 @@ import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.gui.dialogs.CreateWorldDialog;
 import hitonoriol.madsand.gui.dialogs.LoadWorldDialog;
 import hitonoriol.madsand.gui.dialogs.SettingsDialog;
+import hitonoriol.madsand.properties.Globals;
 
 public class MainMenu extends Stage {
 
@@ -80,7 +81,7 @@ public class MainMenu extends Stage {
 		menuTable.add(loadGameButton).width(BUTTON_WIDTH).row();
 		//menuTable.add(settingsButton).width(BUTTON_WIDTH).row();
 		menuTable.add(exitButton).width(BUTTON_WIDTH).row();
-		menuTable.add(versionLabel).width(BUTTON_WIDTH);
+		menuTable.add(versionLabel).padTop(20).width(BUTTON_WIDTH);
 
 		super.addActor(menuTable);
 
@@ -146,16 +147,9 @@ public class MainMenu extends Stage {
 
 	}
 
+	static String VER_COLOR = "[LIME]";
+
 	private String getVersion() {
-		String verFile = "MadSandData/version.dat";
-		String ver;
-
-		if (!GameSaver.readFile(verFile).equals(""))
-			ver = "\n[GREEN]" + (GameSaver.readFile(verFile));
-		else
-			ver = "\n[GREEN]Version file not found";
-
-		return ver;
-
+		return VER_COLOR + Globals.VERSION;
 	}
 }

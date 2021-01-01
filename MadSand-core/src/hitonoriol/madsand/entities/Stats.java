@@ -169,9 +169,4 @@ public class Stats {
 	public float calcMaxInventoryWeight() {
 		return BASE_MAX_WEIGHT + (get(Stat.Strength) + get(Stat.Dexterity)) * WEIGHT_MULTIPLIER;
 	}
-
-	public boolean rollEncounter() {
-		double chance = 15;
-		return Utils.percentRoll(chance);
-	}
 }

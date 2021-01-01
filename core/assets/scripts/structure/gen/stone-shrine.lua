@@ -1,4 +1,4 @@
-local structure = assert(loadfile(structure_header)(..., 3, 3));
+local structure = assert(utils:loadScript(structure_header)(..., 3, 3));
 
 -- A stone rectangle without corners & with loot in the middle
 

@@ -1,4 +1,4 @@
-local structure = assert(loadfile(structure_header)(..., 10, 10));
+local structure = assert(utils:loadScript(structure_header)(..., 10, 10));
 
 local map = world:getCurLoc();
 map:fillTile(structure.x, structure.y, structure.width, structure.height, 23);	-- Fill & erode camp tiles

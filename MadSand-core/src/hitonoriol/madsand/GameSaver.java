@@ -86,9 +86,8 @@ public class GameSaver {
 		}
 	}
 
-	public static String readFile(String name, boolean withNewline) {
+	public static String readFile(File file, boolean withNewline) {
 		try {
-			File file = new File(name);
 			BufferedReader br = new BufferedReader(new FileReader(file));
 			String lk = "";
 			String l;
@@ -102,6 +101,10 @@ public class GameSaver {
 		} catch (Exception e) {
 			return "";
 		}
+	}
+	
+	public static String readFile(String name, boolean withNewline) {
+		return readFile(new File(name), withNewline);
 	}
 
 	public static String readFile(String name) {
@@ -188,7 +191,7 @@ public class GameSaver {
 		Gui.drawOkDialog(
 				"Couldn't to load this world. \n"
 						+ "Maybe it was saved in older/newer version of the game or some files are corrupted.\n"
-						+ "Check " + Resources.ERRFILE + " for details.",
+						+ "Check " + Resources.ERR_FILE + " for details.",
 				Gui.mainMenu);
 		// MadSand.justStarted = false;
 	}

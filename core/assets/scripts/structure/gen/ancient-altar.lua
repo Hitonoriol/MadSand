@@ -1,4 +1,4 @@
-local structure = assert(loadfile(structure_header)(..., 9, 9));
+local structure = assert(utils:loadScript(structure_header)(..., 9, 9));
 local map = world:getCurLoc();
 local x0, y0 = structure.x + structure.width/2, structure.y + structure.height/2;
 

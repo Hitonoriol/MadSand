@@ -2,6 +2,7 @@ package hitonoriol.madsand.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.inventory.EquipStats;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.EquipSlot;
@@ -178,6 +179,12 @@ public class PlayerStats extends Stats {
 		baseStats.sub(bonus.stats);
 		statBonus -= bonus.getTotalBonus();
 		calcStats();
+	}
+
+	static float BASE_ENCOUNTER_CHANCE = 9.75f;
+
+	public boolean rollEncounter() {
+		return Utils.percentRoll(BASE_ENCOUNTER_CHANCE);
 	}
 
 	@JsonIgnore

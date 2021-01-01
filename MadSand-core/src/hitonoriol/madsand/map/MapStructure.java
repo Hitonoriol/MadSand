@@ -93,7 +93,6 @@ public class MapStructure {
 		try {
 			return script.call(CoerceJavaToLua.coerce(this)).toboolean();
 		} catch (Exception e) { // This means that assert(x + w <= [map width] && y + h <= [map height]) failed
-			Utils.out("Oopsie, couldn't build structure: " + script);
 			return false;
 		}
 	}

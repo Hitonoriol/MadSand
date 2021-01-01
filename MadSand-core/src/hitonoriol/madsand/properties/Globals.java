@@ -1,15 +1,15 @@
 package hitonoriol.madsand.properties;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.quest.ProceduralQuest;
 
 public class Globals {
+	public static final String VERSION = "Alpha v0.46-pre"; 
+	
 	public static String TRAVEL_ITEM = "travelItem";
 	public static String CURRENCY = "currencyId";
 
@@ -23,7 +23,7 @@ public class Globals {
 	public HashMap<ProceduralQuest.Type, ArrayList<String>> proceduralQuestText;
 
 	public static void loadGlobals() throws Exception {
-		instance = Resources.mapper.readValue(new File(MadSand.GLOBALSFILE), Globals.class);
+		instance = Resources.mapper.readValue(Resources.readInternal(Resources.GLOBALS_FILE), Globals.class);
 	}
 
 	public static Globals instance() {
