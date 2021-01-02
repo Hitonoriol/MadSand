@@ -72,39 +72,34 @@ public class Pair {
 		return this;
 	}
 
+	public Pair fromDirection(Direction direction) {
+		switch (direction) {
+		case UP:
+			return set(0, 1);
+		case DOWN:
+			return set(0, -1);
+		case LEFT:
+			return set(-1, 0);
+		case RIGHT:
+			return set(1, 0);
+		case UP_LEFT:
+			return set(-1, 1);
+		case UP_RIGHT:
+			return set(1, 1);
+		case DOWN_LEFT:
+			return set(-1, -1);
+		case DOWN_RIGHT:
+			return set(1, -1);
+		}
+		return this;
+	}
+
 	public static Pair getInstance() {
 		return instance;
 	}
 
 	public static Pair directionToCoord(Direction arg) {
-		Pair ret = new Pair(0, 0);
-		switch (arg) {
-		case UP:
-			ret = new Pair(0, 1);
-			break;
-		case DOWN:
-			ret = new Pair(0, -1);
-			break;
-		case LEFT:
-			ret = new Pair(-1, 0);
-			break;
-		case RIGHT:
-			ret = new Pair(1, 0);
-			break;
-		case UP_LEFT:
-			ret = new Pair(-1, 1);
-			break;
-		case UP_RIGHT:
-			ret = new Pair(1, 1);
-			break;
-		case DOWN_LEFT:
-			ret = new Pair(-1, -1);
-			break;
-		case DOWN_RIGHT:
-			ret = new Pair(1, -1);
-			break;
-		}
-		return ret;
+		return new Pair().fromDirection(arg);
 	}
 
 	public Direction toDirection() {

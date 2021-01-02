@@ -11,7 +11,7 @@ for i = 0, math.random(8) do
 	map:spawnNpc(val_utils:oneOf("37,38,39"), structure:getFreeTile());
 end
 
-for i = 0, math.random(12) do
+for i = 0, math.random(7) do
 	map:addObject(structure:getFreeTile(), val_utils:oneOf("169,170"));
 end
 

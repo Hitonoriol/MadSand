@@ -122,7 +122,7 @@ public class Mouse {
 
 			if (npc.state == NpcState.Hostile)
 				info += npc.spottedMsg();
-			else if (npc.canGiveQuests && npc.isNeutral())
+			else if ((npc.canGiveQuests || npc.type == NpcType.QuestMaster) && npc.isNeutral())
 				info += "* Might need some help";
 
 			if (npc.animalProductWorker != null)

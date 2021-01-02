@@ -141,22 +141,30 @@ public class Utils {
 		return JRand.word().syllables(1, MAX_SYLLABLES).capitalize().gen();
 	}
 
-	final static float S_MINUTE = 60;
-	final static float S_HOUR = 3600;
-	final static float S_DAY = 86400;
+	final static int S_MINUTE = 60;
+	final static int S_HOUR = 3600;
+	final static int S_DAY = 86400;
+	final static String TIME_DELIM = ":";
+
+	public static String timeString(long seconds, boolean verbose) {
+		int hours = (int) (seconds / S_HOUR);
+		int minutes = (int) ((seconds % S_HOUR) / S_MINUTE);
+		int secs = (int) (seconds % S_MINUTE);
+
+		if (!verbose)
+			return hours + TIME_DELIM + minutes + TIME_DELIM + secs;
+
+		String time = secs + " seconds";
+		if (minutes > 0)
+			time = minutes + " minutes " + time;
+		if (hours > 0)
+			time = hours + " hours " + time;
+
+		return time;
+	}
 
 	public static String timeString(long seconds) {
-		if (seconds < S_MINUTE)
-			return seconds + " seconds";
-
-		else if (seconds < S_HOUR)
-			return round(((float) seconds / S_MINUTE)) + " minutes";
-
-		else if (seconds < S_DAY)
-			return round(((float) seconds / S_HOUR)) + " hours";
-
-		else
-			return round(((float) seconds / S_DAY)) + " days";
+		return timeString(seconds, true);
 	}
 
 	public static double log(double value, double base) {

@@ -141,17 +141,18 @@
 		"friendly" : true
 	},
 	"9" : {
-		"name" : "Scout",
-		"hp" : 160,
+		"name" : "Miner",
+		"hp" : 25,
 		"strength" : 5,
 		"accuracy" : 10,
 		"dexterity" : 0,
 		"rewardExp" : 36,
 		"loot" : null,
 		"faction" : "Partisans",
-		"type" : "Regular",
-		"questList" : null,
-		"spawnOnce" : false,
+		"type" : "QuestMaster",
+		"questList" : [ 11 ],
+		"defaultState": "Still",
+		"spawnOnce" : true,
 		"friendly" : true
 	},
 	"10" : {
@@ -192,7 +193,7 @@
 		"loot" : null,
 		"faction" : "Partisans",
 		"type" : "QuestMaster",
-		"questList" : [6, 8],
+		"questList" : [6, 8, 10],
 		"spawnOnce" : true,
 		"friendly" : true
 	},

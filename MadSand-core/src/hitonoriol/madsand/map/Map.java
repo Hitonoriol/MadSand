@@ -700,9 +700,9 @@ public class Map {
 	}
 
 	boolean objectExists(int x, int y) {
-		if (correctCoords(coords.set(x, y))) {
+		if (correctCoords(coords.set(x, y)))
 			return !getObject(x, y).equals(nullObject);
-		} else
+		else
 			return false;
 	}
 
@@ -962,6 +962,10 @@ public class Map {
 		return getNpc(coords.x, coords.y);
 	}
 
+	public boolean npcExists(int x, int y) {
+		return !getNpc(x, y).equals(nullNpc);
+	}
+
 	public boolean moveNpc(Npc npc, int x, int y) { // moves npc only on the grid(not on the screen) to process smooth movement;
 		//should be called by an npc before changing its own position.
 		int xold = npc.x, yold = npc.y;
@@ -1107,6 +1111,31 @@ public class Map {
 
 		Utils.out("Successfully generated " + name + " at " + coords);
 		return new Pair(coords);
+	}
+
+	public void delAll(int x, int y) {
+		removeNpc(x, y);
+		delObject(x, y);
+	}
+
+	public boolean isFreeTile(int x, int y) {
+		return !npcExists(x, y) && !objectExists(x, y);
+	}
+
+	public boolean isFreeTile(Pair coords) {
+		return isFreeTile(coords.x, coords.y);
+	}
+
+	public Pair getFreeTileNear(Pair coords) {
+		Pair direction = new Pair();
+		Pair freeTile = new Pair();
+		Collections.shuffle(Direction.directions);
+
+		for (Direction dir : Direction.directions)
+			if (isFreeTile(freeTile.set(coords).add(direction.fromDirection(dir))))
+				return freeTile;
+
+		return Pair.nullPair;
 	}
 
 	@SuppressWarnings("unchecked")

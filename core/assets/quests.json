@@ -266,6 +266,48 @@
 	"rewardItems" : "21/40",
 	"removeOnCompletion" : "-1",
 	"repeatable" : false
+},
+
+"10" : {
+	"@type" : "Quest",
+	"exp" : 95,
+	"name" : "Pickletastic",
+	"startMsg" : "
+		Good day to you, {PLAYER}. I've been craving some pickles lately... [And how can I help?] =>
+		That's the right question! Grow me 100 cucumbers and I'll reward you with riches you've never seen before...
+		Okay, maybe I'm exaggerating a little, but what do you think, will 750 coins be ok for you?
+	",
+
+	"endMsg" : "Thank you for your help! Now I'll be able to make a ton of pickles! Here's your reward.",
+
+	"reqMsg" : "Bring me 100 cucumbers.",
+	"reqItems" : "39/100",
+	"giveItems" : "n",
+	"rewardItems" : "21/750",
+	"removeOnCompletion" : "-1",
+	"repeatable" : false,
+	"previousQuest" : 6
+},
+
+"11" : {
+	"@type" : "Quest",
+	"exp" : 115,
+	"name" : "Iron ore",
+	"startMsg" : "
+		Hey, are you going into that mine? Hm... Then I have a little task for you. [I'm listening] =>
+		I managed to mine some coal, but didn't find any iron. So can you mine 30 iron ore for me? I'll smelt it into ingots (2 from each ore) and take only 10 for myself, so 50 are yours. Deal? [Sounds okay]=>
+		## Click on the mine entrance to descend to the mines.
+		* You'll need a pickaxe to mine iron ore.
+	",
+
+	"endMsg" : "Whoa, you're back. Let's get down to smelting...=>Phew, here you go, your 50 iron ingots. Thanks for the hard work!",
+
+	"reqMsg" : "Mine 30 iron ore.",
+	"reqItems" : "23/30",
+	"giveItems" : "n",
+	"rewardItems" : "72/50",
+	"removeOnCompletion" : "-1",
+	"repeatable" : false
 }
 
 }

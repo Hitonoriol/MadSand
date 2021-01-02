@@ -1,10 +1,14 @@
 package hitonoriol.madsand.enums;
 
+import java.util.Arrays;
+import java.util.List;
+
 import hitonoriol.madsand.Utils;
 
 public enum Direction {
 	UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT;
 
+	public static List<Direction> directions = Arrays.asList(Direction.values());
 	public static Direction[] baseValues = { UP, DOWN, LEFT, RIGHT };
 
 	public boolean isBase() {
