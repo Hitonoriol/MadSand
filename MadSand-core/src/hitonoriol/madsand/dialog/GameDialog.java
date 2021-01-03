@@ -98,6 +98,7 @@ public class GameDialog extends Dialog {
 		Dialog ret = super.show(stage);
 		Gui.gameUnfocus();
 		Gui.overlay.hideTooltip();
+		Gui.overlay.gameContextMenu.setVisible(false);
 
 		return ret;
 	}

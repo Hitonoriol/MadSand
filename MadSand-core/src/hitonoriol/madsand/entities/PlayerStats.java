@@ -5,9 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.inventory.EquipStats;
 import hitonoriol.madsand.entities.inventory.Item;
-import hitonoriol.madsand.enums.EquipSlot;
-import hitonoriol.madsand.enums.Skill;
-import hitonoriol.madsand.enums.Stat;
 
 public class PlayerStats extends Stats {
 

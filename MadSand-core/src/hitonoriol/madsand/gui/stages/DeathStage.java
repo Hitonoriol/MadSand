@@ -19,7 +19,7 @@ public class DeathStage extends Stage {
 	TextButton respawnButton;
 	
 	public DeathStage() {
-		super();
+		super(Gui.uiViewport);
 		skin = Gui.skin;
 		
 		respawnButton = new TextButton("Respawn", skin);

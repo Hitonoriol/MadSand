@@ -1,4 +1,4 @@
-package hitonoriol.madsand.enums;
+package hitonoriol.madsand.entities;
 
 public enum Skill {
 	None, Level, Melee, Evasion, Woodcutting, Gathering, Mining, Digging, Survival, Crafting, Farming, Fishing;

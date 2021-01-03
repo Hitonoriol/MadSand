@@ -28,6 +28,7 @@ import hitonoriol.madsand.dialog.DialogChainGenerator;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.entities.inventory.ItemType;
 import hitonoriol.madsand.entities.inventory.trade.TradeInventoryUI;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.enums.*;
@@ -47,6 +48,7 @@ import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.world.Location;
+import hitonoriol.madsand.world.WorkerType;
 
 public class Player extends Entity {
 	@JsonIgnore
@@ -1132,23 +1134,11 @@ public class Player extends Entity {
 	}
 
 	public void hideInventory() {
-		Gdx.input.setInputProcessor(Gui.overlay);
-		Gui.gameResumeFocus();
-		MadSand.state = GameState.GAME;
 		inventory.inventoryUI.hide();
-		Gui.inventoryActive = false;
-		inventory.clearContextMenus();
-		Gui.overlay.showTooltip();
 	}
 
 	public void showInventory() {
-		inventory.inventoryUI.toggleVisible();
-		Gui.overlay.gameContextMenu.setVisible(false);
-		Gui.gameUnfocus();
-		Gdx.input.setInputProcessor(Gui.overlay);
-		MadSand.state = GameState.INVENTORY;
-		Gui.inventoryActive = true;
-		Gui.overlay.hideTooltip();
+		inventory.inventoryUI.show();
 	}
 
 	@JsonGetter("equipment")

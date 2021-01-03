@@ -1,4 +1,7 @@
-package hitonoriol.madsand.enums;
+package hitonoriol.madsand.entities.inventory;
+
+import hitonoriol.madsand.entities.EquipSlot;
+import hitonoriol.madsand.entities.Skill;
 
 public enum ItemType {
 	None,

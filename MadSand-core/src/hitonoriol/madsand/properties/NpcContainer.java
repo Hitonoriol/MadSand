@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import hitonoriol.madsand.entities.Faction;
 import hitonoriol.madsand.entities.LootTable;
-import hitonoriol.madsand.enums.Faction;
-import hitonoriol.madsand.enums.NpcState;
-import hitonoriol.madsand.enums.NpcType;
+import hitonoriol.madsand.entities.NpcState;
+import hitonoriol.madsand.entities.NpcType;
 import hitonoriol.madsand.enums.TradeCategory;
-import hitonoriol.madsand.enums.WorkerType;
+import hitonoriol.madsand.world.WorkerType;
 
 public class NpcContainer {
 	public String name;

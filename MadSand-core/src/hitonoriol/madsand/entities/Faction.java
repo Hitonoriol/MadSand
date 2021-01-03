@@ -1,4 +1,4 @@
-package hitonoriol.madsand.enums;
+package hitonoriol.madsand.entities;
 
 import java.util.Arrays;
 import java.util.List;

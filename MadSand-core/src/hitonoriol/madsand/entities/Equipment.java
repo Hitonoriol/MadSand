@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
-import hitonoriol.madsand.enums.EquipSlot;
 
 public class Equipment {
 	private HashMap<EquipSlot, Item> equipped = new HashMap<>();

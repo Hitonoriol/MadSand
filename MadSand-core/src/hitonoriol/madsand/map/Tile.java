@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Resources;
-import hitonoriol.madsand.enums.ItemType;
+import hitonoriol.madsand.entities.inventory.ItemType;
 import hitonoriol.madsand.properties.TileProp;
 
 public class Tile {

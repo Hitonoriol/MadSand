@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Mouse;
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.enums.ItemType;
 import hitonoriol.madsand.world.World;
 
 public class InventoryUICell extends ItemUI {

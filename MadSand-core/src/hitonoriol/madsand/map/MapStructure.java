@@ -77,7 +77,7 @@ public class MapStructure {
 	}
 
 	public void fillTile(int id) {
-		map.fillTile(x, y, width, height, id);
+		map.fillTile(x, y, width - 1, height - 1, id);
 	}
 
 	public void clear() {

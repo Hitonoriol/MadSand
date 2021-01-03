@@ -23,13 +23,13 @@ import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Mouse;
 import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.entities.EquipSlot;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.PlayerStats;
+import hitonoriol.madsand.entities.Skill;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.quest.Quest;
-import hitonoriol.madsand.enums.EquipSlot;
 import hitonoriol.madsand.enums.GameState;
-import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.gui.dialogs.BuildDialog;
 import hitonoriol.madsand.gui.dialogs.CharacterCreationDialog;
 import hitonoriol.madsand.gui.dialogs.CharacterInfoWindow;
@@ -51,7 +51,6 @@ import hitonoriol.madsand.world.World;
 
 public class Overlay extends Stage {
 	Skin skin;
-	static float SIDEBAR_PADDING = 100;
 	static float SIDEBAR_XPADDING = 5;
 
 	Table overlayTable = new Table();
@@ -59,6 +58,7 @@ public class Overlay extends Stage {
 	public CharacterInfoWindow statWindow;
 	public CharacterCreationDialog charCreateDialog;
 
+	private Table topTable = new Table();
 	public GameTooltip gameTooltip;
 	public GameContextMenu gameContextMenu;
 	public ActionButton actionButton;
@@ -78,7 +78,7 @@ public class Overlay extends Stage {
 	static final int OVSTAT_COUNT = 6;
 
 	public Overlay() {
-		super();
+		super(Gui.uiViewport);
 		skin = Gui.skin;
 		initMouseListeners();
 
@@ -87,12 +87,10 @@ public class Overlay extends Stage {
 		gameContextMenu = new GameContextMenu();
 		gameLog = new GameLog();
 		bottomMenu = new OverlayBottomMenu(this);
+		equipmentSidebar = new EquipmentSidebar();
 
 		initOverlayTable();
-
-		equipmentSidebar = new EquipmentSidebar();
-		equipmentSidebar.setPosition(this.getWidth() - SIDEBAR_XPADDING, equipmentSidebar.getHeight() + SIDEBAR_PADDING,
-				Align.topRight);
+		updateWidgetPositions();
 
 		Mouse.tooltipContainer = gameTooltip;
 
@@ -103,8 +101,14 @@ public class Overlay extends Stage {
 		super.addActor(actionButton);
 	}
 
-	private void initMouseListeners() {
+	public void updateWidgetPositions() {
+		equipmentSidebar.setPosition(this.getWidth() - SIDEBAR_XPADDING,
+				equipmentSidebar.getHeight() + (this.getHeight() - equipmentSidebar.getHeight()) * 0.5f,
+				Align.topRight);
+		overlayTable.getCell(topTable).width(this.getWidth());
+	}
 
+	private void initMouseListeners() {
 		super.addListener(new ClickListener(Buttons.LEFT) {
 			private boolean ignoreClick = false;
 
@@ -152,7 +156,6 @@ public class Overlay extends Stage {
 	float ENTRY_PAD = 5;
 
 	private void initOverlayTable() {
-		Table topTable = new Table();
 		topTable.setSize(Gdx.graphics.getWidth(), StatProgressBar.HEIGHT);
 		topTable.setBackground(Gui.darkBackgroundSizeable);
 		topTable.align(Align.left);
@@ -349,4 +352,5 @@ public class Overlay extends Stage {
 				: " @ Sector (" + MadSand.world.getCurWPos() + ")");
 
 	}
+
 }

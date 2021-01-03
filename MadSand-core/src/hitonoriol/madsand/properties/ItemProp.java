@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.inventory.Item;
-import hitonoriol.madsand.enums.ItemType;
+import hitonoriol.madsand.entities.inventory.ItemType;
 import hitonoriol.madsand.map.CropGrowthStageContainer;
 
 public class ItemProp {

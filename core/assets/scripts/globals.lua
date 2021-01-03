@@ -9,9 +9,10 @@ stats = player.stats;
 
 stamina_tutorial = "LowStamina";
 travel_tutorial = "Travel";
+dungeon_tutorial = "DungeonKey";
 
 show_tutorial = function(name, condition)
-	if (condition() and not player:luaActionDone(name)) then
+	if (not player:luaActionDone(name) and condition()) then
 		tutorial:show(name);
 		player:registerLuaAction(name);
 	end

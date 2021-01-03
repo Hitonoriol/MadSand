@@ -1,4 +1,6 @@
-package hitonoriol.madsand.enums;
+package hitonoriol.madsand.entities;
+
+import hitonoriol.madsand.entities.inventory.ItemType;
 
 public enum EquipSlot {
 	Head(0, "Head"), Chest(1, "Chest"), Legs(2, "Legs"), Feet(3, "Feet"),

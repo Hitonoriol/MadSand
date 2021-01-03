@@ -30,12 +30,12 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import hitonoriol.madsand.containers.AnimationContainer;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.entities.Skill;
 import hitonoriol.madsand.entities.SkillContainer;
 import hitonoriol.madsand.entities.SkillValue;
 import hitonoriol.madsand.entities.TradeListContainer;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.quest.Quest;
-import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.map.ProductionStation;
 import hitonoriol.madsand.map.Tile;

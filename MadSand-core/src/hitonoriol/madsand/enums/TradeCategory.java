@@ -1,11 +1,15 @@
 package hitonoriol.madsand.enums;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import hitonoriol.madsand.Utils;
 
 public enum TradeCategory {
-	All, // Include all categories
-	Random, // Roll a random category
-	Trash, // useless items
+	All, // Flag: Include items from all categories
+	Random, // Flag: Roll a random category
+	Trash, // Useless items
 
 	Food,
 	Potions,
@@ -16,18 +20,20 @@ public enum TradeCategory {
 	Building,
 	Materials;
 
+	public static List<TradeCategory> rollableCategories = new ArrayList<>(Arrays.asList(values()));
+	static {
+		rollableCategories.remove(All);
+		rollableCategories.remove(Random);
+		rollableCategories.remove(Trash);
+	}
+
 	public boolean isFlag() {
 		return this.equals(TradeCategory.Random) ||
 				this.equals(TradeCategory.All);
 	}
 
-	private static TradeCategory categories[] = values();
-
 	public static TradeCategory roll() {
-		TradeCategory category = TradeCategory.All;
-		while (category.isFlag())
-			category = categories[Utils.rand(categories.length)];
-		return category;
+		return Utils.randElement(rollableCategories);
 	}
 
 }

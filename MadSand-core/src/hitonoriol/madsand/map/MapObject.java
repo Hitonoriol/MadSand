@@ -9,8 +9,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
-import hitonoriol.madsand.enums.ItemType;
-import hitonoriol.madsand.enums.Skill;
+import hitonoriol.madsand.entities.Skill;
+import hitonoriol.madsand.entities.inventory.ItemType;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
 import me.xdrop.jrand.JRand;

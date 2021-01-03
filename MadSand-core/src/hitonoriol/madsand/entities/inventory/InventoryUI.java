@@ -3,7 +3,6 @@ package hitonoriol.madsand.entities.inventory;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -12,18 +11,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
+import hitonoriol.madsand.world.World;
 
-public class InventoryUI {
-
-	Table invContainer;
-	Table invTable;
-	AutoFocusScrollPane invScroll;
-	Table invScrollTable;
-	Label header;
-	public TextButton craftMenuButton;
-
-	int stacks = 0;
+public class InventoryUI extends GameDialog {
 
 	int ITEMS_PER_ROW = 5;
 	int WIDTH = 400;
@@ -34,7 +26,18 @@ public class InventoryUI {
 	float BUTTON_WIDTH = 250;
 	float BUTTON_HEIGHT = 50;
 
+	Table invContainer;
+	Table invTable;
+	AutoFocusScrollPane invScroll;
+	Table invScrollTable;
+	Label header;
+	public TextButton craftMenuButton;
+
+	boolean dialogActive;
+	int stacks = 0;
+
 	public InventoryUI() {
+		super(Gui.overlay);
 		setUpInventory();
 	}
 
@@ -60,14 +63,15 @@ public class InventoryUI {
 		invScroll.setScrollingDisabled(true, false);
 
 		invContainer.add(header).pad(10).fillY().align(Align.center).row();
-		invContainer.setSize(WIDTH + OFFSET, HEIGHT);
-		invContainer.setPosition(Gdx.graphics.getWidth() / 2 - WIDTH / 2, Gdx.graphics.getHeight() / 2 - HEIGHT / 2);
 		invContainer.add(invScroll).size(WIDTH, HEIGHT).row();
 		invContainer.add(craftMenuButton).size(BUTTON_WIDTH, BUTTON_HEIGHT).align(Align.center).pad(BUTTON_PADDING)
 				.row();
-		invContainer.setVisible(false);
 
-		Gui.overlay.addActor(invContainer);
+		super.add(invContainer)
+				.width(WIDTH + OFFSET)
+				.height(HEIGHT + header.getHeight() + BUTTON_HEIGHT + BUTTON_PADDING * 3);
+		super.setBackground(Gui.transparency);
+
 		stacks = 0;
 
 		craftMenuButton.addListener(new ChangeListener() {
@@ -75,10 +79,6 @@ public class InventoryUI {
 				Gui.openCraftMenu(0);
 			}
 		});
-	}
-
-	void remove() {
-		invContainer.remove();
 	}
 
 	void refresh(Set<Entry<Item, InventoryUICell>> set) {
@@ -98,15 +98,15 @@ public class InventoryUI {
 	}
 
 	public void hide() {
-		invContainer.setVisible(false);
+		super.remove();
+		Gui.inventoryActive = false;
+		World.player.inventory.clearContextMenus();
 	}
 
-	public void toggleVisible() {
-		invContainer.setVisible(!invContainer.isVisible());
-	}
-
-	boolean isVisible() {
-		return invContainer.isVisible();
+	public void show() {
+		super.show();
+		Gui.inventoryActive = true;
+		dialogActive = false;
 	}
 
 	void setHeader(String str) {

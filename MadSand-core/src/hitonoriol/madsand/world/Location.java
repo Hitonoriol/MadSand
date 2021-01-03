@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
-import hitonoriol.madsand.enums.Faction;
+import hitonoriol.madsand.entities.Faction;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.world.Settlement.Status;
 

@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Utils;
-import hitonoriol.madsand.enums.Skill;
+import hitonoriol.madsand.entities.Skill;
 import hitonoriol.madsand.map.Loot;
 
 public class Inventory {

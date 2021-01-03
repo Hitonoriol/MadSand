@@ -9,7 +9,7 @@ import com.github.czyzby.noise4j.map.generator.util.Generators;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
-import hitonoriol.madsand.enums.Faction;
+import hitonoriol.madsand.entities.Faction;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.properties.WorldGenProp;

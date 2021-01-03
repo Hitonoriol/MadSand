@@ -1,16 +1,17 @@
 {
 	"GameStart" : "
-		#Tutorial# Welcome to MadSand, {PLAYER}![What? How do you know my name?]=>
-		#Tutorial# This game *someday will be* an open-world survival roguelike.{br}
+		%Tutorial%
+		Welcome to MadSand, {PLAYER}![What? How do you know my name?]=>
+		This game *someday will be* an open-world survival roguelike.{br}
 			It's in early stage of development, so feel free to explore and provide feedback and suggestions 
 			about what you see in the game or what you want to see in the future.[Mkaaay...]=>
-		#Tutorial# If I were you, I'd start from exploring and interacting with things. [Oh, ok]=>
-		#Tutorial# To interact with an Object or NPC, approach it and click it with LMB or right click it and choose \"interact\" option, or, 
+		If I were you, I'd start from exploring and interacting with things. [Oh, ok]=>
+		To interact with an Object or NPC, approach it and click it with LMB or right click it and choose \"interact\" option, or, 
 			for keyboard lovers - turn your character to it using arrow keys and press enter. [Understood]=>
-		#Tutorial# Via interaction with objects you can gather resources that can be crafted into something or sold to a trader. 
+		Via interaction with objects you can gather resources that can be crafted into something or sold to a trader. 
 			You'll have to gather all the needed components for a certain item to unlock a craft recipe for it.[Cool, I'll try it]=>
-		#Tutorial# And if you decide to interact with an NPC, you can talk to them by left clicking. Some NPCs can give you various tasks and some can trade with you.=>
-		#Tutorial# And almost forgot, here are the controls:[Show 'em to me!]=>
+		And if you decide to interact with an NPC, you can talk to them by left clicking. Some NPCs can give you various tasks and some can trade with you.=>
+		And almost forgot, here are the controls:[Show 'em to me!]=>
 		#Controls#
 			* WASD or LMB click - walk around{br}
 			* Middle mouse button or Arrow keys - turn around without moving{br}
@@ -24,6 +25,7 @@
 	",
 	
 	"LowStamina" : "
+		%Low Stamina%
 		Easy there, {PLAYER}! You are about to deplete your stamina! [Oops. What's dat?] =>
 		Stamina is used to gather resources, or use items. It regenerates once per time tick when your satiation level (food) is above certain percent. 
 		If you deplete stamina, you won't be able to do any stamina-dependent activities until your stamina is at least partially replenished. [Oh. I see.] =>
@@ -31,7 +33,16 @@
 	",
 	
 	"Travel" : "
-		To travel to an unexplored area you will need a Travelling kit. You can buy one from a trader or craft it from leather. [Nice]=>
-		You don't need a Travelling kit to travel between already explored sectors, though.
+		%Travelling Kits%
+		Travelling kits are used to travel to a previously unexplored area.{br}
+		You can buy one from a trader or craft it from leather. [Nice]
+	",
+	
+	"DungeonKey" : "
+		%Dungeon Keys%
+		You've just found your first dungeon key!{br}
+		They're used to unlock dungeon entrances in certain locations. =>
+		You can find dungeon keys laying on altar pedestals in Dead Lands biome.{br}
+		To take the key, you'll have to break the pedestal with a hammer or a pickaxe.
 	"
 }

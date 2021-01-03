@@ -5,7 +5,6 @@ import java.util.HashMap;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Utils;
-import hitonoriol.madsand.enums.Stat;
 
 public class StatContainer extends HashMap<Stat, Integer>{
 	static final int STAT_RAND_MAX = 8;

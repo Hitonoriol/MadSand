@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.enums.GameState;
@@ -56,6 +57,7 @@ public class Gui {
 
 	public static Skin skin;
 
+	public static ScreenViewport uiViewport = new ScreenViewport();
 	public static Overlay overlay;
 	public static MainMenu mainMenu;
 	public static DeathStage deathStage;

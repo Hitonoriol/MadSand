@@ -12,12 +12,12 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.dialog.GameDialog;
+import hitonoriol.madsand.entities.Faction;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.Reputation;
+import hitonoriol.madsand.entities.Skill;
 import hitonoriol.madsand.entities.SkillContainer;
-import hitonoriol.madsand.enums.Faction;
-import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.gui.widgets.StatLabels;
 import hitonoriol.madsand.gui.widgets.StatProgressBar;

@@ -40,6 +40,7 @@ public class CraftMenu extends Stage {
 	Label titleLabel;
 
 	public CraftMenu() {
+		super(Gui.uiViewport);
 		craftTable = new Table();
 		containerTable = new Table();
 		skin = Gui.skin;
@@ -133,7 +134,7 @@ public class CraftMenu extends Stage {
 		backBtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				if (craftStationId == 0)
-					MadSand.switchStage(GameState.INVENTORY, Gui.overlay);
+					MadSand.switchStage(GameState.GAME, Gui.overlay);
 				else
 					MadSand.reset();
 			}

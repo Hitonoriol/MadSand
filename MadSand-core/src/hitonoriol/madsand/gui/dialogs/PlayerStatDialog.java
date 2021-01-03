@@ -11,8 +11,8 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.dialog.GameDialog;
+import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.entities.StatContainer;
-import hitonoriol.madsand.enums.Stat;
 import hitonoriol.madsand.gui.widgets.StatLabels;
 import hitonoriol.madsand.world.World;
 import me.xdrop.jrand.JRand;

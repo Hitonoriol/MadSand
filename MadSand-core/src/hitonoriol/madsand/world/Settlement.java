@@ -8,12 +8,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.entities.Skill;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
-import hitonoriol.madsand.enums.ItemType;
-import hitonoriol.madsand.enums.Skill;
+import hitonoriol.madsand.entities.inventory.ItemType;
 import hitonoriol.madsand.enums.TradeCategory;
-import hitonoriol.madsand.enums.WorkerType;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.NpcProp;

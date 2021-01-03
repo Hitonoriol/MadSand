@@ -1,4 +1,4 @@
-package hitonoriol.madsand.enums;
+package hitonoriol.madsand.world;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.entities.Skill;
 
 public enum WorkerType {
 	Sweeper(100),

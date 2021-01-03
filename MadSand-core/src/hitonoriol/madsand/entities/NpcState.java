@@ -1,4 +1,4 @@
-package hitonoriol.madsand.enums;
+package hitonoriol.madsand.entities;
 
 public enum NpcState {
 	Still, Idle, Hostile 

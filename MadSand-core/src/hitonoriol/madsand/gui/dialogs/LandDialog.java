@@ -16,15 +16,15 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.dialog.GameDialog;
+import hitonoriol.madsand.entities.Faction;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.inventory.ItemUI;
-import hitonoriol.madsand.enums.Faction;
-import hitonoriol.madsand.enums.WorkerType;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.properties.WorldGenProp;
 import hitonoriol.madsand.world.Location;
 import hitonoriol.madsand.world.Settlement;
+import hitonoriol.madsand.world.WorkerType;
 import hitonoriol.madsand.world.World;
 import hitonoriol.madsand.world.Settlement.WorkerContainer;
 

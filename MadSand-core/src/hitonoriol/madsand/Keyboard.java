@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 import hitonoriol.madsand.enums.Direction;
@@ -24,14 +26,31 @@ public class Keyboard {
 		}
 
 		pollDebugKeys();
-		pollInventoryKey();
 		pollFunctionKeys();
 	}
-	
+
+	public static void initKeyListener() {
+		Gui.overlay.addListener(new InputListener() {
+			@Override
+			public boolean keyUp(InputEvent event, int keycode) {
+				switch (keycode) {
+				case Keys.E:
+					Gui.toggleInventory();
+					break;
+
+				default:
+					return false;
+				}
+
+				return true;
+			}
+		});
+	}
+
 	public static boolean inputIgnored() {
 		return ignoreInput;
 	}
-	
+
 	public static void stopInput() {
 		ignoreInput = true;
 	}
@@ -39,24 +58,19 @@ public class Keyboard {
 	public static void resumeInput() {
 		ignoreInput = false;
 	}
-	
+
 	public static void pollScreenshotKey() {
 		if (Gdx.input.isKeyJustPressed(Keys.F12))
 			Resources.takeScreenshot();
 	}
 
-	public static void pollInventoryKey() {
-		if (Gdx.input.isKeyJustPressed(Keys.E))
-			Gui.toggleInventory();
-	}
-
 	private static void pollFunctionKeys() {
 		if (Gdx.input.isKeyJustPressed(Keys.F11)) {
-			Boolean fullScreen = Boolean.valueOf(Gdx.graphics.isFullscreen());
+			boolean fullScreen = Gdx.graphics.isFullscreen();
 			Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
-			if (fullScreen.booleanValue()) {
+			if (fullScreen)
 				Gdx.graphics.setWindowedMode(1280, 720);
-			} else
+			else
 				Gdx.graphics.setFullscreenMode(currentMode);
 		}
 
@@ -70,10 +84,10 @@ public class Keyboard {
 
 		if ((Gdx.input.isKeyJustPressed(Keys.L)))
 			Gui.overlay.bottomMenu.landButton.toggle();
-		
+
 		if ((Gdx.input.isKeyJustPressed(Keys.G)))
 			GameSaver.saveWorld();
-		
+
 		if (Gdx.input.isKeyJustPressed(Keys.J))
 			Gui.overlay.showJournal();
 

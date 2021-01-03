@@ -6,11 +6,11 @@ import com.badlogic.gdx.math.Vector3;
 
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.entities.Npc;
+import hitonoriol.madsand.entities.NpcState;
+import hitonoriol.madsand.entities.NpcType;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.enums.GameState;
-import hitonoriol.madsand.enums.NpcState;
-import hitonoriol.madsand.enums.NpcType;
-import hitonoriol.madsand.enums.Stat;
 import hitonoriol.madsand.gui.widgets.GameTooltip;
 import hitonoriol.madsand.map.Crop;
 import hitonoriol.madsand.map.Loot;

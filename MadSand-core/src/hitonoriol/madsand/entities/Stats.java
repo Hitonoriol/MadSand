@@ -8,8 +8,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.*;
 
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.enums.Direction;
-import hitonoriol.madsand.enums.Faction;
-import hitonoriol.madsand.enums.Stat;
 
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
 @JsonSubTypes({ @Type(PlayerStats.class) })

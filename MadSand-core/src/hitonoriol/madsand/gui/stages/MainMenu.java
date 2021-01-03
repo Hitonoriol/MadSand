@@ -42,7 +42,7 @@ public class MainMenu extends Stage {
 	Label versionLabel;
 
 	public MainMenu() {
-		super();
+		super(Gui.uiViewport);
 		skin = Gui.skin;
 
 		newGameButton = new TextButton("New game", skin);

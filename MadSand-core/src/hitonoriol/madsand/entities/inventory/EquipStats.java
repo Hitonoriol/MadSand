@@ -4,9 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.entities.StatContainer;
-import hitonoriol.madsand.enums.ItemType;
-import hitonoriol.madsand.enums.Stat;
 
 public class EquipStats {
 	public int lvl;

@@ -91,6 +91,7 @@ public class MadSand extends Game {
 		Utils.out("Render area: " + renderArea.length);
 		Utils.init();
 		Gui.init();
+		Keyboard.initKeyListener();
 		GameTextSubstitutor.init();
 
 		initNewGame();
@@ -117,18 +118,11 @@ public class MadSand extends Game {
 	}
 
 	public static void switchStage(GameState state, Stage stage) {
-
-		if (state != GameState.INVENTORY)
-			World.player.hideInventory();
-
 		if (Gui.gameUnfocused)
 			Gui.overlay.gameContextMenu.setVisible(false);
 
-		if (state == GameState.GAME)
+		else if (state == GameState.GAME)
 			Gui.overlay.gameTooltip.setVisible(true);
-
-		if (state == GameState.INVENTORY)
-			World.player.showInventory();
 
 		Gdx.input.setInputProcessor(stage);
 		MadSand.state = state;
@@ -454,19 +448,7 @@ public class MadSand extends Game {
 			Gui.overlay.draw();
 			Utils.batch.end();
 			super.render();
-		} else if (state.equals(GameState.INVENTORY)) {
-			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
-			Gdx.gl.glClear(16384);
-			Utils.batch.begin();
-			drawGame();
-			Utils.batch.end();
-			Mouse.mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
-			Keyboard.pollInventoryKey();
-
-			Gui.overlay.act();
-			Gui.overlay.draw();
-
-		} else if (state.equals(GameState.TRADE)) {
+		}  else if (state.equals(GameState.TRADE)) {
 			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Gdx.gl.glClear(16384);
 			Utils.batch.begin();
@@ -555,8 +537,9 @@ public class MadSand extends Game {
 	}
 
 	public void resize(int width, int height) {
+		setViewport();
 		Gui.overlay.getViewport().update(width, height, true);
-		Gui.overlay.getViewport().setScreenSize(width, height);
+		Gui.overlay.updateWidgetPositions();
 	}
 
 	public void pause() {

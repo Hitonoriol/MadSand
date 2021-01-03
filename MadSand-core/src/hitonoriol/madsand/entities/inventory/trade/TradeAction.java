@@ -1,4 +1,4 @@
-package hitonoriol.madsand.enums;
+package hitonoriol.madsand.entities.inventory.trade;
 
 /*
  * Used in TradeUI to determine type of action relative to player (Buy / Sell)

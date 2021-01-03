@@ -5,7 +5,6 @@ import java.util.HashMap;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
-import hitonoriol.madsand.enums.Skill;
 import hitonoriol.madsand.world.World;
 
 public class SkillContainer extends HashMap<Skill, SkillValue> {

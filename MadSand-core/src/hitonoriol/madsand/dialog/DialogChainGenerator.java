@@ -22,9 +22,11 @@ public class DialogChainGenerator {
 	public static final String DIALOG_BTN_SCRIPT_DELIMITER = "@"; // Everything after this character will be executed as a Lua script
 	public static final String DIALOG_BTN_TREE_REPLY_DELIMITER = "$";
 
-	public static final String DIALOG_TITLE_REGEX = "\\#(.*?)\\#";
+	public static final String DIALOG_TITLE_REGEX = "\\#(.*?)\\#"; // #Title# -- set current dialog title
+	public static final String DEFAULT_TITLE_REGEX = "\\%(.*?)\\%"; // %Title% -- set default title for every dialog in chain after the current one
 	public static final String DIALOG_BUTTON_REGEX = "\\[(.*?)\\]";
 
+	public static Pattern defTitlePattern = Pattern.compile(DEFAULT_TITLE_REGEX);
 	public static Pattern titlePattern = Pattern.compile(DIALOG_TITLE_REGEX);
 	public static Pattern buttonPattern = Pattern.compile(DIALOG_BUTTON_REGEX);
 
@@ -49,7 +51,11 @@ public class DialogChainGenerator {
 		Matcher buttonMatcher = buttonPattern.matcher(dialogBody);
 		String buttonString;
 
+		String defTitle = getFirstMatch(defTitlePattern, dialogBody);
 		String title = getFirstMatch(titlePattern, dialogBody);
+
+		if (defTitle != null)
+			defaultTitle = defTitle;
 
 		String buttonTokens[];
 		TextButton scriptButton;
@@ -64,22 +70,20 @@ public class DialogChainGenerator {
 				buttonTokens = buttonString.split(DIALOG_BTN_SCRIPT_DELIMITER); // [Button Text @ lua code]
 				scriptButton = new TextButton(buttonTokens[0], Gui.skin);
 				final String buttonScriptString = buttonTokens[1];
+
 				dialog.addButton(scriptButton);
 				scriptButton.addListener(new ChangeListener() {
-
 					@Override
 					public void changed(ChangeEvent event, Actor actor) {
 						dialog.remove();
 						LuaUtils.execute(buttonScriptString);
 					}
-
 				});
 
 			} else {
 				nextDialogButton.setText(buttonString);
 				dialog.addButton(nextDialogButton);
 				nextDialogButton.addListener(new ChangeListener() {
-
 					@Override
 					public void changed(ChangeEvent event, Actor actor) {
 						dialog.remove();
@@ -110,21 +114,16 @@ public class DialogChainGenerator {
 			return null;
 	}
 
-	private String removeDialogRegex(String text) {
-		Matcher matcher;
-		String match;
-		matcher = titlePattern.matcher(text);
-		if (matcher.find()) {
-			match = text.substring(matcher.start(), matcher.end());
-			text = text.replace(match, "");
-		}
+	private StringBuilder removeRegex(Pattern pattern, StringBuilder text) {
+		return text.replace(0, text.length(), pattern.matcher(text).replaceAll(""));
+	}
 
-		matcher = buttonPattern.matcher(text);
-		while (matcher.find()) {
-			match = text.substring(matcher.start(), matcher.end());
-			text = text.replace(match, "");
-		}
-		return text.trim();
+	private String removeDialogRegex(String text) {
+		StringBuilder builder = new StringBuilder(text);
+		removeRegex(buttonPattern, builder);
+		removeRegex(defTitlePattern, builder);
+		removeRegex(titlePattern, builder);
+		return builder.toString().trim();
 	}
 
 	public static String LBRACKET = "-(", RBRACKET = ")-";

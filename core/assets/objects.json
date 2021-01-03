@@ -203,7 +203,7 @@
 	},
 	"15" : {
 		"hp" : 1,
-		"harvestHp" : 15,
+		"harvestHp" : 20,
 		"lvl" : -1,
 		"nocollide" : false,
 		"altItems" : {

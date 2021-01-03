@@ -2,8 +2,6 @@ package hitonoriol.madsand.entities;
 
 import java.util.HashMap;
 
-import hitonoriol.madsand.enums.Faction;
-
 public class Reputation {
 	public final static float RANGE = 100;
 	final static float HOSTILE_THR = -5;
