@@ -10,12 +10,15 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.properties.Globals;
+import hitonoriol.madsand.properties.Prefs;
 
 public class Launcher {
 
 	static LwjglApplicationConfiguration config;
 
 	public static void main(String[] args) throws Exception {
+		Prefs.loadPrefs();
+		Prefs prefs = Prefs.values();
 		config = new LwjglApplicationConfiguration();
 		config.title = "MadSand " + Globals.VERSION;
 		config.resizable = false;
@@ -25,11 +28,10 @@ public class Launcher {
 		config.addIcon("icons/icon-128.png", FileType.Internal);
 		config.addIcon("icons/icon-256.png", FileType.Internal);
 
-		// config.setFromDisplayMode(LwjglApplicationConfiguration.getDesktopDisplayMode());
-
 		config.vSyncEnabled = true;
-		config.width = 1280;
-		config.height = 720;
+		config.width = prefs.screenWidth;
+		config.height = prefs.screenHeight;
+		config.fullscreen = prefs.fullscreen;
 		config.foregroundFPS = 59;
 		config.backgroundFPS = -1;
 
@@ -48,10 +50,6 @@ public class Launcher {
 		ArgParser parser = new ArgParser(args);
 
 		Utils.debugMode = parser.argExists(debugFlag);
-		config.fullscreen = parser.argExists(fullscreenFlag);
-
-		if (config.fullscreen)
-			config.setFromDisplayMode(LwjglApplicationConfiguration.getDesktopDisplayMode());
 
 		if (!Utils.debugMode) {
 			System.setOut(new PrintStream(new File(Resources.OUT_FILE)));

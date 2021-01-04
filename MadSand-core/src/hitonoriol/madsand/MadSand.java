@@ -45,9 +45,6 @@ public class MadSand extends Game {
 	public static final String NPCSFILE = "NPCs";
 	public static final String WORLDFILE = "/World" + SAVE_EXT;
 	public static String WORLDNAME = "";
-	
-	public static final int XDEF = 1280;
-	public static final int YDEF = 720;
 
 	public static final float DEFAULT_ZOOM = 1.5F;
 	public static float ZOOM = DEFAULT_ZOOM;

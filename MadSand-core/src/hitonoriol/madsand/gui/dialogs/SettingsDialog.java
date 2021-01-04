@@ -1,76 +1,95 @@
 package hitonoriol.madsand.gui.dialogs;
 
-import java.io.File;
-
+import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
-import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.dialog.GameDialog;
+import hitonoriol.madsand.properties.Prefs;
 
-public class SettingsDialog extends Dialog {
-	Skin skin = Gui.skin;
+public class SettingsDialog extends GameDialog {
+
+	Prefs prefs = Prefs.values();
+
+	DisplayMode displayModes[] = prefs.getDisplayModes();
+	int curDisplayMode = prefs.getCurDisplayModeIdx();
+
+	CheckBox fullscreenBox = new CheckBox("", Gui.skin);
+	TextButton resolutionBtn = new TextButton("", Gui.skin);
+
+	TextButton applyBtn = new TextButton("Apply", Gui.skin);
 
 	public SettingsDialog() {
-		super("", Gui.skin);
+		super(Gui.mainMenu);
 		createDialog();
 	}
 
 	void createDialog() {
-		int radius = 12;
-		float width = Gui.defLblWidth;
+		super.setTitle("Settings");
+		super.centerTitle();
+		super.skipLine();
+		super.skipLine();
 
-		super.text("\nSettings");
-		super.row();
-		super.align(Align.center);
-		final Label renderv = new Label("", skin);
-		final Slider renderslide = new Slider(5, 100, 1, false, skin);
-		if (new File("MadSand_Saves/lastrend.dat").exists())
-			radius = (Integer.parseInt(GameSaver.readFile("lastrend.dat")));
-		renderslide.setValue(radius);
-		renderv.setText("Render radius (" + (int) renderslide.getValue() + ")");
-		TextButton cbtn = new TextButton("Set", skin);
-		TextButton cancel = new TextButton("Cancel", skin);
+		Table buttonTbl = new Table(Gui.skin);
+		buttonTbl.align(Align.left);
+		buttonTbl.defaults().align(Align.left);
+		buttonTbl.add("Resolution: ").align(Align.right);
+		buttonTbl.add(resolutionBtn).size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT).pad(PADDING).row();
+		buttonTbl.add("Fullscreen: ").align(Align.right);
+		buttonTbl.add(fullscreenBox).size(Gui.BTN_HEIGHT).pad(PADDING).row();
+		super.add(buttonTbl).row();
+		super.skipLine();
 
-		super.add(renderv).row();
-		super.add(renderslide).width(width).row();
+		refreshResolutionBtn();
+		fullscreenBox.setChecked(prefs.fullscreen);
 
-		super.add(cbtn).width(width).row();
-		super.add(cancel).width(width).row();
+		super.add(applyBtn).size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT).row();
+		super.addCloseButton();
 
-		renderslide.addListener(new ChangeListener() {
+		resolutionBtn.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				renderv.setText("Render radius (" + (int) renderslide.getValue() + ")");
+				nextDisplayMode();
 			}
 		});
-		
-		cbtn.addListener(new ChangeListener() {
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				MadSand.setRenderRadius(Math.round(renderslide.getValue()));
-				GameSaver.writeFile("lastrend.dat", Math.round(renderslide.getValue()) + "");
-				remove();
-			}
 
-		});
-		
-		cancel.addListener(new ChangeListener() {
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				remove();
+		applyBtn.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				applySettings();
 			}
-
 		});
-		
 	}
-	
-	public void show() {
-		super.show(Gui.mainMenu);
+
+	private void applySettings() {
+		DisplayMode curMode = displayModes[curDisplayMode];
+		prefs.screenWidth = curMode.width;
+		prefs.screenHeight = curMode.height;
+		prefs.fullscreen = fullscreenBox.isChecked();
+		prefs.apply();
+		Prefs.savePrefs();
+	}
+
+	private void nextDisplayMode() {
+		++curDisplayMode;
+		if (curDisplayMode >= displayModes.length)
+			curDisplayMode = 0;
+
+		DisplayMode mode = displayModes[curDisplayMode];
+
+		if (mode.refreshRate != Prefs.REFRESH_RATE || mode.width < Prefs.MIN_SCREEN_WIDTH)
+			nextDisplayMode();
+
+		refreshResolutionBtn();
+	}
+
+	private void refreshResolutionBtn() {
+		DisplayMode curMode = displayModes[curDisplayMode];
+		resolutionBtn.setText(curMode.width + "x" + curMode.height);
 	}
 }

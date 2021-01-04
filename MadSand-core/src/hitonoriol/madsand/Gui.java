@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
@@ -63,6 +65,8 @@ public class Gui {
 	public static DeathStage deathStage;
 	public static CraftMenu craftMenu;
 
+	static Color mouseOverColor = new Color(0xa5a5a5ff);
+
 	private static void initSkin() { // TODO: Remove this shit and move skin to json for fucks sake
 		font = Resources.createFont(16);
 		fontMedium = Resources.createFont(20);
@@ -91,7 +95,7 @@ public class Gui {
 		TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
 		textButtonStyle.up = skin.newDrawable("background", Color.GRAY);
 		textButtonStyle.down = skin.newDrawable("background", Color.DARK_GRAY);
-		textButtonStyle.over = skin.newDrawable("background", new Color(0xa5a5a5ff));
+		textButtonStyle.over = skin.newDrawable("background", mouseOverColor);
 		textButtonStyle.font = skin.getFont("default");
 		textButtonStyle.disabled = skin.newDrawable("background", new Color(0x3f3f3fdc));
 		skin.add("default", textButtonStyle);
@@ -131,17 +135,23 @@ public class Gui {
 
 		Drawable barKnob = skin.newDrawable("background", Color.DARK_GRAY);
 		barKnob.setMinWidth(5);
+
 		ProgressBar.ProgressBarStyle barStyle = new ProgressBarStyle(skin.newDrawable("background", Color.GRAY),
 				barKnob);
 		barStyle.knobBefore = barStyle.knob;
 		skin.add("default-horizontal", barStyle);
 
+		CheckBox.CheckBoxStyle boxStyle = new CheckBoxStyle();
+		boxStyle.checkboxOn = setMinSize(getColorDrawable(Color.DARK_GRAY), BTN_HEIGHT);
+		boxStyle.checkboxOff = setMinSize(getColorDrawable(Color.GRAY), BTN_HEIGHT);
+		boxStyle.font = textButtonStyle.font;
+		boxStyle.checkboxOver = setMinSize(getColorDrawable(mouseOverColor), BTN_HEIGHT);
+		skin.add("default", boxStyle);
 	}
 
 	static private void loadNinePatches() {
 		dialogBackground = Resources.loadNinePatch("misc/bg.png");
-		dialogBackground.setMinHeight(50);
-		dialogBackground.setMinWidth(100);
+		setMinSize(dialogBackground, 100, 50);
 
 		transparency = Resources.loadNinePatch("misc/transparency.png");
 
@@ -262,6 +272,16 @@ public class Gui {
 
 	public static Drawable getColorDrawable(Color color) {
 		return skin.newDrawable("background", color);
+	}
+
+	public static Drawable setMinSize(Drawable drawable, int width, int height) {
+		drawable.setMinWidth(width);
+		drawable.setMinHeight(height);
+		return drawable;
+	}
+
+	public static Drawable setMinSize(Drawable drawable, int size) {
+		return setMinSize(drawable, size, size);
 	}
 
 	public static ProgressBarStyle createProgressBarStyle(float width, float height, Color color, boolean transparent) {

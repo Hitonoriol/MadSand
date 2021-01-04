@@ -2,6 +2,7 @@ package hitonoriol.madsand.gui.stages;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -90,7 +91,6 @@ public class CraftMenu extends Stage {
 		Label recipeLabel;
 
 		while (i < craftSz) {
-
 			id = itemList.get(i);
 
 			craftButtons[i] = new CraftButton(ItemProp.getItem(id));
@@ -112,7 +112,7 @@ public class CraftMenu extends Stage {
 		//craftTable.setBackground(Gui.darkBackgroundSizeable);
 		craftTable.align(Align.center);
 		scroll = new AutoFocusScrollPane(craftTable);
-		scroll.setSize(MadSand.XDEF, MadSand.YDEF);
+		scroll.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 		containerTable.setBackground(Gui.darkBackgroundSizeable);
 		containerTable.setFillParent(true);
@@ -122,7 +122,9 @@ public class CraftMenu extends Stage {
 			containerTable.add(unlockProgressLabel).padTop(TITLE_PADDING / 3).row();
 
 		containerTable.add(scroll)
-				.size(MadSand.XDEF, MadSand.YDEF - (BACK_BUTTON_HEIGHT + titleLabel.getHeight() + TITLE_PADDING)).row();
+				.size(Gdx.graphics.getWidth(),
+						Gdx.graphics.getHeight() - (BACK_BUTTON_HEIGHT + titleLabel.getHeight() + TITLE_PADDING))
+				.row();
 
 		TextButton backBtn = new TextButton("Back", skin);
 

@@ -79,7 +79,7 @@ public class MainMenu extends Stage {
 
 		menuTable.add(newGameButton).width(BUTTON_WIDTH).row();
 		menuTable.add(loadGameButton).width(BUTTON_WIDTH).row();
-		//menuTable.add(settingsButton).width(BUTTON_WIDTH).row();
+		menuTable.add(settingsButton).width(BUTTON_WIDTH).row();
 		menuTable.add(exitButton).width(BUTTON_WIDTH).row();
 		menuTable.add(versionLabel).padTop(20).width(BUTTON_WIDTH);
 
