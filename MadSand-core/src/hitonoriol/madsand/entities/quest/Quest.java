@@ -13,10 +13,13 @@ import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.*;
 
+import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.dialog.DialogChainGenerator;
+import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.Item;
@@ -26,6 +29,8 @@ import hitonoriol.madsand.properties.NpcProp;
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
 @JsonSubTypes({ @Type(ProceduralQuest.class) })
 public class Quest {
+	static String OBJECTIVE_COLOR = "[#58FFB1F0]";
+
 	public int id;
 	public String name;
 	public int exp;
@@ -98,32 +103,55 @@ public class Quest {
 		return item.quantity;
 	}
 
-	@JsonIgnore
-	private String getObjectiveString(HashMap<Integer, Integer> objectiveList, ObjectiveStringWorker worker) {
+	/*
+	 * Returns human-readable quest objective string
+	 * asList: "1 foo, 2 bar and 5 abc"
+	 * !asList: "1 foo \n 2 bar \n 5 abc"
+	 */
+	private String getObjectiveString(HashMap<Integer, Integer> objectiveList, ObjectiveStringWorker worker,
+			boolean asList) {
 		String objective = "";
 		if (objectiveList.isEmpty())
 			return objective;
-		for (Entry<Integer, Integer> entry : objectiveList.entrySet())
-			objective += worker.makeObjectiveString(entry) + Resources.LINEBREAK;
+
+		int size = objectiveList.entrySet().size();
+		int i = 0;
+		for (Entry<Integer, Integer> entry : objectiveList.entrySet()) {
+			objective += worker.makeObjectiveString(entry);
+			if (!asList)
+				objective += Resources.LINEBREAK;
+			else {
+				if (i == size - 2)
+					objective += " and ";
+				else if (i < size - 1)
+					objective += ", ";
+			}
+			++i;
+		}
 		return objective;
 	}
 
 	@JsonIgnore
 	private String getKillObjectiveString() {
 		return getObjectiveString(killObjective,
-				(Entry<Integer, Integer> entry) -> {
-					return "Kill " + NpcProp.npcs.get(entry.getKey()).name +
-							" (" + getKillObjectiveProgress(entry.getKey()) + "/" + entry.getValue() + ")";
-				});
+				entry -> "Kill " + NpcProp.npcs.get(entry.getKey()).name +
+						" (" + getKillObjectiveProgress(entry.getKey()) + "/" + entry.getValue() + ")",
+				false);
 	}
 
 	@JsonIgnore
 	private String getItemObjectiveString() {
 		return getObjectiveString(itemObjective,
-				(Entry<Integer, Integer> entry) -> {
-					return "Get " + ItemProp.getItemName(entry.getKey()) +
-							" (" + getItemObjectiveProgress(entry.getKey()) + "/" + entry.getValue() + ")";
-				});
+				entry -> "Get " + ItemProp.getItemName(entry.getKey()) +
+						" (" + getItemObjectiveProgress(entry.getKey()) + "/" + entry.getValue() + ")",
+				false);
+	}
+
+	protected String getObjectiveList(HashMap<Integer, Integer> objective, NameGetter nameGetter) {
+		return getObjectiveString(objective,
+				entry -> OBJECTIVE_COLOR + entry.getValue() + " " + nameGetter.get(entry.getKey())
+						+ Resources.COLOR_END,
+				true);
 	}
 
 	private boolean verifyObjective(HashMap<Integer, Integer> objectiveList, ObjectiveVerifier verifier) {
@@ -137,16 +165,12 @@ public class Quest {
 
 	private boolean verifyKillObjective() {
 		return verifyObjective(killObjective,
-				(Entry<Integer, Integer> entry) -> {
-					return getKillObjectiveProgress(entry.getKey()) >= entry.getValue();
-				});
+				entry -> getKillObjectiveProgress(entry.getKey()) >= entry.getValue());
 	}
 
 	private boolean verifyItemObjective() {
 		return verifyObjective(itemObjective,
-				(Entry<Integer, Integer> entry) -> {
-					return getItemObjectiveProgress(entry.getKey()) >= entry.getValue();
-				});
+				entry -> getItemObjectiveProgress(entry.getKey()) >= entry.getValue());
 	}
 
 	@JsonIgnore
@@ -207,6 +231,34 @@ public class Quest {
 		initObjective(reqItems, itemObjective);
 		if (initObjective(reqKills, killObjective))
 			initCurrentKills();
+	}
+
+	private void showQuestDialog(String dialogText) {
+		GameTextSubstitutor.add(GameTextSubstitutor.QUEST_ITEM_OBJECTIVE, getObjectiveList(itemObjective, itemNames));
+		GameTextSubstitutor.add(GameTextSubstitutor.QUEST_KILL_OBJECTIVE, getObjectiveList(killObjective, npcNames));
+		new DialogChainGenerator(dialogText)
+				.setAllTitles(getNpc().stats.name)
+				.generate(Gui.overlay)
+				.show();
+	}
+
+	public void showQuestInProgressDialog() {
+		showQuestDialog(this.reqMsg);
+	}
+
+	public void showQuestStartDialog() {
+		showQuestDialog(startMsg);
+	}
+
+	public void showQuestCompleteDialog() {
+		showQuestDialog(endMsg);
+	}
+
+	protected NameGetter itemNames = id -> ItemProp.getItemName(id);
+	protected NameGetter npcNames = id -> NpcProp.npcs.get(id).name;
+
+	private interface NameGetter {
+		String get(int id);
 	}
 
 	private interface ObjectiveStringWorker {

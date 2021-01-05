@@ -30,6 +30,7 @@ public class GameDialog extends Dialog {
 
 	private AutoFocusScrollPane textScroll;
 	protected Label textLbl;
+	protected TextButton proceedButton;
 	private Stage stage;
 	private float cWidth = -1, cHeight = -1;
 
@@ -140,7 +141,14 @@ public class GameDialog extends Dialog {
 	}
 
 	public void addButton(TextButton button) {
+		if (proceedButton == null)
+			proceedButton = button;
+
 		add(button).width(BTN_WIDTH).height(BTN_HEIGHT).padBottom(PADDING / 2).row();
+	}
+	
+	public TextButton getProceedButton() {
+		return proceedButton;
 	}
 
 	public void show() {

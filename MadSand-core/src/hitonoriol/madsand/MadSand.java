@@ -28,11 +28,8 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MadSand extends Game {
-	public static String VER = "";
-
 	static final int OBJECT_LOOT = 7;
 	public static final int TILESIZE = 33;
-	static final int WORLDSIZE = 10;
 
 	static int renderradius;
 
@@ -88,8 +85,8 @@ public class MadSand extends Game {
 		Utils.out("Render area: " + renderArea.length);
 		Utils.init();
 		Gui.init();
-		Keyboard.initKeyListener();
 		GameTextSubstitutor.init();
+		Keyboard.initKeyListener();
 
 		initNewGame();
 		world.generate();
@@ -104,7 +101,7 @@ public class MadSand extends Game {
 	}
 
 	public static void initNewGame() {
-		world = new World(MadSand.WORLDSIZE);
+		world = new World();
 		World.player.updCoords();
 		LuaUtils.init();
 		Gui.overlay.gameLog.clear();
@@ -424,7 +421,7 @@ public class MadSand extends Game {
 	}
 
 	public void render() {
-		Keyboard.pollScreenshotKey();
+		Keyboard.pollGlobalHotkeys();
 
 		if (state.equals(GameState.GAME)) {
 

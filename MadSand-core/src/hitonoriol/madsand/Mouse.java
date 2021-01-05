@@ -121,7 +121,7 @@ public class Mouse {
 				info += npc.getInfoString();
 
 			if (npc.state == NpcState.Hostile)
-				info += npc.spottedMsg();
+				info += npc.spottedMsg() + Resources.LINEBREAK;
 			else if ((npc.canGiveQuests || npc.type == NpcType.QuestMaster) && npc.isNeutral())
 				info += "* Might need some help";
 

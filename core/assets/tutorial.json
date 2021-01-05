@@ -19,7 +19,7 @@
 			* LMB click - attack a hostile creature{br}
 			* Arrows or \"Attack\" button in RMB menu - attack a neutral creature (be careful, they'll become hostile and will fight back){br}
 			* LMB click on yourself or Space - rest for a turn{br}
-			* U - use currently held placeable block or placeable tile (or a special tool, for example, hoe){br}
+			* U or LMB click on \"Hand\" equip slot - use currently held placeable block or placeable tile (or a special tool, for example, hoe){br}
 			* G or \"Save game\" button in ESC menu  - save current world{br}
 		[Woah, thanks!]
 	",

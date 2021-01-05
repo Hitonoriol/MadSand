@@ -1,7 +1,6 @@
 package hitonoriol.madsand;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -27,6 +26,11 @@ public class Keyboard {
 
 		pollDebugKeys();
 		pollFunctionKeys();
+	}
+
+	public static void pollGlobalHotkeys() {
+		if (Gdx.input.isKeyJustPressed(Keys.F12))
+			Resources.takeScreenshot();
 	}
 
 	public static void initKeyListener() {
@@ -59,21 +63,7 @@ public class Keyboard {
 		ignoreInput = false;
 	}
 
-	public static void pollScreenshotKey() {
-		if (Gdx.input.isKeyJustPressed(Keys.F12))
-			Resources.takeScreenshot();
-	}
-
 	private static void pollFunctionKeys() {
-		if (Gdx.input.isKeyJustPressed(Keys.F11)) {
-			boolean fullScreen = Gdx.graphics.isFullscreen();
-			Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
-			if (fullScreen)
-				Gdx.graphics.setWindowedMode(1280, 720);
-			else
-				Gdx.graphics.setFullscreenMode(currentMode);
-		}
-
 		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
 			Gui.mainMenu.showResumeTable();
 			MadSand.xmid = MadSand.cameraX = World.player.globalPos.x;
@@ -166,7 +156,6 @@ public class Keyboard {
 	}
 
 	private static void pollDebugKeys() {
-
 		if (Gdx.input.isKeyJustPressed(Keys.Z))
 			Utils.debugMode = !Utils.debugMode;
 
@@ -179,19 +168,20 @@ public class Keyboard {
 			Gui.overlay.setKeyboardFocus(console);
 		}
 
-		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.DOWN)) && (Utils.debugMode))
-			MadSand.world.descend();
+		if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) {
+			if (Gdx.input.isKeyJustPressed(Keys.DOWN))
+				MadSand.world.descend();
+			else if (Gdx.input.isKeyJustPressed(Keys.UP))
+				MadSand.world.ascend();
 
-		if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) && (Gdx.input.isKeyJustPressed(Keys.UP)) && (Utils.debugMode))
-			MadSand.world.ascend();
+			else if (Gdx.input.isKeyJustPressed(Keys.R)) {
+				MadSand.world.generate();
+				MadSand.worldEntered();
+			}
+		}
 
 		if (Gdx.input.isKeyJustPressed(Keys.Y))
 			World.player.teleport(Mouse.wx, Mouse.wy);
-
-		if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT) && Gdx.input.isKeyJustPressed(Keys.R)) {
-			MadSand.world.generate();
-			MadSand.worldEntered();
-		}
 
 		if (Gdx.input.isKeyPressed(Keys.NUMPAD_3)) {
 			MadSand.ZOOM += 0.01f;

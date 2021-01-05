@@ -5,15 +5,16 @@ import java.util.HashMap;
 import org.apache.commons.text.StringSubstitutor;
 
 import hitonoriol.madsand.Resources;
+import hitonoriol.madsand.Utils;
 import me.xdrop.jrand.JRand;
 import me.xdrop.jrand.generators.person.FirstnameGenerator;
 import me.xdrop.jrand.model.person.Gender;
 
 public class GameTextSubstitutor {
 	static final String RAND_NAME = "RANDOM_NAME";
-	static final String RAND_NAME_M = "RANDOM_NAME_M";
-	static final String RAND_NAME_F = "RANDOM_NAME_F";
+	static final String RAND_NAME_M = "RANDOM_NAME_M", RAND_NAME_F = "RANDOM_NAME_F";
 
+	public static final String QUEST_ITEM_OBJECTIVE = "ITEM_OBJECTIVE", QUEST_KILL_OBJECTIVE = "KILL_OBJECTIVE";
 	public static final String PLAYER_NAME = "PLAYER";
 	public static final String LINEBREAK = "br";
 
@@ -31,6 +32,7 @@ public class GameTextSubstitutor {
 	}
 
 	public static void add(String var, String subText) {
+		Utils.out("Substitutor: Setting {" + var + "} to \"" + subText + "\"");
 		instance.globalConstants.put(var, subText);
 	}
 

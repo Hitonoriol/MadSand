@@ -3,12 +3,15 @@ package hitonoriol.madsand.properties;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+
 import hitonoriol.madsand.Resources;
+import hitonoriol.madsand.entities.LootTable;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.quest.ProceduralQuest;
 
 public class Globals {
-	public static final String VERSION = "Alpha v0.46"; 
+	public static final String VERSION = "Alpha v0.47"; 
 	
 	public static String TRAVEL_ITEM = "travelItem";
 	public static String CURRENCY = "currencyId";
@@ -16,11 +19,13 @@ public class Globals {
 	private static Globals instance = new Globals();
 
 	public ArrayList<String> traderGreetings;
-
 	public ArrayList<Integer> fetchQuestItems;
-	public HashMap<String, String> values;
+	public ArrayList<Integer> huntQuestItems;
 	public ArrayList<String> idleNpcText;
+	public LootTable proceduralQuestRewards;
 	public HashMap<ProceduralQuest.Type, ArrayList<String>> proceduralQuestText;
+	
+	public HashMap<String, String> values;
 
 	public static void loadGlobals() throws Exception {
 		instance = Resources.mapper.readValue(Resources.readInternal(Resources.GLOBALS_FILE), Globals.class);
@@ -40,5 +45,11 @@ public class Globals {
 	
 	public static Item getCurrency() {
 		return ItemProp.getItem(getInt(CURRENCY));
+	}
+	
+	@JsonSetter("proceduralQuestRewards")
+	public void setProceduralQuestRewards(String loot) {
+		if (loot != null)
+			this.proceduralQuestRewards = LootTable.parse(loot);
 	}
 }

@@ -10,7 +10,7 @@
 			Well, to be honest, it doesn't matter. Not in this place.=>
 			You seem lost... You know what? If you can prove you can be of any use, then we'll talk.=>
 			Can you please bring me some wood for the campfire? Here's an axe, it'll help you.=>
-			Return to me when you get 15 wood pieces.=>
+			Return to me when you get {ITEM_OBJECTIVE}.=>
 			## * You can gather wood by taking axe in your hands (open inventory with E key and left click the axe), approaching a tree and hitting enter or clicking it a few times.=>
 			## * You can also interact with trees with your bare hands, then you'll get another kind of resource.
 		",
@@ -23,7 +23,7 @@
 		Hm... well, you can also take my axe as a reward. I didn't use it anyway. If you want some job or a good story, just ask!
 	",
 
-	"reqMsg" : "Please, give me 15 wood pieces.",
+	"reqMsg" : "Please, give me {ITEM_OBJECTIVE}.",
 	"reqItems" : "1/15",
 	"giveItems" : "3/1",
 	"rewardItems" : "7/5",
@@ -38,7 +38,7 @@
 	"startMsg" : "
 		So, {PLAYER}, you liked using that axe, huh? [Uhh...]=>
 		Guess what, I can show you how to make one yourself. You can even make other great tools that'll help you in this cruel world. [I'm interested]=>
-		Well, let me remember... Ah! Bring me some small rocks. 10 of them, to be more specific. You can find them near boulders. It won't be easy to gather them with your bare hands, but it's worth it, trust me!=>
+		Well, let me remember... Ah! Bring me some small rocks. {ITEM_OBJECTIVE}, to be more specific. You can find them near boulders. It won't be easy to gather them with your bare hands, but it's worth it, trust me!=>
 		## * To gather small rocks, approach a boulder and interact with it.
 	",
 
@@ -52,7 +52,7 @@
 		Oh... I didn't give you any reward? You can have my leftover birthday cake, it even still has candles in it! [Ugh... Cool... Thanks?]
 	",
 
-	"reqMsg" : "Have you gathered those 10 small rocks I asked you for yet?",
+	"reqMsg" : "Have you gathered those {ITEM_OBJECTIVE} I asked you for yet?",
 	"reqItems" : "2/10",
 	"giveItems" : "n",
 	"rewardItems" : "4/4",
@@ -75,7 +75,7 @@
 		## * Then you need to find Flint and Clay somewhere.
 		When you find a thing to dig up, just take your shovel to your hand, stand on the tile that contains the item you want to dig up
 		and press the button that appears on the screen. Alternatively, you can use \"U\" button on the keyboard.=>
-		Hmmm... I believe you. Okay, dig up 5 flint and 5 clay pieces and bring them to me.
+		Hmmm... I believe you. Okay, dig up {ITEM_OBJECTIVE} pieces and bring them to me.
 	",
 
 	"endMsg" : "
@@ -84,7 +84,7 @@
 		So... Let's talk about this later. I need to contact our leader about you.
 	",
 
-	"reqMsg" : "Bring me 5 flint and 5 clay pieces.",
+	"reqMsg" : "Bring me {ITEM_OBJECTIVE} pieces.",
 	"reqItems" : "5/5:9/5",
 	"giveItems" : "n",
 	"rewardItems" : "n",
@@ -142,12 +142,12 @@
 		## * To go underground, you have to unlock dungeon trapdoor and then stand on a \"hole in the ground\" tile and press \"use\" button or the on-screen pop-up button. => 
 		Almost forgot, here you go - my last Dungeon Search scroll. Take it. Use it to find the Dungeon Entrance. Good luck, {PLAYER}! =>
 		## * To use a scroll, open your inventory, click on it with RMB and press \"Use\" button.=>
-		Kill 10 rats and report back. I'll be waiting for you here. Good luck.
+		Kill {KILL_OBJECTIVE} and report back. I'll be waiting for you here. Good luck.
 	",
 
 	"endMsg" : "Thank you, {PLAYER}! Take your reward and return to me when you are ready for the next task.",
 
-	"reqMsg" : "Kill 10 rats in the dungeon.",
+	"reqMsg" : "Kill {KILL_OBJECTIVE} in the dungeon.",
 	"reqKills" : "14/10",
 	"giveItems" : "75/1",
 	"rewardItems" : "21/200",
@@ -162,7 +162,7 @@
 	"name" : "Beer",
 	"startMsg" : "
 		Yo {PLAYER}! It's kinda hot in here. I'd reeeally love to have some beer right now. [What are you, alcoholic?]=>
-		Meh, say what you want about me, but bring me a pint of beer. I'll pay you 10 coins for it. Deal?[Okay]=>
+		Meh, say what you want about me, but bring me {ITEM_OBJECTIVE}. I'll pay you 10 coins for it. Deal?[Okay]=>
 		## * You can craft beer using sour and spicy leaves which can be gathered from bushes. [Cool]
 	",
 
@@ -187,12 +187,12 @@
 			First of all, you need to plow a couple of tiles of soil. You can do it with a hoe while standing on a grass tile.[Please, continue]=>
 		After that, you need something to plant into the soil: some kind of seeds. I'll give you a handful of some seeds so that you can train on them. [Thanks]=>
 		And then you plant your seeds while standing on a plowed soil tile and wait until your crops fully grow. [And that's it?]=>
-		Yeah, it's that simple. Go try it out and bring me 3 tomatoes once they grow. [Understood]
+		Yeah, it's that simple. Go try it out and bring me {ITEM_OBJECTIVE} once they grow. [Understood]
 	",
 
 	"endMsg" : "Well done! You are going to be a great farmer... someday! Take these potato seeds as a reward.",
 
-	"reqMsg" : "Bring me 3 tomatoes.",
+	"reqMsg" : "Bring me {ITEM_OBJECTIVE}.",
 	"reqItems" : "48/3",
 	"giveItems" : "53/5",
 	"rewardItems" : "51/1",
@@ -209,12 +209,12 @@
 		Here - you can build a sewing machine and make yourself some clothes from plant fiber. They'll protect you from monsters you'll meet in the dungeon.
 		About the resources you'll need... Hmm... Ah, yes! I think you'll need some sharp sticks, flint and small rocks. Not sure about the quantity.[Oh, ok]=>
 		## * To build a sewing machine, open Build Menu and click on the Sewing Machine button (the button will appear in the menu once you've collected at least 1 of every required resource) [Ok]=>
-		Hmm... Then, craft at least a Plant Fiber Shirt and talk to me again. See ya.
+		Hmm... Then, craft at least {ITEM_OBJECTIVE} and talk to me again. See ya.
 	",
 
 	"endMsg" : "Whoa, this shirt looks nice on you, {PLAYER}. Now you are 100% ready to kick some monster ass. I'm proud of you.",
 
-	"reqMsg" : "Build a sewing machine and craft at least a Plant Fiber Shirt.",
+	"reqMsg" : "Build a sewing machine and craft at least {ITEM_OBJECTIVE}.",
 	"reqItems" : "105/1",
 	"deleteRequiredItems" : false,
 	"giveItems" : "n",
@@ -232,12 +232,12 @@
 		{PLAYER}, today I'll teach you about farm animals. =>
 		You must've seen some chickens and cows walking around here. So, you can feed them some hay and they will produce something for you: cows will produce milk, chikens will give you some eggs and so on.[Cool]=>
 		To get hay you must build a Wheelbarrow first, but if you don't have one already, I'll give you some hay to test things out. [Thanks]=>
-		Well, go feed some cows and bring me 3 milk bottles. The rest is yours.
+		Well, go feed some cows and bring me {ITEM_OBJECTIVE}. The rest is yours.
 	",
 
 	"endMsg" : "Nice. Nothing beats some fresh milk... in the middle of nowhere. See you soon, {PLAYER}.",
 
-	"reqMsg" : "Bring me 3 milk bottles.",
+	"reqMsg" : "Bring me {ITEM_OBJECTIVE}.",
 	"reqItems" : "126/3",
 	"giveItems" : "104/15",
 	"rewardItems" : "n",
@@ -251,16 +251,16 @@
 	"name" : "Fishing tutorial",
 	"startMsg" : "
 		Ahoy, {PLAYER}! Ye know, 'tis been a pretty long time since I... materialized here, 'n I really miss th' scent o' good ole fish!
-		So ye know wha'? Go catch 5 Herrin's 'n brin' them t' me.[Okay...]=>
+		So ye know wha'? Go catch {ITEM_OBJECTIVE} 'n brin' them t' me.[Okay...]=>
 		Here's some worms that ye can use as bait.
 		As fer th' fishin' rod... Ye can craft it from sticks 'n plant threads.
 		I believe in ye, mate.=>
-		## * To fish in a body of water you need to equip a fishing rod and some kind of bait (for example, worms). Then you have to approach a water tile click on it to start fishing. [Cool]
+		## * To fish in a body of water you need to equip a fishing rod and some kind of bait (for example, worms). Then you have to approach a water tile and click on it to start fishing. [Cool]
 	",
 
 	"endMsg" : "Thank ye. Here's some gold fer ye.",
 
-	"reqMsg" : "Brin' me 5 herrin's.",
+	"reqMsg" : "Brin' me {ITEM_OBJECTIVE}.",
 	"reqItems" : "142/5",
 	"giveItems" : "154/15",
 	"rewardItems" : "21/40",
@@ -274,13 +274,13 @@
 	"name" : "Pickletastic",
 	"startMsg" : "
 		Good day to you, {PLAYER}. I've been craving some pickles lately... [And how can I help?] =>
-		That's the right question! Grow me 100 cucumbers and I'll reward you with riches you've never seen before...
+		That's the right question! Grow me {ITEM_OBJECTIVE} and I'll reward you with riches you've never seen before...
 		Okay, maybe I'm exaggerating a little, but what do you think, will 750 coins be ok for you?
 	",
 
 	"endMsg" : "Thank you for your help! Now I'll be able to make a ton of pickles! Here's your reward.",
 
-	"reqMsg" : "Bring me 100 cucumbers.",
+	"reqMsg" : "Bring me {ITEM_OBJECTIVE}.",
 	"reqItems" : "39/100",
 	"giveItems" : "n",
 	"rewardItems" : "21/750",
@@ -295,14 +295,14 @@
 	"name" : "Iron ore",
 	"startMsg" : "
 		Hey, are you going into that mine? Hm... Then I have a little task for you. [I'm listening] =>
-		I managed to mine some coal, but didn't find any iron. So can you mine 30 iron ore for me? I'll smelt it into ingots (2 from each ore) and take only 10 for myself, so 50 are yours. Deal? [Sounds okay]=>
+		I managed to mine some coal, but didn't find any iron. So can you mine {ITEM_OBJECTIVE} for me? I'll smelt it into ingots (2 from each ore) and take only 10 for myself, so 50 are yours. Deal? [Sounds okay]=>
 		## Click on the mine entrance to descend to the mines.
 		* You'll need a pickaxe to mine iron ore.
 	",
 
 	"endMsg" : "Whoa, you're back. Let's get down to smelting...=>Phew, here you go, your 50 iron ingots. Thanks for the hard work!",
 
-	"reqMsg" : "Mine 30 iron ore.",
+	"reqMsg" : "Mine {ITEM_OBJECTIVE}.",
 	"reqItems" : "23/30",
 	"giveItems" : "n",
 	"rewardItems" : "72/50",

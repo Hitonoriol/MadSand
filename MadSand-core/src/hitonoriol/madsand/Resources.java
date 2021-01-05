@@ -122,6 +122,7 @@ public class Resources {
 	public static String Space = " ", Colon = ":";
 	public static final String Tab = "      ";
 	public static final String LINEBREAK = System.lineSeparator();
+	public static String COLOR_END = "[]";
 
 	public static ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 	public static TypeFactory typeFactory = mapper.getTypeFactory();

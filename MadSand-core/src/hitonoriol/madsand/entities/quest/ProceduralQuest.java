@@ -1,10 +1,11 @@
 package hitonoriol.madsand.entities.quest;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
@@ -15,7 +16,6 @@ import hitonoriol.madsand.entities.Faction;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.properties.Globals;
-import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.NpcContainer;
 import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.properties.WorldGenProp;
@@ -26,10 +26,12 @@ public class ProceduralQuest extends Quest {
 
 	public static final int QUEST_TIMEOUT = 500;
 
-	private final int EXP_MIN = 10;
+	private final int EXP_MIN = 15, EXP_BASE_MAX = 40;
 
+	private final float MIN_Q_FACTOR = 0.5f;
 	private final int MAX_KILL_REQS = 3;
 	private final int MAX_KILL_Q = 5;
+	private final int MAX_HUNT_Q = 12;
 
 	private final int MAX_RESOURCE_REQS = 3;
 	private final int MAX_ITEM_Q = 10;
@@ -66,6 +68,9 @@ public class ProceduralQuest extends Quest {
 		case Resource:
 			randomResourceQuest();
 			break;
+		case Hunt:
+			randomHuntQuest();
+			break;
 		case Craft:
 			if (World.player.craftRecipes.isEmpty()) {
 				generate();
@@ -77,10 +82,38 @@ public class ProceduralQuest extends Quest {
 			break;
 		}
 
+		addRewardItems();
 		super.name = type.name() + " Quest";
-		super.exp = Utils.rand(EXP_MIN, World.player.stats.skills.getExp() / 10);
+		super.exp = rollRewardAmount();
 		super.reqMsg = super.startMsg;
+
+		Utils.out(super.reqItems);
 		createEndMsg();
+	}
+
+	private void addRewardItems() {
+		List<Item> rewards = Globals.instance().proceduralQuestRewards.roll();
+		for (Item item : rewards) {
+			if (item.id == Globals.getInt(Globals.CURRENCY))
+				item.quantity = (int) (rollRewardAmount() * 1.125);
+
+			super.rewardItems += item.getString() + Item.BLOCK_DELIM;
+		}
+	}
+
+	@JsonIgnore
+	private double getLvlFactor() {
+		double lvl = World.player.getLvl() + 3d;
+		return (Math.sqrt(Utils.log(lvl, 3)) - 1d) / 10d;
+	}
+
+	private int rollRewardAmount() {
+		return Utils.rand(EXP_MIN,
+				(int) (EXP_BASE_MAX + (EXP_BASE_MAX * getLvlFactor())));
+	}
+
+	private int rollMaxObjective(int baseObjective) {
+		return baseObjective + (int) (baseObjective * getLvlFactor());
 	}
 
 	private void createEndMsg() {
@@ -104,11 +137,9 @@ public class ProceduralQuest extends Quest {
 	 * name.get(int) - name getter function which must return requirement's name by
 	 * its id
 	 * 
-	 * Returns quest startMessage and requirementString in HashMap
+	 * Returns quest requirementString
 	 */
-	private HashMap<Property, String> randomQuest(List<Integer> list, int maxRolls, int maxQuantity, NameGetter name) {
-		HashMap<Property, String> ret = new HashMap<>();
-		String startMsg = "";
+	private String randomQuest(List<Integer> list, int maxRolls, int maxQuantity) {
 		String reqStr = "";
 
 		HashSet<Integer> usedItems = new HashSet<>();
@@ -117,33 +148,19 @@ public class ProceduralQuest extends Quest {
 		int item;
 
 		for (int i = 0; i < rolls; ++i) {
-
 			while (!usedItems.add(item = Utils.randElement(list)))
 				if (usedItems.size() == list.size())
 					break;
 
-			quantity = Utils.rand(1, maxQuantity);
-			startMsg += quantity + " " + name.get(item);
-
-			if (i == rolls - 2)
-				startMsg += " and ";
-			else if (i < rolls - 1)
-				startMsg += ", ";
-			else
-				startMsg += " ";
-
+			quantity = Math.max(Utils.rand((int) (maxQuantity * MIN_Q_FACTOR), maxQuantity), 1);
 			reqStr += item + Item.ITEM_DELIM + quantity + Item.BLOCK_DELIM;
 		}
-		ret.put(Property.StartMessage, startMsg);
-		ret.put(Property.RequirementString, reqStr);
-		return ret;
+		return reqStr;
 	}
 
 	private void randomItemQuest(List<Integer> items) {
-		HashMap<Property, String> quest = randomQuest(items, MAX_RESOURCE_REQS, MAX_ITEM_Q,
-				(int id) -> ItemProp.getItemName(id));
-		super.reqItems += quest.get(Property.RequirementString);
-		super.startMsg += quest.get(Property.StartMessage);
+		String quest = randomQuest(items, MAX_RESOURCE_REQS, rollMaxObjective(MAX_ITEM_Q));
+		super.reqItems += quest;
 	}
 
 	private void randomResourceQuest() {
@@ -164,10 +181,13 @@ public class ProceduralQuest extends Quest {
 	private void randomFetchQuest() {
 		List<Integer> fetchItem = new ArrayList<>();
 		fetchItem.add(Utils.randElement(Globals.instance().fetchQuestItems));
-		HashMap<Property, String> quest = randomQuest(fetchItem, 1, 1, (int id) -> ItemProp.getItemName(id));
 		Pair coords = MadSand.world.getCurLoc().randPlaceLoot(fetchItem.get(0));
-		super.reqItems += quest.get(Property.RequirementString);
-		super.startMsg += quest.get(Property.StartMessage).trim() + ". I think it's somewhere near (" + coords + ").";
+		super.reqItems += randomQuest(fetchItem, 1, 1);
+		super.startMsg += " I think it's somewhere near (" + coords + ").";
+	}
+
+	private void randomHuntQuest() {
+		super.reqItems += randomQuest(Globals.instance().huntQuestItems, 2, rollMaxObjective(MAX_HUNT_Q));
 	}
 
 	private void randomKillQuest() {
@@ -185,29 +205,20 @@ public class ProceduralQuest extends Quest {
 				i.remove();
 		}
 
-		HashMap<Property, String> quest = randomQuest(mobs, MAX_KILL_REQS, MAX_KILL_Q,
-				(int id) -> NpcProp.npcs.get(id).name);
-		super.reqKills += quest.get(Property.RequirementString);
-		super.startMsg += quest.get(Property.StartMessage);
+		String quest = randomQuest(mobs, MAX_KILL_REQS, rollMaxObjective(MAX_KILL_Q));
+		super.reqKills += quest;
 	}
 
 	private String getStartMsg() {
 		return Utils.randElement(Globals.instance().proceduralQuestText.get(type));
 	}
 
-	private interface NameGetter {
-		String get(int id);
-	}
-
-	private enum Property {
-		StartMessage, RequirementString
-	}
-
 	public enum Type {
 		Craft, // Request random craftable item
 		Fetch, // Place random item somewhere in the world and ask player to bring it to NPC
 		Resource,
-		Kill // kill quests
+		Kill, // kill quests
+		Hunt
 	}
 
 }

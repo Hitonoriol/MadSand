@@ -543,6 +543,8 @@ public class Player extends Entity {
 				.setAllTitles(dialogTitle)
 				.generate(Gui.overlay);
 
+		npcDialog.getProceedButton().setText("Goodbye");
+
 		if (npc.canGiveQuests) {
 			TextButton questButton = new TextButton("Do you need any help?", Gui.skin);
 			npcDialog.addButton(questButton);

@@ -18,7 +18,6 @@ public class GameLog extends Table {
 	private static final int LOG_LENGTH = 20;
 
 	public static final String WARNING_COLOR = "[#ff9185]";
-
 	public static final String NOTICE_ALT_COLOR = "[#58FFB1]";
 	public static String NOTICE_COLOR = "[#16E1EA]";
 

@@ -35,9 +35,8 @@ public class DialogChainGenerator {
 
 	/*
 	 * Chain dialog generator Syntax:
-	 * 
-	 * #Title# Dialog text [Button text] [Script Button Text @
-	 * world.player:fooBar()] => Next Text => ....
+	 * %Default title%
+	 * #Title# Dialog text [Button text] [Script Button Text @ world.player:fooBar()] => Next Text => ....
 	 * 
 	 */
 

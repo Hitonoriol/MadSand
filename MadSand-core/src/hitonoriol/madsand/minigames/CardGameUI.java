@@ -35,6 +35,7 @@ public class CardGameUI extends GameDialog {
 	protected void showBetDialog(SliderDialog dialog, ChangeListener listener) {
 		if (!World.player.inventory.hasItem(currency, 1)) {
 			Gui.drawOkDialog("You don't have any money!", Gui.overlay);
+			endGame();
 			return;
 		}
 		dialog.setSliderTitle("Place your bet:")

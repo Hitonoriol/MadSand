@@ -168,6 +168,8 @@ public class Utils {
 	}
 
 	public static double log(double value, double base) {
+		if (value < 1)
+			return 0;
 		return Math.log(value) / Math.log(base);
 	}
 
