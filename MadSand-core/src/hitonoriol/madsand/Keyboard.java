@@ -39,7 +39,9 @@ public class Keyboard {
 			public boolean keyUp(InputEvent event, int keycode) {
 				switch (keycode) {
 				case Keys.E:
-					Gui.toggleInventory();
+					if ((!Gui.inventoryActive && !Gui.isGameUnfocused())
+							|| ((Gui.inventoryActive && Gui.isGameUnfocused())))
+						Gui.toggleInventory();
 					break;
 
 				default:
@@ -163,6 +165,7 @@ public class Keyboard {
 			return;
 
 		if (Gdx.input.isKeyJustPressed(Keys.GRAVE)) {
+			Gui.gameUnfocus();
 			TextField console = Gui.overlay.getConsoleField();
 			console.setVisible(!console.isVisible());
 			Gui.overlay.setKeyboardFocus(console);

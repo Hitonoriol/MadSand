@@ -2,11 +2,13 @@ package hitonoriol.madsand;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import me.xdrop.jrand.JRand;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -115,6 +117,10 @@ public class Utils {
 		return list.get(random.nextInt(list.size()));
 	}
 
+	public static <T> T randElement(T arr[]) {
+		return randElement(Arrays.asList(arr));
+	}
+
 	public static double randPercent() {
 		return random.nextDouble() * 100.0;
 	}
@@ -154,17 +160,23 @@ public class Utils {
 		if (!verbose)
 			return hours + TIME_DELIM + minutes + TIME_DELIM + secs;
 
-		String time = secs + " seconds";
+		String time = "";
 		if (minutes > 0)
-			time = minutes + " minutes " + time;
+			time = minutes + " minutes ";
 		if (hours > 0)
 			time = hours + " hours " + time;
+		if (secs > 0 || time.length() == 0)
+			time += secs + " seconds";
 
-		return time;
+		return time.trim();
 	}
 
 	public static String timeString(long seconds) {
 		return timeString(seconds, true);
+	}
+
+	public static String subsName(String varName) {
+		return GameTextSubstitutor.DELIM_L + varName + GameTextSubstitutor.DELIM_R;
 	}
 
 	public static double log(double value, double base) {

@@ -31,7 +31,7 @@ import hitonoriol.madsand.world.World;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class Npc extends Entity {
 	public static int NULL_NPC = 0;
-	static double IDLE_MOVE_CHANCE = 20;
+	static double IDLE_MOVE_CHANCE = 15;
 
 	public int id;
 	public long uid;

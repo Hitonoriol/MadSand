@@ -206,6 +206,7 @@ public class Overlay extends Stage {
 				gameLog.inputField.setText("");
 				gameLog.inputField.setVisible(!gameLog.inputField.isVisible());
 				unfocus(gameLog.inputField);
+				Gui.gameResumeFocus();
 			}
 		}
 
@@ -213,6 +214,7 @@ public class Overlay extends Stage {
 			String tmp = gameLog.inputField.getText();
 			gameLog.inputField.setText(prevConsoleInput);
 			prevConsoleInput = tmp;
+			gameLog.inputField.setCursorPosition(gameLog.inputField.getText().length());
 		}
 	}
 

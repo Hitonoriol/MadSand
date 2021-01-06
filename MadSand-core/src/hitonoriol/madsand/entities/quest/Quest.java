@@ -29,7 +29,7 @@ import hitonoriol.madsand.properties.NpcProp;
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
 @JsonSubTypes({ @Type(ProceduralQuest.class) })
 public class Quest {
-	static String OBJECTIVE_COLOR = "[#58FFB1F0]";
+	static String OBJECTIVE_COLOR = "[#58FFB1D8]", REWARD_COLOR = "[#16E1EAD8]", EXP_COLOR = "[#DAA520D1]";
 
 	public int id;
 	public String name;
@@ -147,11 +147,15 @@ public class Quest {
 				false);
 	}
 
-	protected String getObjectiveList(HashMap<Integer, Integer> objective, NameGetter nameGetter) {
+	protected String getObjectiveList(HashMap<Integer, Integer> objective, NameGetter nameGetter, String colorTag) {
 		return getObjectiveString(objective,
-				entry -> OBJECTIVE_COLOR + entry.getValue() + " " + nameGetter.get(entry.getKey())
+				entry -> colorTag + entry.getValue() + " " + nameGetter.get(entry.getKey())
 						+ Resources.COLOR_END,
 				true);
+	}
+
+	protected String getObjectiveList(HashMap<Integer, Integer> objective, NameGetter nameGetter) {
+		return getObjectiveList(objective, nameGetter, OBJECTIVE_COLOR);
 	}
 
 	private boolean verifyObjective(HashMap<Integer, Integer> objectiveList, ObjectiveVerifier verifier) {
@@ -178,10 +182,14 @@ public class Quest {
 		if (isComplete)
 			return true;
 
-		return isComplete = (verifyKillObjective() && verifyItemObjective());
+		return (verifyKillObjective() && verifyItemObjective());
 	}
 
-	private boolean initObjective(String query, HashMap<Integer, Integer> objective) {
+	/*
+	 * Fills map with objective entries: (id, quantity)
+	 * Returns false if objective query string is invalid (must be in format: id/quantity:id/quantity:...)
+	 */
+	private boolean createObjectiveMap(String query, HashMap<Integer, Integer> objective) {
 		if (query == null)
 			return false;
 		if (!query.contains(Item.ITEM_DELIM))
@@ -218,6 +226,14 @@ public class Quest {
 				+ "Return to " + getNpc().stats.name + " to claim your reward.");
 	}
 
+	protected void createEndMsg() {
+		endMsg += Resources.LINEBREAK + Resources.LINEBREAK;
+		endMsg += "Rewards:" + Resources.LINEBREAK;
+		endMsg += Utils.subsName(GameTextSubstitutor.QUEST_EXP_REWARD);
+		if (!rewardItems.equals(Item.EMPTY_ITEM))
+			endMsg += ", " + Utils.subsName(GameTextSubstitutor.QUEST_ITEM_REWARD) + ".";
+	}
+
 	public void start(Player player, long npcUID) {
 		this.player = player;
 		this.npcUID = npcUID;
@@ -228,14 +244,25 @@ public class Quest {
 		killObjective = new HashMap<>();
 		kills = new HashMap<>();
 
-		initObjective(reqItems, itemObjective);
-		if (initObjective(reqKills, killObjective))
+		createObjectiveMap(reqItems, itemObjective);
+		if (createObjectiveMap(reqKills, killObjective))
 			initCurrentKills();
 	}
 
-	private void showQuestDialog(String dialogText) {
+	private void setTextSubstitutionValues() {
+		String expRewardString = EXP_COLOR + "+" + exp + " EXP" + Resources.COLOR_END;
+		HashMap<Integer, Integer> reward = new HashMap<>();
+		createObjectiveMap(this.rewardItems, reward);
+
 		GameTextSubstitutor.add(GameTextSubstitutor.QUEST_ITEM_OBJECTIVE, getObjectiveList(itemObjective, itemNames));
 		GameTextSubstitutor.add(GameTextSubstitutor.QUEST_KILL_OBJECTIVE, getObjectiveList(killObjective, npcNames));
+		GameTextSubstitutor.add(GameTextSubstitutor.QUEST_ITEM_REWARD,
+				getObjectiveList(reward, itemNames, REWARD_COLOR));
+		GameTextSubstitutor.add(GameTextSubstitutor.QUEST_EXP_REWARD, expRewardString);
+	}
+
+	private void showQuestDialog(String dialogText) {
+		setTextSubstitutionValues();
 		new DialogChainGenerator(dialogText)
 				.setAllTitles(getNpc().stats.name)
 				.generate(Gui.overlay)
@@ -251,6 +278,8 @@ public class Quest {
 	}
 
 	public void showQuestCompleteDialog() {
+		isComplete = true;
+		createEndMsg();
 		showQuestDialog(endMsg);
 	}
 

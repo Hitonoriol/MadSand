@@ -1,6 +1,5 @@
 package hitonoriol.madsand.gui.widgets;
 
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -37,15 +36,6 @@ public class GameLog extends Table {
 		inputField.setWidth(WIDTH);
 		inputField.setMessageText("");
 		inputField.setFocusTraversal(true);
-		inputField.setTextFieldListener(new TextField.TextFieldListener() {
-			public void keyTyped(TextField textField, char key) {
-				if (key == Keys.ESCAPE || key == Keys.GRAVE) {
-					inputField.setText("");
-					Gui.overlay.unfocus(inputField);
-				}
-
-			}
-		});
 
 		// Setting up game log
 		logTable.align(Align.topLeft);

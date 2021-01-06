@@ -8,10 +8,9 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
-import hitonoriol.madsand.dialog.DialogChainGenerator;
+import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.Faction;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.TradeCategory;
@@ -53,10 +52,9 @@ public class ProceduralQuest extends Quest {
 	}
 
 	public void generate() {
-		type = Type.values()[Utils.rand(Type.values().length)];
+		type = Utils.randElement(Type.values);
 		super.reqItems = super.reqKills = "";
-		super.startMsg = super.endMsg = "#" + getNpc().stats.name + "#";
-		super.startMsg += getStartMsg();
+		super.startMsg = super.reqMsg = getStartMsg();
 
 		switch (type) {
 		case Fetch:
@@ -85,13 +83,10 @@ public class ProceduralQuest extends Quest {
 		addRewardItems();
 		super.name = type.name() + " Quest";
 		super.exp = rollRewardAmount();
-		super.reqMsg = super.startMsg;
-
-		Utils.out(super.reqItems);
-		createEndMsg();
 	}
 
 	private void addRewardItems() {
+		super.rewardItems = "";
 		List<Item> rewards = Globals.instance().proceduralQuestRewards.roll();
 		for (Item item : rewards) {
 			if (item.id == Globals.getInt(Globals.CURRENCY))
@@ -116,13 +111,9 @@ public class ProceduralQuest extends Quest {
 		return baseObjective + (int) (baseObjective * getLvlFactor());
 	}
 
-	private void createEndMsg() {
-		super.endMsg += "Thank you, {PLAYER}!" + Resources.LINEBREAK + Resources.LINEBREAK;
-		super.endMsg += DialogChainGenerator.LBRACKET + "+" + super.exp + " EXP" + DialogChainGenerator.RBRACKET
-				+ Resources.LINEBREAK;
-		if (!super.rewardItems.equals(Item.EMPTY_ITEM))
-			super.endMsg += DialogChainGenerator.LBRACKET + "+" + Item.queryToName(super.rewardItems)
-					+ DialogChainGenerator.RBRACKET;
+	protected void createEndMsg() {
+		super.endMsg = "Thank you, " + Utils.subsName(GameTextSubstitutor.PLAYER_NAME) + "!";
+		super.createEndMsg();
 	}
 
 	public long timeSinceCreated() {
@@ -183,7 +174,7 @@ public class ProceduralQuest extends Quest {
 		fetchItem.add(Utils.randElement(Globals.instance().fetchQuestItems));
 		Pair coords = MadSand.world.getCurLoc().randPlaceLoot(fetchItem.get(0));
 		super.reqItems += randomQuest(fetchItem, 1, 1);
-		super.startMsg += " I think it's somewhere near (" + coords + ").";
+		super.startMsg += " I think the lost item is somewhere near (" + coords + ").";
 	}
 
 	private void randomHuntQuest() {
@@ -218,7 +209,9 @@ public class ProceduralQuest extends Quest {
 		Fetch, // Place random item somewhere in the world and ask player to bring it to NPC
 		Resource,
 		Kill, // kill quests
-		Hunt
+		Hunt;
+
+		public static Type values[] = values();
 	}
 
 }

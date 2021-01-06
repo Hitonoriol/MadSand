@@ -156,7 +156,9 @@ public class Player extends Entity {
 		if (by < 1)
 			by = 1;
 		stats.skills.increaseSkill(skill, by);
-		stats.skills.increaseSkill(Skill.Level);
+
+		if (!skill.isFightingSkill())
+			stats.skills.increaseSkill(Skill.Level);
 	}
 
 	void increaseSkill(Skill skill) {

@@ -39,7 +39,7 @@ public class MapObject {
 
 	public int maskWidth = 0, maskHeight = 0; // Collision mask dimensions for objects larger than 1x1 cell
 	public HashMap<ItemType, ArrayList<Integer>> altItems;
-	public String onInteract  = Resources.emptyField;
+	public String onInteract = Resources.emptyField;
 	public Skill skill = Skill.None;
 	public String name;
 
@@ -117,7 +117,7 @@ public class MapObject {
 	}
 
 	public double getHpPercent() {
-		return Utils.round((double) hp / (double) maxHp) * 100d;
+		return Utils.round(((double) hp / (double) maxHp) * 100d);
 	}
 
 	private static int getAltItem(int id, ItemType hand, HashMap<ItemType, ArrayList<Integer>> container) {

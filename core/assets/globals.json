@@ -29,29 +29,29 @@
 	],
 	"proceduralQuestText" : {
 		"Craft" : [
-				"Oh, it's you. Listen, {PLAYER}, I want to make a certain device... So I'll need you to craft {ITEM_OBJECTIVE}. I hope it's not too hard for you. Thanks in advance.",
-				"Hey, can you craft something for me? I'm really in need of {ITEM_OBJECTIVE} right now!"
+				"Oh, it's you. Listen, {PLAYER}, I want to make a certain device... So I'll need you to craft {ITEM_OBJECTIVE}. Not for free, of course - I'll give you {ITEM_REWARD} for it. I hope it's not too hard for you. Thanks in advance.",
+				"Hey, can you craft something for me? I'm really in need of {ITEM_OBJECTIVE} right now! I'll give you {ITEM_REWARD} for it."
 				],
 		"Resource" : [
-				"Hello, {PLAYER}, I need you to gather some resources for me. To be more specific, I need {ITEM_OBJECTIVE}.",
-				"Yo! Bring me {ITEM_OBJECTIVE}. Pronto."
+				"Hello, {PLAYER}, I need you to gather some resources for me. To be more specific, I need {ITEM_OBJECTIVE}. You can take my {ITEM_REWARD} as a reward when you come back.",
+				"Yo! Bring me {ITEM_OBJECTIVE}. Pronto. I might even give you {ITEM_REWARD} if I feel like it."
 				],
 		"Kill" : [
-				"Please, help me! These bastards... They won't let me sleep! Kill {KILL_OBJECTIVE}. I'll give you everything I have, just do something with them!",
-				"Say, {PLAYER}, will you deal with one problem for me? I need you to eliminate {KILL_OBJECTIVE}. About the reward? Let's talk about it when you come back."
+				"Please, help me! These bastards... They won't let me sleep! Kill {KILL_OBJECTIVE}. I'll give you {ITEM_REWARD}, just do something with them!",
+				"Say, {PLAYER}, will you deal with one problem for me? I need you to eliminate {KILL_OBJECTIVE}. About the reward? I'll pay you with {ITEM_REWARD} when you come back."
 				],
 		"Fetch" : [
-				"Aaah! God, I lost something very important somewhere around here! Can you find and bring back my {ITEM_OBJECTIVE}?",
-				"What's up, {PLAYER}! Uhm... How do I say... I drank a little too much this night and lost something somewhere in this sector. Go find my {ITEM_OBJECTIVE}, please."
+				"Aaah! God, I lost something very important somewhere around here! Can you find and bring back my {ITEM_OBJECTIVE}? You can have my {ITEM_REWARD} if you find it.",
+				"What's up, {PLAYER}! Uhm... How do I say... I drank a little too much this night and lost something somewhere in this sector. Go find my {ITEM_OBJECTIVE}, please. And wait... Here - {ITEM_REWARD} you can have these when you come back."
 				],
 		"Hunt" : [
 				"Good day to you, {PLAYER}. I heard you are an experienced hunter. Or maybe it was someone else... [And... ?] =>
 				Yeah, not that it matters.
 				Anyways, I'm out of food and too lazy to hunt myself, so can you kill some wild animals and bring me {ITEM_OBJECTIVE}?
-				I'll even pay you a couple of coins if you want! [Right... Sure.]",
+				I'll even pay you with {ITEM_REWARD} if you want! [Right... Sure.]",
 				
 				"Hey, {PLAYER}, do you like hunting? Well, I don't. [Oh god, I know where this is going...] =>
-				I wanted to eat some steaks tonight, so go hunt some animals and bring me {ITEM_OBJECTIVE}."
+				I wanted to eat some steaks tonight, so go hunt some animals and bring me {ITEM_OBJECTIVE}. As for the payment... Will {ITEM_REWARD} do?"
 				]
 	}
 }

@@ -11,15 +11,18 @@ import me.xdrop.jrand.generators.person.FirstnameGenerator;
 import me.xdrop.jrand.model.person.Gender;
 
 public class GameTextSubstitutor {
+	public static final String DELIM_L = "{", DELIM_R = "}";
+
 	static final String RAND_NAME = "RANDOM_NAME";
 	static final String RAND_NAME_M = "RANDOM_NAME_M", RAND_NAME_F = "RANDOM_NAME_F";
 
+	public static final String QUEST_ITEM_REWARD = "ITEM_REWARD", QUEST_EXP_REWARD = "EXP_REWARD";
 	public static final String QUEST_ITEM_OBJECTIVE = "ITEM_OBJECTIVE", QUEST_KILL_OBJECTIVE = "KILL_OBJECTIVE";
 	public static final String PLAYER_NAME = "PLAYER";
 	public static final String LINEBREAK = "br";
 
 	private HashMap<String, String> globalConstants = new HashMap<>();
-	StringSubstitutor substitutor = new StringSubstitutor(globalConstants, "{", "}");
+	StringSubstitutor substitutor = new StringSubstitutor(globalConstants, DELIM_L, DELIM_R);
 
 	private static GameTextSubstitutor instance = new GameTextSubstitutor();
 
@@ -32,7 +35,7 @@ public class GameTextSubstitutor {
 	}
 
 	public static void add(String var, String subText) {
-		Utils.out("Substitutor: Setting {" + var + "} to \"" + subText + "\"");
+		Utils.out("Substitutor: Setting " + DELIM_L + var + DELIM_R + " to \"" + subText + "\"");
 		instance.globalConstants.put(var, subText);
 	}
 
