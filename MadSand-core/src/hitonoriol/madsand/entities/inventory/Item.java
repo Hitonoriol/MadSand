@@ -45,6 +45,7 @@ public class Item {
 	public int altObject, cost;
 	public ItemType type = ItemType.None;
 	public Skill skill = Skill.None;
+	@JsonProperty
 	public float weight = DEFAULT_WEIGHT;
 
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

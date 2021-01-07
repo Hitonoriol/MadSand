@@ -272,6 +272,8 @@ public class WorldGen {
 
 		getLocationBiome();
 		curLoc.rollSize();
+		curLoc.defTile = curBiome.overworld.defaultTile;
+		curLoc.defObject = curBiome.cave.caveObject;
 
 		Utils.out("Generating dungeon!");
 

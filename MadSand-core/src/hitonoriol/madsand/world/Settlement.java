@@ -20,6 +20,7 @@ import hitonoriol.madsand.properties.NpcProp;
 public class Settlement {
 	private static float WAREHOUSE_DEF_WEIGHT = 50;
 
+	private float BASE_HIRE_COST = 12;
 	private int SIZE_UPGRADE_COST = 500;
 	private int SIZE_UPGRADE_BY = 25;
 
@@ -46,6 +47,12 @@ public class Settlement {
 		overworld.setSize(overworld.getWidth() + SIZE_UPGRADE_BY, overworld.getHeight() + SIZE_UPGRADE_BY);
 
 		return true;
+	}
+
+	@JsonIgnore
+	public int getHireCost() {
+		return (int) (Math.sqrt(getPopulation() + 1d) * BASE_HIRE_COST
+				* (1d + Math.sqrt(World.player.settlementsEstablished) / 25d));
 	}
 
 	public boolean isOccupied(long npcUid) {
@@ -166,7 +173,7 @@ public class Settlement {
 	}
 
 	public static class WorkerContainer { // Info about all workers of certain type
-		public static float ITEMS_PER_LVL = 0.15f; // Items per lvl per realtimeTick
+		public static float ITEMS_PER_LVL = 0.1f; // Items per lvl per realtimeTick
 
 		public int lvl = 1;
 		public float itemCharge = 0;

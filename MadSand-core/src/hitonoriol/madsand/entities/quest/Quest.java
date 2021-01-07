@@ -29,7 +29,7 @@ import hitonoriol.madsand.properties.NpcProp;
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
 @JsonSubTypes({ @Type(ProceduralQuest.class) })
 public class Quest {
-	static String OBJECTIVE_COLOR = "[#58FFB1D8]", REWARD_COLOR = "[#16E1EAD8]", EXP_COLOR = "[#DAA520D1]";
+	public static String OBJECTIVE_COLOR = "[#58FFB1D8]", REWARD_COLOR = "[#16E1EAD8]", EXP_COLOR = "[#DAA520D1]";
 
 	public int id;
 	public String name;

@@ -78,8 +78,8 @@
 		"name" : "Video Blackjack machine"
 	},
 	"6" : {
-		"hp" : 5,
-		"harvestHp" : -1,
+		"hp" : 3,
+		"harvestHp" : 10,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
@@ -91,7 +91,7 @@
 		"name" : "Campfire"
 	},
 	"7" : {
-		"hp" : 30,
+		"hp" : 3,
 		"harvestHp" : -1,
 		"lvl" : -1,
 		"nocollide" : false,
@@ -146,8 +146,8 @@
 		"name" : "Cactus"
 	},
 	"11" : {
-		"hp" : 5,
-		"harvestHp" : -1,
+		"hp" : 3,
+		"harvestHp" : 10,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
@@ -162,8 +162,8 @@
 		"name" : "Closed door"
 	},
 	"12" : {
-		"hp" : 5,
-		"harvestHp" : -1,
+		"hp" : 3,
+		"harvestHp" : 10,
 		"lvl" : -1,
 		"nocollide" : true,
 		"maskWidth" : 0,
@@ -246,8 +246,8 @@
 		"name" : "Stone wall"
 	},
 	"18" : {
-		"hp" : 30,
-		"harvestHp" : -1,
+		"hp" : 3,
+		"harvestHp" : 5,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
@@ -258,7 +258,7 @@
 		"name" : "Sign"
 	},
 	"19" : {
-		"hp" : 5,
+		"hp" : 1,
 		"harvestHp" : -1,
 		"lvl" : -1,
 		"nocollide" : true,
@@ -270,7 +270,7 @@
 		"name" : "Cucumber sprout"
 	},
 	"20" : {
-		"hp" : 5,
+		"hp" : 1,
 		"harvestHp" : -1,
 		"lvl" : -1,
 		"nocollide" : true,
@@ -356,8 +356,8 @@
 		"name" : "Coal"
 	},
 	"26" : {
-		"hp" : 30,
-		"harvestHp" : -1,
+		"hp" : 1,
+		"harvestHp" : 15,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
@@ -551,8 +551,8 @@
 		"name" : "Spruce tree"
 	},
 	"39" : {
-		"hp" : 30,
-		"harvestHp" : -1,
+		"hp" : 1,
+		"harvestHp" : 15,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
@@ -563,8 +563,8 @@
 		"name" : "Cross"
 	},
 	"40" : {
-		"hp" : 15,
-		"harvestHp" : -1,
+		"hp" : 1,
+		"harvestHp" : 10,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
@@ -865,8 +865,8 @@
 		"name" : "Cucumber sprout"
 	},
 	"64" : {
-		"hp" : 30,
-		"harvestHp" : -1,
+		"hp" : 1,
+		"harvestHp" : 20,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
@@ -877,8 +877,8 @@
 		"name" : "Altar"
 	},
 	"65" : {
-		"hp" : 5,
-		"harvestHp" : -1,
+		"hp" : 1,
+		"harvestHp" : 10,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
@@ -889,8 +889,8 @@
 		"name" : "Campfire"
 	},
 	"66" : {
-		"hp" : 9,
-		"harvestHp" : -1,
+		"hp" : 1,
+		"harvestHp" : 15,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
@@ -901,8 +901,8 @@
 		"name" : "Fountain"
 	},
 	"67" : {
-		"hp" : 9,
-		"harvestHp" : -1,
+		"hp" : 1,
+		"harvestHp" : 15,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
@@ -914,8 +914,8 @@
 		"name" : "Furnace"
 	},
 	"68" : {
-		"hp" : 9,
-		"harvestHp" : -1,
+		"hp" : 1,
+		"harvestHp" : 15,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
@@ -926,8 +926,8 @@
 		"name" : "Treasure chest"
 	},
 	"69" : {
-		"hp" : 9,
-		"harvestHp" : -1,
+		"hp" : 1,
+		"harvestHp" : 15,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
@@ -938,8 +938,8 @@
 		"name" : "Opened treasure chest"
 	},
 	"70" : {
-		"hp" : 5,
-		"harvestHp" : -1,
+		"hp" : 1,
+		"harvestHp" : 15,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
@@ -950,8 +950,8 @@
 		"name" : "Pile of crates"
 	},
 	"71" : {
-		"hp" : 3,
-		"harvestHp" : -1,
+		"hp" : 1,
+		"harvestHp" : 15,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
@@ -962,8 +962,8 @@
 		"name" : "Keg"
 	},
 	"72" : {
-		"hp" : 9,
-		"harvestHp" : -1,
+		"hp" : 1,
+		"harvestHp" : 15,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
@@ -975,8 +975,8 @@
 		"name" : "Cooking place"
 	},
 	"73" : {
-		"hp" : 9,
-		"harvestHp" : -1,
+		"hp" : 1,
+		"harvestHp" : 15,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
@@ -987,8 +987,8 @@
 		"name" : "Alchemist table"
 	},
 	"74" : {
-		"hp" : 9,
-		"harvestHp" : -1,
+		"hp" : 1,
+		"harvestHp" : 15,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
@@ -999,8 +999,8 @@
 		"name" : "Alchemist table"
 	},
 	"75" : {
-		"hp" : 9,
-		"harvestHp" : -1,
+		"hp" : 1,
+		"harvestHp" : 15,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
@@ -1013,8 +1013,8 @@
 		"name" : "Sewing machine"
 	},
 	"76" : {
-		"hp" : 9,
-		"harvestHp" : -1,
+		"hp" : 1,
+		"harvestHp" : 15,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
@@ -1025,8 +1025,8 @@
 		"name" : "Signpost"
 	},
 	"77" : {
-		"hp" : 9,
-		"harvestHp" : -1,
+		"hp" : 1,
+		"harvestHp" : 15,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
@@ -1037,8 +1037,8 @@
 		"name" : "Signpost"
 	},
 	"78" : {
-		"hp" : 9,
-		"harvestHp" : -1,
+		"hp" : 1,
+		"harvestHp" : 15,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
@@ -1049,8 +1049,8 @@
 		"name" : "Signpost"
 	},
 	"79" : {
-		"hp" : 9,
-		"harvestHp" : -1,
+		"hp" : 1,
+		"harvestHp" : 15,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,
@@ -1085,8 +1085,8 @@
 		"name" : "Mountain"
 	},
 	"82" : {
-		"hp" : 9,
-		"harvestHp" : -1,
+		"hp" : 1,
+		"harvestHp" : 35,
 		"lvl" : -1,
 		"nocollide" : false,
 		"maskWidth" : 0,

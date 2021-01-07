@@ -122,7 +122,6 @@ public class Inventory {
 	}
 
 	public Item getItem(String uid) {
-
 		if (uid.equals(""))
 			return Item.nullItem;
 
@@ -225,7 +224,6 @@ public class Inventory {
 	 * use <Entity>.addItem(...) for extra items to drop
 	 */
 	public boolean putItem(Item item) {
-
 		if (item.quantity < 1)
 			return true;
 
@@ -314,7 +312,7 @@ public class Inventory {
 
 	public boolean delItem(List<Item> items) {
 		for (Item item : items)
-			delItem(item);
+			delItem(item, item.quantity);
 		return true;
 	}
 
@@ -322,17 +320,19 @@ public class Inventory {
 		if (quantity > item.quantity)
 			return false;
 
+		Item foundItem;
 		for (int i = items.size() - 1; i >= 0; --i) {
+			foundItem = items.get(i);
+			if (foundItem.equals(item)) {
+				foundItem.quantity -= quantity;
 
-			if (items.get(i).equals(item)) {
-				item.quantity -= quantity;
-
-				if (item.quantity < 1) {
-					refreshRemoveItem(item);
+				if (foundItem.quantity < 1) {
+					refreshRemoveItem(foundItem);
 					items.remove(i);
 				} else
-					refreshItem(item);
+					refreshItem(foundItem);
 
+				refreshUITitle();
 				return true;
 			}
 		}

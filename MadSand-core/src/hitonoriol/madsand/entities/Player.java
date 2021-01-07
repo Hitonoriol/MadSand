@@ -30,6 +30,7 @@ import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.inventory.ItemType;
 import hitonoriol.madsand.entities.inventory.trade.TradeInventoryUI;
+import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.enums.*;
 import hitonoriol.madsand.gui.dialogs.FishingUI;
@@ -531,6 +532,7 @@ public class Player extends Entity {
 	}
 
 	private void talkToNpc(Npc npc) {
+		int currency = Globals.getInt(Globals.CURRENCY);
 		Location location = MadSand.world.getLocation();
 		if (!npc.stats.faction.isHuman()) {
 			MadSand.print("Doesn't seem like " + npc.stats.name + " can talk");
@@ -560,7 +562,13 @@ public class Player extends Entity {
 		}
 
 		if (location.isPlayerOwnedSettlement()) {
-			TextButton recruitButton = new TextButton("Would you like to work for me?", Gui.skin);
+			int hireCost = location.settlement.getHireCost();
+			TextButton recruitButton = new TextButton(
+					"Will you work for me? "
+							+ Quest.OBJECTIVE_COLOR
+							+ "[[" + hireCost + " " + ItemProp.getItemName(currency) + "s]"
+							+ Resources.COLOR_END,
+					Gui.skin);
 			if (!location.settlement.isOccupied(npc.uid))
 				npcDialog.addButton(recruitButton);
 
@@ -569,6 +577,11 @@ public class Player extends Entity {
 				public void changed(ChangeEvent event, Actor actor) {
 					npcDialog.remove();
 					WorkerType worker = location.settlement.recruitWorker(npc.uid);
+					if (!canAfford(hireCost)) {
+						Gui.drawOkDialog("You don't have enough money to recruit this worker!", Gui.overlay);
+						return;
+					}
+					inventory.delItem(currency, hireCost);
 					new DialogChainGenerator(
 							"Sure. I'll be the best " + worker.name() + " of the " + location.name + " settlement!")
 									.setAllTitles(npc.stats.name)

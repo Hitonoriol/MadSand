@@ -47,10 +47,10 @@ public class Loot {
 		return true;
 	}
 
-	public Loot remove(int idx) {
-		contents.remove(idx);
+	public Item remove(int idx) {
+		Item removedItem = contents.remove(idx);
 		genInfo();
-		return this;
+		return removedItem;
 	}
 
 	public Loot add(int id, int q) {

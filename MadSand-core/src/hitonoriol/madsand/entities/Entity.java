@@ -17,6 +17,7 @@ import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
+import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.TileProp;
 
 public abstract class Entity {
@@ -141,6 +142,10 @@ public abstract class Entity {
 		return stats.faction == faction;
 	}
 
+	public boolean canAfford(int cost) {
+		return inventory.hasItem(Globals.getInt(Globals.CURRENCY), cost);
+	}
+
 	abstract void attack(Direction dir);
 
 	public boolean addItem(Item item) {
@@ -181,13 +186,9 @@ public abstract class Entity {
 		if (loot.equals(Map.nullLoot))
 			return;
 
-		for (int i = loot.contents.size() - 1; i >= 0; --i) {
-			if (addItem(new Item(loot.contents.get(i))))
-				loot.remove(i);
-			else
+		for (int i = loot.contents.size() - 1; i >= 0; --i)
+			if (!addItem(new Item(loot.remove(i))))
 				break;
-		}
-
 	}
 
 	public boolean colliding(Direction direction) {
