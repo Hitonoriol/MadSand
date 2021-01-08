@@ -94,7 +94,7 @@ public class CraftMenu extends Stage {
 			id = itemList.get(i);
 
 			craftButtons[i] = new CraftButton(ItemProp.getItem(id));
-			recipeLabel = new Label(" " + Item.queryToName(ItemProp.getCraftRecipe(id)), skin);
+			recipeLabel = new Label(" " + Item.createReadableItemList(ItemProp.getCraftRecipe(id)), skin);
 			recipeLabel.setAlignment(Align.left);
 
 			craftTable.add(craftButtons[i]).width(craftButtons[i].getWidth());

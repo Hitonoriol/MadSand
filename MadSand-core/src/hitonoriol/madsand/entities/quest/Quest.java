@@ -194,14 +194,8 @@ public class Quest {
 			return false;
 		if (!query.contains(Item.ITEM_DELIM))
 			return false;
-		if (!query.contains(Item.BLOCK_DELIM))
-			reqItems += Item.BLOCK_DELIM;
-		String blocks[] = query.split(Item.BLOCK_DELIM);
-		String item[];
-		for (String itemStr : blocks) {
-			item = itemStr.split(Item.ITEM_DELIM);
-			objective.put(Utils.val(item[0]), Utils.val(item[1]));
-		}
+
+		Item.parseListString(query, (id, quantity) -> objective.put(id, quantity));
 
 		return true;
 	}

@@ -94,7 +94,7 @@ public class InventoryUICell extends ItemUI {
 		dropBtn = new TextButton("Drop", Gui.skin);
 		addContextBtn(dropBtn);
 		invCellContextContainer.setVisible(false);
-		Gui.overlay.addActor(invCellContextContainer);
+		World.player.inventory.inventoryUI.addActor(invCellContextContainer);
 
 		dropBtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {

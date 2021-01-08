@@ -169,8 +169,8 @@ public class QuestWorker {
 		if (isQuestCompleted(quest.id))
 			return;
 
-		if (player.inventory.putItem(quest.giveItems) != -1)
-			MadSand.print("You get " + Item.queryToName(quest.giveItems));
+		if (player.inventory.putItem(quest.giveItems))
+			MadSand.print("You get " + Item.createReadableItemList(quest.giveItems));
 
 		questsInProgress.add(quest);
 		proceduralQuests.remove(quest);
@@ -243,7 +243,6 @@ public class QuestWorker {
 	}
 
 	public int getAvailableQuest(ArrayList<Integer> quests) { // search NPC's quest list for {not yet started / not finished / repeatable} quests
-
 		for (int qid : quests)
 			if (isQuestInProgress(qid) || !isQuestCompleted(qid))
 				return qid;

@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Skill;
-import hitonoriol.madsand.map.Loot;
 
 public class Inventory {
 	public static final double MAX_WEIGHT = Integer.MAX_VALUE;
@@ -269,6 +268,10 @@ public class Inventory {
 		return putItem(item);
 	}
 
+	public boolean putItem(String query) {
+		return putItem(Item.parseItemString(query));
+	}
+
 	public boolean delItem(int id, int quantity) {
 		int idx = getSameCell(id, quantity);
 		if (idx == -1)
@@ -288,26 +291,7 @@ public class Inventory {
 	}
 
 	public boolean delItem(String query) {
-		if (query.equals(Item.EMPTY_ITEM))
-			return false;
-
-		int i = 0;
-		if (query.indexOf(":") == -1)
-			query += ":";
-		try {
-			String[] block = query.split(":");
-			String[] attr;
-			while (i < block.length) {
-				attr = block[i].split("/");
-				if (!delItem(Integer.parseInt(attr[0]), Integer.parseInt(attr[1])))
-					return false;
-				i++;
-			}
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
+		return delItem(Item.parseItemString(query));
 	}
 
 	public boolean delItem(List<Item> items) {
@@ -365,13 +349,5 @@ public class Inventory {
 			i++;
 		}
 		return true;
-	}
-
-	public int putItem(String query) {
-
-		if (query.equals(Item.EMPTY_ITEM))
-			return -1;
-
-		return Loot.addLootQ(query, this, 0, 0, null); // Don't ask about this, this is a long story
 	}
 }

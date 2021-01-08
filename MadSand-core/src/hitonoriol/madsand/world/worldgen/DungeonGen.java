@@ -71,7 +71,7 @@ public class DungeonGen extends DungeonGenerator {
 					}
 
 					if (Utils.percentRoll(curDungeonFloor.lootCorridorProbability))
-						map.putLoot(x, y, loot.roll());
+						map.putLoot(x, y, loot.rollItems());
 
 				}
 
@@ -90,7 +90,7 @@ public class DungeonGen extends DungeonGenerator {
 					}
 
 					if (Utils.percentRoll(curDungeonFloor.lootProbability))
-						map.putLoot(x, y, loot.roll());
+						map.putLoot(x, y, loot.rollItems());
 
 					if (map.spawnPoint.equals(Pair.nullPair)) {
 						map.spawnPoint = new Pair(x, y);

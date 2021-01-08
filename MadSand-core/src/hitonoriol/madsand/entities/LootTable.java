@@ -1,60 +1,21 @@
 package hitonoriol.madsand.entities;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.inventory.Item;
 
-public class LootTable {
-	public boolean exclusiveRoll = false; // Stop after the first successful roll
-	public int rollCount = 1;
-	public SortedMap<Float, LootTableEntry> lootTable = new TreeMap<Float, LootTableEntry>(new Comparator<Float>() {
-		@Override
-		public int compare(Float o1, Float o2) {
-			return o1.compareTo(o2);
-		}
-	});
+public class LootTable extends RollTable<LootTable.LootEntry> {
+	public boolean allowEmptyRoll = false;
 
-	private ArrayList<Item> roll(ArrayList<Item> itemList) {
-		Item item;
-		double roll = Utils.randPercent();
-
-		for (Entry<Float, LootTableEntry> entry : lootTable.entrySet()) {
-			item = Item.nullItem;
-			if (!Utils.percentRoll(roll, entry.getKey()))
-				continue;
-			else {
-				item = entry.getValue().rollItem();
-
-				if (!item.equals(Item.nullItem))
-					itemList.add(item);
-
-				if (exclusiveRoll)
-					break;
-			}
-
-		}
-
-		return itemList;
-	}
-
-	public ArrayList<Item> roll(int times) {
-		ArrayList<Item> itemList = new ArrayList<>();
-
-		for (int i = 0; i < times; ++i)
-			roll(itemList);
-
-		return itemList;
-	}
-
-	public ArrayList<Item> roll() {
-		return roll(rollCount);
+	public ArrayList<Item> rollItems() {
+		ArrayList<Item> items = new ArrayList<>();
+		ArrayList<LootEntry> protoItems = super.roll();
+		for (LootEntry protoItem : protoItems)
+			items.add(protoItem.makeItem(allowEmptyRoll));
+		return items;
 	}
 
 	static final String ENTRY_PROBABILITY_DELIM = "\\|";
@@ -79,24 +40,28 @@ public class LootTable {
 		return table;
 	}
 
-	private static LootTableEntry parseItemList(String listString) {
-		ArrayList<LootItemEntry> lootEntries = new ArrayList<>();
-		LootTableEntry tableEntry = new LootTableEntry(lootEntries);
+	private static RollTable.Entry<LootEntry> parseItemList(String listString) {
+		RollTable.Entry<LootEntry> tableEntry = new RollTable.Entry<>(new ArrayList<>());
+		Item.parseListString(listString, (id, quantity) -> tableEntry.items.add(new LootEntry(id, quantity)));
+		return tableEntry;
+	}
 
-		if (!listString.contains(Item.BLOCK_DELIM))
-			listString += Item.BLOCK_DELIM;
+	public static class LootEntry {
+		public int id;
+		public int maxQuantity;
 
-		String items[] = listString.split(Item.BLOCK_DELIM);
-		String itemArr[];
-		for (String itemStr : items) {
-
-			if (itemStr.equals(""))
-				continue;
-
-			itemArr = itemStr.split(Item.ITEM_DELIM);
-			lootEntries.add(new LootItemEntry(Utils.val(itemArr[0]), Utils.val(itemArr[1])));
+		public LootEntry(int id, int maxQuantity) {
+			this.id = id;
+			this.maxQuantity = maxQuantity;
 		}
 
-		return tableEntry;
+		public LootEntry() {
+			this(0, 0);
+		}
+
+		public Item makeItem(boolean allowEmptyRoll) {
+			int minQuantity = allowEmptyRoll ? 0 : 1;
+			return new Item(id, Utils.rand(minQuantity, maxQuantity));
+		}
 	}
 }

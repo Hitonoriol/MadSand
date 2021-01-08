@@ -795,7 +795,7 @@ public class Map {
 		}
 	}
 
-	public void putLoot(int x, int y, ArrayList<Item> loot) {
+	public void putLoot(int x, int y, List<Item> loot) {
 		for (Item item : loot)
 			putLoot(x, y, item);
 	}

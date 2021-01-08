@@ -2,6 +2,7 @@ package hitonoriol.madsand.entities.inventory;
 
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -102,21 +103,11 @@ public class Item {
 
 	}
 
-	public Item(String query) {
-		if (query.equals(EMPTY_ITEM)) {
-			this.id = 0;
-			loadProperties();
-			return;
-		}
-		String blocks[];
-		blocks = query.split("\\" + ITEM_DELIM);
-		id = Integer.parseInt(blocks[0]);
-		quantity = Integer.parseInt(blocks[1]);
-		loadProperties();
-	}
-
-	public void clear() {
-		id = 0;
+	public Item(String itemStr) {
+		parseListString(itemStr, (id, quantity) -> {
+			this.id = id;
+			this.quantity = quantity;
+		});
 		loadProperties();
 	}
 
@@ -191,7 +182,7 @@ public class Item {
 		return this;
 	}
 
-	private void loadProperties() {
+	protected void loadProperties() {
 		Item properties = ItemProp.items.get(id);
 
 		this.name = properties.name;
@@ -294,40 +285,34 @@ public class Item {
 		return new HashCodeBuilder(14407, 7177).append(id).append(uid).toHashCode();
 	}
 
-	// Static functions for general item related needs:
+	// list string format: id1/quantity1:id2/quantity2:...
+	public static void parseListString(String listString, BiConsumer<Integer, Integer> listItemConsumer) {
+		if (!listString.contains(BLOCK_DELIM))
+			listString += BLOCK_DELIM;
 
-	public static String queryToName(String query) { // item query format: id1/quantity1:id2/quantity2:...
-		int i = 0;
-		String ret = "";
-		if (!query.contains(BLOCK_DELIM))
-			query += BLOCK_DELIM;
-		try {
-			String[] block = query.split(BLOCK_DELIM);
-			String[] attr;
-			while (i < block.length) {
-				attr = block[i].split(ITEM_DELIM);
-				ret = ret + attr[1] + " " + ItemProp.getItemName(Integer.parseInt(attr[0])) + " ";
-				i++;
-			}
-			return ret;
-		} catch (Exception e) {
-			e.printStackTrace();
+		String listItems[] = listString.split(BLOCK_DELIM);
+		String itemAttrs[];
+		for (String itemStr : listItems) {
+			itemAttrs = itemStr.split(ITEM_DELIM);
+			listItemConsumer.accept(Utils.val(itemAttrs[0]), Utils.val(itemAttrs[1]));
 		}
-		return "";
+	}
+
+	public static ArrayList<Item> parseItemString(String itemListStr) {
+		ArrayList<Item> items = new ArrayList<>();
+		parseListString(itemListStr, (id, quantity) -> items.add(new Item(id, quantity)));
+		return items;
+	}
+
+	public static String createReadableItemList(String itemListStr) {
+		StringBuilder ret = new StringBuilder();
+		parseListString(itemListStr, (id, quantity) -> ret.append(quantity + " " + ItemProp.getItemName(id) + " "));
+		return ret.toString();
 	}
 
 	public static ArrayList<Integer> parseCraftRequirements(String recipe) {
-
 		ArrayList<Integer> requirements = new ArrayList<>();
-
-		if (!recipe.contains(BLOCK_DELIM))
-			recipe += BLOCK_DELIM;
-
-		String[] itemBlocks = recipe.split(BLOCK_DELIM);
-
-		for (String itemBlock : itemBlocks)
-			requirements.add(Utils.val(itemBlock.split(ITEM_DELIM)[0]));
-
+		parseListString(recipe, (id, quantity) -> requirements.add(id));
 		return requirements;
 
 	}

@@ -12,7 +12,7 @@ public class FishingSpot {
 	public LootTable fish;
 
 	public ArrayList<Item> catchFish() {
-		return fish.roll();
+		return fish.rollItems();
 	}
 
 	@JsonSetter("fish")

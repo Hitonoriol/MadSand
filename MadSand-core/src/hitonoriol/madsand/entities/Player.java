@@ -449,7 +449,7 @@ public class Player extends Entity {
 		}
 	}
 
-	public boolean addItem(ArrayList<Item> items) {
+	public boolean addItem(List<Item> items) {
 		for (Item item : items)
 			addItem(item);
 		return true;
@@ -790,7 +790,7 @@ public class Player extends Entity {
 		if (!item.type.equals(ItemType.GrabBag))
 			return false;
 
-		ArrayList<Item> items = item.contents.roll();
+		ArrayList<Item> items = item.contents.rollItems();
 		for (Item rolledItem : items)
 			addItem(rolledItem);
 

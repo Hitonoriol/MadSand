@@ -1,41 +1,24 @@
 package hitonoriol.madsand.world;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.entities.RollTable;
 import hitonoriol.madsand.entities.Skill;
 
 public enum WorkerType {
-	Sweeper(100),
-	Hunter(40),
-	Miner(30), Digger(30), Woodcutter(30);
+	Sweeper,
+	Hunter,
+	Miner, Digger, Woodcutter;
 
-	public static List<WorkerType> workers = new ArrayList<WorkerType>(Arrays.asList(values()));
+	public static WorkerType workers[] = values();
+	public static RollTable<WorkerType> workerRollTable = new RollTable<>();
 	static {
-		Collections.sort(workers, new Comparator<WorkerType>() {
-			@Override
-			public int compare(WorkerType o1, WorkerType o2) {
-				return Double.compare(o1.probability, o2.probability);
-			}
-		});
-	}
-
-	double probability;
-
-	WorkerType(double probability) {
-		this.probability = probability;
+		workerRollTable
+				.add(100, Sweeper)
+				.add(40, Hunter)
+				.add(30, Miner, Digger, Woodcutter);
 	}
 
 	public static WorkerType roll() {
-		for (WorkerType type : workers) {
-			if (Utils.percentRoll(type.probability))
-				return type;
-		}
-		return Sweeper;
+		return workerRollTable.rollSingle();
 	}
 
 	public Skill getSkill() {

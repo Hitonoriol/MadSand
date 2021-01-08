@@ -163,7 +163,7 @@ public class Npc extends Entity {
 		initInventory();
 		inventory.setMaxWeight(stats.calcMaxInventoryWeight());
 		if (properties.loot != null)
-			inventory.putItem(properties.loot.roll());
+			inventory.putItem(properties.loot.rollItems());
 
 		if (properties.questList != null)
 			questList = new ArrayList<>(properties.questList);

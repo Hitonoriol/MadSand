@@ -102,7 +102,7 @@ class BuildDialogEntry extends Group {
 		this.recipe = recipe;
 
 		Image objImage = new Image(Resources.objects[id]);
-		Label resourceLabel = new Label("Resources required to build:" + Resources.LINEBREAK + Item.queryToName(recipe),
+		Label resourceLabel = new Label("Resources required to build:" + Resources.LINEBREAK + Item.createReadableItemList(recipe),
 				Gui.skin);
 		resourceLabel.setWrap(true);
 		resourceLabel.setAlignment(Align.center);

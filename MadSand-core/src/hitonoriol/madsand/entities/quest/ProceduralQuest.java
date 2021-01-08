@@ -87,7 +87,7 @@ public class ProceduralQuest extends Quest {
 
 	private void addRewardItems() {
 		super.rewardItems = "";
-		List<Item> rewards = Globals.instance().proceduralQuestRewards.roll();
+		List<Item> rewards = Globals.instance().proceduralQuestRewards.rollItems();
 		for (Item item : rewards) {
 			if (item.id == Globals.getInt(Globals.CURRENCY))
 				item.quantity = (int) (rollRewardAmount() * 1.125);
