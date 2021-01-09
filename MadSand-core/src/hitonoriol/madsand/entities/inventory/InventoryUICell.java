@@ -1,5 +1,7 @@
 package hitonoriol.madsand.entities.inventory;
 
+import java.util.function.Consumer;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -13,6 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Mouse;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.gui.dialogs.ConfirmDialog;
+import hitonoriol.madsand.gui.dialogs.SliderDialog;
 import hitonoriol.madsand.world.World;
 
 public class InventoryUICell extends ItemUI {
@@ -75,16 +79,15 @@ public class InventoryUICell extends ItemUI {
 					return;
 
 				if (!invCellContextContainer.isVisible()) {
+					toFront();
+					World.player.inventory.clearContextMenus();
 					invCellContextContainer.setVisible(true);
 					Mouse.x = Gdx.input.getX();
 					Mouse.y = Gdx.graphics.getHeight() - Gdx.input.getY();
-					invCellContextContainer.setPosition(Mouse.x + CONTEXT_BTN_WIDTH / CONTEXT_W_DENOMINATOR,
-							Mouse.y);
+					invCellContextContainer.setPosition(SIZE / 2, SIZE / 2);
 
-				} else {
+				} else
 					invCellContextContainer.setVisible(false);
-
-				}
 			}
 		});
 	}
@@ -94,18 +97,28 @@ public class InventoryUICell extends ItemUI {
 		dropBtn = new TextButton("Drop", Gui.skin);
 		addContextBtn(dropBtn);
 		invCellContextContainer.setVisible(false);
-		World.player.inventory.inventoryUI.addActor(invCellContextContainer);
+		super.addActor(invCellContextContainer);
 
 		dropBtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				hideContext();
-				World.player.dropItem(item);
-			}
+				Consumer<Integer> dropAction = (quantity) -> World.player.dropItem(item, quantity);
 
+				if (item.quantity > 1)
+					new SliderDialog(item.quantity)
+							.setTitle("Drop " + item.name)
+							.setSliderTitle("Quantity of " + item.name + " to drop")
+							.setOnUpdateText(item.name)
+							.setConfirmAction(dropAction)
+							.show();
+				else
+					new ConfirmDialog("Drop " + item.name + "?",
+							() -> dropAction.accept(item.quantity),
+							Gui.overlay).show();
+			}
 		});
 
-		if (item.type.isConsumable() || item.type == ItemType.PlaceableObject
-				|| item.type == ItemType.PlaceableTile) {
+		if (item.type.isConsumable() || item.type.isPlaceable()) {
 			useBtn = new TextButton("Use", Gui.skin);
 			useBtn.addListener(new ChangeListener() {
 				@Override

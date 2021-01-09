@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Timer;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.gui.dialogs.SliderDialog;
 import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.minigames.Card;
 import hitonoriol.madsand.minigames.CardGameUI;
@@ -126,23 +125,17 @@ public class BlackJackUI extends CardGameUI {
 	protected void startGame() {
 		super.startGame();
 		stopGame();
-		SliderDialog betDialog;
-		super.showBetDialog(betDialog = super.createBetDialog(), new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				int bet = betDialog.getSliderValue();
-				if (bet > 0) {
-					World.player.inventory.delItem(currency, bet);
-					blackjack.startGame(bet);
-					setBetText(bet);
-					buttonTable.setVisible(true);
-					betButton.setVisible(false);
-					refreshHands();
+		super.showBetDialog(bet -> {
+			if (bet > 0) {
+				World.player.inventory.delItem(currency, bet);
+				blackjack.startGame(bet);
+				setBetText(bet);
+				buttonTable.setVisible(true);
+				betButton.setVisible(false);
+				refreshHands();
 
-					if (blackjack.gameEnded())
-						endGame();
-				}
-				betDialog.remove();
+				if (blackjack.gameEnded())
+					endGame();
 			}
 		});
 	}

@@ -21,7 +21,7 @@ public class TradeConfirmDialog extends SliderDialog {
 
 	private static String costFor = " for ";
 	private String costLabelText;
-	
+
 	private int itemPrice;
 	private TradeInventory tradeInventory;
 	private TradeAction tradeAction;
@@ -35,7 +35,7 @@ public class TradeConfirmDialog extends SliderDialog {
 		this.item = item;
 		this.itemPrice = item.getPrice();
 		this.refresher = refresher;
-		this.currentQuantity = minQuantity;
+		this.currentQuantity = minValue;
 		setCostLabelText(currentQuantity);
 
 		super.setSliderTitle(getTradeText());
@@ -67,19 +67,14 @@ public class TradeConfirmDialog extends SliderDialog {
 	}
 
 	private void setConfirmButtonListener() {
-		super.setConfirmListener(new ChangeListener() {
-
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				if (!tradeInventory.sell(item, currentQuantity)) {
-					Gui.drawOkDialog(getTradeErrorText(), Gui.overlay);
-					return;
-				}
-
-				refresher.refreshUI();
-				remove();
+		super.setConfirmAction(quantity -> {
+			if (!tradeInventory.sell(item, quantity)) {
+				Gui.drawOkDialog(getTradeErrorText(), Gui.overlay);
+				return;
 			}
 
+			refresher.refreshUI();
+			remove();
 		});
 	}
 

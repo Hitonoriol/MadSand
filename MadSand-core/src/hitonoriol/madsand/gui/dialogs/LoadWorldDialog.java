@@ -87,13 +87,13 @@ public class LoadWorldDialog extends GameDialog {
 
 			scrollTable.add(loadButton).pad(PAD_BTN).size(BTN_WIDTH, BTN_HEIGHT);
 			scrollTable.add(delButton).size(BTN_HEIGHT).padRight(PAD_BTN).row();
-			String sa = dirs[i];
+			String worldName = dirs[i];
 
 			loadButton.addListener(new ChangeListener() {
 				public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-					MadSand.WORLDNAME = sa;
+					MadSand.WORLDNAME = worldName;
 					remove();
-					if (GameSaver.loadWorld(sa)) {
+					if (GameSaver.loadWorld(worldName)) {
 						MadSand.state = GameState.GAME;
 						Gdx.input.setInputProcessor(Gui.overlay);
 						Gdx.graphics.setContinuousRendering(false);
@@ -108,17 +108,13 @@ public class LoadWorldDialog extends GameDialog {
 
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
-					new ConfirmDialog(new ConfirmDialog.Action() {
+					new ConfirmDialog("Are you sure you want to delete " + worldName + "?",
+							() -> {
+								if (!GameSaver.deleteDirectory(new File(MadSand.MAPDIR + worldName)))
+									Gui.drawOkDialog("Couldn't delete this save slot.", Gui.mainMenu);
 
-						@Override
-						public void run() {
-							if (!GameSaver.deleteDirectory(new File(MadSand.MAPDIR + sa)))
-								Gui.drawOkDialog("Couldn't delete this save slot.", Gui.mainMenu);
-
-							refreshSaveList();
-
-						}
-					}, "Are you sure you want to delete " + sa + "?", Gui.mainMenu).show();
+								refreshSaveList();
+							}, Gui.mainMenu).show();
 				}
 			});
 			i++;

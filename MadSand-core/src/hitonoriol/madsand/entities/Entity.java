@@ -157,15 +157,12 @@ public abstract class Entity {
 		return addItem(item);
 	}
 
-	public boolean dropItem(Item item) {
+	public boolean dropItem(Item item, int quantity) {
 		if (!hasItem(item))
 			return false;
 
-		Pair coord = new Pair(x, y).addDirection(stats.look);
-		MadSand.world.getCurLoc().putLoot(coord.x, coord.y, new Item(item));
-		inventory.delItem(item);
-
-		doAction(stats.minorCost);
+		MadSand.world.getCurLoc().putLoot(x, y, new Item(item, quantity));
+		inventory.delItem(item, quantity);
 		return true;
 	}
 

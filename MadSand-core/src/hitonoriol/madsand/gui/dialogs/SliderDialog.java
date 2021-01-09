@@ -1,5 +1,7 @@
 package hitonoriol.madsand.gui.dialogs;
 
+import java.util.function.Consumer;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -44,8 +46,7 @@ public class SliderDialog extends GameDialog {
 	private TextButton cancelButton;
 	private TextButton confirmButton;
 
-	protected static final int minQuantity = 1; // Min/max slider values
-	protected int maxQuantity;
+	protected int minValue, maxValue;
 	protected int currentQuantity;
 
 	private SliderDialog(Stage stage) {
@@ -68,12 +69,13 @@ public class SliderDialog extends GameDialog {
 		bottomLabel = new Label("", Gui.skin);
 	}
 
-	public SliderDialog(int max) {
+	public SliderDialog(int min, int max) {
 		this(Gui.overlay);
-		maxQuantity = max;
+		minValue = min;
+		maxValue = max;
 		topLabel.setWrap(true);
 		topLabel.setAlignment(Align.bottomLeft);
-		slider = new Slider(minQuantity, maxQuantity, SLIDER_STEP, false, Gui.skin);
+		slider = new Slider(minValue, maxValue, SLIDER_STEP, false, Gui.skin);
 		slider.setHeight(SLIDER_HEIGHT);
 
 		super.add(topLabel).size(WIDTH, DEFAULT_HEIGHT).align(Align.left).padBottom(LABEL_PAD_BOTTOM).row();
@@ -87,11 +89,20 @@ public class SliderDialog extends GameDialog {
 				remove();
 			}
 		});
-
+	}
+	
+	public SliderDialog(int max) {
+		this(1, max);
 	}
 
-	public SliderDialog setConfirmListener(ChangeListener listener) {
-		confirmButton.addListener(listener);
+	public SliderDialog setConfirmAction(Consumer<Integer> action) {
+		confirmButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				action.accept(getSliderValue());
+				remove();
+			}
+		});
 		return this;
 	}
 
@@ -109,7 +120,12 @@ public class SliderDialog extends GameDialog {
 		});
 		// Refresh this label by triggering change event
 		slider.setValue(slider.getMaxValue());
-		slider.setValue(minQuantity);
+		slider.setValue(minValue);
+		return this;
+	}
+	
+	public SliderDialog setTitle(String title) {
+		super.setTitle(title);
 		return this;
 	}
 

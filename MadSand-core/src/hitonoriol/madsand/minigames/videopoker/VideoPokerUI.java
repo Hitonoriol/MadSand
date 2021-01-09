@@ -16,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.gui.dialogs.SliderDialog;
 import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.minigames.Card;
 import hitonoriol.madsand.minigames.CardGameUI;
@@ -63,18 +62,10 @@ public class VideoPokerUI extends CardGameUI {
 		betButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				SliderDialog betDialog;
-				showBetDialog(betDialog = createBetDialog(), new ChangeListener() {
-					@Override
-					public void changed(ChangeEvent event, Actor actor) {
-						int bet = betDialog.getSliderValue();
-						World.player.inventory.delItem(currency, bet);
-						startGame(bet);
-						betDialog.remove();
-					}
-
+				showBetDialog(bet -> {
+					World.player.inventory.delItem(currency, bet);
+					startGame(bet);
 				});
-
 			}
 		});
 

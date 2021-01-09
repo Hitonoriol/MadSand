@@ -83,8 +83,12 @@ public class Item {
 
 			if (item.type.isEquipment())
 				equipStats = new EquipStats(item.equipStats);
-
 		}
+	}
+
+	public Item(Item item, int quantity) {
+		this(item);
+		setQuantity(quantity);
 	}
 
 	public Item() {

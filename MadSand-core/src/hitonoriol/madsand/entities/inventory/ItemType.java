@@ -19,6 +19,11 @@ public enum ItemType {
 		return (this == FishingBait) ? EquipSlot.Offhand : EquipSlot.MainHand;
 	}
 
+	public boolean isPlaceable() {
+		return this == PlaceableObject ||
+				this == PlaceableTile;
+	}
+
 	public boolean isConsumable() {
 		return this == Consumable ||
 				this == GrabBag;
@@ -53,25 +58,25 @@ public enum ItemType {
 	public boolean isUnique() { //Unique = non-stackable
 		return (isWeapon() || isTool() || isArmor());
 	}
-	
+
 	public static ItemType bySkill(Skill skill) {
-		switch(skill) {
-		
+		switch (skill) {
+
 		case Farming:
 			return Hoe;
-		
+
 		case Digging:
 			return Shovel;
-		
+
 		case Mining:
 			return Pickaxe;
-		
+
 		case Woodcutting:
 			return Axe;
-		
+
 		default:
 			return None;
-		
+
 		}
 	}
 }

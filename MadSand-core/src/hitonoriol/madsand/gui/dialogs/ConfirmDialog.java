@@ -13,24 +13,24 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.dialog.GameDialog;
 
 public class ConfirmDialog extends GameDialog {
-	
+
 	private float WIDTH = 400;
 	private float HEIGHT = 175;
-	
-	private float BTN_WIDTH = Gui.defLblWidth/2;
+
+	private float BTN_WIDTH = Gui.defLblWidth / 2;
 	private float BTN_HEIGHT = 40;
 
 	private Table buttonTable = new Table();
 	private TextButton confirmBtn = new TextButton("Confirm", Gui.skin);
 	private TextButton cancelBtn = new TextButton("Cancel", Gui.skin);
-	
-	private Label msgLabel; 
+
+	private Label msgLabel;
 
 	private ConfirmDialog(Stage stage) {
 		super(stage);
 	}
 
-	public ConfirmDialog(Action action, String msg, Stage stage) {
+	public ConfirmDialog(String msg, Runnable action, Stage stage) {
 		this(stage);
 		super.setBackground(Gui.getColorDrawable(Color.DARK_GRAY));
 		super.setSize(WIDTH, HEIGHT);
@@ -39,7 +39,7 @@ public class ConfirmDialog extends GameDialog {
 		msgLabel = new Label(msg, Gui.skin);
 		msgLabel.setWrap(true);
 		msgLabel.setAlignment(Align.center);
-		super.add(msgLabel).size(WIDTH,HEIGHT).row();
+		super.add(msgLabel).size(WIDTH, HEIGHT).row();
 
 		buttonTable.add(confirmBtn).size(BTN_WIDTH, BTN_HEIGHT).pad(5);
 		buttonTable.add(cancelBtn).size(BTN_WIDTH, BTN_HEIGHT).row();
@@ -62,7 +62,7 @@ public class ConfirmDialog extends GameDialog {
 		});
 	}
 
-	public interface Action {
-		public void run();
+	public ConfirmDialog(String msg, Runnable action) {
+		this(msg, action, null);
 	}
 }

@@ -200,7 +200,8 @@ public class Inventory {
 			return;
 		for (Entry<Item, InventoryUICell> pair : itemUI.entrySet()) {
 			InventoryUICell cell = pair.getValue();
-			cell.hideContext();
+			if (cell.contextActive())
+				cell.hideContext();
 		}
 	}
 

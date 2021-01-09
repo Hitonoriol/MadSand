@@ -1,9 +1,10 @@
 package hitonoriol.madsand.minigames;
 
+import java.util.function.Consumer;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.dialog.GameDialog;
@@ -28,19 +29,16 @@ public class CardGameUI extends GameDialog {
 		this.object = object;
 	}
 
-	protected SliderDialog createBetDialog() {
-		return new SliderDialog(World.player.inventory.getItem(currency).quantity);
-	}
-
-	protected void showBetDialog(SliderDialog dialog, ChangeListener listener) {
+	protected void showBetDialog(Consumer<Integer> confirmAction) {
 		if (!World.player.inventory.hasItem(currency, 1)) {
 			Gui.drawOkDialog("You don't have any money!", Gui.overlay);
 			endGame();
 			return;
 		}
-		dialog.setSliderTitle("Place your bet:")
+		new SliderDialog(World.player.inventory.getItem(currency).quantity)
+				.setSliderTitle("Place your bet:")
 				.setOnUpdateText(currencyName + "s")
-				.setConfirmListener(listener)
+				.setConfirmAction(confirmAction)
 				.setTitle("Bet")
 				.show();
 	}

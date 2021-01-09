@@ -35,7 +35,6 @@ public class RollTable<T> {
 		double roll = Utils.randPercent();
 
 		for (Map.Entry<Float, Entry<T>> entry : lootTable.entrySet()) {
-			item = null;
 			if (!Utils.percentRoll(roll, entry.getKey()))
 				continue;
 			else {
