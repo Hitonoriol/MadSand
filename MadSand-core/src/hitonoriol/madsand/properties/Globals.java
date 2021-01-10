@@ -11,8 +11,8 @@ import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.quest.ProceduralQuest;
 
 public class Globals {
-	public static final String VERSION = "Alpha v0.48"; 
-	
+	public static final String VERSION = "Alpha v0.48.3";
+
 	public static String TRAVEL_ITEM = "travelItem";
 	public static String CURRENCY = "currencyId";
 
@@ -24,7 +24,7 @@ public class Globals {
 	public ArrayList<String> idleNpcText;
 	public LootTable proceduralQuestRewards;
 	public HashMap<ProceduralQuest.Type, ArrayList<String>> proceduralQuestText;
-	
+
 	public HashMap<String, String> values;
 
 	public static void loadGlobals() throws Exception {
@@ -42,11 +42,11 @@ public class Globals {
 	public static String getString(String name) {
 		return instance.values.get(name);
 	}
-	
+
 	public static Item getCurrency() {
 		return ItemProp.getItem(getInt(CURRENCY));
 	}
-	
+
 	@JsonSetter("proceduralQuestRewards")
 	public void setProceduralQuestRewards(String loot) {
 		if (loot != null)

@@ -52,6 +52,16 @@ public class Loot {
 		return removedItem;
 	}
 
+	public Item remove(Item item) {
+		int i = 0;
+		for (Item itemStack : contents) {
+			if (itemStack == item)
+				return remove(i);
+			++i;
+		}
+		return Item.nullItem;
+	}
+
 	public Loot add(int id, int q) {
 		if (id == 0)
 			return Map.nullLoot;

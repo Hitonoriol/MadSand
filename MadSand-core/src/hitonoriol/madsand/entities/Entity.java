@@ -14,6 +14,7 @@ import hitonoriol.madsand.containers.PairFloat;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.gui.dialogs.LootDialog;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
@@ -174,18 +175,33 @@ public abstract class Entity {
 		return hasItem(item.id);
 	}
 
-	public void pickUpLoot() {
-		if (stats.dead)
-			return;
+	public boolean pickUpLoot(Loot loot, Item item, int quantity) {
+		boolean removeStack = quantity >= item.quantity;
+		Item pickedUpItem = removeStack ? loot.remove(item) : new Item(item, quantity);
 
+		if (!removeStack)
+			item.quantity -= quantity;
+
+		return addItem(pickedUpItem);
+	}
+
+	public boolean pickUpLoot(Loot loot, Item item) {
+		return pickUpLoot(loot, item, item.quantity);
+	}
+
+	public void pickUpLoot(Loot loot) {
+		for (int i = loot.contents.size() - 1; i >= 0; --i)
+			if (!pickUpLoot(loot, loot.contents.get(i)))
+				break;
+	}
+
+	public void pickUpLoot() {
 		Loot loot = MadSand.world.getCurLoc().getLoot(x, y);
 
 		if (loot.equals(Map.nullLoot))
 			return;
 
-		for (int i = loot.contents.size() - 1; i >= 0; --i)
-			if (!addItem(new Item(loot.remove(i))))
-				break;
+		new LootDialog(loot).show();
 	}
 
 	public boolean colliding(Direction direction) {

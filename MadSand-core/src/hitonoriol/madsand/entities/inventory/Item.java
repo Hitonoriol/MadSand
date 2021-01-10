@@ -146,6 +146,10 @@ public class Item {
 		return info;
 	}
 
+	public int getNutritionalValue() {
+		return (int) (0.125f * satiationAmount + 0.275f * healAmount + 0.525f * staminaAmount);
+	}
+
 	public boolean damageTool(Skill skill) {
 		if (type.isTool() || type.isEquipment())
 			return damage();
@@ -208,6 +212,7 @@ public class Item {
 			healAmount = properties.healAmount;
 			satiationAmount = properties.satiationAmount;
 			staminaAmount = properties.staminaAmount;
+			Utils.out(name + " nutritional value: " + getNutritionalValue());
 		}
 
 		if (type.isUnique())

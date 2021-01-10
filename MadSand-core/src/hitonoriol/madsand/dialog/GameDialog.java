@@ -69,8 +69,10 @@ public class GameDialog extends Dialog {
 		addOkButton(okText);
 	}
 
-	public void skipLine() {
-		add("").row();
+	public Cell<Label> skipLine() {
+		Cell<Label> cell = add("");
+		cell.row();
+		return cell;
 	}
 
 	public void setText(String text) {
@@ -146,7 +148,7 @@ public class GameDialog extends Dialog {
 
 		add(button).width(BTN_WIDTH).height(BTN_HEIGHT).padBottom(PADDING / 2).row();
 	}
-	
+
 	public TextButton getProceedButton() {
 		return proceedButton;
 	}
@@ -155,22 +157,18 @@ public class GameDialog extends Dialog {
 		show(stage);
 	}
 
-	public Cell<TextButton> addCloseButton(float width, float height) {
+	public TextButton createCloseButton() {
 		TextButton closeButton = new TextButton("Close", Gui.skin);
-		Cell<TextButton> cell = super.add(closeButton).size(width, height);
+		Gui.setAction(closeButton, () -> remove());
+		return closeButton;
+	}
 
-		closeButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				remove();
-			}
-		});
-
-		return cell;
+	public Cell<TextButton> addCloseButton(float width, float height) {
+		return super.add(createCloseButton()).size(width, height);
 	}
 
 	public Cell<TextButton> addCloseButton() {
-		return addCloseButton(150, 30);
+		return addCloseButton(Gui.BTN_WIDTH, Gui.BTN_HEIGHT);
 	}
 
 	public void setPrefSize(float width, float height) {

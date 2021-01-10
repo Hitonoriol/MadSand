@@ -107,8 +107,7 @@ public class ItemUI extends Group {
 
 	}
 
-	public static Table createItemList(List<Item> items, int itemsPerRow) {
-		Table itemTable = new Table(Gui.skin);
+	public static Table createItemList(Table itemTable, List<Item> items, int itemsPerRow) {
 		int i = 1;
 		for (Item item : items) {
 			itemTable.add(new ItemUI(item)).size(ItemUI.SIZE);
@@ -117,6 +116,10 @@ public class ItemUI extends Group {
 			++i;
 		}
 		return itemTable;
+	}
+
+	public static Table createItemList(List<Item> items, int itemsPerRow) {
+		return createItemList(new Table(Gui.skin), items, itemsPerRow);
 	}
 
 	public static Table createItemList(List<Item> items) {

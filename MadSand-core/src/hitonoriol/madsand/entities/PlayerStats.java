@@ -67,6 +67,10 @@ public class PlayerStats extends Stats {
 		if (food < 0)
 			food = 0;
 
+		int maxFoodTicks = getMaxFoodTicks();
+		if (foodTicks > maxFoodTicks)
+			foodTicks = maxFoodTicks;
+
 		if (stamina > maxstamina)
 			stamina = maxstamina;
 
@@ -104,7 +108,6 @@ public class PlayerStats extends Stats {
 	 * When food ticks < 0, decrement food level
 	 */
 	private void perTickFoodCheck() {
-
 		if (!skills.skillRoll(Skill.Survival)) {
 			--foodTicks;
 
@@ -135,6 +138,12 @@ public class PlayerStats extends Stats {
 	@JsonIgnore
 	public int getDefense() {
 		return (int) (super.getDefense() + skills.getLvl(Skill.Evasion) * evasionSkillPercent);
+	}
+
+	@JsonIgnore
+	public int getMaxFoodTicks() {
+		float lvl = 0.5f + ((float) skills.getLvl(Skill.Survival) * 0.5f);
+		return (int) (Math.sqrt(lvl) * 5);
 	}
 
 	public Item hand() {
