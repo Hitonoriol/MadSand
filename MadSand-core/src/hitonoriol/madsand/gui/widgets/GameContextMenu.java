@@ -1,10 +1,8 @@
 package hitonoriol.madsand.gui.widgets;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
@@ -16,7 +14,7 @@ import hitonoriol.madsand.world.World;
 
 public class GameContextMenu extends Table {
 	Skin skin;
-	float WIDTH = 125;
+	float WIDTH = 130;
 
 	int clickX, clickY;
 
@@ -34,45 +32,37 @@ public class GameContextMenu extends Table {
 		Item hand = player.stats.hand();
 
 		if (!map.getObject(clickX, clickY).equals(Map.nullObject))
-			addButton("Interact", new ChangeListener() {
-				public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-					player.lookAtMouse(clickX, clickY, true);
-					player.interact();
-				}
+			addButton("Interact", () -> {
+				player.lookAtMouse(clickX, clickY, true);
+				player.interact();
 			});
 
 		if (!map.getNpc(clickX, clickY).equals(Map.nullNpc))
-			addButton("Attack", new ChangeListener() {
-				public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-					player.lookAtMouse(clickX, clickY, true);
-					player.attack();
-					closeGameContextMenu();
-				}
+			addButton("Attack", () -> {
+				player.lookAtMouse(clickX, clickY, true);
+				player.attack();
 			});
 
-		addButton("Turn", new ChangeListener() {
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				World.player.lookAtMouse(clickX, clickY);
-				closeGameContextMenu();
-			}
-		});
+		if (clickX == player.x && clickY == player.y)
+			addButton("Rest fully", () -> player.restFully());
+		else
+			addButton("Turn", () -> World.player.lookAtMouse(clickX, clickY));
 
 		if (!hand.equals(Item.nullItem))
-			addButton("Unequip " + hand.name, new ChangeListener() {
-				public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-					World.player.freeHands();
-					closeGameContextMenu();
-				}
-			});
+			addButton("Unequip " + hand.name, () -> player.freeHands());
 
 		super.setVisible(false);
 	}
 
-	private void addButton(String text, ChangeListener listener) {
+	private void addButton(String text, Runnable action) {
 		TextButton button = new TextButton(text, skin);
-		button.addListener(listener);
 		button.getLabel().setWrap(true);
-		super.add(button).width(WIDTH).minHeight(20).row();
+		super.add(button).width(WIDTH).maxWidth(WIDTH + 100).minHeight(20).row();
+
+		Gui.setAction(button, () -> {
+			action.run();
+			closeGameContextMenu();
+		});
 	}
 
 	public void openGameContextMenu() {

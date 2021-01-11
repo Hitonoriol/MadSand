@@ -393,12 +393,15 @@ public class Npc extends Entity {
 			break;
 
 		case Hostile:
-
-			if (!enemySpotted && canSee(player))
+			if (!enemySpotted && canSee(player)) {
 				enemySpotted = true;
+				player.target();
+			}
 
-			if (enemySpotted && dist > fov * 1.5f)
+			if (enemySpotted && dist > fov * 1.5f) {
 				enemySpotted = false;
+				player.unTarget();
+			}
 
 			if (!enemySpotted) {
 				skipAction();

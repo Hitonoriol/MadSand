@@ -147,8 +147,8 @@ public class Utils {
 		return JRand.word().syllables(1, MAX_SYLLABLES).capitalize().gen();
 	}
 
-	final static int S_MINUTE = 60;
-	final static int S_HOUR = 3600;
+	public final static int S_MINUTE = 60;
+	public final static int S_HOUR = 3600;
 	final static int S_DAY = 86400;
 	final static String TIME_DELIM = ":";
 

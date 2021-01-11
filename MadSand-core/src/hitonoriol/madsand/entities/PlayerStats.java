@@ -7,7 +7,8 @@ import hitonoriol.madsand.entities.inventory.EquipStats;
 import hitonoriol.madsand.entities.inventory.Item;
 
 public class PlayerStats extends Stats {
-
+	static float BASE_SATIATION_PERCENT = 90;
+	
 	private int statBonus = 0; // Total equipment stat bonus
 
 	public float STAMINA_BASE_COST = 0.1f;
@@ -25,7 +26,6 @@ public class PlayerStats extends Stats {
 	@JsonIgnore
 	public Equipment equipment;
 
-	public double satiatedPercent = 90;
 	public final int maxFood = 1000;
 	public int foodTicks = skills.getLvl(Skill.Survival);
 	public int food = maxFood;
@@ -51,7 +51,7 @@ public class PlayerStats extends Stats {
 				owner.damage(STARVE_DMG);
 		}
 
-		if (getSatiationPercent() >= satiatedPercent && skills.skillRoll(Skill.Survival))
+		if (isSatiated() && skills.skillRoll(Skill.Survival))
 			owner.heal(FOOD_HEAL);
 
 		check();
@@ -91,13 +91,19 @@ public class PlayerStats extends Stats {
 		stamina = maxstamina;
 	}
 
-	private void perTickStaminaCheck() {
-		double survivalPercent = skills.getSkillRollPercent(Skill.Survival);
-		double reqSatiationPercent = 95.0 - survivalPercent;
-		if (getSatiationPercent() < reqSatiationPercent)
-			return;
+	@JsonIgnore
+	public boolean isSatiated() {
+		double reqSatiationPercent = BASE_SATIATION_PERCENT - skills.getSkillRollPercent(Skill.Survival);
+		return getSatiationPercent() >= reqSatiationPercent;
+	}
 
-		stamina += (survivalPercent * 0.02);
+	public double getStaminaRegenRate() {
+		return skills.getSkillRollPercent(Skill.Survival) * 0.02;
+	}
+
+	private void perTickStaminaCheck() {
+		if (isSatiated())
+			stamina += getStaminaRegenRate();
 		check();
 	}
 

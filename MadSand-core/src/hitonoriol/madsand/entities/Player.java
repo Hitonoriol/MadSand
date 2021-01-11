@@ -55,6 +55,7 @@ public class Player extends Entity {
 	@JsonIgnore
 	public PlayerStats stats; // Reference to the same Stats object as super.stats
 
+	public int targetedByNpcs = 0;
 	public HashSet<Integer> unlockedItems = new HashSet<Integer>(); // set of items player obtained at least once
 	public ArrayList<Integer> craftRecipes = new ArrayList<Integer>(); // list of items which recipes are available to the player
 	public ArrayList<Integer> buildRecipes = new ArrayList<Integer>();
@@ -96,6 +97,19 @@ public class Player extends Entity {
 	@JsonIgnore
 	public void setName(String name) {
 		super.setName(name);
+	}
+
+	public void unTarget() {
+		--targetedByNpcs;
+	}
+
+	public void target() {
+		++targetedByNpcs;
+	}
+
+	@JsonIgnore
+	public boolean isTargeted() {
+		return targetedByNpcs > 0;
 	}
 
 	public void joinFaction(Faction faction) {
@@ -1029,6 +1043,30 @@ public class Player extends Entity {
 		MadSand.world.timeSubtick(getActionLength(ap));
 		MadSand.print("You rest a bit");
 		Gui.refreshOverlay();
+	}
+
+	public void restFully() {
+		int ticksToRest = (int) ((stats.maxstamina - stats.stamina) / stats.getStaminaRegenRate());
+
+		if (ticksToRest == 0) {
+			MadSand.notice("Your stamina is already full");
+			return;
+		}
+
+		for (int i = 0; i < ticksToRest; ++i) {
+			if (isTargeted()) {
+				MadSand.warn("It's no time to rest. A hostile creature is nearby!");
+				break;
+			}
+
+			if (!stats.isSatiated()) {
+				MadSand.warn("You are too hungry to rest...");
+				break;
+			}
+
+			rest();
+		}
+		MadSand.notice("Rested for " + Utils.timeString(MadSand.world.toWorldTimeSeconds(ticksToRest)));
 	}
 
 	public int doAction(double ap, TimedAction action) {

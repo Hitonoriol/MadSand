@@ -120,14 +120,10 @@ public class Inventory {
 		return i;
 	}
 
-	public Item getItem(String uid) {
-		if (uid.equals(""))
-			return Item.nullItem;
-
-		for (Item item : items) {
-			if (item.uid.equals(uid))
+	public Item getItem(long uid) {
+		for (Item item : items)
+			if (item.uid == uid)
 				return item;
-		}
 
 		return Item.nullItem;
 	}

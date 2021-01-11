@@ -1,7 +1,6 @@
 package hitonoriol.madsand.entities.inventory;
 
 import java.util.ArrayList;
-import java.util.UUID;
 import java.util.function.BiConsumer;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -12,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.LootTable;
@@ -57,7 +57,7 @@ public class Item {
 	public EquipStats equipStats;
 	public CropContainer cropContainer;
 
-	public String uid = "";
+	public long uid = 0;
 
 	public final static Item nullItem = new Item();
 
@@ -139,6 +139,8 @@ public class Item {
 			info += "Satiation: " + satiationAmount + Resources.LINEBREAK;
 			info += "Health: " + healAmount + Resources.LINEBREAK;
 			info += "Stamina: " + staminaAmount + Resources.LINEBREAK;
+			info += "Nutritional value: " + getNutritionalValue() + Resources.LINEBREAK;
+			info += Resources.LINEBREAK;
 		}
 
 		info += "Weight: " + Utils.round(weight) + " kg" + Resources.LINEBREAK;
@@ -212,11 +214,10 @@ public class Item {
 			healAmount = properties.healAmount;
 			satiationAmount = properties.satiationAmount;
 			staminaAmount = properties.staminaAmount;
-			Utils.out(name + " nutritional value: " + getNutritionalValue());
 		}
 
 		if (type.isUnique())
-			uid = UUID.randomUUID().toString();
+			uid = MadSand.world.itemCounter++;
 
 		if (type.isWeapon() || type.isArmor()) {
 			this.lvl = properties.lvl;

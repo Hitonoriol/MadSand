@@ -63,6 +63,7 @@ public class World {
 	public int tick = 0; // tick counter, resets every <ticksPerHour> ticks
 	public long globalTick = 0; // global tick counter, never resets
 	public long npcCounter = 0;
+	public long itemCounter = 0;
 
 	private long logoutTimeStamp;
 	public HashMap<String, String> luaStorage = new HashMap<>();
@@ -513,12 +514,15 @@ public class World {
 			return getDefaultTile();
 	}
 
-	private float M_HOUR = 60;
 	private int H_DAY = 24;
+
+	public int toWorldTimeSeconds(int ticks) {
+		return (int) (((float) ticks / (float) ticksPerHour) * Utils.S_HOUR);
+	}
 
 	@JsonIgnore
 	public int getWorldTimeMinute() {
-		return (int) (M_HOUR * ((float) tick / (float) ticksPerHour));
+		return toWorldTimeSeconds(tick) / Utils.S_MINUTE;
 	}
 
 	@JsonIgnore

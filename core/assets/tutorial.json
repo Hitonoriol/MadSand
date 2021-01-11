@@ -27,8 +27,9 @@
 	"LowStamina" : "
 		%Low Stamina%
 		Easy there, {PLAYER}! You are about to deplete your stamina! [Oops. What's dat?] =>
-		Stamina is used to gather resources, or use items. It regenerates once per time tick when your satiation level (food) is above certain percent. 
-		If you deplete stamina, you won't be able to do any stamina-dependent activities until your stamina is at least partially replenished. [Oh. I see.] =>
+		Stamina is used to gather resources, or use items. It regenerates once per time tick when your satiation level (food) is above certain percent. =>
+		#Resting# You can replenish your stamina by resting. To rest for 1 tick, press space or click on yourself with LMB. To rest until the stamina is fully restored, click on your character with RMB and choose the \"Rest fully\" option.=>
+		If you deplete your stamina, you won't be able to do any stamina-dependent activities until your stamina is at least partially replenished. [Oh. I see.] =>
 		You'll also start losing 1 hp per time tick while your stamina is 0.
 	",
 	
