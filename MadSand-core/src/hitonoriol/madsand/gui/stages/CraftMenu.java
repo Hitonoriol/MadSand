@@ -46,7 +46,7 @@ public class CraftMenu extends Stage {
 		containerTable = new Table();
 		skin = Gui.skin;
 		titleLabel = new Label(titleString, skin);
-		titleLabel.setFontScale(1.35f);
+		Gui.setFontSize(titleLabel, Gui.FONT_M);
 		titleLabel.setAlignment(Align.center);
 	}
 

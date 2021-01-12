@@ -65,7 +65,7 @@ public class MainMenu extends Stage {
 		}
 
 		titleLabel.setPosition(TITLE_XPOS, TITLE_YPOS);
-		titleLabel.setFontScale(1.15f);
+		Gui.setFontSize(titleLabel, Gui.FONT_XL);
 
 		versionLabel = new Label(getVersion(), skin);
 		versionLabel.setAlignment(Align.center);

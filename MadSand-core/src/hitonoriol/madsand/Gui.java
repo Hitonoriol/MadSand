@@ -1,5 +1,8 @@
 package hitonoriol.madsand;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Buttons;
@@ -13,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -27,7 +31,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import hitonoriol.madsand.dialog.GameDialog;
@@ -44,6 +47,7 @@ public class Gui {
 	public static final float DEFWIDTH = 250f;
 	public static final float defLblWidth = Gdx.graphics.getWidth() / 4;
 	public static int BTN_WIDTH = 150, BTN_HEIGHT = 30;
+	public static int FONT_S = 16, FONT_M = 20, FONT_L = 24, FONT_XL = 28;
 
 	public static boolean gameUnfocused = false;
 	public static boolean inventoryActive = false;
@@ -52,10 +56,6 @@ public class Gui {
 	public static NinePatchDrawable transparency;
 
 	public static Table darkness;
-
-	public static BitmapFont font;
-	public static BitmapFont fontMedium;
-	public static BitmapFont fontBig;
 
 	public static NinePatchDrawable darkBackground;
 	public static NinePatchDrawable darkBackgroundSizeable;
@@ -70,14 +70,11 @@ public class Gui {
 	public static CraftMenu craftMenu;
 
 	static Color mouseOverColor = new Color(0xa5a5a5ff);
+	private static Map<Integer, LabelStyle> labelStyles = new HashMap<>();
 
-	private static void initSkin() { // TODO: Remove this shit and move skin to json for fucks sake
-		font = Resources.createFont(16);
-		fontMedium = Resources.createFont(20);
-		fontBig = Resources.createFont(24);
-
+	private static void initSkin() {
 		skin = new Skin();
-		skin.add("default", font);
+		skin.add("default", getFont(FONT_S));
 		loadNinePatches();
 
 		Pixmap pixmap = new Pixmap(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 12, Pixmap.Format.RGB888);
@@ -104,22 +101,18 @@ public class Gui {
 		textButtonStyle.disabled = skin.newDrawable("background", new Color(0x3f3f3fdc));
 		skin.add("default", textButtonStyle);
 
-		Label.LabelStyle labelStyle = new Label.LabelStyle();
-		labelStyle.font = font;
-		labelStyle.fontColor = Color.WHITE;
+		Label.LabelStyle labelStyle = createLabelStyle(FONT_S);
 		skin.add("default", labelStyle);
 
 		Window.WindowStyle ws = new Window.WindowStyle();
-
 		ws.background = skin.newDrawable("background", Color.LIGHT_GRAY);
-
 		ws.stageBackground = darkBackground;
 		ws.titleFontColor = Color.WHITE;
-		ws.titleFont = fontMedium;
+		ws.titleFont = getFont(FONT_M);
 		skin.add("default", ws);
 
 		TextField.TextFieldStyle tx = new TextField.TextFieldStyle();
-		tx.font = font;
+		tx.font = getFont(FONT_S);
 		tx.fontColor = Color.WHITE;
 		tx.background = skin.newDrawable("background", Color.DARK_GRAY);
 		tx.background.setMinHeight(35.0F);
@@ -187,25 +180,10 @@ public class Gui {
 		Gdx.input.setInputProcessor(mainMenu);
 	}
 
-	static Stage worldGenStage;
-	static Stage loadWorldStage;
 	public static Screen travelScreen;
 
 	private static void createTransitionScreens() {
-		createTransitionScreen(worldGenStage, "Generating your world...");
-		createTransitionScreen(loadWorldStage, "Loading...");
 		travelScreen = new TravelScreen(MadSand.game);
-	}
-
-	private static void createTransitionScreen(Stage stage, String text) {
-		stage = new Stage();
-		Label label = new Label(text, skin);
-		label.setFontScale(1.5f);
-		label.setAlignment(Align.center);
-		Table tbl = new Table();
-		tbl.setFillParent(true);
-		tbl.add(label).width(Gdx.graphics.getWidth()).row();
-		stage.addActor(tbl);
 	}
 
 	public static void openCraftMenu(int id) {
@@ -304,6 +282,29 @@ public class Gui {
 				action.run();
 			}
 		});
+	}
+
+	public static BitmapFont getFont(int size) {
+		return getLabelStyle(size).font;
+	}
+
+	public static LabelStyle getLabelStyle(int size) {
+		if (!labelStyles.containsKey(size))
+			labelStyles.put(size, createLabelStyle(size));
+
+		return labelStyles.get(size);
+	}
+
+	private static LabelStyle createLabelStyle(int size) {
+		LabelStyle style = new LabelStyle();
+		style.font = Resources.createFont(size);
+		style.fontColor = Color.WHITE;
+		return style;
+	}
+
+	public static Label setFontSize(Label label, int size) {
+		label.setStyle(Gui.getLabelStyle(size));
+		return label;
 	}
 
 	public static ProgressBarStyle createProgressBarStyle(float width, float height, Color color, boolean transparent) {

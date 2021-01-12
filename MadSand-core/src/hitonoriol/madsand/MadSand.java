@@ -3,6 +3,7 @@ package hitonoriol.madsand;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -299,10 +300,10 @@ public class MadSand extends Game {
 			}
 
 			renderObject(object, x, y);
-			
+
 			if (player.standingOnLoot(x, y))
 				drawLoot(x, y);
-			
+
 			if (npc != Map.nullNpc)
 				drawEntity(npc);
 
@@ -421,10 +422,11 @@ public class MadSand extends Game {
 	}
 
 	public void render() {
+		Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Keyboard.pollGlobalHotkeys();
 
 		if (state.equals(GameState.GAME)) {
-
 			Mouse.mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);
 			camera.unproject(Mouse.mouseinworld);
 			Gui.overlay.pollGameConsole();
@@ -433,8 +435,6 @@ public class MadSand extends Game {
 				Mouse.pollMouseMovement();
 				Keyboard.pollGameKeys();
 			}
-			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
-			Gdx.gl.glClear(16384);
 			Utils.batch.begin();
 			drawGame();
 			updateCamPosition();
@@ -442,70 +442,27 @@ public class MadSand extends Game {
 			Gui.overlay.draw();
 			Utils.batch.end();
 			super.render();
-		}  else if (state.equals(GameState.TRADE)) {
-			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
-			Gdx.gl.glClear(16384);
+		} else if (state.equals(GameState.TRADE)) {
 			Utils.batch.begin();
 			drawGame();
 			Utils.batch.end();
-
 			Gui.overlay.act();
 			Gui.overlay.draw();
-
 		} else if (state.equals(GameState.NMENU)) {
-			Gdx.gl.glClearColor(1.0F, 1.0F, 1.0F, 1.0F);
-			Gdx.gl.glClear(16384);
 			updateCamPosition(cameraX, cameraY);
 			camera.update();
-			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
-			Gdx.gl.glClear(16384);
 			Utils.batch.begin();
 			drawMenuBackground();
 			Utils.batch.end();
 			Gui.mainMenu.act();
 			Gui.mainMenu.draw();
-		} else if (state.equals(GameState.WORLDGEN)) {
-			Utils.batch.begin();
-			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
-			Gdx.gl.glClear(16384);
-			updateCamPosition(World.player.globalPos.x, World.player.globalPos.y);
-			drawMenuBackground();
-			Gui.worldGenStage.draw();
-			Utils.batch.end();
-		} else if (state.equals(GameState.LOAD)) {
-			Utils.batch.begin();
-			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
-			Gdx.gl.glClear(16384);
-			drawMenuBackground();
-			Gui.loadWorldStage.draw();
-			Utils.batch.end();
-		} else if (state.equals(GameState.GOT)) {
-			Utils.batch.begin();
-			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
-			Gdx.gl.glClear(16384);
-			drawMenuBackground();
-			//Gui.sectorChangeStage.draw();
-			//Gui.sectorChangeStage.act();
-			Utils.batch.end();
 		} else if (state.equals(GameState.DEAD)) {
-			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 			Utils.batch.begin();
 			drawGame();
 			Utils.batch.end();
 			Gui.deathStage.act();
 			Gui.deathStage.draw();
-		} else if (state.equals(GameState.MSG)) {
-			camera.position.set(0.0F, 0.0F, 0.0F);
-			Utils.batch.setProjectionMatrix(camera.combined);
-			camera.update();
-			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
-			Gdx.gl.glClear(16384);
-			Utils.batch.begin();
-			drawGame();
-			Utils.batch.end();
 		} else if (state.equals(GameState.CRAFT)) {
-			Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
-			Gdx.gl.glClear(16384);
 			Utils.batch.begin();
 			drawGame();
 			Utils.batch.end();

@@ -69,7 +69,7 @@ public class TradeInventoryUI {
 		setPaneParams(sellPane);
 		setPaneParams(buyPane);
 
-		header.setFontScale(1.5f);
+		Gui.setFontSize(header, Gui.FONT_M);
 
 		containerTable.add(header).align(Align.center).row();
 

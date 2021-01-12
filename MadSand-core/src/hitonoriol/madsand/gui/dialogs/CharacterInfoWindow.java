@@ -30,7 +30,6 @@ import hitonoriol.madsand.world.World;
 public class CharacterInfoWindow {
 	private final static float headerLeftPadding = -45f;
 	private final static float headerBottomPadding = 5f;
-	private final static float headerScale = 1.11f;
 
 	final static float LINE_PAD = 5;
 	final static float BAR_WIDTH = 150;
@@ -56,8 +55,9 @@ public class CharacterInfoWindow {
 		Label nameLbl = new Label(World.player.stats.name, skin);
 		Label levelLbl = new Label("Level: " + World.player.stats.skills.getLvl(Skill.Level) + " ("
 				+ World.player.stats.skills.getExpString(Skill.Level) + ")", skin);
-		levelLbl.setFontScale(headerScale);
-		nameLbl.setFontScale(headerScale);
+
+		Gui.setFontSize(levelLbl, Gui.FONT_M);
+		Gui.setFontSize(nameLbl, Gui.FONT_M);
 
 		// Dialog Title (Player's name & Level progressbar)
 		dialog.add(nameLbl).row();
@@ -76,7 +76,7 @@ public class CharacterInfoWindow {
 		addTitle(scrollTable, "Stats:");
 		for (StatLabels.StatLabel label : statLabels.labels)
 			scrollTable.add(label).padBottom(LINE_PAD).row();
-		
+
 		addTitle(scrollTable, "Miscellaneous:");
 		scrollTable.add(createMiscInfoTable()).row();
 
@@ -100,7 +100,7 @@ public class CharacterInfoWindow {
 
 		});
 	}
-	
+
 	private Table createMiscInfoTable() {
 		Table info = new Table(Gui.skin);
 		info.align(Align.left);
@@ -113,7 +113,7 @@ public class CharacterInfoWindow {
 
 	private void addTitle(Table table, String text) {
 		Label label = new Label(text, Gui.skin);
-		label.setFontScale(headerScale);
+		label.setStyle(Gui.getLabelStyle(Gui.FONT_M));
 		table.add(new Label("", Gui.skin)).row();
 		table.add(label)
 				.width(Gui.defLblWidth)

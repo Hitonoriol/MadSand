@@ -38,7 +38,6 @@ public class QuestJournal extends Dialog {
 	static float NAME_LABEL_WIDTH = 170;
 	static float OBJECTIVE_LABEL_WIDTH = 200;
 	static float NPC_INFO_LABEL_WIDTH = 200;
-	static float HEADER_SCALE = 1.12f;
 
 	Skin skin;
 	static String titleString = "Quest Journal";
@@ -77,10 +76,10 @@ public class QuestJournal extends Dialog {
 		npcLocationLabel = new Label("Turn in to", skin);
 		emptyJournalLabel = new Label(emptyJournalString, skin);
 
-		statusLabel.setFontScale(HEADER_SCALE);
-		nameLabel.setFontScale(HEADER_SCALE);
-		reqLabel.setFontScale(HEADER_SCALE);
-		npcLocationLabel.setFontScale(HEADER_SCALE);
+		Gui.setFontSize(statusLabel, Gui.FONT_M);
+		Gui.setFontSize(nameLabel, Gui.FONT_M);
+		Gui.setFontSize(reqLabel, Gui.FONT_M);
+		Gui.setFontSize(npcLocationLabel, Gui.FONT_M);
 
 		questTable = new Table();
 		questTable.setHeight(TABLE_HEIGHT);

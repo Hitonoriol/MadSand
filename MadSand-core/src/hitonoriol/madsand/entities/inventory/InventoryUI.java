@@ -49,7 +49,7 @@ public class InventoryUI extends GameDialog {
 		invTable.row();
 
 		header = new Label("[0/0 kg]", Gui.skin);
-		header.setFontScale(1.5f);
+		Gui.setFontSize(header, Gui.FONT_L);
 
 		invTable.setBackground(Gui.darkBackground);
 		invTable.align(Align.topLeft);
