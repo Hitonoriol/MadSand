@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.function.BooleanSupplier;
 import java.util.Random;
 import java.util.Set;
 
@@ -37,6 +38,7 @@ import hitonoriol.madsand.gui.dialogs.FishingUI;
 import hitonoriol.madsand.gui.dialogs.GrabBagDialog;
 import hitonoriol.madsand.gui.dialogs.ProductionStationUI;
 import hitonoriol.madsand.gui.dialogs.TraderDialog;
+import hitonoriol.madsand.gui.dialogs.WaitDialog;
 import hitonoriol.madsand.gui.widgets.ResourceProgressBar;
 import hitonoriol.madsand.map.FishingSpot;
 import hitonoriol.madsand.map.Loot;
@@ -1035,14 +1037,36 @@ public class Player extends Entity {
 		return true;
 	}
 
-	@Override
-	public void rest() {
+	private void rest(boolean verbose) {
 		double ap = stats.actionPts;
-		super.rest();
+		stats.actionPts = stats.actionPtsMax;
 		MadSand.world.timeTick(1);
 		MadSand.world.timeSubtick(getActionLength(ap));
-		MadSand.print("You rest a bit");
 		Gui.refreshOverlay();
+
+		if (verbose)
+			MadSand.print("You rest a bit");
+	}
+
+	public void rest() {
+		rest(true);
+	}
+
+	public void skipTick() {
+		rest(false);
+	}
+
+	private void skipTime(int ticks, BooleanSupplier skipCondition) { // Skips <ticks> ticks while skipCondition is true
+		for (int i = 0; i < ticks; ++i) {
+			if (!skipCondition.getAsBoolean())
+				break;
+
+			skipTick();
+		}
+	}
+
+	public void skipTime(int ticks) {
+		skipTime(ticks, () -> true);
 	}
 
 	public void restFully() {
@@ -1053,20 +1077,35 @@ public class Player extends Entity {
 			return;
 		}
 
-		for (int i = 0; i < ticksToRest; ++i) {
+		skipTime(ticksToRest, () -> {
 			if (isTargeted()) {
 				MadSand.warn("It's no time to rest. A hostile creature is nearby!");
-				break;
+				return false;
 			}
 
 			if (!stats.isSatiated()) {
 				MadSand.warn("You are too hungry to rest...");
-				break;
+				return false;
 			}
 
-			rest();
-		}
+			return true;
+		});
+
 		MadSand.notice("Rested for " + Utils.timeString(MadSand.world.toWorldTimeSeconds(ticksToRest)));
+	}
+
+	public void skipTime() {
+		int timeSkipItemId = Globals.getInt(Globals.TIMESKIP_ITEM);
+		Item timeSkipItem = inventory.getItem(timeSkipItemId);
+		if (timeSkipItem.equals(Item.nullItem)) {
+			Gui.drawOkDialog(
+					"You need at least 1 " + ItemProp.getItemName(timeSkipItemId) + " to be able to skip time.",
+					Gui.overlay);
+			return;
+		}
+
+		int maxTimeSkip = timeSkipItem.quantity;
+		new WaitDialog(maxTimeSkip).show();
 	}
 
 	public int doAction(double ap, TimedAction action) {

@@ -129,6 +129,8 @@ public class Keyboard {
 		if (Gdx.input.isKeyJustPressed(Keys.N) && MadSand.world.curLayer() == Location.LAYER_OVERWORLD)
 			MadSand.world.travel();
 
+		if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT) && Gdx.input.isKeyJustPressed(Keys.W))
+			World.player.skipTime();
 	}
 
 	private static void pollMovementKeys() {

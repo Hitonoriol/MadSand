@@ -13,7 +13,7 @@ import hitonoriol.madsand.entities.quest.ProceduralQuest;
 public class Globals {
 	public static final String VERSION = "Alpha v0.49.1";
 
-	public static String TRAVEL_ITEM = "travelItem";
+	public static String TRAVEL_ITEM = "travelItem", TIMESKIP_ITEM = "timeSkipItem";
 	public static String CURRENCY = "currencyId";
 
 	private static Globals instance = new Globals();

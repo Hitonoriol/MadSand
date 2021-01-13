@@ -90,7 +90,7 @@ public class SliderDialog extends GameDialog {
 			}
 		});
 	}
-	
+
 	public SliderDialog(int max) {
 		this(1, max);
 	}
@@ -106,24 +106,21 @@ public class SliderDialog extends GameDialog {
 		return this;
 	}
 
-	public SliderDialog setSliderListener(ChangeListener listener) {
-		slider.addListener(listener);
+	public SliderDialog setSliderAction(Consumer<Integer> action) {
+		slider.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				action.accept(getSliderValue());
+			}
+		});
 		return this;
 	}
 
-	public SliderDialog setOnUpdateText(String text) { // Overrides previous listener
-		setSliderListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				setSliderText(getSliderValue() + " " + text);
-			}
-		});
-		// Refresh this label by triggering change event
-		slider.setValue(slider.getMaxValue());
-		slider.setValue(minValue);
+	public SliderDialog setOnUpdateText(String text) {
+		setSliderAction(value -> setSliderText(value + " " + text));
 		return this;
 	}
-	
+
 	public SliderDialog setTitle(String title) {
 		super.setTitle(title);
 		return this;
@@ -144,6 +141,14 @@ public class SliderDialog extends GameDialog {
 
 	public void setSliderText(String text) { // Set text under the slider
 		bottomLabel.setText(text);
+	}
+
+	@Override
+	public void show() {
+		// Refresh bottomLabel by triggering change event
+		slider.setValue(slider.getMaxValue());
+		slider.setValue(minValue);
+		super.show();
 	}
 
 }

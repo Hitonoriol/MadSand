@@ -93,7 +93,7 @@ public class Item {
 
 	public Item() {
 		this.id = NULL_ITEM;
-		quantity = 1;
+		quantity = 0;
 	}
 
 	public Item(int id, int q) {

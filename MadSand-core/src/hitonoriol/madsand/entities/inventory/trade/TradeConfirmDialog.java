@@ -1,8 +1,5 @@
 package hitonoriol.madsand.entities.inventory.trade;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.inventory.Item;
@@ -56,14 +53,7 @@ public class TradeConfirmDialog extends SliderDialog {
 	}
 
 	private void setSliderListener() {
-		super.setSliderListener(new ChangeListener() {
-
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				currentQuantity = (int) slider.getValue();
-				setCostLabelText(currentQuantity);
-			}
-		});
+		super.setSliderAction(value -> setCostLabelText(currentQuantity = value));
 	}
 
 	private void setConfirmButtonListener() {

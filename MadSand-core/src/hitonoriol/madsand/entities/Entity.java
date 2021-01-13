@@ -307,10 +307,6 @@ public abstract class Entity {
 		return ticks;
 	}
 
-	void rest() {
-		stats.actionPts = stats.actionPtsMax;
-	}
-
 	public void updCoords() {
 		Map map = MadSand.world.getCurLoc();
 		if (x >= map.getWidth())
