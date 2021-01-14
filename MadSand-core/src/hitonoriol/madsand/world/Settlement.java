@@ -173,7 +173,7 @@ public class Settlement {
 	}
 
 	public static class WorkerContainer { // Info about all workers of certain type
-		public static float ITEMS_PER_LVL = 0.1f; // Items per lvl per realtimeTick
+		public static float ITEMS_PER_LVL = 0.025f; // Items per lvl per realtimeTick
 
 		public int lvl = 1;
 		public float itemCharge = 0;

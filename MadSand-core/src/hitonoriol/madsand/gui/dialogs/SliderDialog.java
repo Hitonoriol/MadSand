@@ -121,6 +121,11 @@ public class SliderDialog extends GameDialog {
 		return this;
 	}
 
+	public SliderDialog setStep(int step) {
+		slider.setStepSize(step);
+		return this;
+	}
+
 	public SliderDialog setTitle(String title) {
 		super.setTitle(title);
 		return this;
@@ -141,6 +146,10 @@ public class SliderDialog extends GameDialog {
 
 	public void setSliderText(String text) { // Set text under the slider
 		bottomLabel.setText(text);
+	}
+	
+	public Label getBottomLabel() {
+		return bottomLabel;
 	}
 
 	@Override

@@ -661,14 +661,17 @@ public class World {
 		++globalRealtimeTick;
 		realtimeRefresh();
 	}
+	
+	public void skipRealtimeTicks(long ticks) {
+		for (; ticks > 0; --ticks)
+			realtimeRefresh();
+	}
 
 	private void offlineReward(long offlineTime) {
 		long offlineTicks = (long) (offlineTime / realtimeTickRate);
 		globalRealtimeTick += offlineTicks;
 		LuaUtils.executeScript(LuaUtils.offlineRewardScript, offlineTime);
-
-		for (; offlineTicks > 0; --offlineTicks)
-			realtimeRefresh();
+		skipRealtimeTicks(offlineTicks);
 	}
 
 	private float HOUR = 3600;

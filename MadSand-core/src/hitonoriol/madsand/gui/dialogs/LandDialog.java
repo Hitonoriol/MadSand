@@ -30,6 +30,7 @@ import hitonoriol.madsand.world.Settlement.WorkerContainer;
 
 public class LandDialog extends GameDialog {
 
+	static int DEC_PLACES = 4;
 	static int ITEMS_PER_ROW = 6;
 	static float ITEM_SCALE = 0.1f;
 	static float PAD = 5;
@@ -143,7 +144,7 @@ public class LandDialog extends GameDialog {
 				continue;
 
 			sb.append("* " + type.name() + ": " + workers.getQuantity() + " ");
-			sb.append("(" + Utils.round(workers.getGatheringRate() / MadSand.world.realtimeTickRate) + " actions/sec) ")
+			sb.append("(" + Utils.round(workers.getGatheringRate() / MadSand.world.realtimeTickRate, DEC_PLACES) + " actions/sec) ")
 					.append("[[" + Utils.round(workers.itemCharge * 100f) + "%]")
 					.append(Resources.LINEBREAK);
 		}

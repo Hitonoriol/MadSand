@@ -103,7 +103,7 @@ public class Mouse {
 		}
 
 		if (!object.equals(Map.nullObject))
-			info += ("Object: " + object.name + " (" + object.getHpPercent() + "%)") + Resources.LINEBREAK;
+			info += ("Object: " + object.name + " (" + Utils.round(object.getHpPercent()) + "%)") + Resources.LINEBREAK;
 
 		if (station != null)
 			info += getProdStationInfo(station);

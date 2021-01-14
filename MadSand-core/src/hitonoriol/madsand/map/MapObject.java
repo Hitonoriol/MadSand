@@ -117,7 +117,7 @@ public class MapObject {
 	}
 
 	public double getHpPercent() {
-		return Utils.round(((double) hp / (double) maxHp) * 100d);
+		return ((double) hp / (double) maxHp) * 100d;
 	}
 
 	private static int getAltItem(int id, ItemType hand, HashMap<ItemType, ArrayList<Integer>> container) {

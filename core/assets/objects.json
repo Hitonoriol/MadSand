@@ -2070,5 +2070,12 @@
 		"hp" : 3,
 		"name" : "Clay wall",
 		"isWall" : true
+	},
+	"175" : {
+		"hp" : 1,
+		"harvestHp" : 50,
+		"centered" : true,
+		"onInteract" : "world.player:skipTime()",
+		"name" : "Time machine"
 	}
 }

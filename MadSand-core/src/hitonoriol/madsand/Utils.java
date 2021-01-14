@@ -5,12 +5,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import me.xdrop.jrand.JRand;
 
+import java.math.RoundingMode;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -22,13 +25,16 @@ import java.util.stream.Stream;
 public class Utils {
 	public static boolean debugMode = false;
 	public static SpriteBatch batch;
+	static NumberFormat numberFormatter = NumberFormat.getInstance(Locale.US);
 
 	public static Random random = new Random();
 
 	public static void init() {
+		batch = new SpriteBatch();
+		numberFormatter.setMinimumFractionDigits(0);
+		numberFormatter.setRoundingMode(RoundingMode.HALF_UP);
 		try {
 			Resources.init();
-			batch = new SpriteBatch();
 		} catch (Exception e) {
 			die("Exception on init: " + ExceptionUtils.getStackTrace(e));
 		}
@@ -82,8 +88,13 @@ public class Utils {
 		System.exit(-1);
 	}
 
-	public static double round(double num) {
-		return (Math.round(num * 100) / 100.00);
+	public static String round(double num) {
+		return round(num, 2);
+	}
+
+	public static String round(double num, int n) {
+		numberFormatter.setMaximumFractionDigits(n);
+		return numberFormatter.format(num);
 	}
 
 	public static int rand(int min, int max) {

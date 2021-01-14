@@ -1094,6 +1094,8 @@ public class Player extends Entity {
 		MadSand.notice("Rested for " + Utils.timeString(MadSand.world.toWorldTimeSeconds(ticksToRest)));
 	}
 
+	public static float TIMESKIP_COEF = 18f, REALTIME_SKIP_COEF = 5.5f;
+
 	public void skipTime() {
 		int timeSkipItemId = Globals.getInt(Globals.TIMESKIP_ITEM);
 		Item timeSkipItem = inventory.getItem(timeSkipItemId);
@@ -1104,7 +1106,7 @@ public class Player extends Entity {
 			return;
 		}
 
-		int maxTimeSkip = timeSkipItem.quantity;
+		int maxTimeSkip = (int) (timeSkipItem.quantity * TIMESKIP_COEF);
 		new WaitDialog(maxTimeSkip).show();
 	}
 
