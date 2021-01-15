@@ -442,11 +442,12 @@ public abstract class Entity {
 	public boolean canSee(Entity entity) {
 		int dist = (int) distanceTo(entity);
 		Map loc = MadSand.world.getCurLoc();
+		MapObject object;
 		boolean viewObstructed = false;
 
 		for (Point p : new Line(x, y, entity.x, entity.y))
-			if (loc.getObject(p.x, p.y) != Map.nullObject) {
-				viewObstructed = true;
+			if ((object = loc.getObject(p.x, p.y)) != Map.nullObject) {
+				viewObstructed = !object.nocollide;
 				break;
 			}
 

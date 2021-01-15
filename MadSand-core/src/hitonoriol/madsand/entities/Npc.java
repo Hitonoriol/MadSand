@@ -98,7 +98,7 @@ public class Npc extends Entity {
 		} else if (pathIdx + 1 >= path.getCount()) {
 			return null;
 		}
-		
+
 		if (path.nodes.size == 0)
 			return null;
 
@@ -237,9 +237,11 @@ public class Npc extends Entity {
 	public boolean move(Direction dir) {
 		super.turn(dir);
 		boolean outOfView = distanceTo(World.player) > World.player.fov;
-		if (isStepping()) {
-			if (!outOfView)
-				movementQueue.add(dir);
+		if (!outOfView)
+			outOfView |= !World.player.canSee(this) || MadSand.world.timeSkipInProgress();
+
+		if (isStepping() && !outOfView) {
+			movementQueue.add(dir);
 			return false;
 		}
 		int originalX = this.x, originalY = this.y;
@@ -253,13 +255,13 @@ public class Npc extends Entity {
 
 		int newX = this.x, newY = this.y;
 		setGridCoords(originalX, originalY);
-		MadSand.world.getCurLoc().moveNpc(this, newX, newY); // ykno, let's assume if npc moves, it means that it's in the
-																// same location as player, so... this should work always
-																// despite how ugly this shit looks
+		MadSand.world.getCurLoc().moveNpc(this, newX, newY);
 		setGridCoords(newX, newY);
 
-		if (outOfView)
-			stepping = false;
+		if (outOfView) {
+			stopMovement();
+			updCoords();
+		}
 
 		return true;
 	}

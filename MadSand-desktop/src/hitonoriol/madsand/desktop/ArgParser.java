@@ -12,7 +12,8 @@ public class ArgParser {
 	private HashMap<String, String> options = new HashMap<>();
 
 	public ArgParser(String[] args) {
-		parse(args);
+		if (args != null)
+			parse(args);
 	}
 
 	public ArgParser parse(String[] args) {

@@ -32,6 +32,7 @@ import hitonoriol.madsand.world.worldgen.WorldGen;
 
 public class World {
 	Map nullLoc = new Map(0, 0);
+	private static final float MAX_SIM_DISTANCE_COEF = 2.5f;
 	private static final float ACT_DELAY = 0.1f;
 	public static final int DEFAULT_WORLDSIZE = 10;
 	public static final int TILE_CAVE_EXIT = 25; //TODO move this to cave preset
@@ -55,6 +56,7 @@ public class World {
 
 	private Timer actDelayTimer;
 	private Timer realTimeRefresher;
+	private boolean timeSkip = false;
 	public float realtimeTickRate = 5; // seconds per 1 tick
 	public long globalRealtimeTick = 0; // global realtime tick counter, never resets
 
@@ -610,7 +612,11 @@ public class World {
 
 		boolean pausePlayer = false; // if a hostile mob acts before player, we pause player until the action is completed
 		boolean hostile;
+		float actionDelay = timeSkip ? 0 : ACT_DELAY;
+		float maxSimDst = getMaxSimDistance();
 		for (Entity entity : queue) {
+			if (timeSkip && entity.distanceTo(player) > maxSimDst)
+				continue;
 
 			if ((player.canSee(entity) && entity != player) || (entity == player && pausePlayer)) {
 				hostile = false;
@@ -629,18 +635,19 @@ public class World {
 						if (!entity.isStepping())
 							Keyboard.resumeInput();
 					}
-				}, (hostile && pausePlayer) ? 0 : ACT_DELAY);
+				}, (hostile && pausePlayer) ? 0 : actionDelay);
 			} else
 				entity.act(time);
 		}
 
 		Timer.instance().scheduleTask(new Timer.Task() {
-
 			@Override
 			public void run() {
 				Gui.overlay.processActionMenu();
+				if (timeSkip)
+					endTimeSkip();
 			}
-		}, ACT_DELAY + 0.01f);
+		}, actionDelay + 0.01f);
 	}
 
 	public void updateLight() {
@@ -661,10 +668,10 @@ public class World {
 		++globalRealtimeTick;
 		realtimeRefresh();
 	}
-	
+
 	public void skipRealtimeTicks(long ticks) {
 		for (; ticks > 0; --ticks)
-			realtimeRefresh();
+			realtimeTick();
 	}
 
 	private void offlineReward(long offlineTime) {
@@ -701,6 +708,23 @@ public class World {
 	@JsonIgnore
 	public boolean isUnderGround() {
 		return worldMap.curLayer != Location.LAYER_OVERWORLD;
+	}
+
+	public void startTimeSkip() {
+		timeSkip = true;
+	}
+
+	public void endTimeSkip() {
+		timeSkip = false;
+	}
+
+	public boolean timeSkipInProgress() {
+		return timeSkip;
+	}
+
+	@JsonIgnore
+	public int getMaxSimDistance() {
+		return (int) (player.fov * MAX_SIM_DISTANCE_COEF);
 	}
 
 	@JsonIgnore

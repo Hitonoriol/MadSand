@@ -40,7 +40,7 @@ public class WaitDialog extends SliderDialog {
 
 		super.setConfirmAction(ticks -> {
 			World.player.inventory.delItem(Globals.getInt(Globals.TIMESKIP_ITEM), timeSkipItemSpent);
-			World.player.skipTime(ticks);
+			World.player.skipTicks(ticks);
 			MadSand.world.skipRealtimeTicks(realtimeTicks);
 			MadSand.notice("Skipped " + Utils.timeString(worldSeconds));
 		});

@@ -1037,11 +1037,11 @@ public class Player extends Entity {
 		return true;
 	}
 
-	private void rest(boolean verbose) {
+	private void rest(int ticks, boolean verbose) {
 		double ap = stats.actionPts;
 		stats.actionPts = stats.actionPtsMax;
-		MadSand.world.timeTick(1);
-		MadSand.world.timeSubtick(getActionLength(ap));
+		MadSand.world.timeTick(ticks);
+		MadSand.world.timeSubtick(getActionLength(ap + (ticks - 1) * getSpeed()));
 		Gui.refreshOverlay();
 
 		if (verbose)
@@ -1049,24 +1049,24 @@ public class Player extends Entity {
 	}
 
 	public void rest() {
-		rest(true);
+		rest(1, true);
 	}
 
-	public void skipTick() {
-		rest(false);
+	public void skipTicks(int ticks) {
+		if (ticks > 1)
+			MadSand.world.startTimeSkip();
+		rest(ticks, false);
 	}
 
 	private void skipTime(int ticks, BooleanSupplier skipCondition) { // Skips <ticks> ticks while skipCondition is true
-		for (int i = 0; i < ticks; ++i) {
+		MadSand.world.startTimeSkip();
+		int step = Utils.largestDivisor(ticks);
+		for (int i = 0; i < ticks; i += step) {
 			if (!skipCondition.getAsBoolean())
 				break;
 
-			skipTick();
+			skipTicks(step);
 		}
-	}
-
-	public void skipTime(int ticks) {
-		skipTime(ticks, () -> true);
 	}
 
 	public void restFully() {

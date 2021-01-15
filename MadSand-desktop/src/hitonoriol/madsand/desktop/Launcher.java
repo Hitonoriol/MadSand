@@ -17,6 +17,7 @@ public class Launcher {
 	static LwjglApplicationConfiguration config;
 
 	public static void main(String[] args) throws Exception {
+		applyArgs(args);
 		Prefs.loadPrefs();
 		Prefs prefs = Prefs.values();
 		config = new LwjglApplicationConfiguration();
@@ -35,23 +36,15 @@ public class Launcher {
 		config.foregroundFPS = 59;
 		config.backgroundFPS = -1;
 
-		applyArgs(args);
-
 		new com.badlogic.gdx.backends.lwjgl.LwjglApplication(new MadSand(), config);
 	}
 
 	final static String debugFlag = "debug";
-	final static String fullscreenFlag = "fullscreen";
 
 	private static void applyArgs(String[] args) throws Exception {
-		if (args.length == 0)
-			return;
-
 		ArgParser parser = new ArgParser(args);
 
-		Utils.debugMode = parser.argExists(debugFlag);
-
-		if (!Utils.debugMode) {
+		if (!(Utils.debugMode = parser.argExists(debugFlag))) {
 			System.setOut(new PrintStream(new File(Resources.OUT_FILE)));
 			System.setErr(new PrintStream(new File(Resources.ERR_FILE)));
 		}
