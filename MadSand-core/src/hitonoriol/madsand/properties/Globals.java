@@ -11,7 +11,7 @@ import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.quest.ProceduralQuest;
 
 public class Globals {
-	public static final String VERSION = "Alpha v0.49.2";
+	public static final String VERSION = "Alpha v0.49.3";
 
 	public static String TRAVEL_ITEM = "travelItem", TIMESKIP_ITEM = "timeSkipItem";
 	public static String CURRENCY = "currencyId";

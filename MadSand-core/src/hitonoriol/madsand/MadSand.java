@@ -391,12 +391,7 @@ public class MadSand extends Game {
 			} else
 				Utils.batch.draw(entity.getSprite(), drawx, drawy);
 
-			entity.stepx -= entity.movespeed;
-			entity.stepy -= entity.movespeed;
-
-			if (entity.stepx <= 1)
-				entity.stopMovement();
-
+			entity.animateMovement();
 		} else {
 			Utils.batch.draw(entity.getSprite(), entity.globalPos.x, entity.globalPos.y);
 

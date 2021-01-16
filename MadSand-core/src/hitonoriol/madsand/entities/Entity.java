@@ -22,6 +22,7 @@ import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.TileProp;
 
 public abstract class Entity {
+	private static final float MOVE_SPEED_POW = 1.35f;
 	@JsonIgnore
 	private Sprite upSpr, downSpr, leftSpr, rightSpr;
 
@@ -38,6 +39,7 @@ public abstract class Entity {
 
 	public int x, y; // Grid coords
 	public PairFloat globalPos = new PairFloat(); // Screen space coords
+	public float movementSpeed;
 
 	public int fov = 15;
 	public int maxFov, minFov;
@@ -47,8 +49,6 @@ public abstract class Entity {
 	public Inventory inventory;
 	public Stats stats;
 
-	@JsonIgnore
-	public int movespeed = 2; // on-screen move speed (for smooth movement)
 	@JsonIgnore
 	public float stepy = MadSand.TILESIZE;
 	@JsonIgnore
@@ -348,6 +348,18 @@ public abstract class Entity {
 			ret = true;
 		}
 		return ret;
+	}
+	
+	public void calcMoveSpeed() {
+		movementSpeed = (float) Math.pow(Math.sqrt(getSpeed()), MOVE_SPEED_POW);
+	}
+	
+	public void animateMovement() {
+		stepx -= movementSpeed;
+		stepy -= movementSpeed;
+
+		if (stepx <= 1)
+			stopMovement();
 	}
 
 	public boolean move(Direction dir) {
