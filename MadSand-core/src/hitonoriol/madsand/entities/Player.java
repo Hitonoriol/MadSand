@@ -234,8 +234,27 @@ public class Player extends Entity {
 		return stats.equipment.unEquip(item);
 	}
 
-	private void performAttack(Direction dir) {
-		boolean dead;
+	protected void attack(Npc npc, int dmg) {
+		super.attack(npc, dmg);
+		Map map = MadSand.world.getCurLoc();
+
+		if (npc.stats.dead) {
+			MadSand.notice("You kill " + npc.stats.name + "! [+" + npc.rewardExp + " exp]");
+			addExp(npc.rewardExp);
+			reputation.change(npc.stats.faction, Reputation.KILL_PENALTY);
+
+			if (addToKillCount(npc.id)) // If killed for the first time
+				MadSand.print("You now know more about " + npc.stats.name + "s");
+
+			if (map.getHostileNpcCount() == 0 && MadSand.world.isUnderGround()) {
+				MadSand.print("The curse of the dungeon has been lifted!" + Resources.LINEBREAK +
+						"You can now break objects on this floor of the dungeon.");
+				map.editable = true;
+			}
+		}
+	}
+
+	private void performMeleeAttack(Direction dir) {
 		turn(dir);
 		Map map = MadSand.world.getCurLoc();
 		Npc npc = map.getNpc(coords.set(x, y).addDirection(dir));
@@ -252,37 +271,18 @@ public class Player extends Entity {
 			MadSand.print("You deal " + atk + " damage to " + npc.stats.name);
 
 			super.attackAnimation(npc);
-			npc.damage(atk);
+			attack(npc, atk);
 			damageHeldTool();
 			stats.skills.increaseSkill(Skill.Melee);
-		}
-
-		dead = npc.stats.dead;
-
-		if (dead) {
-
-			MadSand.notice("You kill " + npc.stats.name + "! [+" + npc.rewardExp + " exp]");
-			addExp(npc.rewardExp);
-			reputation.change(npc.stats.faction, Reputation.KILL_PENALTY);
-
-			if (addToKillCount(npc.id)) // If killed for the first time
-				MadSand.print("You now know more about " + npc.stats.name + "s");
-
-			if (map.getHostileNpcCount() == 0 && MadSand.world.isUnderGround()) {
-				MadSand.print("The curse of the dungeon has been lifted!" + Resources.LINEBREAK +
-						"You can now break objects on this floor of the dungeon.");
-				map.editable = true;
-			}
-
 		}
 	}
 
 	@Override
-	public void attack(Direction dir) {
+	public void meleeAttack(Direction dir) {
 		doAction(stats.attackCost, new TimedAction() {
 			@Override
 			public void act() {
-				performAttack(dir);
+				performMeleeAttack(dir);
 			}
 		});
 	}
@@ -329,7 +329,7 @@ public class Player extends Entity {
 	}
 
 	public void attack() {
-		attack(stats.look);
+		meleeAttack(stats.look);
 	}
 
 	@Override

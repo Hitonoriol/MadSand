@@ -297,7 +297,19 @@ public class Npc extends Entity {
 				.toHashCode();
 	}
 
-	void attack(Direction dir) {
+	protected void attack(Player target, int dmg) {
+		super.attack(target, dmg);
+		if (dmg == 0) {
+			MadSand.print(stats.name + " misses!");
+			target.increaseSkill(Skill.Evasion);
+		} else {
+			MadSand.warn(stats.name + " deals " + dmg + " damage to you");
+			super.attackAnimation(target);
+		}
+	}
+
+	@Override
+	void meleeAttack(Direction dir) {
 		Pair coords = new Pair(x, y).addDirection(dir);
 		Player player = World.player;
 		if (player.stats.dead)
@@ -306,14 +318,7 @@ public class Npc extends Entity {
 			return;
 		else {
 			int atk = stats.calcAttack(player.getDefense());
-			if (atk == 0) {
-				MadSand.print(stats.name + " misses!");
-				player.increaseSkill(Skill.Evasion);
-			} else {
-				MadSand.warn(stats.name + " deals " + atk + " damage to you");
-				super.attackAnimation(player);
-			}
-			player.damage(atk);
+			attack(player, atk);
 		}
 	}
 
@@ -429,7 +434,7 @@ public class Npc extends Entity {
 
 				dir = Pair.getRelativeDirection(x, y, player.x, player.y, false);
 				turn(dir);
-				attack(stats.look);
+				meleeAttack(stats.look);
 				doAction(stats.attackCost);
 			}
 			break;

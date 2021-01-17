@@ -98,16 +98,16 @@ public class Keyboard {
 			return;
 
 		if (Gdx.input.isKeyJustPressed(Keys.UP))
-			World.player.attack(Direction.UP);
+			World.player.meleeAttack(Direction.UP);
 
 		else if (Gdx.input.isKeyJustPressed(Keys.DOWN))
-			World.player.attack(Direction.DOWN);
+			World.player.meleeAttack(Direction.DOWN);
 
 		else if (Gdx.input.isKeyJustPressed(Keys.LEFT))
-			World.player.attack(Direction.LEFT);
+			World.player.meleeAttack(Direction.LEFT);
 
 		else if (Gdx.input.isKeyJustPressed(Keys.RIGHT))
-			World.player.attack(Direction.RIGHT);
+			World.player.meleeAttack(Direction.RIGHT);
 	}
 
 	private static void pollActionKeys() {

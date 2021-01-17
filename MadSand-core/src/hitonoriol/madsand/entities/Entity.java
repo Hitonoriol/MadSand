@@ -147,7 +147,19 @@ public abstract class Entity {
 		return inventory.hasItem(Globals.getInt(Globals.CURRENCY), cost);
 	}
 
-	abstract void attack(Direction dir);
+	protected void attack(Entity target, int dmg) {
+		target.damage(dmg);
+	}
+
+	abstract void meleeAttack(Direction dir);
+
+	void rangedAttack(Entity target, Item projectile) {
+		if (!canSee(target))
+			return;
+
+		int dmg = stats.calcBaseRangedAttack() + projectile.dmg;
+		projectile.launchProjectile(globalPos, target.globalPos, () -> attack(target, dmg));
+	}
 
 	public boolean addItem(Item item) {
 		return inventory.putItem(item);
@@ -349,11 +361,11 @@ public abstract class Entity {
 		}
 		return ret;
 	}
-	
+
 	public void calcMoveSpeed() {
 		movementSpeed = (float) Math.pow(Math.sqrt(getSpeed()), MOVE_SPEED_POW);
 	}
-	
+
 	public void animateMovement() {
 		stepx -= movementSpeed;
 		stepy -= movementSpeed;
@@ -459,14 +471,11 @@ public abstract class Entity {
 
 		for (Point p : new Line(x, y, entity.x, entity.y))
 			if ((object = loc.getObject(p.x, p.y)) != Map.nullObject) {
-				viewObstructed = !object.nocollide;
-				break;
+				if (viewObstructed = !object.nocollide)
+					break;
 			}
 
-		if ((dist <= fov) && !viewObstructed)
-			return true;
-
-		return false;
+		return (dist <= fov) && !viewObstructed;
 	}
 
 	public void attackAnimation(Entity entity) {

@@ -6,14 +6,19 @@ import java.util.function.BiConsumer;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.containers.PairFloat;
 import hitonoriol.madsand.entities.LootTable;
 import hitonoriol.madsand.entities.Skill;
 import hitonoriol.madsand.entities.Stat;
@@ -255,6 +260,24 @@ public class Item {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+	}
+
+	static final float BASE_PROJECTILE_SPEED = 0.25f;
+
+	public void launchProjectile(PairFloat from, PairFloat to, Runnable impactAction) {
+		Image projectileImg = new Image(Resources.item[id]);
+		Vector3 screenCoords = new Vector3();
+		Gui.overlay.addActor(projectileImg);
+
+		MadSand.camera.project(screenCoords.set(from.x, from.y, 0));
+		projectileImg.setPosition(screenCoords.x, screenCoords.y);
+
+		MadSand.camera.project(screenCoords.set(to.x, to.y, 0));
+		projectileImg.addAction(
+				Actions.sequence(
+						Actions.moveTo(screenCoords.x, screenCoords.y, BASE_PROJECTILE_SPEED),
+						Actions.run(impactAction),
+						Actions.run(() -> projectileImg.remove())));
 	}
 
 	@JsonIgnore

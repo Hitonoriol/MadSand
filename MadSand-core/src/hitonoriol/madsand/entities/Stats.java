@@ -143,6 +143,12 @@ public class Stats {
 		return get(Stat.Strength);
 	}
 
+	float rangedAtkCoef = 0.3f;
+
+	public int calcBaseRangedAttack() {
+		return (int) Math.max(getBaseAttack() * minAttackPercent * rangedAtkCoef, calcAttack(0) * rangedAtkCoef);
+	}
+
 	public int calcAttack(int defense) {
 		if (attackMissed())
 			return 0;

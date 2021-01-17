@@ -11,8 +11,12 @@
 		"requiredExp" : 15,
 		"lvUpMultiplier" : 0.1
 	},
+	"Evasion" : {
+		"requiredExp" : 50,
+		"lvUpMultiplier" : 0.55
+	},
 	"Level" : {
 		"requiredExp" : 85,
-		"lvUpMultiplier" : 0.9
+		"lvUpMultiplier" : 0.85
 	}
 }

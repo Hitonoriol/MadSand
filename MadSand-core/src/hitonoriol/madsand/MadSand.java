@@ -163,6 +163,7 @@ public class MadSand extends Game {
 		return cl;
 	}
 
+
 	static void setRenderRadius() {
 		renderArea = new PairFloat[countRcells()];
 		renderArea = getAllRcells(renderArea);
