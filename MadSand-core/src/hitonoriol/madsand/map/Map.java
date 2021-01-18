@@ -1,6 +1,5 @@
 package hitonoriol.madsand.map;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -255,6 +254,24 @@ public class Map {
 		return count;
 	}
 
+	public Pair rayCast(Pair from, Pair to) {
+		Line line = new Line(from, to);
+		for (Pair point : line) {
+			if (!isFreeTile(point))
+				return point;
+		}
+
+		return Pair.nullPair;
+	}
+
+	public MapEntity getMapEntity(Pair coords) {
+		MapEntity mapEntity;
+		if ((mapEntity = getObject(coords)) != nullObject)
+			return mapEntity;
+
+		return getNpc(coords);
+	}
+
 	public Pair getRandomPoint(int distanceFromPlayer, int maxDistanceFromPlayer) {
 		Player player = World.player;
 		int x, y;
@@ -355,7 +372,7 @@ public class Map {
 	private Map drawLine(MapAction action, int x1, int y1, int x2, int y2, int id) {
 		Line line = new Line(x1, y1, x2, y2);
 
-		for (Point point : line)
+		for (Pair point : line)
 			action.changeMap(point.x, point.y, id);
 
 		return this;
@@ -376,7 +393,7 @@ public class Map {
 			coords.set(x, y);
 
 			if (fill)
-				for (Point point : new Line(x0, y0, x, y))
+				for (Pair point : new Line(x0, y0, x, y))
 					action.changeMap(point.x, point.y, id);
 			else
 				action.changeMap(x, y, id);
@@ -666,7 +683,7 @@ public class Map {
 
 	public boolean dmgObjInDir(int x, int y, Direction direction) {
 		coords.set(x, y).addDirection(direction);
-		return mapObjects.get(coords).takeDamage();
+		return mapObjects.get(coords).takeHarvestDamage();
 	}
 
 	public boolean addObject(int x, int y, Direction dir, int id) {
@@ -686,7 +703,7 @@ public class Map {
 		if (ret.id == nullObject.id) {
 			delObject(coords);
 
-			if (ret.hp == MapObject.CLEANUP_FLAG)
+			if (ret.isDestroyed())
 				MadSand.world.updateLight();
 
 			return nullObject;
@@ -825,7 +842,7 @@ public class Map {
 				tile.visible = true;
 				blocksLight = false;
 
-				for (Point p : new Line(wx, wy, wx + x, wy + y)) {
+				for (Pair p : new Line(wx, wy, wx + x, wy + y)) {
 					tile = getTile(p.x, p.y);
 					object = getObject(p.x, p.y);
 

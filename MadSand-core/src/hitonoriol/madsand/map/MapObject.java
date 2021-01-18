@@ -16,8 +16,8 @@ import hitonoriol.madsand.properties.TileProp;
 import me.xdrop.jrand.JRand;
 import me.xdrop.jrand.generators.basics.FloatGenerator;
 
-public class MapObject {
-	public static final int CLEANUP_FLAG = -1337;
+public class MapObject extends MapEntity {
+	private static final int CLEANUP_FLAG = -1337;
 	public static final int NULL_OBJECT_ID = 0;
 	public static final int COLLISION_MASK_ID = 666;
 
@@ -81,6 +81,10 @@ public class MapObject {
 		this.hp = CLEANUP_FLAG;
 	}
 
+	public boolean isDestroyed() {
+		return this.hp == CLEANUP_FLAG;
+	}
+
 	private boolean verify() {
 		if (this.hp > 0)
 			return true;
@@ -90,7 +94,7 @@ public class MapObject {
 		}
 	}
 
-	public boolean takeDamage(int amt) {
+	public boolean takeHarvestDamage(int amt) {
 		if (amt <= 0)
 			amt = 1;
 		boolean dmg = false;
@@ -104,12 +108,17 @@ public class MapObject {
 		return dmg;
 	}
 
-	public void takeFullDamage() {
-		takeDamage(harvestHp + 1);
+	boolean takeHarvestDamage() {
+		return takeHarvestDamage(1);
 	}
 
-	boolean takeDamage() {
-		return takeDamage(0);
+	@Override
+	public void damage(int amt) {
+		takeHarvestDamage(amt);
+	}
+
+	public void takeFullDamage() {
+		takeHarvestDamage(harvestHp + 1);
 	}
 
 	public int rollDrop(ItemType heldItemType) {

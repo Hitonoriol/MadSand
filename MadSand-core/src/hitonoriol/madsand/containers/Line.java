@@ -1,16 +1,15 @@
 package hitonoriol.madsand.containers;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Line implements Iterable<Point>{
+public class Line implements Iterable<Pair> {
 	private int x0, y0;
 	private int x1, y1;
-	private List<Point> points;
+	private List<Pair> points;
 
-	public List<Point> getPoints() {
+	public List<Pair> getPoints() {
 		return points;
 	}
 
@@ -19,19 +18,23 @@ public class Line implements Iterable<Point>{
 		setDestination(x1, y1);
 		build();
 	}
-	
+
+	public Line(Pair a, Pair b) {
+		this(a.x, a.y, b.x, b.y);
+	}
+
 	public void setOrigin(int x, int y) {
 		this.x0 = x;
 		this.y0 = y;
 	}
-	
+
 	public void setDestination(int x, int y) {
 		this.x1 = x;
 		this.y1 = y;
 	}
-	
+
 	void build() {
-		points = new ArrayList<Point>();
+		points = new ArrayList<Pair>();
 
 		int dx = Math.abs(x1 - x0);
 		int dy = Math.abs(y1 - y0);
@@ -41,7 +44,7 @@ public class Line implements Iterable<Point>{
 		int err = dx - dy;
 
 		while (true) {
-			points.add(new Point(x0, y0));
+			points.add(new Pair(x0, y0));
 
 			if (x0 == x1 && y0 == y1)
 				break;
@@ -58,7 +61,7 @@ public class Line implements Iterable<Point>{
 		}
 	}
 
-	public Iterator<Point> iterator() {
+	public Iterator<Pair> iterator() {
 		return points.iterator();
 	}
 

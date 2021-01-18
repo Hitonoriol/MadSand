@@ -9,7 +9,8 @@ public enum ItemType {
 	Crop,
 	Consumable,
 	Axe, Shovel, Pickaxe, Hoe, Hammer,
-	MeleeWeapon, OffhandWeapon,
+	MeleeWeapon, OffhandWeapon, Bow,
+	Projectile,
 	HeadArmor, ChestArmor, LegArmor, FootArmor, Shield,
 	GrabBag,
 	FishingRod, FishingBait;

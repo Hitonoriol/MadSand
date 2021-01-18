@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.KeyDeserializer;
 
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.enums.Direction;
 
@@ -41,12 +42,20 @@ public class Pair {
 		return this;
 	}
 
-	Pair add(int x, int y) {
+	public Pair add(int x, int y) {
 		return set(this.x + x, this.y + y);
 	}
 
 	public Pair add(Pair arg) {
 		return add(arg.x, arg.y);
+	}
+
+	public Pair multiply(int mx, int my) {
+		return set(this.x * mx, this.y * my);
+	}
+
+	public Pair multiply(int n) {
+		return multiply(n, n);
 	}
 
 	public Pair random(int xMin, int xMax, int yMin, int yMax) {
@@ -147,6 +156,10 @@ public class Pair {
 
 	public Pair addDirection(Direction dir) {
 		return this.add(directionToCoord(dir));
+	}
+
+	public Pair toWorld() {
+		return multiply(MadSand.TILESIZE);
 	}
 
 	@Override

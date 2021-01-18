@@ -9,6 +9,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Align;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -18,7 +19,7 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
-import hitonoriol.madsand.containers.PairFloat;
+import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.LootTable;
 import hitonoriol.madsand.entities.Skill;
 import hitonoriol.madsand.entities.Stat;
@@ -264,9 +265,11 @@ public class Item {
 
 	static final float BASE_PROJECTILE_SPEED = 0.25f;
 
-	public void launchProjectile(PairFloat from, PairFloat to, Runnable impactAction) {
+	public void launchProjectile(Pair from, Pair to, Runnable impactAction) {
 		Image projectileImg = new Image(Resources.item[id]);
 		Vector3 screenCoords = new Vector3();
+		projectileImg.setOrigin(Align.center);
+		projectileImg.setSize(MadSand.TILESIZE, MadSand.TILESIZE);
 		Gui.overlay.addActor(projectileImg);
 
 		MadSand.camera.project(screenCoords.set(from.x, from.y, 0));

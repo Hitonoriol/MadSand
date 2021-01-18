@@ -234,9 +234,25 @@ public class Player extends Entity {
 		return stats.equipment.unEquip(item);
 	}
 
+	protected void attack(MapObject object, int dmg) {
+		super.attack(object, dmg);
+		MadSand.print("You deal " + dmg + " damage to " + object.name);
+
+		if (object.isDestroyed())
+			MadSand.print(object.name + " shatters into pieces!");
+	}
+
 	protected void attack(Npc npc, int dmg) {
 		super.attack(npc, dmg);
 		Map map = MadSand.world.getCurLoc();
+
+		if (dmg == 0)
+			MadSand.print("You miss " + npc.stats.name);
+		else {
+			MadSand.print("You deal " + dmg + " damage to " + npc.stats.name);
+			damageHeldTool();
+			super.attackAnimation(npc);
+		}
 
 		if (npc.stats.dead) {
 			MadSand.notice("You kill " + npc.stats.name + "! [+" + npc.rewardExp + " exp]");
@@ -264,27 +280,15 @@ public class Player extends Entity {
 
 		int atk = stats.calcAttack(npc.getDefense());
 		npc.provoke();
+		attack(npc, atk);
 
-		if (atk == 0)
-			MadSand.print("You miss " + npc.stats.name);
-		else {
-			MadSand.print("You deal " + atk + " damage to " + npc.stats.name);
-
-			super.attackAnimation(npc);
-			attack(npc, atk);
-			damageHeldTool();
+		if (atk > 0)
 			stats.skills.increaseSkill(Skill.Melee);
-		}
 	}
 
 	@Override
 	public void meleeAttack(Direction dir) {
-		doAction(stats.attackCost, new TimedAction() {
-			@Override
-			public void act() {
-				performMeleeAttack(dir);
-			}
-		});
+		doAction(stats.attackCost, () -> performMeleeAttack(dir));
 	}
 
 	public int getKillCount(int id) {
@@ -497,13 +501,7 @@ public class Player extends Entity {
 	}
 
 	public void craftItem(int id) {
-		doAction(stats.minorCost, new TimedAction() {
-
-			@Override
-			public void act() {
-				performCraftItem(id);
-			}
-		});
+		doAction(stats.minorCost, () -> performCraftItem(id));
 	}
 
 	public void interact() {
@@ -690,12 +688,7 @@ public class Player extends Entity {
 	}
 
 	private void interact(Direction direction) {
-		doAction(stats.minorCost, new TimedAction() {
-			@Override
-			public void act() {
-				performInteraction(direction);
-			}
-		});
+		doAction(stats.minorCost, () -> performInteraction(direction));
 	}
 
 	private float BASE_RES_FAIL = 35; // Base resource gathering fail probability
@@ -730,7 +723,7 @@ public class Player extends Entity {
 		}
 
 		int damage = stats.skills.getBaseSkillDamage(skill) + stats.hand().getSkillDamage(skill);
-		boolean damaged = obj.takeDamage(damage);
+		boolean damaged = obj.takeHarvestDamage(damage);
 
 		if (item != -1 && damaged) { // Succesfull interaction with item that drops something
 			Item objLoot;
@@ -793,12 +786,7 @@ public class Player extends Entity {
 	}
 
 	public void useItem(Item item) {
-		doAction(stats.minorCost, new TimedAction() {
-			@Override
-			public void act() {
-				performUseItem(item);
-			}
-		});
+		doAction(stats.minorCost, () -> performUseItem(item));
 
 	}
 
@@ -1148,12 +1136,7 @@ public class Player extends Entity {
 			return false;
 
 		if (canWalk(dir))
-			doAction(stats.walkCost, new TimedAction() {
-				@Override
-				public void act() {
-					performWalk(dir);
-				}
-			});
+			doAction(stats.walkCost, () -> performWalk(dir));
 		return true;
 	}
 

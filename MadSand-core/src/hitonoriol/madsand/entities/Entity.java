@@ -1,6 +1,5 @@
 package hitonoriol.madsand.entities;
 
-import java.awt.Point;
 import java.util.Comparator;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -17,11 +16,12 @@ import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.gui.dialogs.LootDialog;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
+import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.TileProp;
 
-public abstract class Entity {
+public abstract class Entity extends MapEntity {
 	private static final float MOVE_SPEED_POW = 1.35f;
 	@JsonIgnore
 	private Sprite upSpr, downSpr, leftSpr, rightSpr;
@@ -147,7 +147,7 @@ public abstract class Entity {
 		return inventory.hasItem(Globals.getInt(Globals.CURRENCY), cost);
 	}
 
-	protected void attack(Entity target, int dmg) {
+	protected void attack(MapEntity target, int dmg) {
 		target.damage(dmg);
 	}
 
@@ -157,8 +157,13 @@ public abstract class Entity {
 		if (!canSee(target))
 			return;
 
+		Map map = MadSand.world.getCurLoc();
+		Pair thisCoords = new Pair(x, y);
+		Pair obstacleCoords = map.rayCast(thisCoords, new Pair(target.x, target.y));
+		MapEntity projectileObstacle = map.getMapEntity(obstacleCoords);
+
 		int dmg = stats.calcBaseRangedAttack() + projectile.dmg;
-		projectile.launchProjectile(globalPos, target.globalPos, () -> attack(target, dmg));
+		projectile.launchProjectile(thisCoords, obstacleCoords, () -> attack(projectileObstacle, dmg));
 	}
 
 	public boolean addItem(Item item) {
@@ -469,7 +474,7 @@ public abstract class Entity {
 		MapObject object;
 		boolean viewObstructed = false;
 
-		for (Point p : new Line(x, y, entity.x, entity.y))
+		for (Pair p : new Line(x, y, entity.x, entity.y))
 			if ((object = loc.getObject(p.x, p.y)) != Map.nullObject) {
 				if (viewObstructed = !object.nocollide)
 					break;
