@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.math.Vector3;
 
 import hitonoriol.madsand.containers.Line;
+import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.NpcState;
 import hitonoriol.madsand.entities.NpcType;
@@ -22,17 +23,17 @@ import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.world.World;
 
 public class Mouse {
-	public static int wx = 0; // Coords of the cell of map that mouse is currently pointing at
-	public static int wy = 0;
+	public static int x = 0, y = 0; // Coords of mouse cursor on the screen
+	public static Pair prevCoords = new Pair();
+	public static int wx = 0, wy = 0; // Coords of the cell of map that mouse is currently pointing at
 	public static int clickDst = 0; // Distance from wx, wy to player
-	public static int x = 0; // Coords of mouse cursor on the screen
-	public static int y = 0;
 
 	static Vector3 mouseinworld = new Vector3(0.0F, 0.0F, 0.0F);
 
 	public static String lineDelimiter = "**********";
 
 	public static Map loc;
+	public static Player player;
 	public static Tile tile;
 	public static MapObject object;
 	public static Npc npc;
@@ -48,13 +49,19 @@ public class Mouse {
 	public static void updCoords() {
 		x = Gdx.input.getX();
 		y = Gdx.graphics.getHeight() - Gdx.input.getY();
+		tooltipContainer.moveTo(x, y);
 
 		wx = (int) Math.floor(Mouse.mouseinworld.x / MadSand.TILESIZE);
 		wy = (int) Math.floor(Mouse.mouseinworld.y / MadSand.TILESIZE);
 
+		if (prevCoords.equals(wx, wy))
+			return;
+		prevCoords.set(wx, wy);
+
 		if (Gui.gameUnfocused || !MadSand.state.equals(GameState.GAME))
 			return;
 
+		player = World.player;
 		loc = MadSand.world.getCurLoc();
 		npc = loc.getNpc(wx, wy);
 		tile = loc.getTile(wx, wy);
@@ -71,8 +78,6 @@ public class Mouse {
 			station = null;
 
 		pointingAtObject = (npc != Map.nullNpc) || (object != Map.nullObject) || (tile.hasFishingSpot());
-
-		tooltipContainer.moveTo(x, y);
 
 		Gui.overlay.getTooltip().setText(getCurrentCellInfo());
 	}
@@ -201,34 +206,39 @@ public class Mouse {
 		if (MadSand.state != GameState.GAME)
 			return;
 
-		if ((World.player.isStepping()) || Gui.isGameUnfocused())
+		if ((player.isStepping()) || Gui.isGameUnfocused())
 			return;
 
 		if (justClicked && ((pointingAtObject && diagonal) || rest)) {
 			justClicked = false;
 
-			World.player.lookAtMouse(wx, wy, diagonal);
+			player.lookAtMouse(wx, wy, diagonal);
 
 			if (rest && loot != Map.nullLoot) {
-				World.player.pickUpLoot();
+				player.pickUpLoot();
 				return;
 			} else if (rest) {
-				World.player.rest();
+				player.rest();
 				return;
 			}
 
-			if (pointingAtObject && !npc.equals(Map.nullNpc)) {
+			if (!npc.equals(Map.nullNpc)) {
 				if (npc.state == NpcState.Hostile) {
-					World.player.attack();
+					player.attack();
 					return;
 				}
 			}
 
 			if (pointingAtObject && diagonal) { // Interact with friendly npc or object
-				World.player.interact();
+				player.interact();
 				return;
 			}
 
+		}
+
+		if (justClicked && clickDst > 1) {
+			if (!npc.equals(Map.nullNpc))
+				player.rangedAttack(npc);
 		}
 
 		justClicked = false;

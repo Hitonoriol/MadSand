@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Utils;
 
-public class StatContainer extends HashMap<Stat, Integer>{
+public class StatContainer extends HashMap<Stat, Integer> {
 	static final int STAT_RAND_MAX = 8;
 	static final int STAT_RAND_MIN = 3;
 	static int STAT_MIN_SUM = 20; //for roll() method
@@ -65,7 +65,7 @@ public class StatContainer extends HashMap<Stat, Integer>{
 	public void increase(Stat stat) {
 		increase(stat, 1);
 	}
-	
+
 	public void decrease(Stat stat) {
 		increase(stat, -1);
 	}
@@ -78,19 +78,21 @@ public class StatContainer extends HashMap<Stat, Integer>{
 				sum += get(stat);
 		return sum;
 	}
-	
+
 	@JsonIgnore
 	public int getFreePoints() {
 		return maxStatSum - getSum();
 	}
 
 	public void roll(int lvl) {
+		final int maxStatVal = STAT_RAND_MAX + lvl;
+		final int rollableStats = Stat.rollableStats.size();
+
 		int sum = 0;
-		int maxSum = STAT_RAND_MAX + lvl;
-		while (sum < STAT_MIN_SUM || sum > maxStatSum + lvl * 6) {
+		while (sum < STAT_MIN_SUM || sum > maxStatSum + lvl * rollableStats) {
 			for (Stat stat : Stat.values())
 				if (!stat.excludeFromSum())
-					set(stat, Utils.rand(STAT_RAND_MIN, maxSum));
+					set(stat, Utils.rand(STAT_RAND_MIN, maxStatVal));
 			sum = getSum();
 		}
 	}

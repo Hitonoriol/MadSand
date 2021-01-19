@@ -270,6 +270,25 @@ public class Player extends Entity {
 		}
 	}
 
+	public boolean canPerformRangedAttack() {
+		return stats.hand().type == ItemType.RangedWeapon &&
+				stats.offHand().type == ItemType.Projectile;
+	}
+
+	private void performRangedAttack(Npc npc) {
+		Item projectile = stats.offHand();
+		super.rangedAttack(npc, projectile);
+		damageHeldTool();
+		inventory.delItem(projectile, 1);
+	}
+
+	public void rangedAttack(Npc npc) {
+		if (!canPerformRangedAttack())
+			return;
+
+		doAction(stats.attackCost, () -> performRangedAttack(npc));
+	}
+
 	private void performMeleeAttack(Direction dir) {
 		turn(dir);
 		Map map = MadSand.world.getCurLoc();
@@ -341,7 +360,7 @@ public class Player extends Entity {
 		super.die();
 		stats.equipment.unEquipAll();
 		refreshEquipment();
-		Gui.deathStage.setDeadText("You died\nYou survived " + Utils.round(getSurvivedTime()) + " hours");
+		Gui.deathStage.setDeathMessage("You died\nYou survived " + Utils.round(getSurvivedTime()) + " hours");
 		Gui.darkness.setVisible(true);
 		Gdx.input.setInputProcessor(Gui.deathStage);
 		MadSand.state = GameState.DEAD;

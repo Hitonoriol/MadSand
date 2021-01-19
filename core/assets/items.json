@@ -1664,5 +1664,41 @@
 		"name" : "Ice",
 		"cost" : 3,
 		"weight" : 0.5
+	},
+	"173" : {
+		"name" : "Slingshot",
+		"recipe" : "8/10:69/4:22/6",
+		"cost" : 49,
+		"type" : "RangedWeapon",
+		"weight" : 0.55,
+		"lvl" : 1,
+		"equipStats" : {
+			"stats": {"Strength" : 1}
+		}
+	},
+	"174" : {
+		"name" : "Wooden Bow",
+		"recipe" : "8/15:69/8",
+		"cost" : 77,
+		"type" : "RangedWeapon",
+		"weight" : 0.95,
+		"lvl" : 1,
+		"equipStats" : {
+			"stats": {"Strength" : 1, "Dexterity" : 1}
+		}
+	},
+	"175" : {
+		"name" : "Stone arrow",
+		"type" : "Projectile",
+		"dmg" : 2,
+		"cost" : 8,
+		"weight" : 0.125
+	},
+	"176" : {
+		"name" : "Boomerang",
+		"type" : "Projectile",
+		"dmg" : 2,
+		"cost" : 53,
+		"weight" : 0.75
 	}
 }

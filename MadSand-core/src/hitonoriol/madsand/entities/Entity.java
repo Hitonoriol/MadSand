@@ -22,7 +22,6 @@ import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.TileProp;
 
 public abstract class Entity extends MapEntity {
-	private static final float MOVE_SPEED_POW = 1.35f;
 	@JsonIgnore
 	private Sprite upSpr, downSpr, leftSpr, rightSpr;
 
@@ -367,8 +366,9 @@ public abstract class Entity extends MapEntity {
 		return ret;
 	}
 
-	public void calcMoveSpeed() {
-		movementSpeed = (float) Math.pow(Math.sqrt(getSpeed()), MOVE_SPEED_POW);
+	public void calcMovementSpeed() {
+		float speed = getSpeed();
+		movementSpeed = speed / 17f + (float) Math.pow(Math.sqrt(speed), 1.225f) * 0.975f;
 	}
 
 	public void animateMovement() {

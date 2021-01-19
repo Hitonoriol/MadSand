@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Timer;
 
 import hitonoriol.madsand.containers.AnimationContainer;
 import hitonoriol.madsand.containers.Line;
+import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.containers.PairFloat;
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.Entity;
@@ -25,14 +26,14 @@ import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.world.World;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MadSand extends Game {
 	static final int OBJECT_LOOT = 7;
 	public static final int TILESIZE = 33;
-
-	static int renderradius;
 
 	public static final String SAVE_EXT = ".msf";
 
@@ -62,8 +63,7 @@ public class MadSand extends Game {
 
 	public static World world;
 
-	private static PairFloat[] renderArea;
-	private static final int TEST_POINT = 50;
+	private static List<Pair> renderArea = new ArrayList<>();
 
 	static float ymid;
 	static float xmid = ymid = 0;
@@ -82,8 +82,7 @@ public class MadSand extends Game {
 		Timer.instance().start();
 
 		setRenderRadius(DEFAULT_FOV);
-		setRenderRadius();
-		Utils.out("Render area: " + renderArea.length);
+		Utils.out("Render area: " + renderArea.size());
 		Utils.init();
 		Gui.init();
 		GameTextSubstitutor.init();
@@ -128,50 +127,15 @@ public class MadSand extends Game {
 		switchStage(GameState.GAME, Gui.overlay);
 	}
 
-	static int countRcells() {
-		int i = 0;
-		int ii = 0, cl = 0;
-		while (i < World.DEFAULT_MAPSIZE) {
-			while (ii < World.DEFAULT_MAPSIZE) {
-				if (Line.calcDistance(TEST_POINT * TILESIZE, TEST_POINT * TILESIZE, i * TILESIZE,
-						ii * TILESIZE) <= renderradius) {
-					cl++;
-				}
-				ii++;
-			}
-			ii = 0;
-			i++;
-		}
-		return cl;
-	}
-
-	private static PairFloat[] getAllRcells(PairFloat[] cl) {
-		int i = 0;
-		int ii = 0, clc = 0;
-		while (i < World.DEFAULT_MAPSIZE) {
-			while (ii < World.DEFAULT_MAPSIZE) {
-				if (Line.calcDistance(TEST_POINT * TILESIZE, TEST_POINT * TILESIZE, i * TILESIZE,
-						ii * TILESIZE) <= renderradius) {
-					cl[clc] = new PairFloat(TEST_POINT - ii, TEST_POINT - i);
-					clc++;
-				}
-				ii++;
-			}
-			ii = 0;
-			i++;
-		}
-		return cl;
-	}
-
-
-	static void setRenderRadius() {
-		renderArea = new PairFloat[countRcells()];
-		renderArea = getAllRcells(renderArea);
-	}
-
 	public static void setRenderRadius(int radius) {
-		renderradius = radius * MadSand.TILESIZE;
-		setRenderRadius();
+		final int center = radius, diameter = radius * 2;
+		renderArea = new ArrayList<>();
+		for (int y = 0; y < diameter; ++y) {
+			for (int x = 0; x < diameter; ++x) {
+				if (Line.calcDistance(center, center, x, y) <= radius)
+					renderArea.add(new Pair(center - x, center - y));
+			}
+		}
 	}
 
 	public static void setViewport() {
@@ -245,58 +209,45 @@ public class MadSand extends Game {
 
 		int x, y;
 		int xsz = loc.getWidth(), ysz = loc.getHeight();
-		int i = 0;
 
 		if (player.isInBackground()) // Draw player under tiles & objects if he is currently in the background
 			drawEntity(player);
 
-		while (i < renderArea.length) { // Render background tiles
-			x = player.x + (int) renderArea[i].x;
-			y = player.y + (int) renderArea[i].y;
+		for (Pair cell : renderArea) { // Render background tiles
+			x = player.x + cell.x;
+			y = player.y + cell.y;
 
 			tile = loc.getTile(x, y);
 
-			if (!tile.visible && !tile.visited) { //Don't render tiles which were never seen
-				++i;
+			if (!tile.visible && !tile.visited) //Don't render tiles which were never seen
 				continue;
-			}
 
-			if ((x > xsz || y > ysz || x < 0 || y < 0) && MadSand.world.isUnderGround()) {// Don't render default tile while underground
-				++i;
+			if ((x > xsz || y > ysz || x < 0 || y < 0) && MadSand.world.isUnderGround()) // Don't render default tile while underground
 				continue;
-			}
 
 			Utils.batch.draw(Resources.tile[world.getTileOrDefault(x, y)], x * TILESIZE, y * TILESIZE);
-			++i;
 		}
 
-		i = 0;
-
-		while (i < renderArea.length) { // Render objects, loot, NPCs and player
-			x = player.x + (int) renderArea[i].x;
-			y = player.y + (int) renderArea[i].y;
+		for (Pair cell : renderArea) { // Render objects, loot, NPCs and player
+			x = player.x + cell.x;
+			y = player.y + cell.y;
 
 			tile = loc.getTile(x, y);
 			object = loc.getObject(x, y);
 			npc = loc.getNpc(x, y);
 			tileVisited = tile.visited && !tile.visible;
 
-			if ((x > xsz || y > ysz || x < 0 || y < 0) && MadSand.world.isUnderGround()) {
-				++i;
+			if ((x > xsz || y > ysz || x < 0 || y < 0) && MadSand.world.isUnderGround())
 				continue;
-			}
 
-			if (!tile.visible && !tile.visited) { //Don't render anything on tiles which were never seen
-				++i;
+			if (!tile.visible && !tile.visited) //Don't render anything on tiles which were never seen
 				continue;
-			}
 
 			if (tileVisited && object.isWall) // If object is a wall, it'll be rendered even when not visible
 				renderObject(object, x, y);
 
 			if (tileVisited) { // Render visited & not currently visible tiles partially darkened
 				Utils.batch.draw(Resources.visitedMask, x * TILESIZE, y * TILESIZE);
-				++i;
 				continue;
 			}
 
@@ -311,8 +262,6 @@ public class MadSand extends Game {
 			if (x == player.x && y == player.y)
 				if (!player.isInBackground())
 					drawEntity(player);
-
-			++i;
 		}
 
 		drawAnimations();

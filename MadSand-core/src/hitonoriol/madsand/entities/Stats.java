@@ -81,7 +81,7 @@ public class Stats {
 	}
 
 	public void calcStats() {
-		owner.calcMoveSpeed();
+		owner.calcMovementSpeed();
 		mhp = get(Stat.Constitution) * HP_MULTIPLIER;
 
 		if (hp == 0)

@@ -9,7 +9,7 @@ public enum ItemType {
 	Crop,
 	Consumable,
 	Axe, Shovel, Pickaxe, Hoe, Hammer,
-	MeleeWeapon, OffhandWeapon, Bow,
+	MeleeWeapon, OffhandWeapon, RangedWeapon,
 	Projectile,
 	HeadArmor, ChestArmor, LegArmor, FootArmor, Shield,
 	GrabBag,
@@ -17,7 +17,9 @@ public enum ItemType {
 
 	// For non-equipment items: if player takes the item in hand, which hand does it go to:
 	public EquipSlot handSlot() {
-		return (this == FishingBait) ? EquipSlot.Offhand : EquipSlot.MainHand;
+		return (this == FishingBait || this == Projectile)
+				? EquipSlot.Offhand
+				: EquipSlot.MainHand;
 	}
 
 	public boolean isPlaceable() {
@@ -32,7 +34,8 @@ public enum ItemType {
 
 	public boolean isWeapon() {
 		return this == MeleeWeapon ||
-				this == OffhandWeapon;
+				this == OffhandWeapon ||
+				this == RangedWeapon;
 	}
 
 	public boolean isArmor() {
@@ -56,7 +59,7 @@ public enum ItemType {
 				this == Hammer;
 	}
 
-	public boolean isUnique() { //Unique = non-stackable
+	public boolean isUnique() { // Unique = non-stackable
 		return (isWeapon() || isTool() || isArmor());
 	}
 
