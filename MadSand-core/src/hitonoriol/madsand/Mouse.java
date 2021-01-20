@@ -1,5 +1,8 @@
 package hitonoriol.madsand;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.math.Vector3;
@@ -26,7 +29,7 @@ public class Mouse {
 	public static int x = 0, y = 0; // Coords of mouse cursor on the screen
 	public static Pair prevCoords = new Pair();
 	public static int wx = 0, wy = 0; // Coords of the cell of map that mouse is currently pointing at
-	public static int clickDst = 0; // Distance from wx, wy to player
+	public static Set<Integer> heldButtons = new HashSet<>();
 
 	static Vector3 mouseinworld = new Vector3(0.0F, 0.0F, 0.0F);
 
@@ -43,8 +46,7 @@ public class Mouse {
 
 	public static GameTooltip tooltipContainer;
 
-	public static boolean pointingAtObject = false; // flag that shows if mouse is pointing at object or npc or not
-	public static boolean justClicked = false;
+	private static boolean pointingAtObject = false;
 
 	public static void updCoords() {
 		x = Gdx.input.getX();
@@ -77,7 +79,10 @@ public class Mouse {
 		else
 			station = null;
 
-		pointingAtObject = (npc != Map.nullNpc) || (object != Map.nullObject) || (tile.hasFishingSpot());
+		pointingAtObject = npc != Map.nullNpc ||
+				object != Map.nullObject ||
+				tile.hasFishingSpot() ||
+				player.at(wx, wy);
 
 		Gui.overlay.getTooltip().setText(getCurrentCellInfo());
 	}
@@ -190,66 +195,56 @@ public class Mouse {
 
 	}
 
-	private static final int CLICK_ACTION_REST = 0;
-	private static final int CLICK_ACTION_DIAGONAL = 1;
-	private static boolean rest, diagonal;
+	private static final int CLICK_CUR_TILE = 0, CLICK_ADJ_TILE = 1;
 
-	private static void processClick() {
-		clickDst = (int) Line.calcDistance(World.player.x, World.player.y, wx, wy);
-		diagonal = (clickDst == CLICK_ACTION_DIAGONAL);
-		rest = (clickDst == CLICK_ACTION_REST);
+	public static int getClickDistance() {
+		return (int) Line.calcDistance(World.player.x, World.player.y, wx, wy);
+	}
+
+	public static boolean isClickActionPossible() {
+		int clickDst = getClickDistance();
+		return pointingAtObject ||
+				clickDst == CLICK_CUR_TILE;
 	}
 
 	public static void mouseClickAction() {
-		processClick();
+		int clickDst = getClickDistance();
+		boolean adjacentTileClicked = (clickDst == CLICK_ADJ_TILE);
+		boolean currentTileClicked = (clickDst == CLICK_CUR_TILE);
 
 		if (MadSand.state != GameState.GAME)
 			return;
 
-		if ((player.isStepping()) || Gui.isGameUnfocused())
+		if ((player.isStepping()) || Gui.isGameUnfocused() || !pointingAtObject) {
+			Utils.out("CUM");
 			return;
+		}
 
-		if (justClicked && ((pointingAtObject && diagonal) || rest)) {
-			justClicked = false;
-
-			player.lookAtMouse(wx, wy, diagonal);
-
-			if (rest && loot != Map.nullLoot) {
+		if (currentTileClicked) {
+			if (loot != Map.nullLoot)
 				player.pickUpLoot();
-				return;
-			} else if (rest) {
+			else
 				player.rest();
-				return;
-			}
+		}
 
-			if (!npc.equals(Map.nullNpc)) {
-				if (npc.state == NpcState.Hostile) {
-					player.attack();
-					return;
-				}
-			}
+		else if (adjacentTileClicked) {
+			player.lookAtMouse(wx, wy, true);
 
-			if (pointingAtObject && diagonal) { // Interact with friendly npc or object
+			if (npc.state == NpcState.Hostile)
+				player.meleeAttack();
+			else
 				player.interact();
-				return;
-			}
-
 		}
 
-		if (justClicked && clickDst > 1) {
-			if (!npc.equals(Map.nullNpc))
-				player.rangedAttack(npc);
-		}
-
-		justClicked = false;
+		else if (clickDst > 1 && npc != Map.nullNpc)
+			player.rangedAttack(npc);
 	}
 
 	public static void pollMouseMovement() {
 		if (Keyboard.inputIgnored())
 			return;
 
-		processClick();
-		if (Gdx.input.isButtonPressed(Buttons.LEFT) && !(diagonal && pointingAtObject) && !rest) {
+		if (heldButtons.contains(Buttons.LEFT)) {
 			World.player.lookAtMouse(wx, wy);
 			World.player.walk(World.player.stats.look);
 		}

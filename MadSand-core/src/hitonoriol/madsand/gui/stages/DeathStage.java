@@ -17,16 +17,19 @@ public class DeathStage extends Stage {
 	public DeathStage() {
 		super(Gui.uiViewport);
 		Table container = new Table();
+		final float SIZE_COEF = 1.85f;
 
 		deathMsgLabel = new Label("", Gui.skin);
 		deathMsgLabel.setAlignment(Align.center);
 		respawnButton = new TextButton("Respawn", Gui.skin);
 		titleLabel = new Label("You Died", Gui.skin);
 		Gui.setFontSize(titleLabel, Gui.FONT_XL);
+		Gui.setFontSize(deathMsgLabel, 19);
+		titleLabel.setAlignment(Align.center);
 
-		container.add(titleLabel).width(Gui.defLblWidth).row();
+		container.add(titleLabel).align(Align.center).width(Gui.defLblWidth).padBottom(30f).row();
 		container.add(deathMsgLabel).padBottom(75).row();
-		container.add(respawnButton).width(500.0F).row();
+		container.add(respawnButton).size(Gui.BTN_WIDTH * SIZE_COEF, Gui.BTN_HEIGHT * SIZE_COEF).row();
 		container.setFillParent(true);
 		super.addActor(Gui.darkness);
 		super.addActor(container);

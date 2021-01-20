@@ -367,9 +367,9 @@ public class MadSand extends Game {
 	}
 
 	public void render() {
+		Keyboard.pollGlobalHotkeys();
 		Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		Keyboard.pollGlobalHotkeys();
 
 		if (state.equals(GameState.GAME)) {
 			Mouse.mouseinworld.set(Gdx.input.getX(), Gdx.input.getY(), 0.0F);

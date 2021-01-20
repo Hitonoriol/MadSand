@@ -38,12 +38,14 @@ public enum EquipSlot {
 		case OffhandWeapon:
 			return Offhand;
 
-		case MeleeWeapon:
+		default:
+			break;
+		}
+
+		if (type.isWeapon())
 			return MainHand;
 
-		default:
-			return null;
-		}
+		return null;
 	}
 
 	// Returns slot for any item (if item is not an equipment, one of the hand slots will be returned)

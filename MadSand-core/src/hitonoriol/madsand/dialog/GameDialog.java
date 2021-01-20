@@ -13,7 +13,6 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.LuaUtils;
-import hitonoriol.madsand.Mouse;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 
 public class GameDialog extends Dialog {
@@ -92,7 +91,6 @@ public class GameDialog extends Dialog {
 	public boolean remove() {
 		boolean ret = super.remove();
 		Gui.gameResumeFocus(this);
-		Mouse.justClicked = false;
 		return ret;
 	}
 

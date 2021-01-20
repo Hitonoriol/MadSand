@@ -188,13 +188,8 @@ public class Item {
 	}
 
 	Item reinit() {
-		EquipStats stats = equipStats;
-		String name = this.name;
-
-		loadProperties();
-
-		this.equipStats = stats;
-		this.name = name;
+		if (!type.isUnique())
+			loadProperties();
 		return this;
 	}
 
@@ -263,13 +258,16 @@ public class Item {
 			}
 	}
 
-	static final float BASE_PROJECTILE_SPEED = 0.25f;
+	static final float BASE_PROJECTILE_SPEED = 0.35f;
 
 	public void launchProjectile(Pair from, Pair to, Runnable impactAction) {
+		final int imgSize = (int) (MadSand.TILESIZE * MadSand.ZOOM);
 		Image projectileImg = new Image(Resources.item[id]);
 		Vector3 screenCoords = new Vector3();
 		projectileImg.setOrigin(Align.center);
-		projectileImg.setSize(MadSand.TILESIZE, MadSand.TILESIZE);
+		projectileImg.setSize(imgSize, imgSize);
+		projectileImg
+				.addAction(Actions.rotateTo((float) Math.toDegrees(Math.atan2(from.y - to.y, from.x - to.x)) + 90f));
 		Gui.overlay.addActor(projectileImg);
 
 		MadSand.camera.project(screenCoords.set(from.x, from.y, 0));

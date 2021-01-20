@@ -162,7 +162,9 @@ public abstract class Entity extends MapEntity {
 		MapEntity projectileObstacle = map.getMapEntity(obstacleCoords);
 
 		int dmg = stats.calcBaseRangedAttack() + projectile.dmg;
-		projectile.launchProjectile(thisCoords, obstacleCoords, () -> attack(projectileObstacle, dmg));
+		projectile.launchProjectile(thisCoords.multiply(MadSand.TILESIZE),
+				obstacleCoords.multiply(MadSand.TILESIZE),
+				() -> attack(projectileObstacle, dmg));
 	}
 
 	public boolean addItem(Item item) {

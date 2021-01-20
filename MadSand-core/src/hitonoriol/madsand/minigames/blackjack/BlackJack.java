@@ -11,7 +11,7 @@ public class BlackJack {
 
 	Hand player = new BlackJackHand();
 	Hand dealer = new BlackJackHand();
-	GameResult gameResult;
+	GameResult gameResult = GameResult.None;
 	int bank;
 
 	public void startGame(int bet) {

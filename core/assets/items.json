@@ -1690,6 +1690,8 @@
 	"175" : {
 		"name" : "Stone arrow",
 		"type" : "Projectile",
+		"recipe" : "71/1:2/1",
+		"craftQuantity" : 3,
 		"dmg" : 2,
 		"cost" : 8,
 		"weight" : 0.125

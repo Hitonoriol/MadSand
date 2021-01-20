@@ -43,6 +43,7 @@ import hitonoriol.madsand.gui.widgets.ResourceProgressBar;
 import hitonoriol.madsand.map.FishingSpot;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
+import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.properties.Globals;
@@ -234,7 +235,7 @@ public class Player extends Entity {
 		return stats.equipment.unEquip(item);
 	}
 
-	protected void attack(MapObject object, int dmg) {
+	private void attack(MapObject object, int dmg) {
 		super.attack(object, dmg);
 		MadSand.print("You deal " + dmg + " damage to " + object.name);
 
@@ -242,10 +243,11 @@ public class Player extends Entity {
 			MadSand.print(object.name + " shatters into pieces!");
 	}
 
-	protected void attack(Npc npc, int dmg) {
+	private void attack(Npc npc, int dmg) {
 		super.attack(npc, dmg);
 		Map map = MadSand.world.getCurLoc();
 
+		npc.provoke();
 		if (dmg == 0)
 			MadSand.print("You miss " + npc.stats.name);
 		else {
@@ -262,12 +264,20 @@ public class Player extends Entity {
 			if (addToKillCount(npc.id)) // If killed for the first time
 				MadSand.print("You now know more about " + npc.stats.name + "s");
 
-			if (map.getHostileNpcCount() == 0 && MadSand.world.isUnderGround()) {
+			if (!map.editable && map.getHostileNpcCount() == 0 && MadSand.world.isUnderGround()) {
 				MadSand.print("The curse of the dungeon has been lifted!" + Resources.LINEBREAK +
 						"You can now break objects on this floor of the dungeon.");
 				map.editable = true;
 			}
 		}
+	}
+
+	@Override
+	protected void attack(MapEntity target, int dmg) {
+		if (target instanceof Npc)
+			attack((Npc) target, dmg);
+		else if (target instanceof MapObject)
+			attack((MapObject) target, dmg);
 	}
 
 	public boolean canPerformRangedAttack() {
@@ -280,13 +290,14 @@ public class Player extends Entity {
 		super.rangedAttack(npc, projectile);
 		damageHeldTool();
 		inventory.delItem(projectile, 1);
+		stats.equipment.refreshUI();
 	}
 
 	public void rangedAttack(Npc npc) {
 		if (!canPerformRangedAttack())
 			return;
 
-		doAction(stats.attackCost, () -> performRangedAttack(npc));
+		doAction(stats.rangedAttackCost, () -> performRangedAttack(npc));
 	}
 
 	private void performMeleeAttack(Direction dir) {
@@ -298,7 +309,6 @@ public class Player extends Entity {
 			return;
 
 		int atk = stats.calcAttack(npc.getDefense());
-		npc.provoke();
 		attack(npc, atk);
 
 		if (atk > 0)
@@ -307,7 +317,7 @@ public class Player extends Entity {
 
 	@Override
 	public void meleeAttack(Direction dir) {
-		doAction(stats.attackCost, () -> performMeleeAttack(dir));
+		doAction(stats.meleeAttackCost, () -> performMeleeAttack(dir));
 	}
 
 	public int getKillCount(int id) {
@@ -351,7 +361,7 @@ public class Player extends Entity {
 		return killCount.containsKey(id);
 	}
 
-	public void attack() {
+	public void meleeAttack() {
 		meleeAttack(stats.look);
 	}
 
@@ -360,7 +370,7 @@ public class Player extends Entity {
 		super.die();
 		stats.equipment.unEquipAll();
 		refreshEquipment();
-		Gui.deathStage.setDeathMessage("You died\nYou survived " + Utils.round(getSurvivedTime()) + " hours");
+		Gui.deathStage.setDeathMessage("You survived " + Utils.timeString(getSurvivedTime()));
 		Gui.darkness.setVisible(true);
 		Gdx.input.setInputProcessor(Gui.deathStage);
 		MadSand.state = GameState.DEAD;
@@ -1171,7 +1181,7 @@ public class Player extends Entity {
 			return;
 
 		if (!npc.friendly) {
-			attack();
+			meleeAttack();
 			return;
 		}
 	}
@@ -1220,8 +1230,8 @@ public class Player extends Entity {
 		}
 	}
 
-	float getSurvivedTime() {
-		return (float) (MadSand.world.globalTick - stats.spawnTime) / (float) MadSand.world.ticksPerHour;
+	long getSurvivedTime() {
+		return MadSand.world.globalTick - stats.spawnTime;
 	}
 
 	public void registerLuaAction(String name) {

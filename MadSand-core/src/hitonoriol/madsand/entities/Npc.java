@@ -146,7 +146,7 @@ public class Npc extends Entity {
 		stats.mhp = stats.hp;
 		stats.set(Stat.Strength, (int) (properties.strength + lvl * STR_PER_LVL));
 		stats.set(Stat.Accuracy, (int) (properties.accuracy + lvl * ACC_PER_LVL));
-		stats.attackCost += lvl * ATTACK_SPD_PER_LVL;
+		stats.meleeAttackCost += lvl * ATTACK_SPD_PER_LVL;
 		stats.walkCost += lvl * MOVE_SPD_PER_LVL;
 
 		rewardExp = properties.rewardExp + (int) (lvl * EXP_PER_LVL);
@@ -429,13 +429,13 @@ public class Npc extends Entity {
 				}
 				doAction(stats.walkCost);
 			} else {
-				if (!canAct(stats.attackCost))
+				if (!canAct(stats.meleeAttackCost))
 					return;
 
 				dir = Pair.getRelativeDirection(x, y, player.x, player.y, false);
 				turn(dir);
 				meleeAttack(stats.look);
-				doAction(stats.attackCost);
+				doAction(stats.meleeAttackCost);
 			}
 			break;
 

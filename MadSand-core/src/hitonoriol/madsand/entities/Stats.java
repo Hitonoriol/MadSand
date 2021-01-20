@@ -25,7 +25,8 @@ public class Stats {
 	public StatContainer baseStats;
 
 	public double walkCost = 4.5; // action points consumed by walking
-	public double attackCost = 5;
+	public double meleeAttackCost = 5;
+	public double rangedAttackCost = 5.5;
 	public double minorCost = 1; // action points consumed by minor action
 	public double actionPtsMax = 5; // Entity's speed
 	public double actionPts = actionPtsMax;

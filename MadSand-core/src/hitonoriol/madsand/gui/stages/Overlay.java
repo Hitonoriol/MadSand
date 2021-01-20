@@ -112,28 +112,34 @@ public class Overlay extends Stage {
 		super.addListener(new ClickListener(Buttons.LEFT) {
 			private boolean ignoreClick = false;
 
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				Mouse.heldButtons.remove(button);
+				super.touchUp(event, x, y, pointer, button);
+			}
+
 			public void clicked(InputEvent event, float x, float y) {
 				if (ignoreClick) {
 					ignoreClick = false;
 					return;
 				}
 
-				if (!Gui.gameUnfocused && !Gui.dialogActive && MadSand.state.equals(GameState.GAME)) {
-					Mouse.justClicked = true;
-					Mouse.mouseClickAction();
-				}
+				Mouse.mouseClickAction();
 			}
 
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				ignoreClick = Gui.isGameUnfocused() || !MadSand.state.equals(GameState.GAME) || Gui.dialogActive;
+				ignoreClick |= !Mouse.isClickActionPossible();
+
+				if (ignoreClick)
+					Mouse.heldButtons.add(button);
+
 				super.touchDown(event, x, y, pointer, button);
-				if (event.getType().equals(InputEvent.Type.touchDown))
-					ignoreClick = Gui.isGameUnfocused() || !MadSand.state.equals(GameState.GAME);
 				return true;
 			}
 		});
 
 		super.addListener(new ClickListener(Buttons.RIGHT) {
-
 			public void clicked(InputEvent event, float x, float y) {
 
 				if (Gui.dialogActive)

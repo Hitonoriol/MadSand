@@ -40,7 +40,7 @@ public class GameContextMenu extends Table {
 		if (!map.getNpc(clickX, clickY).equals(Map.nullNpc))
 			addButton("Attack", () -> {
 				player.lookAtMouse(clickX, clickY, true);
-				player.attack();
+				player.meleeAttack();
 			});
 
 		if (clickX == player.x && clickY == player.y)

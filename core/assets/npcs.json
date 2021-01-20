@@ -1,18 +1,5 @@
 {
-	"0" : {
-		"name" : "Nothing",
-		"hp" : 0,
-		"strength" : 0,
-		"accuracy" : 0,
-		"dexterity" : 0,
-		"rewardExp" : 0,
-		"loot" : null,
-		"faction" : "None",
-		"type" : "Regular",
-		"questList" : null,
-		"spawnOnce" : false,
-		"friendly" : true
-	},
+	"0" : {"name" : "Nothing"},
 	"1" : {
 		"name" : "{RANDOM_NAME_M} the Trader",
 		"hp" : 30,

@@ -16,7 +16,7 @@ public class NpcContainer {
 
 	public int lvl = 0;
 	public int hp, strength, accuracy;
-	public int dexterity = 2, defense;
+	public int dexterity = 1, defense;
 
 	public int rewardExp;
 	public LootTable loot;
@@ -30,7 +30,7 @@ public class NpcContainer {
 	public ArrayList<Integer> questList;
 
 	public boolean spawnOnce = false;
-	public boolean friendly = false;
+	public boolean friendly = true;
 	public boolean canTrade = false;
 
 	@JsonSetter("loot")
