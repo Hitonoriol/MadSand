@@ -131,9 +131,20 @@ public class Stats {
 		return Utils.percentRoll(Math.log(Math.pow(get(Stat.Accuracy) + 0.1, 7)));
 	}
 
-	public boolean attackMissed() {
-		double probability = (1 / Math.log(get(Stat.Accuracy) + 1) * 45.0);
-		return Utils.percentRoll(probability);
+	public double calcAttackMissChance() {
+		return (1 / Math.log(get(Stat.Accuracy) + 1) * 45.0);
+	}
+
+	public double calcRangedAttackMissChance(int distance) {
+		return calcAttackMissChance() + Math.exp((double) distance * 0.55) * (1d / Math.sqrt(get(Stat.Accuracy)));
+	}
+
+	public boolean rangedAttackMissed(int distance) {
+		return Utils.percentRoll(calcRangedAttackMissChance(distance));
+	}
+
+	public boolean meleeAttackMissed() {
+		return Utils.percentRoll(calcAttackMissChance());
 	}
 
 	float defPercent = 0.333f;
@@ -146,14 +157,21 @@ public class Stats {
 
 	float rangedAtkCoef = 0.3f;
 
-	public int calcBaseRangedAttack() {
-		return (int) Math.max(getBaseAttack() * minAttackPercent * rangedAtkCoef, calcAttack(0) * rangedAtkCoef);
-	}
-
-	public int calcAttack(int defense) {
-		if (attackMissed())
+	public int calcBaseRangedAttack(int distance) {
+		if (rangedAttackMissed(distance))
 			return 0;
 
+		return (int) Math.max(getBaseAttack() * minAttackPercent * rangedAtkCoef, calcAttack() * rangedAtkCoef);
+	}
+
+	public int calcMeleeAttack(int defense) {
+		if (meleeAttackMissed())
+			return 0;
+
+		return calcAttack(defense);
+	}
+
+	private int calcAttack(int defense) {
 		int atk = (int) (getBaseAttack() - (defense * defPercent));
 
 		if (atk <= 0)
@@ -165,6 +183,10 @@ public class Stats {
 			atk = Utils.rand((int) (atk * minAttackPercent), atk);
 
 		return atk;
+	}
+
+	private int calcAttack() {
+		return calcAttack(0);
 	}
 
 	@JsonIgnore

@@ -21,6 +21,8 @@ import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.map.Map;
+import hitonoriol.madsand.map.MapEntity;
+import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.map.ProductionStation;
 import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.properties.Globals;
@@ -298,7 +300,6 @@ public class Npc extends Entity {
 	}
 
 	protected void attack(Player target, int dmg) {
-		super.attack(target, dmg);
 		if (dmg == 0) {
 			MadSand.print(stats.name + " misses!");
 			target.increaseSkill(Skill.Evasion);
@@ -306,6 +307,20 @@ public class Npc extends Entity {
 			MadSand.warn(stats.name + " deals " + dmg + " damage to you");
 			super.attackAnimation(target);
 		}
+	}
+
+	@Override
+	protected void attack(MapObject object, int dmg) {
+		MadSand.print(stats.name + " hits " + object.name + " dealing " + dmg + " damage to it");
+		super.attack(object, dmg);
+	}
+
+	@Override
+	protected void attack(MapEntity target, int dmg) {
+		super.attack(target, dmg);
+
+		if (target instanceof Player)
+			attack((Player) target, dmg);
 	}
 
 	@Override
@@ -317,8 +332,8 @@ public class Npc extends Entity {
 		if (!(player.x == coords.x && player.y == coords.y))
 			return;
 		else {
-			int atk = stats.calcAttack(player.getDefense());
-			attack(player, atk);
+			int atk = stats.calcMeleeAttack(player.getDefense());
+			attack((MapEntity) player, atk);
 		}
 	}
 
@@ -455,9 +470,11 @@ public class Npc extends Entity {
 	}
 
 	public String getInfoString() {
-		String ret = super.getInfoString();
-		ret += "Friendly: " + (friendly ? "yes" : "no") + Resources.LINEBREAK;
-		return ret;
-	}
+		String info = super.getInfoString();
 
+		if (World.player.knowsNpc(id))
+			info += "Faction: " + stats.faction + Resources.LINEBREAK;
+
+		return info;
+	}
 }

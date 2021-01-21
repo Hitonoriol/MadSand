@@ -34,6 +34,7 @@ public class Mouse {
 	static Vector3 mouseinworld = new Vector3(0.0F, 0.0F, 0.0F);
 
 	public static String lineDelimiter = "**********";
+	static final String NEWLINE = Resources.LINEBREAK;
 
 	public static Map loc;
 	public static Player player;
@@ -87,112 +88,129 @@ public class Mouse {
 		Gui.overlay.getTooltip().setText(getCurrentCellInfo());
 	}
 
+	private static StringBuilder infoBuilder = new StringBuilder();
+
 	public static String getCurrentCellInfo() {
-		Player player = World.player;
-		String info = "";
-		info += ("Looking at (" + wx + ", " + wy + ")") + Resources.LINEBREAK;
+		infoBuilder.setLength(0);
+		infoBuilder.append("Looking at (" + wx + ", " + wy + ")").append(NEWLINE);
 
 		if (Utils.debugMode)
-			info += getDebugInfo();
+			getDebugInfo();
 
-		if (wx == player.x && wy == player.y) {
-			info += "You look at yourself" + Resources.LINEBREAK;
-			info += player.getInfoString();
-		}
+		if (player.at(wx, wy))
+			getPlayerInfo();
 
 		if (!tile.visible) {
-			info += "You can't see anything there" + Resources.LINEBREAK;
-			return info;
+			infoBuilder.append("You can't see anything there").append(NEWLINE);
+			return infoBuilder.toString();
 		}
 
-		info += ("Tile: " + TileProp.getName(tile.id)) + Resources.LINEBREAK;
+		infoBuilder.append("Tile: " + TileProp.getName(tile.id)).append(NEWLINE);
 
 		if (!loot.equals(Map.nullLoot)) {
-			info += "On the ground: ";
-			info += loot.getInfo() + Resources.LINEBREAK;
+			infoBuilder.append("On the ground: ");
+			infoBuilder.append(loot.getInfo()).append(NEWLINE);
 		}
 
 		if (!object.equals(Map.nullObject))
-			info += ("Object: " + object.name + " (" + Utils.round(object.getHpPercent()) + "%)") + Resources.LINEBREAK;
+			infoBuilder.append("Object: " + object.name + " (" + Utils.round(object.getHpPercent()) + "%)")
+					.append(NEWLINE);
 
 		if (station != null)
-			info += getProdStationInfo(station);
+			getProdStationInfo(station);
 
 		if (!crop.equals(Map.nullCrop))
-			info += getCropInfo();
+			getCropInfo();
 
-		if (!npc.equals(Map.nullNpc)) {
-			info += (npc.stats.name + " (Level " + npc.getLvl() + ")") + Resources.LINEBREAK;
-			info += ((npc.isNeutral())
-					? "Neutral"
-					: "Hostile") + Resources.LINEBREAK;
+		if (!npc.equals(Map.nullNpc))
+			getNpcInfo();
 
-			if (World.player.knowsNpc(npc.id))
-				info += npc.getInfoString();
+		if (player.canPerformRangedAttack() && npc != Map.nullNpc)
+			getRangedAttackInfo();
 
-			if (npc.state == NpcState.Hostile)
-				info += npc.spottedMsg() + Resources.LINEBREAK;
-			else if ((npc.canGiveQuests || npc.type == NpcType.QuestMaster) && npc.isNeutral())
-				info += "* Might need some help";
-
-			if (npc.animalProductWorker != null)
-				info += getProdStationInfo(npc.animalProductWorker);
-
-		}
-
-		return info;
+		return infoBuilder.toString();
 	}
 
-	private static String getProdStationInfo(ProductionStation station) {
-		String info = "Status: ";
+	private static void getRangedAttackInfo() {
+		int dst = player.distanceTo(npc);
+		infoBuilder.append("Distance to target: " + dst + " meters")
+				.append(NEWLINE)
+				.append("Chance to miss: " + Utils.round(player.stats.calcRangedAttackMissChance(dst)) + "%")
+				.append(NEWLINE);
+	}
+
+	private static void getNpcInfo() {
+		infoBuilder.append(npc.stats.name + " (Level " + npc.getLvl() + ")")
+				.append(NEWLINE)
+				.append(
+						(npc.isNeutral()
+								? "Neutral"
+								: "Hostile"))
+				.append(NEWLINE);
+
+		infoBuilder.append(npc.getInfoString());
+
+		if (npc.state == NpcState.Hostile)
+			infoBuilder.append(npc.spottedMsg()).append(NEWLINE);
+		else if ((npc.canGiveQuests || npc.type == NpcType.QuestMaster) && npc.isNeutral())
+			infoBuilder.append("* Might need some help").append(NEWLINE);
+
+		if (npc.animalProductWorker != null)
+			getProdStationInfo(npc.animalProductWorker);
+	}
+
+	private static void getPlayerInfo() {
+		infoBuilder.append("You look at yourself")
+				.append(NEWLINE)
+				.append(player.getInfoString());
+	}
+
+	private static void getProdStationInfo(ProductionStation station) {
+		infoBuilder.append("Status: ");
 		String productName = station.getProductName();
 		String rawMaterialName = station.getConsumableName();
 
 		if (station.canProduce()) {
-			info += "producing " + productName;
-			info += " (" + Utils.round(station.productStorage) + "/" + station.maxProductStorage + ")";
-			info += Resources.LINEBREAK;
+			infoBuilder.append("producing " + productName)
+					.append(" (" + Utils.round(station.productStorage) + "/" + station.maxProductStorage + ")")
+					.append(NEWLINE);
 			if (!station.isEndless())
-				info += rawMaterialName + " left: " + Utils.round(station.consumableMaterialStorage);
+				infoBuilder.append(rawMaterialName + " left: " + Utils.round(station.consumableMaterialStorage));
 		} else
-			info += "Idle";
+			infoBuilder.append("Idle");
 
-		info += Resources.LINEBREAK;
+		Utils.newLine(infoBuilder);
 
 		if (!station.hasRawMaterial())
-			info += "* Add more " + rawMaterialName + " to start " + productName + " production";
+			infoBuilder.append("* Add more " + rawMaterialName + " to start " + productName + " production");
 		else if (!station.hasFreeStorage())
-			info += productName + " storage is full!";
-
-		return info;
+			infoBuilder.append(productName + " storage is full!");
 	}
 
-	private static String getCropInfo() {
+	private static void getCropInfo() {
 		long time = (long) (crop.getHarvestTime() * MadSand.world.realtimeTickRate);
-		String info = (time <= 0)
-				? ("* Ready to harvest!")
-				: ("[#58FFB1]* Will fully grow in " + Utils.timeString(time) + "[]");
-		return info;
+		infoBuilder.append(
+				(time <= 0)
+						? ("* Ready to harvest!")
+						: ("[#58FFB1]* Will fully grow in " + Utils.timeString(time) + "[]"));
 	}
 
-	private static String getDebugInfo() {
-		String info = "[#C3C3C3]";
-		info += lineDelimiter + Resources.LINEBREAK;
-		info += "Debug Info:" + Resources.LINEBREAK;
-		info += "Objects on map: " + loc.getObjectCount() + Resources.LINEBREAK;
-		info += "NPCs on map: " + loc.getNpcCount() + Resources.LINEBREAK;
+	private static void getDebugInfo() {
+		infoBuilder.append("[#C3C3C3]")
+				.append(lineDelimiter)
+				.append(NEWLINE)
+				.append("Objects on map: " + loc.getObjectCount()).append(NEWLINE)
+				.append("NPCs on map: " + loc.getNpcCount()).append(NEWLINE);
 		if (!object.equals(Map.nullObject))
-			info += "Object HP: " + object.hp + " | Object HarvestHp: " + object.harvestHp + Resources.LINEBREAK;
+			infoBuilder.append("Object HP: " + object.hp + " | Object HarvestHp: " + object.harvestHp)
+					.append(NEWLINE);
 		if (!npc.equals(Map.nullNpc)) {
-			info += "Npc hp: " + npc.stats.hp + Resources.LINEBREAK;
-			info += "speed: " + npc.getSpeed() + "(" + npc.stats.get(Stat.Dexterity) + ")" + " | tickCharge: "
-					+ npc.tickCharge
-					+ Resources.LINEBREAK;
+			infoBuilder.append("Npc hp: " + npc.stats.hp).append(NEWLINE)
+					.append("speed: " + npc.getSpeed() + "(" + npc.stats.get(Stat.Dexterity) + ")" + " | tickCharge: "
+							+ npc.tickCharge)
+					.append(NEWLINE);
 		}
-		info += lineDelimiter + Resources.LINEBREAK;
-		info += "[]";
-		return info;
-
+		infoBuilder.append(lineDelimiter).append(NEWLINE).append("[]");
 	}
 
 	private static final int CLICK_CUR_TILE = 0, CLICK_ADJ_TILE = 1;

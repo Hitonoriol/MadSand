@@ -80,9 +80,17 @@ public class Equipment {
 		equip(EquipSlot.MainHand, item);
 	}
 
-	public boolean itemEquipped(Item item) {
-		EquipSlot slot = EquipSlot.slotByType(item.type);
+	private boolean itemEquipped(Item item, boolean allowRegularItems) {
+		EquipSlot slot = allowRegularItems ? EquipSlot.slotByTypeAll(item.type) : EquipSlot.slotByType(item.type);
 		return (getItem(slot) == item);
+	}
+
+	public boolean itemEquipped(Item item) {
+		return itemEquipped(item, false);
+	}
+
+	public boolean itemEquippedOrHeld(Item item) {
+		return itemEquipped(item, true);
 	}
 
 	@JsonIgnore

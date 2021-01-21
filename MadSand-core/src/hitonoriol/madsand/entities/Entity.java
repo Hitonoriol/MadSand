@@ -146,8 +146,16 @@ public abstract class Entity extends MapEntity {
 		return inventory.hasItem(Globals.getInt(Globals.CURRENCY), cost);
 	}
 
+	protected void attack(MapObject object, int dmg) {
+		if (object.isDestroyed())
+			MadSand.print(object.name + " shatters into pieces!");
+	}
+
 	protected void attack(MapEntity target, int dmg) {
 		target.damage(dmg);
+
+		if (target instanceof MapObject)
+			attack((MapObject) target, dmg);
 	}
 
 	abstract void meleeAttack(Direction dir);
@@ -161,10 +169,12 @@ public abstract class Entity extends MapEntity {
 		Pair obstacleCoords = map.rayCast(thisCoords, new Pair(target.x, target.y));
 		MapEntity projectileObstacle = map.getMapEntity(obstacleCoords);
 
-		int dmg = stats.calcBaseRangedAttack() + projectile.dmg;
+		int baseDmg = stats.calcBaseRangedAttack(distanceTo(target));
+		int impactDmg = baseDmg != 0 ? baseDmg + projectile.dmg : 0;
+
 		projectile.launchProjectile(thisCoords.multiply(MadSand.TILESIZE),
 				obstacleCoords.multiply(MadSand.TILESIZE),
-				() -> attack(projectileObstacle, dmg));
+				() -> attack(projectileObstacle, impactDmg));
 	}
 
 	public boolean addItem(Item item) {
@@ -172,8 +182,15 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public boolean addItem(int id, int quantity) {
-		Item item = new Item(id, quantity);
-		return addItem(item);
+		return addItem(new Item(id, quantity));
+	}
+
+	public void delItem(Item item, int quantity) {
+		inventory.delItem(item, quantity);
+	}
+
+	public void delItem(int id, int quantity) {
+		delItem(new Item(id), quantity);
 	}
 
 	public boolean dropItem(Item item, int quantity) {
@@ -466,8 +483,8 @@ public abstract class Entity extends MapEntity {
 
 	public abstract void act(float time);
 
-	public double distanceTo(Entity entity) {
-		return Line.calcDistance(x, y, entity.x, entity.y);
+	public int distanceTo(Entity entity) {
+		return (int) Line.calcDistance(x, y, entity.x, entity.y);
 	}
 
 	public boolean canSee(Entity entity) {
@@ -532,7 +549,6 @@ public abstract class Entity extends MapEntity {
 	@JsonIgnore
 	public String getInfoString() {
 		String ret = "";
-		ret += "Faction: " + stats.faction + Resources.LINEBREAK;
 		ret += "Health: " + getHealthState() + Resources.LINEBREAK;
 		return ret;
 	}

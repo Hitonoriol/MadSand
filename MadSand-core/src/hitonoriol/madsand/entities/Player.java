@@ -191,8 +191,10 @@ public class Player extends Entity {
 			else if (stats.offHand().id == id)
 				stats.equipment.unEquip(EquipSlot.Offhand);
 			return;
-		} else
+		} else {
 			Gui.overlay.equipmentSidebar.refreshSlot(EquipSlot.MainHand);
+			Gui.overlay.equipmentSidebar.refreshSlot(EquipSlot.Offhand);
+		}
 	}
 
 	public boolean equip(Item item) {
@@ -235,16 +237,15 @@ public class Player extends Entity {
 		return stats.equipment.unEquip(item);
 	}
 
-	private void attack(MapObject object, int dmg) {
+	protected void attack(MapObject object, int dmg) {
+		if (dmg == 0)
+			MadSand.print("You hit " + object.name + " but deal no damage");
+		else
+			MadSand.print("You deal " + dmg + " damage to " + object.name);
 		super.attack(object, dmg);
-		MadSand.print("You deal " + dmg + " damage to " + object.name);
-
-		if (object.isDestroyed())
-			MadSand.print(object.name + " shatters into pieces!");
 	}
 
 	private void attack(Npc npc, int dmg) {
-		super.attack(npc, dmg);
 		Map map = MadSand.world.getCurLoc();
 
 		npc.provoke();
@@ -274,10 +275,10 @@ public class Player extends Entity {
 
 	@Override
 	protected void attack(MapEntity target, int dmg) {
+		super.attack(target, dmg);
+
 		if (target instanceof Npc)
 			attack((Npc) target, dmg);
-		else if (target instanceof MapObject)
-			attack((MapObject) target, dmg);
 	}
 
 	public boolean canPerformRangedAttack() {
@@ -289,8 +290,7 @@ public class Player extends Entity {
 		Item projectile = stats.offHand();
 		super.rangedAttack(npc, projectile);
 		damageHeldTool();
-		inventory.delItem(projectile, 1);
-		stats.equipment.refreshUI();
+		delItem(projectile, 1);
 	}
 
 	public void rangedAttack(Npc npc) {
@@ -308,8 +308,8 @@ public class Player extends Entity {
 		if (npc == Map.nullNpc)
 			return;
 
-		int atk = stats.calcAttack(npc.getDefense());
-		attack(npc, atk);
+		int atk = stats.calcMeleeAttack(npc.getDefense());
+		attack((MapEntity) npc, atk);
 
 		if (atk > 0)
 			stats.skills.increaseSkill(Skill.Melee);
@@ -495,6 +495,15 @@ public class Player extends Entity {
 			MadSand.world.getCurLoc().putLoot(x, y, item);
 			MadSand.notice("You can't carry any more items.");
 			return false;
+		}
+	}
+
+	@Override
+	public void delItem(Item item, int quantity) {
+		super.delItem(item, quantity);
+		if (stats.equipment.itemEquippedOrHeld(item)) {
+			checkHands(item.id);
+			stats.equipment.refreshUI();
 		}
 	}
 
@@ -1257,6 +1266,7 @@ public class Player extends Entity {
 
 	@JsonSetter("equipment")
 	public void setEquipment(ArrayList<Integer> list) {
+		stats.setOwner(this);
 		for (int itemIdx : list)
 			equip(inventory.getItemByIndex(itemIdx));
 	}

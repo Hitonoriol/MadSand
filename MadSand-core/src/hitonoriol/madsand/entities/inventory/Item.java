@@ -137,18 +137,20 @@ public class Item {
 				+ (type.isUnique() ? (" [ORANGE][[Lvl " + lvl + "][]") : "")
 				+ Resources.LINEBREAK + Resources.LINEBREAK;
 
-		if (type.isArmor() || type.isWeapon()) {
-			info += equipStats.getString() + Resources.LINEBREAK;
-		}
+		if (type.isArmor() || type.isWeapon())
+			info += equipStats.getString();
 
-		if (type.equals(ItemType.Consumable)) {
+		if (type == ItemType.Consumable) {
 			info += "Satiation: " + satiationAmount + Resources.LINEBREAK;
 			info += "Health: " + healAmount + Resources.LINEBREAK;
 			info += "Stamina: " + staminaAmount + Resources.LINEBREAK;
 			info += "Nutritional value: " + getNutritionalValue() + Resources.LINEBREAK;
-			info += Resources.LINEBREAK;
 		}
 
+		if (type == ItemType.Projectile)
+			info += "Projectile damage: [GREEN]" + dmg + Resources.COLOR_END + Resources.LINEBREAK;
+
+		info += Resources.LINEBREAK;
 		info += "Weight: " + Utils.round(weight) + " kg" + Resources.LINEBREAK;
 		info += "Cost: " + cost + "$";
 		return info;

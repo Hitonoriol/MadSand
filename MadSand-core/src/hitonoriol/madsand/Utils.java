@@ -192,7 +192,7 @@ public class Utils {
 	}
 
 	public static int largestDivisor(int n) {
-		if (n % 2 == 0) 
+		if (n % 2 == 0)
 			return n / 2;
 
 		final int sqrtn = (int) Math.sqrt(n);
@@ -207,6 +207,10 @@ public class Utils {
 		if (value < 1)
 			return 0;
 		return Math.log(value) / Math.log(base);
+	}
+
+	public static StringBuilder newLine(StringBuilder sb) {
+		return sb.append(Resources.LINEBREAK);
 	}
 
 	public static int val(boolean bool) {
