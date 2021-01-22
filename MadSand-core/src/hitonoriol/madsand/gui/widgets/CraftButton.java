@@ -1,10 +1,14 @@
 package hitonoriol.madsand.gui.widgets;
 
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import java.util.function.Consumer;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
+import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.entities.inventory.CraftWorker;
 import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.gui.dialogs.SliderDialog;
 import hitonoriol.madsand.world.World;
 
 public class CraftButton extends ItemButton {
@@ -37,11 +41,29 @@ public class CraftButton extends ItemButton {
 
 	@Override
 	protected ClickListener setButtonPressListener() {
-		return new ClickListener() {
-			public void clicked(InputEvent event, float x, float y) {
-				World.player.craftItem(buttonItem.id);
+		Player player = World.player;
+		return Gui.setClickAction(this, () -> {
+			CraftWorker craftWorker = new CraftWorker(player, buttonItem);
+
+			if (!craftWorker.canBeCrafted()) {
+				Gui.drawOkDialog("Not enough resources to craft " + buttonItem.name, Gui.craftMenu);
+				return;
 			}
-		};
+
+			int maxQuantity = craftWorker.getMaxCraftQuantity();
+			Consumer<Integer> craftAction = quantity -> player.craftItem(craftWorker, quantity);
+
+			if (maxQuantity == 1)
+				craftAction.accept(maxQuantity);
+
+			SliderDialog craftDialog = new SliderDialog(maxQuantity);
+			craftDialog.setTitle("Crafting " + buttonItem.name)
+					.setSliderTitle("Quantity of " + buttonItem.name + " to craft:")
+					.setConfirmAction(craftAction)
+					.setSliderAction(quantity -> craftDialog
+							.setSliderText((quantity * buttonItem.craftQuantity) + " " + buttonItem.name))
+					.show(Gui.craftMenu);
+		});
 	}
 
 }

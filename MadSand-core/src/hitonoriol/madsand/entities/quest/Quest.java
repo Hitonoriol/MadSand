@@ -62,12 +62,8 @@ public class Quest {
 	public HashMap<Integer, Integer> killObjective; // {Npc id, number of kills} pairs required to complete quest
 	public HashMap<Integer, Integer> kills; //	{Npc id, kills} state of player's kill counter on quest start 
 
-	public static Comparator<Quest> startTimeComparator = new Comparator<Quest>() {
-
-		@Override
-		public int compare(Quest o1, Quest o2) {
-			return Long.compare(o1.startTime, o2.startTime);
-		}
+	public static Comparator<Quest> startTimeComparator = (quest1, quest2) -> {
+		return Long.compare(quest1.startTime, quest2.startTime);
 	};
 
 	public Quest(int id) {

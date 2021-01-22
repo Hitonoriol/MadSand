@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.mutable.MutableBoolean;
+
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -126,6 +128,10 @@ public class Inventory {
 				return item;
 
 		return Item.nullItem;
+	}
+
+	public Item getItem(Item referenceItem) {
+		return getItem(referenceItem.id);
 	}
 
 	public Item getItem(int id) { // get item by its id, not the index
@@ -330,21 +336,14 @@ public class Inventory {
 	}
 
 	public boolean itemsExist(String sequence) {
-		int i = 0;
-		if (sequence.indexOf(":") == -1)
-			sequence += ":";
-		String[] block = sequence.split(":");
-		String[] attr = new String[0];
-		int id = 0;
-		int q = 0;
-		while (i < block.length) {
-			attr = block[i].split("/");
-			id = Integer.parseInt(attr[0]);
-			q = Integer.parseInt(attr[1]);
-			if (getSameCell(id, q) == -1)
-				return false;
-			i++;
-		}
-		return true;
+		MutableBoolean itemsExist = new MutableBoolean(true);
+		Item.parseListString(sequence, (id, quantity) -> {
+			if (!itemsExist.booleanValue())
+				return;
+
+			if (!hasItem(id, quantity))
+				itemsExist.setFalse();
+		});
+		return itemsExist.booleanValue();
 	}
 }

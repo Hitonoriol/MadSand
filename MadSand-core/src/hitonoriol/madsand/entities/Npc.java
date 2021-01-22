@@ -431,7 +431,6 @@ public class Npc extends Entity {
 			}
 
 			Direction dir;
-
 			if (dist >= attackDistance) {
 
 				if (!canAct(stats.walkCost))
@@ -455,9 +454,7 @@ public class Npc extends Entity {
 			break;
 
 		default:
-
 			break;
-
 		}
 		act();
 	}

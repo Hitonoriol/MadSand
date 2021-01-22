@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -153,11 +154,11 @@ public class SliderDialog extends GameDialog {
 	}
 
 	@Override
-	public void show() {
+	public Dialog show(Stage stage) {
 		// Refresh bottomLabel by triggering change event
 		slider.setValue(slider.getMaxValue());
 		slider.setValue(minValue);
-		super.show();
+		return super.show(stage);
 	}
 
 }

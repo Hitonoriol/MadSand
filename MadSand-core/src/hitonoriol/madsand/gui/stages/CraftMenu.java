@@ -37,7 +37,6 @@ public class CraftMenu extends Stage {
 	public Table containerTable;
 	public Table craftTable;
 	AutoFocusScrollPane scroll;
-	CraftButton[] craftButtons;
 	Label titleLabel;
 
 	public CraftMenu() {
@@ -84,20 +83,18 @@ public class CraftMenu extends Stage {
 			Utils.out("No unlocked recipes.");
 		}
 
-		craftButtons = new CraftButton[craftSz];
-
 		int i = 0;
 		int perRow = 2, id;
 		Label recipeLabel;
-
+		CraftButton craftButton;
 		while (i < craftSz) {
 			id = itemList.get(i);
 
-			craftButtons[i] = new CraftButton(ItemProp.getItem(id));
+			craftButton = new CraftButton(ItemProp.getItem(id));
 			recipeLabel = new Label(" " + Item.createReadableItemList(ItemProp.getCraftRecipe(id)), skin);
 			recipeLabel.setAlignment(Align.left);
 
-			craftTable.add(craftButtons[i]).width(craftButtons[i].getWidth());
+			craftTable.add(craftButton).width(craftButton.getWidth());
 			craftTable.add(recipeLabel).align(Align.left);
 
 			if ((i + 1) % perRow == 0)

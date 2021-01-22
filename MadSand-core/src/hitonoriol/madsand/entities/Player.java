@@ -27,6 +27,7 @@ import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
 import hitonoriol.madsand.dialog.GameDialog;
+import hitonoriol.madsand.entities.inventory.CraftWorker;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.inventory.ItemType;
@@ -513,33 +514,27 @@ public class Player extends Entity {
 		return true;
 	}
 
-	private boolean performCraftItem(int id) {
-		Item itemToCraft = ItemProp.items.get(id);
-		int craftQuantity = ItemProp.getCraftQuantity(id);
+	private boolean performCraftItem(CraftWorker craftWorker, int quantity) {
+		Item craftedItem;
+		if ((craftedItem = craftWorker.craftItem(quantity)) != Item.nullItem) {
+			increaseSkill(Skill.Crafting, quantity);
 
-		if (inventory.itemsExist(itemToCraft.recipe)) {
-			increaseSkill(Skill.Crafting);
-			inventory.delItem(itemToCraft.recipe);
+			Gui.drawOkDialog("Crafted " + quantity + " " + craftedItem.name + " successfully!", Gui.craftMenu);
+			MadSand.notice("You craft " + quantity + " " + craftedItem.name);
 
-			int bonus = stats.skills.getItemReward(Skill.Crafting) - 1;
-			int quantity = craftQuantity + bonus;
-
-			Item item = new Item(id, quantity + bonus);
-
-			addItem(item);
-
-			Gui.drawOkDialog("Crafted " + quantity + " " + itemToCraft.name + " successfully!", Gui.craftMenu);
-			MadSand.notice("You craft " + quantity + " " + itemToCraft.name);
+			int bonus = stats.luckRoll() ? Utils.rand(stats.skills.getItemReward(Skill.Crafting)) : 0;
+			if (bonus > 0) {
+				MadSand.notice("You manage to craft " + bonus + " extra " + craftedItem.name);
+				addItem(new Item(craftedItem.id, bonus));
+			}
 			return true;
 		}
-
-		Gui.drawOkDialog("Not enough resources to craft " + itemToCraft.name, Gui.craftMenu);
 
 		return false;
 	}
 
-	public void craftItem(int id) {
-		doAction(stats.minorCost, () -> performCraftItem(id));
+	public void craftItem(CraftWorker craftWorker, int quantity) {
+		doAction(stats.minorCost, () -> performCraftItem(craftWorker, quantity));
 	}
 
 	public void interact() {

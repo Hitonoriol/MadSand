@@ -1,6 +1,7 @@
 package hitonoriol.madsand.entities.inventory;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.function.BiConsumer;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -39,7 +40,7 @@ public class Item {
 	public int quantity;
 
 	public String recipe;
-	public int craftQuantity;
+	public int craftQuantity = 1;
 	public String useAction;
 
 	public int dmg;
@@ -360,4 +361,8 @@ public class Item {
 	public static int getAltObject(int id) {
 		return ItemProp.getAltObject(id);
 	}
+
+	public static final Comparator<Item> quantityComparator = (item1, item2) -> {
+		return Integer.compare(item1.quantity, item2.quantity);
+	};
 }

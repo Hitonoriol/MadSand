@@ -266,13 +266,15 @@ public class Gui {
 		return setMinSize(drawable, size, size);
 	}
 
-	public static void setClickAction(Actor actor, Runnable action) {
-		actor.addListener(new ClickListener(Buttons.LEFT) {
+	public static ClickListener setClickAction(Actor actor, Runnable action) {
+		ClickListener listener;
+		actor.addListener(listener = new ClickListener(Buttons.LEFT) {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				action.run();
 			}
 		});
+		return listener;
 	}
 
 	public static void setAction(Actor actor, Runnable action) {

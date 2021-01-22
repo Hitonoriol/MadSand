@@ -11,8 +11,7 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 	public final static int MAX_SKILL_LVL = 100; // max effective lvl (possible to get higher lvls, but lvl bonuses won't increase further than this)
 	public final static double MAX_SKILL_ROLL_PERCENT = skillLvlPercent(MAX_SKILL_LVL);
 
-	final int BONUS_DENOMINATOR = 25; // skill lvl/this = bonus percent of something for some actions
-	final int ITEM_BONUS_DENOMINATOR = 5; // level/this = quantity of bonus items from action
+	final float ITEM_BONUS_COEF = 0.35f; // level*this = quantity of bonus items from action
 	public static HashMap<Skill, SkillValue> reqList = new HashMap<Skill, SkillValue>();
 
 	public SkillContainer() {
@@ -98,13 +97,13 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 
 	// How many items to get from one roll
 	public int getItemReward(Skill skill) {
-		int rew = getLvl(skill) / ITEM_BONUS_DENOMINATOR;
+		int reward = (int) (getLvl(skill) * ITEM_BONUS_COEF);
 
-		if (rew == 0)
+		if (reward == 0)
 			return 1;
 
 		if (Utils.percentRoll(getSkillRollPercent(skill)))
-			return rew;
+			return Utils.rand(1, reward);
 		else
 			return 1;
 	}
@@ -136,7 +135,7 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 			additionalPercent = 35;
 		else if (skill == Skill.None)
 			return 100;
-		additionalPercent += calcSkillPercent(1 + ((double)getExp(skill) / (double)get(skill).requiredExp));
+		additionalPercent += calcSkillPercent(1 + ((double) getExp(skill) / (double) get(skill).requiredExp));
 		return skillLvlPercent((double) getLvl(skill)) + additionalPercent;
 	}
 
@@ -162,7 +161,7 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 
 		return calcSkillPercent(skillLvl); // Is capped at ~64%(MAX_SKILL_ROLL_PERCENT) when lvl == 100, & increases smoothly
 	}
-	
+
 	private static double calcSkillPercent(double val) {
 		return Math.log(Math.pow(val + 0.05, 22.0)) * 0.6;
 	}
