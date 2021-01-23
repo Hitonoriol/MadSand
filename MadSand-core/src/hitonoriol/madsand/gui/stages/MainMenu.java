@@ -1,20 +1,16 @@
 package hitonoriol.madsand.gui.stages;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Utils;
-import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.gui.dialogs.CreateWorldDialog;
 import hitonoriol.madsand.gui.dialogs.LoadWorldDialog;
 import hitonoriol.madsand.gui.dialogs.SettingsDialog;
@@ -97,54 +93,18 @@ public class MainMenu extends Stage {
 	}
 
 	private void initButtonListeners() {
-		newGameButton.addListener(new ChangeListener() {
+		Gui.setAction(newGameButton, () -> new CreateWorldDialog().show());
+		Gui.setAction(resumeButton, () -> MadSand.switchScreen(MadSand.gameScreen));
 
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				new CreateWorldDialog().show();
-			}
-
+		Gui.setAction(saveGameButton, () -> {
+			GameSaver.saveWorld();
+			MadSand.switchScreen(MadSand.gameScreen);
 		});
 
-		resumeButton.addListener(new ChangeListener() {
+		Gui.setAction(loadGameButton, () -> new LoadWorldDialog().show());
+		Gui.setAction(settingsButton, () -> new SettingsDialog().show());
 
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				Gdx.graphics.setContinuousRendering(false);
-				MadSand.switchStage(GameState.GAME, Gui.overlay);
-			}
-
-		});
-
-		saveGameButton.addListener(new ChangeListener() {
-
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				GameSaver.saveWorld();
-				Gdx.graphics.setContinuousRendering(false);
-				MadSand.switchStage(GameState.GAME, Gui.overlay);
-			}
-
-		});
-
-		loadGameButton.addListener(new ChangeListener() {
-
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				new LoadWorldDialog().show();
-			}
-
-		});
-
-		settingsButton.addListener(new ChangeListener() {
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				new SettingsDialog().show();
-			}
-		});
-
-		exitButton.addListener(new ChangeListener() {
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				Utils.out("Bye!");
-				System.exit(0);
-			}
-		});
-
+		Gui.setAction(exitButton, () -> System.exit(0));
 	}
 
 	static String VER_COLOR = "[LIME]";

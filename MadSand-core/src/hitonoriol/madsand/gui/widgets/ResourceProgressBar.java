@@ -150,7 +150,7 @@ public class ResourceProgressBar extends TimedProgressBar {
 		Player player = World.player;
 		Vector3 coords = new Vector3(player.x * MadSand.TILESIZE, player.y * MadSand.TILESIZE, 0);
 
-		MadSand.camera.project(coords);
+		MadSand.getCamera().project(coords);
 		coords.y -= YPADDING;
 		super.setPosition(centerRelative(coords.x, getWidth(), player.getSpriteWidth()), coords.y);
 		progressLabel.setPosition(centerRelative(coords.x, progressLabel.getWidth(), player.getSpriteWidth()),

@@ -1,23 +1,19 @@
 package hitonoriol.madsand.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.gui.stages.TravelStage;
 
 public class TravelScreen extends InputAdapter implements Screen {
 
-	Game game;
 	TravelStage travelStage;
 
-	public TravelScreen(Game game) {
+	public TravelScreen() {
 		super();
-		this.game = game;
 		travelStage = new TravelStage();
 	}
 
@@ -30,13 +26,11 @@ public class TravelScreen extends InputAdapter implements Screen {
 
 	@Override
 	public void render(float delta) {
-		
 		Gdx.gl.glClearColor(1, 1, 1, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		travelStage.act();
 		travelStage.draw();
-
 	}
 
 	@Override
@@ -45,14 +39,10 @@ public class TravelScreen extends InputAdapter implements Screen {
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -62,7 +52,6 @@ public class TravelScreen extends InputAdapter implements Screen {
 
 	@Override
 	public void dispose() {
-		Utils.out("TravelScreen has been disposed!!111");
 		travelStage.dispose();
 	}
 

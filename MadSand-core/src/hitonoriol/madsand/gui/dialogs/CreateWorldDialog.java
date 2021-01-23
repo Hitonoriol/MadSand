@@ -15,7 +15,6 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
-import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.world.World;
 
 public class CreateWorldDialog extends GameDialog {
@@ -87,7 +86,7 @@ public class CreateWorldDialog extends GameDialog {
 						index.delete();
 					}
 
-					MadSand.switchStage(GameState.GAME, Gui.overlay);
+					MadSand.switchScreen(MadSand.gameScreen);
 
 					if (!MadSand.isWorldUntouched) {
 						MadSand.initNewGame();
@@ -99,7 +98,6 @@ public class CreateWorldDialog extends GameDialog {
 					World.player.updCoords();
 					Gui.inventoryActive = false;
 					remove();
-					MadSand.ZOOM = MadSand.DEFAULT_ZOOM;
 					Gui.overlay.createCharDialog();
 					Gdx.graphics.setContinuousRendering(false);
 				}

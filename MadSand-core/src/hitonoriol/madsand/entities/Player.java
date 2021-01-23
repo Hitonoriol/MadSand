@@ -10,6 +10,8 @@ import java.util.Random;
 import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -58,6 +60,7 @@ import hitonoriol.madsand.world.WorkerType;
 public class Player extends Entity {
 	@JsonIgnore
 	public PlayerStats stats; // Reference to the same Stats object as super.stats
+	float elapsedTime;// For player animation
 
 	public int targetedByNpcs = 0;
 	public HashSet<Integer> unlockedItems = new HashSet<Integer>(); // set of items player obtained at least once
@@ -371,10 +374,7 @@ public class Player extends Entity {
 		super.die();
 		stats.equipment.unEquipAll();
 		refreshEquipment();
-		Gui.deathStage.setDeathMessage("You survived " + Utils.timeString(getSurvivedTime()));
-		Gui.darkness.setVisible(true);
-		Gdx.input.setInputProcessor(Gui.deathStage);
-		MadSand.state = GameState.DEAD;
+		MadSand.switchScreen(MadSand.deathScreen);
 		MadSand.warn("You died");
 	}
 
@@ -958,7 +958,6 @@ public class Player extends Entity {
 		int wx = MadSand.world.wx();
 		int wy = MadSand.world.wy();
 		Map map = MadSand.world.getCurLoc();
-		MadSand.state = GameState.GAME;
 		stats.food = stats.maxFood;
 		stats.actionPts = stats.actionPtsMax;
 		stats.hp = stats.mhp;
@@ -1229,13 +1228,32 @@ public class Player extends Entity {
 
 	public void objectInFront() {
 		int obj = MadSand.world.getObjID(x, y, stats.look);
-		if ((obj != MapObject.COLLISION_MASK_ID) && (obj != MapObject.NULL_OBJECT_ID)) {
+		if ((obj != MapObject.COLLISION_MASK_ID) && (obj != MapObject.NULL_OBJECT_ID))
 			MadSand.print("You see: " + ObjectProp.getName(obj));
-		}
 	}
 
-	long getSurvivedTime() {
-		return MadSand.world.globalTick - stats.spawnTime;
+	@JsonIgnore
+	public TextureRegion getSprite() {
+		if (!isStepping())
+			return super.getSprite();
+		
+		Animation<TextureRegion> anim = null;
+		elapsedTime += Gdx.graphics.getDeltaTime();
+
+		if (stats.look == Direction.RIGHT)
+			anim = Resources.ranim;
+		else if (stats.look == Direction.LEFT)
+			anim = Resources.lanim;
+		else if (stats.look == Direction.UP)
+			anim = Resources.uanim;
+		else
+			anim = Resources.danim;
+		
+		return anim.getKeyFrame(elapsedTime, true);
+	}
+
+	public long getSurvivedTime() {
+		return MadSand.world.toWorldTimeSeconds(MadSand.world.globalTick - stats.spawnTime);
 	}
 
 	public void registerLuaAction(String name) {

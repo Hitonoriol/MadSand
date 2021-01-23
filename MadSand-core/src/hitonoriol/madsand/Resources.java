@@ -77,8 +77,8 @@ public class Resources {
 
 	public static Texture[] item;
 	public static Texture[] objects;
-	static Texture[] tile;
-	static Texture visitedMask;
+	public static Texture[] tile;
+	public static Texture visitedMask;
 	public static Texture[] npc;
 
 	static TextureRegion[][] tmpAnim;
@@ -93,11 +93,9 @@ public class Resources {
 	static TextureRegion[] animleft = new TextureRegion[2];
 	static TextureRegion[] animright = new TextureRegion[2];
 
-	static Animation<TextureRegion> uanim;
-	static Animation<TextureRegion> danim;
-	static Animation<TextureRegion> lanim;
-	static Animation<TextureRegion> ranim;
+	public static Animation<TextureRegion> uanim, danim, lanim, ranim;
 
+	public static Texture mapcursor;
 	public static Texture questArrow;
 	static Texture placeholder;
 	public static TextureRegionDrawable noEquip;
@@ -304,8 +302,6 @@ public class Resources {
 			ItemProp.buildReq.put(entry.getKey(), Item.parseCraftRequirements(entry.getValue()));
 
 	}
-
-	static Texture mapcursor;
 
 	public static void loadSkillReqs() throws Exception {
 		SkillContainer.reqList = mapper.readValue(readInternal(Resources.SKILL_FILE),

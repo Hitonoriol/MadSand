@@ -3,7 +3,6 @@ package hitonoriol.madsand.gui.dialogs;
 import java.io.File;
 import java.io.FilenameFilter;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -15,7 +14,6 @@ import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
-import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 
 public class LoadWorldDialog extends GameDialog {
@@ -94,9 +92,7 @@ public class LoadWorldDialog extends GameDialog {
 					MadSand.WORLDNAME = worldName;
 					remove();
 					if (GameSaver.loadWorld(worldName)) {
-						MadSand.state = GameState.GAME;
-						Gdx.input.setInputProcessor(Gui.overlay);
-						Gdx.graphics.setContinuousRendering(false);
+						MadSand.switchScreen(MadSand.gameScreen);
 						MadSand.worldEntered();
 					}
 

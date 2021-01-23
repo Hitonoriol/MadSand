@@ -14,7 +14,6 @@ import hitonoriol.madsand.entities.NpcState;
 import hitonoriol.madsand.entities.NpcType;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Stat;
-import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.gui.widgets.GameTooltip;
 import hitonoriol.madsand.map.Crop;
 import hitonoriol.madsand.map.Loot;
@@ -31,7 +30,7 @@ public class Mouse {
 	public static int wx = 0, wy = 0; // Coords of the cell of map that mouse is currently pointing at
 	public static Set<Integer> heldButtons = new HashSet<>();
 
-	static Vector3 mouseinworld = new Vector3(0.0F, 0.0F, 0.0F);
+	public static Vector3 mouseinworld = new Vector3(0.0F, 0.0F, 0.0F);
 
 	public static String lineDelimiter = "**********";
 	static final String NEWLINE = Resources.LINEBREAK;
@@ -61,7 +60,7 @@ public class Mouse {
 			return;
 		prevCoords.set(wx, wy);
 
-		if (Gui.gameUnfocused || !MadSand.state.equals(GameState.GAME))
+		if (Gui.gameUnfocused)
 			return;
 
 		player = World.player;
@@ -229,9 +228,6 @@ public class Mouse {
 		int clickDst = getClickDistance();
 		boolean adjacentTileClicked = (clickDst == CLICK_ADJ_TILE);
 		boolean currentTileClicked = (clickDst == CLICK_CUR_TILE);
-
-		if (MadSand.state != GameState.GAME)
-			return;
 
 		if ((player.isStepping()) || Gui.isGameUnfocused() || !pointingAtObject) {
 			Utils.out("CUM");

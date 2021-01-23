@@ -29,7 +29,6 @@ import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.Skill;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.quest.Quest;
-import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.gui.dialogs.BuildDialog;
 import hitonoriol.madsand.gui.dialogs.CharacterCreationDialog;
 import hitonoriol.madsand.gui.dialogs.CharacterInfoWindow;
@@ -128,7 +127,7 @@ public class Overlay extends Stage {
 			}
 
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				ignoreClick = Gui.isGameUnfocused() || !MadSand.state.equals(GameState.GAME) || Gui.dialogActive;
+				ignoreClick = Gui.isGameUnfocused() || Gui.dialogActive;
 				ignoreClick |= !Mouse.isClickActionPossible();
 
 				if (ignoreClick)
@@ -143,9 +142,6 @@ public class Overlay extends Stage {
 			public void clicked(InputEvent event, float x, float y) {
 
 				if (Gui.dialogActive)
-					return;
-
-				if (!MadSand.state.equals(GameState.GAME))
 					return;
 
 				if (gameTooltip.isVisible()) {

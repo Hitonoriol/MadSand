@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 import hitonoriol.madsand.enums.Direction;
-import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.gui.dialogs.BestiaryDialog;
 import hitonoriol.madsand.world.Location;
 import hitonoriol.madsand.world.World;
@@ -68,10 +67,7 @@ public class Keyboard {
 	private static void pollFunctionKeys() {
 		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
 			Gui.mainMenu.showResumeTable();
-			MadSand.xmid = MadSand.cameraX = World.player.globalPos.x;
-			MadSand.ymid = MadSand.cameraY = World.player.globalPos.y;
-			Gdx.input.setInputProcessor(Gui.mainMenu);
-			MadSand.state = GameState.NMENU;
+			MadSand.switchScreen(MadSand.mainMenu);
 		}
 
 		if ((Gdx.input.isKeyJustPressed(Keys.L)))
@@ -188,30 +184,11 @@ public class Keyboard {
 			World.player.teleport(Mouse.wx, Mouse.wy);
 
 		if (Gdx.input.isKeyPressed(Keys.NUMPAD_3)) {
-			MadSand.ZOOM += 0.01f;
-			MadSand.setViewport();
+			MadSand.gameWorld.changeZoom(0.01f);
 		}
 
 		if (Gdx.input.isKeyPressed(Keys.NUMPAD_1)) {
-			MadSand.ZOOM -= 0.01f;
-			MadSand.setViewport();
-		}
-
-		if (Gdx.input.isKeyPressed(Keys.NUMPAD_4))
-			MadSand.camxoffset -= 2;
-
-		if (Gdx.input.isKeyPressed(Keys.NUMPAD_6))
-			MadSand.camxoffset += 2;
-
-		if (Gdx.input.isKeyPressed(Keys.NUMPAD_8))
-			MadSand.camyoffset += 2;
-
-		if (Gdx.input.isKeyPressed(Keys.NUMPAD_2))
-			MadSand.camyoffset -= 2;
-
-		if (Gdx.input.isKeyPressed(Keys.NUMPAD_5)) {
-			MadSand.camyoffset = 0;
-			MadSand.camxoffset = 0;
+			MadSand.gameWorld.changeZoom(-0.01f);
 		}
 
 		if (Gdx.input.isKeyJustPressed(Keys.F5))

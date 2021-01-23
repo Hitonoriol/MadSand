@@ -14,7 +14,6 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
-import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.properties.ItemProp;
 
@@ -117,7 +116,6 @@ public class TradeInventoryUI {
 		refresh();
 		containerTable.setVisible(true);
 		Gui.gameUnfocus();
-		MadSand.switchStage(GameState.TRADE, Gui.overlay);
 	}
 
 	public void refreshCurrencyHeader(Inventory inventory, TradeAction action) {

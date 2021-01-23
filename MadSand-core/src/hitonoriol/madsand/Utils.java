@@ -1,7 +1,5 @@
 package hitonoriol.madsand;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import me.xdrop.jrand.JRand;
 
@@ -24,13 +22,11 @@ import java.util.stream.Stream;
 
 public class Utils {
 	public static boolean debugMode = false;
-	public static SpriteBatch batch;
 	static NumberFormat numberFormatter = NumberFormat.getInstance(Locale.US);
 
 	public static Random random = new Random();
 
 	public static void init() {
-		batch = new SpriteBatch();
 		numberFormatter.setMinimumFractionDigits(0);
 		numberFormatter.setRoundingMode(RoundingMode.HALF_UP);
 		try {

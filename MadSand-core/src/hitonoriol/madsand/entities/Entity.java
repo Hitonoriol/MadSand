@@ -3,6 +3,7 @@ package hitonoriol.madsand.entities;
 import java.util.Comparator;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import hitonoriol.madsand.Keyboard;
 import hitonoriol.madsand.MadSand;
@@ -96,7 +97,7 @@ public abstract class Entity extends MapEntity {
 		setSprites(s, s, s, s);
 	}
 
-	public Sprite getSprite() {
+	public TextureRegion getSprite() {
 		return sprite;
 	}
 
@@ -390,6 +391,25 @@ public abstract class Entity extends MapEntity {
 		movementSpeed = speed / 17f + (float) Math.pow(Math.sqrt(speed), 1.225f) * 0.975f;
 	}
 
+	@JsonIgnore
+	public PairFloat getWorldPos() {
+		if (!isStepping())
+			return globalPos;
+
+		PairFloat worldPos = new PairFloat(globalPos);
+
+		if (stats.look == Direction.RIGHT)
+			worldPos.x -= stepx;
+		else if (stats.look == Direction.LEFT)
+			worldPos.x += stepx;
+		else if (stats.look == Direction.UP)
+			worldPos.y -= stepy;
+		else
+			worldPos.y += stepy;
+
+		return worldPos;
+	}
+
 	public void animateMovement() {
 		stepx -= movementSpeed;
 		stepy -= movementSpeed;
@@ -503,7 +523,7 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public void attackAnimation(Entity entity) {
-		MadSand.queueAnimation(Resources.createAnimation(Resources.attackAnimStrip),
+		MadSand.gameWorld.queueAnimation(Resources.createAnimation(Resources.attackAnimStrip),
 				entity.globalPos.x, entity.globalPos.y);
 	}
 

@@ -14,7 +14,6 @@ import java.nio.file.Paths;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.world.World;
 
 public class GameSaver {
@@ -160,7 +159,7 @@ public class GameSaver {
 		File f = new File(MadSand.MAPDIR + filename);
 
 		if (!f.exists() || !f.isDirectory()) {
-			MadSand.switchStage(GameState.NMENU, Gui.mainMenu);
+			MadSand.switchScreen(MadSand.mainMenu);
 			Gui.drawOkDialog("Couldn't load this world", Gui.mainMenu);
 			return false;
 		}
@@ -187,7 +186,7 @@ public class GameSaver {
 	}
 
 	public static void loadErrMsg() {
-		MadSand.switchStage(GameState.NMENU, Gui.mainMenu);
+		MadSand.switchScreen(MadSand.mainMenu);
 		Gui.drawOkDialog(
 				"Couldn't to load this world. \n"
 						+ "Maybe it was saved in older/newer version of the game or some files are corrupted.\n"

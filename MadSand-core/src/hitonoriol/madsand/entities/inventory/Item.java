@@ -264,7 +264,7 @@ public class Item {
 	static final float BASE_PROJECTILE_SPEED = 0.35f;
 
 	public void launchProjectile(Pair from, Pair to, Runnable impactAction) {
-		final int imgSize = (int) (MadSand.TILESIZE * MadSand.ZOOM);
+		final int imgSize = (int) (MadSand.TILESIZE * MadSand.gameWorld.getCamZoom());
 		Image projectileImg = new Image(Resources.item[id]);
 		Vector3 screenCoords = new Vector3();
 		projectileImg.setOrigin(Align.center);
@@ -273,10 +273,10 @@ public class Item {
 				.addAction(Actions.rotateTo((float) Math.toDegrees(Math.atan2(from.y - to.y, from.x - to.x)) + 90f));
 		Gui.overlay.addActor(projectileImg);
 
-		MadSand.camera.project(screenCoords.set(from.x, from.y, 0));
+		MadSand.getCamera().project(screenCoords.set(from.x, from.y, 0));
 		projectileImg.setPosition(screenCoords.x, screenCoords.y);
 
-		MadSand.camera.project(screenCoords.set(to.x, to.y, 0));
+		MadSand.getCamera().project(screenCoords.set(to.x, to.y, 0));
 		projectileImg.addAction(
 				Actions.sequence(
 						Actions.moveTo(screenCoords.x, screenCoords.y, BASE_PROJECTILE_SPEED),

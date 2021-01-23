@@ -18,7 +18,6 @@ import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.Item;
-import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.gui.widgets.CraftButton;
 import hitonoriol.madsand.properties.ItemProp;
@@ -133,7 +132,7 @@ public class CraftMenu extends Stage {
 		backBtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 				if (craftStationId == 0)
-					MadSand.switchStage(GameState.GAME, Gui.overlay);
+					MadSand.switchScreen(MadSand.gameScreen);
 				else
 					MadSand.reset();
 			}

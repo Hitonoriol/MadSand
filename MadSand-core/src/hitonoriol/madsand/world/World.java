@@ -518,7 +518,7 @@ public class World {
 
 	private int H_DAY = 24;
 
-	public int toWorldTimeSeconds(int ticks) {
+	public int toWorldTimeSeconds(long ticks) {
 		return (int) (((float) ticks / (float) ticksPerHour) * Utils.S_HOUR);
 	}
 

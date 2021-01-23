@@ -34,10 +34,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import hitonoriol.madsand.dialog.GameDialog;
-import hitonoriol.madsand.enums.GameState;
 import hitonoriol.madsand.gui.dialogs.OkDialog;
 import hitonoriol.madsand.gui.stages.CraftMenu;
-import hitonoriol.madsand.gui.stages.DeathStage;
 import hitonoriol.madsand.gui.stages.MainMenu;
 import hitonoriol.madsand.gui.stages.Overlay;
 import hitonoriol.madsand.screens.TravelScreen;
@@ -66,7 +64,6 @@ public class Gui {
 	public static ScreenViewport uiViewport = new ScreenViewport();
 	public static Overlay overlay;
 	public static MainMenu mainMenu;
-	public static DeathStage deathStage;
 	public static CraftMenu craftMenu;
 
 	static Color mouseOverColor = new Color(0xa5a5a5ff);
@@ -170,25 +167,21 @@ public class Gui {
 		overlay.addActor(darkness);
 
 		mainMenu = new MainMenu();
-		deathStage = new DeathStage();
 
 		craftMenu = new CraftMenu();
 
 		createTransitionScreens(); // These worked when WorldGen & GameSaver were in a separate thread; for now they're useless
-
-		MadSand.state = GameState.NMENU;
-		Gdx.input.setInputProcessor(mainMenu);
 	}
 
 	public static Screen travelScreen;
 
 	private static void createTransitionScreens() {
-		travelScreen = new TravelScreen(MadSand.game);
+		travelScreen = new TravelScreen();
 	}
 
 	public static void openCraftMenu(int id) {
 		craftMenu.refreshCraftMenu(id);
-		MadSand.switchStage(GameState.CRAFT, Gui.craftMenu);
+		MadSand.switchScreen(MadSand.craftScreen);
 	}
 
 	public static void drawOkDialog(String title, String msg, Stage stage) {

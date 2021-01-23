@@ -10,6 +10,10 @@ public class PairFloat { // jus a container for them float coords
 		this.x = x;
 		this.y = y;
 	}
+	
+	public PairFloat(PairFloat pair) {
+		this(pair.x, pair.y);
+	}
 
 	public PairFloat() {
 		this(0, 0);

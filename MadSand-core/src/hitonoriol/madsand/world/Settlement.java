@@ -102,7 +102,7 @@ public class Settlement {
 	}
 
 	public void timeTick() {
-		Map map = location.getOverworld();
+		//Map map = location.getOverworld(); //TODO: Settlements in turn-based time + damage objects when gathering resources
 		objectCoords = Pair.nullPair;
 		Skill workerSkill;
 		WorkerContainer workers;
