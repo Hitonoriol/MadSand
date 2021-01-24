@@ -30,7 +30,7 @@ public class LoadWorldDialog extends GameDialog {
 	Table scrollTable;
 
 	public LoadWorldDialog() {
-		super(Gui.mainMenu);
+		super(MadSand.mainMenu);
 		createDialog();
 	}
 
@@ -107,10 +107,10 @@ public class LoadWorldDialog extends GameDialog {
 					new ConfirmDialog("Are you sure you want to delete " + worldName + "?",
 							() -> {
 								if (!GameSaver.deleteDirectory(new File(MadSand.MAPDIR + worldName)))
-									Gui.drawOkDialog("Couldn't delete this save slot.", Gui.mainMenu);
+									Gui.drawOkDialog("Couldn't delete this save slot.");
 
 								refreshSaveList();
-							}, Gui.mainMenu).show();
+							}, stage).show();
 				}
 			});
 			i++;
@@ -119,9 +119,4 @@ public class LoadWorldDialog extends GameDialog {
 		if (slots == 0)
 			scrollTable.add(new TextButton("No worlds to load", skin)).width(BTN_WIDTH).row();
 	}
-
-	public void show() {
-		super.show(Gui.mainMenu);
-	}
-
 }

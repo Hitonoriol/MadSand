@@ -1,31 +1,37 @@
 package hitonoriol.madsand.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.containers.PairFloat;
+import hitonoriol.madsand.gui.stages.MainMenuStage;
 import hitonoriol.madsand.world.World;
 
-public class MainMenu implements Screen {
+public class MainMenu extends AbstractScreen<MainMenuStage> {
 
 	static float ymid;
 	static float xmid = ymid = 0;
 	private static float menuXStep = 0.8f, menuYStep = 0f;
 	private static float menuOffset = 250;
+	private boolean freshStart = true;
 
 	private GameWorldRenderer gameWorld;
 
 	public MainMenu(GameWorldRenderer gameWorld) {
+		super(new MainMenuStage());
 		this.gameWorld = gameWorld;
 		initMenuAnimation();
 	}
 
 	@Override
 	public void show() {
-		Gdx.input.setInputProcessor(Gui.mainMenu);
+		super.show();
 		gameWorld.setCamFollowPlayer(false);
 		initMenuAnimation();
+
+		if (freshStart)
+			freshStart = false;
+		else
+			stage.showResumeTable();
 	}
 
 	private void initMenuAnimation() {
@@ -62,38 +68,6 @@ public class MainMenu implements Screen {
 	public void render(float delta) {
 		gameWorld.render(delta);
 		animateMenuBackground();
-		Gui.mainMenu.act();
-		Gui.mainMenu.draw();
+		super.render(delta);
 	}
-
-	@Override
-	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-
-	}
-
 }

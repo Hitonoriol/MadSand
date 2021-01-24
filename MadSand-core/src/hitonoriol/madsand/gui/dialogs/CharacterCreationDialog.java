@@ -45,7 +45,7 @@ public class CharacterCreationDialog {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 
 				if (stats.baseStats.getFreePoints() > 0) {
-					Gui.drawOkDialog("You still have unassigned stat points left!", Gui.overlay);
+					Gui.drawOkDialog("You still have unassigned stat points left!");
 					return;
 				}
 

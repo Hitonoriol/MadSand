@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.properties.Prefs;
 
@@ -25,7 +26,7 @@ public class SettingsDialog extends GameDialog {
 	TextButton applyBtn = new TextButton("Apply", Gui.skin);
 
 	public SettingsDialog() {
-		super(Gui.mainMenu);
+		super(MadSand.mainMenu);
 		createDialog();
 	}
 

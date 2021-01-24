@@ -59,7 +59,7 @@ public class TradeConfirmDialog extends SliderDialog {
 	private void setConfirmButtonListener() {
 		super.setConfirmAction(quantity -> {
 			if (!tradeInventory.sell(item, quantity)) {
-				Gui.drawOkDialog(getTradeErrorText(), Gui.overlay);
+				Gui.drawOkDialog(getTradeErrorText());
 				return;
 			}
 

@@ -1667,7 +1667,7 @@
 	},
 	"173" : {
 		"name" : "Slingshot",
-		"recipe" : "8/10:69/4:22/6",
+		"recipe" : "176|8/10:69/4:22/6",
 		"cost" : 49,
 		"type" : "RangedWeapon",
 		"weight" : 0.55,
@@ -1678,7 +1678,7 @@
 	},
 	"174" : {
 		"name" : "Wooden Bow",
-		"recipe" : "8/15:69/8",
+		"recipe" : "176|8/15:69/8",
 		"cost" : 77,
 		"type" : "RangedWeapon",
 		"weight" : 0.95,
@@ -1690,7 +1690,7 @@
 	"175" : {
 		"name" : "Stone arrow",
 		"type" : "Projectile",
-		"recipe" : "71/1:2/1",
+		"recipe" : "176|71/1:2/1",
 		"craftQuantity" : 3,
 		"dmg" : 2,
 		"cost" : 8,

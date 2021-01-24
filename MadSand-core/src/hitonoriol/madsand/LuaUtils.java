@@ -88,7 +88,7 @@ public class LuaUtils {
 	}
 
 	public static void showOkDialog(String text) {
-		Gui.drawOkDialog(text, Gui.overlay);
+		Gui.drawOkDialog(text);
 	}
 
 	public static void print(String msg) {

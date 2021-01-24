@@ -27,17 +27,15 @@ public class OkDialog extends GameDialog {
 	float LBL_MAX_WIDTH = 350;
 
 	float CONTAINER_PADDING = 5;
+	
+	public static String DEFAULT_TITLE = "Info";
 
 	Table dialogContainer;
 
 	boolean isOnTop = false; // If the dialog is displayed on top of another dialog
 
-	private OkDialog(Stage stage) {
-		super(stage);
-	}
-
 	public OkDialog(String title, String text, Stage stage) {
-		this(stage);
+		super(stage);
 		super.clear();
 		super.setBackground(Gui.getColorDrawable(Color.DARK_GRAY));
 		super.align(Align.left);
@@ -79,7 +77,7 @@ public class OkDialog extends GameDialog {
 	}
 	
 	public OkDialog(String text, Stage stage) {
-		this("Info", text, stage);
+		this(DEFAULT_TITLE, text, stage);
 	}
 
 }

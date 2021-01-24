@@ -66,7 +66,6 @@ public class Keyboard {
 
 	private static void pollFunctionKeys() {
 		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
-			Gui.mainMenu.showResumeTable();
 			MadSand.switchScreen(MadSand.mainMenu);
 		}
 

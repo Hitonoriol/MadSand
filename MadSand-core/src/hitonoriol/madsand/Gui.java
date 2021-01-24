@@ -35,8 +35,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.dialogs.OkDialog;
-import hitonoriol.madsand.gui.stages.CraftMenu;
-import hitonoriol.madsand.gui.stages.MainMenu;
 import hitonoriol.madsand.gui.stages.Overlay;
 import hitonoriol.madsand.screens.TravelScreen;
 import hitonoriol.madsand.world.World;
@@ -63,8 +61,6 @@ public class Gui {
 
 	public static ScreenViewport uiViewport = new ScreenViewport();
 	public static Overlay overlay;
-	public static MainMenu mainMenu;
-	public static CraftMenu craftMenu;
 
 	static Color mouseOverColor = new Color(0xa5a5a5ff);
 	private static Map<Integer, LabelStyle> labelStyles = new HashMap<>();
@@ -166,10 +162,6 @@ public class Gui {
 		darkness.setVisible(false);
 		overlay.addActor(darkness);
 
-		mainMenu = new MainMenu();
-
-		craftMenu = new CraftMenu();
-
 		createTransitionScreens(); // These worked when WorldGen & GameSaver were in a separate thread; for now they're useless
 	}
 
@@ -180,16 +172,20 @@ public class Gui {
 	}
 
 	public static void openCraftMenu(int id) {
-		craftMenu.refreshCraftMenu(id);
+		MadSand.craftScreen.getStage().refreshCraftMenu(id);
 		MadSand.switchScreen(MadSand.craftScreen);
 	}
 
-	public static void drawOkDialog(String title, String msg, Stage stage) {
+	private static void drawOkDialog(String title, String msg, Stage stage) {
 		new OkDialog(title, msg, stage).show();
 	}
 
-	public static void drawOkDialog(String msg, Stage stage) {
-		new OkDialog(msg, stage).show();
+	public static void drawOkDialog(String title, String msg) {
+		drawOkDialog(title, msg, null);
+	}
+
+	public static void drawOkDialog(String msg) {
+		drawOkDialog(OkDialog.DEFAULT_TITLE, msg);
 	}
 
 	public static void gameUnfocus() {
@@ -201,7 +197,7 @@ public class Gui {
 		boolean noDialogsLeft = false;
 
 		if (dialog == null)
-			noDialogsLeft = !hasDialogs(overlay);
+			noDialogsLeft = !hasDialogs(MadSand.getStage());
 		else
 			noDialogsLeft = dialog.isOnlyDialog();
 

@@ -31,7 +31,7 @@ public class CardGameUI extends GameDialog {
 
 	protected void showBetDialog(Consumer<Integer> confirmAction) {
 		if (!World.player.inventory.hasItem(currency, 1)) {
-			Gui.drawOkDialog("You don't have any money!", Gui.overlay);
+			Gui.drawOkDialog("You don't have any money!");
 			endGame();
 			return;
 		}
@@ -53,8 +53,7 @@ public class CardGameUI extends GameDialog {
 		if (object.id == MapObject.NULL_OBJECT_ID) {
 			remove();
 			Gui.drawOkDialog("Oops",
-					"As you were about to press one of the machine's buttons it exploded into pieces!",
-					Gui.overlay);
+					"As you were about to press one of the machine's buttons it exploded into pieces!");
 			Gui.overlay.processActionMenu();
 			return;
 		}

@@ -30,7 +30,7 @@ public class Mouse {
 	public static int wx = 0, wy = 0; // Coords of the cell of map that mouse is currently pointing at
 	public static Set<Integer> heldButtons = new HashSet<>();
 
-	public static Vector3 mouseinworld = new Vector3(0.0F, 0.0F, 0.0F);
+	public static Vector3 mouseWorldCoords = new Vector3(0.0F, 0.0F, 0.0F);
 
 	public static String lineDelimiter = "**********";
 	static final String NEWLINE = Resources.LINEBREAK;
@@ -53,8 +53,8 @@ public class Mouse {
 		y = Gdx.graphics.getHeight() - Gdx.input.getY();
 		tooltipContainer.moveTo(x, y);
 
-		wx = (int) Math.floor(Mouse.mouseinworld.x / MadSand.TILESIZE);
-		wy = (int) Math.floor(Mouse.mouseinworld.y / MadSand.TILESIZE);
+		wx = (int) Math.floor(Mouse.mouseWorldCoords.x / MadSand.TILESIZE);
+		wy = (int) Math.floor(Mouse.mouseWorldCoords.y / MadSand.TILESIZE);
 
 		if (prevCoords.equals(wx, wy))
 			return;

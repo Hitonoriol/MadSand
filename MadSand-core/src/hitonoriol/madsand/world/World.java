@@ -90,6 +90,9 @@ public class World {
 		realTimeRefresher.start();
 		GameTextSubstitutor.add(GameTextSubstitutor.PLAYER_NAME, player.stats.name);
 		getCurLoc().refreshGraph();
+		
+		if (!player.newlyCreated)
+			calcOfflineTime();
 	}
 
 	private void initRealtimeRefresher() {
@@ -372,8 +375,7 @@ public class World {
 			if (!player.hasItem(travelItem)) {
 				Gui.drawOkDialog(
 						"You need at least 1 " + ItemProp.getItemName(travelItem)
-								+ " to travel to the next sector.",
-						Gui.overlay);
+								+ " to travel to the next sector.");
 				return;
 			}
 
@@ -696,7 +698,7 @@ public class World {
 		offlineString += Utils.timeString(offlineTime) + "." + Resources.LINEBREAK;
 		offlineString += "Your maximum offline bonus is " + maxHours + " hours.";
 
-		Gui.drawOkDialog(offlineString, Gui.overlay);
+		Gui.drawOkDialog(offlineString);
 
 		offlineReward(offlineTime);
 	}

@@ -101,7 +101,7 @@ public class GameSaver {
 			return "";
 		}
 	}
-	
+
 	public static String readFile(String name, boolean withNewline) {
 		return readFile(new File(name), withNewline);
 	}
@@ -142,7 +142,7 @@ public class GameSaver {
 
 	public static void saveWorld() {
 		if (MadSand.world.inEncounter) {
-			Gui.drawOkDialog("You can't save during an encounter!", Gui.overlay);
+			Gui.drawOkDialog("You can't save during an encounter!");
 			return;
 		}
 		GameSaver.createDirs();
@@ -160,7 +160,7 @@ public class GameSaver {
 
 		if (!f.exists() || !f.isDirectory()) {
 			MadSand.switchScreen(MadSand.mainMenu);
-			Gui.drawOkDialog("Couldn't load this world", Gui.mainMenu);
+			Gui.drawOkDialog("Couldn't load this world");
 			return false;
 		}
 
@@ -176,7 +176,6 @@ public class GameSaver {
 			MadSand.world.updateLight();
 			loadLog();
 			MadSand.print("Loaded Game!");
-			MadSand.world.calcOfflineTime();
 			return true;
 		} else {
 			loadErrMsg();
@@ -190,8 +189,7 @@ public class GameSaver {
 		Gui.drawOkDialog(
 				"Couldn't to load this world. \n"
 						+ "Maybe it was saved in older/newer version of the game or some files are corrupted.\n"
-						+ "Check " + Resources.ERR_FILE + " for details.",
-				Gui.mainMenu);
+						+ "Check " + Resources.ERR_FILE + " for details.");
 		// MadSand.justStarted = false;
 	}
 
@@ -204,11 +202,15 @@ public class GameSaver {
 		try {
 			String fl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.PLAYERFILE;
 			String wfl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.WORLDFILE;
+			Player player = World.player;
 
-			World.player.stats.equipment.setStatBonus(false);
-			Resources.mapper.writeValue(new File(fl), World.player);
+			if (player.newlyCreated)
+				player.newlyCreated = false;
+
+			player.stats.equipment.setStatBonus(false);
+			Resources.mapper.writeValue(new File(fl), player);
 			Resources.mapper.writeValue(new File(wfl), MadSand.world);
-			World.player.stats.equipment.setStatBonus(true);
+			player.stats.equipment.setStatBonus(true);
 
 			return true;
 		} catch (Exception e) {

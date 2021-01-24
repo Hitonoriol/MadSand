@@ -16,7 +16,7 @@ import hitonoriol.madsand.gui.dialogs.LoadWorldDialog;
 import hitonoriol.madsand.gui.dialogs.SettingsDialog;
 import hitonoriol.madsand.properties.Globals;
 
-public class MainMenu extends Stage {
+public class MainMenuStage extends Stage {
 
 	Skin skin;
 
@@ -37,7 +37,7 @@ public class MainMenu extends Stage {
 	TextButton exitButton;
 	Label versionLabel;
 
-	public MainMenu() {
+	public MainMenuStage() {
 		super(Gui.uiViewport);
 		skin = Gui.skin;
 

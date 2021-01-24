@@ -165,15 +165,6 @@ public class Player extends Entity {
 		return inventory;
 	}
 
-	@JsonIgnore
-	public boolean isNewlyCreated() {
-		if (newlyCreated) {
-			newlyCreated = false;
-			return true;
-		}
-		return false;
-	}
-
 	void increaseSkill(Skill skill, int by) {
 		if (by < 1)
 			by = 1;
@@ -206,8 +197,7 @@ public class Player extends Entity {
 		int minLvl = lvl == 0 ? item.lvl - 1 : item.lvl;
 		if (lvl < minLvl) {
 			Gui.drawOkDialog(
-					"Your level is too low! You need to be at least level " + item.lvl + " to equip this item.",
-					Gui.overlay);
+					"Your level is too low! You need to be at least level " + item.lvl + " to equip this item.");
 			return false;
 		}
 
@@ -519,8 +509,8 @@ public class Player extends Entity {
 		if ((craftedItem = craftWorker.craftItem(quantity)) != Item.nullItem) {
 			increaseSkill(Skill.Crafting, quantity);
 
-			Gui.drawOkDialog("Crafted " + quantity + " " + craftedItem.name + " successfully!", Gui.craftMenu);
-			MadSand.notice("You craft " + quantity + " " + craftedItem.name);
+			Gui.drawOkDialog("Crafted " + craftedItem.quantity + " " + craftedItem.name + " successfully!");
+			MadSand.print("You craft " + craftedItem.quantity + " " + craftedItem.name);
 
 			int bonus = stats.luckRoll() ? Utils.rand(stats.skills.getItemReward(Skill.Crafting)) : 0;
 			if (bonus > 0) {
@@ -625,7 +615,7 @@ public class Player extends Entity {
 					npcDialog.remove();
 					WorkerType worker = location.settlement.recruitWorker(npc.uid);
 					if (!canAfford(hireCost)) {
-						Gui.drawOkDialog("You don't have enough money to recruit this worker!", Gui.overlay);
+						Gui.drawOkDialog("You don't have enough money to recruit this worker!");
 						return;
 					}
 					inventory.delItem(currency, hireCost);
@@ -1121,8 +1111,7 @@ public class Player extends Entity {
 		Item timeSkipItem = inventory.getItem(timeSkipItemId);
 		if (timeSkipItem.equals(Item.nullItem)) {
 			Gui.drawOkDialog(
-					"You need at least 1 " + ItemProp.getItemName(timeSkipItemId) + " to be able to skip time.",
-					Gui.overlay);
+					"You need at least 1 " + ItemProp.getItemName(timeSkipItemId) + " to be able to skip time.");
 			return;
 		}
 
@@ -1236,7 +1225,7 @@ public class Player extends Entity {
 	public TextureRegion getSprite() {
 		if (!isStepping())
 			return super.getSprite();
-		
+
 		Animation<TextureRegion> anim = null;
 		elapsedTime += Gdx.graphics.getDeltaTime();
 
@@ -1248,7 +1237,7 @@ public class Player extends Entity {
 			anim = Resources.uanim;
 		else
 			anim = Resources.danim;
-		
+
 		return anim.getKeyFrame(elapsedTime, true);
 	}
 

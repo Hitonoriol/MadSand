@@ -6,9 +6,12 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Timer;
 
+import hitonoriol.madsand.containers.Storage;
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
+import hitonoriol.madsand.screens.AbstractScreen;
 import hitonoriol.madsand.screens.CraftScreen;
 import hitonoriol.madsand.screens.DeathScreen;
 import hitonoriol.madsand.screens.GameScreen;
@@ -36,7 +39,8 @@ public class MadSand extends Game {
 	public static SpriteBatch batch;
 	public static World world;
 
-	private static Game game;
+	Storage<AbstractScreen<?>> currentScreen = new Storage<>();
+	private static MadSand game;
 	public static GameWorldRenderer gameWorld;
 
 	public static GameScreen gameScreen;
@@ -82,8 +86,12 @@ public class MadSand extends Game {
 	public static void switchScreen(Screen screen) {
 		if (Gui.gameUnfocused)
 			Gui.overlay.gameContextMenu.setVisible(false);
-
 		game.setScreen(screen);
+	}
+
+	public static void switchScreen(AbstractScreen<?> screen) {
+		game.currentScreen.set(screen);
+		switchScreen((Screen) screen);
 	}
 
 	public static void reset() {
@@ -104,6 +112,10 @@ public class MadSand extends Game {
 
 	public static OrthographicCamera getCamera() {
 		return gameWorld.getCamera();
+	}
+
+	public static Stage getStage() {
+		return game.currentScreen.get().getStage();
 	}
 
 	public static void warn(String msg) {

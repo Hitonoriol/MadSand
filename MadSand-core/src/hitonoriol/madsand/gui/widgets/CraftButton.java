@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.CraftWorker;
 import hitonoriol.madsand.entities.inventory.Item;
@@ -46,7 +47,7 @@ public class CraftButton extends ItemButton {
 			CraftWorker craftWorker = new CraftWorker(player, buttonItem);
 
 			if (!craftWorker.canBeCrafted()) {
-				Gui.drawOkDialog("Not enough resources to craft " + buttonItem.name, Gui.craftMenu);
+				Gui.drawOkDialog("Not enough resources to craft " + buttonItem.name);
 				return;
 			}
 
@@ -62,7 +63,7 @@ public class CraftButton extends ItemButton {
 					.setConfirmAction(craftAction)
 					.setSliderAction(quantity -> craftDialog
 							.setSliderText((quantity * buttonItem.craftQuantity) + " " + buttonItem.name))
-					.show(Gui.craftMenu);
+					.show(MadSand.getStage());
 		});
 	}
 

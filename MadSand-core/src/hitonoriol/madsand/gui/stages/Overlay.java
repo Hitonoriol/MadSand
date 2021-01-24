@@ -228,6 +228,10 @@ public class Overlay extends Stage {
 		return gameLog.inputField;
 	}
 
+	public boolean isConsoleFocused() {
+		return super.getKeyboardFocus() == gameLog.inputField;
+	}
+
 	public Label[] getLogLabels() {
 		return gameLog.logLabels;
 	}

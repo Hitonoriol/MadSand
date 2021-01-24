@@ -13,7 +13,10 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.LuaUtils;
+import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
+import hitonoriol.madsand.screens.AbstractScreen;
 
 public class GameDialog extends Dialog {
 	public static final float BTN_WIDTH = Gdx.graphics.getWidth() / 4;
@@ -30,7 +33,7 @@ public class GameDialog extends Dialog {
 	private AutoFocusScrollPane textScroll;
 	protected Label textLbl;
 	protected TextButton proceedButton;
-	private Stage stage;
+	protected Stage stage;
 	private float cWidth = -1, cHeight = -1;
 
 	public GameDialog(String title, String text, Stage stage) {
@@ -61,6 +64,10 @@ public class GameDialog extends Dialog {
 		textScroll.remove();
 		getCells().removeValue(cell, true);
 		invalidate();
+	}
+
+	public GameDialog(AbstractScreen<? extends Stage> screen) {
+		this(screen.getStage());
 	}
 
 	public GameDialog(String title, String text, Stage stage, String okText) {
@@ -152,6 +159,9 @@ public class GameDialog extends Dialog {
 	}
 
 	public void show() {
+		if (stage == null)
+			stage = MadSand.getStage();
+
 		show(stage);
 	}
 

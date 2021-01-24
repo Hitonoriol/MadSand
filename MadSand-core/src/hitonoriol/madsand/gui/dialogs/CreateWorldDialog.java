@@ -1,7 +1,6 @@
 package hitonoriol.madsand.gui.dialogs;
 
 import java.io.File;
-import java.io.FilenameFilter;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -18,27 +17,22 @@ import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.world.World;
 
 public class CreateWorldDialog extends GameDialog {
-	
-	float BTN_WIDTH = WIDTH/2;
+
+	float BTN_WIDTH = WIDTH / 2;
 	float BTN_HEIGHT = 40;
-	
+
 	Skin skin = Gui.skin;
-	
+
 	Label nameLabel;
 
 	public CreateWorldDialog() {
-		super(Gui.mainMenu);
+		super(MadSand.mainMenu);
 		createDialog();
 	}
 
 	void createDialog() {
-
 		File file = new File(MadSand.MAPDIR);
-		String[] dirs = file.list(new FilenameFilter() {
-			public boolean accept(File current, String name) {
-				return new File(current, name).isDirectory();
-			}
-		});
+		String[] dirs = file.list((File current, String name) -> new File(current, name).isDirectory());
 
 		int slots = 0;
 
@@ -104,7 +98,7 @@ public class CreateWorldDialog extends GameDialog {
 
 			}
 		});
-		
+
 		worldtxt.setAlignment(Align.center);
 
 		super.row();
@@ -112,9 +106,5 @@ public class CreateWorldDialog extends GameDialog {
 		super.add(worldtxt).width(WIDTH).padBottom(65).row();
 		super.add(okbtn).size(BTN_WIDTH, BTN_HEIGHT).row();
 		super.add(nobtn).size(BTN_WIDTH, BTN_HEIGHT).row();
-	}
-
-	public void show() {
-		super.show(Gui.mainMenu);
 	}
 }

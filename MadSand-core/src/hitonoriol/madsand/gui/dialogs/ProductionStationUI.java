@@ -192,8 +192,7 @@ public class ProductionStationUI extends GameDialog {
 			public void changed(ChangeEvent event, Actor actor) {
 				if (!station.upgrade())
 					Gui.drawOkDialog(
-							"There's not enough " + consumedMaterial + " in storage for upgrade!",
-							Gui.overlay);
+							"There's not enough " + consumedMaterial + " in storage for upgrade!");
 				else
 					refresh();
 			}
@@ -204,7 +203,7 @@ public class ProductionStationUI extends GameDialog {
 			public void changed(ChangeEvent event, Actor actor) {
 				int quantity = (int) consumableSlider.getValue();
 				if (!player.inventory.delItem(station.consumedMaterial, quantity))
-					Gui.drawOkDialog("You don't have this many " + consumedMaterial, Gui.overlay);
+					Gui.drawOkDialog("You don't have this many " + consumedMaterial);
 				else {
 					station.addConsumableItem(quantity);
 					refresh();

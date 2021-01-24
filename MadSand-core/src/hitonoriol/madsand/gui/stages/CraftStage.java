@@ -24,7 +24,7 @@ import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.world.World;
 
-public class CraftMenu extends Stage {
+public class CraftStage extends Stage {
 	private static float CRAFT_ENTRY_PADDING = 40;
 	private static float BACK_BUTTON_HEIGHT = 50;
 	private static float BACK_BUTTON_WIDTH = 250;
@@ -38,7 +38,7 @@ public class CraftMenu extends Stage {
 	AutoFocusScrollPane scroll;
 	Label titleLabel;
 
-	public CraftMenu() {
+	public CraftStage() {
 		super(Gui.uiViewport);
 		craftTable = new Table();
 		containerTable = new Table();

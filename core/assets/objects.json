@@ -2077,5 +2077,11 @@
 		"centered" : true,
 		"onInteract" : "world.player:skipTime()",
 		"name" : "Time machine"
+	},
+	"176" : {
+		"hp" : 1,
+		"harvestHp" : 25,
+		"isCraftingStation" : true,
+		"name" : "Fletching table"
 	}
 }
