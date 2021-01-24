@@ -1,6 +1,9 @@
-sourceCompatibility = 1.7
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 eclipse.project.name = appName + "-core"
+
+compileJava {
+	options.release = 8
+}

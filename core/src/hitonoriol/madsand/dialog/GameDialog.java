@@ -14,7 +14,6 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.screens.AbstractScreen;
 

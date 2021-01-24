@@ -1,0 +1,73 @@
+buildscript {
+    
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        jcenter()
+        google()
+    }
+    dependencies {
+        
+
+    }
+}
+
+allprojects {
+    apply plugin: "eclipse"
+
+    version = '1.0'
+    ext {
+        appName = "MadSand"
+        gdxVersion = '1.9.13'
+        roboVMVersion = '2.3.12'
+        box2DLightsVersion = '1.5'
+        ashleyVersion = '1.7.3'
+        aiVersion = '1.6.0'
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+        google()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+    }
+}
+
+project(":desktop") {
+    apply plugin: "java-library"
+
+
+    dependencies {
+        implementation project(":core")
+        api "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+        
+    }
+}
+
+project(":core") {
+    apply plugin: "java-library"
+
+
+    dependencies {
+        api "com.badlogicgames.gdx:gdx:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        compile group: 'com.badlogicgames.gdx', name: 'gdx-ai', version: '1.6.0'
+        
+        compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+        compile group: 'org.apache.commons', name: 'commons-text', version: '1.9'
+        
+        compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.12.1'
+        compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.12.1'
+        compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.1'
+        
+        compile files('../lib/luaj-jse-3.0.2.jar')
+        compile files('../lib/jrand-0.2.7-alpha.jar')
+    }
+}

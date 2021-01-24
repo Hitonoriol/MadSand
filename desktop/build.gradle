@@ -1,9 +1,12 @@
-sourceCompatibility = 1.7
 sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.main.resources.srcDirs = ["../core/assets"]
 
 project.ext.mainClassName = "hitonoriol.madsand.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../core/assets")
+
+compileJava {
+	options.release = 8
+}
 
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
