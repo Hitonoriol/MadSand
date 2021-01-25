@@ -2082,6 +2082,7 @@
 		"hp" : 1,
 		"harvestHp" : 25,
 		"isCraftingStation" : true,
+		"centered" : true,
 		"name" : "Fletching table"
 	}
 }

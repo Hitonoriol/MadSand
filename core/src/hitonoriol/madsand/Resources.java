@@ -105,7 +105,7 @@ public class Resources {
 	public static Sprite playerUpSpr;
 	public static Sprite playerDownSpr;
 
-	public static TextureRegion[] attackAnimStrip;
+	public static TextureRegion[] attackAnimStrip, objectHitAnimStrip;
 
 	public static int craftableItemCount;
 	public static int itemCount;
@@ -160,6 +160,7 @@ public class Resources {
 
 	private static void loadActionAnimations() {
 		attackAnimStrip = loadAnimationStrip("anim/hit.png", ANIM_FRAME_SIZE);
+		objectHitAnimStrip = loadAnimationStrip("anim/obj_hit.png", ANIM_FRAME_SIZE);
 	}
 
 	private static void initObjectMapper() {

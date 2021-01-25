@@ -1156,7 +1156,7 @@ public class Map {
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T> Pair locate(T thing) {
+	private <T> Pair locate(T thing, boolean exact) {
 		HashMap<Pair, T> mapThings;
 
 		if (thing instanceof Tile)
@@ -1170,18 +1170,31 @@ public class Map {
 			return Pair.nullPair;
 
 		for (Entry<Pair, T> entry : mapThings.entrySet())
-			if (entry.getValue().equals(thing))
-				return entry.getKey();
+			if (exact) {
+				if (entry.getValue() == thing)
+					return entry.getKey();
+			} else {
+				if (entry.getValue().equals(thing))
+					return entry.getKey();
+			}
 
 		return Pair.nullPair;
 	}
 
 	public Pair locateTile(int id) {
-		return locate(TileProp.tiles.get(id));
+		return locate(TileProp.tiles.get(id), false);
 	}
 
 	public Pair locateObject(int id) {
-		return locate(ObjectProp.getObject(id));
+		return locate(ObjectProp.getObject(id), false);
+	}
+
+	public Pair locateObject(MapObject object) {
+		return locate(object, true);
+	}
+
+	public Pair locateTile(Tile tile) {
+		return locate(tile, true);
 	}
 
 	public Pair locateDiggableTile() {

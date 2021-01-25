@@ -155,7 +155,7 @@ public class Stats {
 		return get(Stat.Strength);
 	}
 
-	float rangedAtkCoef = 0.3f;
+	float rangedAtkCoef = 0.45f;
 
 	public int calcBaseRangedAttack(int distance) {
 		if (rangedAttackMissed(distance))

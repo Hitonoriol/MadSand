@@ -7,8 +7,10 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Skill;
 import hitonoriol.madsand.entities.inventory.ItemType;
 import hitonoriol.madsand.properties.ObjectProp;
@@ -82,7 +84,7 @@ public class MapObject extends MapEntity {
 	}
 
 	public boolean isDestroyed() {
-		return this.hp == CLEANUP_FLAG;
+		return hp == CLEANUP_FLAG;
 	}
 
 	private boolean verify() {
@@ -100,11 +102,14 @@ public class MapObject extends MapEntity {
 		boolean dmg = false;
 		harvestHp -= amt;
 		if (harvestHp < 0) {
+			int excDmg = Math.abs(harvestHp) - 1;
 			--this.hp;
 			harvestHp = ObjectProp.getObject(id).harvestHp;
+			if (excDmg > 0)
+				takeHarvestDamage(excDmg);
 			dmg = true;
 		}
-		this.verify();
+		verify();
 		return dmg;
 	}
 
@@ -114,7 +119,10 @@ public class MapObject extends MapEntity {
 
 	@Override
 	public void damage(int amt) {
-		takeHarvestDamage(amt);
+		if (amt == 0)
+			return;
+
+		takeHarvestDamage(amt + 1);
 	}
 
 	public void takeFullDamage() {
@@ -127,6 +135,16 @@ public class MapObject extends MapEntity {
 
 	public double getHpPercent() {
 		return ((double) hp / (double) maxHp) * 100d;
+	}
+
+	@Override
+	public Pair getPosition() {
+		return new Pair(MadSand.world.getCurLoc().locateObject(this));
+	}
+
+	@Override
+	public void playDamageAnimation() {
+		super.playAnimation(Resources.createAnimation(Resources.objectHitAnimStrip));
 	}
 
 	private static int getAltItem(int id, ItemType hand, HashMap<ItemType, ArrayList<Integer>> container) {

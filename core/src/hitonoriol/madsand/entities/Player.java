@@ -248,7 +248,6 @@ public class Player extends Entity {
 		else {
 			MadSand.print("You deal " + dmg + " damage to " + npc.stats.name);
 			damageHeldTool();
-			super.attackAnimation(npc);
 		}
 
 		if (npc.stats.dead) {

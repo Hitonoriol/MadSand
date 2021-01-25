@@ -303,10 +303,8 @@ public class Npc extends Entity {
 		if (dmg == 0) {
 			MadSand.print(stats.name + " misses!");
 			target.increaseSkill(Skill.Evasion);
-		} else {
+		} else
 			MadSand.warn(stats.name + " deals " + dmg + " damage to you");
-			super.attackAnimation(target);
-		}
 	}
 
 	@Override

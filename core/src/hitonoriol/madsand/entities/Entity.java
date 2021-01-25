@@ -155,6 +155,9 @@ public abstract class Entity extends MapEntity {
 	protected void attack(MapEntity target, int dmg) {
 		target.damage(dmg);
 
+		if (dmg > 0)
+			target.playDamageAnimation();
+
 		if (target instanceof MapObject)
 			attack((MapObject) target, dmg);
 	}
@@ -170,11 +173,10 @@ public abstract class Entity extends MapEntity {
 		Pair obstacleCoords = map.rayCast(thisCoords, new Pair(target.x, target.y));
 		MapEntity projectileObstacle = map.getMapEntity(obstacleCoords);
 
-		int baseDmg = stats.calcBaseRangedAttack(distanceTo(target));
+		int baseDmg = stats.calcBaseRangedAttack(distanceTo(projectileObstacle.getPosition()));
 		int impactDmg = baseDmg != 0 ? baseDmg + projectile.dmg : 0;
 
-		projectile.launchProjectile(thisCoords.multiply(MadSand.TILESIZE),
-				obstacleCoords.multiply(MadSand.TILESIZE),
+		projectile.launchProjectile(thisCoords.toWorld(), obstacleCoords.toWorld(),
 				() -> attack(projectileObstacle, impactDmg));
 	}
 
@@ -493,7 +495,6 @@ public abstract class Entity extends MapEntity {
 	}
 
 	boolean walk(Direction dir) {
-
 		if (!canWalk(dir))
 			return false;
 
@@ -503,8 +504,20 @@ public abstract class Entity extends MapEntity {
 
 	public abstract void act(float time);
 
+	public int distanceTo(int x, int y) {
+		return (int) Line.calcDistance(this.x, this.y, x, y);
+	}
+
+	public int distanceTo(Pair coords) {
+		return distanceTo(coords.x, coords.y);
+	}
+
 	public int distanceTo(Entity entity) {
-		return (int) Line.calcDistance(x, y, entity.x, entity.y);
+		return distanceTo(entity.x, entity.y);
+	}
+
+	public Pair getPosition() {
+		return new Pair(x, y);
 	}
 
 	public boolean canSee(Entity entity) {
@@ -522,9 +535,9 @@ public abstract class Entity extends MapEntity {
 		return (dist <= fov) && !viewObstructed;
 	}
 
-	public void attackAnimation(Entity entity) {
-		MadSand.gameWorld.queueAnimation(Resources.createAnimation(Resources.attackAnimStrip),
-				entity.globalPos.x, entity.globalPos.y);
+	@Override
+	public void playDamageAnimation() {
+		super.playAnimation(Resources.createAnimation(Resources.attackAnimStrip));
 	}
 
 	@JsonIgnore
