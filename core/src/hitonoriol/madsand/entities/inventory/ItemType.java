@@ -10,16 +10,20 @@ public enum ItemType {
 	Consumable,
 	Axe, Shovel, Pickaxe, Hoe, Hammer,
 	MeleeWeapon, OffhandWeapon, RangedWeapon,
-	Projectile,
+	Projectile, ThrowingWeapon,
 	HeadArmor, ChestArmor, LegArmor, FootArmor, Shield,
 	GrabBag,
 	FishingRod, FishingBait;
 
 	// For non-equipment items: if player takes the item in hand, which hand does it go to:
 	public EquipSlot handSlot() {
-		return (this == FishingBait || this == Projectile)
+		return (this == FishingBait || isProjectile())
 				? EquipSlot.Offhand
 				: EquipSlot.MainHand;
+	}
+	
+	public boolean isProjectile() {
+		return this == Projectile || this == ThrowingWeapon;
 	}
 
 	public boolean isPlaceable() {

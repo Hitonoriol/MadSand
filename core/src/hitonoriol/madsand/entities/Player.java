@@ -275,8 +275,8 @@ public class Player extends Entity {
 	}
 
 	public boolean canPerformRangedAttack() {
-		return stats.hand().type == ItemType.RangedWeapon &&
-				stats.offHand().type == ItemType.Projectile;
+		return stats.offHand().type == ItemType.ThrowingWeapon ||
+				(stats.hand().type == ItemType.RangedWeapon && stats.offHand().type == ItemType.Projectile);
 	}
 
 	private void performRangedAttack(Npc npc) {

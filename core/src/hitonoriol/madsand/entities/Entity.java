@@ -170,7 +170,7 @@ public abstract class Entity extends MapEntity {
 
 		Map map = MadSand.world.getCurLoc();
 		Pair thisCoords = new Pair(x, y);
-		Pair obstacleCoords = map.rayCast(thisCoords, new Pair(target.x, target.y));
+		Pair obstacleCoords = map.rayCast(thisCoords, target.getPosition());
 		MapEntity projectileObstacle = map.getMapEntity(obstacleCoords);
 
 		int baseDmg = stats.calcBaseRangedAttack(distanceTo(projectileObstacle.getPosition()));

@@ -1689,6 +1689,7 @@
 	},
 	"175" : {
 		"name" : "Stone arrow",
+		"lvl" : 1,
 		"type" : "Projectile",
 		"recipe" : "176|71/1:2/1",
 		"craftQuantity" : 3,
@@ -1698,9 +1699,12 @@
 	},
 	"176" : {
 		"name" : "Boomerang",
-		"type" : "Projectile",
-		"dmg" : 2,
-		"cost" : 53,
-		"weight" : 0.75
+		"lvl" : 1,
+		"recipe" : "1/5:70/2",
+		"craftQuantity" : 5,
+		"type" : "ThrowingWeapon",
+		"dmg" : 1,
+		"cost" : 13,
+		"weight" : 0.35
 	}
 }

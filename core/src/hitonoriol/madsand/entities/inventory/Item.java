@@ -148,7 +148,7 @@ public class Item {
 			info += "Nutritional value: " + getNutritionalValue() + Resources.LINEBREAK;
 		}
 
-		if (type == ItemType.Projectile)
+		if (type.isProjectile())
 			info += "Projectile damage: [GREEN]" + dmg + Resources.COLOR_END + Resources.LINEBREAK;
 
 		info += Resources.LINEBREAK;
