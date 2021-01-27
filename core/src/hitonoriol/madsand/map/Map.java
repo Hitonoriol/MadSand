@@ -9,6 +9,8 @@ import java.util.Map.Entry;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.mutable.MutableBoolean;
+
 import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
 import com.badlogic.gdx.math.Vector2;
@@ -255,13 +257,17 @@ public class Map {
 	}
 
 	public Pair rayCast(Pair from, Pair to) {
-		Line line = new Line(from, to);
-		for (Pair point : line) {
-			if (!isFreeTile(point))
-				return point;
-		}
+		Pair occupiedTile = new Pair(Pair.nullPair);
 
-		return Pair.nullPair;
+		Line.rayCast(from, to, (x, y) -> {
+			if (!isFreeTile(x, y)) {
+				occupiedTile.set(x, y);
+				return false;
+			}
+			return true;
+		});
+
+		return occupiedTile;
 	}
 
 	public MapEntity getMapEntity(Pair coords) {
@@ -370,11 +376,7 @@ public class Map {
 	}
 
 	private Map drawLine(MapAction action, int x1, int y1, int x2, int y2, int id) {
-		Line line = new Line(x1, y1, x2, y2);
-
-		for (Pair point : line)
-			action.changeMap(point.x, point.y, id);
-
+		Line.forEachPoint(x1, y1, x2, y2, (x, y) -> action.changeMap(x, y, id));
 		return this;
 	}
 
@@ -393,8 +395,7 @@ public class Map {
 			coords.set(x, y);
 
 			if (fill)
-				for (Pair point : new Line(x0, y0, x, y))
-					action.changeMap(point.x, point.y, id);
+				drawLine(action, x0, y0, x, y, id);
 			else
 				action.changeMap(x, y, id);
 		}
@@ -826,8 +827,7 @@ public class Map {
 
 	public void updateLight(int wx, int wy, int r) {
 		Tile tile;
-		MapObject object;
-		boolean blocksLight = false;
+		MutableBoolean blocksLight = new MutableBoolean(false);
 		for (int x = -r; x < r; x++) {
 			for (int y = -r; y < r; y++) {
 
@@ -840,21 +840,21 @@ public class Map {
 				tile = getTile(wx + x, wy + y);
 
 				tile.visible = true;
-				blocksLight = false;
+				blocksLight.setFalse();
 
-				for (Pair p : new Line(wx, wy, wx + x, wy + y)) {
-					tile = getTile(p.x, p.y);
-					object = getObject(p.x, p.y);
+				Line.forEachPoint(wx, wy, wx + x, wy + y, (rx, ry) -> {
+					Tile rTile = getTile(rx, ry);
+					MapObject rObject = getObject(rx, ry);
 
-					if (blocksLight)
-						tile.visible = false;
+					if (blocksLight.booleanValue())
+						rTile.visible = false;
 
-					if (object != nullObject && !object.nocollide)
-						blocksLight = true;
+					if (rObject != nullObject && !rObject.nocollide)
+						blocksLight.setTrue();
 
-					if (tile.visible)
-						tile.visited = true;
-				}
+					if (rTile.visible)
+						rTile.visited = true;
+				});
 			}
 		}
 	}

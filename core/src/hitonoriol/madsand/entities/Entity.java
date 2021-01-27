@@ -2,6 +2,8 @@ package hitonoriol.madsand.entities;
 
 import java.util.Comparator;
 
+import org.apache.commons.lang3.mutable.MutableBoolean;
+
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -280,9 +282,11 @@ public abstract class Entity extends MapEntity {
 		stats.check();
 	}
 
-	public void heal(int to) {
-		// stats.skills.getLvlReward(Skill.Survival, to)
-		stats.hp += to;
+	public void heal(int by) {
+		if (stats.hp < stats.mhp)
+			playAnimation(Resources.createAnimation(Resources.healAnimStrip));
+
+		stats.hp += by;
 		stats.check();
 
 	}
@@ -523,16 +527,17 @@ public abstract class Entity extends MapEntity {
 	public boolean canSee(Entity entity) {
 		int dist = (int) distanceTo(entity);
 		Map loc = MadSand.world.getCurLoc();
-		MapObject object;
-		boolean viewObstructed = false;
+		MutableBoolean viewObstructed = new MutableBoolean(false);
 
-		for (Pair p : new Line(x, y, entity.x, entity.y))
-			if ((object = loc.getObject(p.x, p.y)) != Map.nullObject) {
-				if (viewObstructed = !object.nocollide)
-					break;
-			}
+		Line.rayCast(x, y, entity.x, entity.y, (x, y) -> {
+			MapObject object;
+			if ((object = loc.getObject(x, y)) != Map.nullObject)
+				viewObstructed.setValue(!object.nocollide);
 
-		return (dist <= fov) && !viewObstructed;
+			return !viewObstructed.booleanValue();
+		});
+
+		return (dist <= fov) && !viewObstructed.booleanValue();
 	}
 
 	@Override

@@ -81,8 +81,6 @@ public class Resources {
 	public static Texture visitedMask;
 	public static Texture[] npc;
 
-	static TextureRegion[][] tmpAnim;
-
 	static Texture animsheet;
 	public static NinePatchDrawable transparency = loadNinePatch("misc/transparency.png");
 
@@ -106,6 +104,7 @@ public class Resources {
 	public static Sprite playerDownSpr;
 
 	public static TextureRegion[] attackAnimStrip, objectHitAnimStrip;
+	public static TextureRegion[] healAnimStrip, detectAnimStrip;
 
 	public static int craftableItemCount;
 	public static int itemCount;
@@ -159,8 +158,10 @@ public class Resources {
 	}
 
 	private static void loadActionAnimations() {
-		attackAnimStrip = loadAnimationStrip("anim/hit.png", ANIM_FRAME_SIZE);
-		objectHitAnimStrip = loadAnimationStrip("anim/obj_hit.png", ANIM_FRAME_SIZE);
+		attackAnimStrip = loadAnimationStrip("anim/hit.png");
+		objectHitAnimStrip = loadAnimationStrip("anim/obj_hit.png");
+		healAnimStrip = loadAnimationStrip("anim/heal.png");
+		detectAnimStrip = loadAnimationStrip("anim/detect.png");
 	}
 
 	private static void initObjectMapper() {
@@ -314,7 +315,7 @@ public class Resources {
 	static final int PLAYER_ANIM_FRAMES = 2;
 
 	private static void loadPlayerAnimation() {
-		tmpAnim = TextureRegion.split(animsheet, PLAYER_ANIM_WIDTH, PLAYER_ANIM_HEIGHT);
+		TextureRegion[][] tmpAnim = TextureRegion.split(animsheet, PLAYER_ANIM_WIDTH, PLAYER_ANIM_HEIGHT);
 
 		animdown = getAnimationStrip(tmpAnim, 0, PLAYER_ANIM_FRAMES);
 		animleft = getAnimationStrip(tmpAnim, 1, PLAYER_ANIM_FRAMES);
@@ -378,11 +379,6 @@ public class Resources {
 		return createAnimation(strip, ACTION_ANIM_DURATION);
 	}
 
-	public static TextureRegion[] loadAnimationStrip(String file, int frameSize) { // load 1xN animation strip from file
-		TextureRegion[][] animStrip = TextureRegion.split(loadTexture(file), frameSize, frameSize);
-		return getAnimationStrip(animStrip, 0, animStrip[0].length);
-	}
-
 	private static TextureRegion[] getAnimationStrip(TextureRegion[][] region, int row, int frames) { // convert [][] strip to []
 		TextureRegion[] strip = new TextureRegion[frames];
 
@@ -390,6 +386,15 @@ public class Resources {
 			strip[i] = region[row][i];
 
 		return strip;
+	}
+	
+	private static TextureRegion[] loadAnimationStrip(String file, int frameSize) { // load 1xN animation strip from file
+		TextureRegion[][] animStrip = TextureRegion.split(loadTexture(file), frameSize, frameSize);
+		return getAnimationStrip(animStrip, 0, animStrip[0].length);
+	}
+	
+	private static TextureRegion[] loadAnimationStrip(String file) {
+		return loadAnimationStrip(file, ANIM_FRAME_SIZE);
 	}
 
 	public static void takeScreenshot() {

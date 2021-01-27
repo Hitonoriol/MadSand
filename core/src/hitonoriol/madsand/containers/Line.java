@@ -3,6 +3,8 @@ package hitonoriol.madsand.containers;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
 
 public class Line implements Iterable<Pair> {
 	private int x0, y0;
@@ -35,7 +37,15 @@ public class Line implements Iterable<Pair> {
 
 	void build() {
 		points = new ArrayList<Pair>();
+		forEachPoint(x0, y0, x1, y1, (x, y) -> points.add(new Pair(x, y)));
+	}
 
+	public Iterator<Pair> iterator() {
+		return points.iterator();
+	}
+
+	// Applies <pointAction> to each point in line while it returns true
+	public static void rayCast(int x0, int y0, int x1, int y1, BiPredicate<Integer, Integer> pointAction) {
 		int dx = Math.abs(x1 - x0);
 		int dy = Math.abs(y1 - y0);
 
@@ -43,9 +53,7 @@ public class Line implements Iterable<Pair> {
 		int sy = y0 < y1 ? 1 : -1;
 		int err = dx - dy;
 
-		while (true) {
-			points.add(new Pair(x0, y0));
-
+		while (pointAction.test(x0, y0)) {
 			if (x0 == x1 && y0 == y1)
 				break;
 
@@ -54,6 +62,7 @@ public class Line implements Iterable<Pair> {
 				err -= dy;
 				x0 += sx;
 			}
+
 			if (e2 < dx) {
 				err += dx;
 				y0 += sy;
@@ -61,11 +70,22 @@ public class Line implements Iterable<Pair> {
 		}
 	}
 
-	public Iterator<Pair> iterator() {
-		return points.iterator();
+	public static void rayCast(Pair a, Pair b, BiPredicate<Integer, Integer> pointAction) {
+		rayCast(a.x, a.y, b.x, b.y, pointAction);
 	}
 
-	public static double calcDistance(int x1, int y1, int x2, int y2) {
-		return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+	public static void forEachPoint(int x0, int y0, int x1, int y1, BiConsumer<Integer, Integer> pointConsumer) {
+		rayCast(x0, y0, x1, y1, (x, y) -> {
+			pointConsumer.accept(x, y);
+			return true;
+		});
+	}
+
+	public static void forEachPoint(Pair a, Pair b, BiConsumer<Integer, Integer> pointConsumer) {
+		forEachPoint(a.x, a.y, b.x, b.y, pointConsumer);
+	}
+
+	public static double calcDistance(int x0, int y0, int x1, int y1) {
+		return Math.sqrt((x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0));
 	}
 }

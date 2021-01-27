@@ -34,6 +34,7 @@ import hitonoriol.madsand.world.World;
 public class Npc extends Entity {
 	public static int NULL_NPC = 0;
 	static double IDLE_MOVE_CHANCE = 15;
+	static float MAX_FOV_COEF = 1.5f;
 
 	public int id;
 	public long uid;
@@ -361,6 +362,22 @@ public class Npc extends Entity {
 		move(Direction.random());
 	}
 
+	void detectEnemy(Entity enemy) {
+		enemySpotted = true;
+
+		if (enemy instanceof Player)
+			((Player) enemy).target();
+
+		playAnimation(Resources.createAnimation(Resources.detectAnimStrip));
+	}
+
+	void loseSightOf(Entity enemy) {
+		enemySpotted = false;
+
+		if (enemy instanceof Player)
+			((Player) enemy).unTarget();
+	}
+
 	public void act(float time) {
 		boolean badRep = World.player.reputation.isHostile(stats.faction);
 		tickCharge += (timePassed = time);
@@ -413,15 +430,11 @@ public class Npc extends Entity {
 			break;
 
 		case Hostile:
-			if (!enemySpotted && canSee(player)) {
-				enemySpotted = true;
-				player.target();
-			}
+			if (!enemySpotted && canSee(player))
+				detectEnemy(player);
 
-			if (enemySpotted && dist > fov * 1.5f) {
-				enemySpotted = false;
-				player.unTarget();
-			}
+			if (enemySpotted && dist > fov * MAX_FOV_COEF)
+				loseSightOf(player);
 
 			if (!enemySpotted) {
 				skipAction();
