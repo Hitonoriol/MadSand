@@ -153,7 +153,6 @@ public class Gui {
 
 	static void init() {
 		initSkin();
-
 		overlay = new Overlay();
 
 		darkness = new Table();
@@ -162,7 +161,7 @@ public class Gui {
 		darkness.setVisible(false);
 		overlay.addActor(darkness);
 
-		createTransitionScreens(); // These worked when WorldGen & GameSaver were in a separate thread; for now they're useless
+		createTransitionScreens();
 	}
 
 	public static Screen travelScreen;
@@ -255,15 +254,19 @@ public class Gui {
 		return setMinSize(drawable, size, size);
 	}
 
-	public static ClickListener setClickAction(Actor actor, Runnable action) {
+	public static ClickListener setClickAction(Actor actor, int button, Runnable action) {
 		ClickListener listener;
-		actor.addListener(listener = new ClickListener(Buttons.LEFT) {
+		actor.addListener(listener = new ClickListener(button) {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				action.run();
 			}
 		});
 		return listener;
+	}
+
+	public static ClickListener setClickAction(Actor actor, Runnable action) {
+		return setClickAction(actor, Buttons.LEFT, action);
 	}
 
 	public static void setAction(Actor actor, Runnable action) {

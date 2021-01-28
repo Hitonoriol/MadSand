@@ -1,7 +1,7 @@
 sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.main.resources.srcDirs = ["../core/assets"]
 
-project.ext.mainClassName = "hitonoriol.madsand.desktop.DesktopLauncher"
+project.ext.mainClassName = "hitonoriol.madsand.desktop.Launcher"
 project.ext.assetsDir = new File("../core/assets")
 
 compileJava {

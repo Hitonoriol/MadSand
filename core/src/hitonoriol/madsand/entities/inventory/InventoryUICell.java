@@ -4,13 +4,9 @@ import java.util.function.Consumer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Mouse;
@@ -43,52 +39,45 @@ public class InventoryUICell extends ItemUI {
 		equippedLabel.setPosition(itemQuantityLabel.getX(), itemQuantityLabel.getY() + itemQuantityLabel.getHeight());
 		super.addActor(equippedLabel);
 
-		this.addListener(new ClickListener(Buttons.LEFT) {
-			public void clicked(InputEvent event, float x, float y) {
+		Gui.setClickAction(this, Buttons.LEFT, () -> {
+			if (!Gui.inventoryActive)
+				return;
 
-				if (!Gui.inventoryActive)
-					return;
-
-				if (item.type.isEquipment()) {
-					if (player.stats.equipment.itemEquipped(item)) {
-						player.unEquip(item);
-						unEquipItem();
-					} else {
-						Item prev = player.stats.equipment.previousEquipment(item);
-						if (!player.equip(item))
-							return;
-						player.inventory.refreshItem(prev);
-						equipItem();
-					}
-				} else if (item.type.isConsumable()) {
-					player.useItem(item);
+			if (item.type.isEquipment()) {
+				if (player.stats.equipment.itemEquipped(item)) {
+					player.unEquip(item);
+					unEquipItem();
 				} else {
-					player.takeInHand(item);
-					refreshEquippedStatus();
-					Gui.toggleInventory();
+					Item prev = player.stats.equipment.previousEquipment(item);
+					if (!player.equip(item))
+						return;
+					player.inventory.refreshItem(prev);
+					equipItem();
 				}
-
-				player.doAction(player.stats.minorCost);
+			} else if (item.type.isConsumable()) {
+				player.useItem(item);
+			} else {
+				player.takeInHand(item);
+				refreshEquippedStatus();
 			}
+
+			player.doAction(player.stats.minorCost);
 		});
 
-		this.addListener(new ClickListener(Buttons.RIGHT) {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				if (!Gui.inventoryActive)
-					return;
+		Gui.setClickAction(this, Buttons.RIGHT, () -> {
+			if (!Gui.inventoryActive)
+				return;
 
-				if (!invCellContextContainer.isVisible()) {
-					toFront();
-					World.player.inventory.clearContextMenus();
-					invCellContextContainer.setVisible(true);
-					Mouse.x = Gdx.input.getX();
-					Mouse.y = Gdx.graphics.getHeight() - Gdx.input.getY();
-					invCellContextContainer.setPosition(SIZE / 2, SIZE / 2);
+			if (!invCellContextContainer.isVisible()) {
+				toFront();
+				World.player.inventory.clearContextMenus();
+				invCellContextContainer.setVisible(true);
+				Mouse.x = Gdx.input.getX();
+				Mouse.y = Gdx.graphics.getHeight() - Gdx.input.getY();
+				invCellContextContainer.setPosition(SIZE / 2, SIZE / 2);
 
-				} else
-					invCellContextContainer.setVisible(false);
-			}
+			} else
+				invCellContextContainer.setVisible(false);
 		});
 	}
 
@@ -99,46 +88,34 @@ public class InventoryUICell extends ItemUI {
 		invCellContextContainer.setVisible(false);
 		super.addActor(invCellContextContainer);
 
-		dropBtn.addListener(new ChangeListener() {
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				hideContext();
-				Consumer<Integer> dropAction = (quantity) -> World.player.dropItem(item, quantity);
+		Gui.setAction(dropBtn, () -> {
+			hideContext();
+			Consumer<Integer> dropAction = (quantity) -> World.player.dropItem(item, quantity);
 
-				if (item.quantity > 1)
-					new SliderDialog(item.quantity)
-							.setTitle("Drop " + item.name)
-							.setSliderTitle("Quantity of " + item.name + " to drop")
-							.setOnUpdateText(item.name)
-							.setConfirmAction(dropAction)
-							.show();
-				else
-					new ConfirmDialog("Drop " + item.name + "?",
-							() -> dropAction.accept(item.quantity),
-							Gui.overlay).show();
-			}
+			if (item.quantity > 1)
+				new SliderDialog(item.quantity).setTitle("Drop " + item.name)
+						.setSliderTitle("Quantity of " + item.name + " to drop").setOnUpdateText(item.name)
+						.setConfirmAction(dropAction).show();
+			else
+				new ConfirmDialog("Drop " + item.name + "?", () -> dropAction.accept(item.quantity), Gui.overlay)
+						.show();
 		});
 
 		if (item.type.isConsumable() || item.type.isPlaceable()) {
 			useBtn = new TextButton("Use", Gui.skin);
-			useBtn.addListener(new ChangeListener() {
-				@Override
-				public void changed(ChangeEvent event, Actor actor) {
-					World.player.useItem(item);
-					hideContext();
-				}
+			Gui.setAction(useBtn, () -> {
+				World.player.useItem(item);
+				hideContext();
 			});
 			addContextBtn(useBtn);
 		}
 
 		if (item.type.isArmor()) {
 			equipBtn = new TextButton("Equip", Gui.skin);
-			equipBtn.addListener(new ChangeListener() {
-				@Override
-				public void changed(ChangeEvent event, Actor actor) {
-					World.player.equip(item);
-					World.player.freeHands(true);
-					hideContext();
-				}
+			Gui.setAction(equipBtn, () -> {
+				World.player.equip(item);
+				World.player.freeHands(true);
+				hideContext();
 			});
 			addContextBtn(equipBtn);
 		}
@@ -169,7 +146,7 @@ public class InventoryUICell extends ItemUI {
 	}
 
 	public void refreshEquippedStatus() {
-		equippedLabel.setVisible(player.stats.equipment.itemEquipped(item)
-				|| player.stats.hand() == item || player.stats.offHand() == item);
+		equippedLabel.setVisible(player.stats.equipment.itemEquipped(item) || player.stats.hand() == item
+				|| player.stats.offHand() == item);
 	}
 }
