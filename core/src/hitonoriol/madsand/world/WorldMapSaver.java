@@ -10,7 +10,7 @@ import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
-import hitonoriol.madsand.entities.Npc;
+import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.map.Crop;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
@@ -36,11 +36,11 @@ public class WorldMapSaver {
 		long size;
 		try {
 			Location location = worldMap.getLocation(coords.set(wx, wy));
-			//Header: format version, sector layer count
+			// Header: format version, sector layer count
 			stream.write(GameSaver.encode8(GameSaver.saveFormatVersion));
 			stream.write(GameSaver.encode2(location.getLayerCount()));
 
-			//Save all layers of sector
+			// Save all layers of sector
 			for (Entry<Integer, Map> entry : location.layers.entrySet()) {
 				layer = sectorToBytes(wx, wy, entry.getKey());
 				size = layer.length;
@@ -100,12 +100,10 @@ public class WorldMapSaver {
 			Map map = worldMap.locations.get(loc).getLayer(layer);
 			byte mapProperties[] = Resources.mapper.writeValueAsString(map).getBytes();
 
-			Resources.mapper.writeValue(
-					new File(GameSaver.getNpcFile(wx, wy, layer)),
-					map.getNpcs());
+			Resources.mapper.writerFor(Resources.getMapType(Pair.class, AbstractNpc.class))
+					.writeValue(new File(GameSaver.getNpcFile(wx, wy, layer)), map.getNpcs());
 
-			Resources.mapper.writeValue(
-					new File(GameSaver.getProdStationFile(wx, wy, layer)),
+			Resources.mapper.writeValue(new File(GameSaver.getProdStationFile(wx, wy, layer)),
 					map.getMapProductionStations());
 
 			int xsz = map.getWidth();
@@ -190,11 +188,11 @@ public class WorldMapSaver {
 			map.purge();
 
 			// Load NPCs
-			HashMap<Pair, Npc> npcs = Resources.mapper.readValue(
+			HashMap<Pair, AbstractNpc> npcs = Resources.mapper.readValue(
 					new File(GameSaver.getNpcFile(wx, wy, layer)),
-					Resources.getMapType(Pair.class, Npc.class));
+					Resources.getMapType(Pair.class, AbstractNpc.class));
 
-			for (Entry<Pair, Npc> npc : npcs.entrySet()) {
+			for (Entry<Pair, AbstractNpc> npc : npcs.entrySet()) {
 				npc.getValue().loadSprite();
 				npc.getValue().initStatActions();
 			}
@@ -212,7 +210,7 @@ public class WorldMapSaver {
 				}
 			}
 
-			//Load production stations
+			// Load production stations
 			HashMap<Pair, ProductionStation> prodStations = Resources.mapper.readValue(
 					new File(GameSaver.getProdStationFile(wx, wy, layer)),
 					Resources.getMapType(Pair.class, ProductionStation.class));
@@ -225,7 +223,7 @@ public class WorldMapSaver {
 					Resources.getMapType(Pair.class, Loot.class));
 			map.setLoot(mapLoot);
 
-			//Load crops
+			// Load crops
 			int cropsCount = (int) loadNextLongBlock(stream, longBlock);
 			int x, y, id, stage;
 			long ptime;

@@ -11,8 +11,8 @@ import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
 import hitonoriol.madsand.dialog.GameDialog;
-import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.entities.npc.Trader;
 import hitonoriol.madsand.entities.quest.ProceduralQuest;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
@@ -20,13 +20,13 @@ import hitonoriol.madsand.world.Location;
 
 public class TraderDialog extends GameDialog {
 
-	Npc npc;
+	Trader npc;
 
 	private TraderDialog(String title, String text, Stage stage) {
 		super(title, text, stage);
 	}
 
-	public TraderDialog(Player player, Npc npc) {
+	public TraderDialog(Player player, Trader npc) {
 		super(npc.stats.name, Utils.randElement(Globals.instance().traderGreetings), Gui.overlay);
 		this.npc = npc;
 
@@ -54,7 +54,7 @@ public class TraderDialog extends GameDialog {
 		tradeButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				player.tradeWithNpc(npc);
+				player.interact(npc);
 				remove();
 			}
 		});

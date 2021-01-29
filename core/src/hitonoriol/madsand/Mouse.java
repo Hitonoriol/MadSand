@@ -9,11 +9,9 @@ import com.badlogic.gdx.math.Vector3;
 
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
-import hitonoriol.madsand.entities.Npc;
-import hitonoriol.madsand.entities.NpcState;
-import hitonoriol.madsand.entities.NpcType;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Stat;
+import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.gui.widgets.GameTooltip;
 import hitonoriol.madsand.map.Crop;
 import hitonoriol.madsand.map.Loot;
@@ -39,7 +37,7 @@ public class Mouse {
 	public static Player player;
 	public static Tile tile;
 	public static MapObject object;
-	public static Npc npc;
+	public static AbstractNpc npc;
 	public static Loot loot;
 	public static Crop crop;
 	public static ProductionStation station;
@@ -70,9 +68,6 @@ public class Mouse {
 		object = loc.getObject(wx, wy);
 		loot = loc.getLoot(wx, wy);
 		crop = loc.getCrop(wx, wy);
-
-		if (npc.type.equals(NpcType.FarmAnimal))
-			station = npc.animalProductWorker;
 
 		if (object.isProductionStation)
 			station = loc.getProductionStation(wx, wy);
@@ -149,22 +144,18 @@ public class Mouse {
 
 		infoBuilder.append(npc.getInfoString());
 
-		if (npc.state == NpcState.Hostile)
+		if (npc.state == AbstractNpc.State.Hostile)
 			infoBuilder.append(npc.spottedMsg()).append(NEWLINE);
-		else if ((npc.canGiveQuests || npc.type == NpcType.QuestMaster) && npc.isNeutral())
-			infoBuilder.append("* Might need some help").append(NEWLINE);
 
-		if (npc.animalProductWorker != null)
-			getProdStationInfo(npc.animalProductWorker);
 	}
-
+	
 	private static void getPlayerInfo() {
 		infoBuilder.append("You look at yourself")
 				.append(NEWLINE)
 				.append(player.getInfoString());
 	}
 
-	private static void getProdStationInfo(ProductionStation station) {
+	public static void getProdStationInfo(ProductionStation station) {
 		infoBuilder.append("Status: ");
 		String productName = station.getProductName();
 		String rawMaterialName = station.getConsumableName();
@@ -244,7 +235,7 @@ public class Mouse {
 		else if (adjacentTileClicked) {
 			player.lookAtMouse(wx, wy, true);
 
-			if (npc.state == NpcState.Hostile)
+			if (npc.state == AbstractNpc.State.Hostile)
 				player.meleeAttack();
 			else
 				player.interact();

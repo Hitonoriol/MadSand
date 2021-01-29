@@ -1,7 +1,6 @@
-package hitonoriol.madsand.entities;
+package hitonoriol.madsand.entities.npc;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Queue;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -11,27 +10,34 @@ import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
-import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.entities.Entity;
+import hitonoriol.madsand.entities.Faction;
+import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.entities.Skill;
+import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.enums.Direction;
-import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.map.MapObject;
-import hitonoriol.madsand.map.ProductionStation;
 import hitonoriol.madsand.pathfinding.Node;
-import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.NpcContainer;
-import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.world.World;
 
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-public class Npc extends Entity {
+@JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
+@JsonSubTypes({ @Type(Npc.class), @Type(Trader.class), @Type(QuestMaster.class), @Type(FarmAnimal.class) })
+public abstract class AbstractNpc extends Entity {
 	public static int NULL_NPC = 0;
 	static double IDLE_MOVE_CHANCE = 15;
 	static float MAX_FOV_COEF = 1.5f;
@@ -40,14 +46,13 @@ public class Npc extends Entity {
 	public long uid;
 	public int lvl;
 	public int rewardExp;
-	public ArrayList<Integer> questList = new ArrayList<Integer>();
 
-	public boolean canTrade = false;
 	public boolean friendly;
 	public boolean spawnOnce;
 	public boolean provoked = false;
-	public boolean canGiveQuests;
 	private boolean pauseFlag = false;
+
+	public boolean canGiveQuests = false;
 
 	private float timePassed; // time passed since last action
 	public float tickCharge = 0;
@@ -55,39 +60,31 @@ public class Npc extends Entity {
 	public int attackDistance = 2; // Must be < than this
 	public boolean enemySpotted = false;
 
-	public NpcState state = NpcState.Idle;
-	public NpcType type = NpcType.Regular;
-	public TradeCategory tradeCategory;
+	public State state = State.Idle;
 
-	public ProductionStation animalProductWorker;
 	DefaultGraphPath<Node> path = new DefaultGraphPath<Node>();
 	Pair prevDestination = new Pair();
 	int pathIdx = 0;
 
 	private Queue<Direction> movementQueue = new ArrayDeque<>();
 
-	public Npc(int id) {
+	public AbstractNpc(NpcContainer protoNpc) {
 		super();
-		this.id = id;
-		this.uid = MadSand.world.npcCounter++;
+		id = protoNpc.id;
+		uid = MadSand.world.npcCounter++;
 		stats.spawnTime = MadSand.world.globalTick;
 		stats.spawnRealTime = MadSand.world.globalRealtimeTick;
-		loadProperties();
+		loadProperties(protoNpc);
 		if (id != NULL_NPC)
 			loadSprite();
 	}
 
+	public AbstractNpc() {
+		id = NULL_NPC;
+	}
+
 	public void loadSprite() {
 		setSprites(new Sprite(Resources.npc[id]));
-	}
-
-	public Npc(int id, int x, int y) {
-		this(id);
-		teleport(x, y);
-	}
-
-	public Npc() {
-		id = NULL_NPC;
 	}
 
 	public Node findPath(int x, int y) {
@@ -98,9 +95,8 @@ public class Npc extends Entity {
 			pathIdx = 0;
 			prevDestination.set(x, y);
 			map.searchPath(this.x, this.y, x, y, path);
-		} else if (pathIdx + 1 >= path.getCount()) {
+		} else if (pathIdx + 1 >= path.getCount())
 			return null;
-		}
 
 		if (path.nodes.size == 0)
 			return null;
@@ -131,9 +127,7 @@ public class Npc extends Entity {
 	private String NAMED_NPC_STR = " the ";
 	private int CAN_GIVE_QUESTS_CHANCE = 30;
 
-	void loadProperties() {
-		NpcContainer properties = NpcProp.npcs.get(id);
-
+	void loadProperties(NpcContainer properties) {
 		int maxLvl = World.player.getLvl() + MAX_LVL_GAP;
 		int lvl = Utils.rand(properties.lvl, maxLvl);
 
@@ -158,7 +152,6 @@ public class Npc extends Entity {
 			stats.name = Utils.randWord() + NAMED_NPC_STR + stats.name;
 
 		stats.faction = properties.faction;
-		canTrade = properties.canTrade;
 
 		if (properties.defaultState != null)
 			state = properties.defaultState;
@@ -168,58 +161,12 @@ public class Npc extends Entity {
 		if (properties.loot != null)
 			inventory.putItem(properties.loot.rollItems());
 
-		if (properties.questList != null)
-			questList = new ArrayList<>(properties.questList);
-
-		if (stats.faction.isHuman() && (properties.type == NpcType.Regular || properties.type == NpcType.Trader))
-			canGiveQuests = Utils.percentRoll(CAN_GIVE_QUESTS_CHANCE);
-
 		friendly = properties.friendly;
 		spawnOnce = properties.spawnOnce;
-		type = properties.type;
-		tradeCategory = properties.tradeCategory;
-		initTrader();
-		initFarmAnimal();
 	}
 
-	private void initFarmAnimal() {
-		if (!type.equals(NpcType.FarmAnimal))
-			return;
-
-		animalProductWorker = new ProductionStation(-id);
-	}
-
-	private static int BASE_TRADER_COINS = 500;
-	private static int TIER_COIN_MULTIPLIER = 300;
-	private static float SELL_PRICE_COEF = 0.5f;
-
-	private void initTrader() {
-		if (!type.equals(NpcType.Trader) || tradeCategory == null)
-			return;
-
-		inventory.setMaxWeight(Integer.MAX_VALUE);
-		lvl = NpcProp.tradeLists.rollTier();
-		ArrayList<Item> items = NpcProp.tradeLists.roll(tradeCategory, lvl);
-
-		int markup;
-		for (Item item : items) {
-			markup = (int) (item.cost * SELL_PRICE_COEF);
-			item.cost += markup + Utils.rand(markup);
-		}
-
-		inventory.putItem(items);
-		addCurrency();
-		canTrade = true;
-	}
-
-	public int rollTraderCurrency() {
-		int maxCoins = BASE_TRADER_COINS + lvl * TIER_COIN_MULTIPLIER;
-		return Utils.rand(BASE_TRADER_COINS / 2, maxCoins);
-	}
-
-	private void addCurrency() {
-		int currencyId = Globals.getInt(Globals.CURRENCY);
-		inventory.putItem(new Item(currencyId, rollTraderCurrency()));
+	protected void rollQuestGiveAbility() {
+		canGiveQuests = Utils.percentRoll(CAN_GIVE_QUESTS_CHANCE);
 	}
 
 	@JsonIgnore
@@ -228,13 +175,15 @@ public class Npc extends Entity {
 	}
 
 	public boolean isNeutral() {
-		return friendly || state != NpcState.Hostile;
+		return friendly || state != State.Hostile;
 	}
 
 	public void provoke() {
 		if (!provoked)
 			provoked = true;
 	}
+
+	public abstract void interact(Player player);
 
 	@Override
 	public boolean move(Direction dir) {
@@ -284,20 +233,18 @@ public class Npc extends Entity {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Npc))
+		if (!(obj instanceof AbstractNpc))
 			return false;
 		if (obj == this)
 			return true;
 
-		Npc rhs = (Npc) obj;
+		AbstractNpc rhs = (AbstractNpc) obj;
 		return new EqualsBuilder().append(id, rhs.id).isEquals();
 	}
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(18899, 63839)
-				.append(uid)
-				.toHashCode();
+		return new HashCodeBuilder(18899, 63839).append(uid).toHashCode();
 	}
 
 	protected void attack(Player target, int dmg) {
@@ -323,7 +270,7 @@ public class Npc extends Entity {
 	}
 
 	@Override
-	void meleeAttack(Direction dir) {
+	public void meleeAttack(Direction dir) {
 		Pair coords = new Pair(x, y).addDirection(dir);
 		Player player = World.player;
 		if (player.stats.dead)
@@ -390,15 +337,15 @@ public class Npc extends Entity {
 		if (stats.faction == Faction.None)
 			badRep = false;
 
-		if ((!friendly || provoked) && state != NpcState.Hostile)
-			state = NpcState.Hostile;
+		if ((!friendly || provoked) && state != State.Hostile)
+			state = State.Hostile;
 
 		if (friendly) { // Reputation affects only Neutral(friendly) NPCs
-			if (badRep && state != NpcState.Hostile)
-				state = NpcState.Hostile;
+			if (badRep && state != State.Hostile)
+				state = State.Hostile;
 
-			if (!badRep && state == NpcState.Hostile && !provoked)
-				state = NpcState.Idle;
+			if (!badRep && state == State.Hostile && !provoked)
+				state = State.Idle;
 		}
 
 		act();
@@ -470,6 +417,10 @@ public class Npc extends Entity {
 		act();
 	}
 
+	public String interactButtonString() {
+		return "Interact with ";
+	}
+
 	public String spottedMsg() {
 		if (enemySpotted)
 			return "Looks like " + stats.name + " spotted you";
@@ -483,6 +434,13 @@ public class Npc extends Entity {
 		if (World.player.knowsNpc(id))
 			info += "Faction: " + stats.faction + Resources.LINEBREAK;
 
+		if (canGiveQuests && isNeutral())
+			info += "* Might need some help" + Resources.LINEBREAK;
+
 		return info;
+	}
+
+	public static enum State {
+		Still, Idle, Hostile
 	}
 }

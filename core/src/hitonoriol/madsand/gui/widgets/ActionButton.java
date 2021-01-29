@@ -12,11 +12,10 @@ import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.containers.Pair;
-import hitonoriol.madsand.entities.Npc;
-import hitonoriol.madsand.entities.NpcType;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.inventory.ItemType;
+import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.gui.OverlayMouseoverListener;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
@@ -109,7 +108,7 @@ public class ActionButton extends Table {
 
 		int tileItem = MapObject.getTileAltItem(tile.id, player.stats.hand().type);
 		MapObject object = loc.getObject(coords.x, coords.y);
-		Npc npc = loc.getNpc(coords.x, coords.y);
+		AbstractNpc npc = loc.getNpc(coords.x, coords.y);
 		Item item = player.stats.hand();
 		String tileAction = TileProp.getOnInteract(tile.id);
 		String objAction = ObjectProp.getOnInteract(object.id);
@@ -147,17 +146,7 @@ public class ActionButton extends Table {
 			});
 
 		} else if (!npc.equals(Map.nullNpc) && !Gui.dialogActive && npc.friendly) { //NPC interaction button
-			String npcString;
-
-			if (npc.type == NpcType.Regular && npc.stats.faction.isHuman())
-				npcString = "Talk to ";
-			else if (npc.type == NpcType.Trader)
-				npcString = "Trade with ";
-			else
-				npcString = "Interact with ";
-			npcString += npc.stats.name;
-
-			activateInteractBtn(interactButton, npcString, npcInteractListener);
+			activateInteractBtn(interactButton, npc.interactButtonString() + npc.stats.name, npcInteractListener);
 
 		} else if (!object.equals(Map.nullObject) && !objAction.equals(Resources.emptyField)) // Map object interaction button
 			activateInteractBtn(interactButton, "Interact with " + object.name, objInteractListener);

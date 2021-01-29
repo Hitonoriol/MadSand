@@ -20,13 +20,14 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
-import hitonoriol.madsand.entities.Npc;
-import hitonoriol.madsand.entities.NpcType;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Skill;
 import hitonoriol.madsand.entities.TradeListContainer;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.inventory.ItemType;
+import hitonoriol.madsand.entities.npc.FarmAnimal;
+import hitonoriol.madsand.entities.npc.AbstractNpc;
+import hitonoriol.madsand.entities.npc.Npc;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.pathfinding.Graph;
@@ -62,13 +63,13 @@ public class Map {
 	public static MapObject nullObject = new MapObject();
 	public static Loot nullLoot = new Loot();
 	public static Crop nullCrop = new Crop();
-	public static Npc nullNpc = new Npc();
+	public static AbstractNpc nullNpc = new Npc();
 
 	private HashMap<Pair, Tile> mapTiles;
 	private HashMap<Pair, MapObject> mapObjects;
 	private HashMap<Pair, Loot> mapLoot;
 	private HashMap<Pair, Crop> mapCrops;
-	private HashMap<Pair, Npc> mapNpcs;
+	private HashMap<Pair, AbstractNpc> mapNpcs;
 	private HashMap<Pair, ProductionStation> mapProductionStations;
 
 	IndexedAStarPathFinder<Node> pathFinder;
@@ -156,8 +157,7 @@ public class Map {
 	}
 
 	public void rollSize(int min, int max) {
-		this.setSize(Utils.rand(min, max),
-				Utils.rand(min, max));
+		this.setSize(Utils.rand(min, max), Utils.rand(min, max));
 		Utils.out("Rolled map size: " + xsz + ", " + ysz);
 	}
 
@@ -175,11 +175,11 @@ public class Map {
 	}
 
 	@JsonIgnore
-	public HashMap<Pair, Npc> getNpcs() {
+	public HashMap<Pair, AbstractNpc> getNpcs() {
 		return mapNpcs;
 	}
 
-	public void setNpcs(HashMap<Pair, Npc> npcs) {
+	public void setNpcs(HashMap<Pair, AbstractNpc> npcs) {
 		mapNpcs = npcs;
 	}
 
@@ -249,7 +249,7 @@ public class Map {
 	public int getHostileNpcCount() {
 		int count = 0;
 
-		for (Entry<Pair, Npc> entry : mapNpcs.entrySet())
+		for (Entry<Pair, AbstractNpc> entry : mapNpcs.entrySet())
 			if (!entry.getValue().friendly)
 				++count;
 
@@ -925,16 +925,14 @@ public class Map {
 		if (!getNpc(coords.x, coords.y).equals(nullNpc))
 			return false;
 
-		Npc npc = new Npc(id, x, y);
-
-		return putNpc(npc);
+		return putNpc(NpcProp.spawnNpc(id, x, y));
 	}
 
 	public boolean spawnNpc(int id, Pair coords) {
 		return spawnNpc(id, coords.x, coords.y);
 	}
 
-	public boolean putNpc(Npc npc) {
+	public boolean putNpc(AbstractNpc npc) {
 		int x = npc.x;
 		int y = npc.y;
 
@@ -948,23 +946,23 @@ public class Map {
 		return true;
 	}
 
-	public boolean putNpc(Npc npc, int x, int y) {
+	public boolean putNpc(AbstractNpc npc, int x, int y) {
 		npc.teleport(x, y);
 		return moveNpc(npc, x, y);
 	}
 
-	public Npc getNpc(long uid) {
-		for (Entry<Pair, Npc> entry : mapNpcs.entrySet())
+	public AbstractNpc getNpc(long uid) {
+		for (Entry<Pair, AbstractNpc> entry : mapNpcs.entrySet())
 			if (entry.getValue().uid == uid)
 				return entry.getValue();
 		return nullNpc;
 	}
 
-	public Npc getNpc(int x, int y) {
+	public AbstractNpc getNpc(int x, int y) {
 		if (!correctCoords(coords.set(x, y)))
 			return nullNpc;
 
-		Npc npc = mapNpcs.get(coords);
+		AbstractNpc npc = mapNpcs.get(coords);
 
 		if (npc == null)
 			return nullNpc;
@@ -975,7 +973,7 @@ public class Map {
 		return nullNpc;
 	}
 
-	public Npc getNpc(Pair coords) {
+	public AbstractNpc getNpc(Pair coords) {
 		return getNpc(coords.x, coords.y);
 	}
 
@@ -983,10 +981,10 @@ public class Map {
 		return !getNpc(x, y).equals(nullNpc);
 	}
 
-	public boolean moveNpc(Npc npc, int x, int y) { // moves npc only on the grid(not on the screen) to process smooth movement;
-		//should be called by an npc before changing its own position.
+	public boolean moveNpc(AbstractNpc npc, int x, int y) { // moves npc only on the grid(not on the screen) to process smooth movement;
+		// should be called by an npc before changing its own position.
 		int xold = npc.x, yold = npc.y;
-		Npc destNpc = getNpc(coords.x, coords.y);
+		AbstractNpc destNpc = getNpc(coords.x, coords.y);
 
 		if (!correctCoords(coords.set(x, y)))
 			return false;
@@ -1003,12 +1001,11 @@ public class Map {
 		return true;
 	}
 
-	public boolean removeNpc(Npc npc) {
+	public boolean removeNpc(AbstractNpc npc) {
 		return removeNpc(npc.x, npc.y);
 	}
 
 	public boolean removeNpc(int x, int y) {
-
 		if (!correctCoords(coords.set(x, y)))
 			return false;
 
@@ -1031,11 +1028,11 @@ public class Map {
 		for (Entry<Pair, ProductionStation> entry : mapProductionStations.entrySet())
 			entry.getValue().produce();
 
-		for (Entry<Pair, Npc> entry : mapNpcs.entrySet()) {
-			if (!entry.getValue().type.equals(NpcType.FarmAnimal))
+		for (Entry<Pair, AbstractNpc> entry : mapNpcs.entrySet()) {
+			if (!(entry.getValue() instanceof FarmAnimal))
 				continue;
 
-			entry.getValue().animalProductWorker.produce();
+			((FarmAnimal) entry.getValue()).animalProduct.produce();
 		}
 	}
 
@@ -1222,7 +1219,7 @@ public class Map {
 		return Pair.nullPair;
 	}
 
-	public Stream<Npc> pickNpcs(Predicate<Npc> predicate) {
+	public Stream<AbstractNpc> pickNpcs(Predicate<AbstractNpc> predicate) {
 		return mapNpcs.values().stream().filter(predicate);
 	}
 

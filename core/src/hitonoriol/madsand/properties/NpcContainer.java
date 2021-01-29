@@ -6,12 +6,12 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import hitonoriol.madsand.entities.Faction;
 import hitonoriol.madsand.entities.LootTable;
-import hitonoriol.madsand.entities.NpcState;
-import hitonoriol.madsand.entities.NpcType;
+import hitonoriol.madsand.entities.npc.AbstractNpc;
+import hitonoriol.madsand.entities.npc.Npc;
 import hitonoriol.madsand.enums.TradeCategory;
-import hitonoriol.madsand.world.WorkerType;
 
 public class NpcContainer {
+	public int id = -1;
 	public String name;
 
 	public int lvl = 0;
@@ -22,20 +22,48 @@ public class NpcContainer {
 	public LootTable loot;
 
 	public Faction faction = Faction.None;
-	public NpcType type = NpcType.Regular;
 	public TradeCategory tradeCategory;
-	public NpcState defaultState;
-	public WorkerType worker;
-
+	public AbstractNpc.State defaultState;
 	public ArrayList<Integer> questList;
 
 	public boolean spawnOnce = false;
 	public boolean friendly = true;
 	public boolean canTrade = false;
+	public Class<? extends AbstractNpc> type = Npc.class;
+
+	private static NpcClassLoader npcLoader = new NpcClassLoader();
+
+	public AbstractNpc spawn() {
+		try {
+			return type.getDeclaredConstructor(this.getClass()).newInstance(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	@JsonSetter("loot")
 	public void setLoot(String loot) {
 		if (loot != null)
 			this.loot = LootTable.parse(loot);
+	}
+
+	@JsonSetter("type")
+	public void setType(String type) {
+		if (type != null)
+			this.type = npcLoader.loadClass(type);
+	}
+
+	private static class NpcClassLoader extends ClassLoader {
+		@SuppressWarnings("unchecked")
+		@Override
+		public Class<? extends AbstractNpc> loadClass(String name) {
+			name = AbstractNpc.class.getPackageName() + "." + name;
+			try {
+				return (Class<? extends AbstractNpc>) getParent().loadClass(name);
+			} catch (Exception e) {
+				return Npc.class;
+			}
+		}
 	}
 }

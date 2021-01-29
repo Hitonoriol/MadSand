@@ -207,6 +207,7 @@ public class Resources {
 		for (Entry<Integer, NpcContainer> npcEntry : NpcProp.npcs.entrySet()) {
 			i = npcEntry.getKey();
 			npc[i] = loadTexture("npc/" + i + ".png");
+			npcEntry.getValue().id = i;
 		}
 
 	}

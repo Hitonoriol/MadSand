@@ -34,6 +34,11 @@ import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.inventory.ItemType;
 import hitonoriol.madsand.entities.inventory.trade.TradeInventoryUI;
+import hitonoriol.madsand.entities.npc.FarmAnimal;
+import hitonoriol.madsand.entities.npc.AbstractNpc;
+import hitonoriol.madsand.entities.npc.QuestMaster;
+import hitonoriol.madsand.entities.npc.Npc;
+import hitonoriol.madsand.entities.npc.Trader;
 import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.enums.*;
@@ -64,10 +69,11 @@ public class Player extends Entity {
 
 	public int targetedByNpcs = 0;
 	public HashSet<Integer> unlockedItems = new HashSet<Integer>(); // set of items player obtained at least once
-	public ArrayList<Integer> craftRecipes = new ArrayList<Integer>(); // list of items which recipes are available to the player
+	public ArrayList<Integer> craftRecipes = new ArrayList<Integer>(); // list of items which recipes are available to
+																		// the player
 	public ArrayList<Integer> buildRecipes = new ArrayList<Integer>();
 	public QuestWorker quests = new QuestWorker();
-	public HashSet<String> luaActions = new HashSet<>(); //Set for one-time lua actions
+	public HashSet<String> luaActions = new HashSet<>(); // Set for one-time lua actions
 	public HashMap<Integer, Integer> killCount = new HashMap<>();
 	public Reputation reputation = new Reputation();
 	public int settlementsEstablished = 0;
@@ -174,7 +180,7 @@ public class Player extends Entity {
 			stats.skills.increaseSkill(Skill.Level);
 	}
 
-	void increaseSkill(Skill skill) {
+	public void increaseSkill(Skill skill) {
 		increaseSkill(skill, 1);
 	}
 
@@ -239,7 +245,7 @@ public class Player extends Entity {
 		super.attack(object, dmg);
 	}
 
-	private void attack(Npc npc, int dmg) {
+	private void attack(AbstractNpc npc, int dmg) {
 		Map map = MadSand.world.getCurLoc();
 
 		npc.provoke();
@@ -259,8 +265,8 @@ public class Player extends Entity {
 				MadSand.print("You now know more about " + npc.stats.name + "s");
 
 			if (!map.editable && map.getHostileNpcCount() == 0 && MadSand.world.isUnderGround()) {
-				MadSand.print("The curse of the dungeon has been lifted!" + Resources.LINEBREAK +
-						"You can now break objects on this floor of the dungeon.");
+				MadSand.print("The curse of the dungeon has been lifted!" + Resources.LINEBREAK
+						+ "You can now break objects on this floor of the dungeon.");
 				map.editable = true;
 			}
 		}
@@ -270,23 +276,23 @@ public class Player extends Entity {
 	protected void attack(MapEntity target, int dmg) {
 		super.attack(target, dmg);
 
-		if (target instanceof Npc)
-			attack((Npc) target, dmg);
+		if (target instanceof AbstractNpc)
+			attack((AbstractNpc) target, dmg);
 	}
 
 	public boolean canPerformRangedAttack() {
-		return stats.offHand().type == ItemType.ThrowingWeapon ||
-				(stats.hand().type == ItemType.RangedWeapon && stats.offHand().type == ItemType.Projectile);
+		return stats.offHand().type == ItemType.ThrowingWeapon
+				|| (stats.hand().type == ItemType.RangedWeapon && stats.offHand().type == ItemType.Projectile);
 	}
 
-	private void performRangedAttack(Npc npc) {
+	private void performRangedAttack(AbstractNpc npc) {
 		Item projectile = stats.offHand();
 		super.rangedAttack(npc, projectile);
 		damageHeldTool();
 		delItem(projectile, 1);
 	}
 
-	public void rangedAttack(Npc npc) {
+	public void rangedAttack(AbstractNpc npc) {
 		if (!canPerformRangedAttack())
 			return;
 
@@ -296,7 +302,7 @@ public class Player extends Entity {
 	private void performMeleeAttack(Direction dir) {
 		turn(dir);
 		Map map = MadSand.world.getCurLoc();
-		Npc npc = map.getNpc(coords.set(x, y).addDirection(dir));
+		AbstractNpc npc = map.getNpc(coords.set(x, y).addDirection(dir));
 
 		if (npc == Map.nullNpc)
 			return;
@@ -359,7 +365,7 @@ public class Player extends Entity {
 	}
 
 	@Override
-	void die() {
+	protected void die() {
 		super.die();
 		stats.equipment.unEquipAll();
 		refreshEquipment();
@@ -416,8 +422,8 @@ public class Player extends Entity {
 			totalRecipes = ItemProp.craftReq.size();
 		else if (recipeList == buildRecipes)
 			totalRecipes = ItemProp.buildReq.size();
-		return unlocked + "/" + totalRecipes + " ("
-				+ Utils.round(100 * ((float) unlocked / (float) totalRecipes)) + "%)";
+		return unlocked + "/" + totalRecipes + " (" + Utils.round(100 * ((float) unlocked / (float) totalRecipes))
+				+ "%)";
 
 	}
 
@@ -531,43 +537,34 @@ public class Player extends Entity {
 		interact(stats.look);
 	}
 
-	private void interact(Npc npc) {
-		String name = npc.stats.name;
-		ArrayList<Integer> questList = NpcProp.npcs.get(npc.id).questList;
-
-		Gui.overlay.closeGameContextMenu();
-		Gui.overlay.hideActionBtn();
-
-		switch (npc.type) {
-
-		case Trader:
-			if (npc.canGiveQuests)
-				new TraderDialog(this, npc).show();
-			else
-				tradeWithNpc(npc);
-			break;
-
-		case FarmAnimal:
-			new ProductionStationUI(npc.animalProductWorker).show();
-			break;
-
-		case Regular:
-			talkToNpc(npc);
-			break;
-
-		case QuestMaster:
-			npc.pause();
-			if (!quests.processQuests(questList, npc))
-				MadSand.print(name + " has no more quests for you.");
-			break;
-
-		default:
-			break;
-
-		}
+	public void interact(QuestMaster questMaster) {
+		questMaster.pause();
+		if (!quests.processQuests(questMaster.questList, questMaster))
+			MadSand.print(questMaster.stats.name + " has no more quests for you.");
 	}
 
-	private void talkToNpc(Npc npc) {
+	public void interact(Trader trader) {
+		if (trader.canGiveQuests)
+			new TraderDialog(this, trader).show();
+		else
+			new TradeInventoryUI(trader.inventory, inventory).show();
+	}
+
+	public void interact(Npc npc) {
+		talkToNpc(npc);
+	}
+
+	public void interact(FarmAnimal animal) {
+		new ProductionStationUI(animal.animalProduct).show();
+	}
+
+	public void interact(AbstractNpc npc) {
+		npc.interact(this);
+		Gui.overlay.closeGameContextMenu();
+		Gui.overlay.hideActionBtn();
+	}
+
+	private void talkToNpc(AbstractNpc npc) {
 		int currency = Globals.getInt(Globals.CURRENCY);
 		Location location = MadSand.world.getLocation();
 		if (!npc.stats.faction.isHuman()) {
@@ -580,8 +577,7 @@ public class Player extends Entity {
 			dialogTitle += ((occupation != null) ? " (" + occupation.name() + ")" : "");
 		}
 		GameDialog npcDialog = new DialogChainGenerator(Utils.randElement(Globals.instance().idleNpcText))
-				.setAllTitles(dialogTitle)
-				.generate(Gui.overlay);
+				.setAllTitles(dialogTitle).generate(Gui.overlay);
 
 		npcDialog.getProceedButton().setText("Goodbye");
 
@@ -599,12 +595,8 @@ public class Player extends Entity {
 
 		if (location.isPlayerOwnedSettlement()) {
 			int hireCost = location.settlement.getHireCost();
-			TextButton recruitButton = new TextButton(
-					"Will you work for me? "
-							+ Quest.OBJECTIVE_COLOR
-							+ "[[" + hireCost + " " + ItemProp.getItemName(currency) + "s]"
-							+ Resources.COLOR_END,
-					Gui.skin);
+			TextButton recruitButton = new TextButton("Will you work for me? " + Quest.OBJECTIVE_COLOR + "[[" + hireCost
+					+ " " + ItemProp.getItemName(currency) + "s]" + Resources.COLOR_END, Gui.skin);
 			if (!location.settlement.isOccupied(npc.uid))
 				npcDialog.addButton(recruitButton);
 
@@ -620,27 +612,12 @@ public class Player extends Entity {
 					inventory.delItem(currency, hireCost);
 					new DialogChainGenerator(
 							"Sure. I'll be the best " + worker.name() + " of the " + location.name + " settlement!")
-									.setAllTitles(npc.stats.name)
-									.generate(Gui.overlay).show();
+									.setAllTitles(npc.stats.name).generate(Gui.overlay).show();
 				}
 			});
 		}
 
 		npcDialog.show();
-	}
-
-	public void tradeWithNpc(Direction direction) {
-		coords.set(x, y).addDirection(direction);
-		Npc npc = MadSand.world.getCurLoc().getNpc(coords);
-		tradeWithNpc(npc);
-	}
-
-	public void tradeWithNpc(Npc npc) {
-
-		if (!npc.canTrade && !npc.type.equals(NpcType.Trader))
-			return;
-
-		new TradeInventoryUI(npc.inventory, inventory).show();
 	}
 
 	private void fish(FishingSpot spot) {
@@ -657,7 +634,7 @@ public class Player extends Entity {
 
 		Map loc = MadSand.world.getCurLoc();
 		MapObject obj = MadSand.world.getCurLoc().getObject(coords.x, coords.y);
-		Npc npc = loc.getNpc(coords.x, coords.y);
+		AbstractNpc npc = loc.getNpc(coords.x, coords.y);
 		Tile tileInFront = loc.getTile(coords.x, coords.y);
 
 		if (!npc.equals(Map.nullNpc)) {
@@ -729,9 +706,8 @@ public class Player extends Entity {
 			item = -1;
 
 		if (curLvl < obj.lvl) {
-			MadSand.notice(
-					"You are not experienced enough." + Resources.LINEBREAK + skill + " level required: " + obj.lvl
-							+ Resources.LINEBREAK + "Your " + skill + ": " + curLvl);
+			MadSand.notice("You are not experienced enough." + Resources.LINEBREAK + skill + " level required: "
+					+ obj.lvl + Resources.LINEBREAK + "Your " + skill + ": " + curLvl);
 			return -2;
 		}
 
@@ -750,7 +726,8 @@ public class Player extends Entity {
 		if (item != -1 && damaged) { // Succesfull interaction with item that drops something
 			Item objLoot;
 			int rewardCount;
-			int rolls = stats.skills.getItemDropRolls(skill); // The higher the level of the skill, the more rolls of drop we make
+			int rolls = stats.skills.getItemDropRolls(skill); // The higher the level of the skill, the more rolls of
+																// drop we make
 			if (!stats.luckRoll() || !stats.skills.skillRoll(skill))
 				rolls = 1;
 
@@ -1166,7 +1143,7 @@ public class Player extends Entity {
 	}
 
 	public void attackHostile() {
-		Npc npc = MadSand.world.getCurLoc().getNpc(lookingAt());
+		AbstractNpc npc = MadSand.world.getCurLoc().getNpc(lookingAt());
 
 		if (npc.equals(Map.nullNpc))
 			return;

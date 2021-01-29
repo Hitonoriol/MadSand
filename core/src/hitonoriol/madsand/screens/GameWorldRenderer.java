@@ -17,8 +17,8 @@ import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.containers.PairFloat;
 import hitonoriol.madsand.entities.Entity;
-import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapObject;
@@ -108,7 +108,7 @@ public class GameWorldRenderer {
 
 	void drawGame() {
 		Map loc = MadSand.world.getCurLoc();
-		Npc npc;
+		AbstractNpc npc;
 		Tile tile;
 		MapObject object;
 		Player player = World.player;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.inventory.Item;
 
@@ -23,6 +24,15 @@ public class LootTable extends RollTable<LootTable.LootEntry> {
 	static final Pattern tableEntryPattern = Pattern.compile(TABLE_ENTRY_REGEX);
 
 	public static LootTable parse(String lootTblString) {
+		if (!lootTblString.contains("|")) {
+			try {
+				return Resources.mapper.readValue(lootTblString, LootTable.class);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+
 		LootTable table = new LootTable();
 		Matcher entryMatcher = tableEntryPattern.matcher(lootTblString);
 		String entryString;

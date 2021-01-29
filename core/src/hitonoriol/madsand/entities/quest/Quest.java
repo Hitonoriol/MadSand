@@ -20,9 +20,9 @@ import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
-import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.NpcProp;
 
@@ -207,7 +207,7 @@ public class Quest {
 	}
 
 	@JsonIgnore
-	public Npc getNpc() { // Returns nullNpc if quest npc does not exist or is not in the current location
+	public AbstractNpc getNpc() { // Returns nullNpc if quest npc does not exist or is not in the current location
 		return MadSand.world.getCurLoc().getNpc(npcUID);
 	}
 

@@ -20,9 +20,8 @@ import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.Entity;
-import hitonoriol.madsand.entities.Npc;
-import hitonoriol.madsand.entities.NpcState;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.properties.Globals;
@@ -496,7 +495,7 @@ public class World {
 		addObj(x, y, layer, 0);
 	}
 
-	public void delNpc(Npc npc) {
+	public void delNpc(AbstractNpc npc) {
 		getCurLoc().removeNpc(npc);
 	}
 
@@ -602,10 +601,10 @@ public class World {
 
 	public void timeSubtick(float time) { // Gets called on every action player does, time = % of max AP(speed) 
 		Map loc = getCurLoc();
-		HashMap<Pair, Npc> npcs = loc.getNpcs();
+		HashMap<Pair, AbstractNpc> npcs = loc.getNpcs();
 		ArrayList<Entity> queue = new ArrayList<Entity>();
 
-		for (Entry<Pair, Npc> npc : npcs.entrySet())
+		for (Entry<Pair, AbstractNpc> npc : npcs.entrySet())
 			queue.add(npc.getValue());
 
 		queue.add(player);
@@ -623,7 +622,7 @@ public class World {
 			if ((player.canSee(entity) && entity != player) || (entity == player && pausePlayer)) {
 				hostile = false;
 				if (entity != player) {
-					hostile = ((Npc) entity).state == NpcState.Hostile;
+					hostile = ((AbstractNpc) entity).state == AbstractNpc.State.Hostile;
 					pausePlayer |= hostile;
 
 					if (pausePlayer)

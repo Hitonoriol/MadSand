@@ -251,14 +251,7 @@ public class Item {
 		if (contents == null)
 			return;
 
-		if (contents.contains("|"))
-			this.contents = LootTable.parse(contents);
-		else
-			try {
-				this.contents = Resources.mapper.readValue(contents, LootTable.class);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		this.contents = LootTable.parse(contents);
 	}
 
 	static final float BASE_PROJECTILE_SPEED = 0.35f;

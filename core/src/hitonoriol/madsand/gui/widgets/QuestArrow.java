@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.containers.Pair;
-import hitonoriol.madsand.entities.Npc;
+import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.world.World;
@@ -40,7 +40,7 @@ public class QuestArrow extends Image {
 	}
 
 	public void update() {
-		Npc npc = quest.getNpc();
+		AbstractNpc npc = quest.getNpc();
 		if (!npc.equals(Map.nullNpc))
 			update(World.player.x, World.player.y, npc.x, npc.y);
 		else {

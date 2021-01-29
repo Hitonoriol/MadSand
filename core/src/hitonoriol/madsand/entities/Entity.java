@@ -15,6 +15,7 @@ import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.containers.PairFloat;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.gui.dialogs.LootDialog;
 import hitonoriol.madsand.map.Loot;
@@ -95,7 +96,7 @@ public abstract class Entity extends MapEntity {
 	}
 
 	@JsonIgnore
-	void setSprites(Sprite s) {
+	protected void setSprites(Sprite s) {
 		setSprites(s, s, s, s);
 	}
 
@@ -164,7 +165,7 @@ public abstract class Entity extends MapEntity {
 			attack((MapObject) target, dmg);
 	}
 
-	abstract void meleeAttack(Direction dir);
+	public abstract void meleeAttack(Direction dir);
 
 	void rangedAttack(Entity target, Item projectile) {
 		if (!canSee(target))
@@ -250,7 +251,7 @@ public abstract class Entity extends MapEntity {
 		Map loc = MadSand.world.getCurLoc();
 
 		MapObject obj = loc.getObject(nx, ny);
-		Npc npc = loc.getNpc(nx, ny);
+		AbstractNpc npc = loc.getNpc(nx, ny);
 
 		if (!npc.equals(Map.nullNpc))
 			return true;
@@ -309,12 +310,12 @@ public abstract class Entity extends MapEntity {
 		}
 	}
 
-	void die() {
+	protected void die() {
 		stats.dead = true;
 		dropInventory();
 	}
 
-	float getActionLength(double ap) {
+	protected float getActionLength(double ap) {
 		return (float) (ap / getSpeed());
 	}
 

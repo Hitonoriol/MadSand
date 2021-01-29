@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.dialog.GameDialog;
-import hitonoriol.madsand.entities.Npc;
+import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
@@ -121,7 +121,7 @@ public class QuestJournal extends Dialog {
 		}
 
 		Label questName, questObjective, npcInfo;
-		Npc npc;
+		AbstractNpc npc;
 		for (Quest quest : allQuests) {
 			quest.setPlayer(World.player);
 			questName = new Label(quest.name, skin);

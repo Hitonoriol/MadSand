@@ -14,10 +14,10 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
-import hitonoriol.madsand.entities.Npc;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Reputation;
 import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.gui.dialogs.QuestListDialog;
 import hitonoriol.madsand.properties.QuestList;
 
@@ -229,7 +229,7 @@ public class QuestWorker {
 		processQuest(id, MadSand.world.getCurLoc().getNpc(player.lookingAt()).uid);
 	}
 
-	public boolean processQuests(ArrayList<Integer> mobQuestList, Npc npc) {
+	public boolean processQuests(ArrayList<Integer> mobQuestList, AbstractNpc npc) {
 		ArrayList<Integer> availableQuests = getAvailableQuests(mobQuestList);
 
 		if (availableQuests.size() == 0)
