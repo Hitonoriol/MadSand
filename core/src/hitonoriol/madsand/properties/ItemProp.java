@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import hitonoriol.madsand.Resources;
-import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.inventory.ItemType;
+import hitonoriol.madsand.entities.inventory.item.CropSeeds;
+import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.entities.inventory.item.Placeable;
 import hitonoriol.madsand.map.CropGrowthStageContainer;
 
 public class ItemProp {
-	public static HashMap<Integer, Item> items = new HashMap<>();
+	public static HashMap<Integer, ? extends Item> items = new HashMap<>();
 	public static HashMap<Integer, ArrayList<Integer>> craftStationRecipes = new HashMap<>();
 	public static HashMap<Integer, ArrayList<Integer>> craftReq = new HashMap<>();
 	public static HashMap<Integer, ArrayList<Integer>> buildReq = new HashMap<>();
@@ -56,7 +58,7 @@ public class ItemProp {
 	}
 
 	public static int getAltObject(int id) {
-		return items.get(id).altObject;
+		return ((Placeable)items.get(id)).altObject;
 	}
 
 	public static String getOnUseAction(int id) {
@@ -69,10 +71,10 @@ public class ItemProp {
 	}
 
 	public static CropGrowthStageContainer getCropStages(int id) {
-		return items.get(id).cropContainer.cropStages;
+		return ((CropSeeds)items.get(id)).cropContainer.cropStages;
 	}
 	
 	public static int getCropSoil(int id) {
-		return items.get(id).cropContainer.soil;
+		return ((CropSeeds)items.get(id)).cropContainer.soil;
 	}
 }

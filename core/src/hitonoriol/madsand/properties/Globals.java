@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.LootTable;
-import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.quest.ProceduralQuest;
 
 public class Globals {

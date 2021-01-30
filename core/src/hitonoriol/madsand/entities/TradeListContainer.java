@@ -6,7 +6,7 @@ import java.util.HashMap;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Utils;
-import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.properties.NpcProp;
 

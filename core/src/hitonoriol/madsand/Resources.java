@@ -34,7 +34,7 @@ import hitonoriol.madsand.entities.Skill;
 import hitonoriol.madsand.entities.SkillContainer;
 import hitonoriol.madsand.entities.SkillValue;
 import hitonoriol.madsand.entities.TradeListContainer;
-import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.map.ProductionStation;
@@ -257,7 +257,7 @@ public class Resources {
 		int i = 0;
 		Item valItem;
 		String craftStationRecipe[];
-		for (Entry<Integer, Item> entry : ItemProp.items.entrySet()) {
+		for (Entry<Integer, ? extends Item> entry : ItemProp.items.entrySet()) {
 			i = entry.getKey();
 			valItem = entry.getValue();
 

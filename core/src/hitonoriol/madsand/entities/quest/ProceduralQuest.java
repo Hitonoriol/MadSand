@@ -12,7 +12,7 @@ import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.Faction;
-import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.NpcContainer;

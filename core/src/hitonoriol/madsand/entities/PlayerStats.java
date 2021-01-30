@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.inventory.EquipStats;
-import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.entities.inventory.item.CombatEquipment;
+import hitonoriol.madsand.entities.inventory.item.Item;
 
 public class PlayerStats extends Stats {
 	static float BASE_SATIATION_PERCENT = 90;
@@ -173,7 +174,7 @@ public class PlayerStats extends Stats {
 		return equipment.unEquip(item);
 	}
 
-	public void applyBonus(Item item) {
+	public void applyBonus(CombatEquipment item) {
 		if (!item.type.isEquipment())
 			return;
 
@@ -183,7 +184,7 @@ public class PlayerStats extends Stats {
 		calcStats();
 	}
 
-	public void removeBonus(Item item) {
+	public void removeBonus(CombatEquipment item) {
 		if (!item.type.isEquipment())
 			return;
 

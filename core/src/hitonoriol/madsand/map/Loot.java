@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.entities.inventory.item.Item;
 
 public class Loot {
 	public ArrayList<Item> contents = new ArrayList<Item>();
@@ -66,7 +66,7 @@ public class Loot {
 		if (id == 0)
 			return Map.nullLoot;
 
-		return add(new Item(id, q));
+		return add(Item.create(id, q));
 	}
 
 	public Loot add(Item item) {

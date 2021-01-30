@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Tooltip;
 import com.badlogic.gdx.scenes.scene2d.ui.TooltipManager;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.entities.inventory.item.Item;
 
 public class ItemTooltip extends Tooltip<Table>{
 	

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import hitonoriol.madsand.Utils;
-import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.entities.inventory.item.Item;
 
 /*
  * List that contains ids of items for trader npcs
@@ -53,7 +53,7 @@ public class TradeItemList {
 	}
 
 	public Item rollItem() {
-		Item item = new Item(getRandomId());
+		Item item = Item.create(getRandomId());
 		rollItemQuantity(item);
 
 		return item;

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import hitonoriol.madsand.entities.LootTable;
-import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.entities.inventory.item.Item;
 
 public class FishingSpot {
 	public int lvl;

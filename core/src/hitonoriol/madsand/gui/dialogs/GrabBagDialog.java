@@ -10,8 +10,8 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.dialog.GameDialog;
-import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.inventory.ItemUI;
+import hitonoriol.madsand.entities.inventory.item.Item;
 
 public class GrabBagDialog extends GameDialog {
 

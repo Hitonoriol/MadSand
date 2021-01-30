@@ -62,6 +62,7 @@ public class NpcContainer {
 			try {
 				return (Class<? extends AbstractNpc>) getParent().loadClass(name);
 			} catch (Exception e) {
+				e.printStackTrace();
 				return Npc.class;
 			}
 		}

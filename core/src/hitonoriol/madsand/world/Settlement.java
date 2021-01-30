@@ -10,8 +10,8 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Skill;
 import hitonoriol.madsand.entities.inventory.Inventory;
-import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.inventory.ItemType;
+import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.properties.Globals;
@@ -38,7 +38,7 @@ public class Settlement {
 	}
 
 	public boolean upgradeSize() {
-		Item upgradeCost = new Item(Globals.getInt(Globals.CURRENCY), getSizeUpgradeCost());
+		Item upgradeCost = Item.create(Globals.getInt(Globals.CURRENCY), getSizeUpgradeCost());
 		if (!warehouse.itemExists(upgradeCost))
 			return false;
 

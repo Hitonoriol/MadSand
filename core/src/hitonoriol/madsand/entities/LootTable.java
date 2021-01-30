@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
-import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.entities.inventory.item.Item;
 
 public class LootTable extends RollTable<LootTable.LootEntry> {
 	public boolean allowEmptyRoll = false;
@@ -71,7 +71,7 @@ public class LootTable extends RollTable<LootTable.LootEntry> {
 
 		public Item makeItem(boolean allowEmptyRoll) {
 			int minQuantity = allowEmptyRoll ? 0 : 1;
-			return new Item(id, Utils.rand(minQuantity, maxQuantity));
+			return Item.create(id, Utils.rand(minQuantity, maxQuantity));
 		}
 	}
 }

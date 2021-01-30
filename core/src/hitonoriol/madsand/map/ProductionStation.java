@@ -2,7 +2,7 @@ package hitonoriol.madsand.map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.ObjectProp;
 
@@ -95,7 +95,7 @@ public class ProductionStation {
 			return Item.nullItem;
 
 		productStorage -= quantity;
-		return new Item(producedMaterial, quantity);
+		return Item.create(producedMaterial, quantity);
 	}
 
 	@JsonIgnore

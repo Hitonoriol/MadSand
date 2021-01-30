@@ -1,7 +1,7 @@
 package hitonoriol.madsand.entities.inventory.trade;
 
 import hitonoriol.madsand.entities.inventory.Inventory;
-import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.properties.Globals;
 
 public class TradeInventory {
@@ -31,7 +31,7 @@ public class TradeInventory {
 			return false;
 
 		buyer.delItem(currency, cost);
-		buyer.putItem(new Item(item).setQuantity(quantity));
+		buyer.putItem(new Item(item).setQuantity(quantity)); // TODO: Item.copy
 
 		seller.putItem(currency, cost);
 		seller.delItem(item, quantity);

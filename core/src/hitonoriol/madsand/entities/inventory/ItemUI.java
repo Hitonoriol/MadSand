@@ -16,6 +16,8 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Resources;
+import hitonoriol.madsand.entities.inventory.item.Equipment;
+import hitonoriol.madsand.entities.inventory.item.Item;
 
 public class ItemUI extends Group {
 	static float TOP_LABEL_YPADDING = 8;
@@ -93,7 +95,7 @@ public class ItemUI extends Group {
 	}
 
 	void refreshHp() {
-		setHp((int) item.getHpPercent());
+		setHp((int) ((Equipment)item).getHpPercent());
 	}
 
 	public void refresh() {

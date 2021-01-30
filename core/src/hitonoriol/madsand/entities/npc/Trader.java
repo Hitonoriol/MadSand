@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.NpcContainer;
@@ -14,6 +14,7 @@ public class Trader extends AbstractNpc {
 	public TradeCategory tradeCategory;
 
 	public Trader(NpcContainer protoNpc) {
+		super(protoNpc);
 		tradeCategory = protoNpc.tradeCategory;
 
 		inventory.setMaxWeight(Integer.MAX_VALUE);
@@ -46,7 +47,7 @@ public class Trader extends AbstractNpc {
 
 	private void addCurrency() {
 		int currencyId = Globals.getInt(Globals.CURRENCY);
-		inventory.putItem(new Item(currencyId, rollTraderCurrency()));
+		inventory.putItem(Item.create(currencyId, rollTraderCurrency()));
 	}
 
 	@Override

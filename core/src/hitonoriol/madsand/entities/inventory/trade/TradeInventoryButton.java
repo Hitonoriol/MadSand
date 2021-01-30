@@ -5,8 +5,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import hitonoriol.madsand.Resources;
-import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.inventory.ItemTooltip;
+import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.widgets.ItemButton;
 import hitonoriol.madsand.properties.ItemProp;
 

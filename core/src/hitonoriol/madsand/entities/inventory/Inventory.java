@@ -13,6 +13,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Skill;
+import hitonoriol.madsand.entities.inventory.item.Equipment;
+import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.entities.inventory.item.Tool;
 
 public class Inventory {
 	public static final double MAX_WEIGHT = Integer.MAX_VALUE;
@@ -57,15 +60,9 @@ public class Inventory {
 
 	public void refreshContents() {
 		Item item;
-		int shp = -1;
 		for (int i = 0; i < items.size(); ++i) {
 			item = items.get(i);
-			if (item.hp != -1)
-				shp = item.hp;
-
 			item.reinit();
-
-			item.hp = shp;
 
 			if (item.id == 0)
 				refreshRemoveItem(item);
@@ -120,14 +117,6 @@ public class Inventory {
 
 		}
 		return i;
-	}
-
-	public Item getItem(long uid) {
-		for (Item item : items)
-			if (item.uid == uid)
-				return item;
-
-		return Item.nullItem;
 	}
 
 	public Item getItem(Item referenceItem) {
@@ -186,7 +175,7 @@ public class Inventory {
 		refreshUITitle();
 		if (itemUI.containsKey(item)) {
 			itemUI.get(item).setText(item.quantity + "");
-			if (item.type.isTool())
+			if (item instanceof Equipment)
 				itemUI.get(item).refreshHp();
 			itemUI.get(item).refreshEquippedStatus();
 		} else {
@@ -207,7 +196,7 @@ public class Inventory {
 		}
 	}
 
-	public boolean damageTool(Item item, Skill skill) {
+	public boolean damageTool(Tool item, Skill skill) {
 		if (!item.damageTool(skill)) {
 			refreshItem(item);
 			return false;
@@ -215,10 +204,6 @@ public class Inventory {
 			refreshRemoveItem(item);
 			return true;
 		}
-	}
-
-	void damageTool(Item item) {
-		damageTool(item, Skill.None);
 	}
 
 	/*
@@ -267,7 +252,7 @@ public class Inventory {
 		if (id == Item.NULL_ITEM)
 			return true;
 
-		Item item = new Item(id, quantity);
+		Item item = Item.create(id, quantity);
 		return putItem(item);
 	}
 
@@ -280,7 +265,7 @@ public class Inventory {
 		if (idx == -1)
 			return false;
 		else {
-			Item item = new Item(id, quantity);
+			Item item = Item.create(id, quantity);
 			curWeight -= item.getWeight();
 			if ((items.get(idx).quantity - quantity) <= 0) {
 				items.remove(idx);

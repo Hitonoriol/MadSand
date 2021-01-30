@@ -14,7 +14,8 @@ import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.containers.PairFloat;
 import hitonoriol.madsand.entities.inventory.Inventory;
-import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.entities.inventory.item.Projectile;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.gui.dialogs.LootDialog;
@@ -167,7 +168,7 @@ public abstract class Entity extends MapEntity {
 
 	public abstract void meleeAttack(Direction dir);
 
-	void rangedAttack(Entity target, Item projectile) {
+	void rangedAttack(Entity target, Projectile projectile) {
 		if (!canSee(target))
 			return;
 
@@ -188,7 +189,7 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public boolean addItem(int id, int quantity) {
-		return addItem(new Item(id, quantity));
+		return addItem(Item.create(id, quantity));
 	}
 
 	public void delItem(Item item, int quantity) {
@@ -196,14 +197,14 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public void delItem(int id, int quantity) {
-		delItem(new Item(id), quantity);
+		delItem(Item.create(id), quantity);
 	}
 
 	public boolean dropItem(Item item, int quantity) {
 		if (!hasItem(item))
 			return false;
 
-		MadSand.world.getCurLoc().putLoot(x, y, new Item(item, quantity));
+		MadSand.world.getCurLoc().putLoot(x, y, Item.create(item, quantity));
 		inventory.delItem(item, quantity);
 		return true;
 	}
@@ -218,7 +219,7 @@ public abstract class Entity extends MapEntity {
 
 	public boolean pickUpLoot(Loot loot, Item item, int quantity) {
 		boolean removeStack = quantity >= item.quantity;
-		Item pickedUpItem = removeStack ? loot.remove(item) : new Item(item, quantity);
+		Item pickedUpItem = removeStack ? loot.remove(item) : Item.create(item, quantity); // TODO: Item.copy
 
 		if (!removeStack)
 			item.quantity -= quantity;
@@ -305,7 +306,7 @@ public abstract class Entity extends MapEntity {
 		Map curLoc = MadSand.world.getCurLoc();
 		for (int i = inventory.items.size() - 1; i >= 0; --i) {
 			item = inventory.items.get(i);
-			curLoc.putLoot(x, y, new Item(item));
+			curLoc.putLoot(x, y, new Item(item)); // TODO: Item.copy
 			inventory.delItem(item);
 		}
 	}

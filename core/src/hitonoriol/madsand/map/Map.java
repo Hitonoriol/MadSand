@@ -23,8 +23,8 @@ import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Skill;
 import hitonoriol.madsand.entities.TradeListContainer;
-import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.inventory.ItemType;
+import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.npc.FarmAnimal;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.entities.npc.Npc;
@@ -796,7 +796,7 @@ public class Map {
 	}
 
 	public void putLoot(int x, int y, int id, int q) {
-		putLoot(x, y, new Item(id, q));
+		putLoot(x, y, Item.create(id, q));
 	}
 
 	public void putLoot(int x, int y, int id) {

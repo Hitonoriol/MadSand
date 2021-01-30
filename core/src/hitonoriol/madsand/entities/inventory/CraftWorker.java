@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import hitonoriol.madsand.entities.Entity;
+import hitonoriol.madsand.entities.inventory.item.Item;
 
 public class CraftWorker {
 	private Entity entity;
@@ -47,7 +48,7 @@ public class CraftWorker {
 		for (int i = 0; i < quantity; ++i)
 			entity.inventory.delItem(itemToCraft.recipe);
 
-		Item craftedItem = new Item(itemToCraft.id, quantity * itemToCraft.craftQuantity);
+		Item craftedItem = Item.create(itemToCraft.id, quantity * itemToCraft.craftQuantity);
 		entity.addItem(craftedItem);
 		return craftedItem;
 	}

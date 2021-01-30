@@ -30,7 +30,7 @@
 		(2.5|12/1:86/1)
 		(1|83/1:16/1:79/1:76/1)",
 		"faction" : "Monsters",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : true
@@ -44,7 +44,7 @@
 		"rewardExp" : 32,
 		"loot" : null,
 		"faction" : "Partisans",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : true
@@ -92,7 +92,7 @@
 		(3.5|12/1:86/1)
 		(2|83/1:16/1:79/1:76/1)",
 		"faction" : "Monsters",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : true
@@ -106,7 +106,7 @@
 		"rewardExp" : 50,
 		"loot" : null,
 		"faction" : "Partisans",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : true
@@ -151,7 +151,7 @@
 		"rewardExp" : 36,
 		"loot" : null,
 		"faction" : "Partisans",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : true
@@ -165,7 +165,7 @@
 		"rewardExp" : 75,
 		"loot" : null,
 		"faction" : "Outlaws",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : true
@@ -193,7 +193,7 @@
 		"rewardExp" : 50,
 		"loot" : null,
 		"faction" : "Marauders",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : true
@@ -207,7 +207,7 @@
 		"rewardExp" : 6,
 		"loot" : "(100|22/2:95/3:96/2) (25|21/9) (5|85/1) (2.5|12/1:86/1) (1|83/1:16/1:79/1:76/1)",
 		"faction" : "Monsters",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : false
@@ -221,7 +221,7 @@
 		"rewardExp" : 7,
 		"loot" : "(25|21/12) (2.5|12/1:86/1) (1|83/1:16/1:79/1:76/1)",
 		"faction" : "Monsters",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : false
@@ -235,7 +235,7 @@
 		"rewardExp" : 10,
 		"loot" : null,
 		"faction" : "Monsters",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : false
@@ -249,7 +249,7 @@
 		"rewardExp" : 10,
 		"loot" : null,
 		"faction" : "Monsters",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : false
@@ -263,7 +263,7 @@
 		"rewardExp" : 9,
 		"loot" : null,
 		"faction" : "Monsters",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : false
@@ -278,7 +278,7 @@
 		"rewardExp" : 6,
 		"loot" : null,
 		"faction" : "Monsters",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : false
@@ -292,7 +292,7 @@
 		"rewardExp" : 8,
 		"loot" : null,
 		"faction" : "Monsters",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : false
@@ -306,7 +306,7 @@
 		"rewardExp" : 0,
 		"loot" : "(40|22/2)",
 		"faction" : "Animals",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : true
@@ -320,7 +320,7 @@
 		"rewardExp" : 0,
 		"loot" : "(40|22/2)",
 		"faction" : "Animals",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : true
@@ -334,7 +334,7 @@
 		"rewardExp" : 0,
 		"loot" : "(40|22/2)",
 		"faction" : "Animals",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : true
@@ -348,7 +348,7 @@
 		"rewardExp" : 0,
 		"loot" : "(40|22/2)",
 		"faction" : "Animals",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : true
@@ -362,7 +362,7 @@
 		"rewardExp" : 0,
 		"loot" : "(40|22/2)",
 		"faction" : "Animals",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : true
@@ -376,7 +376,7 @@
 		"rewardExp" : 11,
 		"loot" : "(25|29/2)",
 		"faction" : "Monsters",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : true
@@ -390,7 +390,7 @@
 		"rewardExp" : 8,
 		"loot" : null,
 		"faction" : "Monsters",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : true
@@ -404,7 +404,7 @@
 		"rewardExp" : 8,
 		"loot" : null,
 		"faction" : "Monsters",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : true
@@ -418,7 +418,7 @@
 		"rewardExp" : 9,
 		"loot" : null,
 		"faction" : "Monsters",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : true
@@ -436,7 +436,7 @@
 		(0.5|100/1)
 		(0.1|28/3:87/1)",
 		"faction" : "Monsters",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : true
@@ -453,7 +453,7 @@
 		(11|68/5)
 		(0.01|28/3)",
 		"faction" : "Monsters",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : true
@@ -467,7 +467,7 @@
 		"rewardExp" : 20,
 		"loot" : null,
 		"faction" : "Monsters",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : false
@@ -481,7 +481,7 @@
 		"rewardExp" : 8,
 		"loot" : null,
 		"faction" : "Monsters",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : true
@@ -495,7 +495,7 @@
 		"rewardExp" : 8,
 		"loot" : null,
 		"faction" : "Monsters",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : true
@@ -510,7 +510,7 @@
 		"rewardExp" : 5,
 		"loot" : null,
 		"faction" : "Monsters",
-		"type" : "Regular",
+		"type" : "Npc",
 		"questList" : null,
 		"spawnOnce" : false,
 		"friendly" : true
@@ -574,7 +574,7 @@
 		"dexterity" : 3,
 		"accuracy" : 6,
 		"rewardExp" : 4,
-		"type" : "Regular",
+		"type" : "Npc",
 		"friendly" : true
 	},
 	"41" : {
@@ -586,7 +586,7 @@
 		"dexterity" : 2,
 		"accuracy" : 5,
 		"rewardExp" : 6,
-		"type" : "Regular",
+		"type" : "Npc",
 		"friendly" : true
 	},
 	"42" : {
@@ -598,7 +598,7 @@
 		"dexterity" : 5,
 		"accuracy" : 5,
 		"rewardExp" : 7,
-		"type" : "Regular",
+		"type" : "Npc",
 		"friendly" : false
 	},
 	"43" : {
@@ -610,7 +610,7 @@
 		"dexterity" : 6,
 		"accuracy" : 5,
 		"rewardExp" : 4,
-		"type" : "Regular",
+		"type" : "Npc",
 		"friendly" : true
 	},
 	"44" : {
@@ -622,7 +622,7 @@
 		"dexterity" : 4,
 		"accuracy" : 5,
 		"rewardExp" : 4,
-		"type" : "Regular",
+		"type" : "Npc",
 		"friendly" : true
 	},
 	"45" : {
@@ -634,7 +634,7 @@
 		"dexterity" : 6,
 		"accuracy" : 5,
 		"rewardExp" : 2,
-		"type" : "Regular",
+		"type" : "Npc",
 		"friendly" : true
 	},
 	"46" : {
@@ -646,7 +646,7 @@
 		"dexterity" : 5,
 		"accuracy" : 5,
 		"rewardExp" : 11,
-		"type" : "Regular",
+		"type" : "Npc",
 		"friendly" : false
 	},
 	"47" : {
@@ -658,7 +658,7 @@
 		"dexterity" : 5,
 		"accuracy" : 5,
 		"rewardExp" : 10,
-		"type" : "Regular",
+		"type" : "Npc",
 		"friendly" : true
 	},
 	"48" : {
@@ -670,7 +670,7 @@
 		"dexterity" : 6,
 		"accuracy" : 5,
 		"rewardExp" : 5,
-		"type" : "Regular",
+		"type" : "Npc",
 		"friendly" : true
 	},
 	"49" : {
@@ -682,7 +682,7 @@
 		"dexterity" : 5,
 		"accuracy" : 4,
 		"rewardExp" : 11,
-		"type" : "Regular",
+		"type" : "Npc",
 		"friendly" : true
 	},
 	"50" : {
@@ -694,7 +694,7 @@
 		"dexterity" : 2,
 		"accuracy" : 4,
 		"rewardExp" : 16,
-		"type" : "Regular",
+		"type" : "Npc",
 		"friendly" : true
 	},
 	"51" : {
@@ -706,7 +706,7 @@
 		"dexterity" : 5,
 		"accuracy" : 5,
 		"rewardExp" : 5,
-		"type" : "Regular",
+		"type" : "Npc",
 		"friendly" : true
 	},
 	"52" : {
@@ -718,7 +718,7 @@
 		"dexterity" : 6,
 		"accuracy" : 6,
 		"rewardExp" : 7,
-		"type" : "Regular",
+		"type" : "Npc",
 		"friendly" : false
 	},
 	"53" : {
@@ -730,7 +730,7 @@
 		"dexterity" : 4,
 		"accuracy" : 4,
 		"rewardExp" : 5,
-		"type" : "Regular",
+		"type" : "Npc",
 		"friendly" : false
 	},
 	"54" : {
@@ -742,7 +742,7 @@
 		"dexterity" : 5,
 		"accuracy" : 6,
 		"rewardExp" : 7,
-		"type" : "Regular",
+		"type" : "Npc",
 		"friendly" : false
 	},
 	"55" : {
@@ -754,7 +754,7 @@
 		"dexterity" : 6,
 		"accuracy" : 5,
 		"rewardExp" : 7,
-		"type" : "Regular",
+		"type" : "Npc",
 		"friendly" : false
 	}
 }

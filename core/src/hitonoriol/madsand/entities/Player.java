@@ -31,8 +31,8 @@ import hitonoriol.madsand.dialog.DialogChainGenerator;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.inventory.CraftWorker;
 import hitonoriol.madsand.entities.inventory.Inventory;
-import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.inventory.ItemType;
+import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.trade.TradeInventoryUI;
 import hitonoriol.madsand.entities.npc.FarmAnimal;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
@@ -520,7 +520,7 @@ public class Player extends Entity {
 			int bonus = stats.luckRoll() ? Utils.rand(stats.skills.getItemReward(Skill.Crafting)) : 0;
 			if (bonus > 0) {
 				MadSand.notice("You manage to craft " + bonus + " extra " + craftedItem.name);
-				addItem(new Item(craftedItem.id, bonus));
+				addItem(Item.create(craftedItem.id, bonus));
 			}
 			return true;
 		}

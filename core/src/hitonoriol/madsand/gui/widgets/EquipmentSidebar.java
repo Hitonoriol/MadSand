@@ -11,8 +11,8 @@ import com.badlogic.gdx.utils.Array;
 
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.EquipSlot;
-import hitonoriol.madsand.entities.inventory.Item;
 import hitonoriol.madsand.entities.inventory.ItemUI;
+import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.OverlayMouseoverListener;
 import hitonoriol.madsand.world.World;
 

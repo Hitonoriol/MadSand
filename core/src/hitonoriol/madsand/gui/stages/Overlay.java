@@ -27,7 +27,7 @@ import hitonoriol.madsand.entities.EquipSlot;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.Skill;
-import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.gui.dialogs.BuildDialog;
 import hitonoriol.madsand.gui.dialogs.CharacterCreationDialog;

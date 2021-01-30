@@ -1,6 +1,6 @@
 package hitonoriol.madsand.entities;
 
-import hitonoriol.madsand.entities.inventory.Item;
+import hitonoriol.madsand.entities.inventory.item.Item;
 
 public interface StatAction {
 	public void _die();
