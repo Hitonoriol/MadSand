@@ -6,10 +6,12 @@ import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.inventory.EquipStats;
 import hitonoriol.madsand.entities.inventory.item.CombatEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.entities.inventory.item.Projectile;
+import hitonoriol.madsand.entities.inventory.item.Weapon;
 
 public class PlayerStats extends Stats {
 	static float BASE_SATIATION_PERCENT = 90;
-	
+
 	private int statBonus = 0; // Total equipment stat bonus
 
 	public float STAMINA_BASE_COST = 0.1f;
@@ -159,6 +161,24 @@ public class PlayerStats extends Stats {
 
 	public Item offHand() {
 		return equipment.getItem(EquipSlot.Offhand);
+	}
+
+	public Weapon getEquippedWeapon() {
+		Item mainHandItem = hand();
+
+		if (!(mainHandItem instanceof Weapon))
+			return new Weapon();
+
+		return (Weapon) mainHandItem;
+	}
+
+	public Projectile getEquippedProjectile() {
+		Item offHandItem = offHand();
+
+		if (!(offHandItem instanceof Projectile))
+			return new Projectile();
+
+		return (Projectile) offHandItem;
 	}
 
 	@JsonIgnore

@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Resources;
-import hitonoriol.madsand.entities.inventory.item.Equipment;
+import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
 
 public class ItemUI extends Group {
@@ -95,7 +95,7 @@ public class ItemUI extends Group {
 	}
 
 	void refreshHp() {
-		setHp((int) ((Equipment)item).getHpPercent());
+		setHp((int) ((AbstractEquipment)item).getHpPercent());
 	}
 
 	public void refresh() {

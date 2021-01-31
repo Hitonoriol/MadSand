@@ -1,10 +1,11 @@
 package hitonoriol.madsand.entities.inventory.item;
 
 import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.EquipStats;
 import hitonoriol.madsand.world.World;
 
-public abstract class CombatEquipment extends Equipment {
+public abstract class CombatEquipment extends AbstractEquipment {
 	private static final int EQUIPMENT_HP_PER_LVL = 500;
 
 	public EquipStats equipStats;
@@ -21,6 +22,15 @@ public abstract class CombatEquipment extends Equipment {
 		equipStats = new EquipStats(lvl, type);
 		hp = ((lvl == 0 ? 1 : lvl) * EQUIPMENT_HP_PER_LVL);
 		maxHp = hp;
+	}
+	
+	public CombatEquipment() {
+		super();
+	}
+	
+	@Override
+	public void use(Player player) {
+		super.useIfPossible(player, () -> player.stats.equipment.equip(this));
 	}
 
 	@Override

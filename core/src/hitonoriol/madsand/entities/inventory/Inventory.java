@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Skill;
-import hitonoriol.madsand.entities.inventory.item.Equipment;
+import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 
@@ -175,7 +175,7 @@ public class Inventory {
 		refreshUITitle();
 		if (itemUI.containsKey(item)) {
 			itemUI.get(item).setText(item.quantity + "");
-			if (item instanceof Equipment)
+			if (item instanceof AbstractEquipment)
 				itemUI.get(item).refreshHp();
 			itemUI.get(item).refreshEquippedStatus();
 		} else {

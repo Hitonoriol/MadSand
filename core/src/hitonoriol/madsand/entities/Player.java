@@ -33,6 +33,8 @@ import hitonoriol.madsand.entities.inventory.CraftWorker;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.ItemType;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.entities.inventory.item.Projectile;
+import hitonoriol.madsand.entities.inventory.item.Weapon;
 import hitonoriol.madsand.entities.inventory.trade.TradeInventoryUI;
 import hitonoriol.madsand.entities.npc.FarmAnimal;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
@@ -199,13 +201,6 @@ public class Player extends Entity {
 	}
 
 	public boolean equip(Item item) {
-		int lvl = getLvl();
-		int minLvl = lvl == 0 ? item.lvl - 1 : item.lvl;
-		if (lvl < minLvl) {
-			Gui.drawOkDialog(
-					"Your level is too low! You need to be at least level " + item.lvl + " to equip this item.");
-			return false;
-		}
 
 		boolean ret = stats.equip(item);
 
@@ -281,12 +276,17 @@ public class Player extends Entity {
 	}
 
 	public boolean canPerformRangedAttack() {
-		return stats.offHand().type == ItemType.ThrowingWeapon
-				|| (stats.hand().type == ItemType.RangedWeapon && stats.offHand().type == ItemType.Projectile);
+		Projectile projectile = stats.getEquippedProjectile();
+		Weapon rangedWeapon = stats.getEquippedWeapon();
+		if (projectile.isEmpty())
+			return false;
+
+		return projectile.thrownByHand
+				|| (!rangedWeapon.isEmpty() && rangedWeapon.type == Weapon.Type.RangedWeapon);
 	}
 
 	private void performRangedAttack(AbstractNpc npc) {
-		Item projectile = stats.offHand();
+		Projectile projectile = stats.getEquippedProjectile();
 		super.rangedAttack(npc, projectile);
 		damageHeldTool();
 		delItem(projectile, 1);

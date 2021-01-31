@@ -1,9 +1,10 @@
 package hitonoriol.madsand.entities.inventory.item;
 
 import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.entities.EquipSlot;
 import hitonoriol.madsand.entities.Skill;
 
-public class Tool extends Equipment {
+public class Tool extends AbstractEquipment {
 	public int dmg;
 	public Skill skill = Skill.None;
 
@@ -11,6 +12,10 @@ public class Tool extends Equipment {
 		super(protoItem);
 		dmg = protoItem.dmg;
 		skill = protoItem.skill;
+	}
+	
+	public Tool() {
+		super();
 	}
 
 	// Item skill damage - roll amount of damage to do to objects
@@ -32,5 +37,10 @@ public class Tool extends Equipment {
 
 	public static enum Type {
 		Axe, Shovel, Pickaxe, Hoe, Hammer
+	}
+
+	@Override
+	public EquipSlot getEquipSlot() {
+		return EquipSlot.MainHand;
 	}
 }

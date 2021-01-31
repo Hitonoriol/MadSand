@@ -8,10 +8,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.entities.inventory.Inventory;
+import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
+import hitonoriol.madsand.entities.inventory.item.CombatEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.entities.inventory.item.Tool;
 
 public class Equipment {
-	private HashMap<EquipSlot, Item> equipped = new HashMap<>();
+	private HashMap<EquipSlot, AbstractEquipment> equipped = new HashMap<>();
 	private float equipmentWeight = 0;
 	private PlayerStats stats;
 
@@ -19,37 +22,33 @@ public class Equipment {
 		this.stats = stats;
 	}
 
-	boolean equip(EquipSlot slot, Item item) {
+	public boolean equip(AbstractEquipment item) {
+		EquipSlot slot = item.getEquipSlot();
 		if (equipped.containsKey(slot))
 			equipped.remove(slot);
 
 		equipped.put(slot, item);
 
 		Gui.overlay.equipmentSidebar.equipItem(slot, item);
-
 		equipmentWeight += item.weight;
+		return true;
+	}
+
+	public boolean equip(CombatEquipment item) {
+		equip((AbstractEquipment) item);
 		stats.applyBonus(item);
 		return true;
 	}
 
-	public boolean equip(Item item) {
-		EquipSlot slot = EquipSlot.slotByType(item.type);
-
-		if (slot == null)
-			return false;
-
-		return equip(slot, item);
-	}
-
-	public Item previousEquipment(Item item) {
-		return getItem(EquipSlot.slotByType(item.type));
+	public AbstractEquipment previousEquipment(AbstractEquipment item) {
+		return getItem(item.getEquipSlot());
 	}
 
 	public boolean unEquip(EquipSlot slot) {
 		if (!equipped.containsKey(slot))
 			return false;
 
-		Item item = equipped.get(slot);
+		AbstractEquipment item = equipped.get(slot);
 		equipmentWeight -= item.weight;
 		stats.removeBonus(item);
 
@@ -67,7 +66,7 @@ public class Equipment {
 		return unEquip(EquipSlot.slotByType(item.type));
 	}
 
-	public Item getItem(EquipSlot slot) {
+	public AbstractEquipment getItem(EquipSlot slot) {
 		return equipped.getOrDefault(slot, Item.nullItem);
 	}
 

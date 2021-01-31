@@ -5,17 +5,28 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.entities.EquipSlot;
+import hitonoriol.madsand.entities.Player;
 
-public abstract class Equipment extends LevelBoundItem {
+public abstract class AbstractEquipment extends LevelBoundItem {
 	public int hp = -1;
 	public int maxHp = hp;
 	public long uid = 0;
 
-	public Equipment(Equipment protoItem) { // TODO only copy here, generate rand stats inside factory
+	public AbstractEquipment(AbstractEquipment protoItem) { // TODO only copy here, generate rand stats inside factory
 		super(protoItem);
 		hp = protoItem.hp;
 		maxHp = hp;
 		uid = MadSand.world.itemCounter++;
+	}
+
+	public AbstractEquipment() {
+		super();
+	}
+	
+	@Override
+	public void use(Player player) {
+		super.useIfPossible(player, () -> player.stats.equipment.equip(this));
 	}
 
 	boolean damage(int amt) {
@@ -27,6 +38,8 @@ public abstract class Equipment extends LevelBoundItem {
 		return damage(1);
 	}
 
+	public abstract EquipSlot getEquipSlot();
+	
 	@Override
 	public Item reinit() {
 		return this;
@@ -47,6 +60,6 @@ public abstract class Equipment extends LevelBoundItem {
 		if (!super.equals(obj))
 			return false;
 
-		return uid == ((Equipment) obj).uid;
+		return uid == ((AbstractEquipment) obj).uid;
 	}
 }
