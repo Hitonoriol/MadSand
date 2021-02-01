@@ -45,7 +45,7 @@ public class TradeItemList {
 
 	private void rollItemQuantity(Item item) {
 
-		if (item.type.isUnique())
+		if (item.isEquipment())
 			item.quantity = 1;
 		else
 			item.quantity = Utils.rand(BASE_ITEM_QUANTITY) + tier * TIER_FACTOR;

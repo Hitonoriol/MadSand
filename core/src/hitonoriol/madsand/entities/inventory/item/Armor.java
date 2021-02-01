@@ -1,7 +1,7 @@
 package hitonoriol.madsand.entities.inventory.item;
 
 import hitonoriol.madsand.entities.EquipSlot;
-import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.entities.Stat;
 
 public class Armor extends CombatEquipment {
 
@@ -12,14 +12,18 @@ public class Armor extends CombatEquipment {
 		type = protoItem.type;
 	}
 
+	public Armor() {
+		super();
+	}
+
 	@Override
 	public Armor copy() {
 		return new Armor(this);
 	}
-	
+
 	@Override
-	public void use(Player player) {
-		super.useIfPossible(player, () -> player.stats.equipment.equip(this));
+	public Stat getMainStat() {
+		return Stat.Defense;
 	}
 
 	@Override
@@ -42,7 +46,7 @@ public class Armor extends CombatEquipment {
 		}
 		return null;
 	}
-	
+
 	public static enum Type {
 		HeadArmor, ChestArmor, LegArmor, FootArmor, Shield
 	}

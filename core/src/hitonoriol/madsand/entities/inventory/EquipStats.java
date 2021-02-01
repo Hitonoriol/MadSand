@@ -6,6 +6,7 @@ import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.entities.StatContainer;
+import hitonoriol.madsand.entities.inventory.item.CombatEquipment;
 
 public class EquipStats {
 	public int lvl;
@@ -13,12 +14,11 @@ public class EquipStats {
 	public int rollMax, rollMin;
 
 	public StatContainer stats = new StatContainer();
-	public ItemType type;
 	public Stat mainStat;
 
 	private static float multiplier = 1.7f;
 
-	public EquipStats(int lvl, ItemType type) {
+	public EquipStats(int lvl, CombatEquipment item) {
 		this.lvl = lvl;
 
 		rollMax = (int) (lvl * multiplier);
@@ -27,8 +27,7 @@ public class EquipStats {
 		if (rollMin == 0)
 			rollMin = 1;
 
-		this.type = type;
-		mainStat = getMainStat();
+		mainStat = item.getMainStat();
 
 		rollMainStat();
 		rollBonusStats();
@@ -69,16 +68,6 @@ public class EquipStats {
 
 		this.stats.set(stat, value);
 		return value;
-	}
-
-	@JsonIgnore
-	private Stat getMainStat() {
-		if (type.isWeapon())
-			return Stat.Strength;
-		else if (type.isArmor())
-			return Stat.Defense;
-		else
-			return null;
 	}
 
 	private void rollMainStat() {

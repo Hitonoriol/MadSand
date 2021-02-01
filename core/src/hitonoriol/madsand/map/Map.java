@@ -23,8 +23,8 @@ import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Skill;
 import hitonoriol.madsand.entities.TradeListContainer;
-import hitonoriol.madsand.entities.inventory.ItemType;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.npc.FarmAnimal;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.entities.npc.Npc;
@@ -1205,7 +1205,7 @@ public class Map {
 		Tile tile;
 		for (Entry<Pair, Tile> entry : entryList) {
 			tile = entry.getValue();
-			if (tile.rollDrop(ItemType.Shovel) != -1)
+			if (tile.rollDrop(Tool.Type.Shovel) != -1)
 				return entry.getKey();
 		}
 		return Pair.nullPair;

@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Resources;
-import hitonoriol.madsand.entities.inventory.ItemType;
+import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.properties.TileProp;
 
 public class Tile {
@@ -17,7 +17,7 @@ public class Tile {
 
 	public int damage;
 	public String onInteract;
-	public HashMap<ItemType, ArrayList<Integer>> altItems;
+	public HashMap<Tool.Type, ArrayList<Integer>> altItems;
 	public String name;
 	public FishingSpot fishingSpot;
 
@@ -43,8 +43,8 @@ public class Tile {
 		this.onInteract = Resources.emptyField;
 	}
 
-	public int rollDrop(ItemType heldItem) {
-		return MapObject.getTileAltItem(id, heldItem);
+	public int rollDrop(Tool.Type heldItem) {
+		return MapObject.rollTileResource(id, heldItem);
 	}
 
 	public boolean hasFishingSpot() {

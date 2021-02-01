@@ -5,7 +5,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.entities.EquipSlot;
 import hitonoriol.madsand.entities.Player;
 
 public abstract class AbstractEquipment extends LevelBoundItem {
@@ -13,7 +12,7 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 	public int maxHp = hp;
 	public long uid = 0;
 
-	public AbstractEquipment(AbstractEquipment protoItem) { // TODO only copy here, generate rand stats inside factory
+	public AbstractEquipment(AbstractEquipment protoItem) {
 		super(protoItem);
 		hp = protoItem.hp;
 		maxHp = hp;
@@ -26,7 +25,7 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 	
 	@Override
 	public void use(Player player) {
-		super.useIfPossible(player, () -> player.stats.equipment.equip(this));
+		super.useIfPossible(player, () -> equip(player));
 	}
 
 	boolean damage(int amt) {
@@ -37,8 +36,6 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 	boolean damage() {
 		return damage(1);
 	}
-
-	public abstract EquipSlot getEquipSlot();
 	
 	@Override
 	public Item reinit() {

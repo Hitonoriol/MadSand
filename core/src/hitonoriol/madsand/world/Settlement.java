@@ -10,12 +10,12 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Skill;
 import hitonoriol.madsand.entities.inventory.Inventory;
-import hitonoriol.madsand.entities.inventory.ItemType;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.NpcProp;
+import hitonoriol.madsand.entities.inventory.item.Tool;
 
 public class Settlement {
 	private static float WAREHOUSE_DEF_WEIGHT = 50;
@@ -93,9 +93,9 @@ public class Settlement {
 		Map map = location.getOverworld();
 
 		if (skill == Skill.Digging)
-			return map.getTile(objectCoords = map.locateDiggableTile()).rollDrop(ItemType.Shovel);
+			return map.getTile(objectCoords = map.locateDiggableTile()).rollDrop(Tool.Type.Shovel);
 		else if (skill.isResourceSkill())
-			return map.getObject(objectCoords = map.locateObject(skill)).rollDrop(ItemType.bySkill(skill));
+			return map.getObject(objectCoords = map.locateObject(skill)).rollDrop(Tool.Type.bySkill(skill));
 
 		return -1;
 

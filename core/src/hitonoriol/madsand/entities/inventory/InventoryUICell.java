@@ -11,7 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Mouse;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.entities.inventory.item.Placeable;
 import hitonoriol.madsand.gui.dialogs.ConfirmDialog;
 import hitonoriol.madsand.gui.dialogs.SliderDialog;
 import hitonoriol.madsand.world.World;
@@ -25,8 +27,6 @@ public class InventoryUICell extends ItemUI {
 	private Table invCellContextContainer; // RMB context menu container and buttons
 
 	private TextButton dropBtn;
-	private TextButton useBtn;
-	private TextButton equipBtn;
 
 	static String equippedText = "[#387aff]E []";
 	private Label equippedLabel = new Label(equippedText, Gui.skin);
@@ -44,21 +44,18 @@ public class InventoryUICell extends ItemUI {
 			if (!Gui.inventoryActive)
 				return;
 
-			if (item.type.isEquipment()) {
+			if (item.is(AbstractEquipment.class) || item.is(Placeable.class)) {
 				if (player.stats.equipment.itemEquipped(item)) {
 					player.unEquip(item);
 					unEquipItem();
 				} else {
 					Item prev = player.stats.equipment.previousEquipment(item);
-					if (!player.equip(item))
-						return;
+					player.equip(item);
 					player.inventory.refreshItem(prev);
 					equipItem();
 				}
-			} else if (item.type.isConsumable()) {
-				player.useItem(item);
 			} else {
-				player.takeInHand(item);
+				item.use(player);
 				refreshEquippedStatus();
 			}
 
@@ -101,25 +98,6 @@ public class InventoryUICell extends ItemUI {
 				new ConfirmDialog("Drop " + item.name + "?", () -> dropAction.accept(item.quantity), Gui.overlay)
 						.show();
 		});
-
-		if (item.type.isConsumable() || item.type.isPlaceable()) {
-			useBtn = new TextButton("Use", Gui.skin);
-			Gui.setAction(useBtn, () -> {
-				World.player.useItem(item);
-				hideContext();
-			});
-			addContextBtn(useBtn);
-		}
-
-		if (item.type.isArmor()) {
-			equipBtn = new TextButton("Equip", Gui.skin);
-			Gui.setAction(equipBtn, () -> {
-				World.player.equip(item);
-				World.player.freeHands(true);
-				hideContext();
-			});
-			addContextBtn(equipBtn);
-		}
 	}
 
 	public void equipItem() {

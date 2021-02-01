@@ -9,6 +9,8 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.entities.EquipSlot;
+import hitonoriol.madsand.entities.Player;
 
 public class Projectile extends LevelBoundItem {
 	public int dmg;
@@ -22,6 +24,16 @@ public class Projectile extends LevelBoundItem {
 	
 	public Projectile() {
 		super();
+	}
+	
+	@Override
+	public Projectile copy() {
+		return new Projectile(this);
+	}
+	
+	@Override
+	public void use(Player player) {
+		player.stats.equipment.equip(this);
 	}
 	
 	static final float BASE_PROJECTILE_SPEED = 0.35f;
@@ -45,6 +57,11 @@ public class Projectile extends LevelBoundItem {
 						Actions.moveTo(screenCoords.x, screenCoords.y, BASE_PROJECTILE_SPEED),
 						Actions.run(impactAction),
 						Actions.run(() -> projectileImg.remove())));
+	}
+	
+	@Override
+	public EquipSlot getEquipSlot() {
+		return EquipSlot.Offhand;
 	}
 
 	@Override

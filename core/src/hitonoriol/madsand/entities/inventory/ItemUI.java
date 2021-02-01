@@ -104,7 +104,7 @@ public class ItemUI extends Group {
 		else
 			setText(item.quantity + "");
 
-		if (item.type.isTool() || item.type.isEquipment())
+		if (item.isEquipment())
 			refreshHp();
 
 	}

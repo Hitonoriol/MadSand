@@ -204,7 +204,7 @@ public abstract class Entity extends MapEntity {
 		if (!hasItem(item))
 			return false;
 
-		MadSand.world.getCurLoc().putLoot(x, y, Item.create(item, quantity));
+		MadSand.world.getCurLoc().putLoot(x, y, Item.duplicate(item, quantity));
 		inventory.delItem(item, quantity);
 		return true;
 	}
@@ -219,7 +219,7 @@ public abstract class Entity extends MapEntity {
 
 	public boolean pickUpLoot(Loot loot, Item item, int quantity) {
 		boolean removeStack = quantity >= item.quantity;
-		Item pickedUpItem = removeStack ? loot.remove(item) : Item.create(item, quantity); // TODO: Item.copy
+		Item pickedUpItem = removeStack ? loot.remove(item) : Item.duplicate(item, quantity);
 
 		if (!removeStack)
 			item.quantity -= quantity;

@@ -7,6 +7,7 @@ import hitonoriol.madsand.entities.inventory.EquipStats;
 import hitonoriol.madsand.entities.inventory.item.CombatEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Projectile;
+import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.inventory.item.Weapon;
 
 public class PlayerStats extends Stats {
@@ -163,39 +164,20 @@ public class PlayerStats extends Stats {
 		return equipment.getItem(EquipSlot.Offhand);
 	}
 
+	public Tool getEquippedTool() {
+		return hand().as(Tool.class);
+	}
+
 	public Weapon getEquippedWeapon() {
-		Item mainHandItem = hand();
-
-		if (!(mainHandItem instanceof Weapon))
-			return new Weapon();
-
-		return (Weapon) mainHandItem;
+		return hand().as(Weapon.class);
 	}
 
 	public Projectile getEquippedProjectile() {
-		Item offHandItem = offHand();
-
-		if (!(offHandItem instanceof Projectile))
-			return new Projectile();
-
-		return (Projectile) offHandItem;
-	}
-
-	@JsonIgnore
-	public void setHand(Item item) {
-		equipment.setHand(item);
-	}
-
-	public boolean equip(Item item) {
-		return equipment.equip(item);
-	}
-
-	public boolean unequip(Item item) {
-		return equipment.unEquip(item);
+		return offHand().as(Projectile.class);
 	}
 
 	public void applyBonus(CombatEquipment item) {
-		if (!item.type.isEquipment())
+		if (item.isEmpty())
 			return;
 
 		EquipStats bonus = item.equipStats;
@@ -205,7 +187,7 @@ public class PlayerStats extends Stats {
 	}
 
 	public void removeBonus(CombatEquipment item) {
-		if (!item.type.isEquipment())
+		if (item.isEmpty())
 			return;
 
 		EquipStats bonus = item.equipStats;

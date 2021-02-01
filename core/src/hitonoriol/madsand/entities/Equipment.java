@@ -8,13 +8,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.entities.inventory.Inventory;
-import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.CombatEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
-import hitonoriol.madsand.entities.inventory.item.Tool;
 
 public class Equipment {
-	private HashMap<EquipSlot, AbstractEquipment> equipped = new HashMap<>();
+	private HashMap<EquipSlot, Item> equipped = new HashMap<>();
 	private float equipmentWeight = 0;
 	private PlayerStats stats;
 
@@ -22,7 +20,7 @@ public class Equipment {
 		this.stats = stats;
 	}
 
-	public boolean equip(AbstractEquipment item) {
+	public boolean equip(Item item) {
 		EquipSlot slot = item.getEquipSlot();
 		if (equipped.containsKey(slot))
 			equipped.remove(slot);
@@ -35,12 +33,12 @@ public class Equipment {
 	}
 
 	public boolean equip(CombatEquipment item) {
-		equip((AbstractEquipment) item);
+		equip((Item) item);
 		stats.applyBonus(item);
 		return true;
 	}
 
-	public AbstractEquipment previousEquipment(AbstractEquipment item) {
+	public Item previousEquipment(Item item) {
 		return getItem(item.getEquipSlot());
 	}
 
@@ -48,9 +46,12 @@ public class Equipment {
 		if (!equipped.containsKey(slot))
 			return false;
 
-		AbstractEquipment item = equipped.get(slot);
-		equipmentWeight -= item.weight;
-		stats.removeBonus(item);
+		Item item = getItem(slot);
+		if (item.is(CombatEquipment.class)) {
+			CombatEquipment equipment = (CombatEquipment) item;
+			equipmentWeight -= equipment.weight;
+			stats.removeBonus(equipment);
+		}
 
 		Gui.overlay.equipmentSidebar.equipItem(slot, Item.nullItem);
 
@@ -63,10 +64,10 @@ public class Equipment {
 	}
 
 	public boolean unEquip(Item item) {
-		return unEquip(EquipSlot.slotByType(item.type));
+		return unEquip(item.getEquipSlot());
 	}
 
-	public AbstractEquipment getItem(EquipSlot slot) {
+	public Item getItem(EquipSlot slot) {
 		return equipped.getOrDefault(slot, Item.nullItem);
 	}
 
@@ -74,22 +75,8 @@ public class Equipment {
 		return getItem(EquipSlot.MainHand);
 	}
 
-	public void setHand(Item item) {
-		unEquip(EquipSlot.MainHand);
-		equip(EquipSlot.MainHand, item);
-	}
-
-	private boolean itemEquipped(Item item, boolean allowRegularItems) {
-		EquipSlot slot = allowRegularItems ? EquipSlot.slotByTypeAll(item.type) : EquipSlot.slotByType(item.type);
-		return (getItem(slot) == item);
-	}
-
 	public boolean itemEquipped(Item item) {
-		return itemEquipped(item, false);
-	}
-
-	public boolean itemEquippedOrHeld(Item item) {
-		return itemEquipped(item, true);
+		return (getItem(item.getEquipSlot()) == item);
 	}
 
 	@JsonIgnore
@@ -107,11 +94,13 @@ public class Equipment {
 	}
 
 	public void setStatBonus(boolean apply) {
-		for (Entry<EquipSlot, Item> entry : equipped.entrySet())
+		for (Entry<EquipSlot, Item> entry : equipped.entrySet()) {
+			CombatEquipment equipment = entry.getValue().as(CombatEquipment.class);
 			if (!apply)
-				stats.removeBonus(entry.getValue());
+				stats.removeBonus(equipment);
 			else
-				stats.applyBonus(entry.getValue());
+				stats.applyBonus(equipment);
+		}
 	}
 
 	public void refreshUI() {

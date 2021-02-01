@@ -27,11 +27,11 @@ import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Skill;
-import hitonoriol.madsand.entities.inventory.ItemType;
 import hitonoriol.madsand.gui.widgets.TimedProgressBar;
 import hitonoriol.madsand.gui.widgets.TimedProgressBar.TimedAction;
 import hitonoriol.madsand.map.FishingSpot;
 import hitonoriol.madsand.world.World;
+import hitonoriol.madsand.entities.inventory.item.Tool;
 import me.xdrop.jrand.JRand;
 
 public class FishingUI extends GameDialog {
@@ -128,7 +128,7 @@ public class FishingUI extends GameDialog {
 			remove();
 		}
 
-		if (player.stats.hand().type != ItemType.FishingRod)
+		if (player.stats.getEquippedTool().type != Tool.Type.FishingRod)
 			remove();
 	}
 

@@ -12,7 +12,7 @@ import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Skill;
-import hitonoriol.madsand.entities.inventory.ItemType;
+import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
 import me.xdrop.jrand.JRand;
@@ -40,7 +40,7 @@ public class MapObject extends MapEntity {
 	public boolean centered = false;
 
 	public int maskWidth = 0, maskHeight = 0; // Collision mask dimensions for objects larger than 1x1 cell
-	public HashMap<ItemType, ArrayList<Integer>> altItems;
+	public HashMap<Tool.Type, ArrayList<Integer>> altItems;
 	public String onInteract = Resources.emptyField;
 	public Skill skill = Skill.None;
 	public String name;
@@ -129,8 +129,8 @@ public class MapObject extends MapEntity {
 		takeHarvestDamage(harvestHp + 1);
 	}
 
-	public int rollDrop(ItemType heldItemType) {
-		return getAltItem(this.id, heldItemType);
+	public int rollDrop(Tool.Type heldItemType) {
+		return rollObjectResource(this.id, heldItemType);
 	}
 
 	public double getHpPercent() {
@@ -147,24 +147,23 @@ public class MapObject extends MapEntity {
 		super.playAnimation(Resources.createAnimation(Resources.objectHitAnimStrip));
 	}
 
-	private static int getAltItem(int id, ItemType hand, HashMap<ItemType, ArrayList<Integer>> container) {
-		HashMap<ItemType, ArrayList<Integer>> items = container;
+	private static int rollResource(int id, Tool.Type heldTool, HashMap<Tool.Type, ArrayList<Integer>> items) {
 		if (items == null)
 			return -1;
-		if (!items.containsKey(hand))
-			hand = ItemType.None;
-		if (!items.containsKey(hand) || items.get(hand) == null)
+		if (!items.containsKey(heldTool))
+			heldTool = Tool.Type.None;
+		if (!items.containsKey(heldTool) || items.get(heldTool) == null)
 			return -1;
-		ArrayList<Integer> aitems = items.get(hand);
-		return aitems.get(Utils.random.nextInt(aitems.size()));
+
+		return Utils.randElement(items.get(heldTool));
 	}
 
-	public static int getAltItem(int id, ItemType hand) {
-		return getAltItem(id, hand, ObjectProp.getObject(id).altItems);
+	public static int rollObjectResource(int id, Tool.Type heldTool) {
+		return rollResource(id, heldTool, ObjectProp.getObject(id).altItems);
 	}
 
-	public static int getTileAltItem(int id, ItemType hand) {
-		return getAltItem(id, hand, TileProp.getTileProp(id).altItems);
+	public static int rollTileResource(int id, Tool.Type heldTool) {
+		return rollResource(id, heldTool, TileProp.getTileProp(id).altItems);
 	}
 
 	@Override

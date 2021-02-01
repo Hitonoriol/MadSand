@@ -16,10 +16,11 @@ import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
+import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.entities.EquipSlot;
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.entities.inventory.ItemType;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
 
@@ -40,8 +41,6 @@ public class Item {
 	public int craftQuantity = 1;
 	public String useAction;
 
-	public ItemType type = ItemType.None;
-
 	public final static Item nullItem = new Item();
 	public static final int NULL_ITEM = 0;
 	private static final float DEFAULT_WEIGHT = 0.25f;
@@ -54,7 +53,6 @@ public class Item {
 	public Item(Item protoItem) {
 		id = protoItem.id;
 		quantity = 1;
-		name = protoItem.name;
 		loadProperties(protoItem);
 	}
 
@@ -78,7 +76,12 @@ public class Item {
 	}
 
 	public void use(Player player) {
-		return;
+		if (useAction != null)
+			LuaUtils.execute(useAction);
+	}
+
+	public void equip(Player player) {
+		player.stats.equipment.equip(this);
 	}
 
 	@JsonIgnore
@@ -115,10 +118,7 @@ public class Item {
 	protected void loadProperties(Item properties) {
 		this.name = properties.name;
 		this.weight = properties.weight;
-
-		this.type = properties.type;
 		this.cost = properties.cost;
-
 		this.useAction = properties.useAction;
 	}
 
@@ -197,16 +197,24 @@ public class Item {
 
 	}
 
-	public static ItemType getType(int id) {
-		return ItemProp.getType(id);
+	public EquipSlot getEquipSlot() {
+		return EquipSlot.MainHand;
+	}
+
+	protected Item rollProperties() {
+		return this;
 	}
 
 	public static int getAltObject(int id) {
 		return ItemProp.getAltObject(id);
 	}
 
-	public static Item create(Item item, int quantity) {
+	public static Item duplicate(Item item, int quantity) {
 		return item.copy().setQuantity(quantity);
+	}
+
+	public static Item create(Item item, int quantity) {
+		return duplicate(item, quantity).rollProperties();
 	}
 
 	public static Item create(int id, int quantity) {
@@ -215,6 +223,27 @@ public class Item {
 
 	public static Item create(int id) {
 		return create(id, 1);
+	}
+
+	public <T extends Item> boolean is(Class<T> itemSubtype) {
+		return itemSubtype.isInstance(this);
+	}
+
+	public boolean isEquipment() {
+		return this instanceof AbstractEquipment;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends Item> T as(Class<T> itemSubtype) {
+		if (this.is(itemSubtype))
+			return (T) this;
+		else
+			try {
+				return itemSubtype.getDeclaredConstructor().newInstance();
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
 	}
 
 	public static final Comparator<Item> quantityComparator = (item1, item2) -> {

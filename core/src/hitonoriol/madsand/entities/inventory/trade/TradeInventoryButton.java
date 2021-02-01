@@ -20,7 +20,7 @@ public class TradeInventoryButton extends ItemButton {
 	public TradeInventoryButton(TradeInventory trade, Item item, TradeAction action, TradeUIRefresher refresher) {
 		super(item);
 
-		if (item.type.isEquipment()) {
+		if (item.isEquipment()) {
 			tooltip = new ItemTooltip(item);
 			super.addListener(tooltip);
 		}

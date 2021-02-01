@@ -31,9 +31,14 @@ import hitonoriol.madsand.dialog.DialogChainGenerator;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.inventory.CraftWorker;
 import hitonoriol.madsand.entities.inventory.Inventory;
-import hitonoriol.madsand.entities.inventory.ItemType;
+import hitonoriol.madsand.entities.inventory.item.Consumable;
+import hitonoriol.madsand.entities.inventory.item.CropSeeds;
+import hitonoriol.madsand.entities.inventory.item.FishingBait;
+import hitonoriol.madsand.entities.inventory.item.GrabBag;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.entities.inventory.item.Placeable;
 import hitonoriol.madsand.entities.inventory.item.Projectile;
+import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.inventory.item.Weapon;
 import hitonoriol.madsand.entities.inventory.trade.TradeInventoryUI;
 import hitonoriol.madsand.entities.npc.FarmAnimal;
@@ -190,7 +195,7 @@ public class Player extends Entity {
 		int itemIdx = inventory.getSameCell(id);
 		if (itemIdx == -1) {
 			if (stats.hand().id == id)
-				stats.setHand(Item.nullItem);
+				stats.equipment.unEquip(EquipSlot.MainHand);
 			else if (stats.offHand().id == id)
 				stats.equipment.unEquip(EquipSlot.Offhand);
 			return;
@@ -200,31 +205,9 @@ public class Player extends Entity {
 		}
 	}
 
-	public boolean equip(Item item) {
-
-		boolean ret = stats.equip(item);
-
-		if (ret)
-			MadSand.print("You equip " + item.name);
-		else
-			takeInHand(item);
-
-		return ret;
-	}
-
-	public void takeInHand(Item item) {
-		EquipSlot slot = item.type.handSlot();
-		Item prevHand = stats.equipment.getItem(slot);
-		stats.equipment.equip(slot, item);
-
-		if (!prevHand.equals(Item.nullItem))
-			inventory.refreshItem(prevHand);
-
-		if (!prevHand.equals(item))
-			MadSand.print("You take " + item.name + " in your hand");
-		else
-			freeHands(slot);
-
+	public void equip(Item item) {
+		item.equip(this);
+		MadSand.print("You equip " + item.name);
 	}
 
 	public boolean unEquip(Item item) {
@@ -374,13 +357,16 @@ public class Player extends Entity {
 	}
 
 	void damageHeldTool(Skill objectSkill) {
-		if (inventory.damageTool(stats.hand(), objectSkill)) {
-			MadSand.notice("Your " + stats.hand().name + " broke");
+		Tool heldTool = stats.getEquippedTool();
+		if (heldTool.isEmpty())
+			return;
 
-			if (stats.hand().type.isEquipment())
-				unEquip(stats.hand());
+		if (inventory.damageTool(heldTool, objectSkill)) {
+			MadSand.notice("Your " + heldTool.name + " broke");
 
-			inventory.delItem(stats.hand());
+			unEquip(heldTool);
+
+			inventory.delItem(heldTool);
 			freeHands(true);
 		} else
 			Gui.overlay.equipmentSidebar.refreshSlot(EquipSlot.MainHand);
@@ -497,7 +483,7 @@ public class Player extends Entity {
 	@Override
 	public void delItem(Item item, int quantity) {
 		super.delItem(item, quantity);
-		if (stats.equipment.itemEquippedOrHeld(item)) {
+		if (stats.equipment.itemEquipped(item)) {
 			checkHands(item.id);
 			stats.equipment.refreshUI();
 		}
@@ -621,7 +607,7 @@ public class Player extends Entity {
 	}
 
 	private void fish(FishingSpot spot) {
-		if (stats.offHand().type != ItemType.FishingBait) {
+		if (!stats.offHand().is(FishingBait.class)) {
 			MadSand.notice("You don't have any bait equipped!");
 			return;
 		}
@@ -642,7 +628,7 @@ public class Player extends Entity {
 			return;
 		}
 
-		if (stats.hand().type == ItemType.FishingRod && tileInFront.hasFishingSpot())
+		if (stats.getEquippedTool().type == Tool.Type.FishingRod && tileInFront.hasFishingSpot())
 			fish(tileInFront.fishingSpot);
 
 		if (obj.id == Map.nullObject.id)
@@ -675,7 +661,7 @@ public class Player extends Entity {
 			return;
 		}
 
-		if (getObjectResource(obj.id) != -1 || stats.hand().type == ItemType.Hammer) {
+		if (getObjectResource(obj.id) != -1 || stats.getEquippedTool().type == Tool.Type.Hammer) {
 			if (obj.harvestHp > 0)
 				new ResourceProgressBar(obj).start();
 			else
@@ -702,7 +688,7 @@ public class Player extends Entity {
 		Skill skill = obj.skill;
 		int curLvl = stats.skills.getLvl(skill);
 
-		if (stats.hand().type == ItemType.Hammer)
+		if (stats.getEquippedTool().type == Tool.Type.Hammer)
 			item = -1;
 
 		if (curLvl < obj.lvl) {
@@ -720,7 +706,7 @@ public class Player extends Entity {
 			return -1;
 		}
 
-		int damage = stats.skills.getBaseSkillDamage(skill) + stats.hand().getSkillDamage(skill);
+		int damage = stats.skills.getBaseSkillDamage(skill) + stats.getEquippedTool().getSkillDamage(skill);
 		boolean damaged = obj.takeHarvestDamage(damage);
 
 		if (item != -1 && damaged) { // Succesfull interaction with item that drops something
@@ -733,9 +719,9 @@ public class Player extends Entity {
 
 			for (int i = 0; i < rolls; ++i) {
 				rewardCount = stats.skills.getItemReward(skill);
-				objLoot = new Item(item, rewardCount);
+				objLoot = Item.create(item, rewardCount);
 				addItem(objLoot);
-				item = MapObject.getAltItem(obj.id, stats.hand().type);
+				item = getObjectResource(obj.id);
 			}
 
 			increaseSkill(skill, obj.lvl);
@@ -751,48 +737,24 @@ public class Player extends Entity {
 	}
 
 	private int getObjectResource(int objectId) {
-		return MapObject.getAltItem(objectId, stats.hand().type);
+		return MapObject.rollObjectResource(objectId, stats.getEquippedTool().type);
 	}
 
 	public void useItem() {
 		useItem(stats.hand());
 	}
 
-	private void performUseItem(Item item) {
-		boolean itemUsed = false;
-		checkHands(item.id);
-
-		itemUsed |= useGrabBag(item);
-		itemUsed |= useTileInteractItem(item);
-		itemUsed |= useScriptedItem(item);
-		itemUsed |= useScriptedTile();
-		itemUsed |= useConsumableItem(item);
-		itemUsed |= plantCrop(item);
-		itemUsed |= usePlaceableObject(item);
-		itemUsed |= usePlaceableTile(item);
-
-		if (!itemUsed && stats.equipment.getItem(EquipSlot.slotByTypeAll(item.type)) != item)
-			itemUsed = equip(item);
-
-		checkHands(item.id);
-
-		if (itemUsed) {
-			damageHeldTool();
-
-			if (!item.type.isConsumable())
-				changeStamina(-item.weight);
-		}
-	}
-
 	public void useItem(Item item) {
-		doAction(stats.minorCost, () -> performUseItem(item));
+		doAction(stats.minorCost, () -> {
+			if (useScriptedTile())
+				return;
 
+			item.use(this);
+			checkHands(item.id);
+		});
 	}
 
-	private boolean useGrabBag(Item item) {
-		if (!item.type.equals(ItemType.GrabBag))
-			return false;
-
+	public void useItem(GrabBag item) {
 		ArrayList<Item> items = item.contents.rollItems();
 		for (Item rolledItem : items)
 			addItem(rolledItem);
@@ -802,58 +764,36 @@ public class Player extends Entity {
 
 		if (items.isEmpty())
 			MadSand.warn("You opened " + item.name + ", but it was empty");
-
-		return true;
 	}
 
-	private boolean usePlaceableTile(Item item) {
-		if (Item.getType(item.id).equals(ItemType.PlaceableTile)) {
+	public void useItem(Placeable item) {
+		Map map = MadSand.world.getCurLoc();
+		if (item.type == Placeable.Type.Object)
+			map.addObject(x, y, stats.look, item.altObject);
+		else
+			map.addTile(x, y, stats.look, item.altObject);
+
+		inventory.delItem(item, 1);
+	}
+
+	public void useItem(CropSeeds item) {
+		Pair coords = new Pair(x, y);
+		if (MadSand.world.getCurLoc().putCrop(coords.x, coords.y, item.id)) {
+			increaseSkill(Skill.Farming);
+			MadSand.print("You plant " + item.name);
 			inventory.delItem(item, 1);
-			MadSand.world.getCurLoc().addTile(x, y, stats.look, Item.getAltObject(item.id));
-			return true;
 		}
-
-		return false;
 	}
 
-	private boolean usePlaceableObject(Item item) {
-		if (Item.getType(item.id).equals(ItemType.PlaceableObject)) {
-			inventory.delItem(item, 1);
-			MadSand.world.getCurLoc().addObject(x, y, stats.look, Item.getAltObject(item.id));
-			return true;
-		}
-
-		return false;
-	}
-
-	private boolean plantCrop(Item item) {
-		if (Item.getType(item.id) == ItemType.Crop) {
-			Pair coords = new Pair(x, y);
-			if (MadSand.world.getCurLoc().putCrop(coords.x, coords.y, item.id)) {
-				increaseSkill(Skill.Farming);
-				MadSand.print("You plant " + item.name);
-				inventory.delItem(item, 1);
-			}
-			return true;
-		}
-
-		return false;
-	}
-
-	private boolean useConsumableItem(Item item) {
-		if (Item.getType(item.id).equals(ItemType.Consumable)) {
-			increaseSkill(Skill.Survival);
-			MadSand.print("You eat " + item.name);
-			stats.foodTicks += item.getNutritionalValue();
-			heal(item.healAmount);
-			satiate(item.satiationAmount);
-			changeStamina(item.staminaAmount);
-			inventory.delItem(item, 1);
-			Gui.refreshOverlay();
-			return true;
-		}
-
-		return false;
+	public void useItem(Consumable item) {
+		increaseSkill(Skill.Survival);
+		MadSand.print("You eat " + item.name);
+		stats.foodTicks += item.getNutritionalValue();
+		heal(item.healAmount);
+		satiate(item.satiationAmount);
+		changeStamina(item.staminaAmount);
+		inventory.delItem(item, 1);
+		Gui.refreshOverlay();
 	}
 
 	private boolean useScriptedTile() {
@@ -866,43 +806,31 @@ public class Player extends Entity {
 		return false;
 	}
 
-	private boolean useScriptedItem(Item item) {
-		String action = ItemProp.getOnUseAction(item.id);
+	public void useItem(Tool item) {
+		changeStamina(-item.weight);
+		damageHeldTool();
 
-		if (!action.equals(Resources.emptyField)) {
-			LuaUtils.execute(action);
-			if (item.type.equals(ItemType.Consumable))
-				this.inventory.delItem(item, 1);
-			checkHands(item.id);
-			return true;
+		if (item.type == Tool.Type.Shovel) {
+			int ptile = MadSand.world.getTileId(x, y);
+			int altItem = MapObject.rollTileResource(ptile, item.type);
+
+			if (altItem != -1) {
+				MadSand.world.getCurLoc().delTile(x, y);
+				Item gotItem = Item.create(altItem);
+
+				addItem(gotItem);
+
+				MadSand.notice("You dig " + gotItem.name + " from the ground");
+				increaseSkill(Skill.Digging);
+			}
 		}
-
-		return false;
-	}
-
-	private boolean useTileInteractItem(Item item) {
-		int ptile = MadSand.world.getTileId(x, y);
-		int altItem = MapObject.getTileAltItem(ptile, item.type);
-
-		if (altItem != -1) {
-			MadSand.world.getCurLoc().delTile(x, y);
-			Item gotItem = new Item(altItem);
-
-			addItem(gotItem);
-
-			MadSand.notice("You dig " + gotItem.name + " from the ground");
-			increaseSkill(Skill.Digging);
-			return true;
-		}
-
-		return false;
 	}
 
 	public void freeHands(EquipSlot slot, boolean silent) {
 		Item item = stats.equipment.getItem(slot);
 		if (!silent && item.id != Item.NULL_ITEM)
 			MadSand.print("You put " + item.name + " back to your inventory");
-		stats.equipment.equip(slot, Item.nullItem);
+		stats.equipment.unEquip(slot);
 		inventory.refreshItem(item);
 	}
 
@@ -1179,10 +1107,10 @@ public class Player extends Entity {
 		ArrayList<Item> items = new ArrayList<>();
 		// Require coins
 		int creationCost = (settlementsEstablished + 1) * SETTLEMENT_COST;
-		items.add(new Item(Globals.getInt(Globals.CURRENCY), creationCost));
+		items.add(Item.create(Globals.getInt(Globals.CURRENCY), creationCost));
 
 		// Not-so-random material of tier #<settlementsEstablished>
-		Item requiredResource = new Item(
+		Item requiredResource = Item.create(
 				NpcProp.tradeLists.getTradeItemList(TradeCategory.Materials, settlementsEstablished)
 						.getRandomId(new Random(settlementsEstablished)));
 		requiredResource.quantity = SETTLEMENT_RES_COST * (settlementsEstablished + 1);

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import hitonoriol.madsand.Resources;
-import hitonoriol.madsand.entities.inventory.ItemType;
 import hitonoriol.madsand.entities.inventory.item.CropSeeds;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Placeable;
@@ -51,10 +50,6 @@ public class ItemProp {
 
 	public static int getCost(int id) {
 		return items.get(id).cost;
-	}
-
-	public static ItemType getType(int id) {
-		return items.get(id).type;
 	}
 
 	public static int getAltObject(int id) {

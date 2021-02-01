@@ -13,7 +13,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.entities.inventory.ItemType;
+import hitonoriol.madsand.entities.inventory.item.CropSeeds;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.gui.OverlayMouseoverListener;
@@ -24,6 +24,7 @@ import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.world.World;
+import hitonoriol.madsand.entities.inventory.item.Tool;
 
 public class ActionButton extends Table {
 	public Skin skin;
@@ -106,7 +107,7 @@ public class ActionButton extends Table {
 		Tile tile = loc.getTile(coords.x, coords.y);
 		coords.addDirection(player.stats.look);
 
-		int tileItem = MapObject.getTileAltItem(tile.id, player.stats.hand().type);
+		int tileItem = MapObject.rollTileResource(tile.id, player.stats.getEquippedTool().type);
 		MapObject object = loc.getObject(coords.x, coords.y);
 		AbstractNpc npc = loc.getNpc(coords.x, coords.y);
 		Item item = player.stats.hand();
@@ -117,11 +118,11 @@ public class ActionButton extends Table {
 		interactButton = new TextButton("", skin);
 		super.add(interactButton).width(WIDTH).row();
 		super.addListener(inGameBtnListener);
-		boolean holdsShovel = player.stats.hand().type == ItemType.Shovel;
+		boolean holdsShovel = player.stats.getEquippedTool().type == Tool.Type.Shovel;
 
 		String tileMsg = "Interact with ";
 
-		if (item.type.equals(ItemType.Crop) && tile.id == ItemProp.getCropSoil(item.id))
+		if (item.is(CropSeeds.class) && tile.id == ItemProp.getCropSoil(item.id))
 			activateInteractBtn(interactButton, "Plant " + item.name, useItemListener);
 		else if (player.canTravel())
 			activateInteractBtn(interactButton, "Travel to the next sector", travelListener);

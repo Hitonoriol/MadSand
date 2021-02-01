@@ -1,6 +1,7 @@
 package hitonoriol.madsand.entities.inventory.item;
 
 import hitonoriol.madsand.Resources;
+import hitonoriol.madsand.entities.Player;
 
 public class Consumable extends Item {
 	public int satiationAmount;
@@ -13,10 +14,20 @@ public class Consumable extends Item {
 		satiationAmount = protoItem.satiationAmount;
 		staminaAmount = protoItem.staminaAmount;
 	}
-
+	
+	public Consumable() {
+		super();
+	}
+	
 	@Override
-	public Item copy() {
+	public Consumable copy() {
 		return new Consumable(this);
+	}
+	
+	@Override
+	public void use(Player player) {
+		super.use(player);
+		player.useItem(this);
 	}
 
 	public int getNutritionalValue() {

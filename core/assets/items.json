@@ -1,12 +1,14 @@
 {
-	"0" : { "name": "Nothing"},
+	"0" : { "@type" : "Item", "name": "Nothing"},
 	"1" : {
 		"name" : "Wood",
 		"altObject" : 9,
 		"cost" : 5,
-		"type" : "PlaceableObject"
+		"@type" : "Placeable",
+		"type" : "Object"
 	},
 	"2" : {
+		"@type" : "Item",
 		"name" : "Small rock",
 		"craftQuantity" : 4,
 		"recipe" : "25/1",
@@ -14,12 +16,13 @@
 		"weight" : 0.6
 	},
 	"3" : {
+		"@type" : "Tool",
+		"type" : "Axe",
 		"name" : "Stone axe",
 		"recipe" : "2/5:8/5",
 		"dmg" : 1,
 		"hp" : 256,
 		"cost" : 14,
-		"type" : "Axe",
 		"skill" : "Woodcutting",
 		"weight" : 0.7
 	},
@@ -30,10 +33,11 @@
 		"staminaAmount" : 5,
 		"healAmount" : 5,
 		"cost" : 15,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.7
 	},
 	"5" : {
+		"@type" : "Item",
 		"name" : "Clay",
 		"cost" : 3,
 		"weight" : 0.3
@@ -44,6 +48,7 @@
 		"dmg" : 2,
 		"hp" : 256,
 		"cost" : 14,
+		"@type" : "Tool",
 		"type" : "Shovel",
 		"weight" : 0.7
 	},
@@ -53,10 +58,11 @@
 		"staminaAmount" : 2,
 		"healAmount" : 1,
 		"cost" : 7,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.05
 	},
 	"8" : {
+		"@type" : "Item",
 		"name" : "Stick",
 		"recipe" : "1/1",
 		"craftQuantity" : 3,
@@ -64,6 +70,7 @@
 		"weight" : 0.2
 	},
 	"9" : {
+		"@type" : "Item",
 		"name" : "Flint",
 		"cost" : 5,
 		"weight" : 0.1
@@ -73,7 +80,8 @@
 		"recipe" : "2/2",
 		"altObject" : 8,
 		"cost" : 7,
-		"type" : "PlaceableObject",
+		"@type" : "Placeable",
+		"type" : "Object",
 		"weight" : 1.5
 	},
 	"11" : {
@@ -82,6 +90,7 @@
 		"dmg" : 2,
 		"hp" : 1024,
 		"cost" : 14,
+		"@type" : "Tool",
 		"type" : "Pickaxe",
 		"skill" : "Mining",
 		"weight" : 0.7
@@ -90,6 +99,7 @@
 		"name" : "Stone sword",
 		"recipe" : "2/7:8/5",
 		"cost" : 15,
+		"@type" : "Weapon",
 		"type" : "MeleeWeapon",
 		"weight" : 0.8,
 		"lvl" : 1,
@@ -103,6 +113,7 @@
 		"name" : "Iron sword",
 		"recipe" : "155|23/15:8/10",
 		"cost" : 29,
+		"@type" : "Weapon",
 		"type" : "MeleeWeapon",
 		"weight" : 1.0,
 		"lvl" : 2,
@@ -114,6 +125,7 @@
 		"name" : "Iron helmet",
 		"recipe" : "155|23/25",
 		"cost" : 32,
+		"@type" : "Armor",
 		"type" : "HeadArmor",
 		"weight" : 1.1,
 		"lvl" : 3,
@@ -127,6 +139,7 @@
 		"name" : "Iron shield",
 		"recipe" : "155|23/25",
 		"cost" : 35,
+		"@type" : "Armor",
 		"type" : "Shield",
 		"weight" : 1.1,
 		"lvl" : 1,
@@ -140,6 +153,7 @@
 		"name" : "Leather armor",
 		"recipe" : "22/15",
 		"cost" : 27,
+		"@type" : "Armor",
 		"type" : "ChestArmor",
 		"weight" : 0.8,
 		"lvl" : 1,
@@ -153,6 +167,7 @@
 		"name" : "Iron platemail",
 		"recipe" : "155|23/30",
 		"cost" : 49,
+		"@type" : "Armor",
 		"type" : "ChestArmor",
 		"weight" : 1.4,
 		"lvl" : 2,
@@ -166,6 +181,7 @@
 		"name" : "Chainmail",
 		"recipe" : "23/37:8/3",
 		"cost" : 40,
+		"@type" : "Armor",
 		"type" : "ChestArmor",
 		"weight" : 1.3,
 		"lvl" : 2,
@@ -179,6 +195,7 @@
 		"name" : "Reinforced iron platemail",
 		"recipe" : "155|17/1:72/10",
 		"cost" : 85,
+		"@type" : "Armor",
 		"type" : "ChestArmor",
 		"weight" : 1.9,
 		"lvl" : 3,
@@ -192,6 +209,7 @@
 		"name" : "Hardened iron sword",
 		"recipe" : "155|13/1:72/10",
 		"cost" : 90,
+		"@type" : "Weapon",
 		"type" : "MeleeWeapon",
 		"weight" : 1.9,
 		"lvl" : 3,
@@ -202,20 +220,24 @@
 		}
 	},
 	"21" : {
+		"@type" : "Item",
 		"name" : "Coin",
 		"cost" : 1,
 		"weight" : 0.0
 	},
 	"22" : {
+		"@type" : "Item",
 		"name" : "Leather",
 		"cost" : 5
 	},
 	"23" : {
+		"@type" : "Item",
 		"name" : "Iron ore",
 		"cost" : 16,
 		"weight" : 0.7
 	},
 	"24" : {
+		"@type" : "Item",
 		"name" : "Gold ore",
 		"cost" : 30,
 		"weight" : 0.7
@@ -224,10 +246,12 @@
 		"name" : "Stone",
 		"altObject" : 13,
 		"cost" : 1,
-		"type" : "PlaceableObject",
+		"@type" : "Placeable",
+		"type" : "Object",
 		"weight" : 1.0
 	},
 	"26" : {
+		"@type" : "Item",
 		"name" : "???",
 		"cost" : 1,
 		"weight" : 1.0
@@ -237,25 +261,30 @@
 		"recipe" : "1/1",
 		"altObject" : 9,
 		"cost" : 4,
-		"type" : "PlaceableTile",
+		"@type" : "Placeable",
+		"type" : "Tile",
 		"weight" : 1.0
 	},
 	"28" : {
+		"@type" : "Item",
 		"name" : "Ruby",
 		"cost" : 30,
 		"weight" : 0.1
 	},
 	"29" : {
+		"@type" : "Item",
 		"name" : "Sapphire",
 		"cost" : 45,
 		"weight" : 0.1
 	},
 	"30" : {
+		"@type" : "Item",
 		"name" : "Diamond",
 		"cost" : 75,
 		"weight" : 0.1
 	},
 	"31" : {
+		"@type" : "Item",
 		"name" : "Emerald",
 		"cost" : 60,
 		"weight" : 0.1
@@ -264,42 +293,48 @@
 		"name" : "Stone plate",
 		"altObject" : 15,
 		"cost" : 5,
-		"type" : "PlaceableObject",
+		"@type" : "Placeable",
+		"type" : "Object",
 		"weight" : 1.2
 	},
 	"33" : {
 		"name" : "Stone plate",
 		"altObject" : 16,
 		"cost" : 5,
-		"type" : "PlaceableObject",
+		"@type" : "Placeable",
+		"type" : "Object",
 		"weight" : 1.2
 	},
 	"34" : {
 		"name" : "Stone plate",
 		"altObject" : 17,
 		"cost" : 5,
-		"type" : "PlaceableObject",
+		"@type" : "Placeable",
+		"type" : "Object",
 		"weight" : 1.2
 	},
 	"35" : {
 		"name" : "Stone floor",
 		"altObject" : 12,
 		"cost" : 5,
-		"type" : "PlaceableTile",
+		"@type" : "Placeable",
+		"type" : "Tile",
 		"weight" : 1.2
 	},
 	"36" : {
 		"name" : "Stone floor",
 		"altObject" : 13,
 		"cost" : 5,
-		"type" : "PlaceableTile",
+		"@type" : "Placeable",
+		"type" : "Tile",
 		"weight" : 1.2
 	},
 	"37" : {
 		"name" : "Stone floor",
 		"altObject" : 14,
 		"cost" : 5,
-		"type" : "PlaceableTile",
+		"@type" : "Placeable",
+		"type" : "Tile",
 		"weight" : 1.2
 	},
 	"38" : {
@@ -307,7 +342,8 @@
 		"recipe" : "1/15:8/5",
 		"altObject" : 18,
 		"cost" : 8,
-		"type" : "PlaceableObject",
+		"@type" : "Placeable",
+		"type" : "Object",
 		"weight" : 1.0
 	},
 	"39" : {
@@ -316,7 +352,7 @@
 		"staminaAmount" : 2.5,
 		"healAmount" : 2,
 		"cost" : 9,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.15
 	},
 	"40" : {
@@ -324,7 +360,7 @@
 		"recipe" : "91|68/5",
 		"altObject" : 20,
 		"cost" : 18,
-		"type" : "Crop",
+		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
 			"soil" : 15,
@@ -358,6 +394,7 @@
 		"dmg" : 2,
 		"hp" : 256,
 		"cost" : 14,
+		"@type" : "Tool",
 		"type" : "Hoe",
 		"weight" : 0.8
 	},
@@ -366,7 +403,8 @@
 		"recipe" : "5/3:2/3",
 		"altObject" : 26,
 		"cost" : 10,
-		"type" : "PlaceableObject",
+		"@type" : "Placeable",
+		"type" : "Object",
 		"weight" : 1.0
 	},
 	"43" : {
@@ -374,7 +412,8 @@
 		"recipe" : "5/1",
 		"altObject" : 19,
 		"cost" : 3,
-		"type" : "PlaceableTile",
+		"@type" : "Placeable",
+		"type" : "Tile",
 		"weight" : 1.0
 	},
 	"44" : {
@@ -383,7 +422,7 @@
 		"staminaAmount" : 2.5,
 		"healAmount" : 2,
 		"cost" : 3,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.05
 	},
 	"45" : {
@@ -391,7 +430,7 @@
 		"satiationAmount" : -10,
 		"healAmount" : -18,
 		"cost" : 7,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.05
 	},
 	"46" : {
@@ -400,7 +439,7 @@
 		"staminaAmount" : 3,
 		"healAmount" : 3,
 		"cost" : 11,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.1
 	},
 	"47" : {
@@ -409,7 +448,7 @@
 		"staminaAmount" : 3,
 		"healAmount" : 3,
 		"cost" : 11,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.1
 	},
 	"48" : {
@@ -418,7 +457,7 @@
 		"staminaAmount" : 3,
 		"healAmount" : 3,
 		"cost" : 11,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.1
 	},
 	"49" : {
@@ -427,7 +466,7 @@
 		"staminaAmount" : 3,
 		"healAmount" : 3,
 		"cost" : 11,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.1
 	},
 	"50" : {
@@ -436,7 +475,7 @@
 		"staminaAmount" : 3,
 		"healAmount" : 5,
 		"cost" : 12,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.1
 	},
 	"51" : {
@@ -444,7 +483,7 @@
 		"recipe" : "91|68/5",
 		"altObject" : 43,
 		"cost" : 24,
-		"type" : "Crop",
+		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
 			"soil" : 15,
@@ -467,7 +506,7 @@
 		"recipe" : "91|68/5",
 		"altObject" : 47,
 		"cost" : 24,
-		"type" : "Crop",
+		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
 			"soil" : 15,
@@ -490,7 +529,7 @@
 		"recipe" : "91|68/5",
 		"altObject" : 51,
 		"cost" : 24,
-		"type" : "Crop",
+		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
 			"soil" : 15,
@@ -513,7 +552,7 @@
 		"recipe" : "91|68/5",
 		"altObject" : 55,
 		"cost" : 24,
-		"type" : "Crop",
+		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
 			"soil" : 15,
@@ -536,7 +575,7 @@
 		"recipe" : "91|68/5",
 		"altObject" : 59,
 		"cost" : 24,
-		"type" : "Crop",
+		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
 			"soil" : 15,
@@ -555,6 +594,7 @@
 		}
 	},
 	"56" : {
+		"@type" : "Item",
 		"name" : "Coal",
 		"cost" : 4,
 		"weight" : 0.7
@@ -566,7 +606,7 @@
 		"healAmount" : 7,
 		"staminaAmount" : 7.5,
 		"cost" : 11,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.4
 	},
 	"58" : {
@@ -576,7 +616,7 @@
 		"staminaAmount" : 5,
 		"healAmount" : -5,
 		"cost" : 12,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.5
 	},
 	"59" : {
@@ -585,7 +625,7 @@
 		"staminaAmount" : 5,
 		"healAmount" : 5,
 		"cost" : 15,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.3
 	},
 	"60" : {
@@ -594,43 +634,49 @@
 		"healAmount" : 25,
 		"staminaAmount" : 2.5,
 		"cost" : 25,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.2
 	},
 	"61" : {
 		"name" : "Buckler",
 		"lvl": 1,
 		"cost" : 79,
-		"type": "Shield",
+		"@type" : "Armor",
+		"type" : "Shield",
 		"weight" : 1.1
 	},
 	"62" : {
 		"name" : "Royal shield",
 		"lvl": 1,
 		"cost" : 110,
-		"type": "Shield",
+		"@type" : "Armor",
+		"type" : "Shield",
 		"weight" : 1.1
 	},
 	"63" : {
 		"name" : "Golden shield",
 		"lvl": 1,
 		"cost" : 199,
-		"type": "Shield",
+		"@type" : "Armor",
+		"type" : "Shield",
 		"weight" : 1.7
 	},
 	"64" : {
 		"name" : "Executor's shield",
 		"lvl": 1,
 		"cost" : 231,
-		"type": "Shield",
+		"@type" : "Armor",
+		"type" : "Shield",
 		"weight" : 1.8
 	},
 	"65" : {
+		"@type" : "Item",
 		"name" : "Spicy leaf",
 		"cost" : 5,
 		"weight" : 0.01
 	},
 	"66" : {
+		"@type" : "Item",
 		"name" : "Sour leaf",
 		"cost" : 5,
 		"weight" : 0.01
@@ -642,11 +688,13 @@
 		"lvl" : 1,
 		"hp" : 1536,
 		"cost" : 32,
+		"@type" : "Tool",
 		"type" : "Pickaxe",
 		"skill" : "Mining",
 		"weight" : 0.9
 	},
 	"68" : {
+		"@type" : "Item",
 		"name" : "Plant fiber",
 		"craftQuantity" : 3,
 		"recipe" : "8/2",
@@ -654,6 +702,7 @@
 		"weight" : 0.01
 	},
 	"69" : {
+		"@type" : "Item",
 		"name" : "Plant thread",
 		"craftQuantity" : 2,
 		"recipe" : "68/1",
@@ -661,6 +710,7 @@
 		"weight" : 0.01
 	},
 	"70" : {
+		"@type" : "Item",
 		"name" : "Sharp rock",
 		"recipe" : "2/1",
 		"craftQuantity": 2,
@@ -668,12 +718,14 @@
 		"weight" : 0.5
 	},
 	"71" : {
+		"@type" : "Item",
 		"name" : "Sharp stick",
 		"recipe" : "2/1:8/1",
 		"cost" : 7,
 		"weight" : 0.1
 	},
 	"72" : {
+		"@type" : "Item",
 		"name" : "Iron ingot",
 		"recipe" : "67|23/1:56/1",
 		"craftQuantity" : 2,
@@ -681,6 +733,7 @@
 		"weight" : 0.7
 	},
 	"73" : {
+		"@type" : "Item",
 		"name" : "Gold ingot",
 		"recipe" : "67|24/1:56/1",
 		"craftQuantity" : 2,
@@ -691,6 +744,7 @@
 		"name" : "Spear",
 		"recipe" : "72/5:8/5",
 		"cost" : 57,
+		"@type" : "Weapon",
 		"type" : "MeleeWeapon",
 		"weight" : 0.8,
 		"lvl" : 2,
@@ -702,7 +756,7 @@
 	},
 	"75": {
 		"name": "Scroll of Dungeon Entrance Search",
-		"type": "Consumable",
+		"@type" : "Consumable",
 		"cost": 86,
 		"weight": 0.1,
 		"useAction": "
@@ -717,6 +771,7 @@
 		"name" : "Leather Boots",
 		"recipe" : "22/10",
 		"cost" : 50,
+		"@type" : "Armor",
 		"type" : "FootArmor",
 		"weight" : 1,
 		"lvl" : 1,
@@ -731,6 +786,7 @@
 		"name" : "Iron Boots",
 		"recipe" : "155|72/10",
 		"cost" : 80,
+		"@type" : "Armor",
 		"type" : "FootArmor",
 		"weight" : 1.9,
 		"lvl" : 2,
@@ -745,6 +801,7 @@
 		"name" : "Golden Boots",
 		"recipe" : "73/10",
 		"cost" : 135,
+		"@type" : "Armor",
 		"type" : "FootArmor",
 		"weight" : 1.75,
 		"lvl" : 3,
@@ -759,6 +816,7 @@
 		"name" : "Leather Pants",
 		"recipe" : "22/10",
 		"cost" : 50,
+		"@type" : "Armor",
 		"type" : "LegArmor",
 		"weight" : 0.7,
 		"lvl" : 1,
@@ -772,6 +830,7 @@
 		"name" : "Adventurer's Pants",
 		"recipe" : "75|68/10:69/3",
 		"cost" : 55,
+		"@type" : "Armor",
 		"type" : "LegArmor",
 		"weight" : 0.5,
 		"lvl" : 1,
@@ -785,6 +844,7 @@
 		"name" : "Reinforced Iron Helmet",
 		"recipe" : "155|14/1:72/10",
 		"cost" : 150,
+		"@type" : "Armor",
 		"type" : "HeadArmor",
 		"weight" : 2.25,
 		"lvl" : 3,
@@ -798,6 +858,7 @@
 		"name" : "Adventurer's Hat",
 		"recipe" : "75|68/10:69/3",
 		"cost" : 55,
+		"@type" : "Armor",
 		"type" : "HeadArmor",
 		"weight" : 2.25,
 		"lvl" : 1,
@@ -811,6 +872,7 @@
 		"name" : "Leather Helmet",
 		"recipe" : "22/10",
 		"cost" : 45,
+		"@type" : "Armor",
 		"type" : "HeadArmor",
 		"weight" : 1,
 		"lvl" : 1,
@@ -824,6 +886,7 @@
 		"name" : "Light Iron Armor",
 		"recipe" : "155|72/10",
 		"cost" : 100,
+		"@type" : "Armor",
 		"type" : "ChestArmor",
 		"weight" : 1.75,
 		"lvl" : 2,
@@ -836,6 +899,7 @@
 	"85" : {
 		"name" : "Toy Sword",
 		"cost" : 19,
+		"@type" : "Weapon",
 		"type" : "MeleeWeapon",
 		"weight" : 0.6,
 		"lvl" : 1,
@@ -849,6 +913,7 @@
 		"name" : "Spiked Club",
 		"recipe" : "70/5:1/1",
 		"cost" : 20,
+		"@type" : "Weapon",
 		"type" : "MeleeWeapon",
 		"weight" : 1.1,
 		"lvl" : 1,
@@ -861,6 +926,7 @@
 	"87" : {
 		"name" : "Dagger",
 		"cost" : 79,
+		"@type" : "Weapon",
 		"type" : "OffhandWeapon",
 		"weight" : 0.9,
 		"lvl" : 1,
@@ -874,6 +940,7 @@
 		"name" : "Steel Dagger",
 		"recipe" : "155|72/15",
 		"cost" : 111,
+		"@type" : "Weapon",
 		"type" : "OffhandWeapon",
 		"weight" : 1.1,
 		"lvl" : 2,
@@ -887,6 +954,7 @@
 		"name" : "Iron Flail",
 		"recipe" : "155|72/17",
 		"cost" : 125,
+		"@type" : "Weapon",
 		"type" : "MeleeWeapon",
 		"weight" : 2,
 		"lvl" : 3,
@@ -899,6 +967,7 @@
 	"90" : {
 		"name" : "Rapier",
 		"cost" : 150,
+		"@type" : "Weapon",
 		"type" : "MeleeWeapon",
 		"weight" : 1.7,
 		"lvl" : 3,
@@ -911,6 +980,7 @@
 	"91" : {
 		"name" : "Saber",
 		"cost" : 150,
+		"@type" : "Weapon",
 		"type" : "MeleeWeapon",
 		"weight" : 1.9,
 		"lvl" : 3,
@@ -923,6 +993,7 @@
 	"92" : {
 		"name" : "Royal Shortsword",
 		"cost" : 190,
+		"@type" : "Weapon",
 		"type" : "MeleeWeapon",
 		"weight" : 2.25,
 		"lvl" : 4,
@@ -935,6 +1006,7 @@
 	"93" : {
 		"name" : "Waraxe",
 		"cost" : 235,
+		"@type" : "Weapon",
 		"type" : "MeleeWeapon",
 		"weight" : 4,
 		"lvl" : 5,
@@ -948,17 +1020,20 @@
 		"name" : "Fishing Rod",
 		"lvl" : 1,
 		"hp" : 50,
+		"@type" : "Tool",
 		"type" : "FishingRod",
 		"recipe" : "8/5:69/5",
 		"cost" : 20,
 		"weight" : 0.7
 	},
 	"95" : {
+		"@type" : "Item",
 		"name" : "Bone",
 		"cost" : 4,
 		"weight" : 0.1
 	},
 	"96" : {
+		"@type" : "Item",
 		"name" : "Raw Meat",
 		"cost" : 4,
 		"weight" : 0.3
@@ -969,7 +1044,7 @@
 		"staminaAmount" : 1,
 		"healAmount" : 1,
 		"cost" : 5,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.09
 	},
 	"98" : {
@@ -978,7 +1053,7 @@
 		"staminaAmount" : 5,
 		"healAmount" : 5,
 		"cost" : 30,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.6
 	},
 	"99" : {
@@ -987,30 +1062,35 @@
 		"staminaAmount" : 2,
 		"healAmount" : 3,
 		"cost" : 7,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.17
 	},
 	"100" : {
+		"@type" : "Item",
 		"name" : "Dungeon key",
 		"cost" : 350,
 		"weight" : 0.1
 	},
 	"101" : {
+		"@type" : "Item",
 		"name" : "Time flux powder",
 		"cost" : 0,
 		"weight" : 0
 	},
 	"102" : {
+		"@type" : "Item",
 		"name" : "Empty flask",
 		"cost" : 5,
 		"weight" : 0.15
 	},
 	"103" : {
+		"@type" : "Item",
 		"name" : "Water flask",
 		"cost" : 5,
 		"weight" : 0.2
 	},
 	"104" : {
+		"@type" : "Item",
 		"name" : "Hay",
 		"cost" : 5,
 		"weight" : 0.1
@@ -1019,6 +1099,7 @@
 		"name" : "Plant fiber shirt",
 		"recipe" : "75|68/10:69/1",
 		"cost" : 33,
+		"@type" : "Armor",
 		"type" : "ChestArmor",
 		"weight" : 0.11,
 		"lvl" : 1,
@@ -1034,7 +1115,7 @@
 		"staminaAmount" : 2.5,
 		"healAmount" : 3,
 		"cost" : 8,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.2
 	},
 	"107" : {
@@ -1043,7 +1124,7 @@
 		"staminaAmount" : 2.5,
 		"healAmount" : 3,
 		"cost" : 8,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.19
 	},
 	"108" : {
@@ -1052,7 +1133,7 @@
 		"staminaAmount" : 2.5,
 		"healAmount" : 7,
 		"cost" : 9,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.1
 	},
 	"109" : {
@@ -1061,15 +1142,17 @@
 		"staminaAmount" : 1,
 		"healAmount" : 1,
 		"cost" : 6,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.05
 	},
 	"110" : {
+		"@type" : "Item",
 		"name" : "Wheat",
 		"cost" : 8,
 		"weight" : 0.1
 	},
 	"111" : {
+		"@type" : "Item",
 		"name" : "Cocoa",
 		"cost" : 10,
 		"weight" : 0.11
@@ -1080,7 +1163,7 @@
 		"staminaAmount" : 2,
 		"healAmount" : 4,
 		"cost" : 9,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.1
 	},
 	"113" : {
@@ -1089,7 +1172,7 @@
 		"staminaAmount" : 1.9,
 		"healAmount" : 2,
 		"cost" : 8,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.09
 	},
 	"114" : {
@@ -1098,7 +1181,7 @@
 		"staminaAmount" : 2,
 		"healAmount" : 7,
 		"cost" : 12,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.05
 	},
 	"115" : {
@@ -1106,7 +1189,7 @@
 		"recipe" : "91|68/5",
 		"altObject" : 115,
 		"cost" : 30,
-		"type" : "Crop",
+		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
 			"soil" : 15,
@@ -1129,7 +1212,7 @@
 		"recipe" : "91|68/5",
 		"altObject" : 119,
 		"cost" : 30,
-		"type" : "Crop",
+		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
 			"soil" : 15,
@@ -1152,7 +1235,7 @@
 		"recipe" : "91|68/5",
 		"altObject" : 123,
 		"cost" : 35,
-		"type" : "Crop",
+		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
 			"soil" : 15,
@@ -1175,7 +1258,7 @@
 		"recipe" : "91|68/5",
 		"altObject" : 127,
 		"cost" : 20,
-		"type" : "Crop",
+		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
 			"soil" : 15,
@@ -1198,7 +1281,7 @@
 		"recipe" : "91|68/5",
 		"altObject" : 131,
 		"cost" : 33,
-		"type" : "Crop",
+		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
 			"soil" : 15,
@@ -1221,7 +1304,7 @@
 		"recipe" : "91|68/5",
 		"altObject" : 135,
 		"cost" : 40,
-		"type" : "Crop",
+		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
 			"soil" : 15,
@@ -1244,7 +1327,7 @@
 		"recipe" : "91|68/5",
 		"altObject" : 139,
 		"cost" : 30,
-		"type" : "Crop",
+		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
 			"soil" : 15,
@@ -1267,7 +1350,7 @@
 		"recipe" : "91|68/5",
 		"altObject" : 143,
 		"cost" : 35,
-		"type" : "Crop",
+		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
 			"soil" : 15,
@@ -1290,7 +1373,7 @@
 		"recipe" : "91|68/5",
 		"altObject" : 147,
 		"cost" : 25,
-		"type" : "Crop",
+		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
 			"soil" : 15,
@@ -1313,7 +1396,7 @@
 		"recipe" : "91|68/5",
 		"altObject" : 151,
 		"cost" : 50,
-		"type" : "Crop",
+		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
 			"soil" : 15,
@@ -1332,6 +1415,7 @@
 		}
 	},
 	"125" : {
+		"@type" : "Item",
 		"name" : "Egg",
 		"cost" : 8,
 		"weight" : 0.1
@@ -1342,10 +1426,11 @@
 		"staminaAmount" : 2,
 		"healAmount" : 4,
 		"cost" : 9,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.1
 	},
 	"127" : {
+		"@type" : "Item",
 		"name" : "Wool",
 		"cost" : 9,
 		"weight" : 0.07
@@ -1354,7 +1439,7 @@
 		"name" : "Resource bag",
 		"cost" : 0,
 		"weight" : 0.1,
-		"type" : "GrabBag",
+		"@type" : "GrabBag",
 		"contents" : "	(80|1/23:2/20:5/15:9/15:68/20)
 				(40|104/30:56/10:22/11)
 				(15|72/8:73/8)
@@ -1364,7 +1449,7 @@
 		"name" : "Farming bag",
 		"cost" : 0,
 		"weight" : 0.1,
-		"type" : "GrabBag",
+		"@type" : "GrabBag",
 		"contents" : "	(75|40/3:51/3:52/3)
 				(35|53/3:54/3:55/3)
 				(10|118/2:123/2)
@@ -1374,6 +1459,7 @@
 				(0.5625|124/5)"
 	},
 	"130" : {
+		"@type" : "Item",
 		"name" : "Travelling kit",
 		"recipe" : "75|22/5",
 		"cost" : 250,
@@ -1383,6 +1469,7 @@
 		"name" : "Plant fiber boots",
 		"recipe" : "75|68/10:69/1",
 		"cost" : 30,
+		"@type" : "Armor",
 		"type" : "FootArmor",
 		"weight" : 0.15,
 		"lvl" : 1,
@@ -1396,6 +1483,7 @@
 		"name" : "Plant fiber pants",
 		"recipe" : "75|68/15:69/1",
 		"cost" : 35,
+		"@type" : "Armor",
 		"type" : "LegArmor",
 		"weight" : 0.11,
 		"lvl" : 1,
@@ -1409,6 +1497,7 @@
 		"name" : "Plant fiber hat",
 		"recipe" : "75|68/10:69/1",
 		"cost" : 30,
+		"@type" : "Armor",
 		"type" : "HeadArmor",
 		"weight" : 0.11,
 		"lvl" : 1,
@@ -1419,31 +1508,37 @@
 		}
 	},
 	"134" : {
+		"@type" : "Item",
 		"name" : "Palm wood stick",
 		"cost" : 2,
 		"weight" : 0.05
 	},
 	"135" : {
+		"@type" : "Item",
 		"name" : "Pine wood stick",
 		"cost" : 2,
 		"weight" : 0.05
 	},
 	"136" : {
+		"@type" : "Item",
 		"name" : "Deathwood stick",
 		"cost" : 4,
 		"weight" : 0.07
 	},
 	"137" : {
+		"@type" : "Item",
 		"name" : "Important letter",
 		"cost" : 0,
 		"weight" : 0
 	},
 	"138" : {
+		"@type" : "Item",
 		"name" : "Leather bag",
 		"cost" : 0,
 		"weight" : 0
 	},
 	"139" : {
+		"@type" : "Item",
 		"name" : "Flour",
 		"recipe" : "72|110/1",
 		"craftQuantity" : 3,
@@ -1457,61 +1552,72 @@
 		"staminaAmount" : 5,
 		"healAmount" : 5,
 		"cost" : 9,
-		"type" : "Consumable",
+		"@type" : "Consumable",
 		"weight" : 0.25
 	},
 	"141" : {
+		"@type" : "Item",
 		"name" : "Raw poultry",
 		"cost" : 4,
 		"weight" : 0.1
 	},
 	
 	"142" : {
+		"@type" : "Item",
 		"name" : "Herring",
 		"cost" : 4,
 		"weight" : 0.33
 	},
 	"143" : {
+		"@type" : "Item",
 		"name" : "Carp",
 		"cost" : 4,
 		"weight" : 0.33
 	},
 	"144" : {
+		"@type" : "Item",
 		"name" : "Eel",
 		"cost" : 8,
 		"weight" : 0.4
 	},
 	"145" : {
+		"@type" : "Item",
 		"name" : "Angelfish",
 		"cost" : 10,
 		"weight" : 0.35
 	},
 	"146" : {
+		"@type" : "Item",
 		"name" : "Clownfish",
 		"cost" : 11,
 		"weight" : 0.35
 	},
 	"147" : {
+		"@type" : "Item",
 		"name" : "Jellyfish",
 		"cost" : 7,
 		"weight" : 0.4
 	},
 	"148" : {
+		"@type" : "Item",
 		"name" : "Octopus",
 		"cost" : 10,
 		"weight" : 0.45
 	},
 	"149" : {
+		"@type" : "Item",
 		"name" : "Turtle",
 		"cost" : 12,
 		"weight" : 0.75
 	},
 	"150" : {
+		"@type" : "Item",
 		"name" : "Fish bones",
 		"cost" : 1,
 		"weight" : 0.1
 	},
 	"151" : {
+		"@type" : "Item",
 		"name" : "Old boot",
 		"cost" : 1,
 		"weight" : 0.19
@@ -1521,34 +1627,39 @@
 		"name" : "Algae covered box",
 		"cost" : 0,
 		"weight" : 2,
-		"type" : "GrabBag",
+		"@type" : "GrabBag",
 		"contents" : "	(75|150/5:151/5)
 				(40|142/3:143/3)
 				(25|144/3:145/3:146/3)
 				(10|147/2:148/2:149/2)"
 	},
 	"153" : {
+		"@type" : "Item",
 		"name" : "Feather",
 		"cost" : 2,
 		"weight" : 0.01
 	},
 	"154" : {
+		"@type" : "Item",
 		"name" : "Worm",
 		"cost" : 2,
 		"weight" : 0.01,
 		"type" : "FishingBait"
 	},
 	"155" : {
+		"@type" : "Item",
 		"name" : "Pine wood",
 		"cost" : 6,
 		"weight" : 0.1
 	},
 	"156" : {
+		"@type" : "Item",
 		"name" : "Palm wood",
 		"cost" : 7,
 		"weight" : 0.1
 	},
 	"157" : {
+		"@type" : "Item",
 		"name" : "Deathwood",
 		"cost" : 9,
 		"weight" : 0.15
@@ -1560,6 +1671,7 @@
 		"dmg" : 2,
 		"hp" : 1256,
 		"cost" : 32,
+		"@type" : "Tool",
 		"type" : "Axe",
 		"skill" : "Woodcutting",
 		"weight" : 0.9
@@ -1568,6 +1680,7 @@
 		"name" : "Boxing gloves",
 		"cost" : 50,
 		"recipe" : "75|127/10:69/3",
+		"@type" : "Weapon",
 		"type" : "OffhandWeapon",
 		"weight" : 0.25,
 		"lvl" : 1,
@@ -1578,46 +1691,55 @@
 		}
 	},
 	"160" : {
+		"@type" : "Item",
 		"name" : "Pufferfish",
 		"cost" : 10,
 		"weight" : 0.4
 	},
 	"161" : {
+		"@type" : "Item",
 		"name" : "Swordfish",
 		"cost" : 10,
 		"weight" : 0.45
 	},
 	"162" : {
+		"@type" : "Item",
 		"name" : "Dolphin",
 		"cost" : 12,
 		"weight" : 3.5
 	},
 	"163" : {
+		"@type" : "Item",
 		"name" : "Seal",
 		"cost" : 15,
 		"weight" : 5
 	},
 	"164" : {
+		"@type" : "Item",
 		"name" : "Killer whale",
 		"cost" : 17,
 		"weight" : 5.75
 	},
 	"165" : {
+		"@type" : "Item",
 		"name" : "Blue whale",
 		"cost" : 20,
 		"weight" : 10
 	},
 	"166" : {
+		"@type" : "Item",
 		"name" : "Shark",
 		"cost" : 13,
 		"weight" : 3.5
 	},
 	"167" : {
+		"@type" : "Item",
 		"name" : "Yellow fish",
 		"cost" : 8,
 		"weight" : 0.35
 	},
 	"168" : {
+		"@type" : "Item",
 		"name" : "Blue fish",
 		"cost" : 8,
 		"weight" : 0.35
@@ -1627,7 +1749,7 @@
 		"recipe" : "91|68/5",
 		"altObject" : 160,
 		"cost" : 50,
-		"type" : "Crop",
+		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
 			"soil" : 0,
@@ -1651,16 +1773,19 @@
 		"dmg" : 1,
 		"hp" : 256,
 		"cost" : 16,
+		"@type" : "Tool",
 		"type" : "Hammer",
 		"skill" : "None",
 		"weight" : 0.95
 	},
 	"171" : {
+		"@type" : "Item",
 		"name" : "Sandstone",
 		"cost" : 3,
 		"weight" : 0.75
 	},
 	"172" : {
+		"@type" : "Item",
 		"name" : "Ice",
 		"cost" : 3,
 		"weight" : 0.5
@@ -1669,6 +1794,7 @@
 		"name" : "Slingshot",
 		"recipe" : "176|8/10:69/4:22/6",
 		"cost" : 49,
+		"@type" : "Weapon",
 		"type" : "RangedWeapon",
 		"weight" : 0.55,
 		"lvl" : 1,
@@ -1680,6 +1806,7 @@
 		"name" : "Wooden Bow",
 		"recipe" : "176|8/15:69/8",
 		"cost" : 77,
+		"@type" : "Weapon",
 		"type" : "RangedWeapon",
 		"weight" : 0.95,
 		"lvl" : 1,
@@ -1690,7 +1817,7 @@
 	"175" : {
 		"name" : "Stone arrow",
 		"lvl" : 1,
-		"type" : "Projectile",
+		"@type" : "Projectile",
 		"recipe" : "176|71/1:2/1",
 		"craftQuantity" : 3,
 		"dmg" : 2,
@@ -1702,7 +1829,8 @@
 		"lvl" : 1,
 		"recipe" : "1/5:70/2",
 		"craftQuantity" : 5,
-		"type" : "ThrowingWeapon",
+		"@type" : "Projectile",
+		"thrownByHand" : true,
 		"dmg" : 1,
 		"cost" : 13,
 		"weight" : 0.35

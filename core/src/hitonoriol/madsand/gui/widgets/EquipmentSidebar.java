@@ -97,7 +97,7 @@ public class EquipmentSidebar extends Table {
 	public void refresh() {
 		for (ItemUI itemUI : equip)
 			if (!World.player.hasItem(itemUI.getItem()))
-				clearSlot(EquipSlot.slotByType(itemUI.getItem().type));
+				clearSlot(itemUI.getItem().getEquipSlot());
 
 	}
 }
