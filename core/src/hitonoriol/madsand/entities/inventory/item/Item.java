@@ -2,6 +2,7 @@ package hitonoriol.madsand.entities.inventory.item;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -89,14 +90,17 @@ public class Item {
 		return ItemProp.getCost(id);
 	}
 
+	@JsonIgnore
 	public String getFullName() {
 		return name;
 	}
 
+	@JsonIgnore
 	protected String getMiscInfo() {
 		return "";
 	}
 
+	@JsonIgnore
 	public String getInfoString() {
 		String info = "";
 		info += getFullName()
@@ -138,11 +142,6 @@ public class Item {
 	@JsonIgnore
 	public float getWeight() {
 		return weight * (float) quantity;
-	}
-
-	@JsonIgnore
-	public boolean isEmpty() {
-		return id == NULL_ITEM;
 	}
 
 	@Override
@@ -234,16 +233,11 @@ public class Item {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends Item> T as(Class<T> itemSubtype) {
+	public <T extends Item> Optional<T> as(Class<T> itemSubtype) {
 		if (this.is(itemSubtype))
-			return (T) this;
-		else
-			try {
-				return itemSubtype.getDeclaredConstructor().newInstance();
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
+			return Optional.of((T) this);
+
+		return Optional.empty();
 	}
 
 	public static final Comparator<Item> quantityComparator = (item1, item2) -> {

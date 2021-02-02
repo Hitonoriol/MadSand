@@ -12,11 +12,13 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.util.Random;
 import java.util.StringTokenizer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -185,6 +187,10 @@ public class Utils {
 
 	public static String subsName(String varName) {
 		return GameTextSubstitutor.DELIM_L + varName + GameTextSubstitutor.DELIM_R;
+	}
+
+	public static <T> boolean test(Optional<T> opt, Predicate<T> predicate) {
+		return opt.filter(predicate).isPresent();
 	}
 
 	public static int largestDivisor(int n) {

@@ -22,7 +22,7 @@ public class Weapon extends CombatEquipment {
 	public Weapon copy() {
 		return new Weapon(this);
 	}
-	
+
 	@Override
 	public EquipSlot getEquipSlot() {
 		if (type == Type.OffhandWeapon)

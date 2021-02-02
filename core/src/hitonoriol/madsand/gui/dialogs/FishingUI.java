@@ -128,7 +128,7 @@ public class FishingUI extends GameDialog {
 			remove();
 		}
 
-		if (player.stats.getEquippedTool().type != Tool.Type.FishingRod)
+		if (!player.stats.isToolEquipped(Tool.Type.FishingRod))
 			remove();
 	}
 

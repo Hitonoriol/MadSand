@@ -1,5 +1,7 @@
 package hitonoriol.madsand.entities.inventory.item;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import hitonoriol.madsand.entities.EquipSlot;
 import hitonoriol.madsand.entities.Stat;
 
@@ -27,6 +29,7 @@ public class Armor extends CombatEquipment {
 	}
 
 	@Override
+	@JsonIgnore
 	public EquipSlot getEquipSlot() {
 		switch (type) {
 		case HeadArmor:

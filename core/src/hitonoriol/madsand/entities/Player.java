@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import java.util.Random;
 import java.util.Set;
@@ -259,20 +260,21 @@ public class Player extends Entity {
 	}
 
 	public boolean canPerformRangedAttack() {
-		Projectile projectile = stats.getEquippedProjectile();
-		Weapon rangedWeapon = stats.getEquippedWeapon();
+		Optional<Projectile> projectile = stats.getEquippedProjectile();
+		Optional<Weapon> rangedWeapon = stats.getEquippedWeapon();
 		if (projectile.isEmpty())
 			return false;
 
-		return projectile.thrownByHand
-				|| (!rangedWeapon.isEmpty() && rangedWeapon.type == Weapon.Type.RangedWeapon);
+		return projectile.get().thrownByHand
+				|| (!rangedWeapon.isEmpty() && rangedWeapon.get().type == Weapon.Type.RangedWeapon);
 	}
 
 	private void performRangedAttack(AbstractNpc npc) {
-		Projectile projectile = stats.getEquippedProjectile();
-		super.rangedAttack(npc, projectile);
-		damageHeldTool();
-		delItem(projectile, 1);
+		stats.getEquippedProjectile().ifPresent(projectile -> {
+			super.rangedAttack(npc, projectile);
+			damageHeldTool();
+			delItem(projectile, 1);
+		});
 	}
 
 	public void rangedAttack(AbstractNpc npc) {
@@ -357,19 +359,17 @@ public class Player extends Entity {
 	}
 
 	void damageHeldTool(Skill objectSkill) {
-		Tool heldTool = stats.getEquippedTool();
-		if (heldTool.isEmpty())
-			return;
+		stats.getEquippedTool().ifPresent(heldTool -> {
+			if (inventory.damageTool(heldTool, objectSkill)) {
+				MadSand.notice("Your " + heldTool.name + " broke");
 
-		if (inventory.damageTool(heldTool, objectSkill)) {
-			MadSand.notice("Your " + heldTool.name + " broke");
+				unEquip(heldTool);
 
-			unEquip(heldTool);
-
-			inventory.delItem(heldTool);
-			freeHands(true);
-		} else
-			Gui.overlay.equipmentSidebar.refreshSlot(EquipSlot.MainHand);
+				inventory.delItem(heldTool);
+				freeHands(true);
+			} else
+				Gui.overlay.equipmentSidebar.refreshSlot(EquipSlot.MainHand);
+		});
 	}
 
 	private void unlockRecipe(ArrayList<Integer> recipeList, int recipe) {
@@ -628,7 +628,7 @@ public class Player extends Entity {
 			return;
 		}
 
-		if (stats.getEquippedTool().type == Tool.Type.FishingRod && tileInFront.hasFishingSpot())
+		if (stats.isToolEquipped(Tool.Type.FishingRod) && tileInFront.hasFishingSpot())
 			fish(tileInFront.fishingSpot);
 
 		if (obj.id == Map.nullObject.id)
@@ -661,7 +661,7 @@ public class Player extends Entity {
 			return;
 		}
 
-		if (getObjectResource(obj.id) != -1 || stats.getEquippedTool().type == Tool.Type.Hammer) {
+		if (getObjectResource(obj) != -1 || stats.isToolEquipped(Tool.Type.Hammer)) {
 			if (obj.harvestHp > 0)
 				new ResourceProgressBar(obj).start();
 			else
@@ -683,12 +683,12 @@ public class Player extends Entity {
 		if (obj.id == Map.nullObject.id)
 			return -1;
 
-		int item = getObjectResource(obj.id);
+		int item = getObjectResource(obj);
 		int mhp = ObjectProp.getObject(obj.id).harvestHp;
 		Skill skill = obj.skill;
 		int curLvl = stats.skills.getLvl(skill);
 
-		if (stats.getEquippedTool().type == Tool.Type.Hammer)
+		if (stats.isToolEquipped(Tool.Type.Hammer))
 			item = -1;
 
 		if (curLvl < obj.lvl) {
@@ -706,14 +706,16 @@ public class Player extends Entity {
 			return -1;
 		}
 
-		int damage = stats.skills.getBaseSkillDamage(skill) + stats.getEquippedTool().getSkillDamage(skill);
+		int damage = stats.skills.getBaseSkillDamage(skill)
+				+ stats.getEquippedTool()
+						.map(tool -> tool.getSkillDamage(skill))
+						.orElse(Tool.MIN_SKILL_DMG);
 		boolean damaged = obj.takeHarvestDamage(damage);
 
-		if (item != -1 && damaged) { // Succesfull interaction with item that drops something
+		if (item != -1 && damaged) { // Successful interaction with item that drops something
 			Item objLoot;
 			int rewardCount;
-			int rolls = stats.skills.getItemDropRolls(skill); // The higher the level of the skill, the more rolls of
-																// drop we make
+			int rolls = stats.skills.getItemDropRolls(skill);
 			if (!stats.luckRoll() || !stats.skills.skillRoll(skill))
 				rolls = 1;
 
@@ -721,7 +723,7 @@ public class Player extends Entity {
 				rewardCount = stats.skills.getItemReward(skill);
 				objLoot = Item.create(item, rewardCount);
 				addItem(objLoot);
-				item = getObjectResource(obj.id);
+				item = getObjectResource(obj);
 			}
 
 			increaseSkill(skill, obj.lvl);
@@ -736,8 +738,8 @@ public class Player extends Entity {
 		return damage;
 	}
 
-	private int getObjectResource(int objectId) {
-		return MapObject.rollObjectResource(objectId, stats.getEquippedTool().type);
+	private int getObjectResource(MapObject object) {
+		return object.rollDrop(stats.getEquippedToolType());
 	}
 
 	public void useItem() {

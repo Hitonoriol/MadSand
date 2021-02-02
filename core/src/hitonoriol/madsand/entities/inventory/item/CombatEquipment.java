@@ -1,5 +1,7 @@
 package hitonoriol.madsand.entities.inventory.item;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Stat;
@@ -13,7 +15,6 @@ public abstract class CombatEquipment extends AbstractEquipment {
 
 	public CombatEquipment(CombatEquipment protoItem) {
 		super(protoItem);
-		this.lvl = protoItem.lvl;
 		equipStats = new EquipStats(protoItem.equipStats);
 	}
 
@@ -33,6 +34,7 @@ public abstract class CombatEquipment extends AbstractEquipment {
 		return this;
 	}
 
+	@JsonIgnore
 	public abstract Stat getMainStat();
 
 	@Override
@@ -46,7 +48,7 @@ public abstract class CombatEquipment extends AbstractEquipment {
 	}
 
 	@Override
-	public String getMiscInfo() {
+	protected String getMiscInfo() {
 		return equipStats.getString();
 	}
 }

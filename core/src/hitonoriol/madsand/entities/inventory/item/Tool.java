@@ -6,6 +6,8 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Skill;
 
 public class Tool extends AbstractEquipment {
+	public static int MIN_SKILL_DMG = 1;
+	
 	public int dmg;
 	public Type type;
 	public Skill skill = Skill.None;
@@ -36,9 +38,9 @@ public class Tool extends AbstractEquipment {
 	// Min: 1
 	public int getSkillDamage(Skill skill) {
 		if (skill != this.skill)
-			return 1;
+			return MIN_SKILL_DMG;
 		else
-			return Utils.rand(1, dmg / Skill.SKILL_DMG_DENOMINATOR);
+			return Utils.rand(MIN_SKILL_DMG, dmg / Skill.SKILL_DMG_DENOMINATOR);
 	}
 
 	public boolean damageTool(Skill skill) {

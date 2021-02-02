@@ -22,7 +22,7 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 	public AbstractEquipment() {
 		super();
 	}
-	
+
 	@Override
 	public void use(Player player) {
 		super.useIfPossible(player, () -> equip(player));
@@ -36,7 +36,7 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 	boolean damage() {
 		return damage(1);
 	}
-	
+
 	@Override
 	public Item reinit() {
 		return this;

@@ -71,10 +71,6 @@ public class Equipment {
 		return equipped.getOrDefault(slot, Item.nullItem);
 	}
 
-	public Item getHand() {
-		return getItem(EquipSlot.MainHand);
-	}
-
 	public boolean itemEquipped(Item item) {
 		return (getItem(item.getEquipSlot()) == item);
 	}
@@ -95,11 +91,12 @@ public class Equipment {
 
 	public void setStatBonus(boolean apply) {
 		for (Entry<EquipSlot, Item> entry : equipped.entrySet()) {
-			CombatEquipment equipment = entry.getValue().as(CombatEquipment.class);
-			if (!apply)
-				stats.removeBonus(equipment);
-			else
-				stats.applyBonus(equipment);
+			entry.getValue().as(CombatEquipment.class).ifPresent(equipment -> {
+				if (!apply)
+					stats.removeBonus(equipment);
+				else
+					stats.applyBonus(equipment);
+			});
 		}
 	}
 

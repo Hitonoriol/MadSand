@@ -8,6 +8,7 @@ public abstract class LevelBoundItem extends Item {
 
 	public LevelBoundItem(LevelBoundItem protoItem) {
 		super(protoItem);
+		lvl = protoItem.lvl;
 	}
 
 	public LevelBoundItem() {

@@ -1,5 +1,7 @@
 package hitonoriol.madsand.entities;
 
+import java.util.Optional;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Utils;
@@ -157,29 +159,36 @@ public class PlayerStats extends Stats {
 	}
 
 	public Item hand() {
-		return equipment.getHand();
+		return equipment.getItem(EquipSlot.MainHand);
 	}
 
 	public Item offHand() {
 		return equipment.getItem(EquipSlot.Offhand);
 	}
 
-	public Tool getEquippedTool() {
+	public boolean isToolEquipped(Tool.Type type) {
+		return Utils.test(getEquippedTool(), tool -> tool.type == type);
+	}
+
+	public Tool.Type getEquippedToolType() {
+		return getEquippedTool()
+				.map(tool -> tool.type)
+				.orElse(Tool.Type.None);
+	}
+
+	public Optional<Tool> getEquippedTool() {
 		return hand().as(Tool.class);
 	}
 
-	public Weapon getEquippedWeapon() {
+	public Optional<Weapon> getEquippedWeapon() {
 		return hand().as(Weapon.class);
 	}
 
-	public Projectile getEquippedProjectile() {
+	public Optional<Projectile> getEquippedProjectile() {
 		return offHand().as(Projectile.class);
 	}
 
 	public void applyBonus(CombatEquipment item) {
-		if (item.isEmpty())
-			return;
-
 		EquipStats bonus = item.equipStats;
 		baseStats.add(bonus.stats);
 		statBonus += bonus.getTotalBonus();
@@ -187,9 +196,6 @@ public class PlayerStats extends Stats {
 	}
 
 	public void removeBonus(CombatEquipment item) {
-		if (item.isEmpty())
-			return;
-
 		EquipStats bonus = item.equipStats;
 		baseStats.sub(bonus.stats);
 		statBonus -= bonus.getTotalBonus();

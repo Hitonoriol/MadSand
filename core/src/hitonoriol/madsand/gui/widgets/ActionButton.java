@@ -107,7 +107,7 @@ public class ActionButton extends Table {
 		Tile tile = loc.getTile(coords.x, coords.y);
 		coords.addDirection(player.stats.look);
 
-		int tileItem = MapObject.rollTileResource(tile.id, player.stats.getEquippedTool().type);
+		int tileItem = MapObject.rollTileResource(tile.id, player.stats.getEquippedToolType());
 		MapObject object = loc.getObject(coords.x, coords.y);
 		AbstractNpc npc = loc.getNpc(coords.x, coords.y);
 		Item item = player.stats.hand();
@@ -118,7 +118,7 @@ public class ActionButton extends Table {
 		interactButton = new TextButton("", skin);
 		super.add(interactButton).width(WIDTH).row();
 		super.addListener(inGameBtnListener);
-		boolean holdsShovel = player.stats.getEquippedTool().type == Tool.Type.Shovel;
+		boolean holdsShovel = player.stats.isToolEquipped(Tool.Type.Shovel);
 
 		String tileMsg = "Interact with ";
 
