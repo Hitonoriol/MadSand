@@ -62,11 +62,13 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 	}
 
 	public boolean increaseSkill(Skill skill) {
-		++get(skill).exp;
-		return check(skill);
+		return increaseSkill(skill, 1);
 	}
 
 	public boolean increaseSkill(Skill skill, int amt) {
+		if (skill == Skill.None)
+			return false;
+
 		get(skill).exp += amt;
 		return check(skill);
 	}

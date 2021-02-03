@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.dialogs.SliderDialog;
-import hitonoriol.madsand.map.MapObject;
+import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.world.World;

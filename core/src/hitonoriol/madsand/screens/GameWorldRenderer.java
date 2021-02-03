@@ -21,8 +21,8 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
-import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.map.Tile;
+import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.world.World;
 
 public class GameWorldRenderer {

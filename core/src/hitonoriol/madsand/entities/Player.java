@@ -60,8 +60,9 @@ import hitonoriol.madsand.map.FishingSpot;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
-import hitonoriol.madsand.map.MapObject;
 import hitonoriol.madsand.map.Tile;
+import hitonoriol.madsand.map.object.MapObject;
+import hitonoriol.madsand.map.object.ResourceObject;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.NpcProp;
@@ -619,11 +620,11 @@ public class Player extends Entity {
 		coords.set(x, y).addDirection(direction);
 
 		Map loc = MadSand.world.getCurLoc();
-		MapObject obj = MadSand.world.getCurLoc().getObject(coords.x, coords.y);
+		MapObject obj = loc.getObject(coords.x, coords.y);
 		AbstractNpc npc = loc.getNpc(coords.x, coords.y);
 		Tile tileInFront = loc.getTile(coords.x, coords.y);
 
-		if (!npc.equals(Map.nullNpc)) {
+		if (npc != Map.nullNpc) {
 			interact(npc);
 			return;
 		}
@@ -631,45 +632,23 @@ public class Player extends Entity {
 		if (stats.isToolEquipped(Tool.Type.FishingRod) && tileInFront.hasFishingSpot())
 			fish(tileInFront.fishingSpot);
 
-		if (obj.id == Map.nullObject.id)
-			return;
+		obj.interact(this);
+		MadSand.world.updateLight();
+	}
 
-		String action = ObjectProp.getOnInteract(obj.id);
-
-		if (obj.isCraftingStation) {
-			Gui.openCraftMenu(obj.id);
-			return;
-		}
-		if (obj.isProductionStation) {
-			new ProductionStationUI(loc.getProductionStation(coords)).show();
-			return;
-		}
-
-		if (!action.equals(Resources.emptyField)) {
-			LuaUtils.execute(action);
-			return;
-		}
-
-		if (!loc.editable) {
-			MadSand.notice("You try to interact with " + obj.name + "..." + Resources.LINEBREAK
-					+ "But suddenly, you feel that it's protected by some mysterious force");
-			return;
-		}
-
+	public void interact(ResourceObject resourceObj) {
 		if (stats.stamina <= 0) {
 			MadSand.print("You are too tired to gather resources. Try resting a little.");
 			return;
 		}
 
-		if (getObjectResource(obj) != -1 || stats.isToolEquipped(Tool.Type.Hammer)) {
-			if (obj.harvestHp > 0)
-				new ResourceProgressBar(obj).start();
+		if (getObjectResource(resourceObj) != -1 || stats.isToolEquipped(Tool.Type.Hammer)) {
+			if (resourceObj.harvestHp > 0)
+				new ResourceProgressBar(resourceObj).start();
 			else
-				gatherResources(obj);
+				gatherResources(resourceObj);
 		} else
-			MadSand.print("You can't gather any resources from " + obj.name + " with your current tool");
-
-		MadSand.world.updateLight();
+			MadSand.print("You can't do anything with " + resourceObj.name + " using your current tool");
 	}
 
 	private void interact(Direction direction) {
@@ -677,15 +656,15 @@ public class Player extends Entity {
 	}
 
 	private float BASE_RES_FAIL = 35; // Base resource gathering fail probability
-	// returns amount of damage done to object's harvestHp or negative value on fail
 
+	// returns amount of damage done to object's harvestHp or negative value on fail
 	public int gatherResources(MapObject obj) {
 		if (obj.id == Map.nullObject.id)
 			return -1;
 
 		int item = getObjectResource(obj);
 		int mhp = ObjectProp.getObject(obj.id).harvestHp;
-		Skill skill = obj.skill;
+		Skill skill = obj.getInteractionSkill();
 		int curLvl = stats.skills.getLvl(skill);
 
 		if (stats.isToolEquipped(Tool.Type.Hammer))
@@ -739,7 +718,9 @@ public class Player extends Entity {
 	}
 
 	private int getObjectResource(MapObject object) {
-		return object.rollDrop(stats.getEquippedToolType());
+		return object.as(ResourceObject.class)
+				.map(resourceObj -> resourceObj.rollDrop(stats.getEquippedToolType()))
+				.orElse(-1);
 	}
 
 	public void useItem() {

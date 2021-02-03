@@ -36,9 +36,9 @@ import hitonoriol.madsand.entities.SkillValue;
 import hitonoriol.madsand.entities.TradeListContainer;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.quest.Quest;
-import hitonoriol.madsand.map.MapObject;
-import hitonoriol.madsand.map.ProductionStation;
+import hitonoriol.madsand.map.ItemProducer;
 import hitonoriol.madsand.map.Tile;
+import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.NpcContainer;
@@ -296,7 +296,7 @@ public class Resources {
 	private static void loadProductionStations() throws Exception {
 		ObjectProp.productionStations = mapper.readValue(
 				readInternal(Resources.PRODSTATION_FILE),
-				getMapType(Integer.class, ProductionStation.class));
+				getMapType(Integer.class, ItemProducer.class));
 
 		ObjectProp.buildRecipes = mapper.readValue(
 				readInternal(Resources.BUILDRECIPE_FILE),

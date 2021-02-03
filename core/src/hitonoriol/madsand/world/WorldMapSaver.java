@@ -14,8 +14,8 @@ import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.map.Crop;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
-import hitonoriol.madsand.map.MapObject;
-import hitonoriol.madsand.map.ProductionStation;
+import hitonoriol.madsand.map.ItemProducer;
+import hitonoriol.madsand.map.object.MapObject;
 
 public class WorldMapSaver {
 	final String LOOT_DELIM = "|";
@@ -211,9 +211,9 @@ public class WorldMapSaver {
 			}
 
 			// Load production stations
-			HashMap<Pair, ProductionStation> prodStations = Resources.mapper.readValue(
+			HashMap<Pair, ItemProducer> prodStations = Resources.mapper.readValue(
 					new File(GameSaver.getProdStationFile(wx, wy, layer)),
-					Resources.getMapType(Pair.class, ProductionStation.class));
+					Resources.getMapType(Pair.class, ItemProducer.class));
 			map.setMapProductionStations(prodStations);
 
 			// Load loot

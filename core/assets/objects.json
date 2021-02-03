@@ -1,77 +1,49 @@
 {
 	"0" : {
-		"hp" : 999,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"onInteract" : "-1",
-		"skill" : "None",
+		"@type" : "MapObject",
 		"name" : "Nothing"
 	},
 	"1" : {
+		"@type" : "ResourceObject",
 		"hp" : 11,
 		"harvestHp" : 8,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 2 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Mining",
 		"name" : "Boulder"
 	},
 	"2" : {
+		"@type" : "ResourceObject",
 		"hp" : 11,
 		"harvestHp" : 4,
-		"lvl" : -1,
-		"nocollide" : false,
 		"centered" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 8 ],
 			"Axe" : [ 1 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Woodcutting",
 		"name" : "Tree"
 	},
 	"3" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Cake"
 	},
 	"4" : {
+		"@type" : "ResourceObject",
 		"hp" : 7,
 		"harvestHp" : 2,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 7, 8, 65, 66, 7 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Gathering",
 		"name" : "Berry bush"
 	},
 	"5" : {
+		"@type" : "MapObject",
 		"hp" : 11,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"onInteract" : "luajava.newInstance(
 							package('minigames.blackjack.BlackJackUI'),
 							world:getCurLoc():getObject(player:lookingAt())):show()",
@@ -80,1459 +52,845 @@
 	"6" : {
 		"hp" : 3,
 		"harvestHp" : 10,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
 		"skill" : "Survival",
-		"isProductionStation": true,
+		"@type" : "ItemFactory",
 		"name" : "Campfire"
 	},
 	"7" : {
+		"@type" : "MapObject",
 		"hp" : 3,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Chest"
 	},
 	"8" : {
+		"@type" : "MapObject",
 		"hp" : 10,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"isWall" : true,
 		"name" : "Hewn rock"
 	},
 	"9" : {
+		"@type" : "ResourceObject",
 		"hp" : 1,
 		"harvestHp" : 10,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 0 ],
 			"Axe" : [ 1 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Woodcutting",
 		"isWall" : true,
 		"name" : "Wooden planks"
 	},
 	"10" : {
+		"@type" : "ResourceObject",
 		"hp" : 5,
 		"harvestHp" : 2,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 68 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Gathering",
 		"name" : "Cactus"
 	},
 	"11" : {
+		"@type" : "MapObject",
 		"hp" : 3,
 		"harvestHp" : 10,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
 		"onInteract" : "
 			local player_look = world.player:lookingAt();
 			utils:delObject(player_look.x, player_look.y);
 			utils:addObject(player_look.x, player_look.y, 12);
 		",
-		"skill" : "None",
 		"name" : "Closed door"
 	},
 	"12" : {
+		"@type" : "MapObject",
 		"hp" : 3,
 		"harvestHp" : 10,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
 		"onInteract" : "
 			local player_look = world.player:lookingAt();
 			utils:delObject(player_look.x, player_look.y);
 			utils:addObject(player_look.x, player_look.y, 11);
 		",
-		"skill" : "None",
 		"name" : "Opened door"
 	},
 	"13" : {
+		"@type" : "ResourceObject",
 		"hp" : 2,
 		"harvestHp" : 12,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"Pickaxe" : [ 25 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Mining",
 		"isWall" : true,
 		"name" : "Stone"
 	},
 	"14" : {
+		"@type" : "MapObject",
 		"hp" : 3,
 		"harvestHp" : 3,
 		"lvl" : 2,
 		"nocollide" : true,
-		"altItems" : null,
 		"skill" : "Woodcutting",
 		"name" : "Bamboo"
 	},
 	"15" : {
+		"@type" : "ResourceObject",
 		"hp" : 1,
 		"harvestHp" : 20,
-		"lvl" : -1,
-		"nocollide" : false,
 		"altItems" : {
 			"Pickaxe" : [ 32 ]
 		},
-		"skill" : "None",
 		"isWall" : true,
 		"name" : "Stone wall"
 	},
 	"16" : {
+		"@type" : "ResourceObject",
 		"hp" : 1,
 		"harvestHp" : 15,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 0 ],
 			"Pickaxe" : [ 33 ]
 		},
-		"onInteract" : "-1",
-		"skill" : "None",
 		"isWall" : true,
 		"name" : "Stone wall"
 	},
 	"17" : {
+		"@type" : "ResourceObject",
 		"hp" : 1,
 		"harvestHp" : 15,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 0 ],
 			"Pickaxe" : [ 34 ]
 		},
-		"onInteract" : "-1",
-		"skill" : "None",
 		"isWall" : true,
 		"name" : "Stone wall"
 	},
 	"18" : {
+		"@type" : "MapObject",
 		"hp" : 3,
 		"harvestHp" : 5,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Sign"
 	},
 	"19" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Cucumber sprout"
 	},
 	"20" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Cucumber seeds"
 	},
 	"21" : {
+		"@type" : "ResourceObject",
 		"hp" : 3,
 		"harvestHp" : 1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 39, 40 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Farming",
 		"name" : "Cucumber bush"
 	},
 	"22" : {
+		"@type" : "ResourceObject",
 		"hp" : 1,
 		"harvestHp" : 20,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"Pickaxe" : [ 23 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Mining",
 		"isWall" : true,
 		"name" : "Iron ore"
 	},
 	"23" : {
+		"@type" : "ResourceObject",
 		"hp" : 1,
 		"harvestHp" : 25,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"Pickaxe" : [ 24 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Mining",
 		"isWall" : true,
 		"name" : "Gold ore"
 	},
 	"24" : {
+		"@type" : "ResourceObject",
 		"hp" : 3,
 		"harvestHp" : 1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 68, 8 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Gathering",
 		"name" : "Tumbleweed"
 	},
 	"25" : {
+		"@type" : "ResourceObject",
 		"hp" : 1,
 		"harvestHp" : 15,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 0 ],
 			"Pickaxe" : [ 56 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Mining",
 		"isWall" : true,
 		"name" : "Coal"
 	},
 	"26" : {
+		"@type" : "MapObject",
 		"hp" : 1,
 		"harvestHp" : 15,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"isWall" : true,
 		"name" : "Mixed brick wall"
 	},
 	"27" : {
+		"@type" : "ResourceObject",
 		"hp" : 6,
 		"harvestHp" : 8,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 2 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Mining",
 		"name" : "Boulder"
 	},
 	"28" : {
+		"@type" : "ResourceObject",
 		"hp" : 6,
 		"harvestHp" : 8,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 2 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Mining",
 		"name" : "Boulder"
 	},
 	"29" : {
+		"@type" : "ResourceObject",
 		"hp" : 10,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 8 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Woodcutting",
 		"name" : "Spruce tree"
 	},
 	"30" : {
+		"@type" : "ResourceObject",
 		"hp" : 11,
 		"harvestHp" : 4,
-		"lvl" : -1,
-		"nocollide" : false,
 		"centered" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 8 ],
 			"Axe" : [ 1 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Woodcutting",
 		"name" : "Tree"
 	},
 	"31" : {
+		"@type" : "ResourceObject",
 		"hp" : 11,
 		"harvestHp" : 4,
 		"lvl" : 2,
-		"nocollide" : false,
 		"centered" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 134 ],
 			"Axe" : [ 156 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Woodcutting",
 		"name" : "Palm tree"
 	},
 	"32" : {
+		"@type" : "ResourceObject",
 		"hp" : 11,
 		"harvestHp" : 4,
 		"lvl" : 1,
-		"nocollide" : false,
 		"centered" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 135 ],
 			"Axe" : [ 155 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Woodcutting",
 		"name" : "Pine"
 	},
 	"33" : {
+		"@type" : "ResourceObject",
 		"hp" : 11,
 		"harvestHp" : 4,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 8 ],
 			"Axe" : [ 1 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Woodcutting",
 		"name" : "Stump"
 	},
 	"34" : {
+		"@type" : "ResourceObject",
 		"hp" : 11,
 		"harvestHp" : 4,
 		"lvl" : 3,
-		"nocollide" : false,
 		"centered" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 136 ],
 			"Axe" : [ 157 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Woodcutting",
 		"name" : "Dead tree"
 	},
 	"35" : {
+		"@type" : "ResourceObject",
 		"hp" : 11,
 		"harvestHp" : 4,
-		"lvl" : -1,
-		"nocollide" : false,
 		"centered" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 8 ],
 			"Axe" : [ 1 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Woodcutting",
 		"name" : "Tree"
 	},
 	"36" : {
+		"@type" : "ResourceObject",
 		"hp" : 11,
 		"harvestHp" : 4,
-		"lvl" : -1,
-		"nocollide" : false,
 		"centered" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 8 ],
 			"Axe" : [ 1 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Woodcutting",
 		"name" : "Tree"
 	},
 	"37" : {
+		"@type" : "ResourceObject",
 		"hp" : 7,
 		"harvestHp" : 2,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 8, 65, 66, 68 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Gathering",
 		"name" : "Bush"
 	},
 	"38" : {
+		"@type" : "ResourceObject",
 		"hp" : 11,
 		"harvestHp" : 4,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 8 ],
 			"Axe" : [ 1 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Woodcutting",
 		"name" : "Spruce tree"
 	},
 	"39" : {
+		"@type" : "MapObject",
 		"hp" : 1,
 		"harvestHp" : 15,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Cross"
 	},
 	"40" : {
+		"@type" : "MapObject",
 		"hp" : 1,
 		"harvestHp" : 10,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Stalactite"
 	},
 	"41" : {
+		"@type" : "ResourceObject",
 		"hp" : 1,
 		"harvestHp" : 1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 44 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Gathering",
 		"name" : "Edible mushrooms"
 	},
 	"42" : {
+		"@type" : "ResourceObject",
 		"hp" : 1,
 		"harvestHp" : 1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 45 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Gathering",
 		"name" : "Amanita"
 	},
 	"43" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Potato sprout"
 	},
 	"44" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Potato sprout"
 	},
 	"45" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Potato sprout"
 	},
 	"46" : {
+		"@type" : "ResourceObject",
 		"hp" : 3,
 		"harvestHp" : 1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 46, 51 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Farming",
 		"name" : "Potato"
 	},
 	"47" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Carrot sprout"
 	},
 	"48" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Carrot sprout"
 	},
 	"49" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Carrot sprout"
 	},
 	"50" : {
+		"@type" : "ResourceObject",
 		"hp" : 3,
 		"harvestHp" : 1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 47, 54 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Farming",
 		"name" : "Carrot"
 	},
 	"51" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Tomato sprout"
 	},
 	"52" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Tomato sprout"
 	},
 	"53" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Tomato sprout"
 	},
 	"54" : {
+		"@type" : "ResourceObject",
 		"hp" : 3,
 		"harvestHp" : 1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 48, 53 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Farming",
 		"name" : "Tomato bush"
 	},
 	"55" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Pepper sprout"
 	},
 	"56" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Pepper sprout"
 	},
 	"57" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Pepper sprout"
 	},
 	"58" : {
+		"@type" : "ResourceObject",
 		"hp" : 3,
 		"harvestHp" : 1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 49, 54 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Farming",
 		"name" : "Pepper bush"
 	},
 	"59" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Corn sprout"
 	},
 	"60" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Corn sprout"
 	},
 	"61" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Corn sprout"
 	},
 	"62" : {
+		"@type" : "ResourceObject",
 		"hp" : 3,
 		"harvestHp" : 1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 50, 55 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Farming",
 		"name" : "Corn"
 	},
 	"63" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Cucumber sprout"
 	},
 	"64" : {
+		"@type" : "MapObject",
 		"hp" : 1,
 		"harvestHp" : 20,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Altar"
 	},
 	"65" : {
+		"@type" : "MapObject",
 		"hp" : 1,
 		"harvestHp" : 10,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Campfire"
 	},
 	"66" : {
+		"@type" : "MapObject",
 		"hp" : 1,
 		"harvestHp" : 15,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Fountain"
 	},
 	"67" : {
 		"hp" : 1,
 		"harvestHp" : 15,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
-		"isCraftingStation" : true,
+		"@type" : "CraftingStation",
 		"name" : "Furnace"
 	},
 	"68" : {
+		"@type" : "MapObject",
 		"hp" : 1,
 		"harvestHp" : 15,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Treasure chest"
 	},
 	"69" : {
+		"@type" : "MapObject",
 		"hp" : 1,
 		"harvestHp" : 15,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Opened treasure chest"
 	},
 	"70" : {
+		"@type" : "MapObject",
 		"hp" : 1,
 		"harvestHp" : 15,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Pile of crates"
 	},
 	"71" : {
+		"@type" : "MapObject",
 		"hp" : 1,
 		"harvestHp" : 15,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Keg"
 	},
 	"72" : {
 		"hp" : 1,
 		"harvestHp" : 15,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
-		"isCraftingStation" : true,
+		"@type" : "CraftingStation",
 		"name" : "Cooking place"
 	},
 	"73" : {
+		"@type" : "MapObject",
 		"hp" : 1,
 		"harvestHp" : 15,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Alchemist table"
 	},
 	"74" : {
+		"@type" : "MapObject",
 		"hp" : 1,
 		"harvestHp" : 15,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Alchemist table"
 	},
 	"75" : {
 		"hp" : 1,
 		"harvestHp" : 15,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
-		"isCraftingStation" : true,
+		"@type" : "CraftingStation",
 		"centered" : true,
 		"name" : "Sewing machine"
 	},
 	"76" : {
+		"@type" : "MapObject",
 		"hp" : 1,
 		"harvestHp" : 15,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Signpost"
 	},
 	"77" : {
+		"@type" : "MapObject",
 		"hp" : 1,
 		"harvestHp" : 15,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Signpost"
 	},
 	"78" : {
+		"@type" : "MapObject",
 		"hp" : 1,
 		"harvestHp" : 15,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Signpost"
 	},
 	"79" : {
+		"@type" : "MapObject",
 		"hp" : 1,
 		"harvestHp" : 15,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Sign"
 	},
 	"80" : {
+		"@type" : "MapObject",
 		"hp" : 9,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Mountain"
 	},
 	"81" : {
+		"@type" : "MapObject",
 		"hp" : 9,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Mountain"
 	},
 	"82" : {
+		"@type" : "MapObject",
 		"hp" : 1,
 		"harvestHp" : 35,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
 		"onInteract" : "
 			world:descend(world:getLocation().LAYER_BASE_CAVE + 1);
 			
 		",
 		"centered" : true,
-		"skill" : "None",
 		"name" : "Mine entrance"
 	},
 	"83" : {
+		"@type" : "MapObject",
 		"hp" : 50,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Straw house"
 	},
 	"84" : {
+		"@type" : "MapObject",
 		"hp" : 50,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Sandstone house"
 	},
 	"85" : {
+		"@type" : "MapObject",
 		"hp" : 50,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "House"
 	},
 	"86" : {
+		"@type" : "MapObject",
 		"hp" : 50,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "House"
 	},
 	"87" : {
+		"@type" : "MapObject",
 		"hp" : 50,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Palace entrance"
 	},
 	"88" : {
+		"@type" : "MapObject",
 		"hp" : 10,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Tombstone"
 	},
 	"89" : {
+		"@type" : "MapObject",
 		"hp" : 50,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "House"
 	},
 	"90" : {
 		"hp" : 15,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"centered" : true,
-		"isProductionStation" : true,
+		"@type" : "ItemFactory",
 		"name" : "Wheelbarrow"
 	},
 	"91" : {
 		"hp" : 15,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
-		"isCraftingStation" : true,
+		"@type" : "CraftingStation",
 		"name" : "Seed barrel"
 	},
 	"92" : {
+		"@type" : "MapObject",
 		"hp" : 15,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Well"
 	},
 	"93" : {
+		"@type" : "MapObject",
 		"hp" : 15,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
 		"onInteract" : "player:unlockRandomBuildRecipe(); obj_delete_looked_at();",
-		"skill" : "None",
 		"name" : "Recipe crate"
 	},
 	"94" : {
+		"@type" : "MapObject",
 		"hp" : 15,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Pile of wooden crates"
 	},
 	"95" : {
+		"@type" : "MapObject",
 		"hp" : 15,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Barrel"
 	},
 	"96" : {
+		"@type" : "MapObject",
 		"hp" : 15,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Bookshelf"
 	},
 	"97" : {
+		"@type" : "MapObject",
 		"hp" : 15,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Pillar"
 	},
 	"98" : {
+		"@type" : "MapObject",
 		"hp" : 15,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Sphinx"
 	},
 	"99" : {
+		"@type" : "MapObject",
 		"hp" : 25,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Warrior statue"
 	},
 	"100" : {
+		"@type" : "MapObject",
 		"hp" : 15,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Vending machine"
 	},
 	"101" : {
+		"@type" : "MapObject",
 		"hp" : 25,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"isWall" : true,
 		"name" : "Brick wall"
 	},
 	"102" : {
+		"@type" : "MapObject",
 		"hp" : 25,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"isWall" : true,
 		"name" : "Brick wall"
 	},
 	"103" : {
+		"@type" : "MapObject",
 		"hp" : 25,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"isWall" : true,
 		"name" : "Wall"
 	},
 	"104" : {
+		"@type" : "MapObject",
 		"hp" : 25,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"isWall" : true,
 		"name" : "Brick wall"
 	},
 	"105" : {
+		"@type" : "MapObject",
 		"hp" : 25,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"isWall" : true,
 		"name" : "Brick wall"
 	},
 	"106" : {
+		"@type" : "MapObject",
 		"hp" : 25,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"isWall" : true,
 		"name" : "Wall"
 	},
 	"107" : {
+		"@type" : "MapObject",
 		"hp" : 25,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"isWall" : true,
 		"name" : "Stone wall"
 	},
 	"108" : {
+		"@type" : "MapObject",
 		"hp" : 25,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"isWall" : true,
 		"name" : "Yellow wall"
 	},
 	"109" : {
+		"@type" : "MapObject",
 		"hp" : 25,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"isWall" : true,
 		"name" : "Turquoise wall"
 	},
 	"110" : {
+		"@type" : "MapObject",
 		"hp" : 25,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"isWall" : true,
 		"name" : "Turquoise wall"
 	},
 	"111" : {
+		"@type" : "MapObject",
 		"hp" : 25,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"isWall" : true,
 		"name" : "Clay wall"
 	},
 	"112" : {
+		"@type" : "MapObject",
 		"hp" : 30,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
 		"onInteract" : "
 			world:ascend(0);
 		",
-		"skill" : "None",
 		"name" : "Ladder to the surface"
 	},
 	"113" : {
+		"@type" : "MapObject",
 		"hp" : 30,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
 		"onInteract" : "
 			utils:descend();
 		",
-		"skill" : "None",
 		"name" : "Staircase down"
 	},
 	"114" : {
+		"@type" : "MapObject",
 		"hp" : 30,
-		"harvestHp" : -1,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
 		"onInteract" : "
 			utils:ascend();
 		",
-		"skill" : "None",
 		"name" : "Staircase up"
 	},
 	"115" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Watermelon sprout"
 	},
 	"116" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Watermelon sprout"
 	},
 	"117" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Watermelon sprout"
 	},
 	"118" : {
+		"@type" : "ResourceObject",
 		"hp" : 3,
 		"harvestHp" : 1,
 		"nocollide" : true,
-		"onInteract" : "-1",
 		"altItems" : {
 			"None" : [ 106, 115 ]
 		},
@@ -1540,34 +898,28 @@
 		"name" : "Watermelon"
 	},
 	"119" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Melon sprout"
 	},
 	"120" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Melon sprout"
 	},
 	"121" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Melon sprout"
 	},
 	"122" : {
+		"@type" : "ResourceObject",
 		"hp" : 3,
 		"harvestHp" : 1,
 		"nocollide" : true,
-		"onInteract" : "-1",
 		"altItems" : {
 			"None" : [ 107, 116 ]
 		},
@@ -1575,34 +927,28 @@
 		"name" : "Melon"
 	},
 	"123" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Pineapple sprout"
 	},
 	"124" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Pineapple sprout"
 	},
 	"125" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Pineapple sprout"
 	},
 	"126" : {
+		"@type" : "ResourceObject",
 		"hp" : 3,
 		"harvestHp" : 1,
 		"nocollide" : true,
-		"onInteract" : "-1",
 		"altItems" : {
 			"None" : [ 108, 117 ]
 		},
@@ -1610,34 +956,28 @@
 		"name" : "Pineapple"
 	},
 	"127" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Pea sprout"
 	},
 	"128" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Pea sprout"
 	},
 	"129" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Pea sprout"
 	},
 	"130" : {
+		"@type" : "ResourceObject",
 		"hp" : 3,
 		"harvestHp" : 1,
 		"nocollide" : true,
-		"onInteract" : "-1",
 		"altItems" : {
 			"None" : [ 109, 118 ]
 		},
@@ -1645,34 +985,28 @@
 		"name" : "Peas"
 	},
 	"131" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Wheat sprout"
 	},
 	"132" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Wheat sprout"
 	},
 	"133" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Wheat sprout"
 	},
 	"134" : {
+		"@type" : "ResourceObject",
 		"hp" : 3,
 		"harvestHp" : 1,
 		"nocollide" : true,
-		"onInteract" : "-1",
 		"altItems" : {
 			"None" : [ 110, 119 ]
 		},
@@ -1680,34 +1014,28 @@
 		"name" : "Wheat"
 	},
 	"135" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Wheat sprout"
 	},
 	"136" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Wheat sprout"
 	},
 	"137" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Wheat sprout"
 	},
 	"138" : {
+		"@type" : "ResourceObject",
 		"hp" : 3,
 		"harvestHp" : 1,
 		"nocollide" : true,
-		"onInteract" : "-1",
 		"altItems" : {
 			"None" : [ 111, 120 ]
 		},
@@ -1715,34 +1043,28 @@
 		"name" : "Cocoa"
 	},
 	"139" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Eggplant sprout"
 	},
 	"140" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Eggplant sprout"
 	},
 	"141" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Eggplant sprout"
 	},
 	"142" : {
+		"@type" : "ResourceObject",
 		"hp" : 3,
 		"harvestHp" : 1,
 		"nocollide" : true,
-		"onInteract" : "-1",
 		"altItems" : {
 			"None" : [ 112, 121 ]
 		},
@@ -1750,34 +1072,28 @@
 		"name" : "Eggplant"
 	},
 	"143" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Grape sprout"
 	},
 	"144" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Grape sprout"
 	},
 	"145" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Grape sprout"
 	},
 	"146" : {
+		"@type" : "ResourceObject",
 		"hp" : 3,
 		"harvestHp" : 1,
 		"nocollide" : true,
-		"onInteract" : "-1",
 		"altItems" : {
 			"None" : [ 99, 122 ]
 		},
@@ -1785,34 +1101,28 @@
 		"name" : "Grapes"
 	},
 	"147" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Radish sprout"
 	},
 	"148" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Radish sprout"
 	},
 	"149" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Radish sprout"
 	},
 	"150" : {
+		"@type" : "ResourceObject",
 		"hp" : 3,
 		"harvestHp" : 1,
 		"nocollide" : true,
-		"onInteract" : "-1",
 		"altItems" : {
 			"None" : [ 113, 123 ]
 		},
@@ -1820,34 +1130,28 @@
 		"name" : "Radish"
 	},
 	"151" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Strawberry sprout"
 	},
 	"152" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Strawberry sprout"
 	},
 	"153" : {
+		"@type" : "MapObject",
 		"hp" : 1,
-		"harvestHp" : -1,
 		"nocollide" : true,
-		"onInteract" : "-1",
-		"skill" : "None",
 		"name" : "Strawberry sprout"
 	},
 	"154" : {
+		"@type" : "ResourceObject",
 		"hp" : 3,
 		"harvestHp" : 1,
 		"nocollide" : true,
-		"onInteract" : "-1",
 		"altItems" : {
 			"None" : [ 114, 124 ]
 		},
@@ -1856,107 +1160,67 @@
 	},
 	"155" : {
 		"hp" : 50,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
-		"skill" : "None",
-		"isCraftingStation" : true,
+		"@type" : "CraftingStation",
 		"name" : "Iron Anvil"
 	},
 	"156" : {
 		"hp" : 20,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
 		"skill" : "Survival",
-		"isProductionStation": true,
+		"@type" : "ItemFactory",
 		"name" : "Woodcutting place"
 	},
 	"157" : {
 		"hp" : 20,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
 		"skill" : "Survival",
-		"isProductionStation": true,
+		"@type" : "ItemFactory",
 		"name" : "Mushroom basket"
 	},
 	"158" : {
 		"hp" : 20,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"nocollide" : false,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
-		"altItems" : null,
-		"onInteract" : "-1",
 		"skill" : "Survival",
-		"isProductionStation": true,
+		"@type" : "ItemFactory",
 		"name" : "Beartrap"
 	},
 	"159" : {
-		"hp" : 100,
-		"harvestHp" : -1,
-		"nocollide" : false,
-		"onInteract" : "-1",
-		"skill" : "None",
+		"@type" : "MapObject",
+		"hp" : 1,
+		"harvestHp" : 20,
 		"name" : "Gas pump"
 	},
 	"160" : {
+		"@type" : "MapObject",
 		"hp" : 1,
 		"harvestHp" : 1,
-		"lvl" : -1,
 		"nocollide" : true,
 		"centered" : true,
-		"onInteract" : "-1",
 		"name" : "Tree sapling"
 	},
 	"161" : {
+		"@type" : "ResourceObject",
 		"hp" : 1,
 		"harvestHp" : 2,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 68 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Gathering",
 		"name" : "Rose"
 	},
 	"162" : {
+		"@type" : "ResourceObject",
 		"hp" : 1,
 		"harvestHp" : 2,
-		"lvl" : -1,
 		"nocollide" : true,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"altItems" : {
 			"None" : [ 68 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Gathering",
 		"name" : "Lilly"
 	},
 	"163" : {
+		"@type" : "ResourceObject",
 		"hp" : 1,
 		"harvestHp" : 3,
-		"lvl" : -1,
-		"nocollide" : false,
-		"onInteract" : "-1",
 		"altItems" : {
 			"None" : [ 46 ]
 		},
@@ -1964,11 +1228,9 @@
 		"name" : "Box of potatoes"
 	},
 	"164" : {
+		"@type" : "ResourceObject",
 		"hp" : 1,
 		"harvestHp" : 3,
-		"lvl" : -1,
-		"nocollide" : false,
-		"onInteract" : "-1",
 		"altItems" : {
 			"None" : [ 47 ]
 		},
@@ -1976,11 +1238,9 @@
 		"name" : "Box of carrots"
 	},
 	"165" : {
+		"@type" : "ResourceObject",
 		"hp" : 1,
 		"harvestHp" : 3,
-		"lvl" : -1,
-		"nocollide" : false,
-		"onInteract" : "-1",
 		"altItems" : {
 			"None" : [ 97 ]
 		},
@@ -1988,11 +1248,9 @@
 		"name" : "Box of apples"
 	},
 	"166" : {
+		"@type" : "ResourceObject",
 		"hp" : 1,
 		"harvestHp" : 3,
-		"lvl" : -1,
-		"nocollide" : false,
-		"onInteract" : "-1",
 		"altItems" : {
 			"None" : [ 110 ]
 		},
@@ -2000,8 +1258,8 @@
 		"name" : "Wheat bag"
 	},
 	"167" : {
+		"@type" : "ResourceObject",
 		"hp" : 6,
-		"onInteract" : "-1",
 		"altItems" : {
 			"Pickaxe" : [ 172 ]
 		},
@@ -2009,9 +1267,8 @@
 		"name" : "Ice"
 	},
 	"168" : {
+		"@type" : "ResourceObject",
 		"hp" : 8,
-		"nocollide" : false,
-		"onInteract" : "-1",
 		"altItems" : {
 			"Pickaxe" : [ 171 ]
 		},
@@ -2019,17 +1276,18 @@
 		"name" : "Sandstone"
 	},
 	"169" : {
+		"@type" : "ResourceObject",
 		"hp" : 3,
 		"harvestHp" : 3,
 		"lvl" : 1,
 		"altItems" : {
 			"None" : [ 104 ]
 		},
-		"onInteract" : "-1",
 		"skill" : "Gathering",
 		"name" : "Haystack"
 	},
 	"170" : {
+		"@type" : "ResourceObject",
 		"hp" : 3,
 		"harvestHp" : 3,
 		"lvl" : 1,
@@ -2040,24 +1298,20 @@
 		"name" : "Haybale"
 	},
 	"171" : {
+		"@type" : "MapObject",
 		"hp" : 10,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"onInteract" : "-1",
 		"name" : "Cauldron"
 	},
 	"172" : {
+		"@type" : "MapObject",
 		"hp" : 11,
-		"harvestHp" : -1,
-		"lvl" : -1,
-		"maskWidth" : 0,
-		"maskHeight" : 0,
 		"onInteract" : "luajava.newInstance(
 							package('minigames.videopoker.VideoPokerUI'),
 							world:getCurLoc():getObject(player:lookingAt())):show()",
 		"name" : "Video Poker machine"
 	},
 	"173" : {
+		"@type" : "ResourceObject",
 		"hp" : 3,
 		"harvestHp" : 6,
 		"nocollide" : true,
@@ -2067,11 +1321,13 @@
 		}
 	},
 	"174" : {
+		"@type" : "MapObject",
 		"hp" : 3,
 		"name" : "Clay wall",
 		"isWall" : true
 	},
 	"175" : {
+		"@type" : "MapObject",
 		"hp" : 1,
 		"harvestHp" : 50,
 		"centered" : true,
@@ -2081,7 +1337,7 @@
 	"176" : {
 		"hp" : 1,
 		"harvestHp" : 25,
-		"isCraftingStation" : true,
+		"@type" : "CraftingStation",
 		"centered" : true,
 		"name" : "Fletching table"
 	}

@@ -30,6 +30,9 @@ import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.entities.npc.Npc;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.TradeCategory;
+import hitonoriol.madsand.map.object.ItemFactory;
+import hitonoriol.madsand.map.object.MapObject;
+import hitonoriol.madsand.map.object.ResourceObject;
 import hitonoriol.madsand.pathfinding.Graph;
 import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.pathfinding.DistanceHeuristic;
@@ -58,7 +61,7 @@ public class Map {
 
 	public Pair spawnPoint = Pair.nullPair; // for dungeon levels only
 
-	static final int COLLISION_MASK_ID = 666;
+	public static final int COLLISION_MASK_ID = 666;
 	public static Tile nullTile = new Tile();
 	public static MapObject nullObject = new MapObject();
 	public static Loot nullLoot = new Loot();
@@ -70,7 +73,7 @@ public class Map {
 	private HashMap<Pair, Loot> mapLoot;
 	private HashMap<Pair, Crop> mapCrops;
 	private HashMap<Pair, AbstractNpc> mapNpcs;
-	private HashMap<Pair, ProductionStation> mapProductionStations;
+	private ArrayList<Pair> mapProductionStations;
 
 	IndexedAStarPathFinder<Node> pathFinder;
 	Graph graph;
@@ -166,12 +169,27 @@ public class Map {
 	}
 
 	@JsonIgnore
-	public HashMap<Pair, ProductionStation> getMapProductionStations() {
-		return mapProductionStations;
+	public HashMap<Pair, ItemProducer> getMapProductionStations() {
+		HashMap<Pair, ItemProducer> prodStations = new HashMap<>();
+
+		for (Pair coords : mapProductionStations)
+			getObject(coords).as(ItemFactory.class)
+					.ifPresent(itemfactory -> prodStations.put(coords, itemfactory.itemProducer));
+
+		return prodStations;
 	}
 
-	public void setMapProductionStations(HashMap<Pair, ProductionStation> productionStations) {
-		mapProductionStations = productionStations;
+	public void setMapProductionStations(HashMap<Pair, ItemProducer> productionStations) {
+		mapProductionStations.clear();
+		for (Entry<Pair, ItemProducer> entry : productionStations.entrySet()) {
+			Pair coords = entry.getKey();
+			getObject(coords).as(ItemFactory.class)
+					.ifPresent(itemFactory -> {
+						itemFactory.itemProducer = entry.getValue();
+						mapProductionStations.add(coords);
+					});
+
+		}
 	}
 
 	@JsonIgnore
@@ -302,7 +320,7 @@ public class Map {
 		mapLoot = new HashMap<>();
 		mapNpcs = new HashMap<>();
 		mapCrops = new HashMap<>();
-		mapProductionStations = new HashMap<>();
+		mapProductionStations = new ArrayList<>();
 
 		nodeMap = new NodeMap(xsz, ysz);
 		graph = new Graph();
@@ -649,13 +667,13 @@ public class Map {
 		}
 
 		Pair coords = new Pair(this.coords);
-		MapObject object = new MapObject(id);
+		MapObject object = MapObject.create(id);
 
 		if (addObject(coords, object)) {
 			setObjectSize(x, y, id);
 
-			if (object.isProductionStation)
-				mapProductionStations.put(coords, new ProductionStation(id));
+			object.as(ItemFactory.class)
+					.ifPresent(itemFactory -> mapProductionStations.add(coords));
 
 			if (graph.getNodeCount() > 0) {
 				if (!object.nocollide) {
@@ -1016,17 +1034,10 @@ public class Map {
 		return true;
 	}
 
-	public ProductionStation getProductionStation(Pair coords) {
-		return mapProductionStations.get(coords);
-	}
-
-	public ProductionStation getProductionStation(int x, int y) {
-		return getProductionStation(coords.set(x, y));
-	}
-
 	public void updateProductionStations() {
-		for (Entry<Pair, ProductionStation> entry : mapProductionStations.entrySet())
-			entry.getValue().produce();
+		for (Pair coords : mapProductionStations)
+			getObject(coords).as(ItemFactory.class)
+					.ifPresent(itemFactory -> itemFactory.itemProducer.produce());
 
 		for (Entry<Pair, AbstractNpc> entry : mapNpcs.entrySet()) {
 			if (!(entry.getValue() instanceof FarmAnimal))
@@ -1104,7 +1115,6 @@ public class Map {
 		if (getObjectCount() < maxObjects)
 			for (RollList rollList : overworld.regenerateObjects)
 				rollObjects(rollList);
-
 	}
 
 	public boolean addStructure(MapStructure structure) {
@@ -1213,7 +1223,8 @@ public class Map {
 
 	public Pair locateObject(Skill skill) {
 		for (Entry<Pair, MapObject> entry : mapObjects.entrySet()) {
-			if (entry.getValue().skill == skill)
+			if (Utils.test(entry.getValue().as(ResourceObject.class),
+					resourceObj -> resourceObj.skill == skill))
 				return entry.getKey();
 		}
 		return Pair.nullPair;

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.inventory.item.Tool;
+import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.properties.TileProp;
 
 public class Tile {

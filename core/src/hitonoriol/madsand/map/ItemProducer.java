@@ -6,7 +6,7 @@ import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.ObjectProp;
 
-public class ProductionStation {
+public class ItemProducer {
 	public int id;
 	public int lvl = 0, maxLvl;
 
@@ -25,17 +25,17 @@ public class ProductionStation {
 	public int producedMaterial; // Item id -- item produced by the station
 	public int consumedMaterial; // Item id -- item required for station upgrade & as "fuel"
 
-	public ProductionStation(int id) {
+	public ItemProducer(int id) {
 		this.id = id;
 		loadProperties();
 	}
 
-	public ProductionStation() {
+	public ItemProducer() {
 		this.id = 0;
 	}
 
 	private void loadProperties() {
-		ProductionStation properties = ObjectProp.productionStations.get(this.id);
+		ItemProducer properties = ObjectProp.productionStations.get(this.id);
 		this.producedMaterial = properties.producedMaterial;
 		this.consumedMaterial = properties.consumedMaterial;
 

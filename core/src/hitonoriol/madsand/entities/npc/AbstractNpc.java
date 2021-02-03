@@ -29,7 +29,7 @@ import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
-import hitonoriol.madsand.map.MapObject;
+import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.properties.NpcContainer;
 import hitonoriol.madsand.world.World;

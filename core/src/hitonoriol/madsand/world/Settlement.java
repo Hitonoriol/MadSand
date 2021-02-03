@@ -13,6 +13,7 @@ import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.map.Map;
+import hitonoriol.madsand.map.object.ResourceObject;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.entities.inventory.item.Tool;
@@ -95,7 +96,10 @@ public class Settlement {
 		if (skill == Skill.Digging)
 			return map.getTile(objectCoords = map.locateDiggableTile()).rollDrop(Tool.Type.Shovel);
 		else if (skill.isResourceSkill())
-			return map.getObject(objectCoords = map.locateObject(skill)).rollDrop(Tool.Type.bySkill(skill));
+			return map.getObject(objectCoords = map.locateObject(skill))
+					.as(ResourceObject.class)
+					.map(resourceObj -> resourceObj.rollDrop(Tool.Type.bySkill(skill)))
+					.orElse(-1);
 
 		return -1;
 

@@ -16,9 +16,10 @@ import hitonoriol.madsand.gui.widgets.GameTooltip;
 import hitonoriol.madsand.map.Crop;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
-import hitonoriol.madsand.map.MapObject;
-import hitonoriol.madsand.map.ProductionStation;
+import hitonoriol.madsand.map.ItemProducer;
 import hitonoriol.madsand.map.Tile;
+import hitonoriol.madsand.map.object.ItemFactory;
+import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.world.World;
 
@@ -40,7 +41,7 @@ public class Mouse {
 	public static AbstractNpc npc;
 	public static Loot loot;
 	public static Crop crop;
-	public static ProductionStation station;
+	public static ItemProducer station;
 
 	public static GameTooltip tooltipContainer;
 
@@ -69,10 +70,9 @@ public class Mouse {
 		loot = loc.getLoot(wx, wy);
 		crop = loc.getCrop(wx, wy);
 
-		if (object.isProductionStation)
-			station = loc.getProductionStation(wx, wy);
-		else
-			station = null;
+		station = null;
+		object.as(ItemFactory.class)
+				.ifPresent(itemFactory -> station = itemFactory.itemProducer);
 
 		pointingAtObject = npc != Map.nullNpc ||
 				object != Map.nullObject ||
@@ -148,14 +148,14 @@ public class Mouse {
 			infoBuilder.append(npc.spottedMsg()).append(NEWLINE);
 
 	}
-	
+
 	private static void getPlayerInfo() {
 		infoBuilder.append("You look at yourself")
 				.append(NEWLINE)
 				.append(player.getInfoString());
 	}
 
-	public static void getProdStationInfo(ProductionStation station) {
+	public static void getProdStationInfo(ItemProducer station) {
 		infoBuilder.append("Status: ");
 		String productName = station.getProductName();
 		String rawMaterialName = station.getConsumableName();

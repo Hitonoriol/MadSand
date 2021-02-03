@@ -12,7 +12,7 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.SkillContainer;
-import hitonoriol.madsand.map.MapObject;
+import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.world.World;
 
 /*
@@ -54,7 +54,8 @@ public class ResourceProgressBar extends TimedProgressBar {
 
 	public ResourceProgressBar(MapObject object) {
 		this(BASE_DELAY
-				- (D_MULTIPLIER * (float) SkillContainer.skillLvlPercent(World.player.stats.skills.getLvl(object.skill))));
+				- (D_MULTIPLIER * (float) SkillContainer.skillLvlPercent(
+						World.player.stats.skills.getLvl(object.getInteractionSkill()))));
 		super.setAnimateDuration(delay);
 		nextValue = delay;
 

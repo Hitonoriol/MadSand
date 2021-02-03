@@ -2,7 +2,6 @@ package hitonoriol.madsand.entities.inventory.item;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -17,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
+import hitonoriol.madsand.DynamicallyCastable;
 import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
@@ -29,7 +29,7 @@ import hitonoriol.madsand.properties.ItemProp;
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
 @JsonSubTypes({ @Type(Armor.class), @Type(Consumable.class), @Type(CropSeeds.class), @Type(FishingBait.class),
 		@Type(GrabBag.class), @Type(Placeable.class), @Type(Projectile.class), @Type(Tool.class), @Type(Weapon.class) })
-public class Item {
+public class Item implements DynamicallyCastable<Item>{
 
 	public int id;
 	public int quantity;
@@ -224,20 +224,8 @@ public class Item {
 		return create(id, 1);
 	}
 
-	public <T extends Item> boolean is(Class<T> itemSubtype) {
-		return itemSubtype.isInstance(this);
-	}
-
 	public boolean isEquipment() {
 		return this instanceof AbstractEquipment;
-	}
-
-	@SuppressWarnings("unchecked")
-	public <T extends Item> Optional<T> as(Class<T> itemSubtype) {
-		if (this.is(itemSubtype))
-			return Optional.of((T) this);
-
-		return Optional.empty();
 	}
 
 	public static final Comparator<Item> quantityComparator = (item1, item2) -> {

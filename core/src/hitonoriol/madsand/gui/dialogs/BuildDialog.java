@@ -24,8 +24,9 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.map.Map;
-import hitonoriol.madsand.map.MapObject;
-import hitonoriol.madsand.map.ProductionStation;
+import hitonoriol.madsand.map.ItemProducer;
+import hitonoriol.madsand.map.object.CraftingStation;
+import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.world.World;
@@ -122,8 +123,8 @@ class BuildDialogEntry extends Group {
 	}
 
 	private void additionalInfo(Table container) {
-		ProductionStation station = ObjectProp.productionStations.get(id);
-		boolean isCraftingStation = ObjectProp.getObject(id).isCraftingStation;
+		ItemProducer station = ObjectProp.productionStations.get(id);
+		boolean isCraftingStation = ObjectProp.getObject(id).is(CraftingStation.class);
 
 		if (station != null) {
 			container.add("Produces " + ItemProp.getItemName(station.producedMaterial)).padBottom(PAD).row();

@@ -15,7 +15,7 @@ import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
-import hitonoriol.madsand.map.ProductionStation;
+import hitonoriol.madsand.map.ItemProducer;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.properties.ObjectProp;
@@ -46,7 +46,7 @@ public class ProductionStationUI extends GameDialog {
 	String consumedMaterial, producedMaterial;
 	String stationName;
 
-	ProductionStation station;
+	ItemProducer station;
 	Player player;
 
 	TextButton closeButton;
@@ -81,7 +81,7 @@ public class ProductionStationUI extends GameDialog {
 		super(stage);
 	}
 
-	public ProductionStationUI(ProductionStation station) {
+	public ProductionStationUI(ItemProducer station) {
 		this(Gui.overlay);
 		this.station = station;
 		this.player = World.player;
