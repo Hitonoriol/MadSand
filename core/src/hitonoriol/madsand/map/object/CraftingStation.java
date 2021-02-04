@@ -3,7 +3,7 @@ package hitonoriol.madsand.map.object;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.entities.Player;
 
-public class CraftingStation extends MapObject {
+public class CraftingStation extends BuiltObject {
 	public CraftingStation(CraftingStation protoObject) {
 		super(protoObject);
 	}
@@ -19,7 +19,6 @@ public class CraftingStation extends MapObject {
 
 	@Override
 	public void interact(Player player) {
-		super.interact(player);
-		Gui.openCraftMenu(id);
+		super.interact(player, () -> Gui.openCraftMenu(id));
 	}
 }

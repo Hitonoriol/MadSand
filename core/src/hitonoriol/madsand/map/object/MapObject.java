@@ -33,7 +33,6 @@ public class MapObject extends MapEntity implements DynamicallyCastable<MapObjec
 	public static final int NULL_OBJECT_ID = 0;
 	public static final int COLLISION_MASK_ID = 666;
 
-	@JsonIgnore
 	public int id;
 	public String name;
 
@@ -47,6 +46,7 @@ public class MapObject extends MapEntity implements DynamicallyCastable<MapObjec
 
 	public int maskWidth = 0, maskHeight = 0; // Collision mask dimensions for objects larger than 1x1 cell
 
+	public int dropOnDestruction;
 	public String onInteract = Resources.emptyField;
 
 	public MapObject(MapObject protoObject) {
@@ -81,10 +81,20 @@ public class MapObject extends MapEntity implements DynamicallyCastable<MapObjec
 					+ "But suddenly, you feel that it's protected by some mysterious force");
 	}
 
-	public void interact(Player player) {
-		if (!onInteract.equals(Resources.emptyField))
+	public void interact(Player player, Runnable interaction) {
+		if (player.stats.isToolEquipped(Tool.Type.Hammer))
+			interactIfPossible(() -> player.startResourceGathering(this));
+
+		else if (!onInteract.equals(Resources.emptyField))
 			LuaUtils.execute(onInteract);
 
+		else
+			interaction.run();
+	}
+
+	public void interact(Player player) {
+		interact(player, () -> {
+		});
 	}
 
 	@JsonIgnore
@@ -95,6 +105,10 @@ public class MapObject extends MapEntity implements DynamicallyCastable<MapObjec
 	void destroy() {
 		this.id = 0; // cleaned up later in map
 		this.hp = CLEANUP_FLAG;
+
+		Pair coords = getPosition();
+		if (dropOnDestruction != 0)
+			MadSand.world.getCurLoc().putLoot(coords.x, coords.y, dropOnDestruction);
 	}
 
 	public boolean isDestroyed() {

@@ -4,7 +4,7 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.gui.dialogs.ProductionStationUI;
 import hitonoriol.madsand.map.ItemProducer;
 
-public class ItemFactory extends MapObject {
+public class ItemFactory extends BuiltObject {
 
 	public ItemProducer itemProducer;
 
@@ -24,6 +24,6 @@ public class ItemFactory extends MapObject {
 
 	@Override
 	public void interact(Player player) {
-		new ProductionStationUI(itemProducer).show();
+		super.interact(player, () -> new ProductionStationUI(itemProducer).show());
 	}
 }

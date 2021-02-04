@@ -68,13 +68,9 @@
 		"name" : "Hewn rock"
 	},
 	"9" : {
-		"@type" : "ResourceObject",
+		"@type" : "MapObject",
 		"hp" : 1,
 		"harvestHp" : 10,
-		"altItems" : {
-			"None" : [ 0 ],
-			"Axe" : [ 1 ]
-		},
 		"skill" : "Woodcutting",
 		"isWall" : true,
 		"name" : "Wooden planks"
@@ -133,34 +129,23 @@
 		"name" : "Bamboo"
 	},
 	"15" : {
-		"@type" : "ResourceObject",
+		"@type" : "MapObject",
 		"hp" : 1,
 		"harvestHp" : 20,
-		"altItems" : {
-			"Pickaxe" : [ 32 ]
-		},
 		"isWall" : true,
 		"name" : "Stone wall"
 	},
 	"16" : {
-		"@type" : "ResourceObject",
+		"@type" : "MapObject",
 		"hp" : 1,
 		"harvestHp" : 15,
-		"altItems" : {
-			"None" : [ 0 ],
-			"Pickaxe" : [ 33 ]
-		},
 		"isWall" : true,
 		"name" : "Stone wall"
 	},
 	"17" : {
-		"@type" : "ResourceObject",
+		"@type" : "MapObject",
 		"hp" : 1,
 		"harvestHp" : 15,
-		"altItems" : {
-			"None" : [ 0 ],
-			"Pickaxe" : [ 34 ]
-		},
 		"isWall" : true,
 		"name" : "Stone wall"
 	},

@@ -642,17 +642,21 @@ public class Player extends Entity {
 			return;
 		}
 
-		if (getObjectResource(resourceObj) != -1 || stats.isToolEquipped(Tool.Type.Hammer)) {
-			if (resourceObj.harvestHp > 0)
-				new ResourceProgressBar(resourceObj).start();
-			else
-				gatherResources(resourceObj);
-		} else
+		if (getObjectResource(resourceObj) != -1)
+			startResourceGathering(resourceObj);
+		else
 			MadSand.print("You can't do anything with " + resourceObj.name + " using your current tool");
 	}
 
 	private void interact(Direction direction) {
 		doAction(stats.minorCost, () -> performInteraction(direction));
+	}
+
+	public void startResourceGathering(MapObject object) {
+		if (object.harvestHp > 0)
+			new ResourceProgressBar(object).start();
+		else
+			gatherResources(object);
 	}
 
 	private float BASE_RES_FAIL = 35; // Base resource gathering fail probability

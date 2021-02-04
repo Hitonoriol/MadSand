@@ -34,8 +34,7 @@ public class ResourceObject extends MapObject {
 
 	@Override
 	public void interact(Player player) {
-		super.interact(player);
-		super.interactIfPossible(() -> player.interact(this));
+		super.interact(player, () -> interactIfPossible(() -> player.interact(this)));
 	}
 
 	private void rollHp() {

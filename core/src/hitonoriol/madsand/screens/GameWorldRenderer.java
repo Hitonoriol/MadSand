@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
@@ -27,14 +28,13 @@ import hitonoriol.madsand.world.World;
 
 public class GameWorldRenderer {
 	static final int TILESIZE = MadSand.TILESIZE;
-	static final int OBJECT_LOOT = 7;
-
-	private float cameraY, cameraX;
-	final int camxoffset = 17, camyoffset = 37;
 	public static final float DEFAULT_ZOOM = 1.5F;
-	private float zoom = DEFAULT_ZOOM;
-	static final int DEFAULT_FOV = 12;
+	static final int OBJECT_LOOT = 7;
+	final int camxoffset = 17, camyoffset = 37;
+
+	private float cameraX, cameraY;
 	private boolean followPlayer;
+	private float zoom = DEFAULT_ZOOM;
 
 	private OrthographicCamera camera = new OrthographicCamera();
 	private ConcurrentHashMap<PairFloat, AnimationContainer> animations = new ConcurrentHashMap<>();
@@ -56,8 +56,8 @@ public class GameWorldRenderer {
 	}
 
 	private void renderObject(MapObject object, int x, int y) {
-		x *= MadSand.TILESIZE;
-		y *= MadSand.TILESIZE;
+		x *= TILESIZE;
+		y *= TILESIZE;
 
 		if (object.centered)
 			x -= object.getRenderOffset();
@@ -87,12 +87,19 @@ public class GameWorldRenderer {
 		}
 	}
 
-	void drawLoot(int x, int y) {
-		Loot loot = MadSand.world.getCurLoc().getLoot(x, y);
+	private static final float LOOT_SIZE = TILESIZE * 0.85f;
+	private static final float LOOT_OFFSET = (TILESIZE - LOOT_SIZE) * 0.5f;
+
+	void drawLoot(float x, float y) {
+		Loot loot = MadSand.world.getCurLoc().getLoot((int) x, (int) y);
+		Texture lootTx;
+
 		if (loot.contents.size() == 1)
-			MadSand.batch.draw(Resources.item[loot.contents.get(0).id], x * TILESIZE, y * TILESIZE, TILESIZE, TILESIZE);
+			lootTx = Resources.item[loot.contents.get(0).id];
 		else
-			MadSand.batch.draw(Resources.objects[OBJECT_LOOT], x * TILESIZE, y * TILESIZE);
+			lootTx = Resources.objects[OBJECT_LOOT];
+
+		MadSand.batch.draw(lootTx, x * TILESIZE + LOOT_OFFSET, y * TILESIZE + LOOT_OFFSET, LOOT_SIZE, LOOT_SIZE);
 	}
 
 	void drawEntity(Entity entity) {
@@ -203,7 +210,7 @@ public class GameWorldRenderer {
 	public float getCamZoom() {
 		return zoom;
 	}
-	
+
 	public void setCamFollowPlayer(boolean follow) {
 		followPlayer = follow;
 	}

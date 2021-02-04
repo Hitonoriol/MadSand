@@ -143,8 +143,8 @@ public class Resources {
 
 		Globals.loadGlobals();
 		loadWorldGen();
-		loadItems();
 		loadMapObjects();
+		loadItems();
 		loadProductionStations();
 		loadMapTiles();
 		loadQuests();
