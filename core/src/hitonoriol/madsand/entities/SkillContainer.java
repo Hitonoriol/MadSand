@@ -134,7 +134,7 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 		if (skill == Skill.Survival)
 			additionalPercent = 2.5f;
 		else if (skill.isResourceSkill())
-			additionalPercent = 35;
+			additionalPercent = 30;
 		else if (skill == Skill.None)
 			return 100;
 		additionalPercent += calcSkillPercent(1 + ((double) getExp(skill) / (double) get(skill).requiredExp));

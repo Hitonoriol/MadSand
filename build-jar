@@ -1,0 +1,6 @@
+set -e
+version=$(cat "core/src/hitonoriol/madsand/properties/Globals.java" | pcregrep -o1 'VERSION \= \"(.*?)\"')
+echo "Building MadSand $version"
+./gradlew desktop:dist
+mkdir -p "release/$version"
+mv desktop/build/libs/desktop-1.0.jar "release/$version/madsand.jar"

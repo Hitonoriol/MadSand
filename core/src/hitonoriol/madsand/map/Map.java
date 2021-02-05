@@ -700,11 +700,6 @@ public class Map {
 		return addObject(coord.x, coord.y, id);
 	}
 
-	public boolean dmgObjInDir(int x, int y, Direction direction) {
-		coords.set(x, y).addDirection(direction);
-		return mapObjects.get(coords).takeHarvestDamage();
-	}
-
 	public boolean addObject(int x, int y, Direction dir, int id) {
 		coords.set(x, y).addDirection(dir);
 		return addObject(coords.x, coords.y, id);

@@ -180,7 +180,7 @@ public class Player extends Entity {
 		return inventory;
 	}
 
-	void increaseSkill(Skill skill, int by) {
+	public void increaseSkill(Skill skill, int by) {
 		if (by < 1)
 			by = 1;
 		stats.skills.increaseSkill(skill, by);
@@ -263,11 +263,11 @@ public class Player extends Entity {
 	public boolean canPerformRangedAttack() {
 		Optional<Projectile> projectile = stats.getEquippedProjectile();
 		Optional<Weapon> rangedWeapon = stats.getEquippedWeapon();
-		if (projectile.isEmpty())
+		if (!projectile.isPresent())
 			return false;
 
 		return projectile.get().thrownByHand
-				|| (!rangedWeapon.isEmpty() && rangedWeapon.get().type == Weapon.Type.RangedWeapon);
+				|| (rangedWeapon.isPresent() && rangedWeapon.get().type == Weapon.Type.RangedWeapon);
 	}
 
 	private void performRangedAttack(AbstractNpc npc) {
@@ -659,66 +659,15 @@ public class Player extends Entity {
 			gatherResources(object);
 	}
 
-	private float BASE_RES_FAIL = 35; // Base resource gathering fail probability
-
-	// returns amount of damage done to object's harvestHp or negative value on fail
 	public int gatherResources(MapObject obj) {
-		if (obj.id == Map.nullObject.id)
+		if (obj.equals(Map.nullObject))
 			return -1;
-
-		int item = getObjectResource(obj);
-		int mhp = ObjectProp.getObject(obj.id).harvestHp;
-		Skill skill = obj.getInteractionSkill();
-		int curLvl = stats.skills.getLvl(skill);
-
-		if (stats.isToolEquipped(Tool.Type.Hammer))
-			item = -1;
-
-		if (curLvl < obj.lvl) {
-			MadSand.notice("You are not experienced enough." + Resources.LINEBREAK + skill + " level required: "
-					+ obj.lvl + Resources.LINEBREAK + "Your " + skill + ": " + curLvl);
-			return -2;
-		}
 
 		doAction(stats.minorCost);
-		damageHeldTool(skill);
+		damageHeldTool(obj.getInteractionSkill());
 		changeStamina(-stats.calcStaminaCost());
 
-		if (Utils.percentRoll(BASE_RES_FAIL) && !stats.skills.skillRoll(skill) && !stats.luckRoll()) {
-			MadSand.print("You fail to interact with " + obj.name);
-			return -1;
-		}
-
-		int damage = stats.skills.getBaseSkillDamage(skill)
-				+ stats.getEquippedTool()
-						.map(tool -> tool.getSkillDamage(skill))
-						.orElse(Tool.MIN_SKILL_DMG);
-		boolean damaged = obj.takeHarvestDamage(damage);
-
-		if (item != -1 && damaged) { // Successful interaction with item that drops something
-			Item objLoot;
-			int rewardCount;
-			int rolls = stats.skills.getItemDropRolls(skill);
-			if (!stats.luckRoll() || !stats.skills.skillRoll(skill))
-				rolls = 1;
-
-			for (int i = 0; i < rolls; ++i) {
-				rewardCount = stats.skills.getItemReward(skill);
-				objLoot = Item.create(item, rewardCount);
-				addItem(objLoot);
-				item = getObjectResource(obj);
-			}
-
-			increaseSkill(skill, obj.lvl);
-		}
-
-		if (!damaged)
-			MadSand.print("You hit " + obj.name + " [ " + obj.harvestHp + " / " + mhp + " ]");
-
-		if (item == -1 && damaged && obj.id != Map.nullObject.id)
-			MadSand.print("You damaged " + obj.name);
-
-		return damage;
+		return obj.acceptHit(this);
 	}
 
 	private int getObjectResource(MapObject object) {

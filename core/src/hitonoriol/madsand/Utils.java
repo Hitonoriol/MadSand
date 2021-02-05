@@ -188,6 +188,11 @@ public class Utils {
 	public static String subsName(String varName) {
 		return GameTextSubstitutor.DELIM_L + varName + GameTextSubstitutor.DELIM_R;
 	}
+	
+	public static <T> String getPackageName(Class<T> clazz) {
+		String fullName = clazz.getName();
+		return fullName.substring(0, fullName.lastIndexOf("."));
+	}
 
 	public static <T> boolean test(Optional<T> opt, Predicate<T> predicate) {
 		return opt.filter(predicate).isPresent();

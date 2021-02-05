@@ -3,8 +3,13 @@ package hitonoriol.madsand.map.object;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.Resources;
+import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.Skill;
+import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import me.xdrop.jrand.JRand;
 import me.xdrop.jrand.generators.basics.FloatGenerator;
@@ -34,7 +39,54 @@ public class ResourceObject extends MapObject {
 
 	@Override
 	public void interact(Player player) {
-		super.interact(player, () -> interactIfPossible(() -> player.interact(this)));
+		Skill skill = getInteractionSkill();
+		int curLvl = player.stats.skills.getLvl(skill);
+
+		if (curLvl < lvl)
+			MadSand.notice("You are not experienced enough." + Resources.LINEBREAK
+					+ skill + " level required: " + lvl + Resources.LINEBREAK
+					+ "Your " + skill + ": " + curLvl);
+		else
+			super.interact(player, () -> interactIfPossible(() -> player.interact(this)));
+	}
+
+	private void rollResources(Player player, int hpDelta) {
+		PlayerStats stats = player.stats;
+		Tool.Type heldTool = stats.getEquippedToolType();
+		Item objLoot;
+		int rolls;
+
+		for (int x = 0; x < hpDelta; ++x) {
+			rolls = stats.skills.getItemDropRolls(skill);
+			if (!stats.luckRoll() && !stats.skills.skillRoll(skill))
+				rolls = 1;
+
+			for (int i = 0; i < rolls; ++i) {
+				objLoot = Item.create(rollDrop(heldTool), stats.skills.getItemReward(skill));
+				player.addItem(objLoot);
+			}
+
+			player.increaseSkill(skill, lvl);
+		}
+	}
+
+	private float BASE_RES_FAIL = 35; // Base resource gathering fail probability
+
+	@Override
+	public int acceptHit(Player player) {
+		if (Utils.percentRoll(BASE_RES_FAIL) && !player.stats.skills.skillRoll(skill) && !player.stats.luckRoll()) {
+			MadSand.print("You fail to interact with " + name);
+			return -1;
+		}
+
+		int preHitHp = hp;
+		int damage = super.acceptHit(player, () -> player.stats.skills.getBaseSkillDamage(skill)
+				+ player.stats.getEquippedToolDamage(skill));
+
+		if (rollDrop(player.stats.getEquippedToolType()) != -1 && preHitHp != hp)
+			rollResources(player, Math.abs(preHitHp - hp));
+
+		return damage;
 	}
 
 	private void rollHp() {
@@ -42,6 +94,9 @@ public class ResourceObject extends MapObject {
 	}
 
 	public int rollDrop(Tool.Type heldItemType) {
+		if (heldItemType == Tool.Type.Hammer)
+			return -1;
+
 		return rollResource(id, heldItemType, altItems);
 	}
 

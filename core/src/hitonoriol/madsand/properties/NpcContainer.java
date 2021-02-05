@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Faction;
 import hitonoriol.madsand.entities.LootTable;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
@@ -58,7 +59,7 @@ public class NpcContainer {
 		@SuppressWarnings("unchecked")
 		@Override
 		public Class<? extends AbstractNpc> loadClass(String name) {
-			name = AbstractNpc.class.getPackageName() + "." + name;
+			name = Utils.getPackageName(AbstractNpc.class) + "." + name;
 			try {
 				return (Class<? extends AbstractNpc>) getParent().loadClass(name);
 			} catch (Exception e) {

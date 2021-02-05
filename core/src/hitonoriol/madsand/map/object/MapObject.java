@@ -2,6 +2,7 @@ package hitonoriol.madsand.map.object;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.function.Supplier;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
@@ -130,8 +131,8 @@ public class MapObject extends MapEntity implements DynamicallyCastable<MapObjec
 		boolean dmg = false;
 		harvestHp -= amt;
 		if (harvestHp < 0) {
+			--hp;
 			int excDmg = Math.abs(harvestHp) - 1;
-			--this.hp;
 			harvestHp = ObjectProp.getObject(id).harvestHp;
 			if (excDmg > 0)
 				takeHarvestDamage(excDmg);
@@ -141,16 +142,27 @@ public class MapObject extends MapEntity implements DynamicallyCastable<MapObjec
 		return dmg;
 	}
 
-	public boolean takeHarvestDamage() {
-		return takeHarvestDamage(1);
-	}
-
 	@Override
 	public void damage(int amt) {
 		if (amt == 0)
 			return;
 
 		takeHarvestDamage(amt + 1);
+	}
+
+	protected int acceptHit(Player player, Supplier<Integer> dmgSupplier) {
+		int damage = dmgSupplier.get();
+		int maxHp = ObjectProp.getObject(id).harvestHp;
+		if (!takeHarvestDamage(damage))
+			MadSand.print("You hit " + name + " [ " + harvestHp + " / " + maxHp + " ]");
+		else
+			MadSand.print("You damaged " + name);
+		return damage;
+	}
+
+	// returns amount of damage done to object's harvestHp or negative value on fail
+	public int acceptHit(Player player) {
+		return acceptHit(player, () -> player.stats.getEquippedToolDamage(Skill.None));
 	}
 
 	public void takeFullDamage() {

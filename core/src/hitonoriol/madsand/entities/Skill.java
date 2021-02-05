@@ -11,5 +11,5 @@ public enum Skill {
 		return this == Melee || this == Evasion;
 	}
 
-	public static final int SKILL_DMG_DENOMINATOR = 2;
+	public static final float SKILL_DMG_COEF = 1.125f;
 }

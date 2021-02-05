@@ -169,6 +169,12 @@ public class PlayerStats extends Stats {
 	public boolean isToolEquipped(Tool.Type type) {
 		return Utils.test(getEquippedTool(), tool -> tool.type == type);
 	}
+	
+	public int getEquippedToolDamage(Skill skill) {
+		return getEquippedTool()
+				.map(tool -> tool.getSkillDamage(skill))
+				.orElse(Tool.MIN_SKILL_DMG);
+	}
 
 	public Tool.Type getEquippedToolType() {
 		return getEquippedTool()

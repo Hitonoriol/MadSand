@@ -37,10 +37,10 @@ public class Tool extends AbstractEquipment {
 	// Item skill damage - roll amount of damage to do to objects
 	// Min: 1
 	public int getSkillDamage(Skill skill) {
-		if (skill != this.skill)
+		if (type != Type.Hammer && skill != this.skill)
 			return MIN_SKILL_DMG;
 		else
-			return Utils.rand(MIN_SKILL_DMG, dmg / Skill.SKILL_DMG_DENOMINATOR);
+			return Utils.rand(MIN_SKILL_DMG, (int) (dmg * Skill.SKILL_DMG_COEF));
 	}
 
 	public boolean damageTool(Skill skill) {
