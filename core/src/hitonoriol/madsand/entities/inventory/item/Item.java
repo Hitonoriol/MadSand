@@ -78,7 +78,7 @@ public class Item implements DynamicallyCastable<Item>{
 
 	public void use(Player player) {
 		if (useAction != null)
-			LuaUtils.execute(useAction);
+			LuaUtils.execute(useAction, this);
 	}
 
 	public void equip(Player player) {

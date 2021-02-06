@@ -24,10 +24,7 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.map.Map;
-import hitonoriol.madsand.map.ItemProducer;
-import hitonoriol.madsand.map.object.CraftingStation;
 import hitonoriol.madsand.map.object.MapObject;
-import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.world.World;
 
@@ -103,16 +100,15 @@ class BuildDialogEntry extends Group {
 		this.recipe = recipe;
 
 		Image objImage = new Image(Resources.objects[id]);
-		Label resourceLabel = new Label("Resources required to build:" + Resources.LINEBREAK + Item.createReadableItemList(recipe),
+		Label resourceLabel = new Label(
+				"Resources required to build:" + Resources.LINEBREAK + Item.createReadableItemList(recipe),
 				Gui.skin);
 		resourceLabel.setWrap(true);
 		resourceLabel.setAlignment(Align.center);
 
 		container.add(ObjectProp.getName(id)).padBottom(PAD).row();
 		container.add(objImage).align(Align.center).height(objImage.getHeight()).padBottom(PAD).row();
-
-		additionalInfo(container);
-
+		container.add(ObjectProp.getObject(id).getBuildInfo()).padBottom(PAD).row();
 		container.add(resourceLabel).align(Align.center).width(WIDTH).row();
 		container.setFillParent(true);
 
@@ -120,18 +116,6 @@ class BuildDialogEntry extends Group {
 		super.addActor(container);
 
 		initListeners();
-	}
-
-	private void additionalInfo(Table container) {
-		ItemProducer station = ObjectProp.productionStations.get(id);
-		boolean isCraftingStation = ObjectProp.getObject(id).is(CraftingStation.class);
-
-		if (station != null) {
-			container.add("Produces " + ItemProp.getItemName(station.producedMaterial)).padBottom(PAD).row();
-			if (!station.isEndless())
-				container.add("Consumes " + ItemProp.getItemName(station.consumedMaterial)).padBottom(PAD).row();
-		} else if (isCraftingStation)
-			container.add("Crafting station").padBottom(PAD).row();
 	}
 
 	private void initListeners() {

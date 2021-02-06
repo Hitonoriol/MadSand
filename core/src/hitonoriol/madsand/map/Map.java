@@ -1229,10 +1229,14 @@ public class Map {
 		return mapNpcs.values().stream().filter(predicate);
 	}
 
+	public float getOccupiedObjectSpace() {
+		return ((float) getObjectCount() / (float) getMaxObjects()) * 100f;
+	}
+
 	/*
 	 * Get maximum count of objects on map by its size
 	 */
-	private float MAX_OBJECT_PERCENT = 0.15f; // Max percent of map allowed to be filled with objects
+	private float MAX_OBJECT_PERCENT = 0.125f; // Max percent of map allowed to be filled with objects
 	private float MAX_NPC_PERCENT = 0.02f;
 
 	private int maxObjects = -1;

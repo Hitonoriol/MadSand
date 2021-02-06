@@ -1,7 +1,10 @@
 package hitonoriol.madsand;
 
+import java.util.stream.Stream;
+
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.Varargs;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
@@ -39,20 +42,43 @@ public class LuaUtils {
 		globals.set(luaName, object);
 	}
 
-	public static LuaValue loadScript(String file) {
-		return globals.load(Resources.readInternal(Resources.SCRIPT_DIR + file));
-	}
-
 	public static LuaValue executeScript(String file, Object arg) {
-		return loadScript(file).call(LuaValue.valueOf(String.valueOf(arg)));
+		return loadScript(file).call(CoerceJavaToLua.coerce(arg));
 	}
 
 	public static LuaValue executeScript(String file) {
-		return loadScript(file).call();
+		return callChunk(loadScript(file));
 	}
 
 	public static LuaValue execute(String str) {
-		return globals.load(str).call();
+		return callChunk(loadChunk(str));
+	}
+	
+	public static LuaValue execute(String str, Object arg) {
+		return callChunk(loadChunk(str), arg);
+	}
+
+	private static LuaValue loadChunk(String chunk) {
+		return globals.load(chunk);
+	}
+	
+	public static LuaValue loadScript(String file) {
+		return loadChunk(Resources.readInternal(Resources.SCRIPT_DIR + file));
+	}
+	
+	private static LuaValue callChunk(LuaValue chunk) {
+		return chunk.call();
+	}
+	
+	private static LuaValue callChunk(LuaValue chunk, Object arg) {
+		return chunk.call(CoerceJavaToLua.coerce(arg));
+	}
+
+	static Varargs callChunk(LuaValue chunk, Object... args) {
+		LuaValue[] luaArgs = Stream.of(args)
+				.map(arg -> CoerceJavaToLua.coerce(arg))
+				.toArray(LuaValue[]::new);
+		return chunk.invoke(LuaValue.varargsOf(luaArgs));
 	}
 
 	public static String getSectorScriptPath(int wx, int wy) {

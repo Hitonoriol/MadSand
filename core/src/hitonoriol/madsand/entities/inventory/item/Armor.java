@@ -12,6 +12,7 @@ public class Armor extends CombatEquipment {
 	public Armor(Armor protoItem) {
 		super(protoItem);
 		type = protoItem.type;
+		initEquipStats(protoItem.equipStats);
 	}
 
 	public Armor() {

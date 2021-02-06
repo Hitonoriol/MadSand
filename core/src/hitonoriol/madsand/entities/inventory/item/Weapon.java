@@ -10,8 +10,7 @@ public class Weapon extends CombatEquipment {
 	public Weapon(Weapon protoItem) {
 		super(protoItem);
 		type = protoItem.type;
-		if (lvl == protoItem.lvl)
-			equipStats.stats.set(Stat.Strength, protoItem.equipStats.stats);
+		initEquipStats(protoItem.equipStats);
 	}
 
 	public Weapon() {

@@ -15,7 +15,7 @@ public abstract class BuiltObject extends MapObject {
 	}
 
 	@Override
-	void destroy() {
+	public void destroy() {
 		Pair coords = getPosition();
 		MadSand.world.getCurLoc()
 				.putLoot(coords.x, coords.y, Item.parseItemString(ObjectProp.buildRecipes.get(id)));

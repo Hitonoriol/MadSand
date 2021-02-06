@@ -90,9 +90,8 @@
 		"hp" : 3,
 		"harvestHp" : 10,
 		"onInteract" : "
-			local player_look = world.player:lookingAt();
-			utils:delObject(player_look.x, player_look.y);
-			utils:addObject(player_look.x, player_look.y, 12);
+			this(...):destroy();
+			world:getCurLoc():addObject(world.player:lookingAt(), 12);
 		",
 		"name" : "Closed door"
 	},
@@ -102,9 +101,8 @@
 		"harvestHp" : 10,
 		"nocollide" : true,
 		"onInteract" : "
-			local player_look = world.player:lookingAt();
-			utils:delObject(player_look.x, player_look.y);
-			utils:addObject(player_look.x, player_look.y, 11);
+			this(...):destroy();
+			world:getCurLoc():addObject(world.player:lookingAt(), 11);
 		",
 		"name" : "Opened door"
 	},
@@ -724,7 +722,7 @@
 	"93" : {
 		"@type" : "MapObject",
 		"hp" : 15,
-		"onInteract" : "player:unlockRandomBuildRecipe(); obj_delete_looked_at();",
+		"onInteract" : "player:unlockRandomBuildRecipe(); this(...):destroy();",
 		"name" : "Recipe crate"
 	},
 	"94" : {

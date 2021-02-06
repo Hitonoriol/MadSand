@@ -11,6 +11,10 @@ stamina_tutorial = "LowStamina";
 travel_tutorial = "Travel";
 dungeon_tutorial = "DungeonKey";
 
+this = function(value)
+	return value;
+end
+
 show_tutorial = function(name, condition)
 	if (not player:luaActionDone(name) and condition()) then
 		tutorial:show(name);

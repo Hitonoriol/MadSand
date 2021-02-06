@@ -87,7 +87,7 @@ public class MapObject extends MapEntity implements DynamicallyCastable<MapObjec
 			interactIfPossible(() -> player.startResourceGathering(this));
 
 		else if (!onInteract.equals(Resources.emptyField))
-			LuaUtils.execute(onInteract);
+			LuaUtils.execute(onInteract, this);
 
 		else
 			interaction.run();
@@ -103,7 +103,7 @@ public class MapObject extends MapEntity implements DynamicallyCastable<MapObjec
 		return (id == Map.COLLISION_MASK_ID);
 	}
 
-	void destroy() {
+	public void destroy() {
 		this.id = 0; // cleaned up later in map
 		this.hp = CLEANUP_FLAG;
 
@@ -181,6 +181,11 @@ public class MapObject extends MapEntity implements DynamicallyCastable<MapObjec
 	@Override
 	public void playDamageAnimation() {
 		super.playAnimation(Resources.createAnimation(Resources.objectHitAnimStrip));
+	}
+	
+	@JsonIgnore
+	public String getBuildInfo() {
+		return "";
 	}
 
 	protected static int rollResource(int id, Tool.Type heldTool, HashMap<Tool.Type, ArrayList<Integer>> items) {

@@ -21,4 +21,9 @@ public class CraftingStation extends BuiltObject {
 	public void interact(Player player) {
 		super.interact(player, () -> Gui.openCraftMenu(id));
 	}
+	
+	@Override
+	public String getBuildInfo() {
+		return "Crafting station";
+	}
 }

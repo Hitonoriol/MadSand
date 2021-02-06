@@ -15,11 +15,17 @@ public abstract class CombatEquipment extends AbstractEquipment {
 
 	public CombatEquipment(CombatEquipment protoItem) {
 		super(protoItem);
-		equipStats = new EquipStats(protoItem.equipStats);
 	}
 
 	public CombatEquipment() {
 		super();
+	}
+	
+	protected void initEquipStats(EquipStats protoEquipStats) {
+		if (protoEquipStats == null)
+			equipStats = new EquipStats(lvl, this);
+		else
+			equipStats = new EquipStats(protoEquipStats);
 	}
 
 	protected CombatEquipment rollProperties() {
