@@ -9,6 +9,8 @@ import hitonoriol.madsand.containers.Pair;
 public abstract class MapEntity {
 	public abstract void damage(int amt);
 
+	public abstract String getName();
+
 	@JsonIgnore
 	public abstract Pair getPosition();
 

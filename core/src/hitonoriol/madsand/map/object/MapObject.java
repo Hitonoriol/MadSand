@@ -213,6 +213,10 @@ public class MapObject extends MapEntity implements DynamicallyCastable<MapObjec
 		MapObject rhs = (MapObject) obj;
 		return new EqualsBuilder().append(id, rhs.id).isEquals();
 	}
+	
+	public String getName() {
+		return name;
+	}
 
 	@JsonIgnore
 	public Skill getInteractionSkill() {

@@ -21,6 +21,7 @@ public class NpcContainer {
 
 	public int rewardExp;
 	public LootTable loot;
+	public ArrayList<Integer> projectiles;
 
 	public Faction faction = Faction.None;
 	public TradeCategory tradeCategory;

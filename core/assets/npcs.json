@@ -23,6 +23,7 @@
 		"strength" : 3,
 		"accuracy" : 2,
 		"dexterity" : 3,
+		"projectiles" : [177],
 		"rewardExp" : 7,
 		"loot" : "
 		(40|95/4:96/2)
@@ -729,6 +730,7 @@
 		"strength" : 3,
 		"dexterity" : 4,
 		"accuracy" : 4,
+		"projectiles" : [178],
 		"rewardExp" : 5,
 		"type" : "Npc",
 		"friendly" : false

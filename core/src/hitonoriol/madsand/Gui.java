@@ -22,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip;
@@ -50,8 +49,6 @@ public class Gui {
 	public static boolean dialogActive = false;
 
 	public static NinePatchDrawable transparency;
-
-	public static Table darkness;
 
 	public static NinePatchDrawable darkBackground;
 	public static NinePatchDrawable darkBackgroundSizeable;
@@ -154,13 +151,6 @@ public class Gui {
 	static void init() {
 		initSkin();
 		overlay = new Overlay();
-
-		darkness = new Table();
-		darkness.setBackground(darkBackground);
-		darkness.setFillParent(true);
-		darkness.setVisible(false);
-		overlay.addActor(darkness);
-
 		createTransitionScreens();
 	}
 

@@ -1834,5 +1834,23 @@
 		"dmg" : 1,
 		"cost" : 13,
 		"weight" : 0.35
+	},
+	"177" : {
+		"name" : "Pebble",
+		"lvl" : 1,
+		"@type" : "Projectile",
+		"thrownByHand" : true,
+		"dmg" : 1,
+		"cost" : 13,
+		"weight" : 0.15
+	},
+	"178" : {
+		"name" : "Acid blob",
+		"lvl" : 1,
+		"@type" : "Projectile",
+		"thrownByHand" : true,
+		"dmg" : 2,
+		"cost" : 0,
+		"weight" : 0
 	}
 }

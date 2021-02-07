@@ -168,19 +168,19 @@ public abstract class Entity extends MapEntity {
 
 	public abstract void meleeAttack(Direction dir);
 
-	void rangedAttack(Entity target, Projectile projectile) {
+	protected void rangedAttack(Entity target, Projectile projectile) {
 		if (!canSee(target))
 			return;
 
 		Map map = MadSand.world.getCurLoc();
 		Pair thisCoords = new Pair(x, y);
 		Pair obstacleCoords = map.rayCast(thisCoords, target.getPosition());
-		MapEntity projectileObstacle = map.getMapEntity(obstacleCoords);
+		MapEntity projectileObstacle = obstacleCoords.equals(Pair.nullPair) ? target : map.getMapEntity(obstacleCoords);
 
 		int baseDmg = stats.calcBaseRangedAttack(distanceTo(projectileObstacle.getPosition()));
-		int impactDmg = baseDmg != 0 ? baseDmg + projectile.dmg : 0;
+		int impactDmg = baseDmg != 0 ? baseDmg + projectile.calcDamage() : 0;
 
-		projectile.launchProjectile(thisCoords.toWorld(), obstacleCoords.toWorld(),
+		projectile.launchProjectile(thisCoords.toWorld(), projectileObstacle.getPosition().toWorld(),
 				() -> attack(projectileObstacle, impactDmg));
 	}
 
@@ -510,6 +510,10 @@ public abstract class Entity extends MapEntity {
 
 	public abstract void act(float time);
 
+	public Direction getRelativeDirection(int x, int y, boolean fourWay) {
+		return Pair.getRelativeDirection(this.x, this.y, x, y, fourWay);
+	}
+
 	public int distanceTo(int x, int y) {
 		return (int) Line.calcDistance(this.x, this.y, x, y);
 	}
@@ -584,6 +588,10 @@ public abstract class Entity extends MapEntity {
 			return HEALTH_STATE_25;
 		else
 			return HEALTH_STATE_10;
+	}
+	
+	public String getName() {
+		return stats.name;
 	}
 
 	@JsonIgnore

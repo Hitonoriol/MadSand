@@ -8,9 +8,12 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
+import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.EquipSlot;
 import hitonoriol.madsand.entities.Player;
+import me.xdrop.jrand.JRand;
+import me.xdrop.jrand.generators.basics.FloatGenerator;
 
 public class Projectile extends LevelBoundItem {
 	public int dmg;
@@ -21,21 +24,30 @@ public class Projectile extends LevelBoundItem {
 		dmg = protoItem.dmg;
 		thrownByHand = protoItem.thrownByHand;
 	}
-	
+
 	public Projectile() {
 		super();
 	}
-	
+
 	@Override
 	public Projectile copy() {
 		return new Projectile(this);
 	}
-	
+
 	@Override
 	public void use(Player player) {
 		player.stats.equipment.equip(this);
 	}
-	
+
+	static FloatGenerator dmgRangeGen = JRand.flt().range(0.4f, 1.25f);
+
+	public int calcDamage() {
+		if (Utils.percentRoll((float) lvl / 45f))
+			return dmg * 2;
+
+		return (int) Math.max(1, dmg * dmgRangeGen.gen());
+	}
+
 	static final float BASE_PROJECTILE_SPEED = 0.35f;
 
 	public void launchProjectile(Pair from, Pair to, Runnable impactAction) {
@@ -58,7 +70,7 @@ public class Projectile extends LevelBoundItem {
 						Actions.run(impactAction),
 						Actions.run(() -> projectileImg.remove())));
 	}
-	
+
 	@Override
 	public EquipSlot getEquipSlot() {
 		return EquipSlot.Offhand;

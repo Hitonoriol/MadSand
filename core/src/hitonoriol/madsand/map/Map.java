@@ -276,12 +276,19 @@ public class Map {
 
 	public Pair rayCast(Pair from, Pair to) {
 		Pair occupiedTile = new Pair(Pair.nullPair);
+		MutableBoolean ignoreTile = new MutableBoolean(true);
 
 		Line.rayCast(from, to, (x, y) -> {
+			if (ignoreTile.booleanValue()) {
+				ignoreTile.setFalse();
+				return true;
+			}
+
 			if (!isFreeTile(x, y)) {
 				occupiedTile.set(x, y);
 				return false;
 			}
+
 			return true;
 		});
 

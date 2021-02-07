@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Optional;
 
 import org.apache.commons.lang3.mutable.MutableBoolean;
 
@@ -93,6 +94,18 @@ public class Inventory {
 
 	public boolean itemExists(Item item) {
 		return items.contains(item);
+	}
+
+	public <T extends Item> Optional<T> getItem(Class<T> itemType) {
+		return items.stream()
+				.filter(item -> item.is(itemType))
+				.findFirst()
+				.map(item -> item.as(itemType))
+				.orElse(Optional.empty());
+	}
+
+	public <T extends Item> boolean hasItem(Class<T> itemType) {
+		return getItem(itemType).isPresent();
 	}
 
 	public boolean hasItem(int id, int quantity) {

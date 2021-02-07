@@ -26,10 +26,10 @@ import hitonoriol.madsand.entities.Faction;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Skill;
 import hitonoriol.madsand.entities.Stat;
+import hitonoriol.madsand.entities.inventory.item.Projectile;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
-import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.properties.NpcContainer;
 import hitonoriol.madsand.world.World;
@@ -44,7 +44,7 @@ public abstract class AbstractNpc extends Entity {
 
 	public int id;
 	public long uid;
-	public int lvl;
+	public int lvl = 1;
 	public int rewardExp;
 
 	public boolean friendly;
@@ -57,7 +57,7 @@ public abstract class AbstractNpc extends Entity {
 	private float timePassed; // time passed since last action
 	public float tickCharge = 0;
 
-	public int attackDistance = 2; // Must be < than this
+	public int meleeAttackDst = 2; // Must be < than this
 	public boolean enemySpotted = false;
 
 	public State state = State.Idle;
@@ -121,7 +121,7 @@ public abstract class AbstractNpc extends Entity {
 	private float EXP_PER_LVL = 3.4f;
 
 	// Action cost penalties
-	private float ATTACK_SPD_PER_LVL = 0.1f;
+	private float MELEE_SPD_PER_LVL = 0.1f, RANGED_SPD_PER_LVL = 0.5f;
 	private float MOVE_SPD_PER_LVL = 0.15f;
 
 	private String NAMED_NPC_STR = " the ";
@@ -143,8 +143,10 @@ public abstract class AbstractNpc extends Entity {
 		stats.mhp = stats.hp;
 		stats.set(Stat.Strength, (int) (properties.strength + lvl * STR_PER_LVL));
 		stats.set(Stat.Accuracy, (int) (properties.accuracy + lvl * ACC_PER_LVL));
-		stats.meleeAttackCost += lvl * ATTACK_SPD_PER_LVL;
-		stats.walkCost += lvl * MOVE_SPD_PER_LVL;
+
+		stats.meleeAttackCost += (float) lvl * MELEE_SPD_PER_LVL;
+		stats.rangedAttackCost += (float) lvl * RANGED_SPD_PER_LVL;
+		stats.walkCost += (float) lvl * MOVE_SPD_PER_LVL;
 
 		rewardExp = properties.rewardExp + (int) (lvl * EXP_PER_LVL);
 
@@ -160,6 +162,10 @@ public abstract class AbstractNpc extends Entity {
 		inventory.setMaxWeight(stats.calcMaxInventoryWeight());
 		if (properties.loot != null)
 			inventory.putItem(properties.loot.rollItems());
+
+		if (properties.projectiles != null)
+			properties.projectiles.stream()
+					.forEach(id -> inventory.putItem(id, (int) (Utils.rand(10, 17) * Math.sqrt(this.lvl))));
 
 		friendly = properties.friendly;
 		spawnOnce = properties.spawnOnce;
@@ -256,14 +262,11 @@ public abstract class AbstractNpc extends Entity {
 	}
 
 	@Override
-	protected void attack(MapObject object, int dmg) {
-		MadSand.print(stats.name + " hits " + object.name + " dealing " + dmg + " damage to it");
-		super.attack(object, dmg);
-	}
-
-	@Override
 	protected void attack(MapEntity target, int dmg) {
 		super.attack(target, dmg);
+
+		if (dmg > 0)
+			MadSand.print(stats.name + " hits " + target.getName() + " dealing " + dmg + " damage to it");
 
 		if (target instanceof Player)
 			attack((Player) target, dmg);
@@ -325,6 +328,63 @@ public abstract class AbstractNpc extends Entity {
 			((Player) enemy).unTarget();
 	}
 
+	private void getCloserTo(Entity entity) {
+		if (!canAct(stats.walkCost))
+			return;
+
+		Node closestNode = findPath(entity.x, entity.y);
+		if (closestNode != null)
+			move(getRelativeDirection(closestNode.x, closestNode.y, true));
+		doAction(stats.walkCost);
+	}
+
+	private void actMeleeAttack(Entity enemy) {
+		if (distanceTo(enemy) >= meleeAttackDst)
+			getCloserTo(enemy);
+		else {
+			if (!canAct(stats.meleeAttackCost))
+				return;
+
+			turn(getRelativeDirection(enemy.x, enemy.y, false));
+			meleeAttack(stats.look);
+			doAction(stats.meleeAttackCost);
+		}
+	}
+
+	private boolean canPerformRangedAttack() {
+		return inventory.hasItem(Projectile.class);
+	}
+
+	private boolean performRangedAttack(Entity enemy, Projectile projectile) {
+		if (canAct(stats.rangedAttackCost)) {
+			rangedAttack(enemy, projectile);
+			doAction(stats.rangedAttackCost);
+			return true;
+		} else
+			return false;
+	}
+
+	private int MAX_DST = 7, OPTIMAL_DST = 3;
+
+	private void actRangedAttack(Entity enemy) {
+		int dst = distanceTo(enemy);
+		Projectile projectile = inventory.getItem(Projectile.class).get();
+		if (dst > MAX_DST)
+			getCloserTo(enemy);
+
+		else if (dst > OPTIMAL_DST) {
+			if (!performRangedAttack(enemy, projectile))
+				getCloserTo(enemy);
+		}
+
+		else if (dst <= OPTIMAL_DST && dst >= meleeAttackDst)
+			performRangedAttack(enemy, projectile);
+
+		else
+			actMeleeAttack(enemy);
+
+	}
+
 	public void act(float time) {
 		boolean badRep = World.player.reputation.isHostile(stats.faction);
 		tickCharge += (timePassed = time);
@@ -348,14 +408,22 @@ public abstract class AbstractNpc extends Entity {
 				state = State.Idle;
 		}
 
+		prevTickCharge = -1;
 		act();
 	}
+
+	float prevTickCharge;
 
 	private void act() {
 		if (!canAct()) {
 			tickCharge = 0;
 			return;
 		}
+
+		if (tickCharge == prevTickCharge)
+			return;
+		else
+			prevTickCharge = tickCharge;
 
 		Player player = World.player;
 		double dist = distanceTo(player);
@@ -388,27 +456,10 @@ public abstract class AbstractNpc extends Entity {
 				return;
 			}
 
-			Direction dir;
-			if (dist >= attackDistance) {
-
-				if (!canAct(stats.walkCost))
-					return;
-
-				Node closestNode = findPath(player.x, player.y);
-				if (closestNode != null) {
-					dir = Pair.getRelativeDirection(x, y, closestNode.x, closestNode.y, true);
-					move(dir);
-				}
-				doAction(stats.walkCost);
-			} else {
-				if (!canAct(stats.meleeAttackCost))
-					return;
-
-				dir = Pair.getRelativeDirection(x, y, player.x, player.y, false);
-				turn(dir);
-				meleeAttack(stats.look);
-				doAction(stats.meleeAttackCost);
-			}
+			if (canPerformRangedAttack())
+				actRangedAttack(player);
+			else
+				actMeleeAttack(player);
 			break;
 
 		default:
