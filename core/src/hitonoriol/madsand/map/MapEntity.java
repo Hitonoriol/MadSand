@@ -2,11 +2,12 @@ package hitonoriol.madsand.map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import hitonoriol.madsand.DynamicallyCastable;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.AnimationContainer;
 import hitonoriol.madsand.containers.Pair;
 
-public abstract class MapEntity {
+public abstract class MapEntity implements DynamicallyCastable<MapEntity>{
 	public abstract void damage(int amt);
 
 	public abstract String getName();
@@ -20,4 +21,9 @@ public abstract class MapEntity {
 	}
 
 	public abstract void playDamageAnimation();
+
+	@JsonIgnore
+	public boolean isEmpty() {
+		return this == Map.nullNpc || this == Map.nullObject;
+	}
 }

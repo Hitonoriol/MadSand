@@ -13,7 +13,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
-import hitonoriol.madsand.DynamicallyCastable;
 import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
@@ -29,7 +28,7 @@ import hitonoriol.madsand.properties.TileProp;
 
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
 @JsonSubTypes({ @Type(CraftingStation.class), @Type(ItemFactory.class), @Type(ResourceObject.class) })
-public class MapObject extends MapEntity implements DynamicallyCastable<MapObject> {
+public class MapObject extends MapEntity{
 	private static final int CLEANUP_FLAG = -1337;
 	public static final int NULL_OBJECT_ID = 0;
 	public static final int COLLISION_MASK_ID = 666;

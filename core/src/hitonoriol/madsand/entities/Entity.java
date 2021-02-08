@@ -1,15 +1,18 @@
 package hitonoriol.madsand.entities;
 
 import java.util.Comparator;
+import java.util.function.Predicate;
 
 import org.apache.commons.lang3.mutable.MutableBoolean;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import hitonoriol.madsand.Keyboard;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
+import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.containers.PairFloat;
@@ -530,20 +533,43 @@ public abstract class Entity extends MapEntity {
 		return new Pair(x, y);
 	}
 
-	public boolean canSee(Entity entity) {
-		int dist = (int) distanceTo(entity);
-		Map loc = MadSand.world.getCurLoc();
-		MutableBoolean viewObstructed = new MutableBoolean(false);
+	public boolean rayCast(Entity entity, Predicate<MapEntity> obstaclePredicate) {
+		MutableBoolean result = new MutableBoolean(true);
+		Map map = MadSand.world.getCurLoc();
+		Pair coords = new Pair();
 
 		Line.rayCast(x, y, entity.x, entity.y, (x, y) -> {
-			MapObject object;
-			if ((object = loc.getObject(x, y)) != Map.nullObject)
-				viewObstructed.setValue(!object.nocollide);
+			if (this.at(x, y))
+				return true;
 
-			return !viewObstructed.booleanValue();
+			result.setValue(obstaclePredicate.test(map.getMapEntity(coords.set(x, y))));
+			return result.booleanValue();
 		});
 
-		return (dist <= fov) && !viewObstructed.booleanValue();
+		return result.booleanValue();
+	}
+
+	// true if <obstacle> is a solid object
+	private static Predicate<MapEntity> canSeePredicate = obstacle -> {
+		if (obstacle.isEmpty())
+			return true;
+
+		return obstacle.as(MapObject.class).map(object -> object.nocollide).orElse(true);
+	};
+
+	public boolean canSee(Entity entity) {
+		return distanceTo(entity) <= fov && rayCast(entity, canSeePredicate);
+	}
+
+	public boolean canShoot(Entity entity) {
+		return rayCast(entity, obstacle -> {
+			if (!obstacle.isEmpty() && obstacle.is(AbstractNpc.class)) {
+				Utils.out(getName() + " can't shoot: " + obstacle.getName() + " is in the way!");
+				return false;
+			}
+
+			return canSeePredicate.test(obstacle);
+		});
 	}
 
 	@Override
@@ -589,7 +615,7 @@ public abstract class Entity extends MapEntity {
 		else
 			return HEALTH_STATE_10;
 	}
-	
+
 	public String getName() {
 		return stats.name;
 	}

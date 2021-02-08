@@ -356,6 +356,9 @@ public abstract class AbstractNpc extends Entity {
 	}
 
 	private boolean performRangedAttack(Entity enemy, Projectile projectile) {
+		if (!canShoot(enemy))
+			return false;
+
 		if (canAct(stats.rangedAttackCost)) {
 			rangedAttack(enemy, projectile);
 			doAction(stats.rangedAttackCost);
