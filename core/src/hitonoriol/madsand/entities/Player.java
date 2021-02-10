@@ -77,14 +77,14 @@ public class Player extends Entity {
 	float elapsedTime;// For player animation
 
 	public int targetedByNpcs = 0;
-	public HashSet<Integer> unlockedItems = new HashSet<Integer>(); // set of items player obtained at least once
-	public ArrayList<Integer> craftRecipes = new ArrayList<Integer>(); // list of items which recipes are available to
-																		// the player
-	public ArrayList<Integer> buildRecipes = new ArrayList<Integer>();
+	public HashSet<Integer> unlockedItems = new HashSet<>(); // set of items player obtained at least once
+	public ArrayList<Integer> craftRecipes = new ArrayList<>(); // list of items which recipes are available to the player
+	public ArrayList<Integer> buildRecipes = new ArrayList<>();
 	public QuestWorker quests = new QuestWorker();
 	public HashSet<String> luaActions = new HashSet<>(); // Set for one-time lua actions
 	public HashMap<Integer, Integer> killCount = new HashMap<>();
 	public Reputation reputation = new Reputation();
+	public ArrayList<Integer> abilities = new ArrayList<>();
 	public int settlementsEstablished = 0;
 
 	private TimedAction scheduledAction;

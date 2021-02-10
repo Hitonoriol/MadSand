@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.LootTable;
+import hitonoriol.madsand.entities.ability.Ability;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.quest.ProceduralQuest;
 
@@ -24,11 +25,13 @@ public class Globals {
 	public ArrayList<String> idleNpcText;
 	public LootTable proceduralQuestRewards;
 	public HashMap<ProceduralQuest.Type, ArrayList<String>> proceduralQuestText;
+	public HashMap<Integer, Ability> abilities;
 
 	public HashMap<String, String> values;
 
 	public static void loadGlobals() throws Exception {
 		instance = Resources.mapper.readValue(Resources.readInternal(Resources.GLOBALS_FILE), Globals.class);
+		instance.abilities.entrySet().stream().forEach(entry -> entry.getValue().id = entry.getKey());
 	}
 
 	public static Globals instance() {

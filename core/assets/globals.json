@@ -5,6 +5,15 @@
 		"timeSkipItem" : "101",
 		"drowningDamage" : "3"
 	},
+	"abilities" : {
+		"1" : {
+			"@type" : "ActiveAbility",
+			"type" : "Oneshot",
+			"name" : "Low Kick",
+			"script" : "low-kick.lua",
+			"staminaCost" : 5
+		}
+	},
 	"proceduralQuestRewards" : "
 								(100|21/1)
 								(5|130/1)

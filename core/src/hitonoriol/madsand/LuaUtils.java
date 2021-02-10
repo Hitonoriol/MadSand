@@ -42,12 +42,16 @@ public class LuaUtils {
 		globals.set(luaName, object);
 	}
 
-	public static LuaValue executeScript(String file, Object arg) {
-		return loadScript(file).call(CoerceJavaToLua.coerce(arg));
-	}
-
 	public static LuaValue executeScript(String file) {
 		return callChunk(loadScript(file));
+	}
+	
+	public static LuaValue executeScript(String file, Object arg) {
+		return callChunk(loadScript(file), CoerceJavaToLua.coerce(arg));
+	}
+	
+	public static Varargs executeScript(String file, Object... args) {
+		return callChunk(loadScript(file), args);
 	}
 
 	public static LuaValue execute(String str) {

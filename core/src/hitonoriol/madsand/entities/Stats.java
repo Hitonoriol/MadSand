@@ -151,7 +151,7 @@ public class Stats {
 	float minAttackPercent = 0.3f;
 	float critPercent = 0.45f;
 
-	protected int getBaseAttack() {
+	public int getBaseAttack() {
 		return get(Stat.Strength);
 	}
 
