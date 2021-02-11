@@ -1,7 +1,6 @@
 package hitonoriol.madsand.gui.dialogs;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
@@ -21,10 +20,6 @@ import hitonoriol.madsand.world.Location;
 public class TraderDialog extends GameDialog {
 
 	Trader npc;
-
-	private TraderDialog(String title, String text, Stage stage) {
-		super(title, text, stage);
-	}
 
 	public TraderDialog(Player player, Trader npc) {
 		super(npc.stats.name, Utils.randElement(Globals.instance().traderGreetings), Gui.overlay);

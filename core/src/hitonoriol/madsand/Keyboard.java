@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 import hitonoriol.madsand.enums.Direction;
-import hitonoriol.madsand.gui.dialogs.BestiaryDialog;
 import hitonoriol.madsand.world.Location;
 import hitonoriol.madsand.world.World;
 
@@ -36,16 +35,18 @@ public class Keyboard {
 		Gui.overlay.addListener(new InputListener() {
 			@Override
 			public boolean keyUp(InputEvent event, int keycode) {
-				switch (keycode) {
-				case Keys.E:
+				if (keycode == Keys.E) {
 					if ((!Gui.inventoryActive && !Gui.isGameUnfocused())
 							|| ((Gui.inventoryActive && Gui.isGameUnfocused())))
 						Gui.toggleInventory();
-					break;
-
-				default:
-					return false;
+					return true;
 				}
+
+				if (Gui.isGameUnfocused())
+					return true;
+
+				if (Gui.overlay.bottomMenu.isKeyBoundToButton(keycode))
+					Gui.overlay.bottomMenu.toggleButton(keycode);
 
 				return true;
 			}
@@ -65,27 +66,11 @@ public class Keyboard {
 	}
 
 	private static void pollFunctionKeys() {
-		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
+		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE))
 			MadSand.switchScreen(MadSand.mainMenu);
-		}
 
-		if ((Gdx.input.isKeyJustPressed(Keys.L)))
-			Gui.overlay.bottomMenu.landButton.toggle();
-
-		if ((Gdx.input.isKeyJustPressed(Keys.G)))
+		if (Gdx.input.isKeyJustPressed(Keys.G))
 			GameSaver.saveWorld();
-
-		if (Gdx.input.isKeyJustPressed(Keys.J))
-			Gui.overlay.showJournal();
-
-		if (Gdx.input.isKeyJustPressed(Keys.X))
-			new BestiaryDialog(World.player).show();
-
-		if (Gdx.input.isKeyJustPressed(Keys.B))
-			Gui.overlay.showBuildMenu();
-
-		if (Gdx.input.isKeyJustPressed(Keys.Q))
-			Gui.overlay.toggleStatsWindow();
 	}
 
 	private static void pollTurnKeys() {

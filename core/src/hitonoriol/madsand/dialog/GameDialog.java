@@ -65,6 +65,10 @@ public class GameDialog extends Dialog {
 		invalidate();
 	}
 
+	public GameDialog() {
+		this((Stage) null);
+	}
+
 	public GameDialog(AbstractScreen<? extends Stage> screen) {
 		this(screen.getStage());
 	}

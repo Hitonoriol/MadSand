@@ -29,11 +29,9 @@ import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.Skill;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.quest.Quest;
-import hitonoriol.madsand.gui.dialogs.BuildDialog;
 import hitonoriol.madsand.gui.dialogs.CharacterCreationDialog;
 import hitonoriol.madsand.gui.dialogs.CharacterInfoWindow;
 import hitonoriol.madsand.gui.dialogs.LevelupDialog;
-import hitonoriol.madsand.gui.dialogs.QuestJournal;
 import hitonoriol.madsand.gui.widgets.ActionButton;
 import hitonoriol.madsand.gui.widgets.EquipmentSidebar;
 import hitonoriol.madsand.gui.widgets.GameContextMenu;
@@ -267,14 +265,6 @@ public class Overlay extends Stage {
 		if (charCreateDialog == null)
 			charCreateDialog = new CharacterCreationDialog();
 		charCreateDialog.show();
-	}
-
-	public void showJournal() {
-		new QuestJournal(World.player.quests).show();
-	}
-
-	public void showBuildMenu() {
-		new BuildDialog().show();
 	}
 
 	public void setHandDisplay(Item item) {

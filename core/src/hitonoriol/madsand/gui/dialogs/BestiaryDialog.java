@@ -3,7 +3,6 @@ package hitonoriol.madsand.gui.dialogs;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -31,10 +30,6 @@ public class BestiaryDialog extends GameDialog {
 	Table scrollTable = new Table();
 	AutoFocusScrollPane scroll;
 	Label emptyLabel = new Label("You haven't killed any monsters yet", Gui.skin);
-
-	private BestiaryDialog(Stage stage) {
-		super(stage);
-	}
 
 	public BestiaryDialog(Player player) {
 		super(Gui.overlay);

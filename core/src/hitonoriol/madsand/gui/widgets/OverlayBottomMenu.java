@@ -1,27 +1,25 @@
 package hitonoriol.madsand.gui.widgets;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.gui.OverlayMouseoverListener;
+import hitonoriol.madsand.gui.dialogs.AbilityDialog;
 import hitonoriol.madsand.gui.dialogs.BestiaryDialog;
 import hitonoriol.madsand.gui.dialogs.BuildDialog;
 import hitonoriol.madsand.gui.dialogs.LandDialog;
 import hitonoriol.madsand.gui.dialogs.QuestJournal;
 import hitonoriol.madsand.gui.stages.Overlay;
 import hitonoriol.madsand.world.World;
-
-/* TODO
- * Horizontal button table with shortcuts to:
- * Stat menu, inventory, ... 
- */
 
 public class OverlayBottomMenu extends Table {
 
@@ -30,14 +28,7 @@ public class OverlayBottomMenu extends Table {
 	static float BUTTON_PADDING = 5;
 	static float TABLE_PADDING_LEFT = 25;
 
-	Skin skin;
-
-	TextButton characterStatButton;
-	TextButton inventoryButton;
-	TextButton journalButton;
-	TextButton buildButton;
-	TextButton bestiaryButton;
-	public TextButton landButton;
+	private Map<Integer, Button> keyBoundButtons = new HashMap<>();
 
 	NinePatchDrawable background;
 
@@ -47,88 +38,41 @@ public class OverlayBottomMenu extends Table {
 	public OverlayBottomMenu(Overlay overlay) {
 		super();
 
-		skin = Gui.skin;
 		this.overlay = overlay;
 		mouseoverListener = new OverlayMouseoverListener();
 
-		addButton(characterStatButton = new TextButton("Character [Q]", skin));
-		addButton(inventoryButton = new TextButton("Inventory [E]", skin));
-		addButton(journalButton = new TextButton("Journal [J]", skin));
-		addButton(buildButton = new TextButton("Build [B]", skin));
-		addButton(bestiaryButton = new TextButton("Bestiary [X]", skin));
-		addButton(landButton = new TextButton("Land [L]", skin));
+		addButton("Character", Keys.Q, () -> overlay.toggleStatsWindow());
+		addButton("Inventory", Keys.E, () -> Gui.toggleInventory());
+		addButton("Abilities", Keys.R, () -> new AbilityDialog(World.player.abilities).show());
+		addButton("Journal", Keys.J, () -> new QuestJournal(World.player.quests).show());
+		addButton("Build", Keys.B, () -> new BuildDialog().show());
+		addButton("Bestiary", Keys.X, () -> new BestiaryDialog(World.player).show());
+		addButton("Land", Keys.L, () -> new LandDialog(MadSand.world.getLocation()).show());
 
 		background = new NinePatchDrawable(Gui.darkBackgroundSizeable);
 
 		super.setBackground(background);
-
-		initButtonListeners();
 
 		super.align(Align.bottomLeft);
 		super.pack();
 		super.padLeft(TABLE_PADDING_LEFT);
 	}
 
-	private void initButtonListeners() {
-		bestiaryButton.addListener(new ChangeListener() {
-
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				new BestiaryDialog(World.player).show();
-
-			}
-		});
-
-		characterStatButton.addListener(new ChangeListener() {
-
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				overlay.toggleStatsWindow();
-			}
-
-		});
-
-		inventoryButton.addListener(new ChangeListener() {
-
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				Gui.toggleInventory();
-			}
-
-		});
-
-		journalButton.addListener(new ChangeListener() {
-
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				new QuestJournal(World.player.quests).show();
-
-			}
-
-		});
-
-		buildButton.addListener(new ChangeListener() {
-
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				new BuildDialog().show();
-			}
-
-		});
-		
-		landButton.addListener(new ChangeListener() {
-
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				new LandDialog(MadSand.world.getLocation()).show();
-			}
-			
-		});
+	public boolean isKeyBoundToButton(int key) {
+		return keyBoundButtons.containsKey(key);
 	}
 
-	private void addButton(TextButton button) {
+	public void toggleButton(int buttonKey) {
+		if (keyBoundButtons.containsKey(buttonKey))
+			keyBoundButtons.get(buttonKey).toggle();
+	}
+
+	private void addButton(String text, int key, Runnable action) {
+		TextButton button = new TextButton(text + " [" + Keys.toString(key) + "]", Gui.skin);
 		button.addListener(mouseoverListener);
 		super.add(button).size(WIDTH, HEIGHT).pad(BUTTON_PADDING);
+		Gui.setAction(button, action);
+		keyBoundButtons.put(key, button);
 	}
 
 }

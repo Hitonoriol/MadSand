@@ -3,7 +3,6 @@ package hitonoriol.madsand.gui.dialogs;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -40,10 +39,6 @@ public class LandDialog extends GameDialog {
 	private Timer.Task refreshTask;
 
 	Table dialogContents = new Table(Gui.skin);
-
-	private LandDialog(Stage stage) {
-		super(stage);
-	}
 
 	public LandDialog(Location location) {
 		super(Gui.overlay);
