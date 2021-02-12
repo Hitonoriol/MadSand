@@ -1,6 +1,6 @@
 package hitonoriol.madsand.gui.dialogs;
 
-import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -14,9 +14,9 @@ import hitonoriol.madsand.entities.ability.PassiveAbility;
 
 public class AbilityDialog extends GameDialog {
 
-	private List<Integer> abilities;
+	private Set<Integer> abilities;
 
-	public AbilityDialog(List<Integer> abilities) {
+	public AbilityDialog(Set<Integer> abilities) {
 		super.setTitle("Abilities");
 		super.skipLine();
 		this.abilities = abilities;

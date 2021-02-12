@@ -6,9 +6,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.function.BooleanSupplier;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.BooleanSupplier;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -42,14 +42,15 @@ import hitonoriol.madsand.entities.inventory.item.Projectile;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.inventory.item.Weapon;
 import hitonoriol.madsand.entities.inventory.trade.TradeInventoryUI;
-import hitonoriol.madsand.entities.npc.FarmAnimal;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
-import hitonoriol.madsand.entities.npc.QuestMaster;
+import hitonoriol.madsand.entities.npc.FarmAnimal;
 import hitonoriol.madsand.entities.npc.Npc;
+import hitonoriol.madsand.entities.npc.QuestMaster;
 import hitonoriol.madsand.entities.npc.Trader;
 import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.entities.quest.QuestWorker;
-import hitonoriol.madsand.enums.*;
+import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.gui.dialogs.FishingUI;
 import hitonoriol.madsand.gui.dialogs.GrabBagDialog;
 import hitonoriol.madsand.gui.dialogs.ProductionStationUI;
@@ -77,14 +78,14 @@ public class Player extends Entity {
 	float elapsedTime;// For player animation
 
 	public int targetedByNpcs = 0;
-	public HashSet<Integer> unlockedItems = new HashSet<>(); // set of items player obtained at least once
-	public ArrayList<Integer> craftRecipes = new ArrayList<>(); // list of items which recipes are available to the player
-	public ArrayList<Integer> buildRecipes = new ArrayList<>();
+	public Set<Integer> unlockedItems = new HashSet<>(); // set of items player obtained at least once
+	public List<Integer> craftRecipes = new ArrayList<>(); // list of items which recipes are available to the player
+	public List<Integer> buildRecipes = new ArrayList<>();
 	public QuestWorker quests = new QuestWorker();
-	public HashSet<String> luaActions = new HashSet<>(); // Set for one-time lua actions
+	public Set<String> luaActions = new HashSet<>(); // Set for one-time lua actions
 	public HashMap<Integer, Integer> killCount = new HashMap<>();
 	public Reputation reputation = new Reputation();
-	public ArrayList<Integer> abilities = new ArrayList<>();
+	public Set<Integer> abilities = new HashSet<>();
 	public int settlementsEstablished = 0;
 
 	private TimedAction scheduledAction;
@@ -110,6 +111,14 @@ public class Player extends Entity {
 
 	public PlayerStats stats() {
 		return (PlayerStats) super.stats();
+	}
+
+	public boolean addAbility(int id) {
+		return abilities.add(id);
+	}
+
+	public boolean removeAbility(int id) {
+		return abilities.remove(Integer.valueOf(id));
 	}
 
 	public void refreshEquipment() {
@@ -373,7 +382,7 @@ public class Player extends Entity {
 		});
 	}
 
-	private void unlockRecipe(ArrayList<Integer> recipeList, int recipe) {
+	private void unlockRecipe(List<Integer> recipeList, int recipe) {
 		if (recipeList.contains(recipe))
 			return;
 
@@ -384,7 +393,7 @@ public class Player extends Entity {
 		recipeList.add(recipe);
 	}
 
-	private boolean unlockRandomRecipe(HashMap<Integer, ArrayList<Integer>> reqMap, ArrayList<Integer> recipes) {
+	private boolean unlockRandomRecipe(HashMap<Integer, ArrayList<Integer>> reqMap, List<Integer> recipes) {
 		Set<Integer> availableRecipes;
 
 		if (recipes == craftRecipes)
@@ -402,7 +411,7 @@ public class Player extends Entity {
 		return true;
 	}
 
-	private String getRecipeProgress(ArrayList<Integer> recipeList) {
+	private String getRecipeProgress(List<Integer> recipeList) {
 		int unlocked = recipeList.size();
 		int totalRecipes = 0;
 		if (recipeList == craftRecipes)
@@ -435,7 +444,7 @@ public class Player extends Entity {
 		unlockRecipe(buildRecipes, recipe);
 	}
 
-	private void refreshRecipes(HashMap<Integer, ArrayList<Integer>> reqMap, ArrayList<Integer> recipes) {
+	private void refreshRecipes(HashMap<Integer, ArrayList<Integer>> reqMap, List<Integer> recipes) {
 		HashSet<Integer> reqs, all;
 
 		for (Entry<Integer, ArrayList<Integer>> entry : reqMap.entrySet()) {
@@ -488,6 +497,10 @@ public class Player extends Entity {
 			checkHands(item.id);
 			stats.equipment.refreshUI();
 		}
+	}
+	
+	public void delItem(Item item) {
+		delItem(item, item.quantity);
 	}
 
 	public boolean addItem(List<Item> items) {

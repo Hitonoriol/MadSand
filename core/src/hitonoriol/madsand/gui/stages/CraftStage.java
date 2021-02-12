@@ -1,6 +1,6 @@
 package hitonoriol.madsand.gui.stages;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -60,7 +60,7 @@ public class CraftStage extends Stage {
 		containerTable.remove();
 		containerTable = new Table();
 		Player player = World.player;
-		ArrayList<Integer> itemList;
+		List<Integer> itemList;
 		String stationName = titleString;
 
 		if (craftStationId == 0) {

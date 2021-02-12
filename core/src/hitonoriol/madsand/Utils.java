@@ -1,8 +1,5 @@
 package hitonoriol.madsand;
 
-import hitonoriol.madsand.dialog.GameTextSubstitutor;
-import me.xdrop.jrand.JRand;
-
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -13,14 +10,17 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
-
-import org.apache.commons.lang3.exception.ExceptionUtils;
-
 import java.util.Random;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+
+import hitonoriol.madsand.dialog.GameTextSubstitutor;
+import me.xdrop.jrand.JRand;
 
 public class Utils {
 	public static boolean debugMode = false;
@@ -119,6 +119,12 @@ public class Utils {
 		return random.nextInt(max);
 	}
 
+	public static <T> T randElement(Set<T> set) {
+		return set.stream()
+				.skip(rand(0, set.size() - 1))
+				.findFirst().orElse(null);
+	}
+
 	public static <T> T randElement(List<T> list) {
 		if (list.size() == 1)
 			return list.get(0);
@@ -188,7 +194,7 @@ public class Utils {
 	public static String subsName(String varName) {
 		return GameTextSubstitutor.DELIM_L + varName + GameTextSubstitutor.DELIM_R;
 	}
-	
+
 	public static <T> String getPackageName(Class<T> clazz) {
 		String fullName = clazz.getName();
 		return fullName.substring(0, fullName.lastIndexOf("."));

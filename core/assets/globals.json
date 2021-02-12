@@ -5,6 +5,19 @@
 		"timeSkipItem" : "101",
 		"drowningDamage" : "3"
 	},
+	"scrolls" : {
+		"Dungeon Entrance Search" : "
+			local tileCoords = utils:locateTile(45);
+			local coordString = '(' .. tileCoords.x .. ', ' .. tileCoords.y .. ')';
+			
+			if (not tileCoords:isEmpty()) then
+				utils:showDialog('#Dungeon Search# You feel an immense amount of magical power guiding you towards ' .. coordString .. '...');
+				utils:notice('Dungeon entrance found somewhere around ' .. coordString);
+			else
+				utils:showDialog('The scroll crumbles in your hands as you read it, leaving you in deafening silence.');
+			end
+		"
+	},
 	"abilities" : {
 		"1" : {
 			"@type" : "ActiveAbility",

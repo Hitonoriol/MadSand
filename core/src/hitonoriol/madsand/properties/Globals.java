@@ -12,20 +12,24 @@ import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.quest.ProceduralQuest;
 
 public class Globals {
-	public static final String VERSION = "Alpha v0.49.4";
+	public static final String VERSION = "Alpha v0.49.5-pre";
 
 	public static String TRAVEL_ITEM = "travelItem", TIMESKIP_ITEM = "timeSkipItem";
 	public static String CURRENCY = "currencyId";
 
 	private static Globals instance = new Globals();
 
+	public ArrayList<String> idleNpcText;
 	public ArrayList<String> traderGreetings;
+
 	public ArrayList<Integer> fetchQuestItems;
 	public ArrayList<Integer> huntQuestItems;
-	public ArrayList<String> idleNpcText;
+
 	public LootTable proceduralQuestRewards;
 	public HashMap<ProceduralQuest.Type, ArrayList<String>> proceduralQuestText;
+
 	public HashMap<Integer, Ability> abilities;
+	public HashMap<String, String> scrolls;
 
 	public HashMap<String, String> values;
 

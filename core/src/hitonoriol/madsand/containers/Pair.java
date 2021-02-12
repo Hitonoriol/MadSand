@@ -161,6 +161,10 @@ public class Pair {
 	public Pair toWorld() {
 		return multiply(MadSand.TILESIZE);
 	}
+	
+	public boolean isEmpty() {
+		return equals(nullPair);
+	}
 
 	@Override
 	public int hashCode() {
