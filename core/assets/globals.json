@@ -5,6 +5,7 @@
 		"timeSkipItem" : "101",
 		"drowningDamage" : "3"
 	},
+	"baseScrollId" : 75,
 	"scrolls" : {
 		"Dungeon Entrance Search" : "
 			local tileCoords = utils:locateTile(45);
@@ -16,6 +17,9 @@
 			else
 				utils:showDialog('The scroll crumbles in your hands as you read it, leaving you in deafening silence.');
 			end
+		",
+		"Teleportation" : "
+			world.player:teleport(world:getCurLoc():getRandomPoint());
 		"
 	},
 	"abilities" : {

@@ -312,13 +312,21 @@ public class Map {
 			x = Utils.rand(xsz);
 			y = Utils.rand(ysz);
 			distance = (int) Line.calcDistance(x, y, player.x, player.y);
+
+			if (isFreeTile(x, y))
+				continue;
+
 		} while (distance < distanceFromPlayer || distance > maxDistanceFromPlayer);
 
 		return coords.set(x, y);
 	}
 
 	public Pair getRandomPoint(int distanceFromPlayer) {
-		return getRandomPoint(distanceFromPlayer, xsz * ysz);
+		return getRandomPoint(distanceFromPlayer, getArea());
+	}
+	
+	public Pair getRandomPoint() {
+		return getRandomPoint(-1);
 	}
 
 	public Map purge() {

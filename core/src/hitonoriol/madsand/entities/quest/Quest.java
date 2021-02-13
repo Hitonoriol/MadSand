@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.*;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
@@ -48,7 +49,7 @@ public class Quest {
 	public String giveItems = Item.EMPTY_ITEM; // Item string -- Items to give after the quest start
 	public String rewardItems = Item.EMPTY_ITEM; // Item string -- Items to give on quest completion
 	public String removeOnCompletion = Item.EMPTY_ITEM; // Item string -- Items to remove on quest completion
-	public String execOnCompletion = ""; // Lua script to be executed on quest completion
+	public String execOnCompletion = "", execOnStart = ""; // Lua script to be executed on quest start/completion
 
 	public long startTime;
 
@@ -183,7 +184,8 @@ public class Quest {
 
 	/*
 	 * Fills map with objective entries: (id, quantity)
-	 * Returns false if objective query string is invalid (must be in format: id/quantity:id/quantity:...)
+	 * Returns false if objective query string is invalid (must be in format:
+	 * id/quantity:id/quantity:...)
 	 */
 	private boolean createObjectiveMap(String query, HashMap<Integer, Integer> objective) {
 		if (query == null)
@@ -233,6 +235,7 @@ public class Quest {
 		itemObjective = new HashMap<>();
 		killObjective = new HashMap<>();
 		kills = new HashMap<>();
+		LuaUtils.execute(execOnStart);
 
 		createObjectiveMap(reqItems, itemObjective);
 		if (createObjectiveMap(reqKills, killObjective))

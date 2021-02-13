@@ -756,7 +756,6 @@
 	},
 	"75": {
 		"@type" : "Scroll",
-		"name": "Scroll of ",
 		"cost": 50,
 		"weight": 0.01
 	},

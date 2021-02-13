@@ -373,6 +373,10 @@ public abstract class Entity extends MapEntity {
 		updCoords();
 		MadSand.world.updateLight();
 	}
+	
+	public void teleport(Pair coords) {
+		teleport(coords.x, coords.y);
+	}
 
 	public void setGridCoords(int x, int y) {
 		this.x = x;

@@ -1,13 +1,18 @@
 package hitonoriol.madsand.entities.inventory.item;
 
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.properties.Globals;
+import hitonoriol.madsand.properties.ItemProp;
 
 public class Scroll extends Item {
 
 	public Scroll(Scroll protoItem) {
 		super(protoItem);
+
+		if (protoItem.useAction == null)
+			roll();
 	}
 
 	public Scroll() {
@@ -21,6 +26,7 @@ public class Scroll extends Item {
 
 	@Override
 	public void use(Player player) {
+		MadSand.notice("You read " + name);
 		super.use(player);
 		player.delItem(this, 1);
 	}
@@ -30,15 +36,19 @@ public class Scroll extends Item {
 	}
 
 	public Scroll load(String name) {
-		this.name += name;
-		useAction = Globals.instance().scrolls.get(name);
+		Globals globals = Globals.instance();
+
+		if (id == Item.NULL_ITEM)
+			loadProperties(ItemProp.getItem(id = globals.baseScrollId));
+
+		this.name = "Scroll of " + name;
+		useAction = globals.scrolls.get(name);
+		quantity = 1;
 		return this;
 	}
 
 	public static Scroll create(String name) {
-		Scroll scroll = new Scroll();
-		scroll.quantity = 1;
-		return scroll.load(name);
+		return new Scroll().load(name);
 	}
 
 	@Override

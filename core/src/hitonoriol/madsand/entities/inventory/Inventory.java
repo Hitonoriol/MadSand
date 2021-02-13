@@ -231,7 +231,7 @@ public class Inventory {
 		float newWeight = item.getWeight() + curWeight;
 		int existingIdx = getSameCell(item.id);
 
-		if (item.isEquipment())
+		if (!item.equals(getItemByIndex(existingIdx)))
 			existingIdx = -1;
 
 		if (newWeight <= maxWeight) {
@@ -265,8 +265,7 @@ public class Inventory {
 		if (id == Item.NULL_ITEM)
 			return true;
 
-		Item item = Item.create(id, quantity);
-		return putItem(item);
+		return putItem(Item.create(id, quantity));
 	}
 
 	public boolean putItem(String query) {
@@ -274,21 +273,7 @@ public class Inventory {
 	}
 
 	public boolean delItem(int id, int quantity) {
-		int idx = getSameCell(id, quantity);
-		if (idx == -1)
-			return false;
-		else {
-			Item item = Item.create(id, quantity);
-			curWeight -= item.getWeight();
-			if ((items.get(idx).quantity - quantity) <= 0) {
-				items.remove(idx);
-				refreshRemoveItem(item);
-			} else {
-				items.get(idx).quantity -= quantity;
-				refreshItem(items.get(idx));
-			}
-			return true;
-		}
+		return delItem(Item.create(id), quantity);
 	}
 
 	public boolean delItem(String query) {
@@ -309,6 +294,7 @@ public class Inventory {
 		for (int i = items.size() - 1; i >= 0; --i) {
 			foundItem = items.get(i);
 			if (foundItem.equals(item)) {
+				curWeight -= foundItem.weight * quantity;
 				foundItem.quantity -= quantity;
 
 				if (foundItem.quantity < 1) {

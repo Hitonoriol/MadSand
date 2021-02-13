@@ -29,6 +29,7 @@ public class Globals {
 	public HashMap<ProceduralQuest.Type, ArrayList<String>> proceduralQuestText;
 
 	public HashMap<Integer, Ability> abilities;
+	public int baseScrollId;
 	public HashMap<String, String> scrolls;
 
 	public HashMap<String, String> values;

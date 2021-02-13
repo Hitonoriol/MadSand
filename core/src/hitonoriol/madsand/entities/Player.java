@@ -476,7 +476,7 @@ public class Player extends Entity {
 	public boolean addItem(Item item) {
 		if (super.addItem(item)) {
 
-			if (item.name != "" && item.quantity > 0)
+			if (!item.name.isEmpty() && item.quantity > 0)
 				MadSand.notice("You get " + item.quantity + " " + item.name);
 
 			if (unlockedItems.add(item.id))

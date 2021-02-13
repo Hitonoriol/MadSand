@@ -28,7 +28,8 @@ import hitonoriol.madsand.properties.ItemProp;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
 @JsonSubTypes({ @Type(Armor.class), @Type(Consumable.class), @Type(CropSeeds.class), @Type(FishingBait.class),
-		@Type(GrabBag.class), @Type(Placeable.class), @Type(Projectile.class), @Type(Tool.class), @Type(Weapon.class) })
+		@Type(GrabBag.class), @Type(Placeable.class), @Type(Projectile.class), @Type(Tool.class), @Type(Weapon.class),
+		@Type(Scroll.class) })
 public class Item implements DynamicallyCastable<Item> {
 
 	public int id;
@@ -120,7 +121,9 @@ public class Item implements DynamicallyCastable<Item> {
 	}
 
 	protected void loadProperties(Item properties) {
-		this.name = properties.name;
+		if (properties.name != null)
+			this.name = properties.name;
+
 		this.weight = properties.weight;
 		this.cost = properties.cost;
 		this.useAction = properties.useAction;
