@@ -11,6 +11,7 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 	public int hp = -1;
 	public int maxHp = hp;
 	public long uid = 0;
+	public boolean cursed = false; 
 
 	public AbstractEquipment(AbstractEquipment protoItem) {
 		super(protoItem);

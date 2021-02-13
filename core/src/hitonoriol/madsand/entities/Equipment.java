@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.mutable.MutableBoolean;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Gui;
@@ -46,15 +48,17 @@ public class Equipment {
 		if (!equipped.containsKey(slot))
 			return false;
 
-		Item item = getItem(slot);
-		if (item.is(CombatEquipment.class)) {
-			CombatEquipment equipment = (CombatEquipment) item;
+		MutableBoolean cursedEquipment = new MutableBoolean(false);
+		getItem(slot).as(CombatEquipment.class).ifPresent(equipment -> {
 			equipmentWeight -= equipment.weight;
 			stats.removeBonus(equipment);
-		}
+			cursedEquipment.setValue(equipment.cursed && equipment.hp > 0);
+		});
+
+		if (cursedEquipment.isTrue())
+			return false;
 
 		Gui.overlay.equipmentSidebar.equipItem(slot, Item.nullItem);
-
 		return equipped.remove(slot) != null;
 	}
 

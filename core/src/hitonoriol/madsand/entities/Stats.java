@@ -124,7 +124,7 @@ public class Stats {
 	}
 
 	public boolean luckRoll() {
-		return Utils.percentRoll(Utils.log(Math.pow(get(Stat.Luck), 1.75), 8) + 10);
+		return Utils.percentRoll(Utils.log(Math.pow(get(Stat.Luck), 1.75), 8) + 9.75);
 	}
 
 	public boolean critRoll() {

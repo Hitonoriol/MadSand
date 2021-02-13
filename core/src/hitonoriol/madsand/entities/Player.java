@@ -223,7 +223,12 @@ public class Player extends Entity {
 
 	public boolean unEquip(Item item) {
 		MadSand.print("You unequip " + item.name);
-		return stats.equipment.unEquip(item);
+
+		boolean unEquipped = stats.equipment.unEquip(item);
+		if (!unEquipped)
+			MadSand.warn("You can't unequip " + item.name + " - it's cursed!");
+
+		return unEquipped;
 	}
 
 	protected void attack(MapObject object, int dmg) {
@@ -498,7 +503,7 @@ public class Player extends Entity {
 			stats.equipment.refreshUI();
 		}
 	}
-	
+
 	public void delItem(Item item) {
 		delItem(item, item.quantity);
 	}
