@@ -1,13 +1,24 @@
 package hitonoriol.madsand.entities;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.entities.LootTable.Deserializer;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.properties.Globals;
 
+@JsonDeserialize(using = Deserializer.class)
 public class LootTable extends RollTable<LootTable.LootEntry> {
 	public boolean allowEmptyRoll = false;
 
@@ -19,11 +30,14 @@ public class LootTable extends RollTable<LootTable.LootEntry> {
 		return items;
 	}
 
-	static final String ENTRY_PROBABILITY_DELIM = "\\|";
+	static final String ENTRY_PROBABILITY_DELIM = "\\|", LOAD_TABLE_TOKEN = "$";
 	static final String TABLE_ENTRY_REGEX = "\\((.*?)\\)";
 	static final Pattern tableEntryPattern = Pattern.compile(TABLE_ENTRY_REGEX);
 
 	public static LootTable parse(String lootTblString) {
+		if (lootTblString.contains(LOAD_TABLE_TOKEN))
+			return Globals.instance().lootTables.get(lootTblString.substring(1));
+		
 		if (!lootTblString.contains("|")) {
 			try {
 				return Resources.mapper.readValue(lootTblString, LootTable.class);
@@ -72,6 +86,15 @@ public class LootTable extends RollTable<LootTable.LootEntry> {
 		public Item makeItem(boolean allowEmptyRoll) {
 			int minQuantity = allowEmptyRoll ? 0 : 1;
 			return Item.create(id, Utils.rand(minQuantity, maxQuantity));
+		}
+	}
+
+	public static class Deserializer extends JsonDeserializer<LootTable> {
+		@Override
+		public LootTable deserialize(JsonParser p, DeserializationContext ctxt)
+				throws IOException, JsonProcessingException {
+			JsonNode node = p.readValueAsTree();
+			return parse(node.asText());
 		}
 	}
 }

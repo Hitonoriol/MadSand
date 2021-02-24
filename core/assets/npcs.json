@@ -581,7 +581,7 @@
 	"41" : {
 		"name" : "Bear",
 		"faction" : "Animals",
-		"loot" : "(97.5|96/1)(95|22/4)",
+		"loot" : "$wild_animal_l",
 		"hp" : 21,
 		"strength" : 3,
 		"dexterity" : 2,
@@ -593,7 +593,7 @@
 	"42" : {
 		"name" : "Crocodile",
 		"faction" : "Animals",
-		"loot" : "(97.5|96/1)(95|22/4)",
+		"loot" : "$wild_animal_l",
 		"hp" : 20,
 		"strength" : 3,
 		"dexterity" : 5,
@@ -605,7 +605,7 @@
 	"43" : {
 		"name" : "Deer",
 		"faction" : "Animals",
-		"loot" : "(97.5|96/1)(95|22/3)",
+		"loot" : "$wild_animal_m",
 		"hp" : 15,
 		"strength" : 2,
 		"dexterity" : 6,
@@ -617,7 +617,7 @@
 	"44" : {
 		"name" : "Giraffe",
 		"faction" : "Animals",
-		"loot" : "(97.5|96/1)(95|22/3)",
+		"loot" : "$wild_animal_m",
 		"hp" : 18,
 		"strength" : 2,
 		"dexterity" : 4,
@@ -629,7 +629,7 @@
 	"45" : {
 		"name" : "Hedgehog",
 		"faction" : "Animals",
-		"loot" : "(97.5|96/1)",
+		"loot" : "$wild_animal_s",
 		"hp" : 5,
 		"strength" : 3,
 		"dexterity" : 6,
@@ -641,7 +641,7 @@
 	"46" : {
 		"name" : "Leopard",
 		"faction" : "Animals",
-		"loot" : "(97.5|96/1)(95|22/3)",
+		"loot" : "$wild_animal_m",
 		"hp" : 23,
 		"strength" : 4,
 		"dexterity" : 5,
@@ -653,7 +653,7 @@
 	"47" : {
 		"name" : "Lion",
 		"faction" : "Animals",
-		"loot" : "(97.5|96/1)(95|22/3)",
+		"loot" : "$wild_animal_m",
 		"hp" : 20,
 		"strength" : 4,
 		"dexterity" : 5,
@@ -665,7 +665,7 @@
 	"48" : {
 		"name" : "Monkey",
 		"faction" : "Animals",
-		"loot" : "(97.5|96/1)(95|22/2)",
+		"loot" : "$wild_animal_m",
 		"hp" : 7,
 		"strength" : 3,
 		"dexterity" : 6,
@@ -689,7 +689,7 @@
 	"50" : {
 		"name" : "Rhinoceros",
 		"faction" : "Animals",
-		"loot" : "(97.5|96/1)(95|22/3)",
+		"loot" : "$wild_animal_m",
 		"hp" : 27,
 		"strength" : 6,
 		"dexterity" : 2,
@@ -701,7 +701,7 @@
 	"51" : {
 		"name" : "Zebra",
 		"faction" : "Animals",
-		"loot" : "(97.5|96/1)(95|22/3)",
+		"loot" : "$wild_animal_m",
 		"hp" : 14,
 		"strength" : 3,
 		"dexterity" : 5,

@@ -23,9 +23,9 @@ import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.properties.WorldGenProp;
 import hitonoriol.madsand.world.Location;
 import hitonoriol.madsand.world.Settlement;
+import hitonoriol.madsand.world.Settlement.WorkerContainer;
 import hitonoriol.madsand.world.WorkerType;
 import hitonoriol.madsand.world.World;
-import hitonoriol.madsand.world.Settlement.WorkerContainer;
 
 public class LandDialog extends GameDialog {
 

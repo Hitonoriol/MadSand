@@ -27,11 +27,11 @@ import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Skill;
+import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.gui.widgets.TimedProgressBar;
 import hitonoriol.madsand.gui.widgets.TimedProgressBar.TimedAction;
 import hitonoriol.madsand.map.FishingSpot;
 import hitonoriol.madsand.world.World;
-import hitonoriol.madsand.entities.inventory.item.Tool;
 import me.xdrop.jrand.JRand;
 
 public class FishingUI extends GameDialog {

@@ -1,8 +1,9 @@
 package hitonoriol.madsand.properties;
 
 import java.util.HashMap;
-import hitonoriol.madsand.map.Map;
+
 import hitonoriol.madsand.map.ItemProducer;
+import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.object.MapObject;
 
 public class ObjectProp {

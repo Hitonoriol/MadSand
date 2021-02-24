@@ -11,12 +11,12 @@ import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Skill;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.object.ResourceObject;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.NpcProp;
-import hitonoriol.madsand.entities.inventory.item.Tool;
 
 public class Settlement {
 	private static float WAREHOUSE_DEF_WEIGHT = 50;

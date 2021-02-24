@@ -13,8 +13,8 @@ import hitonoriol.madsand.entities.Faction;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.properties.WorldGenProp;
-import hitonoriol.madsand.world.WorldMap;
 import hitonoriol.madsand.world.Location;
+import hitonoriol.madsand.world.WorldMap;
 
 public class WorldGen {
 	private WorldMap worldMap;

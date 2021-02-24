@@ -12,9 +12,9 @@ import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.map.Crop;
+import hitonoriol.madsand.map.ItemProducer;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
-import hitonoriol.madsand.map.ItemProducer;
 import hitonoriol.madsand.map.object.MapObject;
 
 public class WorldMapSaver {

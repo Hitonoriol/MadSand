@@ -5,6 +5,11 @@
 		"timeSkipItem" : "101",
 		"drowningDamage" : "3"
 	},
+	"lootTables" : {
+		"wild_animal_l" : "(97.5|96/2)(95|22/4)",
+		"wild_animal_m" : "(97.5|96/1)(95|22/3)",
+		"wild_animal_s" : "(97|96/1)"
+	},
 	"baseScrollId" : 75,
 	"scrolls" : {
 		"Dungeon Entrance Search" : "

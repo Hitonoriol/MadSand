@@ -3,8 +3,6 @@ package hitonoriol.madsand.properties;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
-
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.LootTable;
 import hitonoriol.madsand.entities.ability.Ability;
@@ -28,6 +26,7 @@ public class Globals {
 	public LootTable proceduralQuestRewards;
 	public HashMap<ProceduralQuest.Type, ArrayList<String>> proceduralQuestText;
 
+	public HashMap<String, LootTable> lootTables;
 	public HashMap<Integer, Ability> abilities;
 	public int baseScrollId;
 	public HashMap<String, String> scrolls;
@@ -53,11 +52,5 @@ public class Globals {
 
 	public static Item getCurrency() {
 		return ItemProp.getItem(getInt(CURRENCY));
-	}
-
-	@JsonSetter("proceduralQuestRewards")
-	public void setProceduralQuestRewards(String loot) {
-		if (loot != null)
-			this.proceduralQuestRewards = LootTable.parse(loot);
 	}
 }

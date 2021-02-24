@@ -15,6 +15,7 @@ import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.CropSeeds;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.gui.OverlayMouseoverListener;
 import hitonoriol.madsand.map.Map;
@@ -24,7 +25,6 @@ import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.world.World;
-import hitonoriol.madsand.entities.inventory.item.Tool;
 
 public class ActionButton extends Table {
 	public Skin skin;

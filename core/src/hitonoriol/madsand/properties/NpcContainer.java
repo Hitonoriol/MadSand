@@ -44,12 +44,6 @@ public class NpcContainer {
 		}
 	}
 
-	@JsonSetter("loot")
-	public void setLoot(String loot) {
-		if (loot != null)
-			this.loot = LootTable.parse(loot);
-	}
-
 	@JsonSetter("type")
 	public void setType(String type) {
 		if (type != null)

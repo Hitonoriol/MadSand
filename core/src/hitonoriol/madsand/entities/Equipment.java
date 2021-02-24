@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang3.mutable.MutableBoolean;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.entities.inventory.Inventory;
+import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.CombatEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
 
@@ -48,15 +47,18 @@ public class Equipment {
 		if (!equipped.containsKey(slot))
 			return false;
 
-		MutableBoolean cursedEquipment = new MutableBoolean(false);
-		getItem(slot).as(CombatEquipment.class).ifPresent(equipment -> {
+		Item equippedItem = getItem(slot);
+		boolean cursedEquipment = equippedItem.as(AbstractEquipment.class)
+				.map(equipment -> equipment.cursed && equipment.hp > 0)
+				.orElse(false);
+
+		if (cursedEquipment)
+			return false;
+
+		equippedItem.as(CombatEquipment.class).ifPresent(equipment -> {
 			equipmentWeight -= equipment.weight;
 			stats.removeBonus(equipment);
-			cursedEquipment.setValue(equipment.cursed && equipment.hp > 0);
 		});
-
-		if (cursedEquipment.isTrue())
-			return false;
 
 		Gui.overlay.equipmentSidebar.equipItem(slot, Item.nullItem);
 		return equipped.remove(slot) != null;

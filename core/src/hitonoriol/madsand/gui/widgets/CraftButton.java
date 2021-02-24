@@ -1,6 +1,7 @@
 package hitonoriol.madsand.gui.widgets;
 
 import java.util.function.Consumer;
+
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
