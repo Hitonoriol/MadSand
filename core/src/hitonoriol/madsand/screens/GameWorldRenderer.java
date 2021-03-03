@@ -95,7 +95,7 @@ public class GameWorldRenderer {
 		Texture lootTx;
 
 		if (loot.contents.size() == 1)
-			lootTx = Resources.item[loot.contents.get(0).id];
+			lootTx = loot.contents.get(0).getTexture();
 		else
 			lootTx = Resources.objects[OBJECT_LOOT];
 

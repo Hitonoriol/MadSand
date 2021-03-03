@@ -480,7 +480,6 @@ public class Player extends Entity {
 	@Override
 	public boolean addItem(Item item) {
 		if (super.addItem(item)) {
-
 			if (!item.name.isEmpty() && item.quantity > 0)
 				MadSand.notice("You get " + item.quantity + " " + item.name);
 

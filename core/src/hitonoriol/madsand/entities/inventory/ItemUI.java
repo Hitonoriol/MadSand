@@ -39,7 +39,7 @@ public class ItemUI extends Group {
 		topLabel = new Label("", Gui.skin);
 		highlight = new Image(Resources.noEquip);
 		toolHpLabel = new Label("", Gui.skin);
-		itemBtn = new ImageButton(new SpriteDrawable(new Sprite(Resources.item[item.id])));
+		itemBtn = new ImageButton(new SpriteDrawable(new Sprite(item.getTexture())));
 		itemQuantityLabel = new Label(item.quantity + "", Gui.skin);
 		tooltip = new ItemTooltip(item);
 

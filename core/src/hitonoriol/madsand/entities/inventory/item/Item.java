@@ -2,11 +2,14 @@ package hitonoriol.madsand.entities.inventory.item;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.IdentityHashMap;
+import java.util.Map;
 import java.util.function.BiConsumer;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import hitonoriol.madsand.DynamicallyCastable;
 import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.Resources;
+import hitonoriol.madsand.TextureProcessor;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.EquipSlot;
 import hitonoriol.madsand.entities.Player;
@@ -46,6 +50,8 @@ public class Item implements DynamicallyCastable<Item> {
 	public final static Item nullItem = new Item();
 	public static final int NULL_ITEM = 0;
 	private static final float DEFAULT_WEIGHT = 0.25f;
+
+	private static Map<Item, Texture> dynamicTxPool = new IdentityHashMap<>();
 
 	public final static String ITEM_DELIM = "/";
 	public final static String BLOCK_DELIM = ":";
@@ -206,6 +212,20 @@ public class Item implements DynamicallyCastable<Item> {
 		return EquipSlot.MainHand;
 	}
 
+	@JsonIgnore
+	public Texture getTexture() {
+		if (!dynamicTxPool.containsKey(this))
+			return Resources.item[id];
+
+		return dynamicTxPool.get(this);
+	}
+
+	public Texture createDynamicTexture() {
+		Texture dynamicTx = TextureProcessor.copyTexture(Resources.item[id]);
+		dynamicTxPool.put(this, dynamicTx);
+		return dynamicTx;
+	}
+
 	protected Item rollProperties() {
 		return this;
 	}
@@ -215,7 +235,16 @@ public class Item implements DynamicallyCastable<Item> {
 	}
 
 	public static Item duplicate(Item item, int quantity) {
-		return item.copy().setQuantity(quantity);
+		Item newItem = item.copy().setQuantity(quantity);
+
+		if (Utils.percentRoll(30)) {
+			/* Dynamic item texture test */
+			TextureProcessor txProc = new TextureProcessor(newItem.createDynamicTexture());
+			txProc.invertColors();
+			/* *** */
+		}
+
+		return newItem;
 	}
 
 	public static Item create(Item item, int quantity) {
