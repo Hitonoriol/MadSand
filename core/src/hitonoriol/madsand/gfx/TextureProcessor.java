@@ -1,8 +1,8 @@
-package hitonoriol.madsand;
+package hitonoriol.madsand.gfx;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
-
-import org.apache.commons.lang3.mutable.MutableFloat;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -10,36 +10,41 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.glutils.PixmapTextureData;
 
+import hitonoriol.madsand.gfx.Effects.TextureEffect;
+
 public class TextureProcessor {
 
 	private Texture texture;
+	private Pixmap pixmap;
+	private List<TextureEffect> effects = new ArrayList<>(1);
 
 	public TextureProcessor(Texture texture) {
 		this.texture = texture;
 	}
 
-	public void foreachPixel(Consumer<Color> pixelAction) {
-		Pixmap pixmap = getTextureData().consumePixmap();
+	public TextureProcessor foreachPixel(Consumer<Color> pixelAction) {
+		Pixmap pixmap = getPixmap();
 		Color pixelColor = new Color();
 
 		for (int x = 0; x < pixmap.getWidth(); x++)
 			for (int y = 0; y < pixmap.getHeight(); y++) {
-				pixelAction.accept(pixelColor.set(pixmap.getPixel(x, y)));
+				if (pixelColor.set(pixmap.getPixel(x, y)).a == 0)
+					continue;
+
+				pixelAction.accept(pixelColor);
 				pixmap.drawPixel(x, y, Color.rgba8888(pixelColor));
 			}
-
-		loadPixmap(pixmap);
+		return this;
 	}
 
-	public void invertColors() {
-		Color white = new Color();
-		MutableFloat alpha = new MutableFloat();
-		foreachPixel(color -> {
-			white.set(1, 1, 1, 1);
-			alpha.setValue(color.a);
-			color.set(white.sub(color));
-			color.a = alpha.floatValue();
-		});
+	public TextureProcessor addEffect(TextureEffect effect) {
+		effects.add(effect);
+		return this;
+	}
+
+	public void applyEffects() {
+		effects.stream().forEach(effect -> effect.accept(this));
+		loadPixmap(pixmap);
 	}
 
 	private TextureData getTextureData() {
@@ -48,6 +53,12 @@ public class TextureProcessor {
 
 	public void loadPixmap(Pixmap pixmap) {
 		loadPixmap(texture, pixmap);
+	}
+
+	public Pixmap getPixmap() {
+		if (pixmap == null)
+			pixmap = getTextureData().consumePixmap();
+		return pixmap;
 	}
 
 	public static void loadPixmap(Texture texture, Pixmap pixmap) {
