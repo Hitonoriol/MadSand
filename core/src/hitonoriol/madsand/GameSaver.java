@@ -109,6 +109,10 @@ public class GameSaver {
 	public static String readFile(String name) {
 		return readFile(name, false);
 	}
+	
+	public static String getFxDir() {
+		return MadSand.MAPDIR + MadSand.WORLDNAME + Resources.FX_DIR;
+	}
 
 	public static String getProdStationFile(int wx, int wy, int layer) {
 		return MadSand.MAPDIR + MadSand.WORLDNAME + "/productionstations" + getSectorString(wx, wy, layer)
@@ -165,6 +169,7 @@ public class GameSaver {
 		}
 
 		MadSand.initNewGame();
+		createDirs();
 
 		if (!loadChar()) {
 			loadErrMsg();
@@ -323,14 +328,16 @@ public class GameSaver {
 		File maploc = new File(MadSand.MAPDIR);
 		File curworld = new File(MadSand.MAPDIR + MadSand.WORLDNAME);
 
-		if (!saveloc.exists()) {
+		if (!saveloc.exists())
 			saveloc.mkdirs();
-		}
-		if (!maploc.exists()) {
+
+		if (!maploc.exists())
 			maploc.mkdirs();
-		}
+
 		if (!curworld.exists())
 			curworld.mkdirs();
+
+		new File(MadSand.MAPDIR + MadSand.WORLDNAME + Resources.FX_DIR).mkdirs();
 	}
 
 }

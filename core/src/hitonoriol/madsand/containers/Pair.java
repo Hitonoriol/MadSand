@@ -186,7 +186,7 @@ public class Pair {
 		return (this.x == x && this.y == y);
 	}
 
-	final String PAIR_STRING_DELIMITER = ", ";
+	final static String PAIR_STRING_DELIMITER = ", ";
 
 	@Override
 	public String toString() {
@@ -197,7 +197,7 @@ public class Pair {
 		return new Pair(x, y);
 	}
 
-	public class PairKeyDeserializer extends KeyDeserializer {
+	public static class PairKeyDeserializer extends KeyDeserializer {
 
 		@Override
 		public Pair deserializeKey(String key, DeserializationContext ctxt) throws IOException {

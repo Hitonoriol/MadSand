@@ -1,5 +1,6 @@
 package hitonoriol.madsand;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -30,12 +31,14 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import hitonoriol.madsand.containers.AnimationContainer;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.containers.Pair.PairKeyDeserializer;
 import hitonoriol.madsand.entities.Skill;
 import hitonoriol.madsand.entities.SkillContainer;
 import hitonoriol.madsand.entities.SkillValue;
 import hitonoriol.madsand.entities.TradeListContainer;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.quest.Quest;
+import hitonoriol.madsand.gfx.Effects.TextureEffect;
 import hitonoriol.madsand.map.ItemProducer;
 import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.map.object.MapObject;
@@ -169,7 +172,7 @@ public class Resources {
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 		SimpleModule simpleModule = new SimpleModule();
-		simpleModule.addKeyDeserializer(Pair.class, Pair.getInstance().new PairKeyDeserializer());
+		simpleModule.addKeyDeserializer(Pair.class, new PairKeyDeserializer());
 
 		mapper.registerModule(simpleModule);
 	}
@@ -388,14 +391,36 @@ public class Resources {
 
 		return strip;
 	}
-	
+
 	private static TextureRegion[] loadAnimationStrip(String file, int frameSize) { // load 1xN animation strip from file
 		TextureRegion[][] animStrip = TextureRegion.split(loadTexture(file), frameSize, frameSize);
 		return getAnimationStrip(animStrip, 0, animStrip[0].length);
 	}
-	
+
 	private static TextureRegion[] loadAnimationStrip(String file) {
 		return loadAnimationStrip(file, ANIM_FRAME_SIZE);
+	}
+
+	public static String FX_DIR = "/fx/", FX_FILE = ".fx";
+
+	public static ArrayList<TextureEffect> loadTextureFx(long effectId) {
+		try {
+			ArrayList<TextureEffect> effects = mapper.readValue(
+					new File(GameSaver.getFxDir() + effectId + FX_FILE),
+					typeFactory.constructCollectionType(ArrayList.class, TextureEffect.class));
+			return effects;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static void saveTextureFx(long effectId, ArrayList<TextureEffect> effects) {
+		try {
+			mapper.writeValue(new File(GameSaver.getFxDir() + effectId + FX_FILE), effects);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void takeScreenshot() {

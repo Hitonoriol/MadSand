@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -21,11 +22,11 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import hitonoriol.madsand.DynamicallyCastable;
 import hitonoriol.madsand.LuaUtils;
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.EquipSlot;
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.gfx.Effects;
 import hitonoriol.madsand.gfx.TextureProcessor;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
@@ -43,6 +44,7 @@ public class Item implements DynamicallyCastable<Item> {
 	@JsonProperty
 	public float weight = DEFAULT_WEIGHT;
 	public int cost;
+	public long textureFxId = 0;
 
 	public String recipe;
 	public int craftQuantity = 1;
@@ -213,15 +215,41 @@ public class Item implements DynamicallyCastable<Item> {
 		return EquipSlot.MainHand;
 	}
 
+	public void refreshTextureEffects() {
+
+	}
+
 	@JsonIgnore
 	public Texture getTexture() {
 		if (!dynamicTxPool.containsKey(this))
-			return Resources.item[id];
+			if (textureFxId != 0)
+				new TextureProcessor(createDynamicTexture())
+						.addEffects(Resources.loadTextureFx(textureFxId))
+						.applyEffects();
+			else
+				return Resources.item[id];
 
 		return dynamicTxPool.get(this);
 	}
 
-	public Texture createDynamicTexture() {
+	public void applyEffects(Consumer<TextureProcessor> effectApplier) {
+		if (effectApplier == null)
+			return;
+
+		Texture texture = getTexture();
+		if (!dynamicTxPool.containsValue(texture))
+			texture = createDynamicTexture();
+
+		TextureProcessor txProc = new TextureProcessor(texture);
+		effectApplier.accept(txProc);
+
+		if (textureFxId == 0)
+			textureFxId = ++MadSand.world.textureFxCounter;
+
+		Resources.saveTextureFx(textureFxId, txProc.getEffects());
+	}
+
+	protected Texture createDynamicTexture() {
 		Texture dynamicTx = TextureProcessor.copyTexture(Resources.item[id]);
 		dynamicTxPool.put(this, dynamicTx);
 		return dynamicTx;
@@ -237,14 +265,6 @@ public class Item implements DynamicallyCastable<Item> {
 
 	public static Item duplicate(Item item, int quantity) {
 		Item newItem = item.copy().setQuantity(quantity);
-
-		if (Utils.percentRoll(30)) {
-			/* Dynamic item texture test */
-			TextureProcessor txProc = new TextureProcessor(newItem.createDynamicTexture());
-			txProc.addEffect(Effects.colorInversion).applyEffects();
-			/* *** */
-		}
-
 		return newItem;
 	}
 

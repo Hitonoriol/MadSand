@@ -136,16 +136,24 @@ public class Utils {
 		return randElement(Arrays.asList(arr));
 	}
 
-	public static double randPercent() {
+	public static double randPercent(Random random) {
 		return random.nextDouble() * 100.0;
 	}
+	
+	public static double randPercent() {
+		return randPercent(random);
+	}
 
-	public static boolean percentRoll(double percent) {
+	public static boolean percentRoll(Random random, double percent) {
 
 		if (percent == 0)
 			return false;
 
-		return (randPercent() < percent);
+		return (randPercent(random) < percent);
+	}
+	
+	public static boolean percentRoll(double percent) {
+		return percentRoll(random, percent);
 	}
 
 	public static boolean percentRoll(double rollResult, double percent) {

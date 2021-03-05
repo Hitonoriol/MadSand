@@ -1,10 +1,8 @@
 package hitonoriol.madsand.gfx;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.TextureData;
@@ -16,7 +14,7 @@ public class TextureProcessor {
 
 	private Texture texture;
 	private Pixmap pixmap;
-	private List<TextureEffect> effects = new ArrayList<>(1);
+	private ArrayList<TextureEffect> effects;
 
 	public TextureProcessor(Texture texture) {
 		this.texture = texture;
@@ -38,13 +36,25 @@ public class TextureProcessor {
 	}
 
 	public TextureProcessor addEffect(TextureEffect effect) {
+		if (effects == null)
+			effects = new ArrayList<>(1);
+
 		effects.add(effect);
+		return this;
+	}
+
+	public TextureProcessor addEffects(ArrayList<TextureEffect> effects) {
+		this.effects = effects;
 		return this;
 	}
 
 	public void applyEffects() {
 		effects.stream().forEach(effect -> effect.accept(this));
 		loadPixmap(pixmap);
+	}
+
+	public ArrayList<TextureEffect> getEffects() {
+		return effects;
 	}
 
 	private TextureData getTextureData() {

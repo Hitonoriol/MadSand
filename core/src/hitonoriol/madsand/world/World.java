@@ -63,8 +63,10 @@ public class World {
 	public int worldtime = 6; // time (00 - 23)
 	public int tick = 0; // tick counter, resets every <ticksPerHour> ticks
 	public long globalTick = 0; // global tick counter, never resets
+	
 	public long npcCounter = 0;
 	public long itemCounter = 0;
+	public long textureFxCounter = 0;
 
 	private long logoutTimeStamp;
 	public HashMap<String, String> luaStorage = new HashMap<>();
