@@ -1,6 +1,5 @@
 package hitonoriol.madsand;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -38,7 +37,6 @@ import hitonoriol.madsand.entities.SkillValue;
 import hitonoriol.madsand.entities.TradeListContainer;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.quest.Quest;
-import hitonoriol.madsand.gfx.Effects.TextureEffect;
 import hitonoriol.madsand.map.ItemProducer;
 import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.map.object.MapObject;
@@ -399,28 +397,6 @@ public class Resources {
 
 	private static TextureRegion[] loadAnimationStrip(String file) {
 		return loadAnimationStrip(file, ANIM_FRAME_SIZE);
-	}
-
-	public static String FX_DIR = "/fx/", FX_FILE = ".fx";
-
-	public static ArrayList<TextureEffect> loadTextureFx(long effectId) {
-		try {
-			ArrayList<TextureEffect> effects = mapper.readValue(
-					new File(GameSaver.getFxDir() + effectId + FX_FILE),
-					typeFactory.constructCollectionType(ArrayList.class, TextureEffect.class));
-			return effects;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public static void saveTextureFx(long effectId, ArrayList<TextureEffect> effects) {
-		try {
-			mapper.writeValue(new File(GameSaver.getFxDir() + effectId + FX_FILE), effects);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	public static void takeScreenshot() {

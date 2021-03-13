@@ -109,13 +109,9 @@ public class GameSaver {
 	public static String readFile(String name) {
 		return readFile(name, false);
 	}
-	
-	public static String getFxDir() {
-		return MadSand.MAPDIR + MadSand.WORLDNAME + Resources.FX_DIR;
-	}
 
 	public static String getProdStationFile(int wx, int wy, int layer) {
-		return MadSand.MAPDIR + MadSand.WORLDNAME + "/productionstations" + getSectorString(wx, wy, layer)
+		return getCurSaveDir() + "productionstations" + getSectorString(wx, wy, layer)
 				+ MadSand.SAVE_EXT;
 	}
 
@@ -127,8 +123,12 @@ public class GameSaver {
 		return SECTOR_DELIM + wx + SECTOR_DELIM + wy;
 	}
 
+	public static String getCurSaveDir() {
+		return MadSand.MAPDIR + MadSand.WORLDNAME + "/";
+	}
+
 	static String getWorldXYPath(String file, int wx, int wy) {
-		return MadSand.MAPDIR + MadSand.WORLDNAME + "/" + file + getSectorString(wx, wy) + MadSand.SAVE_EXT;
+		return getCurSaveDir() + file + getSectorString(wx, wy) + MadSand.SAVE_EXT;
 	}
 
 	public static File getLocationFile(int wx, int wy) {
@@ -140,7 +140,7 @@ public class GameSaver {
 	}
 
 	public static String getNpcFile(int wx, int wy, int layer) {
-		return MadSand.MAPDIR + MadSand.WORLDNAME + "/" + MadSand.NPCSFILE + getSectorString(wx, wy, layer)
+		return getCurSaveDir() + MadSand.NPCSFILE + getSectorString(wx, wy, layer)
 				+ MadSand.SAVE_EXT;
 	}
 
@@ -205,8 +205,8 @@ public class GameSaver {
 
 	static boolean saveChar() {
 		try {
-			String fl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.PLAYERFILE;
-			String wfl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.WORLDFILE;
+			String fl = getCurSaveDir() + MadSand.PLAYERFILE;
+			String wfl = getCurSaveDir() + MadSand.WORLDFILE;
 			Player player = World.player;
 
 			if (player.newlyCreated)
@@ -227,8 +227,8 @@ public class GameSaver {
 	static boolean loadChar() {
 		try {
 			Utils.out("Loading character...");
-			String fl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.PLAYERFILE;
-			String wfl = MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.WORLDFILE;
+			String fl = getCurSaveDir() + MadSand.PLAYERFILE;
+			String wfl = getCurSaveDir() + MadSand.WORLDFILE;
 
 			MadSand.world = Resources.mapper.readValue(readFile(wfl), World.class);
 			MadSand.world.initWorld();
@@ -289,7 +289,7 @@ public class GameSaver {
 
 	private static boolean saveLog() {
 		try {
-			FileWriter fw = new FileWriter(MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.LOGFILE);
+			FileWriter fw = new FileWriter(getCurSaveDir() + MadSand.LOGFILE);
 
 			for (Label logLabel : Gui.overlay.getLogLabels())
 				fw.write(logLabel.getText().toString() + Resources.LINEBREAK);
@@ -306,7 +306,7 @@ public class GameSaver {
 	private static boolean loadLog() {
 		try {
 			BufferedReader br = new BufferedReader(
-					new FileReader(MadSand.MAPDIR + MadSand.WORLDNAME + MadSand.LOGFILE));
+					new FileReader(getCurSaveDir() + MadSand.LOGFILE));
 			String line;
 			int i = 0;
 			Label[] labels = Gui.overlay.getLogLabels();
@@ -324,20 +324,9 @@ public class GameSaver {
 	}
 
 	public static void createDirs() {
-		File saveloc = new File(MadSand.SAVEDIR);
-		File maploc = new File(MadSand.MAPDIR);
-		File curworld = new File(MadSand.MAPDIR + MadSand.WORLDNAME);
-
-		if (!saveloc.exists())
-			saveloc.mkdirs();
-
-		if (!maploc.exists())
-			maploc.mkdirs();
-
-		if (!curworld.exists())
-			curworld.mkdirs();
-
-		new File(MadSand.MAPDIR + MadSand.WORLDNAME + Resources.FX_DIR).mkdirs();
+		new File(MadSand.SAVEDIR).mkdirs();
+		new File(MadSand.MAPDIR).mkdirs();
+		new File(getCurSaveDir()).mkdirs();
 	}
 
 }

@@ -1,13 +1,16 @@
 package hitonoriol.madsand.entities.inventory.item;
 
+import java.util.Random;
+
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.badlogic.gdx.graphics.Color;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.gfx.Color;
+import hitonoriol.madsand.gfx.ConditionalEffects;
 import hitonoriol.madsand.gfx.Effects;
 import me.xdrop.jrand.JRand;
 import me.xdrop.jrand.generators.basics.FloatGenerator;
@@ -18,12 +21,20 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 	public long uid = 0;
 	public boolean cursed = false;
 
+	static FloatGenerator colorGen = JRand.flt().range(0, 1);
+	public static ConditionalEffects<AbstractEquipment> equipEffects = new ConditionalEffects<>(effects -> {
+		effects.put(equipment -> equipment.cursed, Effects.colorize(Color.RED));
+		effects.put(equipment -> Utils.percentRoll(equipment.itemRandom(), 5), Effects.colorInversion);
+		effects.put(equipment -> Utils.percentRoll(equipment.itemRandom(), 20),
+				Effects.colorize(new Color(colorGen.gen(), colorGen.gen(), colorGen.gen(), 1)));
+	});
+
 	public AbstractEquipment(AbstractEquipment protoItem) {
 		super(protoItem);
 		hp = protoItem.hp;
 		maxHp = hp;
 		uid = MadSand.world.itemCounter++;
-		refreshTextureEffects();
+		cursed = Utils.percentRoll(7.5);
 	}
 
 	public AbstractEquipment() {
@@ -44,15 +55,14 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 		return damage(1);
 	}
 
+	protected Random itemRandom() {
+		return new Random(uid);
+	}
+
 	@Override
 	public void refreshTextureEffects() {
 		super.refreshTextureEffects();
-		FloatGenerator colorGen = JRand.flt().range(0, 1);
-
-		if (Utils.percentRoll(75))
-			applyEffects(texProc -> texProc
-					.addEffect(Effects.colorize(new Color(colorGen.gen(), colorGen.gen(), colorGen.gen(), 1)))
-					.applyEffects());
+		equipEffects.apply(this);
 	}
 
 	@Override

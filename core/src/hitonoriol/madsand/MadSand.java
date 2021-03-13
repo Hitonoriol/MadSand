@@ -61,6 +61,7 @@ public class MadSand extends Game {
 		GameTextSubstitutor.init();
 		Keyboard.initKeyListener();
 
+		GameSaver.createDirs();
 		initNewGame();
 		world.generate();
 		initScreens();

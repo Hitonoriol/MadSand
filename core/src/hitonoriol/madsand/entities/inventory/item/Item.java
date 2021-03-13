@@ -22,7 +22,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import hitonoriol.madsand.DynamicallyCastable;
 import hitonoriol.madsand.LuaUtils;
-import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.EquipSlot;
@@ -44,7 +43,7 @@ public class Item implements DynamicallyCastable<Item> {
 	@JsonProperty
 	public float weight = DEFAULT_WEIGHT;
 	public int cost;
-	public long textureFxId = 0;
+	private boolean textureFxModified = true;
 
 	public String recipe;
 	public int craftQuantity = 1;
@@ -55,6 +54,7 @@ public class Item implements DynamicallyCastable<Item> {
 	private static final float DEFAULT_WEIGHT = 0.25f;
 
 	private static Map<Item, Texture> dynamicTxPool = new IdentityHashMap<>();
+	private static Map<Item, TextureProcessor> effectQueue = new IdentityHashMap<>();
 
 	public final static String ITEM_DELIM = "/";
 	public final static String BLOCK_DELIM = ":";
@@ -215,19 +215,17 @@ public class Item implements DynamicallyCastable<Item> {
 		return EquipSlot.MainHand;
 	}
 
-	public void refreshTextureEffects() {
-
+	protected void refreshTextureEffects() {
+		textureFxModified = false;
 	}
 
 	@JsonIgnore
 	public Texture getTexture() {
+		if (textureFxModified)
+			refreshTextureEffects();
+
 		if (!dynamicTxPool.containsKey(this))
-			if (textureFxId != 0)
-				new TextureProcessor(createDynamicTexture())
-						.addEffects(Resources.loadTextureFx(textureFxId))
-						.applyEffects();
-			else
-				return Resources.item[id];
+			return Resources.item[id];
 
 		return dynamicTxPool.get(this);
 	}
@@ -236,17 +234,20 @@ public class Item implements DynamicallyCastable<Item> {
 		if (effectApplier == null)
 			return;
 
-		Texture texture = getTexture();
-		if (!dynamicTxPool.containsValue(texture))
+		Texture texture = Resources.item[id];
+		if (!dynamicTxPool.containsKey(this))
 			texture = createDynamicTexture();
 
-		TextureProcessor txProc = new TextureProcessor(texture);
+		TextureProcessor txProc;
+
+		if (effectQueue.containsKey(this))
+			txProc = effectQueue.get(this);
+		else
+			effectQueue.put(this, txProc = new TextureProcessor(texture));
+
 		effectApplier.accept(txProc);
-
-		if (textureFxId == 0)
-			textureFxId = ++MadSand.world.textureFxCounter;
-
-		Resources.saveTextureFx(textureFxId, txProc.getEffects());
+		if (txProc.isDone())
+			effectQueue.remove(this);
 	}
 
 	protected Texture createDynamicTexture() {
