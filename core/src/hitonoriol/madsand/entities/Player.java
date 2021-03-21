@@ -495,6 +495,16 @@ public class Player extends Entity {
 	}
 
 	@Override
+	public boolean dropItem(Item item, int quantity) {
+		boolean ret = super.dropItem(item, quantity);
+
+		if (item.quantity == quantity && stats().equipment.itemEquipped(item))
+			stats().equipment.unEquip(item);
+
+		return ret;
+	}
+
+	@Override
 	public void delItem(Item item, int quantity) {
 		super.delItem(item, quantity);
 		if (stats.equipment.itemEquipped(item)) {

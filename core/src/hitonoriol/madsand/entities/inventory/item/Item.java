@@ -2,8 +2,9 @@ package hitonoriol.madsand.entities.inventory.item;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.IdentityHashMap;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -53,8 +54,8 @@ public class Item implements DynamicallyCastable<Item> {
 	public static final int NULL_ITEM = 0;
 	private static final float DEFAULT_WEIGHT = 0.25f;
 
-	private static Map<Item, Texture> dynamicTxPool = new IdentityHashMap<>();
-	private static Map<Item, TextureProcessor> effectQueue = new IdentityHashMap<>();
+	private static Map<Item, Texture> dynamicTxPool = new HashMap<>();
+	private static Map<Item, TextureProcessor> effectQueue = new HashMap<>();
 
 	public final static String ITEM_DELIM = "/";
 	public final static String BLOCK_DELIM = ":";
@@ -215,6 +216,10 @@ public class Item implements DynamicallyCastable<Item> {
 		return EquipSlot.MainHand;
 	}
 
+	public Random itemRandom() {
+		return new Random(id + cost);
+	}
+	
 	protected void refreshTextureEffects() {
 		textureFxModified = false;
 	}

@@ -46,10 +46,13 @@ public class InventoryUICell extends ItemUI {
 
 			if (item.is(AbstractEquipment.class) || item.is(Placeable.class)) {
 				if (player.stats.equipment.itemEquipped(item)) {
-					player.unEquip(item);
-					unEquipItem();
+					if (player.unEquip(item))
+						unEquipItem();
 				} else {
 					Item prev = player.stats.equipment.previousEquipment(item);
+					if (player.unEquip(prev))
+						return;
+
 					player.equip(item);
 					player.inventory.refreshItem(prev);
 					equipItem();

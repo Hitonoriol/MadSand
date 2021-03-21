@@ -205,7 +205,7 @@ public abstract class Entity extends MapEntity {
 
 	public boolean dropItem(Item item, int quantity) {
 		if (!hasItem(item))
-			return false;
+			return false;			
 
 		MadSand.world.getCurLoc().putLoot(x, y, Item.duplicate(item, quantity));
 		inventory.delItem(item, quantity);

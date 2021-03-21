@@ -12,8 +12,6 @@ import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.gfx.ConditionalEffects;
 import hitonoriol.madsand.gfx.Effects;
-import me.xdrop.jrand.JRand;
-import me.xdrop.jrand.generators.basics.FloatGenerator;
 
 public abstract class AbstractEquipment extends LevelBoundItem {
 	public int hp = -1;
@@ -21,20 +19,26 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 	public long uid = 0;
 	public boolean cursed = false;
 
-	static FloatGenerator colorGen = JRand.flt().range(0, 1);
-	public static ConditionalEffects<AbstractEquipment> equipEffects = new ConditionalEffects<>(effects -> {
+	public static ConditionalEffects<AbstractEquipment> equipEffects = new ConditionalEffects<>((effects, random) -> {
+		effects.put(equipment -> Utils.percentRoll(random, 90),
+				Effects.colorize(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat(), 1)));
+		effects.put(equipment -> Utils.percentRoll(random, 5), Effects.colorInversion);
 		effects.put(equipment -> equipment.cursed, Effects.colorize(Color.RED));
-		effects.put(equipment -> Utils.percentRoll(equipment.itemRandom(), 5), Effects.colorInversion);
-		effects.put(equipment -> Utils.percentRoll(equipment.itemRandom(), 20),
-				Effects.colorize(new Color(colorGen.gen(), colorGen.gen(), colorGen.gen(), 1)));
 	});
 
 	public AbstractEquipment(AbstractEquipment protoItem) {
 		super(protoItem);
 		hp = protoItem.hp;
 		maxHp = hp;
-		uid = MadSand.world.itemCounter++;
-		cursed = Utils.percentRoll(7.5);
+
+		if (uid == 0) {
+			uid = ++MadSand.world.itemCounter;
+			cursed = Utils.percentRoll(7.5);
+		} else {
+			uid = protoItem.uid;
+			cursed = protoItem.cursed;
+		}
+		Utils.out("Created AbstractEq with uid=" + uid);
 	}
 
 	public AbstractEquipment() {
@@ -55,8 +59,8 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 		return damage(1);
 	}
 
-	protected Random itemRandom() {
-		return new Random(uid);
+	public Random itemRandom() {
+		return new Random(uid + Utils.val(cursed) + lvl);
 	}
 
 	@Override
