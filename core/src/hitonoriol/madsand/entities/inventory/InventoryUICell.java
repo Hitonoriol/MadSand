@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Mouse;
+import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
@@ -91,6 +92,12 @@ public class InventoryUICell extends ItemUI {
 
 		Gui.setAction(dropBtn, () -> {
 			hideContext();
+
+			if (Utils.test(item.as(AbstractEquipment.class), eq -> eq.cantBeDropped())) {
+				Gui.drawOkDialog("Cursed item", item.name + " is cursed and can't be dropped!");
+				return;
+			}
+
 			Consumer<Integer> dropAction = (quantity) -> World.player.dropItem(item, quantity);
 
 			if (item.quantity > 1)

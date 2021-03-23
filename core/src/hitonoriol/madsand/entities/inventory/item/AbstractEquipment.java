@@ -38,7 +38,6 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 			uid = protoItem.uid;
 			cursed = protoItem.cursed;
 		}
-		Utils.out("Created AbstractEq with uid=" + uid);
 	}
 
 	public AbstractEquipment() {
@@ -57,6 +56,10 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 
 	boolean damage() {
 		return damage(1);
+	}
+	
+	public boolean cantBeDropped() {
+		return cursed && hp > 0;
 	}
 
 	public Random itemRandom() {

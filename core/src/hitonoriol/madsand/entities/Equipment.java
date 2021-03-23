@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.CombatEquipment;
@@ -47,15 +48,7 @@ public class Equipment {
 		if (!equipped.containsKey(slot))
 			return false;
 
-		Item equippedItem = getItem(slot);
-		boolean cursedEquipment = equippedItem.as(AbstractEquipment.class)
-				.map(equipment -> equipment.cursed && equipment.hp > 0)
-				.orElse(false);
-
-		if (cursedEquipment)
-			return false;
-
-		equippedItem.as(CombatEquipment.class).ifPresent(equipment -> {
+		getItem(slot).as(CombatEquipment.class).ifPresent(equipment -> {
 			equipmentWeight -= equipment.weight;
 			stats.removeBonus(equipment);
 		});
@@ -70,6 +63,11 @@ public class Equipment {
 	}
 
 	public boolean unEquip(Item item) {
+		boolean cursedEquipment = Utils.test(item.as(AbstractEquipment.class), eq -> eq.cantBeDropped());
+
+		if (cursedEquipment)
+			return false;
+
 		return unEquip(item.getEquipSlot());
 	}
 
