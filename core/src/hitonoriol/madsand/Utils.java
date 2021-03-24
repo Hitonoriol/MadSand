@@ -18,6 +18,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.commons.math3.random.RandomDataGenerator;
+
+import com.badlogic.gdx.graphics.Color;
 
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import me.xdrop.jrand.JRand;
@@ -139,25 +142,37 @@ public class Utils {
 	public static double randPercent(Random random) {
 		return random.nextDouble() * 100.0;
 	}
-	
+
+	public static double randPercent(RandomDataGenerator random) {
+		return random.nextUniform(0, 100, true);
+	}
+
 	public static double randPercent() {
 		return randPercent(random);
 	}
 
 	public static boolean percentRoll(Random random, double percent) {
-
-		if (percent == 0)
-			return false;
-
-		return (randPercent(random) < percent);
+		return percentRoll(randPercent(random), percent);
 	}
-	
+
+	public static boolean percentRoll(RandomDataGenerator random, double percent) {
+		return percentRoll(randPercent(random), percent);
+	}
+
 	public static boolean percentRoll(double percent) {
 		return percentRoll(random, percent);
 	}
 
 	public static boolean percentRoll(double rollResult, double percent) {
 		return rollResult < percent;
+	}
+
+	public static float nextFloat(RandomDataGenerator random) {
+		return (float) random.nextUniform(0, 1, true);
+	}
+
+	public static Color randomColor(RandomDataGenerator random) {
+		return new Color(nextFloat(random), nextFloat(random), nextFloat(random), 1);
 	}
 
 	public static long now() {

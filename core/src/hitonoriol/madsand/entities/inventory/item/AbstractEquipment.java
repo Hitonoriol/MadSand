@@ -1,7 +1,5 @@
 package hitonoriol.madsand.entities.inventory.item;
 
-import java.util.Random;
-
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.badlogic.gdx.graphics.Color;
@@ -19,11 +17,15 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 	public long uid = 0;
 	public boolean cursed = false;
 
-	public static ConditionalEffects<AbstractEquipment> equipEffects = new ConditionalEffects<>((effects, random) -> {
-		effects.put(equipment -> Utils.percentRoll(random, 90),
-				Effects.colorize(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat(), 1)));
-		effects.put(equipment -> Utils.percentRoll(random, 5), Effects.colorInversion);
-		effects.put(equipment -> equipment.cursed, Effects.colorize(Color.RED));
+	public static ConditionalEffects<AbstractEquipment> equipEffects = ConditionalEffects.create(effects -> {
+		effects.addEffect(equipment -> Utils.percentRoll(effects.random(), 40),
+				item -> Effects.colorize(Utils.randomColor(effects.random())));
+
+		effects.addEffect(equipment -> Utils.percentRoll(effects.random(), 5),
+				item -> Effects.colorInversion);
+
+		effects.addEffect(equipment -> equipment.cursed,
+				item -> Effects.colorize(Color.RED));
 	});
 
 	public AbstractEquipment(AbstractEquipment protoItem) {
@@ -31,7 +33,7 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 		hp = protoItem.hp;
 		maxHp = hp;
 
-		if (uid == 0) {
+		if (protoItem.uid == 0) {
 			uid = ++MadSand.world.itemCounter;
 			cursed = Utils.percentRoll(7.5);
 		} else {
@@ -57,13 +59,9 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 	boolean damage() {
 		return damage(1);
 	}
-	
+
 	public boolean cantBeDropped() {
 		return cursed && hp > 0;
-	}
-
-	public Random itemRandom() {
-		return new Random(uid + Utils.val(cursed) + lvl);
 	}
 
 	@Override

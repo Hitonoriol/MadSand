@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -216,20 +215,20 @@ public class Item implements DynamicallyCastable<Item> {
 		return EquipSlot.MainHand;
 	}
 
-	public Random itemRandom() {
-		return new Random(id + cost);
-	}
-	
 	protected void refreshTextureEffects() {
 		textureFxModified = false;
 	}
 
 	@JsonIgnore
 	public Texture getTexture() {
-		if (textureFxModified)
-			refreshTextureEffects();
+		boolean dynTexExists = dynamicTxPool.containsKey(this);
 
-		if (!dynamicTxPool.containsKey(this))
+		if (!dynTexExists && textureFxModified) {
+			refreshTextureEffects();
+			dynTexExists = dynamicTxPool.containsKey(this);
+		}
+
+		if (!dynTexExists)
 			return Resources.item[id];
 
 		return dynamicTxPool.get(this);

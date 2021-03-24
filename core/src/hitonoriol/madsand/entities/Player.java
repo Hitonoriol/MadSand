@@ -222,6 +222,9 @@ public class Player extends Entity {
 	}
 
 	public boolean unEquip(Item item) {
+		if (item == Item.nullItem)
+			return false;
+
 		MadSand.print("You unequip " + item.name);
 
 		boolean unEquipped = stats.equipment.unEquip(item);
@@ -496,12 +499,10 @@ public class Player extends Entity {
 
 	@Override
 	public boolean dropItem(Item item, int quantity) {
-		boolean ret = super.dropItem(item, quantity);
-
 		if (item.quantity == quantity && stats().equipment.itemEquipped(item))
 			stats().equipment.unEquip(item);
 
-		return ret;
+		return super.dropItem(item, quantity);
 	}
 
 	@Override
