@@ -28,8 +28,7 @@ import hitonoriol.madsand.properties.TileProp;
 
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
 @JsonSubTypes({ @Type(CraftingStation.class), @Type(ItemFactory.class), @Type(ResourceObject.class) })
-public class MapObject extends MapEntity{
-	private static final int CLEANUP_FLAG = -1337;
+public class MapObject extends MapEntity {
 	public static final int NULL_OBJECT_ID = 0;
 	public static final int COLLISION_MASK_ID = 666;
 
@@ -104,7 +103,6 @@ public class MapObject extends MapEntity{
 
 	public void destroy() {
 		this.id = 0; // cleaned up later in map
-		this.hp = CLEANUP_FLAG;
 
 		Pair coords = getPosition();
 		if (dropOnDestruction != 0)
@@ -112,7 +110,7 @@ public class MapObject extends MapEntity{
 	}
 
 	public boolean isDestroyed() {
-		return hp == CLEANUP_FLAG;
+		return id == 0;
 	}
 
 	private boolean verify() {
@@ -181,7 +179,7 @@ public class MapObject extends MapEntity{
 	public void playDamageAnimation() {
 		super.playAnimation(Resources.createAnimation(Resources.objectHitAnimStrip));
 	}
-	
+
 	@JsonIgnore
 	public String getBuildInfo() {
 		return "";
@@ -212,7 +210,7 @@ public class MapObject extends MapEntity{
 		MapObject rhs = (MapObject) obj;
 		return new EqualsBuilder().append(id, rhs.id).isEquals();
 	}
-	
+
 	public String getName() {
 		return name;
 	}

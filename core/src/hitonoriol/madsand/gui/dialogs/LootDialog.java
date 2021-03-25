@@ -54,6 +54,11 @@ public class LootDialog extends GameDialog {
 
 	@SuppressWarnings("unchecked")
 	private void refreshLootTable() {
+		if (loot.isEmpty()) {
+			remove();
+			return;
+		}
+
 		lootTable.clear();
 		ItemUI.createItemList(lootTable, loot.contents, ITEMS_PER_ROW);
 		Actor actor;

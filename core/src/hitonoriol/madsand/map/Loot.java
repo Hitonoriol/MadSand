@@ -39,7 +39,7 @@ public class Loot {
 		lootStr = ret;
 	}
 
-	boolean isEmpty() {
+	public boolean isEmpty() {
 		for (int i = 0; i < contents.size(); ++i)
 			if (contents.get(i).id != 0)
 				return false;

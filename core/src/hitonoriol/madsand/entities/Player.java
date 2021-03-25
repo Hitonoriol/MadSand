@@ -719,7 +719,7 @@ public class Player extends Entity {
 	}
 
 	public void useItem(GrabBag item) {
-		ArrayList<Item> items = item.contents.rollItems();
+		ArrayList<Item> items = item.contents().rollItems();
 		for (Item rolledItem : items)
 			addItem(rolledItem);
 

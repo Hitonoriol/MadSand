@@ -268,6 +268,13 @@ public class Item implements DynamicallyCastable<Item> {
 		return ItemProp.getAltObject(id);
 	}
 
+	public static Item getProto(int id) {
+		if (ItemProp.items.containsKey(id))
+			return ItemProp.getItem(id);
+
+		return nullItem;
+	}
+
 	public static Item duplicate(Item item, int quantity) {
 		Item newItem = item.copy().setQuantity(quantity);
 		return newItem;

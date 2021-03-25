@@ -17,16 +17,15 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 	public long uid = 0;
 	public boolean cursed = false;
 
-	public static ConditionalEffects<AbstractEquipment> equipEffects = ConditionalEffects.create(effects -> {
-		effects.addEffect(equipment -> Utils.percentRoll(effects.random(), 40),
-				item -> Effects.colorize(Utils.randomColor(effects.random())));
+	public static ConditionalEffects<AbstractEquipment> equipEffects = ConditionalEffects.create(effects -> effects
+			.addEffect(equipment -> Utils.percentRoll(effects.random(), 40),
+					item -> Effects.colorize(Utils.randomColor(effects.random())))
 
-		effects.addEffect(equipment -> Utils.percentRoll(effects.random(), 5),
-				item -> Effects.colorInversion);
+			.addEffect(equipment -> Utils.percentRoll(effects.random(), 5),
+					item -> Effects.colorInversion)
 
-		effects.addEffect(equipment -> equipment.cursed,
-				item -> Effects.colorize(Color.RED));
-	});
+			.addEffect(equipment -> equipment.cursed,
+					item -> Effects.colorize(Color.RED)));
 
 	public AbstractEquipment(AbstractEquipment protoItem) {
 		super(protoItem);

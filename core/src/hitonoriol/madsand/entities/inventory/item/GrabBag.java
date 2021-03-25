@@ -7,22 +7,32 @@ import hitonoriol.madsand.entities.Player;
 
 public class GrabBag extends Item {
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	public LootTable contents;
-	
+	protected LootTable contents;
+
 	public GrabBag(GrabBag protoItem) {
 		super(protoItem);
 		contents = protoItem.contents;
 	}
-	
+
 	public GrabBag() {
 		super();
 	}
-	
+
+	public LootTable contents() {
+		if (contents == null)
+			contents = Item.getProto(id)
+					.as(getClass())
+					.map(bag -> bag.contents)
+					.orElse(new LootTable());
+
+		return contents;
+	}
+
 	@Override
 	public GrabBag copy() {
 		return new GrabBag(this);
 	}
-	
+
 	@Override
 	public void use(Player player) {
 		player.useItem(this);
