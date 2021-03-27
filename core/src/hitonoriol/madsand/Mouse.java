@@ -2,6 +2,7 @@ package hitonoriol.madsand;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.BiConsumer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
@@ -46,6 +47,7 @@ public class Mouse {
 	public static GameTooltip tooltipContainer;
 
 	private static boolean pointingAtObject = false;
+	private static BiConsumer<Integer, Integer> clickAction = null;
 
 	public static void updCoords() {
 		x = Gdx.input.getX();
@@ -203,6 +205,19 @@ public class Mouse {
 		infoBuilder.append(lineDelimiter).append(NEWLINE).append("[]");
 	}
 
+	public static boolean hasClickAction() {
+		return clickAction != null;
+	}
+
+	public static void setClickAction(BiConsumer<Integer, Integer> coordConsumer) {
+		clickAction = coordConsumer;
+	}
+
+	public static void performClickAction() {
+		clickAction.accept(wx, wy);
+		clickAction = null;
+	}
+
 	private static final int CLICK_CUR_TILE = 0, CLICK_ADJ_TILE = 1;
 
 	public static int getClickDistance() {
@@ -220,10 +235,8 @@ public class Mouse {
 		boolean adjacentTileClicked = (clickDst == CLICK_ADJ_TILE);
 		boolean currentTileClicked = (clickDst == CLICK_CUR_TILE);
 
-		if ((player.isStepping()) || Gui.isGameUnfocused() || !pointingAtObject) {
-			Utils.out("CUM");
+		if ((player.isStepping()) || Gui.isGameUnfocused() || !pointingAtObject)
 			return;
-		}
 
 		if (currentTileClicked) {
 			if (loot != Map.nullLoot)

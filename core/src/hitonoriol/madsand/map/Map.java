@@ -97,16 +97,16 @@ public class Map {
 		MapObject object;
 		graph.clear();
 		nodeMap.clear();
-		for (int x = 0; x < xsz; ++x) {
-			for (int y = 0; y < ysz; ++y) {
+		for (int y = 0; y < ysz; ++y) {
+			for (int x = 0; x < xsz; ++x) {
 				object = getObject(x, y);
 				if (object.equals(nullObject) || object.nocollide)
 					graph.addNode(nodeMap.putNew(x, y));
 			}
 		}
 
-		for (int x = 0; x < xsz; ++x) {
-			for (int y = 0; y < ysz; ++y)
+		for (int y = 0; y < xsz; ++y) {
+			for (int x = 0; x < xsz; ++x)
 				linkToNeighbors(x, y);
 		}
 		refreshPathFinder();
@@ -120,7 +120,9 @@ public class Map {
 		Pair nCoords = new Pair();
 		for (Direction dir : Direction.baseValues) {
 			nCoords.set(x, y).addDirection(dir);
-			addNodeNeighbor(node, nCoords.x, nCoords.y);
+
+			if (nodeMap.nodeExists(nCoords.x, nCoords.y))
+				addNodeNeighbor(node, nCoords.x, nCoords.y);
 		}
 	}
 
@@ -156,7 +158,12 @@ public class Map {
 	}
 
 	public boolean searchPath(int startX, int startY, int endX, int endY, DefaultGraphPath<Node> path) {
-		return pathFinder.searchNodePath(nodeMap.get(startX, startY), nodeMap.get(endX, endY), heuristic, path);
+		Node start = nodeMap.get(startX, startY), end = nodeMap.get(endX, endY);
+
+		if (start == null || end == null)
+			return false;
+
+		return pathFinder.searchNodePath(start, end, heuristic, path);
 	}
 
 	public void rollSize(int min, int max) {
@@ -324,7 +331,7 @@ public class Map {
 	public Pair getRandomPoint(int distanceFromPlayer) {
 		return getRandomPoint(distanceFromPlayer, getArea());
 	}
-	
+
 	public Pair getRandomPoint() {
 		return getRandomPoint(-1);
 	}

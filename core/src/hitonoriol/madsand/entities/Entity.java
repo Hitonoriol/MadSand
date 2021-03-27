@@ -205,7 +205,7 @@ public abstract class Entity extends MapEntity {
 
 	public boolean dropItem(Item item, int quantity) {
 		if (!hasItem(item))
-			return false;			
+			return false;
 
 		MadSand.world.getCurLoc().putLoot(x, y, Item.duplicate(item, quantity));
 		inventory.delItem(item, quantity);
@@ -369,11 +369,14 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public void teleport(int x, int y) {
+		if (!MadSand.world.getCurLoc().isFreeTile(x, y))
+			return;
+
 		setGridCoords(x, y);
 		updCoords();
 		MadSand.world.updateLight();
 	}
-	
+
 	public void teleport(Pair coords) {
 		teleport(coords.x, coords.y);
 	}

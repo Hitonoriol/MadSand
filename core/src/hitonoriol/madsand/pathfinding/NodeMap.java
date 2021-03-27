@@ -33,7 +33,11 @@ public class NodeMap {
 	public Node get(Pair coords) {
 		return get(coords.x, coords.y);
 	}
-	
+
+	public boolean nodeExists(int x, int y) {
+		return map.containsKey(coords.set(x, y));
+	}
+
 	public void clear() {
 		idx = 0;
 		map.clear();

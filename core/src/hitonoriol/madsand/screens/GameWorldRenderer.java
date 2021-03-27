@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 
@@ -24,6 +25,7 @@ import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.map.object.MapObject;
+import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.world.World;
 
 public class GameWorldRenderer {
@@ -39,6 +41,9 @@ public class GameWorldRenderer {
 	private OrthographicCamera camera = new OrthographicCamera();
 	private ConcurrentHashMap<PairFloat, AnimationContainer> animations = new ConcurrentHashMap<>();
 	private List<Pair> renderArea = new ArrayList<>();
+
+	private DefaultGraphPath<Node> pathToCursor = new DefaultGraphPath<Node>();
+	private Pair prevCurCoords = new Pair();
 
 	public GameWorldRenderer() {
 		updateViewport();
@@ -113,6 +118,28 @@ public class GameWorldRenderer {
 			setCamPosition(drawPos.x, drawPos.y);
 	}
 
+	void drawMapCursor() {
+		MadSand.batch.end();
+		MadSand.batch.begin();
+		int x = Mouse.wx, y = Mouse.wy;
+		if (!Mouse.hasClickAction())
+			MadSand.batch.draw(Resources.mapCursor, x * TILESIZE, y * TILESIZE);
+		else {
+			int px = World.player.x, py = World.player.y;
+			if (!prevCurCoords.equals(x, y)) {
+				prevCurCoords.set(x, y);
+				pathToCursor.clear();
+				if (!MadSand.world.getCurLoc().searchPath(px, py, x, y, pathToCursor))
+					return;
+			}
+			pathToCursor
+					.forEach(cell -> MadSand.batch.draw(Resources.mapCursor, cell.x * TILESIZE, cell.y * TILESIZE));
+			MadSand.batch.flush();
+		}
+		MadSand.batch.end();
+		MadSand.batch.begin();
+	}
+
 	void drawGame() {
 		Map loc = MadSand.world.getCurLoc();
 		AbstractNpc npc;
@@ -180,19 +207,15 @@ public class GameWorldRenderer {
 
 		drawAnimations();
 
-		if (!Gui.gameUnfocused) {
-			MadSand.batch.draw(Resources.mapcursor, Mouse.wx * TILESIZE, Mouse.wy * TILESIZE);
-			MadSand.batch.end();
-			MadSand.batch.begin();
-		}
-
+		if (!Gui.gameUnfocused)
+			drawMapCursor();
 	}
 
 	public void render(float delta) {
 		MadSand.batch.begin();
 		drawGame();
-		updateCamPosition();
 		MadSand.batch.end();
+		updateCamPosition();
 	}
 
 	public OrthographicCamera getCamera() {

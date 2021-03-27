@@ -112,6 +112,10 @@ public class Overlay extends Stage {
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				Mouse.heldButtons.remove(button);
+
+				if (Mouse.hasClickAction())
+					Mouse.performClickAction();
+
 				super.touchUp(event, x, y, pointer, button);
 			}
 
@@ -126,7 +130,7 @@ public class Overlay extends Stage {
 
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				ignoreClick = Gui.isGameUnfocused() || Gui.dialogActive;
-				ignoreClick |= !Mouse.isClickActionPossible();
+				ignoreClick |= !Mouse.isClickActionPossible() && !Mouse.hasClickAction();
 
 				if (ignoreClick)
 					Mouse.heldButtons.add(button);

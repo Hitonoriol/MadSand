@@ -94,7 +94,8 @@ public abstract class AbstractNpc extends Entity {
 			path.clear();
 			pathIdx = 0;
 			prevDestination.set(x, y);
-			map.searchPath(this.x, this.y, x, y, path);
+			if (!map.searchPath(this.x, this.y, x, y, path))
+				return null;
 		} else if (pathIdx + 1 >= path.getCount())
 			return null;
 

@@ -94,7 +94,7 @@ public class Resources {
 
 	public static Animation<TextureRegion> uanim, danim, lanim, ranim;
 
-	public static Texture mapcursor;
+	public static Texture mapCursor;
 	public static Texture questArrow;
 	static Texture placeholder;
 	public static TextureRegionDrawable noEquip;
@@ -128,7 +128,7 @@ public class Resources {
 	public static void init() throws Exception {
 		Utils.out("Loading resources...");
 
-		mapcursor = loadTexture("misc/cur.png");
+		mapCursor = loadTexture("misc/cur.png");
 		animsheet = loadTexture("player/anim.png");
 		visitedMask = loadTexture("light/light_visited.png");
 		placeholder = loadTexture("misc/placeholder.png");
