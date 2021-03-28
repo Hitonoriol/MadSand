@@ -914,6 +914,13 @@ public class Player extends Entity {
 
 		return true;
 	}
+	
+	@Override
+	public void teleport(int x, int y) {
+		super.teleport(x, y);
+		Gdx.graphics.requestRendering();
+		MadSand.gameWorld.setWorldCamPosition(x, y);
+	}
 
 	private void rest(int ticks, boolean verbose) {
 		double ap = stats.actionPts;

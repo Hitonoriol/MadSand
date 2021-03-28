@@ -259,6 +259,10 @@ public class GameWorldRenderer {
 		camera.update();
 	}
 
+	public void setWorldCamPosition(int x, int y) {
+		updateCamPosition(x * TILESIZE, y * TILESIZE);
+	}
+
 	public void updateCamPosition() {
 		updateCamPosition(cameraX, cameraY);
 	}

@@ -7,7 +7,7 @@ import com.badlogic.gdx.ai.pfa.DefaultConnection;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedNode;
 import com.badlogic.gdx.utils.Array;
 
-public class Node implements IndexedNode<Node> {
+public class Node implements IndexedNode<Node>, Comparable<Node> {
 
 	private int index;
 	public final int x, y;
@@ -23,6 +23,10 @@ public class Node implements IndexedNode<Node> {
 	@Override
 	public int getIndex() {
 		return index;
+	}
+	
+	void setIndex(int idx) {
+		index = idx;
 	}
 
 	@Override
@@ -50,7 +54,12 @@ public class Node implements IndexedNode<Node> {
 	}
 
 	public String toString() {
-		return String.format("Index:%d x:%d y:%d", index, x, y);
+		return String.format("#%d (%d, %d)", index, x, y);
+	}
+
+	@Override
+	public int compareTo(Node o) {
+		return Integer.compare(index, o.index);
 	}
 
 }

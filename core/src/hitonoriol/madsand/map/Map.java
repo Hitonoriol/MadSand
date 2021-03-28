@@ -94,6 +94,7 @@ public class Map {
 	}
 
 	public void refreshGraph() {
+		Utils.out("Rebuilding pathfinding graph...");
 		MapObject object;
 		graph.clear();
 		nodeMap.clear();
@@ -110,6 +111,7 @@ public class Map {
 				linkToNeighbors(x, y);
 		}
 		refreshPathFinder();
+		Utils.out("Created " + graph.getNodeCount() + " nodes");
 	}
 
 	private void linkToNeighbors(int x, int y) {
@@ -121,8 +123,10 @@ public class Map {
 		for (Direction dir : Direction.baseValues) {
 			nCoords.set(x, y).addDirection(dir);
 
-			if (nodeMap.nodeExists(nCoords.x, nCoords.y))
+			if (nodeMap.nodeExists(nCoords.x, nCoords.y)) {
 				addNodeNeighbor(node, nCoords.x, nCoords.y);
+				addNodeNeighbor(nodeMap.get(nCoords), x, y);
+			}
 		}
 	}
 
@@ -133,8 +137,10 @@ public class Map {
 		if (node == null)
 			return;
 
-		for (Direction dir : Direction.baseValues)
+		for (Direction dir : Direction.baseValues) {
 			removeNodeNeighbor(nodeMap.get(coords.set(x, y).addDirection(dir)), x, y);
+			removeNodeNeighbor(nodeMap.get(x, y), coords.x, coords.y);
+		}
 
 	}
 
@@ -344,8 +350,8 @@ public class Map {
 		mapCrops = new HashMap<>();
 		mapProductionStations = new ArrayList<>();
 
-		nodeMap = new NodeMap(xsz, ysz);
 		graph = new Graph();
+		nodeMap = new NodeMap(xsz, ysz);
 		heuristic = new DistanceHeuristic();
 		return this;
 	}
