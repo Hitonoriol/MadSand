@@ -919,7 +919,7 @@ public class Player extends Entity {
 	public void teleport(int x, int y) {
 		super.teleport(x, y);
 		Gdx.graphics.requestRendering();
-		MadSand.gameWorld.setWorldCamPosition(x, y);
+		MadSand.getRenderer().setWorldCamPosition(x, y);
 	}
 
 	private void rest(int ticks, boolean verbose) {

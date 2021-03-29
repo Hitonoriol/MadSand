@@ -6,7 +6,6 @@ import java.util.Queue;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -31,6 +30,7 @@ import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.pathfinding.Node;
+import hitonoriol.madsand.pathfinding.Path;
 import hitonoriol.madsand.properties.NpcContainer;
 import hitonoriol.madsand.world.World;
 
@@ -62,7 +62,7 @@ public abstract class AbstractNpc extends Entity {
 
 	public State state = State.Idle;
 
-	DefaultGraphPath<Node> path = new DefaultGraphPath<Node>();
+	Path path = new Path();
 	Pair prevDestination = new Pair();
 	int pathIdx = 0;
 

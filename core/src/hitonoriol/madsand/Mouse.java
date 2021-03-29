@@ -16,6 +16,9 @@ import hitonoriol.madsand.gui.widgets.GameTooltip;
 import hitonoriol.madsand.map.CellInfo;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
+import hitonoriol.madsand.pathfinding.Node;
+import hitonoriol.madsand.pathfinding.Path;
+import hitonoriol.madsand.screens.GameWorldRenderer;
 import hitonoriol.madsand.world.World;
 
 public class Mouse {
@@ -42,14 +45,50 @@ public class Mouse {
 
 		if (Gui.gameUnfocused)
 			return;
-		
+
 		if (prevCoords.equals(wx, wy))
 			return;
 		prevCoords.set(wx, wy);
 
 		cellInfo.set(wx, wy);
 		pointingAtObject = cellInfo.isCellOccupied();
+		highlightRangedTarget();
 		Gui.overlay.getTooltip().setText(cellInfo.getInfo());
+	}
+
+	private static Path rangedPath;
+
+	private static void highlightRangedTarget() {
+		Player player = World.player;
+		GameWorldRenderer renderer = MadSand.getRenderer();
+
+		if (!player.canPerformRangedAttack())
+			return;
+
+		int x = cellInfo.getX(), y = cellInfo.getY();
+		if (!cellInfo.hasNpc()) {
+			if (rangedPath != null)
+				renderer.removePath(rangedPath);
+		}
+
+		else if (rangedPath == null
+				|| (rangedPath != null && !rangedPath.getDestination().at(x, y))) {
+			renderer.removePath(rangedPath);
+			renderer.queuePath(rangedPath = Path.create(player.x, player.y, x, y));
+		}
+
+		if (rangedPath != null) {
+			Node destNode = rangedPath.getDestination();
+			if (!MadSand.world.getCurLoc().npcExists(destNode.x, destNode.y))
+				renderer.removePath(rangedPath);
+
+			if (!renderer.isPathQueued(rangedPath))
+				rangedPath = null;
+		}
+	}
+
+	public static CellInfo pointingAt() {
+		return cellInfo;
 	}
 
 	public static boolean hasClickAction() {

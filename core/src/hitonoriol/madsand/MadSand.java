@@ -41,7 +41,7 @@ public class MadSand extends Game {
 
 	Storage<AbstractScreen<?>> currentScreen = new Storage<>();
 	private static MadSand game;
-	public static GameWorldRenderer gameWorld;
+	private static GameWorldRenderer gameWorld;
 
 	public static GameScreen gameScreen;
 	public static CraftScreen craftScreen;
@@ -117,6 +117,10 @@ public class MadSand extends Game {
 
 	public static Stage getStage() {
 		return game.currentScreen.get().getStage();
+	}
+	
+	public static GameWorldRenderer getRenderer() {
+		return gameWorld;
 	}
 
 	public static void warn(String msg) {

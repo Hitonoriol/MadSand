@@ -20,13 +20,22 @@ public class Node implements IndexedNode<Node>, Comparable<Node> {
 		this.y = y;
 	}
 
+	// this will break everything if you try to pathfind over it
+	public Node(int x, int y) {
+		this(x, y, 0);
+	}
+
 	@Override
 	public int getIndex() {
 		return index;
 	}
-	
+
 	void setIndex(int idx) {
 		index = idx;
+	}
+
+	public boolean at(int x, int y) {
+		return this.x == x && this.y == y;
 	}
 
 	@Override

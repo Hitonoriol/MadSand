@@ -168,11 +168,11 @@ public class Keyboard {
 			Mouse.setClickAction((x, y) -> World.player.teleport(x, y));
 
 		if (Gdx.input.isKeyPressed(Keys.NUMPAD_3)) {
-			MadSand.gameWorld.changeZoom(0.01f);
+			MadSand.getRenderer().changeZoom(0.01f);
 		}
 
 		if (Gdx.input.isKeyPressed(Keys.NUMPAD_1)) {
-			MadSand.gameWorld.changeZoom(-0.01f);
+			MadSand.getRenderer().changeZoom(-0.01f);
 		}
 
 		if (Gdx.input.isKeyJustPressed(Keys.F5))

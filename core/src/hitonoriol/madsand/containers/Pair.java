@@ -58,6 +58,14 @@ public class Pair {
 		return multiply(n, n);
 	}
 
+	public Pair divide(int dx, int dy) {
+		return set(this.x / dx, this.y / dy);
+	}
+
+	public Pair divide(int n) {
+		return divide(n, n);
+	}
+
 	public Pair random(int xMin, int xMax, int yMin, int yMax) {
 		return this.set(Utils.rand(xMin, xMax), Utils.rand(yMin, yMax));
 	}
@@ -158,10 +166,14 @@ public class Pair {
 		return this.add(directionToCoord(dir));
 	}
 
-	public Pair toWorld() {
+	public Pair toScreen() {
 		return multiply(MadSand.TILESIZE);
 	}
-	
+
+	public Pair toWorld() {
+		return divide(MadSand.TILESIZE);
+	}
+
 	public boolean isEmpty() {
 		return equals(nullPair);
 	}

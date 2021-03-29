@@ -26,6 +26,7 @@ import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.map.object.MapObject;
+import hitonoriol.madsand.pathfinding.Path;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.TileProp;
 
@@ -183,8 +184,10 @@ public abstract class Entity extends MapEntity {
 		int baseDmg = stats.calcBaseRangedAttack(distanceTo(projectileObstacle.getPosition()));
 		int impactDmg = baseDmg != 0 ? baseDmg + projectile.calcDamage() : 0;
 
-		projectile.launchProjectile(thisCoords.toWorld(), projectileObstacle.getPosition().toWorld(),
+		projectile.launchProjectile(thisCoords.toScreen(),
+				obstacleCoords.set(projectileObstacle.getPosition()).toScreen(),
 				() -> attack(projectileObstacle, impactDmg));
+		MadSand.getRenderer().queuePath(Path.create(thisCoords.toWorld(), obstacleCoords.toWorld()), 0.675f);
 	}
 
 	public boolean addItem(Item item) {

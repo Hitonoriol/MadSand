@@ -42,6 +42,14 @@ public class CellInfo {
 		this.y = y;
 		refresh();
 	}
+	
+	public int getX() {
+		return x;
+	}
+	
+	public int getY() {
+		return y;
+	}
 
 	private void refresh() {
 		player = World.player;
@@ -67,6 +75,10 @@ public class CellInfo {
 
 	public AbstractNpc getNpc() {
 		return npc;
+	}
+
+	public boolean hasNpc() {
+		return !npc.equals(Map.nullNpc);
 	}
 
 	public Loot getLoot() {

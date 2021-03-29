@@ -163,6 +163,10 @@ public class Map {
 
 	}
 
+	public Node getNode(int x, int y) {
+		return nodeMap.get(x, y);
+	}
+
 	public boolean searchPath(int startX, int startY, int endX, int endY, DefaultGraphPath<Node> path) {
 		Node start = nodeMap.get(startX, startY), end = nodeMap.get(endX, endY);
 

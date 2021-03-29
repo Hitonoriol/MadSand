@@ -2,11 +2,10 @@ package hitonoriol.madsand.screens;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 
@@ -25,7 +24,7 @@ import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.map.object.MapObject;
-import hitonoriol.madsand.pathfinding.Node;
+import hitonoriol.madsand.pathfinding.Path;
 import hitonoriol.madsand.world.World;
 
 public class GameWorldRenderer {
@@ -40,9 +39,10 @@ public class GameWorldRenderer {
 
 	private OrthographicCamera camera = new OrthographicCamera();
 	private ConcurrentHashMap<PairFloat, AnimationContainer> animations = new ConcurrentHashMap<>();
+	private ConcurrentHashMap<Path, Float> paths = new ConcurrentHashMap<>();
 	private List<Pair> renderArea = new ArrayList<>();
 
-	private DefaultGraphPath<Node> pathToCursor = new DefaultGraphPath<Node>();
+	private Path pathToCursor = new Path();
 	private Pair prevCurCoords = new Pair();
 
 	public GameWorldRenderer() {
@@ -75,21 +75,45 @@ public class GameWorldRenderer {
 		animations.put(new PairFloat(x, y), animation);
 	}
 
-	public void drawAnimations() {
+	public void queuePath(Path path, float duration) {
+		paths.put(path, duration);
+	}
+
+	public void removePath(Path path) {
+		if (path != null)
+			paths.remove(path);
+	}
+
+	public boolean isPathQueued(Path path) {
+		return paths.containsKey(path);
+	}
+
+	public void queuePath(Path path) {
+		queuePath(path, Float.MAX_VALUE);
+	}
+
+	void drawPaths() {
+		paths.forEach((path, duration) -> {
+			float time = paths.get(path) - Gdx.graphics.getDeltaTime();
+			drawPath(path, Color.RED);
+
+			if (time <= 0)
+				paths.remove(path);
+			else
+				paths.put(path, time);
+		});
+	}
+
+	void drawAnimations() {
 		if (animations.isEmpty())
 			return;
 
-		PairFloat coords;
-		AnimationContainer animation;
-
-		for (Entry<PairFloat, AnimationContainer> anim : animations.entrySet()) {
-			coords = anim.getKey();
-			animation = anim.getValue();
+		animations.forEach((coords, animation) -> {
 			MadSand.batch.draw(animation.getCurrentKeyFrame(), coords.x, coords.y);
 
 			if (animation.isAnimationFinished())
 				animations.remove(coords);
-		}
+		});
 	}
 
 	private static final float LOOT_SIZE = TILESIZE * 0.85f;
@@ -118,9 +142,19 @@ public class GameWorldRenderer {
 			setCamPosition(drawPos.x, drawPos.y);
 	}
 
+	private static Color defColor = new Color(1, 1, 1, 1);
+
+	public void drawPath(Path path, Color color) {
+		MadSand.batch.setColor(color);
+		path.forEach(cell -> MadSand.batch.draw(Resources.mapCursor, cell.x * TILESIZE, cell.y * TILESIZE));
+		MadSand.batch.setColor(defColor);
+	}
+
+	public void drawPath(Path path) {
+		drawPath(path, defColor);
+	}
+
 	void drawMapCursor() {
-		MadSand.batch.end();
-		MadSand.batch.begin();
 		int x = Mouse.wx, y = Mouse.wy;
 		if (!Mouse.hasClickAction())
 			MadSand.batch.draw(Resources.mapCursor, x * TILESIZE, y * TILESIZE);
@@ -132,12 +166,8 @@ public class GameWorldRenderer {
 				if (!MadSand.world.getCurLoc().searchPath(px, py, x, y, pathToCursor))
 					return;
 			}
-			pathToCursor
-					.forEach(cell -> MadSand.batch.draw(Resources.mapCursor, cell.x * TILESIZE, cell.y * TILESIZE));
-			MadSand.batch.flush();
+			drawPath(pathToCursor);
 		}
-		MadSand.batch.end();
-		MadSand.batch.begin();
 	}
 
 	void drawGame() {
@@ -209,6 +239,7 @@ public class GameWorldRenderer {
 
 		if (!Gui.gameUnfocused)
 			drawMapCursor();
+		drawPaths();
 	}
 
 	public void render(float delta) {
