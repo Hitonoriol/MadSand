@@ -42,6 +42,10 @@ public class Pair {
 		return this;
 	}
 
+	public Pair copy() {
+		return new Pair(this);
+	}
+
 	public Pair add(int x, int y) {
 		return set(this.x + x, this.y + y);
 	}

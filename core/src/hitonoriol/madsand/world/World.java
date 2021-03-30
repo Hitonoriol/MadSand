@@ -4,7 +4,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map.Entry;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Timer;
@@ -63,7 +62,7 @@ public class World {
 	public int worldtime = 6; // time (00 - 23)
 	public int tick = 0; // tick counter, resets every <ticksPerHour> ticks
 	public long globalTick = 0; // global tick counter, never resets
-	
+
 	public long npcCounter = 0;
 	public long itemCounter = 0;
 	public long textureFxCounter = 0;
@@ -91,7 +90,7 @@ public class World {
 		realTimeRefresher.start();
 		GameTextSubstitutor.add(GameTextSubstitutor.PLAYER_NAME, player.stats.name);
 		getCurLoc().refreshGraph();
-		
+
 		if (!player.newlyCreated)
 			calcOfflineTime();
 	}
@@ -606,9 +605,12 @@ public class World {
 		HashMap<Pair, AbstractNpc> npcs = loc.getNpcs();
 		ArrayList<Entity> queue = new ArrayList<Entity>();
 
-		for (Entry<Pair, AbstractNpc> npc : npcs.entrySet())
-			queue.add(npc.getValue());
+		Utils.out("\n\n* New subtick, time passed=" + time);
 
+		npcs.forEach((position, npc) -> {
+			npc.getActDelay();
+			queue.add(npc);
+		});
 		queue.add(player);
 
 		Collections.sort(queue, Entity.speedComparator);
@@ -618,8 +620,10 @@ public class World {
 		float actionDelay = timeSkip ? 0 : ACT_DELAY;
 		float maxSimDst = getMaxSimDistance();
 		for (Entity entity : queue) {
-			if (timeSkip && entity.distanceTo(player) > maxSimDst)
+			if (/*timeSkip &&*/ entity.distanceTo(player) > maxSimDst)
 				continue;
+
+			Utils.out(entity.getName() + " plans to act...");
 
 			if ((player.canSee(entity) && entity != player) || (entity == player && pausePlayer)) {
 				hostile = false;
@@ -635,10 +639,11 @@ public class World {
 					@Override
 					public void run() {
 						entity.act(time);
+						Utils.out(entity.getName() + " finished acting. " + entity.x + ", " + entity.y);
 						if (!entity.isStepping())
 							Keyboard.resumeInput();
 					}
-				}, (hostile && pausePlayer) ? 0 : actionDelay);
+				}, ((hostile && pausePlayer) ? 0 : actionDelay) + entity.getActDelay());
 			} else
 				entity.act(time);
 		}

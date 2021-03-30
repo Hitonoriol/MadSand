@@ -39,7 +39,7 @@ public class GameWorldRenderer {
 
 	private OrthographicCamera camera = new OrthographicCamera();
 	private ConcurrentHashMap<PairFloat, AnimationContainer> animations = new ConcurrentHashMap<>();
-	private ConcurrentHashMap<Path, Float> paths = new ConcurrentHashMap<>();
+	private ConcurrentHashMap<Path, PathDescriptor> paths = new ConcurrentHashMap<>();
 	private List<Pair> renderArea = new ArrayList<>();
 
 	private Path pathToCursor = new Path();
@@ -75,8 +75,16 @@ public class GameWorldRenderer {
 		animations.put(new PairFloat(x, y), animation);
 	}
 
-	public void queuePath(Path path, float duration) {
-		paths.put(path, duration);
+	public void queuePath(Path path, float duration, Color color) {
+		paths.put(path, new PathDescriptor(duration, color));
+	}
+
+	public void queuePath(Path path, Color color) {
+		queuePath(path, Float.MAX_VALUE, color);
+	}
+
+	public void queuePath(Path path) {
+		paths.put(path, PathDescriptor.DEFAULT);
 	}
 
 	public void removePath(Path path) {
@@ -88,19 +96,18 @@ public class GameWorldRenderer {
 		return paths.containsKey(path);
 	}
 
-	public void queuePath(Path path) {
-		queuePath(path, Float.MAX_VALUE);
-	}
-
 	void drawPaths() {
 		paths.forEach((path, duration) -> {
-			float time = paths.get(path) - Gdx.graphics.getDeltaTime();
-			drawPath(path, Color.RED);
+			PathDescriptor pInfo = paths.get(path);
+			drawPath(path, pInfo.color);
+
+			if (pInfo.noTimeLimit())
+				return;
+
+			float time = pInfo.render(Gdx.graphics.getDeltaTime());
 
 			if (time <= 0)
 				paths.remove(path);
-			else
-				paths.put(path, time);
 		});
 	}
 
@@ -302,5 +309,33 @@ public class GameWorldRenderer {
 		camera.viewportWidth = Gdx.graphics.getWidth() / zoom;
 		camera.viewportHeight = Gdx.graphics.getHeight() / zoom;
 		camera.update();
+	}
+
+	private static class PathDescriptor {
+		float duration = Float.MAX_VALUE;
+		Color color = defColor;
+
+		static PathDescriptor DEFAULT = new PathDescriptor();
+
+		public PathDescriptor(float duration, Color color) {
+			this.duration = duration;
+			this.color = color;
+		}
+
+		public PathDescriptor(Color color) {
+			this.color = color;
+		}
+
+		public PathDescriptor() {
+		}
+
+		boolean noTimeLimit() {
+			return duration == Float.MAX_VALUE;
+		}
+
+		float render(float delta) {
+			duration -= delta;
+			return duration;
+		}
 	}
 }

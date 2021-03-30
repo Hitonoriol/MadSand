@@ -1,5 +1,7 @@
 package hitonoriol.madsand.entities.inventory.item;
 
+import java.util.function.Consumer;
+
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -10,8 +12,11 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.EquipSlot;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.map.Map;
+import hitonoriol.madsand.map.MapEntity;
 import me.xdrop.jrand.JRand;
 import me.xdrop.jrand.generators.basics.FloatGenerator;
 
@@ -50,7 +55,7 @@ public class Projectile extends LevelBoundItem {
 
 	static final float BASE_PROJECTILE_SPEED = 0.35f;
 
-	public void launchProjectile(Pair from, Pair to, Runnable impactAction) {
+	public void launchProjectile(Pair from, Pair to, Consumer<MapEntity> impactAction) {
 		final int imgSize = (int) (MadSand.TILESIZE * MadSand.getRenderer().getCamZoom());
 		Image projectileImg = new Image(Resources.item[id]);
 		Vector3 screenCoords = new Vector3();
@@ -62,12 +67,25 @@ public class Projectile extends LevelBoundItem {
 
 		MadSand.getCamera().project(screenCoords.set(from.x, from.y, 0));
 		projectileImg.setPosition(screenCoords.x, screenCoords.y);
-
 		MadSand.getCamera().project(screenCoords.set(to.x, to.y, 0));
+
+		to.toWorld();
+		Map map = MadSand.world.getCurLoc();
+		Utils.out("Projectile " + name + " will land on " + to.toString());
+
 		projectileImg.addAction(
 				Actions.sequence(
 						Actions.moveTo(screenCoords.x, screenCoords.y, BASE_PROJECTILE_SPEED),
-						Actions.run(impactAction),
+						Actions.run(() -> {
+							MapEntity target = map.getMapEntity(to);
+
+							if (target != Map.nullNpc) {
+								impactAction.accept(target);
+								target.as(Entity.class)
+										.ifPresent(entity -> entity.setActDelay(BASE_PROJECTILE_SPEED));
+							} else
+								map.putLoot(to.x, to.y, id, 1);
+						}),
 						Actions.run(() -> projectileImg.remove())));
 	}
 

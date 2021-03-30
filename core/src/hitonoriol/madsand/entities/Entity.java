@@ -5,6 +5,7 @@ import java.util.function.Predicate;
 
 import org.apache.commons.lang3.mutable.MutableBoolean;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -48,6 +49,7 @@ public abstract class Entity extends MapEntity {
 	public int x, y; // Grid coords
 	public PairFloat globalPos = new PairFloat(); // Screen space coords
 	public float movementSpeed;
+	private float actDelay = 0;
 
 	public int fov = 15;
 	public int maxFov, minFov;
@@ -107,6 +109,21 @@ public abstract class Entity extends MapEntity {
 
 	public TextureRegion getSprite() {
 		return sprite;
+	}
+
+	public void setActDelay(float actDelay) {
+		Utils.out(getName() + ": adding actDelay: +" + actDelay);
+		this.actDelay += actDelay;
+	}
+
+	public float getActDelay() {
+		float delay = actDelay;
+
+		if (delay > 0)
+			Utils.out(getName() + ": actDelay=" + delay);
+
+		actDelay = 0;
+		return delay;
 	}
 
 	public void initStatActions() {
@@ -172,22 +189,20 @@ public abstract class Entity extends MapEntity {
 
 	public abstract void meleeAttack(Direction dir);
 
-	protected void rangedAttack(Entity target, Projectile projectile) {
-		if (!canSee(target))
-			return;
-
+	protected void rangedAttack(Pair targetPos, Projectile projectile) {
 		Map map = MadSand.world.getCurLoc();
 		Pair thisCoords = new Pair(x, y);
-		Pair obstacleCoords = map.rayCast(thisCoords, target.getPosition());
-		MapEntity projectileObstacle = obstacleCoords.equals(Pair.nullPair) ? target : map.getMapEntity(obstacleCoords);
+		Pair obstacleCoords = map.rayCast(thisCoords, targetPos);
+		if (obstacleCoords.isEmpty())
+			obstacleCoords.set(targetPos);
 
-		int baseDmg = stats.calcBaseRangedAttack(distanceTo(projectileObstacle.getPosition()));
+		int baseDmg = stats.calcBaseRangedAttack(distanceTo(obstacleCoords));
 		int impactDmg = baseDmg != 0 ? baseDmg + projectile.calcDamage() : 0;
 
-		projectile.launchProjectile(thisCoords.toScreen(),
-				obstacleCoords.set(projectileObstacle.getPosition()).toScreen(),
-				() -> attack(projectileObstacle, impactDmg));
-		MadSand.getRenderer().queuePath(Path.create(thisCoords.toWorld(), obstacleCoords.toWorld()), 0.675f);
+		projectile.launchProjectile(thisCoords.toScreen().copy(),
+				obstacleCoords.toScreen().copy(),
+				target -> attack(target, impactDmg));
+		MadSand.getRenderer().queuePath(Path.create(thisCoords.toWorld(), obstacleCoords.toWorld()), 0.675f, Color.RED);
 	}
 
 	public boolean addItem(Item item) {
@@ -559,7 +574,7 @@ public abstract class Entity extends MapEntity {
 		return result.booleanValue();
 	}
 
-	// true if <obstacle> is a solid object
+	// true if <obstacle> is not a solid object, or doesn't exist
 	private static Predicate<MapEntity> canSeePredicate = obstacle -> {
 		if (obstacle.isEmpty())
 			return true;
@@ -584,6 +599,7 @@ public abstract class Entity extends MapEntity {
 
 	@Override
 	public void playDamageAnimation() {
+		setActDelay(Resources.ACTION_ANIM_DURATION);
 		super.playAnimation(Resources.createAnimation(Resources.attackAnimStrip));
 	}
 

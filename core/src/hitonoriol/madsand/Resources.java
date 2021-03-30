@@ -74,7 +74,7 @@ public class Resources {
 	public static final String OUT_FILE = "MadSandOutput.log";
 
 	static final int ANIM_FRAME_SIZE = 32;
-	static final float ACTION_ANIM_DURATION = 0.15f;
+	public static final float ACTION_ANIM_DURATION = 0.15f;
 
 	public static Texture[] item;
 	public static Texture[] objects;

@@ -287,9 +287,9 @@ public class Player extends Entity {
 				|| (rangedWeapon.isPresent() && rangedWeapon.get().type == Weapon.Type.RangedWeapon);
 	}
 
-	private void performRangedAttack(AbstractNpc npc) {
+	private void performRangedAttack(Pair targetPos) {
 		stats.getEquippedProjectile().ifPresent(projectile -> {
-			super.rangedAttack(npc, projectile);
+			super.rangedAttack(targetPos, projectile);
 			damageHeldTool();
 			delItem(projectile, 1);
 		});
@@ -299,7 +299,7 @@ public class Player extends Entity {
 		if (!canPerformRangedAttack())
 			return;
 
-		doAction(stats.rangedAttackCost, () -> performRangedAttack(npc));
+		doAction(stats.rangedAttackCost, () -> performRangedAttack(npc.getPosition()));
 	}
 
 	private void performMeleeAttack(Direction dir) {
@@ -486,6 +486,8 @@ public class Player extends Entity {
 			if (!item.name.isEmpty() && item.quantity > 0)
 				MadSand.notice("You get " + item.quantity + " " + item.name);
 
+			stats().equipment.refreshUI();
+			
 			if (unlockedItems.add(item.id))
 				refreshAvailableRecipes();
 
