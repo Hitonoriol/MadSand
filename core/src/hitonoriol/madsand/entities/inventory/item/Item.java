@@ -164,7 +164,9 @@ public class Item implements DynamicallyCastable<Item> {
 			return true;
 
 		Item rhs = (Item) obj;
-		return new EqualsBuilder().append(id, rhs.id).isEquals();
+		return new EqualsBuilder()
+				.append(id, rhs.id)
+				.isEquals();
 	}
 
 	public boolean equals(int id) {

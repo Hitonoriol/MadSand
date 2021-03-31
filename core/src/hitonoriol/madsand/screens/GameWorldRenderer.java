@@ -42,9 +42,6 @@ public class GameWorldRenderer {
 	private ConcurrentHashMap<Path, PathDescriptor> paths = new ConcurrentHashMap<>();
 	private List<Pair> renderArea = new ArrayList<>();
 
-	private Path pathToCursor = new Path();
-	private Pair prevCurCoords = new Pair();
-
 	public GameWorldRenderer() {
 		updateViewport();
 	}
@@ -165,16 +162,8 @@ public class GameWorldRenderer {
 		int x = Mouse.wx, y = Mouse.wy;
 		if (!Mouse.hasClickAction())
 			MadSand.batch.draw(Resources.mapCursor, x * TILESIZE, y * TILESIZE);
-		else {
-			int px = World.player.x, py = World.player.y;
-			if (!prevCurCoords.equals(x, y)) {
-				prevCurCoords.set(x, y);
-				pathToCursor.clear();
-				if (!MadSand.world.getCurLoc().searchPath(px, py, x, y, pathToCursor))
-					return;
-			}
-			drawPath(pathToCursor);
-		}
+		else
+			drawPath(Mouse.getPathToCursor());
 	}
 
 	void drawGame() {

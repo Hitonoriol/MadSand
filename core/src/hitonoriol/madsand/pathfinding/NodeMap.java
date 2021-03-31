@@ -18,20 +18,21 @@ public class NodeMap {
 
 	public Node putNew(int x, int y) {
 		Node node = new Node(x, y, idx++);
-		map.put(coords.set(x, y), node);
+		map.put(new Pair(x, y), node);
 		return node;
 	}
 
 	public Node remove(int x, int y) {
+		--idx;
 		return map.remove(coords.set(x, y));
 	}
 
 	public Node get(int x, int y) {
-		return map.get(coords.set(x, y));
+		return get(coords.set(x, y));
 	}
 
 	public Node get(Pair coords) {
-		return get(coords.x, coords.y);
+		return map.get(coords);
 	}
 
 	public boolean nodeExists(int x, int y) {

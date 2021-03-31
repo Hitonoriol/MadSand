@@ -35,6 +35,9 @@ public class Mouse {
 	private static BiConsumer<Integer, Integer> clickAction = null;
 	private static CellInfo cellInfo = new CellInfo();
 
+	private static Path rangedPath;
+	private static Path pathToCursor = new Path();
+
 	public static void updCoords() {
 		x = Gdx.input.getX();
 		y = Gdx.graphics.getHeight() - Gdx.input.getY();
@@ -50,13 +53,19 @@ public class Mouse {
 			return;
 		prevCoords.set(wx, wy);
 
+		if (hasClickAction())
+			refreshPathToCursor();
+
 		cellInfo.set(wx, wy);
 		pointingAtObject = cellInfo.isCellOccupied();
 		highlightRangedTarget();
 		Gui.overlay.getTooltip().setText(cellInfo.getInfo());
 	}
 
-	private static Path rangedPath;
+	private static void refreshPathToCursor() {
+		pathToCursor.clear();
+		MadSand.world.getCurLoc().searchPath(World.player.x, World.player.y, wx, wy, pathToCursor);
+	}
 
 	private static void highlightRangedTarget() {
 		Player player = World.player;
@@ -87,6 +96,10 @@ public class Mouse {
 		}
 	}
 
+	public static Path getPathToCursor() {
+		return pathToCursor;
+	}
+
 	public static CellInfo pointingAt() {
 		return cellInfo;
 	}
@@ -97,10 +110,15 @@ public class Mouse {
 
 	public static void setClickAction(BiConsumer<Integer, Integer> coordConsumer) {
 		clickAction = coordConsumer;
+		refreshPathToCursor();
 	}
 
 	public static void performClickAction() {
-		clickAction.accept(wx, wy);
+		if (pathToCursor.isEmpty())
+			return;
+
+		Node destination = pathToCursor.getDestination();
+		clickAction.accept(destination.x, destination.y);
 		clickAction = null;
 	}
 

@@ -1,6 +1,6 @@
 package hitonoriol.madsand.gfx;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -13,7 +13,7 @@ import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gfx.Effects.TextureEffect;
 
 public class ConditionalEffects<T extends Item> {
-	private Map<Predicate<T>, Function<T, TextureEffect>> effects = new HashMap<>(3);
+	private Map<Predicate<T>, Function<T, TextureEffect>> effects = new LinkedHashMap<>(3);
 	private RandomDataGenerator itemRandom = new RandomDataGenerator();
 
 	private ConditionalEffects() {
@@ -24,7 +24,7 @@ public class ConditionalEffects<T extends Item> {
 		effects.forEach((itemPredicate, effect) -> {
 			if (itemPredicate.test(item)) {
 				item.applyEffects(processor -> processor.addEffect(effect.apply(item)));
-				Utils.out("Woo! Applied fx " + effect + " to " + item.hashCode());
+				Utils.out("Woo! Applied fx " + " to " + item.hashCode());
 			}
 		});
 		item.applyEffects(processor -> processor.applyEffects());

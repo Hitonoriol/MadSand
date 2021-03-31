@@ -63,7 +63,7 @@ public class Node implements IndexedNode<Node>, Comparable<Node> {
 	}
 
 	public String toString() {
-		return String.format("#%d (%d, %d)", index, x, y);
+		return String.format("#%d (%d, %d) [%d neighbors]", index, x, y, connections.size);
 	}
 
 	@Override

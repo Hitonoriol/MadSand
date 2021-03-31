@@ -54,7 +54,7 @@ public class Keyboard {
 	}
 
 	public static boolean inputIgnored() {
-		return ignoreInput;
+		return ignoreInput || Mouse.hasClickAction();
 	}
 
 	public static void stopInput() {

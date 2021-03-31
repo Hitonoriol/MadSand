@@ -106,7 +106,7 @@ public class Map {
 			}
 		}
 
-		for (int y = 0; y < xsz; ++y) {
+		for (int y = 0; y < ysz; ++y) {
 			for (int x = 0; x < xsz; ++x)
 				linkToNeighbors(x, y);
 		}
@@ -115,7 +115,7 @@ public class Map {
 	}
 
 	private void linkToNeighbors(int x, int y) {
-		Node node = nodeMap.get(x, y);
+		Node node = getNode(x, y);
 		if (node == null)
 			return;
 
@@ -170,7 +170,7 @@ public class Map {
 	public boolean searchPath(int startX, int startY, int endX, int endY, DefaultGraphPath<Node> path) {
 		Node start = nodeMap.get(startX, startY), end = nodeMap.get(endX, endY);
 
-		if (start == null || end == null)
+		if (start == null || end == null) 
 			return false;
 
 		return pathFinder.searchNodePath(start, end, heuristic, path);
@@ -248,6 +248,7 @@ public class Map {
 	public void setSize(int xsz, int ysz) {
 		this.xsz = xsz;
 		this.ysz = ysz;
+		
 	}
 
 	@JsonIgnore

@@ -16,6 +16,10 @@ public class Path extends DefaultGraphPath<Node> {
 		super();
 	}
 	
+	public boolean isEmpty() {
+		return nodes.isEmpty();
+	}
+	
 	public Node getDestination() {
 		return super.get(super.getCount() - 1);
 	}

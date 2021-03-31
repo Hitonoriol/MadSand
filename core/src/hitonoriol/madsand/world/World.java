@@ -605,7 +605,7 @@ public class World {
 		HashMap<Pair, AbstractNpc> npcs = loc.getNpcs();
 		ArrayList<Entity> queue = new ArrayList<Entity>();
 
-		Utils.out("\n\n* New subtick, time passed=" + time);
+		//Utils.out("\n\n* New subtick, time passed=" + time);
 
 		npcs.forEach((position, npc) -> {
 			npc.getActDelay();
@@ -620,10 +620,10 @@ public class World {
 		float actionDelay = timeSkip ? 0 : ACT_DELAY;
 		float maxSimDst = getMaxSimDistance();
 		for (Entity entity : queue) {
-			if (/*timeSkip &&*/ entity.distanceTo(player) > maxSimDst)
+			if (timeSkip && entity.distanceTo(player) > maxSimDst)
 				continue;
 
-			Utils.out(entity.getName() + " plans to act...");
+			//Utils.out(entity.getName() + " plans to act...");
 
 			if ((player.canSee(entity) && entity != player) || (entity == player && pausePlayer)) {
 				hostile = false;
@@ -639,7 +639,7 @@ public class World {
 					@Override
 					public void run() {
 						entity.act(time);
-						Utils.out(entity.getName() + " finished acting. " + entity.x + ", " + entity.y);
+						//Utils.out(entity.getName() + " finished acting. " + entity.x + ", " + entity.y);
 						if (!entity.isStepping())
 							Keyboard.resumeInput();
 					}

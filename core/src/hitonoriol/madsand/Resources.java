@@ -143,11 +143,11 @@ public class Resources {
 		initObjectMapper();
 
 		Globals.loadGlobals();
-		loadWorldGen();
-		loadMapObjects();
 		loadItems();
-		loadProductionStations();
 		loadMapTiles();
+		loadMapObjects();
+		loadProductionStations();
+		loadWorldGen();
 		loadQuests();
 		loadNpcs();
 		loadTradeLists();
