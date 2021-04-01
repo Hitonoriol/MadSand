@@ -1,5 +1,5 @@
 local radius = 4
-local structure = assert(utils:loadScript(structure_header)(..., radius * 2, radius * 2));
+local structure = assert(lua:loadScript(structure_header)(..., radius * 2, radius * 2));
 local map = world:getCurLoc();
 
 map:drawObjectCircle(structure.x + radius, structure.y + radius, radius, 167);

@@ -5,10 +5,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.Stats;
 import hitonoriol.madsand.gui.widgets.StatLabels;
+import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.world.World;
 
 public class CharacterCreationDialog {
@@ -56,7 +56,7 @@ public class CharacterCreationDialog {
 					Gui.gameUnfocused = false;
 					Gui.refreshOverlay();
 					GameTextSubstitutor.add(GameTextSubstitutor.PLAYER_NAME, dialog.nameField.getText());
-					LuaUtils.executeScript(LuaUtils.onCreationScript);
+					Lua.executeScript(Lua.onCreationScript);
 				}
 			}
 

@@ -1,4 +1,4 @@
-local structure = assert(utils:loadScript(structure_header)(..., 7 + math.random(0, 2), 6));
+local structure = assert(lua:loadScript(structure_header)(..., 7 + math.random(0, 2), 6));
 local map = world:getCurLoc();
 
 local p1 = pair:make(structure.x, structure.y);

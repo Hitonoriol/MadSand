@@ -15,7 +15,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
@@ -25,6 +24,7 @@ import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
+import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.NpcProp;
 
@@ -236,7 +236,7 @@ public class Quest {
 		itemObjective = new HashMap<>();
 		killObjective = new HashMap<>();
 		kills = new HashMap<>();
-		LuaUtils.execute(execOnStart);
+		Lua.execute(execOnStart);
 
 		createObjectiveMap(reqItems, itemObjective);
 		if (createObjectiveMap(reqKills, killObjective))

@@ -23,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Keyboard;
-import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
@@ -57,6 +56,7 @@ import hitonoriol.madsand.gui.dialogs.ProductionStationUI;
 import hitonoriol.madsand.gui.dialogs.TraderDialog;
 import hitonoriol.madsand.gui.dialogs.WaitDialog;
 import hitonoriol.madsand.gui.widgets.ResourceProgressBar;
+import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.map.FishingSpot;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
@@ -765,7 +765,7 @@ public class Player extends Entity {
 	private boolean useScriptedTile() {
 		String tileAction = TileProp.getOnInteract(MadSand.world.getTileId(x, y));
 		if (!tileAction.equals(Resources.emptyField)) {
-			LuaUtils.execute(tileAction);
+			Lua.execute(tileAction);
 			return true;
 		}
 
@@ -1005,7 +1005,7 @@ public class Player extends Entity {
 		MadSand.world.timeTick(ticks); // committing our action and then letting world catch up to time we've spent
 		MadSand.world.timeSubtick(getActionLength(ap)); // letting NPCs catch up
 		Gui.overlay.refresh();
-		LuaUtils.execute(LuaUtils.onAction);
+		Lua.execute(Lua.onAction);
 		return ticks;
 	}
 

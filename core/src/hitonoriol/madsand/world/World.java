@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Keyboard;
-import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
@@ -22,6 +21,7 @@ import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
@@ -246,12 +246,12 @@ public class World {
 			return false;
 
 		Pair coords = worldMap.curWorldPos;
-		String locationScriptPath = LuaUtils.getSectorScriptPath(coords.x, coords.y);
+		String locationScriptPath = Lua.getSectorScriptPath(coords.x, coords.y);
 
 		if (!Gdx.files.internal(Resources.SCRIPT_DIR + locationScriptPath).exists())
 			return false;
 
-		LuaUtils.executeScript(locationScriptPath);
+		Lua.executeScript(locationScriptPath);
 
 		return true;
 	}
@@ -389,7 +389,7 @@ public class World {
 		inEncounter = true;
 		clearCurLoc();
 
-		LuaUtils.executeScript(Resources.ENCOUNTER_DIR + Utils.randElement(WorldGenProp.encounters) + ".lua");
+		Lua.executeScript(Resources.ENCOUNTER_DIR + Utils.randElement(WorldGenProp.encounters) + ".lua");
 		getCurLoc().refreshGraph();
 	}
 
@@ -685,7 +685,7 @@ public class World {
 	private void offlineReward(long offlineTime) {
 		long offlineTicks = (long) (offlineTime / realtimeTickRate);
 		globalRealtimeTick += offlineTicks;
-		LuaUtils.executeScript(LuaUtils.offlineRewardScript, offlineTime);
+		Lua.executeScript(Lua.offlineRewardScript, offlineTime);
 		skipRealtimeTicks(offlineTicks);
 	}
 

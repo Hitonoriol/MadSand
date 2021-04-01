@@ -21,12 +21,12 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import hitonoriol.madsand.DynamicallyCastable;
-import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.EquipSlot;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.gfx.TextureProcessor;
+import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
 
@@ -88,7 +88,7 @@ public class Item implements DynamicallyCastable<Item> {
 
 	public void use(Player player) {
 		if (useAction != null)
-			LuaUtils.execute(useAction, this);
+			Lua.execute(useAction, this);
 	}
 
 	public void equip(Player player) {

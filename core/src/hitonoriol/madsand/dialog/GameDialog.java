@@ -12,9 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
+import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.screens.AbstractScreen;
 
 public class GameDialog extends Dialog {
@@ -144,7 +144,7 @@ public class GameDialog extends Dialog {
 		button.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				LuaUtils.execute(luaCode);
+				Lua.execute(luaCode);
 			}
 		});
 		addButton(button);

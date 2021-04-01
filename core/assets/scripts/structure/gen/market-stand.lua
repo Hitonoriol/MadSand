@@ -1,4 +1,4 @@
-local structure = assert(utils:loadScript(structure_header)(..., 5 + math.random(0, 2), 4 + math.random(0, 2)));
+local structure = assert(lua:loadScript(structure_header)(..., 5 + math.random(0, 2), 4 + math.random(0, 2)));
 local map = world:getCurLoc();
 
 map:fillTile(structure.x, structure.y, structure.width - 1, structure.height - 1, val_utils:oneOf("47,48"));

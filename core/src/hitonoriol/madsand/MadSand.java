@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Timer;
 
 import hitonoriol.madsand.containers.Storage;
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
+import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.screens.AbstractScreen;
 import hitonoriol.madsand.screens.CraftScreen;
 import hitonoriol.madsand.screens.DeathScreen;
@@ -80,7 +81,7 @@ public class MadSand extends Game {
 	public static void initNewGame() {
 		world = new World();
 		World.player.updCoords();
-		LuaUtils.init();
+		Lua.init();
 		Gui.overlay.gameLog.clear();
 	}
 

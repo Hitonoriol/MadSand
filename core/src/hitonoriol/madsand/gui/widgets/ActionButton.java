@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.containers.Pair;
@@ -18,6 +17,7 @@ import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.gui.OverlayMouseoverListener;
+import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.map.object.MapObject;
@@ -137,7 +137,7 @@ public class ActionButton extends Table {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
 					if (!holdsShovel)
-						LuaUtils.execute(tileAction);
+						Lua.execute(tileAction);
 					else
 						player.useItem();
 					Gui.gameUnfocused = false;

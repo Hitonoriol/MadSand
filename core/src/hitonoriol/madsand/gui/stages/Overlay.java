@@ -19,7 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Mouse;
 import hitonoriol.madsand.Utils;
@@ -40,6 +39,7 @@ import hitonoriol.madsand.gui.widgets.GameTooltip;
 import hitonoriol.madsand.gui.widgets.OverlayBottomMenu;
 import hitonoriol.madsand.gui.widgets.QuestArrow;
 import hitonoriol.madsand.gui.widgets.StatProgressBar;
+import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.world.World;
 
 /*
@@ -201,7 +201,7 @@ public class Overlay extends Stage {
 			String cmd = gameLog.inputField.getText().trim();
 
 			try {
-				LuaUtils.execute(cmd);
+				Lua.execute(cmd);
 			} catch (Exception e) {
 				MadSand.print("Couldn't execute user input");
 				e.printStackTrace();

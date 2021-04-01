@@ -1,4 +1,4 @@
-local structure = assert(utils:loadScript(structure_header)(..., math.random(1, 3), math.random(1, 3)));
+local structure = assert(lua:loadScript(structure_header)(..., math.random(1, 3), math.random(1, 3)));
 local map = world:getCurLoc();
 
 local crop_list = "20,43,47,51,55";

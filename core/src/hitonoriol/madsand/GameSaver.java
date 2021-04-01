@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.world.World;
 
 public class GameSaver {
@@ -177,7 +178,7 @@ public class GameSaver {
 		}
 
 		if (loadLocation()) {
-			LuaUtils.init();
+			Lua.init();
 			MadSand.world.updateLight();
 			loadLog();
 			MadSand.print("Loaded Game!");

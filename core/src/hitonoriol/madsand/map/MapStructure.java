@@ -1,12 +1,11 @@
 package hitonoriol.madsand.map;
 
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.lib.jse.CoerceJavaToLua;
-
-import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.lua.Lua;
+import hitonoriol.madsand.lua.LuaLambda;
+import hitonoriol.madsand.lua.LuaLambda.LuaPredicate;
 import hitonoriol.madsand.world.World;
 
 public class MapStructure {
@@ -17,7 +16,7 @@ public class MapStructure {
 	public int width, height;
 	public Map map = MadSand.world.getCurLoc();
 
-	LuaValue script;
+	LuaPredicate builder;
 
 	public MapStructure(int x, int y) {
 		setCoords(x, y);
@@ -85,13 +84,13 @@ public class MapStructure {
 	}
 
 	public MapStructure setName(String file) {
-		script = LuaUtils.loadScript("structure/" + file + ".lua");
+		builder = LuaLambda.predicate(Lua.loadScript("structure/" + file + ".lua"));
 		return this;
 	}
 
 	public boolean build() {
 		try {
-			return script.call(CoerceJavaToLua.coerce(this)).toboolean();
+			return builder.test(this);
 		} catch (Exception e) { // This means that assert(x + w <= [map width] && y + h <= [map height]) failed
 			return false;
 		}

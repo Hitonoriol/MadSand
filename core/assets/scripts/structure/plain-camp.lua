@@ -1,4 +1,4 @@
-local structure = assert(utils:loadScript(structure_header)(..., 10, 10));
+local structure = assert(lua:loadScript(structure_header)(..., 10, 10));
 local map = world:getCurLoc();
 
 structure:clear();

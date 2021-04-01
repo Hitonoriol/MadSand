@@ -10,8 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.lua.Lua;
 
 public class DialogChainGenerator {
 	public static final String DEFAULT_BTN_TEXT = "[Proceed]";
@@ -75,7 +75,7 @@ public class DialogChainGenerator {
 					@Override
 					public void changed(ChangeEvent event, Actor actor) {
 						dialog.remove();
-						LuaUtils.execute(buttonScriptString);
+						Lua.execute(buttonScriptString);
 					}
 				});
 

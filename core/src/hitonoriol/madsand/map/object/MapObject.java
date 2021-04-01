@@ -13,7 +13,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
-import hitonoriol.madsand.LuaUtils;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
@@ -21,6 +20,7 @@ import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Skill;
 import hitonoriol.madsand.entities.inventory.item.Tool;
+import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.properties.ObjectProp;
@@ -85,7 +85,7 @@ public class MapObject extends MapEntity {
 			interactIfPossible(() -> player.startResourceGathering(this));
 
 		else if (!onInteract.equals(Resources.emptyField))
-			LuaUtils.execute(onInteract, this);
+			Lua.execute(onInteract, this);
 
 		else
 			interaction.run();
