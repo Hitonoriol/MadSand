@@ -21,6 +21,8 @@ public class WorldGenPreset {
 	//Dungeon params
 	public int dungeonProbability; // Probability to generate dungeon instead of normal cave
 	public DungeonPreset dungeon = new DungeonPreset();
+	
+	public String postGenScript;
 
 	@JsonIgnore
 	public int getDefaultTile() {

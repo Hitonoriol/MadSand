@@ -64,4 +64,8 @@ public class LuaUtils {
 	public static int rollLoot(TradeCategory category) {
 		return rollLoot(category, -1);
 	}
+
+	public static String getScriptName(String regularText) {
+		return regularText.toLowerCase().replace(' ', '-') + ".lua";
+	}
 }

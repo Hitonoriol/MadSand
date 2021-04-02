@@ -115,7 +115,8 @@
 					}
 				}
 			]
-		}
+		},
+		"postGenScript" : "if val_utils:percentRoll(5) then world:getCurLoc():randPlaceLoot(179) end"
 	},
 
 	"1" : {

@@ -41,3 +41,7 @@ end
 package = function(name)
 	return root_package .. "." .. name;
 end
+
+change_stamina = function(ability)
+	player:changeStamina(-ability.staminaCost);
+end

@@ -10,10 +10,12 @@ import org.luaj.vm2.lib.jse.JsePlatform;
 
 import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.Mouse;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.properties.Tutorial;
+import hitonoriol.madsand.world.World;
 
 public class Lua {
 
@@ -25,17 +27,21 @@ public class Lua {
 	public static final String onCreationScript = "player_oncreation.lua";
 	public static final String offlineRewardScript = "offline_reward.lua";
 
-	public static void init() {
+	static {
 		globals = JsePlatform.standardGlobals();
+	}
 
+	public static void init() {
 		register("lua", CoerceJavaToLua.coerce(new Lua()));
 		register("utils", CoerceJavaToLua.coerce(new LuaUtils()));
 		register("val_utils", CoerceJavaToLua.coerce(new Utils()));
 		register("lambda", CoerceJavaToLua.coerce(new LuaLambda()));
 		register("pair", CoerceJavaToLua.coerce(Pair.getInstance()));
+		register("mouse", CoerceJavaToLua.coerce(new Mouse()));
 		register("world", CoerceJavaToLua.coerce(MadSand.world));
+		register("player", CoerceJavaToLua.coerce(World.player));
 		register("tutorial", CoerceJavaToLua.coerce(new Tutorial()));
-		
+
 		executeScript("globals.lua", Resources.SCRIPT_DIR);
 
 		onAction = Resources.readInternal(Resources.SCRIPT_DIR + onActionScript);

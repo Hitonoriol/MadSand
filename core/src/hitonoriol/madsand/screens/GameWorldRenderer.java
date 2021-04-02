@@ -300,6 +300,7 @@ public class GameWorldRenderer {
 		camera.update();
 	}
 
+	@SuppressWarnings("unused")
 	private static class PathDescriptor {
 		float duration = Float.MAX_VALUE;
 		Color color = defColor;
@@ -315,8 +316,7 @@ public class GameWorldRenderer {
 			this.color = color;
 		}
 
-		public PathDescriptor() {
-		}
+		public PathDescriptor() {}
 
 		boolean noTimeLimit() {
 			return duration == Float.MAX_VALUE;

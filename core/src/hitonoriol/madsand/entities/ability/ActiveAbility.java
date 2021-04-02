@@ -12,12 +12,13 @@ public class ActiveAbility extends Ability {
 	@Override
 	public void apply() {
 		Player player = World.player;
-		if (player.stats.stamina >= staminaCost)
+		if (player.stats.stamina < staminaCost) {
+			MadSand.warn("You don't have enough stamina to use this ability!");
 			return;
+		}
 
 		MadSand.notice((type == Type.Oneshot ? "You use " : "You activate") + name);
 
-		player.changeStamina(-staminaCost);
 		super.apply();
 	}
 

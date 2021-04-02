@@ -109,28 +109,53 @@ public class Overlay extends Stage {
 		super.addListener(new ClickListener(Buttons.LEFT) {
 			private boolean ignoreClick = false;
 
+			boolean skipClick() {
+				boolean ret = ignoreClick;
+				if (ignoreClick)
+					ignoreClick = false;
+				return ret;
+			}
+
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				Mouse.heldButtons.remove(button);
 
-				if (Mouse.hasClickAction())
-					Mouse.performClickAction();
+				if (getKeyboardFocus() != null)
+					return;
+
+				if (Mouse.hasClickAction()) {
+					if (event.getButton() == Buttons.LEFT)
+						Mouse.performClickAction();
+					else if (event.getButton() == Buttons.RIGHT) {
+						MadSand.print("You change your mind");
+						Mouse.cancelClickAction();
+					}
+				}
+
+				else if (event.getButton() == Buttons.RIGHT) {
+					if (Gui.dialogActive)
+						return;
+
+					if (gameTooltip.isVisible()) {
+						gameContextMenu.openGameContextMenu();
+						Gui.gameUnfocused = true;
+					} else
+						gameContextMenu.closeGameContextMenu();
+				}
 
 				super.touchUp(event, x, y, pointer, button);
 			}
 
 			public void clicked(InputEvent event, float x, float y) {
-				if (ignoreClick) {
-					ignoreClick = false;
+				if (skipClick())
 					return;
-				}
 
 				Mouse.mouseClickAction();
 			}
 
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				ignoreClick = Gui.isGameUnfocused() || Gui.dialogActive;
-				ignoreClick |= !Mouse.isClickActionPossible() && !Mouse.hasClickAction();
+				ignoreClick |= !Mouse.isClickActionPossible();
 
 				if (ignoreClick)
 					Mouse.heldButtons.add(button);
@@ -138,22 +163,6 @@ public class Overlay extends Stage {
 				super.touchDown(event, x, y, pointer, button);
 				return true;
 			}
-		});
-
-		super.addListener(new ClickListener(Buttons.RIGHT) {
-			public void clicked(InputEvent event, float x, float y) {
-
-				if (Gui.dialogActive)
-					return;
-
-				if (gameTooltip.isVisible()) {
-					gameContextMenu.openGameContextMenu();
-					Gui.gameUnfocused = true;
-				} else
-					gameContextMenu.closeGameContextMenu();
-
-			}
-
 		});
 	}
 

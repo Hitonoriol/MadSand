@@ -28,14 +28,25 @@ public class Globals {
 
 	public HashMap<String, LootTable> lootTables;
 	public HashMap<Integer, Ability> abilities;
+
 	public int baseScrollId;
 	public HashMap<String, String> scrolls;
+
+	public int basePillId;
+	public HashMap<String, String> pills = new HashMap<>();
 
 	public HashMap<String, String> values;
 
 	public static void loadGlobals() throws Exception {
 		instance = Resources.mapper.readValue(Resources.readInternal(Resources.GLOBALS_FILE), Globals.class);
 		instance.abilities.entrySet().stream().forEach(entry -> entry.getValue().id = entry.getKey());
+		initPillScripts();
+	}
+
+	private static void initPillScripts() {
+		HashMap<String, String> scripts = instance().pills;
+		instance().abilities
+				.forEach((id, ability) -> scripts.put(ability.name, "player:addAbility(" + id + ")"));
 	}
 
 	public static Globals instance() {

@@ -25,10 +25,15 @@
 ],
 
 "Weapons": [
-	{ "tier": 0, "minRolls": 10, "maxRolls": 20, "items": [12, 85, 86] },
-	{ "tier": 1, "minRolls": 9, "maxRolls": 10, "items": [13, 20, 74] },
+	{ "tier": 0, "minRolls": 10, "maxRolls": 20, "items": [12, 85, 86, 174] },
+	{ "tier": 1, "minRolls": 9, "maxRolls": 10, "items": [13, 20, 74, 174] },
 	{ "tier": 2, "minRolls": 7, "maxRolls": 10, "items": [87, 88, 89, 90] },
 	{ "tier": 3, "minRolls": 7, "maxRolls": 10, "items": [91, 92, 93] }
+],
+
+"Projectiles": [
+	{ "tier": 0, "minRolls": 5, "maxRolls": 10, "items": [175] },
+	{ "tier": 1, "minRolls": 2, "maxRolls": 5, "items": [176, 177] }
 ],
 
 "Armor": [
@@ -49,5 +54,14 @@
 	{ "tier": 2, "minRolls": 10, "maxRolls": 20, "items": [70, 71, 8, 23, 24] },
 	{ "tier": 3, "minRolls": 5, "maxRolls": 15, "items": [72, 73] },
 	{ "tier": 4, "minRolls": 0, "maxRolls": 8, "items": [28, 29, 30, 31] }
+],
+
+"Scrolls": [
+	{ "tier": 0, "minRolls": 1, "maxRolls": 5, "items": [75] }
+],
+
+"Pills": [
+	{ "tier": 0, "minRolls": 1, "maxRolls": 3, "items": [179] }
 ]
+
 }

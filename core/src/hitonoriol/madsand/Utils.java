@@ -21,6 +21,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.math3.random.RandomDataGenerator;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.utils.Timer;
 
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import me.xdrop.jrand.JRand;
@@ -39,6 +40,15 @@ public class Utils {
 		} catch (Exception e) {
 			die("Exception on init: " + ExceptionUtils.getStackTrace(e));
 		}
+	}
+
+	public static void scheduleTask(Runnable task, float delaySec) {
+		Timer.instance().scheduleTask(new Timer.Task() {
+			@Override
+			public void run() {
+				task.run();
+			}
+		}, delaySec);
 	}
 
 	public static String str(int val) {

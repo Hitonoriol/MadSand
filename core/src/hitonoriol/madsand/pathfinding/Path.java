@@ -23,6 +23,10 @@ public class Path extends DefaultGraphPath<Node> {
 	public Node getDestination() {
 		return super.get(super.getCount() - 1);
 	}
+	
+	public void truncate(int newLength) {
+		nodes.truncate(newLength);
+	}
 
 	public static Path create(int x1, int y1, int x2, int y2) {
 		Map map = MadSand.world.getCurLoc();

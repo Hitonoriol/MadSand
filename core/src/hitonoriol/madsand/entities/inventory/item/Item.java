@@ -34,7 +34,7 @@ import hitonoriol.madsand.properties.ItemProp;
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
 @JsonSubTypes({ @Type(Armor.class), @Type(Consumable.class), @Type(CropSeeds.class), @Type(FishingBait.class),
 		@Type(GrabBag.class), @Type(Placeable.class), @Type(Projectile.class), @Type(Tool.class), @Type(Weapon.class),
-		@Type(Scroll.class) })
+		@Type(Scroll.class), @Type(Pill.class) })
 public class Item implements DynamicallyCastable<Item> {
 
 	public int id;

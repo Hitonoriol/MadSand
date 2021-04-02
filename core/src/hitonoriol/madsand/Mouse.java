@@ -37,6 +37,7 @@ public class Mouse {
 
 	private static Path rangedPath;
 	private static Path pathToCursor = new Path();
+	private static int DEF_CUR_PATH_LEN = 8, maxCurPathLen = DEF_CUR_PATH_LEN;
 
 	public static void updCoords() {
 		x = Gdx.input.getX();
@@ -65,6 +66,9 @@ public class Mouse {
 	private static void refreshPathToCursor() {
 		pathToCursor.clear();
 		MadSand.world.getCurLoc().searchPath(World.player.x, World.player.y, wx, wy, pathToCursor);
+
+		if (!pathToCursor.isEmpty() && pathToCursor.getCount() > maxCurPathLen)
+			pathToCursor.truncate(maxCurPathLen);
 	}
 
 	private static void highlightRangedTarget() {
@@ -108,9 +112,19 @@ public class Mouse {
 		return clickAction != null;
 	}
 
-	public static void setClickAction(BiConsumer<Integer, Integer> coordConsumer) {
+	public static void setClickAction(BiConsumer<Integer, Integer> coordConsumer, int maxPathLen) {
+		maxCurPathLen = maxPathLen;
 		clickAction = coordConsumer;
 		refreshPathToCursor();
+	}
+
+	public static void setClickAction(BiConsumer<Integer, Integer> coordConsumer) {
+		setClickAction(coordConsumer, DEF_CUR_PATH_LEN);
+		MadSand.print("You think about your next move...");
+	}
+
+	public static void cancelClickAction() {
+		clickAction = null;
 	}
 
 	public static void performClickAction() {
@@ -119,7 +133,7 @@ public class Mouse {
 
 		Node destination = pathToCursor.getDestination();
 		clickAction.accept(destination.x, destination.y);
-		clickAction = null;
+		cancelClickAction();
 	}
 
 	private static final int CLICK_CUR_TILE = 0, CLICK_ADJ_TILE = 1;

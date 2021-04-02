@@ -1844,5 +1844,10 @@
 		"dmg" : 2,
 		"cost" : 0,
 		"weight" : 0
+	},
+	"179": {
+		"@type" : "Pill",
+		"cost": 1000,
+		"weight": 0.01
 	}
 }

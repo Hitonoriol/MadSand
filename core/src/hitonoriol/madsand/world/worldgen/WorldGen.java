@@ -10,6 +10,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Faction;
+import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.properties.WorldGenProp;
@@ -104,7 +105,6 @@ public class WorldGen {
 			rollDungeon();
 			initialMobSpawn();
 			rollLandProperties();
-
 		} else {
 
 			if (curLayer <= Location.LAYER_MAX_DUNGEON)
@@ -114,6 +114,9 @@ public class WorldGen {
 
 		}
 
+		if (curBiome.postGenScript != null)
+			Lua.execute(curBiome.postGenScript);
+		
 		reset();
 	}
 

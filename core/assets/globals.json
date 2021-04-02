@@ -27,13 +27,19 @@
 			world.player:teleport(world:getCurLoc():getRandomPoint());
 		"
 	},
+	"basePillId" : 179,
 	"abilities" : {
 		"1" : {
 			"@type" : "ActiveAbility",
 			"type" : "Oneshot",
 			"name" : "Low Kick",
-			"script" : "low-kick.lua",
 			"staminaCost" : 5
+		},
+		"2" : {
+			"@type" : "ActiveAbility",
+			"type" : "Oneshot",
+			"name" : "Blink",
+			"staminaCost" : 10
 		}
 	},
 	"proceduralQuestRewards" : "

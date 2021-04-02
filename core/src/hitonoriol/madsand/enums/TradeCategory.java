@@ -16,9 +16,12 @@ public enum TradeCategory {
 	Farming,
 	Tools,
 	Weapons,
+	Projectiles,
 	Armor,
 	Building,
-	Materials;
+	Materials,
+	Scrolls,
+	Pills;
 
 	public static List<TradeCategory> rollableCategories = new ArrayList<>(Arrays.asList(values()));
 	static {

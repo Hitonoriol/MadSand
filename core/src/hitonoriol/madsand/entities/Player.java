@@ -29,6 +29,7 @@ import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
 import hitonoriol.madsand.dialog.GameDialog;
+import hitonoriol.madsand.entities.ability.Ability;
 import hitonoriol.madsand.entities.inventory.CraftWorker;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.item.Consumable;
@@ -85,7 +86,7 @@ public class Player extends Entity {
 	public Set<String> luaActions = new HashSet<>(); // Set for one-time lua actions
 	public HashMap<Integer, Integer> killCount = new HashMap<>();
 	public Reputation reputation = new Reputation();
-	public Set<Integer> abilities = new HashSet<>();
+	public List<Ability> abilities = new ArrayList<>();
 	public int settlementsEstablished = 0;
 
 	private TimedAction scheduledAction;
@@ -114,11 +115,19 @@ public class Player extends Entity {
 	}
 
 	public boolean addAbility(int id) {
-		return abilities.add(id);
+		Ability ability = Ability.get(id);
+		boolean firstTime = !abilities.contains(ability);
+
+		if (firstTime)
+			abilities.add(ability);
+		else
+			abilities.get(abilities.indexOf(ability)).levelUp();
+
+		return firstTime;
 	}
 
 	public boolean removeAbility(int id) {
-		return abilities.remove(Integer.valueOf(id));
+		return abilities.remove(Ability.get(id));
 	}
 
 	public void refreshEquipment() {
@@ -487,7 +496,7 @@ public class Player extends Entity {
 				MadSand.notice("You get " + item.quantity + " " + item.name);
 
 			stats().equipment.refreshUI();
-			
+
 			if (unlockedItems.add(item.id))
 				refreshAvailableRecipes();
 
@@ -916,7 +925,7 @@ public class Player extends Entity {
 
 		return true;
 	}
-	
+
 	@Override
 	public void teleport(int x, int y) {
 		super.teleport(x, y);

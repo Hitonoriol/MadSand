@@ -18,6 +18,10 @@ public class LuaLambda {
 	public static LuaBiConsumer biConsumer(LuaValue chunk) {
 		return (arg1, arg2) -> Lua.callChunk(chunk, arg1, arg2);
 	}
+	
+	public static LuaIntBiConsumer intBiConsumer(LuaValue chunk) {
+		return (arg1, arg2) -> Lua.callChunk(chunk, arg1, arg2);
+	}
 
 	public static LuaPredicate predicate(LuaValue chunk) {
 		return arg -> Lua.callChunk(chunk, arg).toboolean();
@@ -28,4 +32,5 @@ public class LuaLambda {
 	public static interface LuaConsumer extends Consumer<Object> {}
 
 	public static interface LuaBiConsumer extends BiConsumer<Object, Object> {}
+	public static interface LuaIntBiConsumer extends BiConsumer<Integer, Integer> {}
 }

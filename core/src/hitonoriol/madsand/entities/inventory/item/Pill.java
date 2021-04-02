@@ -1,0 +1,41 @@
+package hitonoriol.madsand.entities.inventory.item;
+
+import java.util.HashMap;
+
+import hitonoriol.madsand.properties.Globals;
+
+public class Pill extends ScriptedConsumable {
+	public Pill(Pill protoItem) {
+		super(protoItem);
+	}
+
+	public Pill() {
+		super();
+	}
+
+	@Override
+	public Item copy() {
+		return new Pill(this);
+	}
+
+	@Override
+	protected HashMap<String, String> getScriptMap() {
+		return Globals.instance().pills;
+	}
+
+	@Override
+	protected int getBaseId() {
+		return Globals.instance().basePillId;
+	}
+
+	@Override
+	protected String getBaseName() {
+		return "Pill of ";
+	}
+
+	@Override
+	public Pill load(String name) {
+		super.load(name);
+		return this;
+	}
+}

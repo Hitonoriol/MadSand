@@ -1,18 +1,13 @@
 package hitonoriol.madsand.entities.inventory.item;
 
-import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Utils;
-import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.properties.Globals;
-import hitonoriol.madsand.properties.ItemProp;
+import java.util.HashMap;
 
-public class Scroll extends Item {
+import hitonoriol.madsand.properties.Globals;
+
+public class Scroll extends ScriptedConsumable {
 
 	public Scroll(Scroll protoItem) {
 		super(protoItem);
-
-		if (protoItem.useAction == null)
-			roll();
 	}
 
 	public Scroll() {
@@ -25,34 +20,32 @@ public class Scroll extends Item {
 	}
 
 	@Override
-	public void use(Player player) {
-		MadSand.notice("You read " + name);
-		super.use(player);
-		player.delItem(this, 1);
+	protected HashMap<String, String> getScriptMap() {
+		return Globals.instance().scrolls;
 	}
 
-	public Scroll roll() {
-		return load(Utils.randElement(Globals.instance().scrolls.keySet()));
+	@Override
+	protected int getBaseId() {
+		return Globals.instance().baseScrollId;
 	}
 
+	@Override
+	protected String getBaseName() {
+		return "Scroll of ";
+	}
+	
+	@Override
+	protected String getUseMsg() {
+		return "You read ";
+	}
+
+	@Override
 	public Scroll load(String name) {
-		Globals globals = Globals.instance();
-
-		if (id == Item.NULL_ITEM)
-			loadProperties(ItemProp.getItem(id = globals.baseScrollId));
-
-		this.name = "Scroll of " + name;
-		useAction = globals.scrolls.get(name);
-		quantity = 1;
+		super.load(name);
 		return this;
 	}
 
 	public static Scroll create(String name) {
 		return new Scroll().load(name);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && name.equals(((Item) obj).name);
 	}
 }
