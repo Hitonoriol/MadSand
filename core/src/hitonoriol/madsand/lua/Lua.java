@@ -28,7 +28,7 @@ public class Lua {
 	public static final String offlineRewardScript = "offline_reward.lua";
 
 	static {
-		globals = JsePlatform.standardGlobals();
+		reinitGlobals();
 	}
 
 	public static void init() {
@@ -45,6 +45,10 @@ public class Lua {
 		executeScript("globals.lua", Resources.SCRIPT_DIR);
 
 		onAction = Resources.readInternal(Resources.SCRIPT_DIR + onActionScript);
+	}
+	
+	private static void reinitGlobals() {
+		globals = JsePlatform.standardGlobals();
 	}
 
 	public static void register(String luaName, LuaValue object) {

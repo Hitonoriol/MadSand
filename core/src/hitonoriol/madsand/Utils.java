@@ -86,6 +86,10 @@ public class Utils {
 		System.out.print("[" + sdf.format(Calendar.getInstance().getTime()) + "] " + arg + "\n");
 	}
 
+	public static void out(String arg, Object... args) {
+		out(String.format(arg, args));
+	}
+
 	public static void out() {
 		System.out.println();
 	}

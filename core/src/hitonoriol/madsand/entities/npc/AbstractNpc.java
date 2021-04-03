@@ -266,11 +266,11 @@ public abstract class AbstractNpc extends Entity {
 	protected void attack(MapEntity target, int dmg) {
 		super.attack(target, dmg);
 
-		if (dmg > 0)
-			MadSand.print(stats.name + " hits " + target.getName() + " dealing " + dmg + " damage to it");
-
 		if (target instanceof Player)
 			attack((Player) target, dmg);
+
+		else if (dmg > 0)
+			MadSand.print(stats.name + " hits " + target.getName() + " dealing " + dmg + " damage");
 	}
 
 	@Override
@@ -493,6 +493,10 @@ public abstract class AbstractNpc extends Entity {
 			info += "* Might need some help" + Resources.LINEBREAK;
 
 		return info;
+	}
+
+	public boolean isEmpty() {
+		return this == Map.nullNpc;
 	}
 
 	public static enum State {

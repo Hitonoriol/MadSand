@@ -48,6 +48,10 @@ public class LuaUtils {
 	public static void notice(String msg) {
 		MadSand.notice(msg);
 	}
+	
+	public static void warn(String msg) {
+		MadSand.warn(msg);
+	}
 
 	public static int oneOf(String stringList) {
 		return Utils.oneOf(stringList);

@@ -21,8 +21,13 @@ public abstract class ScriptedConsumable extends Item {
 
 	@Override
 	public void use(Player player) {
-		super.use(player);
+		if (useAction == null)
+			useAction = getScript();
+
+		Utils.out("Using scripted consumable [%s] script {%s}", name, useAction);
+		
 		MadSand.notice(getUseMsg() + name);
+		super.use(player);
 		player.delItem(this, 1);
 	}
 
@@ -31,6 +36,10 @@ public abstract class ScriptedConsumable extends Item {
 	protected abstract int getBaseId();
 
 	protected abstract String getBaseName();
+
+	protected String getScript() {
+		return getScriptMap().get(name.replace(getBaseName(), ""));
+	}
 
 	protected String getUseMsg() {
 		return "You use ";
@@ -45,7 +54,7 @@ public abstract class ScriptedConsumable extends Item {
 			loadProperties(ItemProp.getItem(id = getBaseId()));
 
 		this.name = getBaseName() + name;
-		useAction = getScriptMap().get(name);
+		useAction = getScript();
 		quantity = 1;
 		return this;
 	}

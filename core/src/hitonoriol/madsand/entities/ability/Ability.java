@@ -18,7 +18,7 @@ import hitonoriol.madsand.properties.Globals;
 @JsonSubTypes({ @Type(ActiveAbility.class), @Type(PassiveAbility.class) })
 public abstract class Ability implements DynamicallyCastable<Ability> {
 	public int id;
-	public int lvl = 1;
+	public int lvl = 1, exp = 0;
 	public String name;
 	private LuaConsumer action;
 
@@ -32,8 +32,20 @@ public abstract class Ability implements DynamicallyCastable<Ability> {
 		action = LuaLambda.consumer(Lua.loadScript("ability/" + LuaUtils.getScriptName(name)));
 	}
 
-	public int levelUp() {
-		return ++lvl;
+	public boolean levelUp() {
+		int prevLvl = lvl;
+		if (++exp >= getLevelUpRequirement()) {
+			exp = 0;
+			++lvl;
+		}
+
+		Utils.out("%s [LVL %d]: %d/%d pills", name, lvl, exp, getLevelUpRequirement());
+
+		return lvl != prevLvl;
+	}
+
+	public int getLevelUpRequirement() {
+		return lvl * 2;
 	}
 
 	public static Ability get(int id) {

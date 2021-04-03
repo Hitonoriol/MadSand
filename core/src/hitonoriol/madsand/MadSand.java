@@ -119,7 +119,7 @@ public class MadSand extends Game {
 	public static Stage getStage() {
 		return game.currentScreen.get().getStage();
 	}
-	
+
 	public static GameWorldRenderer getRenderer() {
 		return gameWorld;
 	}
@@ -132,12 +132,20 @@ public class MadSand extends Game {
 		Gui.overlay.gameLog.print(arg);
 	}
 
+	public static void print(String arg, Object... args) {
+		print(String.format(arg, args));
+	}
+
 	public static void print(String msg, String color) {
 		Gui.overlay.gameLog.print(msg, color);
 	}
 
 	public static void notice(String msg) {
 		Gui.overlay.gameLog.notice(msg);
+	}
+
+	public static void notice(String msg, Object... args) {
+		notice(String.format(msg, args));
 	}
 
 	// New world is generated on game launch, so this thing ensures that new world won't be generated twice when you press "New Game" button
@@ -152,8 +160,7 @@ public class MadSand extends Game {
 		WORLDNAME = arg;
 	}
 
-	public void resume() {
-	}
+	public void resume() {}
 
 	public void resize(int width, int height) {
 		gameWorld.updateViewport();
@@ -161,8 +168,7 @@ public class MadSand extends Game {
 		Gui.overlay.updateWidgetPositions();
 	}
 
-	public void pause() {
-	}
+	public void pause() {}
 
 	public void dispose() {
 		Utils.out("End");

@@ -118,10 +118,19 @@ public class Player extends Entity {
 		Ability ability = Ability.get(id);
 		boolean firstTime = !abilities.contains(ability);
 
-		if (firstTime)
+		Utils.out("Adding ability %d, first time: %b", id, firstTime);
+
+		if (firstTime) {
 			abilities.add(ability);
-		else
-			abilities.get(abilities.indexOf(ability)).levelUp();
+			MadSand.notice("You learn " + ability.name);
+		} else {
+			ability = abilities.get(abilities.indexOf(ability));
+			if (ability.levelUp())
+				MadSand.notice("Your %s is now Level %d!", ability.name, ability.lvl);
+			else
+				MadSand.notice("Your %s (Level %d) gets a bit better [%d/%d]",
+						ability.name, ability.lvl, ability.exp, ability.getLevelUpRequirement());
+		}
 
 		return firstTime;
 	}
@@ -285,6 +294,23 @@ public class Player extends Entity {
 		if (target instanceof AbstractNpc)
 			attack((AbstractNpc) target, dmg);
 	}
+
+	/* Melee Attack method for Ability scripts */
+	private void performAttack(Pair coords, int dmg) {
+		Map map = MadSand.world.getCurLoc();
+		if (super.distanceTo(coords) > 1)
+			return;
+
+		if (map.isFreeTile(coords))
+			return;
+
+		attack(map.getMapEntity(coords), dmg);
+	}
+
+	public void attack(Pair coords, int dmg) {
+		doAction(stats.meleeAttackCost, () -> performAttack(coords, dmg));
+	}
+	/* ***** */
 
 	public boolean canPerformRangedAttack() {
 		Optional<Projectile> projectile = stats.getEquippedProjectile();
