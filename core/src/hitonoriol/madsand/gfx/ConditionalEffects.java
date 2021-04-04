@@ -15,16 +15,16 @@ import hitonoriol.madsand.gfx.Effects.TextureEffect;
 public class ConditionalEffects<T extends Item> {
 	private Map<Predicate<T>, Function<T, TextureEffect>> effects = new LinkedHashMap<>(3);
 	private RandomDataGenerator itemRandom = new RandomDataGenerator();
+	private Predicate<T> noCondition = item -> true;
 
-	private ConditionalEffects() {
-	}
+	private ConditionalEffects() {}
 
 	public void apply(T item) {
 		itemRandom.reSeed(item.hashCode());
 		effects.forEach((itemPredicate, effect) -> {
 			if (itemPredicate.test(item)) {
 				item.applyEffects(processor -> processor.addEffect(effect.apply(item)));
-				Utils.out("Woo! Applied fx " + " to " + item.hashCode());
+				Utils.out("Woo! Applied fx to %s", item);
 			}
 		});
 		item.applyEffects(processor -> processor.applyEffects());
@@ -34,11 +34,15 @@ public class ConditionalEffects<T extends Item> {
 		effects.put(predicate, effectEntry);
 		return this;
 	}
-	
+
+	public ConditionalEffects<T> addEffect(Function<T, TextureEffect> effectEntry) {
+		return addEffect(noCondition, effectEntry);
+	}
+
 	public RandomDataGenerator random() {
 		return itemRandom;
 	}
-	
+
 	public static <T extends Item> ConditionalEffects<T> create(Consumer<ConditionalEffects<T>> initializer) {
 		ConditionalEffects<T> condFx = new ConditionalEffects<>();
 		initializer.accept(condFx);

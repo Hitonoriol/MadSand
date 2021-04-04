@@ -88,7 +88,7 @@ public class Inventory {
 		}
 	}
 
-	public int getSameCell(Item item) {
+	public int getIndex(Item item) {
 		return items.indexOf(item);
 	}
 
@@ -112,7 +112,7 @@ public class Inventory {
 		return getSameCell(id, quantity) != -1;
 	}
 
-	public int getSameCell(int id) {
+	public int getIndex(int id) {
 		int pos = 0;
 		for (Item item : items) {
 			if (item.id == id)
@@ -123,7 +123,7 @@ public class Inventory {
 	}
 
 	public int getSameCell(int id, int q) { // find q or more items
-		int i = getSameCell(id);
+		int i = getIndex(id);
 		if (i != -1) {
 			if (items.get(i).quantity < q)
 				return -1;
@@ -133,12 +133,16 @@ public class Inventory {
 	}
 
 	public Item getItem(Item referenceItem) {
-		return getItem(referenceItem.id);
+		int itemIdx = getIndex(referenceItem);
+		if (itemIdx == -1)
+			return Item.nullItem;
+
+		return items.get(itemIdx);
 	}
 
 	public Item getItem(int id) { // get item by its id, not the index
 		Item ret = Item.nullItem;
-		int pos = getSameCell(id);
+		int pos = getIndex(id);
 
 		if (pos != -1)
 			ret = items.get(pos);
@@ -229,7 +233,7 @@ public class Inventory {
 
 		Item updItem;
 		float newWeight = item.getWeight() + curWeight;
-		int existingIdx = getSameCell(item.id);
+		int existingIdx = getIndex(item);
 
 		if (!item.equals(getItemByIndex(existingIdx)))
 			existingIdx = -1;

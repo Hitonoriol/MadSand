@@ -170,7 +170,7 @@ public class Map {
 	public boolean searchPath(int startX, int startY, int endX, int endY, DefaultGraphPath<Node> path) {
 		Node start = nodeMap.get(startX, startY), end = nodeMap.get(endX, endY);
 
-		if (start == null || end == null) 
+		if (start == null || end == null)
 			return false;
 
 		return pathFinder.searchNodePath(start, end, heuristic, path);
@@ -248,7 +248,7 @@ public class Map {
 	public void setSize(int xsz, int ysz) {
 		this.xsz = xsz;
 		this.ysz = ysz;
-		
+
 	}
 
 	@JsonIgnore
@@ -1025,6 +1025,10 @@ public class Map {
 
 	public boolean npcExists(int x, int y) {
 		return !getNpc(x, y).equals(nullNpc);
+	}
+
+	public boolean npcExists(Pair coords) {
+		return npcExists(coords.x, coords.y);
 	}
 
 	public boolean moveNpc(AbstractNpc npc, int x, int y) { // moves npc only on the grid(not on the screen) to process smooth movement;

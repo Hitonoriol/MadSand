@@ -178,6 +178,12 @@ public class Item implements DynamicallyCastable<Item> {
 		return new HashCodeBuilder(14407, 7177).append(id).toHashCode();
 	}
 
+	@Override
+	public String toString() {
+		return String.format("[%d] {%s} %d %s (%.2f kg)",
+				hashCode(), getClass().getSimpleName(), quantity, name, getWeight());
+	}
+
 	// list string format: id1/quantity1:id2/quantity2:...
 	public static void parseListString(String listString, BiConsumer<Integer, Integer> listItemConsumer) {
 		if (listString.equals(EMPTY_ITEM))

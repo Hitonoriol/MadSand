@@ -2,12 +2,19 @@ package hitonoriol.madsand.entities.inventory.item;
 
 import java.util.HashMap;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.gfx.ConditionalEffects;
+import hitonoriol.madsand.gfx.Effects;
 import hitonoriol.madsand.properties.ItemProp;
 
 public abstract class ScriptedConsumable extends Item {
+	private static ConditionalEffects<ScriptedConsumable> textureFx = ConditionalEffects.create(fx -> fx
+			.addEffect(item -> Effects.colorize(Utils.randomColor(fx.random()))));
+
 	public ScriptedConsumable(ScriptedConsumable protoItem) {
 		super(protoItem);
 
@@ -25,10 +32,16 @@ public abstract class ScriptedConsumable extends Item {
 			useAction = getScript();
 
 		Utils.out("Using scripted consumable [%s] script {%s}", name, useAction);
-		
+
 		MadSand.notice(getUseMsg() + name);
 		super.use(player);
 		player.delItem(this, 1);
+	}
+
+	@Override
+	protected void refreshTextureEffects() {
+		super.refreshTextureEffects();
+		textureFx.apply(this);
 	}
 
 	protected abstract HashMap<String, String> getScriptMap();
@@ -62,5 +75,13 @@ public abstract class ScriptedConsumable extends Item {
 	@Override
 	public boolean equals(Object obj) {
 		return super.equals(obj) && name.equals(((Item) obj).name);
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(48481, 29411)
+				.append(super.hashCode())
+				.append(name)
+				.toHashCode();
 	}
 }

@@ -91,7 +91,8 @@ public class Utils {
 	}
 
 	public static void out() {
-		System.out.println();
+		if (debugMode)
+			System.out.println();
 	}
 
 	public static void die(String... msg) {

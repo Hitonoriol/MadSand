@@ -17,11 +17,11 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 	public long uid = 0;
 	public boolean cursed = false;
 
-	public static ConditionalEffects<AbstractEquipment> equipEffects = ConditionalEffects.create(effects -> effects
-			.addEffect(equipment -> Utils.percentRoll(effects.random(), 40),
-					item -> Effects.colorize(Utils.randomColor(effects.random())))
+	public static ConditionalEffects<AbstractEquipment> textureFx = ConditionalEffects.create(fx -> fx
+			.addEffect(equipment -> Utils.percentRoll(fx.random(), 40),
+					item -> Effects.colorize(Utils.randomColor(fx.random())))
 
-			.addEffect(equipment -> Utils.percentRoll(effects.random(), 5),
+			.addEffect(equipment -> Utils.percentRoll(fx.random(), 5),
 					item -> Effects.colorInversion)
 
 			.addEffect(equipment -> equipment.cursed,
@@ -66,7 +66,7 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 	@Override
 	public void refreshTextureEffects() {
 		super.refreshTextureEffects();
-		equipEffects.apply(this);
+		textureFx.apply(this);
 	}
 
 	@Override

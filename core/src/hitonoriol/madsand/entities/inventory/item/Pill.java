@@ -15,7 +15,7 @@ public class Pill extends ScriptedConsumable {
 
 	@Override
 	public Item copy() {
-		return new Pill(this);
+		return new Pill(this).roll();
 	}
 
 	@Override

@@ -231,7 +231,7 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public boolean hasItem(int id) {
-		return inventory.getSameCell(id) != -1;
+		return inventory.getIndex(id) != -1;
 	}
 
 	public boolean hasItem(Item item) {

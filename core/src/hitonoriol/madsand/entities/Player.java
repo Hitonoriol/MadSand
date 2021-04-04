@@ -221,7 +221,7 @@ public class Player extends Entity {
 	}
 
 	public void checkHands(int id) {
-		int itemIdx = inventory.getSameCell(id);
+		int itemIdx = inventory.getIndex(id);
 		if (itemIdx == -1) {
 			if (stats.hand().id == id)
 				stats.equipment.unEquip(EquipSlot.MainHand);
@@ -354,7 +354,10 @@ public class Player extends Entity {
 
 	@Override
 	public void meleeAttack(Direction dir) {
-		doAction(stats.meleeAttackCost, () -> performMeleeAttack(dir));
+		if (MadSand.world.getCurLoc().npcExists(coords.set(x, y).addDirection(dir)))
+			doAction(stats.meleeAttackCost, () -> performMeleeAttack(dir));
+		else
+			turn(dir);
 	}
 
 	public int getKillCount(int id) {
@@ -518,6 +521,12 @@ public class Player extends Entity {
 	@Override
 	public boolean addItem(Item item) {
 		if (super.addItem(item)) {
+
+			Utils.out();
+			Utils.out("Player receives %s", item);
+			Utils.out("In inventory: %s", inventory.getItem(item));
+			Utils.out();
+
 			if (!item.name.isEmpty() && item.quantity > 0)
 				MadSand.notice("You get " + item.quantity + " " + item.name);
 
