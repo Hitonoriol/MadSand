@@ -11,7 +11,8 @@ public class Tutorial {
 	public static HashMap<String, String> strings = new HashMap<String, String>();
 
 	public static void show(String name) {
-		GameDialog.generateDialogChain(strings.get(name).replace(System.lineSeparator(), ""), Gui.overlay).show();
+		if (!Prefs.values().skipTutorials)
+			GameDialog.generateDialogChain(strings.get(name).replace(System.lineSeparator(), ""), Gui.overlay).show();
 	}
 
 }

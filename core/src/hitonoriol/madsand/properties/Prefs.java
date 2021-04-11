@@ -23,8 +23,10 @@ public class Prefs {
 	public static int MIN_SCREEN_WIDTH = 1100;
 	public int screenWidth = 1280, screenHeight = 720;
 	public boolean fullscreen = false;
-
 	DisplayMode displayModes[];
+
+	public boolean enableRealtimeMechanics = true;
+	public boolean skipTutorials = false;
 
 	@JsonIgnore
 	public DisplayMode[] getDisplayModes() {
