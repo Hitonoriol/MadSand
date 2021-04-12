@@ -13,6 +13,7 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.widgets.AutoCheckBox;
+import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.properties.Prefs;
 
 public class SettingsDialog extends GameDialog {
@@ -27,6 +28,8 @@ public class SettingsDialog extends GameDialog {
 
 	Table buttonTbl = new Table(Gui.skin);
 
+	static float HEIGHT = 350;
+
 	public SettingsDialog() {
 		super(MadSand.mainMenu);
 		createDialog();
@@ -39,7 +42,10 @@ public class SettingsDialog extends GameDialog {
 
 		buttonTbl.align(Align.left);
 		buttonTbl.defaults().align(Align.left);
-		super.add(buttonTbl).padLeft(Gui.BTN_HEIGHT).padRight(Gui.BTN_HEIGHT).row();
+		super.add(new AutoFocusScrollPane(buttonTbl))
+				.height(HEIGHT)
+				.padLeft(Gui.BTN_HEIGHT).padRight(Gui.BTN_HEIGHT)
+				.row();
 		super.skipLine();
 
 		addTitle("Video");

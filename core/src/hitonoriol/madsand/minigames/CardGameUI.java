@@ -54,7 +54,7 @@ public class CardGameUI extends GameDialog {
 			remove();
 			Gui.drawOkDialog("Oops",
 					"As you were about to press one of the machine's buttons it exploded into pieces!");
-			Gui.overlay.processActionMenu();
+			Gui.overlay.refreshActionButton();
 			return;
 		}
 	}

@@ -247,8 +247,8 @@ public class Overlay extends Stage {
 		return gameLog.logLabels;
 	}
 
-	public void processActionMenu() {
-		actionButton.processActionMenu();
+	public void refreshActionButton() {
+		actionButton.refresh();
 	}
 
 	public void closeGameContextMenu() {
@@ -260,7 +260,7 @@ public class Overlay extends Stage {
 	}
 
 	public void hideActionBtn() {
-		actionButton.hideActionBtn();
+		actionButton.hideButton();
 	}
 
 	public void toggleStatsWindow() {

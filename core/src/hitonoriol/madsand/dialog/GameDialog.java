@@ -101,6 +101,7 @@ public class GameDialog extends Dialog {
 	public boolean remove() {
 		boolean ret = super.remove();
 		Gui.gameResumeFocus(this);
+		Gui.overlay.refreshActionButton();
 		return ret;
 	}
 

@@ -14,7 +14,7 @@ import hitonoriol.madsand.world.World;
 
 public class GameContextMenu extends Table {
 	Skin skin;
-	float WIDTH = 130;
+	float WIDTH = 155, HEIGHT = Gui.FONT_S * 3;
 
 	int clickX, clickY;
 
@@ -31,6 +31,8 @@ public class GameContextMenu extends Table {
 		Player player = World.player;
 		Item hand = player.stats.hand();
 
+		super.defaults().size(WIDTH, HEIGHT);
+
 		if (!map.getObject(clickX, clickY).equals(Map.nullObject))
 			addButton("Interact", () -> {
 				player.lookAtMouse(clickX, clickY, true);
@@ -40,7 +42,10 @@ public class GameContextMenu extends Table {
 		if (!map.getNpc(clickX, clickY).equals(Map.nullNpc))
 			addButton("Attack", () -> {
 				player.lookAtMouse(clickX, clickY, true);
-				player.meleeAttack();
+				if (player.canPerformRangedAttack())
+					player.rangedAttack(map.getNpc(clickX, clickY));
+				else
+					player.meleeAttack();
 			});
 
 		if (clickX == player.x && clickY == player.y)
@@ -57,7 +62,8 @@ public class GameContextMenu extends Table {
 	private void addButton(String text, Runnable action) {
 		TextButton button = new TextButton(text, skin);
 		button.getLabel().setWrap(true);
-		super.add(button).width(WIDTH).maxWidth(WIDTH + 100).minHeight(20).row();
+
+		super.add(button).row();
 
 		Gui.setAction(button, () -> {
 			action.run();

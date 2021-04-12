@@ -594,7 +594,6 @@ public class Player extends Entity {
 	}
 
 	public void interact() {
-		Gui.overlay.hideActionBtn();
 		interact(stats.look);
 	}
 
@@ -723,6 +722,11 @@ public class Player extends Entity {
 	}
 
 	private void interact(Direction direction) {
+		MapEntity entity = mapEntityInFront();
+
+		if (!entity.as(AbstractNpc.class).map(npc -> npc.isNeutral() || entity.isEmpty()).orElse(true))
+			return;
+
 		doAction(stats.minorCost, () -> performInteraction(direction));
 	}
 
@@ -857,6 +861,7 @@ public class Player extends Entity {
 	}
 
 	public void respawn() {
+		Gui.overlay.refreshActionButton();
 		MadSand.world.setLayer(Location.LAYER_OVERWORLD);
 		MadSand.world.getCurWPos();
 		int wx = MadSand.world.wx();
@@ -923,6 +928,10 @@ public class Player extends Entity {
 		return new Pair(x, y).addDirection(stats.look);
 	}
 
+	public MapEntity mapEntityInFront() {
+		return MadSand.world.getCurLoc().getMapEntity(coords.set(x, y).addDirection(stats.look));
+	}
+
 	public MapObject objectLookingAt() {
 		return MadSand.world.getCurLoc().getObject(x, y, stats.look);
 	}
@@ -934,7 +943,7 @@ public class Player extends Entity {
 	@Override
 	public void turn(Direction dir) {
 		super.turn(dir);
-		Gui.overlay.processActionMenu();
+		Gui.overlay.refreshActionButton();
 	}
 
 	public boolean canTravel() {
@@ -966,6 +975,15 @@ public class Player extends Entity {
 		super.teleport(x, y);
 		Gdx.graphics.requestRendering();
 		MadSand.getRenderer().setWorldCamPosition(x, y);
+	}
+
+	@Override
+	public void heal(int by) {
+		boolean atMaxHp = stats.hp == stats.mhp;
+		super.heal(by);
+
+		if (by > 0 && !atMaxHp)
+			MadSand.notice("Your wounds are healing [+" + by + " HP]");
 	}
 
 	private void rest(int ticks, boolean verbose) {
@@ -1137,9 +1155,10 @@ public class Player extends Entity {
 	}
 
 	public void objectInFront() {
-		int obj = MadSand.world.getObjID(x, y, stats.look);
-		if ((obj != MapObject.COLLISION_MASK_ID) && (obj != MapObject.NULL_OBJECT_ID))
-			MadSand.print("You see: " + ObjectProp.getName(obj));
+		MapEntity entity = mapEntityInFront();
+
+		if (!entity.isEmpty())
+			MadSand.print("You see: " + entity.getName());
 	}
 
 	@JsonIgnore

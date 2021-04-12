@@ -412,7 +412,7 @@ public class World {
 		} else { // this means we are in the cave
 			delObj(player.x, player.y);
 			putMapTile(player.x, player.y, TILE_CAVE_EXIT);
-			Gui.overlay.processActionMenu();
+			Gui.overlay.refreshActionButton();
 			updateLight();
 			place = "cave";
 		}
@@ -438,7 +438,7 @@ public class World {
 		else
 			MadSand.print("You get back to dungeon level " + worldMap.curLayer);
 
-		Gui.overlay.processActionMenu();
+		Gui.overlay.refreshActionButton();
 		return ret;
 	}
 
@@ -619,6 +619,7 @@ public class World {
 		boolean hostile;
 		float actionDelay = timeSkip ? 0 : ACT_DELAY;
 		float maxSimDst = getMaxSimDistance();
+		float maxDelay = 0;
 		for (Entity entity : queue) {
 			if (timeSkip && entity.distanceTo(player) > maxSimDst)
 				continue;
@@ -635,15 +636,18 @@ public class World {
 						Keyboard.stopInput();
 				}
 
+				float actDelay = ((hostile && pausePlayer) ? 0 : actionDelay) + entity.getActDelay();
+				maxDelay = Math.max(maxDelay, actDelay);
+
 				actDelayTimer.scheduleTask(new Timer.Task() {
 					@Override
 					public void run() {
 						entity.act(time);
-						//Utils.out(entity.getName() + " finished acting. " + entity.x + ", " + entity.y);
+						/*Utils.out(entity.getName() + " finished acting. " + entity.x + ", " + entity.y);*/
 						if (!entity.isStepping())
 							Keyboard.resumeInput();
 					}
-				}, ((hostile && pausePlayer) ? 0 : actionDelay) + entity.getActDelay());
+				}, actDelay);
 			} else
 				entity.act(time);
 		}
@@ -651,11 +655,12 @@ public class World {
 		Timer.instance().scheduleTask(new Timer.Task() {
 			@Override
 			public void run() {
-				Gui.overlay.processActionMenu();
+				/*Utils.out("Post-act actions");*/
+				Gui.overlay.refreshActionButton();
 				if (timeSkip)
 					endTimeSkip();
 			}
-		}, actionDelay + 0.01f);
+		}, maxDelay + 0.01f);
 	}
 
 	public void updateLight() {

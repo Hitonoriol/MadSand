@@ -1,11 +1,10 @@
 package hitonoriol.madsand.gui.widgets;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
@@ -28,17 +27,17 @@ import hitonoriol.madsand.world.World;
 
 public class ActionButton extends Table {
 	public Skin skin;
-	public static final float ACTION_TBL_YPOS = Gdx.graphics.getHeight() / 6f;
 
 	public OverlayMouseoverListener inGameBtnListener;
-	public ChangeListener npcInteractListener;
-	public ChangeListener objInteractListener;
-	public ChangeListener travelListener;
-	public ChangeListener useItemListener;
+	public Runnable npcInteractAction;
+	public Runnable objInteractAction;
+	public Runnable travelAction;
+	public Runnable useItemAction;
 
 	public TextButton interactButton;
 
-	private final float WIDTH = 300;
+	private static final float WIDTH = 325, HEIGHT = 4.75f * Gui.FONT_S;
+	public static final float ACTION_TBL_YPOS = Gdx.graphics.getHeight() / 5.75f;
 
 	public ActionButton() {
 		super();
@@ -46,59 +45,71 @@ public class ActionButton extends Table {
 		skin = Gui.skin;
 
 		interactButton = new TextButton("", skin);
+		interactButton.getLabel().setWrap(true);
 		super.setVisible(false);
 		super.setPosition(Gui.horizontalCenter(this), ACTION_TBL_YPOS);
-		super.add(interactButton).width(WIDTH).row();
+		super.defaults().size(WIDTH, HEIGHT);
 
 		inGameBtnListener = new OverlayMouseoverListener();
 
-		useItemListener = new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				World.player.useItem();
-				setVisible(false);
-			}
+		useItemAction = () -> World.player.useItem();
+		npcInteractAction = () -> World.player.interact();
+
+		objInteractAction = () -> {
+			World.player.interact();
+			Gui.gameUnfocused = true;
+			refresh();
 		};
 
-		npcInteractListener = new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				World.player.interact();
-				setVisible(false);
-			}
-		};
-
-		objInteractListener = new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				World.player.interact();
-				Gui.gameUnfocused = true;
-				processActionMenu();
-			}
-		};
-
-		travelListener = new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				MadSand.world.travel();
-				setVisible(false);
-			}
-		};
+		travelAction = () -> MadSand.world.travel();
 	}
 
-	public void hideActionBtn() {
+	public void hideButton() {
 		super.removeActor(interactButton);
 		super.setVisible(false);
 	}
 
-	private void activateInteractBtn(TextButton btn, String text, ChangeListener listener) {
+	private void activateButton(String text, Runnable lmbAction, Runnable rmbAction) {
 		super.setVisible(true);
-		btn.setVisible(true);
-		btn.setText(text);
-		btn.addListener(listener);
+		interactButton.setVisible(true);
+		interactButton.setText(text);
+		Gui.setClickAction(interactButton, Buttons.LEFT, () -> {
+			lmbAction.run();
+			hideButton();
+		});
+		Gui.setClickAction(interactButton, Buttons.RIGHT, () -> {
+			rmbAction.run();
+			hideButton();
+		});
 	}
 
-	public void processActionMenu() {
+	private void activateButton(String text, Runnable lmbAction) {
+		activateButton(text, lmbAction, () -> {});
+	}
+
+	private void initButton() {
+		super.clear();
+		super.add(interactButton).row();
+		super.addListener(inGameBtnListener);
+	}
+
+	private String npcInteractionString(AbstractNpc npc) {
+		String str = "";
+
+		if (npc.isNeutral())
+			str = "[LMB] " + npc.interactButtonString() + npc.getName()
+					+ Resources.LINEBREAK + Resources.LINEBREAK
+					+ "[RMB] Attack";
+
+		return str;
+	}
+
+	public void refresh() {
+		if (Gui.isGameUnfocused()) {
+			hideButton();
+			return;
+		}
+
 		Map loc = MadSand.world.getCurLoc();
 
 		Player player = World.player;
@@ -113,45 +124,41 @@ public class ActionButton extends Table {
 		Item item = player.stats.hand();
 		String tileAction = TileProp.getOnInteract(tile.id);
 		String objAction = ObjectProp.getOnInteract(object.id);
-
-		super.removeActor(interactButton);
-		interactButton = new TextButton("", skin);
-		super.add(interactButton).width(WIDTH).row();
-		super.addListener(inGameBtnListener);
 		boolean holdsShovel = player.stats.isToolEquipped(Tool.Type.Shovel);
-
 		String tileMsg = "Interact with ";
 
+		initButton();
+
 		if (item.is(CropSeeds.class) && tile.id == ItemProp.getCropSoil(item.id))
-			activateInteractBtn(interactButton, "Plant " + item.name, useItemListener);
+			activateButton("Plant " + item.name, useItemAction);
+
 		else if (player.canTravel())
-			activateInteractBtn(interactButton, "Travel to the next sector", travelListener);
-		else if (!tile.equals(Map.nullTile) // Tile interaction button
+			activateButton("Travel to the next sector", travelAction);
+
+		else if (!tile.equals(Map.nullTile) // Tile interaction
 				&& (!tileAction.equals(Resources.emptyField)
 						|| (tileItem != -1 && holdsShovel))) {
 
 			if (tileItem != -1 && holdsShovel)
 				tileMsg = "Dig ";
 
-			activateInteractBtn(interactButton, tileMsg + TileProp.getName(tile.id), new ChangeListener() {
-				@Override
-				public void changed(ChangeEvent event, Actor actor) {
-					if (!holdsShovel)
-						Lua.execute(tileAction);
-					else
-						player.useItem();
-					Gui.gameUnfocused = false;
-					Gui.overlay.showTooltip();
-					hideActionBtn();
-				}
+			activateButton(tileMsg + TileProp.getName(tile.id), () -> {
+				if (!holdsShovel)
+					Lua.execute(tileAction);
+				else
+					player.useItem();
+				Gui.gameUnfocused = false;
+				Gui.overlay.showTooltip();
+				hideButton();
 			});
 
-		} else if (!npc.equals(Map.nullNpc) && !Gui.dialogActive && npc.friendly) { //NPC interaction button
-			activateInteractBtn(interactButton, npc.interactButtonString() + npc.stats.name, npcInteractListener);
+		} else if (!npc.equals(Map.nullNpc) && npc.isNeutral())
+			activateButton(npcInteractionString(npc), npcInteractAction, () -> player.meleeAttack());
 
-		} else if (!object.equals(Map.nullObject) && !objAction.equals(Resources.emptyField)) // Map object interaction button
-			activateInteractBtn(interactButton, "Interact with " + object.name, objInteractListener);
+		else if (!object.equals(Map.nullObject) && !objAction.equals(Resources.emptyField)) // Map object interaction button
+			activateButton("Interact with " + object.name, objInteractAction);
+
 		else
-			hideActionBtn();
+			hideButton();
 	}
 }

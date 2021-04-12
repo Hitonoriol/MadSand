@@ -36,7 +36,7 @@ public class Loot {
 				ret += " ";
 			++i;
 		}
-		lootStr = ret;
+		lootStr = ret.trim();
 	}
 
 	public boolean isEmpty() {
