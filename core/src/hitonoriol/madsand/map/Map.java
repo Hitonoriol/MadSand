@@ -92,6 +92,11 @@ public class Map {
 		rollSize();
 		purge();
 	}
+	
+	@JsonIgnore
+	public Graph getPathfindingGraph() {
+		return graph;
+	}
 
 	public void refreshGraph() {
 		Utils.out("Rebuilding pathfinding graph...");
@@ -356,7 +361,7 @@ public class Map {
 		mapProductionStations = new ArrayList<>();
 
 		graph = new Graph();
-		nodeMap = new NodeMap(xsz, ysz);
+		nodeMap = new NodeMap(graph, xsz, ysz);
 		heuristic = new DistanceHeuristic();
 		return this;
 	}

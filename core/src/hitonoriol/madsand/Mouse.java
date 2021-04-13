@@ -60,6 +60,10 @@ public class Mouse {
 		cellInfo.set(wx, wy);
 		pointingAtObject = cellInfo.isCellOccupied();
 		highlightRangedTarget();
+		refreshTooltip();
+	}
+	
+	public static void refreshTooltip() {
 		Gui.overlay.getTooltip().setText(cellInfo.getInfo());
 	}
 
@@ -131,9 +135,11 @@ public class Mouse {
 		if (pathToCursor.isEmpty())
 			return;
 
-		Node destination = pathToCursor.getDestination();
-		clickAction.accept(destination.x, destination.y);
+		BiConsumer<Integer, Integer> action = clickAction;
 		cancelClickAction();
+
+		Node destination = pathToCursor.getDestination();
+		action.accept(destination.x, destination.y);
 	}
 
 	private static final int CLICK_CUR_TILE = 0, CLICK_ADJ_TILE = 1;
@@ -156,8 +162,10 @@ public class Mouse {
 		AbstractNpc npc = cellInfo.getNpc();
 		Player player = World.player;
 
-		if ((player.isStepping()) || Gui.isGameUnfocused() || !pointingAtObject)
+		if ((player.isMoving()) || Gui.isGameUnfocused() || !pointingAtObject)
 			return;
+		
+		refreshTooltip();
 
 		if (currentTileClicked) {
 			if (loot != Map.nullLoot)

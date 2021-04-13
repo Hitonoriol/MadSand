@@ -23,6 +23,7 @@ import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.map.Map;
+import hitonoriol.madsand.pathfinding.Graph;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.WorldGenProp;
@@ -598,12 +599,17 @@ public class World {
 			tick = 0;
 			hourTick();
 		}
+
+		getCurLoc().getPathfindingGraph().reIndex();
 	}
 
 	public void timeSubtick(float time) { // Gets called on every action player does, time = % of max AP(speed) 
 		Map loc = getCurLoc();
 		HashMap<Pair, AbstractNpc> npcs = loc.getNpcs();
 		ArrayList<Entity> queue = new ArrayList<Entity>();
+		Graph graph = loc.getPathfindingGraph();
+
+		graph.reIndex();
 
 		//Utils.out("\n\n* New subtick, time passed=" + time);
 
@@ -644,7 +650,7 @@ public class World {
 					public void run() {
 						entity.act(time);
 						/*Utils.out(entity.getName() + " finished acting. " + entity.x + ", " + entity.y);*/
-						if (!entity.isStepping())
+						if (!entity.isMoving())
 							Keyboard.resumeInput();
 					}
 				}, actDelay);
@@ -657,6 +663,7 @@ public class World {
 			public void run() {
 				/*Utils.out("Post-act actions");*/
 				Gui.overlay.refreshActionButton();
+				graph.reIndex();
 				if (timeSkip)
 					endTimeSkip();
 			}

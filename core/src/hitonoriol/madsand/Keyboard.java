@@ -74,7 +74,7 @@ public class Keyboard {
 	}
 
 	private static void pollTurnKeys() {
-		if (World.player.isStepping())
+		if (World.player.isMoving())
 			return;
 
 		if (Gdx.input.isKeyJustPressed(Keys.UP))
@@ -165,7 +165,7 @@ public class Keyboard {
 		}
 
 		if (Gdx.input.isKeyJustPressed(Keys.Y))
-			Mouse.setClickAction((x, y) -> World.player.teleport(x, y), World.player.fov);
+			Mouse.setClickAction((x, y) -> World.player.move(Mouse.getPathToCursor()), World.player.fov);
 
 		if (Gdx.input.isKeyPressed(Keys.NUMPAD_3)) {
 			MadSand.getRenderer().changeZoom(0.01f);

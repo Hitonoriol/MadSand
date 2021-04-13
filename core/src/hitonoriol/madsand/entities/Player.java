@@ -77,6 +77,7 @@ public class Player extends Entity {
 	@JsonIgnore
 	public PlayerStats stats; // Reference to the same Stats object as super.stats
 	float elapsedTime;// For player animation
+	float origMoveSpeed = 0, runSpeedCoef = 3.5f;
 
 	public int targetedByNpcs = 0;
 	public Set<Integer> unlockedItems = new HashSet<>(); // set of items player obtained at least once
@@ -891,7 +892,7 @@ public class Player extends Entity {
 	}
 
 	public Direction lookAtMouse(int x, int y, boolean diagonal) {
-		if (isStepping())
+		if (isMoving())
 			return stats.look;
 
 		Direction dir;
@@ -1091,13 +1092,31 @@ public class Player extends Entity {
 
 	@Override
 	public boolean walk(Direction dir) {
-
 		if (Keyboard.inputIgnored())
 			return false;
 
 		if (canWalk(dir))
 			doAction(stats.walkCost, () -> performWalk(dir));
 		return true;
+	}
+
+	@Override
+	public void stopMovement() {
+		if (origMoveSpeed > 0 && origMoveSpeed < movementSpeed)
+			movementSpeed = origMoveSpeed;
+
+		super.stopMovement();
+	}
+
+	@Override
+	protected void pollMovementQueue() {
+		if (!hasQueuedMovement())
+			return;
+
+		Keyboard.resumeInput();
+		origMoveSpeed = movementSpeed;
+		movementSpeed *= runSpeedCoef;
+		walk(movementQueue.poll());
 	}
 
 	@Override
@@ -1163,7 +1182,7 @@ public class Player extends Entity {
 
 	@JsonIgnore
 	public TextureRegion getSprite() {
-		if (!isStepping())
+		if (!isMoving())
 			return super.getSprite();
 
 		Animation<TextureRegion> anim = null;

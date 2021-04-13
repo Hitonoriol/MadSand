@@ -7,23 +7,23 @@ import hitonoriol.madsand.containers.Pair;
 
 public class NodeMap {
 	private Map<Pair, Node> map = new HashMap<>();
+	private Graph graph;
 	private Pair coords = new Pair();
-	private int idx = 0;
 	public int width, height;
 
-	public NodeMap(int width, int height) {
+	public NodeMap(Graph graph, int width, int height) {
+		this.graph = graph;
 		this.width = width;
 		this.height = height;
 	}
 
 	public Node putNew(int x, int y) {
-		Node node = new Node(x, y, idx++);
+		Node node = new Node(x, y, graph.getNodeCount());
 		map.put(new Pair(x, y), node);
 		return node;
 	}
 
 	public Node remove(int x, int y) {
-		--idx;
 		return map.remove(coords.set(x, y));
 	}
 
@@ -40,7 +40,6 @@ public class NodeMap {
 	}
 
 	public void clear() {
-		idx = 0;
 		map.clear();
 	}
 }

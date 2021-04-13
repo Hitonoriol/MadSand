@@ -1,6 +1,8 @@
 package hitonoriol.madsand.entities;
 
+import java.util.ArrayDeque;
 import java.util.Comparator;
+import java.util.Queue;
 import java.util.function.Predicate;
 
 import org.apache.commons.lang3.mutable.MutableBoolean;
@@ -59,12 +61,14 @@ public abstract class Entity extends MapEntity {
 	public Inventory inventory;
 	public Stats stats;
 
+	protected Queue<Direction> movementQueue = new ArrayDeque<>();
+
 	@JsonIgnore
 	public float stepy = MadSand.TILESIZE;
 	@JsonIgnore
 	public float stepx = MadSand.TILESIZE;
 
-	boolean stepping = false;
+	boolean moving = false;
 
 	public Entity(String name) {
 		stats = isPlayer() ? new PlayerStats() : new Stats();
@@ -134,19 +138,33 @@ public abstract class Entity extends MapEntity {
 		return this.x == x && this.y == y;
 	}
 
-	public boolean isStepping() {
-		return stepping;
+	public boolean isMoving() {
+		return moving;
 	}
 
-	public void setStepping(boolean val) {
-		stepping = val;
+	public void setMoving(boolean val) {
+		moving = val;
+	}
+
+	public void queueMovement(Direction dir) {
+		movementQueue.add(dir);
+	}
+
+	public boolean hasQueuedMovement() {
+		return !movementQueue.isEmpty();
+	}
+
+	protected void pollMovementQueue() {
+		if (hasQueuedMovement())
+			move(movementQueue.poll());
 	}
 
 	public void stopMovement() {
-		stepping = false;
+		moving = false;
 		stepx = stepy = MadSand.TILESIZE;
 		if (Keyboard.inputIgnored())
 			Keyboard.resumeInput();
+		pollMovementQueue();
 	}
 
 	public Inventory initInventory() {
@@ -429,7 +447,7 @@ public abstract class Entity extends MapEntity {
 
 	@JsonIgnore
 	public PairFloat getWorldPos() {
-		if (!isStepping())
+		if (!isMoving())
 			return globalPos;
 
 		PairFloat worldPos = new PairFloat(globalPos);
@@ -478,10 +496,17 @@ public abstract class Entity extends MapEntity {
 				++x;
 				globalPos.x += MadSand.TILESIZE;
 			}
-			stepping = true;
+			moving = true;
 			return true;
 		}
 		return false;
+	}
+
+	public void move(Path path) {
+		path.forEachDirection(direction -> queueMovement(direction));
+
+		if (!isMoving())
+			pollMovementQueue();
 	}
 
 	public int tileDmg() {
@@ -493,7 +518,7 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public void turn(Direction dir) {
-		if (stepping)
+		if (moving)
 			return;
 
 		stats.look = dir;
@@ -516,7 +541,7 @@ public abstract class Entity extends MapEntity {
 		if (dir.isDiagonal())
 			return false;
 
-		if (stepping)
+		if (moving)
 			return false;
 
 		stats.look = dir;

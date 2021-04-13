@@ -137,7 +137,7 @@ public class GameWorldRenderer {
 
 	void drawEntity(Entity entity) {
 		PairFloat drawPos = entity.getWorldPos();
-		if (entity.isStepping())
+		if (entity.isMoving())
 			entity.animateMovement();
 
 		MadSand.batch.draw(entity.getSprite(), drawPos.x, drawPos.y);

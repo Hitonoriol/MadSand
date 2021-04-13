@@ -1,8 +1,5 @@
 package hitonoriol.madsand.entities.npc;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -65,8 +62,6 @@ public abstract class AbstractNpc extends Entity {
 	Path path = new Path();
 	Pair prevDestination = new Pair();
 	int pathIdx = 0;
-
-	private Queue<Direction> movementQueue = new ArrayDeque<>();
 
 	public AbstractNpc(NpcContainer protoNpc) {
 		super();
@@ -202,8 +197,8 @@ public abstract class AbstractNpc extends Entity {
 		if (!outOfView)
 			outOfView |= !World.player.canSee(this) || MadSand.world.timeSkipInProgress();
 
-		if (isStepping() && !outOfView) {
-			movementQueue.add(dir);
+		if (isMoving() && !outOfView) {
+			queueMovement(dir);
 			return false;
 		}
 		int originalX = this.x, originalY = this.y;
@@ -226,19 +221,6 @@ public abstract class AbstractNpc extends Entity {
 		}
 
 		return true;
-	}
-
-	private void pollMovementQueue() {
-		if (movementQueue.isEmpty())
-			return;
-
-		move(movementQueue.poll());
-	}
-
-	@Override
-	public void stopMovement() {
-		super.stopMovement();
-		pollMovementQueue();
 	}
 
 	@Override

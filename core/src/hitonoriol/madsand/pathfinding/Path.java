@@ -1,10 +1,13 @@
 package hitonoriol.madsand.pathfinding;
 
+import java.util.function.Consumer;
+
 import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.map.Map;
 
 public class Path extends DefaultGraphPath<Node> {
@@ -15,17 +18,31 @@ public class Path extends DefaultGraphPath<Node> {
 	public Path() {
 		super();
 	}
-	
+
 	public boolean isEmpty() {
 		return nodes.isEmpty();
 	}
-	
+
 	public Node getDestination() {
 		return super.get(super.getCount() - 1);
 	}
-	
+
 	public void truncate(int newLength) {
 		nodes.truncate(newLength);
+	}
+
+	public void forEachDirection(Consumer<Direction> dirAction) {
+		if (getCount() < 2)
+			return;
+
+		Node prevNode = nodes.get(0);
+		for (Node node : nodes) {
+			if (node == prevNode)
+				continue;
+
+			dirAction.accept(Pair.getRelativeDirection(prevNode.x, prevNode.y, node.x, node.y, true));
+			prevNode = node;
+		}
 	}
 
 	public static Path create(int x1, int y1, int x2, int y2) {
