@@ -162,8 +162,6 @@ public abstract class Entity extends MapEntity {
 	public void stopMovement() {
 		moving = false;
 		stepx = stepy = MadSand.TILESIZE;
-		if (Keyboard.inputIgnored())
-			Keyboard.resumeInput();
 		pollMovementQueue();
 	}
 

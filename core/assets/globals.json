@@ -11,6 +11,7 @@
 		"wild_animal_s" : "(97|96/1)"
 	},
 	"baseScrollId" : 75,
+
 	"scrolls" : {
 		"Dungeon Entrance Search" : "
 			local tileCoords = utils:locateTile(45);
@@ -27,21 +28,30 @@
 			world.player:teleport(world:getCurLoc():getRandomPoint());
 		"
 	},
+
 	"basePillId" : 179,
+
 	"abilities" : {
 		"1" : {
 			"@type" : "ActiveAbility",
 			"type" : "Oneshot",
 			"name" : "Low Kick",
-			"staminaCost" : 5
+			"staminaCost" : 2.25
 		},
 		"2" : {
 			"@type" : "ActiveAbility",
 			"type" : "Oneshot",
 			"name" : "Blink",
 			"staminaCost" : 10
+		},
+		"3" : {
+			"@type" : "ActiveAbility",
+			"type" : "Oneshot",
+			"name" : "Run",
+			"staminaCost" : 0.35
 		}
 	},
+
 	"proceduralQuestRewards" : "
 								(100|21/1)
 								(5|130/1)

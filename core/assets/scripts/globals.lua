@@ -43,5 +43,5 @@ package = function(name)
 end
 
 change_stamina = function(ability)
-	player:changeStamina(-ability.staminaCost);
+	player:changeStamina(-ability:getStaminaCost());
 end

@@ -1092,7 +1092,7 @@ public class Player extends Entity {
 
 	@Override
 	public boolean walk(Direction dir) {
-		if (Keyboard.inputIgnored())
+		if (!hasQueuedMovement() && Keyboard.inputIgnored())
 			return false;
 
 		if (canWalk(dir))
@@ -1102,8 +1102,11 @@ public class Player extends Entity {
 
 	@Override
 	public void stopMovement() {
-		if (origMoveSpeed > 0 && origMoveSpeed < movementSpeed)
+		if (origMoveSpeed > 0 && origMoveSpeed < movementSpeed) {
 			movementSpeed = origMoveSpeed;
+			if (!hasQueuedMovement())
+				Keyboard.resumeInput();
+		}
 
 		super.stopMovement();
 	}
@@ -1113,7 +1116,8 @@ public class Player extends Entity {
 		if (!hasQueuedMovement())
 			return;
 
-		Keyboard.resumeInput();
+		Keyboard.stopInput();
+		
 		origMoveSpeed = movementSpeed;
 		movementSpeed *= runSpeedCoef;
 		walk(movementQueue.poll());

@@ -6,7 +6,7 @@ import hitonoriol.madsand.world.World;
 
 public class ActiveAbility extends Ability {
 
-	public int staminaCost;
+	public float staminaCost, tmpBonus;
 	public Type type;
 
 	@Override
@@ -20,6 +20,17 @@ public class ActiveAbility extends Ability {
 		MadSand.notice((type == Type.Oneshot ? "You use " : "You activate") + name);
 
 		super.apply();
+	}
+	
+	public float getStaminaCost() {
+		float cost = staminaCost + tmpBonus;
+		tmpBonus = 0;
+		return cost;
+	}
+	
+	public ActiveAbility addBonusCost(float cost) {
+		tmpBonus = cost;
+		return this;
 	}
 
 	public static enum Type {
