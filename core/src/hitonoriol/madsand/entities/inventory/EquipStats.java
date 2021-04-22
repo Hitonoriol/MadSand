@@ -3,10 +3,10 @@ package hitonoriol.madsand.entities.inventory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Resources;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.entities.StatContainer;
 import hitonoriol.madsand.entities.inventory.item.CombatEquipment;
+import hitonoriol.madsand.util.Utils;
 
 public class EquipStats {
 	public int lvl;

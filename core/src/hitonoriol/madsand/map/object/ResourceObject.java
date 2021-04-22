@@ -5,12 +5,12 @@ import java.util.HashMap;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.Skill;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Tool;
+import hitonoriol.madsand.util.Utils;
 import me.xdrop.jrand.JRand;
 import me.xdrop.jrand.generators.basics.FloatGenerator;
 

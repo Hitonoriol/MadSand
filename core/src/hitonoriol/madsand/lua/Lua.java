@@ -12,9 +12,9 @@ import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Mouse;
 import hitonoriol.madsand.Resources;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.properties.Tutorial;
+import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
 
 public class Lua {

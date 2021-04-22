@@ -7,9 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.Stat;
+import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
 
 public class StatLabels {

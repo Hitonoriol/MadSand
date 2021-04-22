@@ -2,10 +2,10 @@ package hitonoriol.madsand.entities.inventory.item;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.entities.inventory.EquipStats;
+import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
 
 public abstract class CombatEquipment extends AbstractEquipment {

@@ -13,10 +13,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import hitonoriol.madsand.Resources;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.LootTable.Deserializer;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.properties.Globals;
+import hitonoriol.madsand.util.Utils;
 
 @JsonDeserialize(using = Deserializer.class)
 public class LootTable extends RollTable<LootTable.LootEntry> {

@@ -7,11 +7,11 @@ import java.util.Map.Entry;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.CombatEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.util.Functional;
 
 public class Equipment {
 	private HashMap<EquipSlot, Item> equipped = new HashMap<>();
@@ -63,7 +63,7 @@ public class Equipment {
 	}
 
 	public boolean unEquip(Item item) {
-		boolean cursedEquipment = Utils.test(item.as(AbstractEquipment.class), eq -> eq.cantBeDropped());
+		boolean cursedEquipment = Functional.test(item.as(AbstractEquipment.class), eq -> eq.cantBeDropped());
 
 		if (cursedEquipment)
 			return false;

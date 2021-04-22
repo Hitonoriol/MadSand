@@ -22,13 +22,13 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import hitonoriol.madsand.DynamicallyCastable;
 import hitonoriol.madsand.Resources;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.EquipSlot;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.gfx.TextureProcessor;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
+import hitonoriol.madsand.util.Utils;
 
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)

@@ -15,7 +15,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Skill;
@@ -25,6 +24,7 @@ import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
+import hitonoriol.madsand.util.Utils;
 
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
 @JsonSubTypes({ @Type(CraftingStation.class), @Type(ItemFactory.class), @Type(ResourceObject.class) })

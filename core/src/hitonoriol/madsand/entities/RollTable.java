@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.util.Utils;
 
 public class RollTable<T> {
 	public boolean exclusiveRoll = false; // Stop after the first successful roll

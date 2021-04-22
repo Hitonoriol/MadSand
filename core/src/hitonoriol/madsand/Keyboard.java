@@ -8,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.properties.Prefs;
+import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.Location;
 import hitonoriol.madsand.world.World;
 
@@ -33,6 +35,8 @@ public class Keyboard {
 
 	public static void initKeyListener() {
 		Gui.overlay.addListener(new InputListener() {
+			Prefs prefs = Prefs.values();
+
 			@Override
 			public boolean keyUp(InputEvent event, int keycode) {
 				if (keycode == Keys.E) {
@@ -47,6 +51,10 @@ public class Keyboard {
 
 				if (Gui.overlay.bottomMenu.isKeyBoundToButton(keycode))
 					Gui.overlay.bottomMenu.toggleButton(keycode);
+
+				if (!prefs.abilityKeyBinds.isEmpty())
+					if (prefs.abilityKeyBinds.containsKey(keycode))
+						World.player.getAbility(prefs.abilityKeyBinds.get(keycode)).apply();
 
 				return true;
 			}

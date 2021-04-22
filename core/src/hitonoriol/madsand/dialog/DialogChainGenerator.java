@@ -10,8 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.lua.Lua;
+import hitonoriol.madsand.util.Utils;
 
 public class DialogChainGenerator {
 	public static final String DEFAULT_BTN_TEXT = "[Proceed]";

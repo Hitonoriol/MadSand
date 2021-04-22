@@ -9,8 +9,8 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.KeyDeserializer;
 
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.util.Utils;
 
 public class Pair {
 	public static final Pair nullPair = new Pair(-1, -1);

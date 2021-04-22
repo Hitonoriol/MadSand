@@ -12,11 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Skill;
 import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Tool;
+import hitonoriol.madsand.util.Utils;
 
 public class Inventory {
 	public static final double MAX_WEIGHT = Integer.MAX_VALUE;

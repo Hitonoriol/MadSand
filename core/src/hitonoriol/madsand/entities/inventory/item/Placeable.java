@@ -2,9 +2,9 @@ package hitonoriol.madsand.entities.inventory.item;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.properties.ObjectProp;
+import hitonoriol.madsand.util.Utils;
 
 public class Placeable extends Item {
 

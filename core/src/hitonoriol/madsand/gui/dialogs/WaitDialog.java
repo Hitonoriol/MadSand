@@ -4,10 +4,10 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
+import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
 
 public class WaitDialog extends SliderDialog {

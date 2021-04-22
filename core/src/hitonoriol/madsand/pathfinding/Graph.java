@@ -3,7 +3,7 @@ package hitonoriol.madsand.pathfinding;
 import com.badlogic.gdx.ai.pfa.indexed.DefaultIndexedGraph;
 import com.badlogic.gdx.utils.Array;
 
-import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.util.Utils;
 
 public class Graph extends DefaultIndexedGraph<Node> {
 

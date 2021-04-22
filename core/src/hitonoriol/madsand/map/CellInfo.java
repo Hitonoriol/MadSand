@@ -2,7 +2,6 @@ package hitonoriol.madsand.map;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
@@ -10,6 +9,7 @@ import hitonoriol.madsand.map.object.ItemFactory;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.properties.TileProp;
+import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
 
 public class CellInfo {

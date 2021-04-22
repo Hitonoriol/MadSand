@@ -8,7 +8,6 @@ import java.util.Map.Entry;
 
 import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Resources;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.map.Crop;
@@ -16,6 +15,7 @@ import hitonoriol.madsand.map.ItemProducer;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.object.MapObject;
+import hitonoriol.madsand.util.Utils;
 
 public class WorldMapSaver {
 	final String LOOT_DELIM = "|";

@@ -25,7 +25,6 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Keyboard;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
 import hitonoriol.madsand.dialog.GameDialog;
@@ -70,6 +69,7 @@ import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
+import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.Location;
 import hitonoriol.madsand.world.WorkerType;
 
@@ -113,6 +113,14 @@ public class Player extends Entity {
 
 	public PlayerStats stats() {
 		return (PlayerStats) super.stats();
+	}
+
+	public Ability getAbility(int id) {
+		int idx = abilities.indexOf(Ability.get(id));
+		if (idx == -1)
+			return null;
+
+		return abilities.get(idx);
 	}
 
 	public boolean addAbility(int id) {
@@ -1117,7 +1125,7 @@ public class Player extends Entity {
 			return;
 
 		Keyboard.stopInput();
-		
+
 		origMoveSpeed = movementSpeed;
 		movementSpeed *= runSpeedCoef;
 		walk(movementQueue.poll());

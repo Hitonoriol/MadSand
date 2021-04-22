@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Faction;
 import hitonoriol.madsand.entities.LootTable;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.entities.npc.Npc;
 import hitonoriol.madsand.enums.TradeCategory;
+import hitonoriol.madsand.util.Utils;
 
 public class NpcContainer {
 	public int id = -1;

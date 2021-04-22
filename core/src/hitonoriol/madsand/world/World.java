@@ -14,7 +14,6 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Keyboard;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.Entity;
@@ -27,6 +26,7 @@ import hitonoriol.madsand.pathfinding.Graph;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.WorldGenProp;
+import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.worldgen.WorldGen;
 
 public class World {

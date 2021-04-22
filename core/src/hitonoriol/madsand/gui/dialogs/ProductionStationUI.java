@@ -11,7 +11,6 @@ import com.badlogic.gdx.utils.Timer;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
@@ -19,6 +18,7 @@ import hitonoriol.madsand.map.ItemProducer;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.properties.ObjectProp;
+import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
 
 public class ProductionStationUI extends GameDialog {

@@ -1,7 +1,7 @@
 package hitonoriol.madsand.screens;
 
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.gui.stages.DeathStage;
+import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
 
 public class DeathScreen extends AbstractScreen<DeathStage> {

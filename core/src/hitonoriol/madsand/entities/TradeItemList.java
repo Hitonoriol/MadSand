@@ -3,8 +3,8 @@ package hitonoriol.madsand.entities;
 import java.util.ArrayList;
 import java.util.Random;
 
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.util.Utils;
 
 /*
  * List that contains ids of items for trader npcs

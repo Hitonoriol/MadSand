@@ -12,10 +12,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import hitonoriol.madsand.Keyboard;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.containers.PairFloat;
@@ -32,6 +30,7 @@ import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.pathfinding.Path;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.TileProp;
+import hitonoriol.madsand.util.Utils;
 
 public abstract class Entity extends MapEntity {
 	@JsonIgnore

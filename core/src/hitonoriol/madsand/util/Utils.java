@@ -1,4 +1,4 @@
-package hitonoriol.madsand;
+package hitonoriol.madsand.util;
 
 import java.math.RoundingMode;
 import java.text.NumberFormat;
@@ -9,38 +9,30 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.math3.random.RandomDataGenerator;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Timer;
 
+import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import me.xdrop.jrand.JRand;
 
 public class Utils {
 	public static boolean debugMode = false;
 	static NumberFormat numberFormatter = NumberFormat.getInstance(Locale.US);
-
-	public static Random random = new Random();
-
-	public static void init() {
+	static {
 		numberFormatter.setMinimumFractionDigits(0);
 		numberFormatter.setRoundingMode(RoundingMode.HALF_UP);
-		try {
-			Resources.init();
-		} catch (Exception e) {
-			die("Exception on init: " + ExceptionUtils.getStackTrace(e));
-		}
 	}
+
+	public static Random random = new Random();
 
 	public static void scheduleTask(Runnable task, float delaySec) {
 		Timer.instance().scheduleTask(new Timer.Task() {
@@ -236,10 +228,6 @@ public class Utils {
 	public static <T> String getPackageName(Class<T> clazz) {
 		String fullName = clazz.getName();
 		return fullName.substring(0, fullName.lastIndexOf("."));
-	}
-
-	public static <T> boolean test(Optional<T> opt, Predicate<T> predicate) {
-		return opt.filter(predicate).isPresent();
 	}
 
 	public static int largestDivisor(int n) {

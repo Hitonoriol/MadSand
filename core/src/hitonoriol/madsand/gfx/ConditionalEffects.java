@@ -8,9 +8,9 @@ import java.util.function.Predicate;
 
 import org.apache.commons.math3.random.RandomDataGenerator;
 
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gfx.Effects.TextureEffect;
+import hitonoriol.madsand.util.Utils;
 
 public class ConditionalEffects<T extends Item> {
 	private Map<Predicate<T>, Function<T, TextureEffect>> effects = new LinkedHashMap<>(3);

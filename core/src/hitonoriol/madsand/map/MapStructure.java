@@ -1,11 +1,11 @@
 package hitonoriol.madsand.map;
 
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.lua.LuaLambda;
 import hitonoriol.madsand.lua.LuaLambda.LuaPredicate;
+import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
 
 public class MapStructure {

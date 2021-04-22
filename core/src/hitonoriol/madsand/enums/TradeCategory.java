@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.util.Utils;
 
 public enum TradeCategory {
 	All, // Flag: Include items from all categories

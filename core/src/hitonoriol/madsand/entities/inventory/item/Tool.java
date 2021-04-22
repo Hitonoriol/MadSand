@@ -1,9 +1,9 @@
 package hitonoriol.madsand.entities.inventory.item;
 
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.EquipSlot;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Skill;
+import hitonoriol.madsand.util.Utils;
 
 public class Tool extends AbstractEquipment {
 	public static int MIN_SKILL_DMG = 1;

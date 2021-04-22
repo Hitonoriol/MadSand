@@ -21,7 +21,6 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Mouse;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.EquipSlot;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.PlayerStats;
@@ -40,6 +39,7 @@ import hitonoriol.madsand.gui.widgets.OverlayBottomMenu;
 import hitonoriol.madsand.gui.widgets.QuestArrow;
 import hitonoriol.madsand.gui.widgets.StatProgressBar;
 import hitonoriol.madsand.lua.Lua;
+import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
 
 /*

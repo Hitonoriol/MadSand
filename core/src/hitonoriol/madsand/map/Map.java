@@ -17,7 +17,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
@@ -42,6 +41,8 @@ import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.properties.WorldGenProp;
+import hitonoriol.madsand.util.Functional;
+import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.Location;
 import hitonoriol.madsand.world.World;
 import hitonoriol.madsand.world.worldgen.OverworldPreset;
@@ -1260,7 +1261,7 @@ public class Map {
 
 	public Pair locateObject(Skill skill) {
 		for (Entry<Pair, MapObject> entry : mapObjects.entrySet()) {
-			if (Utils.test(entry.getValue().as(ResourceObject.class),
+			if (Functional.test(entry.getValue().as(ResourceObject.class),
 					resourceObj -> resourceObj.skill == skill))
 				return entry.getKey();
 		}

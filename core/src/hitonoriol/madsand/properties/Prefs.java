@@ -2,6 +2,8 @@ package hitonoriol.madsand.properties;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Optional;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
@@ -9,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.util.Utils;
 
 public class Prefs {
 	public static String PREFS_FILE = "prefs.json";
@@ -19,12 +21,18 @@ public class Prefs {
 	}
 
 	private static Prefs values = new Prefs();
+
+	/* Video */
 	public static int REFRESH_RATE = 60;
 	public static int MIN_SCREEN_WIDTH = 1100;
 	public int screenWidth = 1280, screenHeight = 720;
 	public boolean fullscreen = false;
 	DisplayMode displayModes[];
 
+	/* Keybinds */
+	public LinkedHashMap<Integer, Integer> abilityKeyBinds;
+
+	/* Gameplay */
 	public boolean enableRealtimeMechanics = true;
 	public boolean skipTutorials = false;
 
@@ -53,6 +61,22 @@ public class Prefs {
 		return getDisplayModes()[getCurDisplayModeIdx()];
 	}
 
+	public int getAbilityKey(int id) {
+		return values.abilityKeyBinds.entrySet().stream()
+				.filter(bind -> bind.getValue() == id)
+				.findFirst()
+				.map(bind -> bind.getKey())
+				.orElse(-1);
+	}
+
+	public void bindAbility(int key, int abilityId) {
+		Optional.of(getAbilityKey(abilityId))
+				.filter(boundKey -> boundKey != -1)
+				.ifPresent(boundKey -> abilityKeyBinds.remove(boundKey));
+
+		abilityKeyBinds.put(key, abilityId);
+	}
+
 	public void apply() {
 		if (fullscreen)
 			Gdx.graphics.setFullscreenMode(getCurDisplayMode());
@@ -75,6 +99,9 @@ public class Prefs {
 			Utils.out("Failed to restore preferences from " + PREFS_FILE);
 			e.printStackTrace();
 		}
+
+		if (values.abilityKeyBinds == null)
+			values.abilityKeyBinds = new LinkedHashMap<>();
 	}
 
 	public static void savePrefs() {

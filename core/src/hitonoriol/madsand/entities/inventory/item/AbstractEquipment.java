@@ -6,10 +6,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.gfx.ConditionalEffects;
 import hitonoriol.madsand.gfx.Effects;
+import hitonoriol.madsand.util.Utils;
 
 public abstract class AbstractEquipment extends LevelBoundItem {
 	public int hp = -1;

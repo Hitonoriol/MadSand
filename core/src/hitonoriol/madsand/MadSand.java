@@ -18,6 +18,7 @@ import hitonoriol.madsand.screens.DeathScreen;
 import hitonoriol.madsand.screens.GameScreen;
 import hitonoriol.madsand.screens.GameWorldRenderer;
 import hitonoriol.madsand.screens.MainMenu;
+import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
 
 public class MadSand extends Game {
@@ -57,7 +58,7 @@ public class MadSand extends Game {
 		Gdx.graphics.setContinuousRendering(false);
 
 		Timer.instance().start();
-		Utils.init();
+		Resources.loadAll();
 		Gui.init();
 		GameTextSubstitutor.init();
 		Keyboard.initKeyListener();

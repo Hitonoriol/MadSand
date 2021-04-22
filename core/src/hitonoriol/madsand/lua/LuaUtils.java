@@ -2,11 +2,11 @@ package hitonoriol.madsand.lua;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.properties.NpcProp;
+import hitonoriol.madsand.util.Utils;
 
 public class LuaUtils {
 	public static Pair locateTile(int id) {

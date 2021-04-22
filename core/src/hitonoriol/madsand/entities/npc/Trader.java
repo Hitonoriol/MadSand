@@ -2,13 +2,13 @@ package hitonoriol.madsand.entities.npc;
 
 import java.util.ArrayList;
 
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.NpcContainer;
 import hitonoriol.madsand.properties.NpcProp;
+import hitonoriol.madsand.util.Utils;
 
 public class Trader extends AbstractNpc {
 	public TradeCategory tradeCategory;

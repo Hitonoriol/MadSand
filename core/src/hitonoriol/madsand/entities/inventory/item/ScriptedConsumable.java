@@ -5,11 +5,11 @@ import java.util.HashMap;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.gfx.ConditionalEffects;
 import hitonoriol.madsand.gfx.Effects;
 import hitonoriol.madsand.properties.ItemProp;
+import hitonoriol.madsand.util.Utils;
 
 public abstract class ScriptedConsumable extends Item {
 	private static ConditionalEffects<ScriptedConsumable> textureFx = ConditionalEffects.create(fx -> fx

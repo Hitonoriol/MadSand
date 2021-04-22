@@ -8,7 +8,6 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.Faction;
@@ -18,6 +17,7 @@ import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.NpcContainer;
 import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.properties.WorldGenProp;
+import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
 import hitonoriol.madsand.world.worldgen.OverworldPreset;
 

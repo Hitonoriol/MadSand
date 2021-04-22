@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Cursor;
@@ -49,6 +51,7 @@ import hitonoriol.madsand.properties.QuestList;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.properties.Tutorial;
 import hitonoriol.madsand.properties.WorldGenProp;
+import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.worldgen.WorldGenPreset;
 
 public class Resources {
@@ -125,7 +128,15 @@ public class Resources {
 	public static ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 	public static TypeFactory typeFactory = mapper.getTypeFactory();
 
-	public static void init() throws Exception {
+	public static void loadAll() {
+		try {
+			init();
+		} catch (Exception e) {
+			Utils.die("Exception on init: " + ExceptionUtils.getStackTrace(e));
+		}
+	}
+	
+	private static void init() throws Exception {
 		Utils.out("Loading resources...");
 
 		mapCursor = loadTexture("misc/cur.png");

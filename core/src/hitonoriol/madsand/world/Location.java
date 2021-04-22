@@ -7,10 +7,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Faction;
 import hitonoriol.madsand.map.Map;
+import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.Settlement.Status;
 
 /*

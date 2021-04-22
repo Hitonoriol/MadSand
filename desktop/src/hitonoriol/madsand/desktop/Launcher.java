@@ -8,9 +8,9 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.Prefs;
+import hitonoriol.madsand.util.Utils;
 
 public class Launcher {
 

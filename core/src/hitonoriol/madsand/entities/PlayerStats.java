@@ -4,13 +4,14 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import hitonoriol.madsand.Utils;
 import hitonoriol.madsand.entities.inventory.EquipStats;
 import hitonoriol.madsand.entities.inventory.item.CombatEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Projectile;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.inventory.item.Weapon;
+import hitonoriol.madsand.util.Functional;
+import hitonoriol.madsand.util.Utils;
 
 public class PlayerStats extends Stats {
 	static float BASE_SATIATION_PERCENT = 90;
@@ -167,7 +168,7 @@ public class PlayerStats extends Stats {
 	}
 
 	public boolean isToolEquipped(Tool.Type type) {
-		return Utils.test(getEquippedTool(), tool -> tool.type == type);
+		return Functional.test(getEquippedTool(), tool -> tool.type == type);
 	}
 	
 	public int getEquippedToolDamage(Skill skill) {

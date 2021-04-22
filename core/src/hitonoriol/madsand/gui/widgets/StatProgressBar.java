@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.Utils;
+import hitonoriol.madsand.util.Utils;
 
 public class StatProgressBar extends Group {
 
