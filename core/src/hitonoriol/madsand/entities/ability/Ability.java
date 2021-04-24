@@ -20,10 +20,9 @@ public abstract class Ability implements DynamicallyCastable<Ability> {
 	public int id;
 	public int lvl = 1, exp = 0;
 	public String name;
-	private LuaConsumer action;
+	protected LuaConsumer action;
 
 	public void apply() {
-		Utils.out(name + ": Running ability script...");
 		action.accept(this);
 	}
 
@@ -50,6 +49,11 @@ public abstract class Ability implements DynamicallyCastable<Ability> {
 
 	public static Ability get(int id) {
 		return Globals.instance().abilities.get(id);
+	}
+	
+	@Override
+	public String toString() {
+		return name + " Lvl. " + lvl;
 	}
 
 	@Override

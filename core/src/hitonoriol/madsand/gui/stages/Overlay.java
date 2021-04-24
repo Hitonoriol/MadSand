@@ -35,6 +35,7 @@ import hitonoriol.madsand.gui.widgets.EquipmentSidebar;
 import hitonoriol.madsand.gui.widgets.GameContextMenu;
 import hitonoriol.madsand.gui.widgets.GameLog;
 import hitonoriol.madsand.gui.widgets.GameTooltip;
+import hitonoriol.madsand.gui.widgets.Hotbar;
 import hitonoriol.madsand.gui.widgets.OverlayBottomMenu;
 import hitonoriol.madsand.gui.widgets.QuestArrow;
 import hitonoriol.madsand.gui.widgets.StatProgressBar;
@@ -61,6 +62,7 @@ public class Overlay extends Stage {
 	public ActionButton actionButton;
 	public GameLog gameLog;
 	public OverlayBottomMenu bottomMenu;
+	public Hotbar hotbar;
 	public EquipmentSidebar equipmentSidebar;
 
 	public StatProgressBar hpBar;
@@ -77,7 +79,6 @@ public class Overlay extends Stage {
 	public Overlay() {
 		super(Gui.uiViewport);
 		skin = Gui.skin;
-		initMouseListeners();
 
 		actionButton = new ActionButton();
 		gameTooltip = new GameTooltip();
@@ -85,6 +86,7 @@ public class Overlay extends Stage {
 		gameLog = new GameLog();
 		bottomMenu = new OverlayBottomMenu(this);
 		equipmentSidebar = new EquipmentSidebar();
+		hotbar = new Hotbar();
 
 		initOverlayTable();
 		updateWidgetPositions();
@@ -93,6 +95,7 @@ public class Overlay extends Stage {
 
 		super.addActor(equipmentSidebar);
 		super.addActor(bottomMenu);
+		super.addActor(hotbar);
 		super.addActor(gameTooltip);
 		super.addActor(gameContextMenu);
 		super.addActor(actionButton);
@@ -103,67 +106,6 @@ public class Overlay extends Stage {
 				equipmentSidebar.getHeight() + (this.getHeight() - equipmentSidebar.getHeight()) * 0.5f,
 				Align.topRight);
 		overlayTable.getCell(topTable).width(this.getWidth());
-	}
-
-	private void initMouseListeners() {
-		super.addListener(new ClickListener(Buttons.LEFT) {
-			private boolean ignoreClick = false;
-
-			boolean skipClick() {
-				boolean ret = ignoreClick;
-				if (ignoreClick)
-					ignoreClick = false;
-				return ret;
-			}
-
-			@Override
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				Mouse.heldButtons.remove(button);
-
-				if (getKeyboardFocus() != null)
-					return;
-
-				if (Mouse.hasClickAction()) {
-					if (event.getButton() == Buttons.LEFT)
-						Mouse.performClickAction();
-					else if (event.getButton() == Buttons.RIGHT) {
-						MadSand.print("You change your mind");
-						Mouse.cancelClickAction();
-					}
-				}
-
-				else if (event.getButton() == Buttons.RIGHT) {
-					if (Gui.dialogActive)
-						return;
-
-					if (gameTooltip.isVisible()) {
-						gameContextMenu.openGameContextMenu();
-						Gui.gameUnfocused = true;
-					} else
-						gameContextMenu.closeGameContextMenu();
-				}
-
-				super.touchUp(event, x, y, pointer, button);
-			}
-
-			public void clicked(InputEvent event, float x, float y) {
-				if (skipClick())
-					return;
-
-				Mouse.mouseClickAction();
-			}
-
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				ignoreClick = Gui.isGameUnfocused() || Gui.dialogActive;
-				ignoreClick |= !Mouse.isClickActionPossible();
-
-				if (ignoreClick)
-					Mouse.heldButtons.add(button);
-
-				super.touchDown(event, x, y, pointer, button);
-				return true;
-			}
-		});
 	}
 
 	float ENTRY_PAD = 5;

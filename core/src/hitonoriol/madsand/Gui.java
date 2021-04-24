@@ -42,7 +42,7 @@ public class Gui {
 	public static final float DEFWIDTH = 250f;
 	public static final float defLblWidth = Gdx.graphics.getWidth() / 4;
 	public static int BTN_WIDTH = 150, BTN_HEIGHT = 30;
-	public static int FONT_S = 16, FONT_M = 20, FONT_L = 24, FONT_XL = 28;
+	public final static int FONT_XS = 14, FONT_S = 16, FONT_M = 20, FONT_L = 24, FONT_XL = 28;
 
 	public static boolean gameUnfocused = false;
 	public static boolean inventoryActive = false;

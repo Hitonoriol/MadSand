@@ -11,6 +11,9 @@ import hitonoriol.madsand.Gui;
  */
 
 public class OverlayMouseoverListener extends InputListener {
+	
+	private static final OverlayMouseoverListener instance = new OverlayMouseoverListener();
+	
 	public OverlayMouseoverListener() {
 		super();
 	}
@@ -27,5 +30,9 @@ public class OverlayMouseoverListener extends InputListener {
 			Gui.gameUnfocused = false;
 			Gui.overlay.showTooltip();
 		}
+	}
+	
+	public static OverlayMouseoverListener instance() {
+		return instance;
 	}
 }

@@ -151,11 +151,13 @@ public class GameDialog extends Dialog {
 		addButton(button);
 	}
 
-	public void addButton(TextButton button) {
+	public Cell<TextButton> addButton(TextButton button) {
 		if (proceedButton == null)
 			proceedButton = button;
 
-		add(button).width(BTN_WIDTH).height(BTN_HEIGHT).padBottom(PADDING / 2).row();
+		Cell<TextButton> cell = add(button).width(BTN_WIDTH).height(BTN_HEIGHT).padBottom(PADDING / 2);
+		cell.row();
+		return cell;
 	}
 
 	public TextButton getProceedButton() {

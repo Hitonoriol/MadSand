@@ -31,15 +31,12 @@ public class OverlayBottomMenu extends Table {
 	private Map<Integer, Button> keyBoundButtons = new HashMap<>();
 
 	NinePatchDrawable background;
-
-	OverlayMouseoverListener mouseoverListener;
 	Overlay overlay;
 
 	public OverlayBottomMenu(Overlay overlay) {
 		super();
 
 		this.overlay = overlay;
-		mouseoverListener = new OverlayMouseoverListener();
 
 		addButton("Character", Keys.Q, () -> overlay.toggleStatsWindow());
 		addButton("Inventory", Keys.E, () -> Gui.toggleInventory());
@@ -69,7 +66,7 @@ public class OverlayBottomMenu extends Table {
 
 	private void addButton(String text, int key, Runnable action) {
 		TextButton button = new TextButton(text + " [" + Keys.toString(key) + "]", Gui.skin);
-		button.addListener(mouseoverListener);
+		button.addListener(OverlayMouseoverListener.instance());
 		super.add(button).size(WIDTH, HEIGHT).pad(BUTTON_PADDING);
 		Gui.setAction(button, action);
 		keyBoundButtons.put(key, button);

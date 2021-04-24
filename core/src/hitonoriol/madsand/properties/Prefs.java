@@ -11,7 +11,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.entities.ability.ActiveAbility;
 import hitonoriol.madsand.util.Utils;
+import hitonoriol.madsand.world.World;
 
 public class Prefs {
 	public static String PREFS_FILE = "prefs.json";
@@ -23,7 +26,6 @@ public class Prefs {
 	private static Prefs values = new Prefs();
 
 	/* Video */
-	public static int REFRESH_RATE = 60;
 	public static int MIN_SCREEN_WIDTH = 1100;
 	public int screenWidth = 1280, screenHeight = 720;
 	public boolean fullscreen = false;
@@ -47,9 +49,12 @@ public class Prefs {
 
 	@JsonIgnore
 	public int getCurDisplayModeIdx() {
+		if (!fullscreen)
+			return displayModes.length - 1;
+
 		int modeIdx = 0;
 		for (DisplayMode mode : displayModes) {
-			if (screenWidth == mode.width && screenHeight == mode.height && mode.refreshRate == REFRESH_RATE)
+			if (screenWidth == mode.width && screenHeight == mode.height)
 				break;
 			++modeIdx;
 		}
@@ -75,6 +80,7 @@ public class Prefs {
 				.ifPresent(boundKey -> abilityKeyBinds.remove(boundKey));
 
 		abilityKeyBinds.put(key, abilityId);
+		Gui.overlay.hotbar.addEntry(World.player.getAbility(abilityId).as(ActiveAbility.class).get());
 	}
 
 	public void apply() {
@@ -89,6 +95,9 @@ public class Prefs {
 	}
 
 	public static void loadPrefs() {
+		if (values.abilityKeyBinds == null)
+			values.abilityKeyBinds = new LinkedHashMap<>();
+
 		File prefs = new File(PREFS_FILE);
 		if (!prefs.exists())
 			return;
@@ -99,9 +108,6 @@ public class Prefs {
 			Utils.out("Failed to restore preferences from " + PREFS_FILE);
 			e.printStackTrace();
 		}
-
-		if (values.abilityKeyBinds == null)
-			values.abilityKeyBinds = new LinkedHashMap<>();
 	}
 
 	public static void savePrefs() {

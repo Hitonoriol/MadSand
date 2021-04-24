@@ -1,17 +1,15 @@
 package hitonoriol.madsand.gui.dialogs;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.ability.Ability;
 import hitonoriol.madsand.entities.ability.ActiveAbility;
@@ -23,32 +21,39 @@ import hitonoriol.madsand.util.Utils;
 public class AbilityDialog extends GameDialog {
 
 	private List<Ability> abilities;
+	static float BTN_HEIGHT = 50;
 	static float PAD = 30;
+	Table container = new Table(Gui.skin);
 
 	public AbilityDialog(List<Ability> abilities) {
 		super.setTitle("Abilities");
 		super.skipLine();
+		super.skipLine().padBottom(PAD);
 		this.abilities = abilities;
+		super.add(container).row();
+		super.skipLine().padTop(PAD);
+		super.addCloseButton();
+
+		refresh();
+	}
+
+	private void refresh() {
+		container.clear();
 
 		if (abilities.isEmpty())
-			super.add("You don't have any abilities").height(250).align(Align.center).row();
+			container.add("You don't have any abilities").height(250).align(Align.center).row();
 		else {
-			super.skipLine().padBottom(PAD);
 			createAbilityBlock("Active", ActiveAbility.class);
 			createAbilityBlock("Passive", PassiveAbility.class);
 		}
-
-		super.row();
-		super.skipLine().padTop(PAD);
-		super.addCloseButton();
 	}
 
 	private <T extends Ability> void createAbilityBlock(String title, Class<T> abilityType) {
 		if (!hasAbilities(abilityType))
 			return;
 
-		Gui.setFontSize(super.add(title).padBottom(7).getActor(), Gui.FONT_M);
-		super.row();
+		Gui.setFontSize(container.add(title).padBottom(7).getActor(), Gui.FONT_M);
+		container.row();
 		createAbilityEntries(abilityType, ability -> addAbilityButton(ability.as(abilityType).get()));
 
 	}
@@ -68,35 +73,41 @@ public class AbilityDialog extends GameDialog {
 	}
 
 	private void addAbilityButton(Ability abstrAbility) {
-		String btnText = abstrAbility.name + " Lvl. " + abstrAbility.lvl;
 		abstrAbility.as(ActiveAbility.class)
 				.ifPresent(
 						ability -> {
 							Prefs prefs = Prefs.values();
 
-							addButton(btnText + Resources.LINEBREAK
-									+ "[" + ability.staminaCost + " stamina]",
+							addButton(abstrAbility,
 									() -> {
 										ability.apply();
 										Utils.scheduleTask(() -> remove(), 0.1f);
-									}).padRight(5);
+									}).padRight(5).padLeft(5);
 
-							String bindText = Optional.of(prefs.getAbilityKey(ability.id))
-									.map(key -> Keys.toString(key))
-									.orElse("No Key");
-
-							addButton(bindText, () -> new KeyDialog(key -> prefs.bindAbility(key, ability.id))).row();
+							addButton(ability.getBindKeyString(),
+									() -> new KeyDialog(key -> {
+										prefs.bindAbility(key, ability.id);
+										refresh();
+									}).show())
+											.size(75, BTN_HEIGHT)
+											.padRight(5)
+											.row();
 						});
 
 		abstrAbility.as(PassiveAbility.class)
-				.ifPresent(ability -> Functional.with(addButton(btnText, () -> {}), cell -> {
+				.ifPresent(ability -> Functional.with(addButton(abstrAbility, () -> {}), cell -> {
 					cell.getActor().setDisabled(true);
 					cell.row();
 				}));
 	}
 
+	private Cell<TextButton> addButton(Ability ability, Runnable action) {
+		return addButton(ability.toString(), action);
+	}
+
 	private Cell<TextButton> addButton(String text, Runnable action) {
-		Cell<TextButton> cell = super.add(new TextButton(text, Gui.skin)).width(300).height(45);
+		Cell<TextButton> cell = container.add(new TextButton(text, Gui.skin))
+				.size(300, BTN_HEIGHT);
 		Gui.setAction(cell.getActor(), action);
 		return cell;
 	}

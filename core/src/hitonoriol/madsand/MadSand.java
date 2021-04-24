@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Timer;
 import hitonoriol.madsand.containers.Storage;
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.lua.Lua;
+import hitonoriol.madsand.properties.Prefs;
 import hitonoriol.madsand.screens.AbstractScreen;
 import hitonoriol.madsand.screens.CraftScreen;
 import hitonoriol.madsand.screens.DeathScreen;
@@ -61,11 +62,11 @@ public class MadSand extends Game {
 		Resources.loadAll();
 		Gui.init();
 		GameTextSubstitutor.init();
-		Keyboard.initKeyListener();
+		Keyboard.initListener();
+		Mouse.initListener();
 
 		GameSaver.createDirs();
 		initNewGame();
-		world.generate();
 		initScreens();
 
 		Utils.out("End of initialization!");
@@ -84,6 +85,7 @@ public class MadSand extends Game {
 		World.player.updCoords();
 		Lua.init();
 		Gui.overlay.gameLog.clear();
+		world.generate();
 	}
 
 	public static void switchScreen(Screen screen) {
@@ -161,7 +163,8 @@ public class MadSand extends Game {
 		WORLDNAME = arg;
 	}
 
-	public void resume() {}
+	public void resume() {
+	}
 
 	public void resize(int width, int height) {
 		gameWorld.updateViewport();
@@ -169,9 +172,11 @@ public class MadSand extends Game {
 		Gui.overlay.updateWidgetPositions();
 	}
 
-	public void pause() {}
+	public void pause() {
+	}
 
 	public void dispose() {
+		Prefs.savePrefs();
 		Utils.out("End");
 	}
 }

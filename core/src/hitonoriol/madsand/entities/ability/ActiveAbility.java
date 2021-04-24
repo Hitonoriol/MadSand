@@ -1,10 +1,17 @@
 package hitonoriol.madsand.entities.ability;
 
+import java.util.Optional;
+
+import com.badlogic.gdx.Input.Keys;
+
+import hitonoriol.madsand.HotbarAssignable;
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.properties.Prefs;
 import hitonoriol.madsand.world.World;
 
-public class ActiveAbility extends Ability {
+public class ActiveAbility extends Ability implements HotbarAssignable {
 
 	public float staminaCost, tmpBonus;
 	public Type type;
@@ -21,19 +28,42 @@ public class ActiveAbility extends Ability {
 
 		super.apply();
 	}
-	
+
 	public float getStaminaCost() {
 		float cost = staminaCost + tmpBonus;
 		tmpBonus = 0;
 		return cost;
 	}
-	
+
 	public ActiveAbility addBonusCost(float cost) {
 		tmpBonus = cost;
 		return this;
 	}
 
+	@Override
+	public String toString() {
+		return super.toString() + Resources.LINEBREAK
+				+ "[" + staminaCost + " stamina]";
+	}
+
+	public String getBindKeyString() {
+		return "[" + Optional.of(Prefs.values().getAbilityKey(id))
+				.filter(key -> key != -1)
+				.map(key -> Keys.toString(key))
+				.orElse("None") + "]";
+	}
+
 	public static enum Type {
 		Oneshot, Toggleable
+	}
+
+	@Override
+	public String getHotbarString() {
+		return toString() + " " + getBindKeyString();
+	}
+
+	@Override
+	public void hotbarAction() {
+		apply();
 	}
 }

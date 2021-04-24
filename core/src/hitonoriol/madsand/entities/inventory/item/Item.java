@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import hitonoriol.madsand.DynamicallyCastable;
+import hitonoriol.madsand.HotbarAssignable;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.EquipSlot;
 import hitonoriol.madsand.entities.Player;
@@ -29,13 +30,14 @@ import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.util.Utils;
+import hitonoriol.madsand.world.World;
 
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
 @JsonSubTypes({ @Type(Armor.class), @Type(Consumable.class), @Type(CropSeeds.class), @Type(FishingBait.class),
 		@Type(GrabBag.class), @Type(Placeable.class), @Type(Projectile.class), @Type(Tool.class), @Type(Weapon.class),
 		@Type(Scroll.class), @Type(Pill.class) })
-public class Item implements DynamicallyCastable<Item> {
+public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 
 	public int id;
 	public int quantity;
@@ -182,6 +184,16 @@ public class Item implements DynamicallyCastable<Item> {
 	public String toString() {
 		return String.format("[%d] {%s} %d %s (%.2f kg)",
 				hashCode(), getClass().getSimpleName(), quantity, name, getWeight());
+	}
+	
+	@Override
+	public String getHotbarString() {
+		return getFullName();
+	}
+
+	@Override
+	public void hotbarAction() {
+		use(World.player);
 	}
 
 	// list string format: id1/quantity1:id2/quantity2:...

@@ -105,7 +105,7 @@ public class SettingsDialog extends GameDialog {
 
 		DisplayMode mode = displayModes[curDisplayMode];
 
-		if (mode.refreshRate != Prefs.REFRESH_RATE || mode.width < Prefs.MIN_SCREEN_WIDTH)
+		if (mode.width < Prefs.MIN_SCREEN_WIDTH)
 			nextDisplayMode();
 
 		refreshResolutionBtn();
@@ -113,6 +113,6 @@ public class SettingsDialog extends GameDialog {
 
 	private void refreshResolutionBtn() {
 		DisplayMode curMode = displayModes[curDisplayMode];
-		resolutionBtn.setText(curMode.width + "x" + curMode.height);
+		resolutionBtn.setText(curMode.width + "x" + curMode.height + "@" + curMode.refreshRate);
 	}
 }

@@ -7,11 +7,14 @@ import java.util.function.BiConsumer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
+import hitonoriol.madsand.gui.stages.Overlay;
 import hitonoriol.madsand.gui.widgets.GameTooltip;
 import hitonoriol.madsand.map.CellInfo;
 import hitonoriol.madsand.map.Loot;
@@ -39,6 +42,68 @@ public class Mouse {
 	private static Path pathToCursor = new Path();
 	private static int DEF_CUR_PATH_LEN = 8, maxCurPathLen = DEF_CUR_PATH_LEN;
 
+	public static void initListener() {
+		Overlay overlay = Gui.overlay;
+		overlay.addListener(new ClickListener(Buttons.LEFT) {
+			private boolean ignoreClick = false;
+
+			boolean skipClick() {
+				boolean ret = ignoreClick;
+				if (ignoreClick)
+					ignoreClick = false;
+				return ret;
+			}
+
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				Mouse.heldButtons.remove(button);
+
+				if (overlay.getKeyboardFocus() != null)
+					return;
+
+				if (Mouse.hasClickAction()) {
+					if (event.getButton() == Buttons.LEFT)
+						Mouse.performClickAction();
+					else if (event.getButton() == Buttons.RIGHT) {
+						MadSand.print("You change your mind");
+						Mouse.cancelClickAction();
+					}
+				}
+
+				else if (event.getButton() == Buttons.RIGHT) {
+					if (Gui.dialogActive)
+						return;
+
+					if (overlay.gameTooltip.isVisible()) {
+						overlay.gameContextMenu.openGameContextMenu();
+						Gui.gameUnfocused = true;
+					} else
+						overlay.gameContextMenu.closeGameContextMenu();
+				}
+
+				super.touchUp(event, x, y, pointer, button);
+			}
+
+			public void clicked(InputEvent event, float x, float y) {
+				if (skipClick())
+					return;
+
+				Mouse.mouseClickAction();
+			}
+
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				ignoreClick = Gui.isGameUnfocused() || Gui.dialogActive;
+				ignoreClick |= !Mouse.isClickActionPossible();
+
+				if (ignoreClick)
+					Mouse.heldButtons.add(button);
+
+				super.touchDown(event, x, y, pointer, button);
+				return true;
+			}
+		});
+	}
+
 	public static void updCoords() {
 		x = Gdx.input.getX();
 		y = Gdx.graphics.getHeight() - Gdx.input.getY();
@@ -62,7 +127,7 @@ public class Mouse {
 		highlightRangedTarget();
 		refreshTooltip();
 	}
-	
+
 	public static void refreshTooltip() {
 		Gui.overlay.getTooltip().setText(cellInfo.getInfo());
 	}
@@ -164,7 +229,7 @@ public class Mouse {
 
 		if ((player.isMoving()) || Gui.isGameUnfocused() || !pointingAtObject)
 			return;
-		
+
 		refreshTooltip();
 
 		if (currentTileClicked) {

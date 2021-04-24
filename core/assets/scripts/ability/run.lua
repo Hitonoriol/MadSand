@@ -8,7 +8,7 @@ mouse:setClickAction(
 			local path = mouse:getPathToCursor();
 			local path_cost = (path:getCount() - 1) * ability.staminaCost;
 			
-			if (path_cost + ability.staminaCost > player:stats().stamina) then
+			if (path_cost + ability.staminaCost > player:getStats().stamina) then
 				utils:warn("You don't have enough stamina to run such distance!");
 				return;
 			end

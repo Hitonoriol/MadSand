@@ -36,11 +36,10 @@ public class Functional {
 		@Override
 		public synchronized boolean tryAdvance(Consumer<? super T> consumer) {
 			boolean hadNext = spliterator.tryAdvance(elem -> {
-				if (predicate.test(elem) && isMatched) {
+				if (predicate.test(elem) && isMatched)
 					consumer.accept(elem);
-				} else {
+				else 
 					isMatched = false;
-				}
 			});
 			return hadNext && isMatched;
 		}

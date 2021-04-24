@@ -33,7 +33,7 @@ public class Keyboard {
 			Resources.takeScreenshot();
 	}
 
-	public static void initKeyListener() {
+	public static void initListener() {
 		Gui.overlay.addListener(new InputListener() {
 			Prefs prefs = Prefs.values();
 
