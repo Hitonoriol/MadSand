@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+}
+
+sourceSets.main.java.srcDirs = [ "src/" ]
+
+version '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(":desktop")
+    implementation project(":core")
+
+    implementation(platform('org.junit:junit-bom:5.7.0'))
+    implementation('org.junit.jupiter:junit-jupiter')
+    implementation('org.junit.jupiter:junit-jupiter-engine')
+    implementation('org.junit.platform:junit-platform-runner')
+}
+
+test {
+    useJUnitPlatform()
+}

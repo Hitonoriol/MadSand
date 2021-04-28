@@ -83,9 +83,7 @@ public class Inventory {
 	public void dump() {
 		Utils.out("Inventory dump: ");
 		Utils.out("Weight: " + curWeight + " / " + maxWeight);
-		for (Item item : items) {
-			Utils.out(item.quantity + " " + item.name);
-		}
+		items.forEach(item->Utils.out(item.toString()));
 	}
 
 	public int getIndex(Item item) {
@@ -112,6 +110,26 @@ public class Inventory {
 		return getSameCell(id, quantity) != -1;
 	}
 
+	public boolean hasItem(int id) {
+		return hasItem(id, 1);
+	}
+
+	public boolean containsAll(List<Item> items) {
+		for (Item item : items) {
+			Item invItem = getItem(item.id);
+			if (invItem == Item.nullItem || invItem.quantity < item.quantity)
+				return false;
+		}
+		return true;
+	}
+
+	public boolean containsNone(List<Item> items) {
+		for (Item item : items)
+			if (hasItem(item.id))
+				return false;
+		return true;
+	}
+
 	public int getIndex(int id) {
 		int pos = 0;
 		for (Item item : items) {
@@ -124,11 +142,9 @@ public class Inventory {
 
 	public int getSameCell(int id, int q) { // find q or more items
 		int i = getIndex(id);
-		if (i != -1) {
+		if (i != -1)
 			if (items.get(i).quantity < q)
 				return -1;
-
-		}
 		return i;
 	}
 
@@ -157,7 +173,7 @@ public class Inventory {
 		return items.get(idx);
 	}
 
-	void clear() {
+	public void clear() {
 		items.clear();
 		curWeight = 0;
 	}
@@ -321,6 +337,10 @@ public class Inventory {
 
 	public boolean delItem(int id) {
 		return delItem(id, 1);
+	}
+
+	public boolean isEmpty() {
+		return items.isEmpty();
 	}
 
 	public boolean itemsExist(String sequence) {

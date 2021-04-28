@@ -2,6 +2,7 @@ package hitonoriol.madsand.entities;
 
 import java.util.ArrayDeque;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Queue;
 import java.util.function.Predicate;
 
@@ -220,8 +221,16 @@ public abstract class Entity extends MapEntity {
 		MadSand.getRenderer().queuePath(Path.create(thisCoords.toWorld(), obstacleCoords.toWorld()), 0.675f, Color.RED);
 	}
 
+
+
 	public boolean addItem(Item item) {
 		return inventory.putItem(item);
+	}
+
+	public boolean addItem(List<Item> items) {
+		for (Item item : items)
+			addItem(item);
+		return true;
 	}
 
 	public boolean addItem(int id, int quantity) {

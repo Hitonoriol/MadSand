@@ -135,6 +135,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 		if (properties.name != null)
 			this.name = properties.name;
 
+		this.recipe = properties.recipe;
 		this.weight = properties.weight;
 		this.cost = properties.cost;
 		this.useAction = properties.useAction;
@@ -156,6 +157,10 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 	@JsonIgnore
 	public float getWeight() {
 		return weight * (float) quantity;
+	}
+
+	public boolean isCraftable() {
+		return recipe != null;
 	}
 
 	@Override
@@ -185,7 +190,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 		return String.format("[%d] {%s} %d %s (%.2f kg)",
 				hashCode(), getClass().getSimpleName(), quantity, name, getWeight());
 	}
-	
+
 	@Override
 	public String getHotbarString() {
 		return getFullName();
@@ -310,6 +315,10 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 
 	public static Item create(int id) {
 		return create(id, 1);
+	}
+
+	public static Item createRandom() {
+		return create(Utils.randElement(ItemProp.items.keySet()));
 	}
 
 	public boolean isEquipment() {

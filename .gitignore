@@ -51,3 +51,6 @@ MadSand-Launcher/version.dat
 
 release
 desktop/prefs.json
+.idea/
+prefs.json
+test/build
