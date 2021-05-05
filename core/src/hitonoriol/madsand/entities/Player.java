@@ -622,7 +622,7 @@ public class Player extends Entity {
     }
 
     private void talkToNpc(AbstractNpc npc) {
-        int currency = Globals.getInt(Globals.CURRENCY);
+        int currency = Globals.values().currencyId;
         Location location = MadSand.world.getLocation();
         if (!npc.stats.faction.isHuman()) {
             MadSand.print("Doesn't seem like " + npc.stats.name + " can talk");
@@ -633,7 +633,7 @@ public class Player extends Entity {
             WorkerType occupation = location.settlement.getOccupation(npc.uid);
             dialogTitle += ((occupation != null) ? " (" + occupation.name() + ")" : "");
         }
-        GameDialog npcDialog = new DialogChainGenerator(Utils.randElement(Globals.instance().idleNpcText))
+        GameDialog npcDialog = new DialogChainGenerator(Utils.randElement(Globals.values().idleNpcText))
                 .setAllTitles(dialogTitle).generate(Gui.overlay);
 
         npcDialog.getProceedButton().setText("Goodbye");
@@ -1161,7 +1161,7 @@ public class Player extends Entity {
         ArrayList<Item> items = new ArrayList<>();
         // Require coins
         int creationCost = (settlementsEstablished + 1) * SETTLEMENT_COST;
-        items.add(Item.create(Globals.getInt(Globals.CURRENCY), creationCost));
+        items.add(Item.create(Globals.values().currencyId, creationCost));
 
         // Not-so-random material of tier #<settlementsEstablished>
         Item requiredResource = Item.create(

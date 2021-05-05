@@ -10,8 +10,13 @@ public class NpcProp {
 	public static TradeListContainer tradeLists = new TradeListContainer();
 
 	public static AbstractNpc spawnNpc(int id, int x, int y) {
-		AbstractNpc npc = npcs.get(id).spawn();
+		AbstractNpc npc = spawnNpc(id);
 		npc.teleport(x, y);
 		return npc;
+	}
+
+	/* Spawns a new NPC into the cold dark digital limbo */
+	public static AbstractNpc spawnNpc(int id) {
+		return npcs.get(id).spawn();
 	}
 }

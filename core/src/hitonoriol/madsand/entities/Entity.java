@@ -185,7 +185,7 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public boolean canAfford(int cost) {
-		return inventory.hasItem(Globals.getInt(Globals.CURRENCY), cost);
+		return inventory.hasItem(Globals.values().currencyId, cost);
 	}
 
 	protected void attack(MapObject object, int dmg) {
@@ -220,8 +220,6 @@ public abstract class Entity extends MapEntity {
 				target -> attack(target, impactDmg));
 		MadSand.getRenderer().queuePath(Path.create(thisCoords.toWorld(), obstacleCoords.toWorld()), 0.675f, Color.RED);
 	}
-
-
 
 	public boolean addItem(Item item) {
 		return inventory.putItem(item);
@@ -346,12 +344,12 @@ public abstract class Entity extends MapEntity {
 	@JsonIgnore
 	public abstract int getLvl();
 
-	void dropInventory() {
+	public void dropInventory() {
 		Item item;
 		Map curLoc = MadSand.world.getCurLoc();
 		for (int i = inventory.items.size() - 1; i >= 0; --i) {
 			item = inventory.items.get(i);
-			curLoc.putLoot(x, y, new Item(item)); // TODO: Item.copy
+			curLoc.putLoot(x, y, item.copy());
 			inventory.delItem(item);
 		}
 	}

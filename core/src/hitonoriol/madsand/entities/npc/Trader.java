@@ -46,7 +46,7 @@ public class Trader extends AbstractNpc {
 	}
 
 	private void addCurrency() {
-		int currencyId = Globals.getInt(Globals.CURRENCY);
+		int currencyId = Globals.values().currencyId;
 		inventory.putItem(Item.create(currencyId, rollTraderCurrency()));
 	}
 

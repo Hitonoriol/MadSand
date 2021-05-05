@@ -21,12 +21,12 @@ public class Scroll extends ScriptedConsumable {
 
 	@Override
 	protected HashMap<String, String> getScriptMap() {
-		return Globals.instance().scrolls;
+		return Globals.values().scrolls;
 	}
 
 	@Override
 	protected int getBaseId() {
-		return Globals.instance().baseScrollId;
+		return Globals.values().baseScrollId;
 	}
 
 	@Override

@@ -22,7 +22,7 @@ public class TraderDialog extends GameDialog {
 	Trader npc;
 
 	public TraderDialog(Player player, Trader npc) {
-		super(npc.stats.name, Utils.randElement(Globals.instance().traderGreetings), Gui.overlay);
+		super(npc.stats.name, Utils.randElement(Globals.values().traderGreetings), Gui.overlay);
 		this.npc = npc;
 
 		TextButton tradeButton = new TextButton("What do you have for sale?", Gui.skin);
@@ -63,7 +63,7 @@ public class TraderDialog extends GameDialog {
 	}
 
 	private void addQuestReward(ProceduralQuest quest) {
-		int currency = Globals.getInt(Globals.CURRENCY);
+		int currency = Globals.values().currencyId;
 		int curQuantity = npc.rollTraderCurrency();
 		String currencyName = ItemProp.getItemName(currency);
 		quest.endMsg += Resources.LINEBREAK +

@@ -1,6 +1,6 @@
 {
+	"currencyId" : 21,
 	"values" : {
-		"currencyId" : "21",
 		"travelItem" : "130",
 		"timeSkipItem" : "101",
 		"drowningDamage" : "3"

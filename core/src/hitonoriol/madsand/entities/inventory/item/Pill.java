@@ -20,12 +20,12 @@ public class Pill extends ScriptedConsumable {
 
 	@Override
 	protected HashMap<String, String> getScriptMap() {
-		return Globals.instance().pills;
+		return Globals.values().pills;
 	}
 
 	@Override
 	protected int getBaseId() {
-		return Globals.instance().basePillId;
+		return Globals.values().basePillId;
 	}
 
 	@Override

@@ -24,181 +24,181 @@ import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
 
 public class MadSand extends Game {
-    public static final int TILESIZE = 33;
+	public static final int TILESIZE = 33;
 
-    public static final String SAVE_EXT = ".msf";
+	public static final String SAVE_EXT = ".msf";
 
-    public static final String SAVEDIR = "MadSand_Saves/";
-    public static final String MAPDIR = SAVEDIR + "worlds/";
-    public static final String PLAYERFILE = "/Player" + SAVE_EXT;
-    public static final String LOGFILE = "/log" + SAVE_EXT;
-    public static final String NPCSFILE = "NPCs";
-    public static final String WORLDFILE = "/World" + SAVE_EXT;
-    public static String WORLDNAME = "";
+	public static final String SAVEDIR = "MadSand_Saves/";
+	public static final String MAPDIR = SAVEDIR + "worlds/";
+	public static final String PLAYERFILE = "/Player" + SAVE_EXT;
+	public static final String LOGFILE = "/log" + SAVE_EXT;
+	public static final String NPCSFILE = "NPCs";
+	public static final String WORLDFILE = "/World" + SAVE_EXT;
+	public static String WORLDNAME = "";
 
-    public static boolean isWorldUntouched = true; // flag for once-per-launch actions
+	public static boolean isWorldUntouched = true; // flag for once-per-launch actions
 
-    public static int MAXSAVESLOTS = 10;
+	public static int MAXSAVESLOTS = 10;
 
-    public static SpriteBatch batch;
-    public static World world;
+	public static SpriteBatch batch;
+	public static World world;
 
-    Storage<AbstractScreen<?>> currentScreen = new Storage<>();
-    private static MadSand game;
-    private static GameWorldRenderer gameWorld;
+	Storage<AbstractScreen<?>> currentScreen = new Storage<>();
+	private static MadSand game;
+	private static GameWorldRenderer gameWorld;
 
-    public static GameScreen gameScreen;
-    public static CraftScreen craftScreen;
-    public static DeathScreen deathScreen;
-    public static MainMenu mainMenu;
+	public static GameScreen gameScreen;
+	public static CraftScreen craftScreen;
+	public static DeathScreen deathScreen;
+	public static MainMenu mainMenu;
 
-    public void create() {
-        Utils.out("Starting initialization!");
-        game = this;
-        batch = new SpriteBatch();
-        gameWorld = new GameWorldRenderer();
-        Gdx.graphics.setContinuousRendering(false);
+	private long startTime = Utils.now();
 
-        Timer.instance().start();
-        Resources.loadAll();
-        Gui.init();
-        GameTextSubstitutor.init();
-        Keyboard.initListener();
-        Mouse.initListener();
+	public void create() {
+		Utils.out("Starting initialization!");
+		game = this;
+		batch = new SpriteBatch();
+		gameWorld = new GameWorldRenderer();
+		Gdx.graphics.setContinuousRendering(false);
 
-        GameSaver.createDirs();
-        initNewGame();
-        initScreens();
+		Timer.instance().start();
+		Resources.loadAll();
+		Gui.init();
+		GameTextSubstitutor.init();
+		Keyboard.initListener();
+		Mouse.initListener();
 
-        Utils.out("End of initialization!");
-    }
+		GameSaver.createDirs();
+		initNewGame();
+		initScreens();
 
-    private static void initScreens() {
-        gameScreen = new GameScreen(gameWorld);
-        craftScreen = new CraftScreen(gameWorld);
-        deathScreen = new DeathScreen(gameWorld);
-        mainMenu = new MainMenu(gameWorld);
-        switchScreen(mainMenu);
-    }
+		Utils.out("End of initialization!");
+	}
 
-    public static void initNewGame() {
-        world = new World();
-        World.player.updCoords();
-        Lua.init();
-        Gui.overlay.gameLog.clear();
-        world.generate();
-    }
+	private static void initScreens() {
+		gameScreen = new GameScreen(gameWorld);
+		craftScreen = new CraftScreen(gameWorld);
+		deathScreen = new DeathScreen(gameWorld);
+		mainMenu = new MainMenu(gameWorld);
+		switchScreen(mainMenu);
+	}
 
-    public static void switchScreen(Screen screen) {
-        if (Gui.gameUnfocused)
-            Gui.overlay.gameContextMenu.setVisible(false);
-        game.setScreen(screen);
-    }
+	public static void initNewGame() {
+		world = new World();
+		World.player.updCoords();
+		Lua.init();
+		Gui.overlay.gameLog.clear();
+		world.generate();
+	}
 
-    public static void switchScreen(AbstractScreen<?> screen) {
-        game.currentScreen.set(screen);
-        switchScreen((Screen) screen);
-    }
+	public static void switchScreen(Screen screen) {
+		if (Gui.gameUnfocused)
+			Gui.overlay.gameContextMenu.setVisible(false);
+		game.setScreen(screen);
+	}
 
-    public static void reset() {
-        Gui.gameResumeFocus();
-        switchScreen(gameScreen);
-    }
+	public static void switchScreen(AbstractScreen<?> screen) {
+		game.currentScreen.set(screen);
+		switchScreen((Screen) screen);
+	}
 
-    @Override
-    public void render() {
-        Keyboard.pollGlobalHotkeys();
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        super.render();
-    }
+	public static void reset() {
+		Gui.gameResumeFocus();
+		switchScreen(gameScreen);
+	}
 
-    @Override
-    public void resume() {
-    }
+	@Override
+	public void render() {
+		Keyboard.pollGlobalHotkeys();
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		super.render();
+	}
 
-    @Override
-    public void resize(int width, int height) {
-        gameWorld.updateViewport();
-        Gui.overlay.getViewport().update(width, height, true);
-        Gui.overlay.updateWidgetPositions();
-    }
+	@Override
+	public void resume() {}
 
-    @Override
-    public void pause() {
-    }
+	@Override
+	public void resize(int width, int height) {
+		gameWorld.updateViewport();
+		Gui.overlay.getViewport().update(width, height, true);
+		Gui.overlay.updateWidgetPositions();
+	}
 
-    @Override
-    public void dispose() {
-        Prefs.savePrefs();
-        Utils.out("End");
-    }
+	@Override
+	public void pause() {}
 
-    public static void setRenderRadius(int radius) {
-        gameWorld.setRenderRadius(radius);
-    }
+	@Override
+	public void dispose() {
+		Prefs.savePrefs();
+		Utils.out("Bye! Session lasted for [%s]", Utils.timeString(Utils.now() - startTime));
+	}
 
-    public static OrthographicCamera getCamera() {
-        return gameWorld.getCamera();
-    }
+	public static void setRenderRadius(int radius) {
+		gameWorld.setRenderRadius(radius);
+	}
 
-    public static Stage getStage() {
-        return game.currentScreen.get().getStage();
-    }
+	public static OrthographicCamera getCamera() {
+		return gameWorld.getCamera();
+	}
 
-    public static GameWorldRenderer getRenderer() {
-        return gameWorld;
-    }
+	public static Stage getStage() {
+		return game.currentScreen.get().getStage();
+	}
 
-    public World getWorld() {
-        return world;
-    }
+	public static GameWorldRenderer getRenderer() {
+		return gameWorld;
+	}
 
-    public Player getPlayer() {
-        return world.player;
-    }
+	public World getWorld() {
+		return world;
+	}
 
-    public static World world() {
-        return game.getWorld();
-    }
+	public Player getPlayer() {
+		return world.player;
+	}
 
-    public static Player player() {
-        return game.getPlayer();
-    }
+	public static World world() {
+		return game.getWorld();
+	}
 
-    public static void warn(String msg) {
-        Gui.overlay.gameLog.warn(msg);
-    }
+	public static Player player() {
+		return game.getPlayer();
+	}
 
-    public static void print(String arg) {
-        Gui.overlay.gameLog.print(arg);
-    }
+	public static void warn(String msg) {
+		Gui.overlay.gameLog.warn(msg);
+	}
 
-    public static void print(String arg, Object... args) {
-        print(String.format(arg, args));
-    }
+	public static void print(String arg) {
+		Gui.overlay.gameLog.print(arg);
+	}
 
-    public static void print(String msg, String color) {
-        Gui.overlay.gameLog.print(msg, color);
-    }
+	public static void print(String arg, Object... args) {
+		print(String.format(arg, args));
+	}
 
-    public static void notice(String msg) {
-        Gui.overlay.gameLog.notice(msg);
-    }
+	public static void print(String msg, String color) {
+		Gui.overlay.gameLog.print(msg, color);
+	}
 
-    public static void notice(String msg, Object... args) {
-        notice(String.format(msg, args));
-    }
+	public static void notice(String msg) {
+		Gui.overlay.gameLog.notice(msg);
+	}
 
-    // New world is generated on game launch, so this thing ensures that new world won't be generated twice when you press "New Game" button
-    public static void worldEntered() {
-        if (MadSand.isWorldUntouched)
-            MadSand.isWorldUntouched = false;
+	public static void notice(String msg, Object... args) {
+		notice(String.format(msg, args));
+	}
 
-        world.enter();
-    }
+	// New world is generated on game launch, so this thing ensures that new world won't be generated twice when you press "New Game" button
+	public static void worldEntered() {
+		if (MadSand.isWorldUntouched)
+			MadSand.isWorldUntouched = false;
 
-    public static void setWorldName(String arg) {
-        WORLDNAME = arg;
-    }
+		world.enter();
+	}
+
+	public static void setWorldName(String arg) {
+		WORLDNAME = arg;
+	}
 }

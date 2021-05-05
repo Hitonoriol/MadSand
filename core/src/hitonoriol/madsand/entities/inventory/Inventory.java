@@ -59,6 +59,11 @@ public class Inventory {
 		return "[" + Utils.round(curWeight) + "/" + maxWeight + "] kg";
 	}
 
+	@JsonIgnore
+	public float getTotalWeight() {
+		return curWeight;
+	}
+
 	public void refreshContents() {
 		Item item;
 		for (int i = 0; i < items.size(); ++i) {
@@ -83,7 +88,7 @@ public class Inventory {
 	public void dump() {
 		Utils.out("Inventory dump: ");
 		Utils.out("Weight: " + curWeight + " / " + maxWeight);
-		items.forEach(item->Utils.out(item.toString()));
+		items.forEach(item -> Utils.out(item.toString()));
 	}
 
 	public int getIndex(Item item) {
@@ -244,6 +249,9 @@ public class Inventory {
 	 * use <Entity>.addItem(...) for extra items to drop
 	 */
 	public boolean putItem(Item item) {
+		if (item.equals(Item.nullItem))
+			return false;
+
 		if (item.quantity < 1)
 			return true;
 
@@ -293,7 +301,10 @@ public class Inventory {
 	}
 
 	public boolean delItem(int id, int quantity) {
-		return delItem(Item.create(id), quantity);
+		if (!hasItem(id))
+			return false;
+
+		return delItem(getItem(id), quantity);
 	}
 
 	public boolean delItem(String query) {
@@ -314,7 +325,7 @@ public class Inventory {
 		for (int i = items.size() - 1; i >= 0; --i) {
 			foundItem = items.get(i);
 			if (foundItem.equals(item)) {
-				curWeight -= foundItem.weight * quantity;
+				curWeight -= foundItem.weight * (float) quantity;
 				foundItem.quantity -= quantity;
 
 				if (foundItem.quantity < 1) {

@@ -87,9 +87,9 @@ public class ProceduralQuest extends Quest {
 
 	private void addRewardItems() {
 		super.rewardItems = "";
-		List<Item> rewards = Globals.instance().proceduralQuestRewards.rollItems();
+		List<Item> rewards = Globals.values().proceduralQuestRewards.rollItems();
 		for (Item item : rewards) {
-			if (item.id == Globals.getInt(Globals.CURRENCY))
+			if (item.isCurrency())
 				item.quantity = (int) (rollRewardAmount() * 1.125);
 
 			super.rewardItems += item.getString() + Item.BLOCK_DELIM;
@@ -171,14 +171,14 @@ public class ProceduralQuest extends Quest {
 
 	private void randomFetchQuest() {
 		List<Integer> fetchItem = new ArrayList<>();
-		fetchItem.add(Utils.randElement(Globals.instance().fetchQuestItems));
+		fetchItem.add(Utils.randElement(Globals.values().fetchQuestItems));
 		Pair coords = MadSand.world.getCurLoc().randPlaceLoot(fetchItem.get(0));
 		super.reqItems += randomQuest(fetchItem, 1, 1);
 		super.startMsg += " I think the lost item is somewhere near (" + coords + ").";
 	}
 
 	private void randomHuntQuest() {
-		super.reqItems += randomQuest(Globals.instance().huntQuestItems, 2, rollMaxObjective(MAX_HUNT_Q));
+		super.reqItems += randomQuest(Globals.values().huntQuestItems, 2, rollMaxObjective(MAX_HUNT_Q));
 	}
 
 	private void randomKillQuest() {
@@ -201,7 +201,7 @@ public class ProceduralQuest extends Quest {
 	}
 
 	private String getStartMsg() {
-		return Utils.randElement(Globals.instance().proceduralQuestText.get(type));
+		return Utils.randElement(Globals.values().proceduralQuestText.get(type));
 	}
 
 	public enum Type {

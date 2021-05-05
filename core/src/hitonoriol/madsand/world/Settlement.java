@@ -39,7 +39,7 @@ public class Settlement {
 	}
 
 	public boolean upgradeSize() {
-		Item upgradeCost = Item.create(Globals.getInt(Globals.CURRENCY), getSizeUpgradeCost());
+		Item upgradeCost = Item.create(Globals.values().currencyId, getSizeUpgradeCost());
 		if (!warehouse.itemExists(upgradeCost))
 			return false;
 

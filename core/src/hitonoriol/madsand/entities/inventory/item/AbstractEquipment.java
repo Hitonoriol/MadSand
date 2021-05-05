@@ -46,6 +46,14 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 	}
 
 	@Override
+	public Item setQuantity(int quantity) {
+		if (this.quantity != 1)
+			this.quantity = 1;
+
+		return this;
+	}
+
+	@Override
 	public void use(Player player) {
 		super.useIfPossible(player, () -> equip(player));
 	}
@@ -86,6 +94,9 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 
 	@Override
 	public boolean equals(Object obj) {
+		if (!(obj instanceof AbstractEquipment))
+			return false;
+
 		if (!super.equals(obj))
 			return false;
 

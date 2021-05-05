@@ -65,7 +65,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 
 	public Item(Item protoItem) {
 		id = protoItem.id;
-		quantity = 1;
+		quantity = protoItem.quantity > 1 ? protoItem.quantity : 1;
 		loadProperties(protoItem);
 	}
 
@@ -99,7 +99,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 
 	@JsonIgnore
 	public int getPrice() {
-		return ItemProp.getCost(id);
+		return cost;
 	}
 
 	@JsonIgnore
@@ -143,7 +143,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 
 	@JsonIgnore
 	public boolean isCurrency() {
-		return id == Globals.getInt(Globals.CURRENCY);
+		return id == Globals.values().currencyId;
 	}
 
 	@JsonIgnore
@@ -187,8 +187,13 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 
 	@Override
 	public String toString() {
-		return String.format("[%d] {%s} %d %s (%.2f kg)",
-				hashCode(), getClass().getSimpleName(), quantity, name, getWeight());
+		return String.format("[%d] {%s} [id: %d] %d %s (%.2f kg)",
+				hashCode(),
+				getClass().getSimpleName(),
+				id,
+				quantity,
+				name,
+				getWeight());
 	}
 
 	@Override
@@ -301,8 +306,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 	}
 
 	public static Item duplicate(Item item, int quantity) {
-		Item newItem = item.copy().setQuantity(quantity);
-		return newItem;
+		return item.copy().setQuantity(quantity);
 	}
 
 	public static Item create(Item item, int quantity) {
@@ -318,7 +322,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 	}
 
 	public static Item createRandom() {
-		return create(Utils.randElement(ItemProp.items.keySet()));
+		return create(Utils.randElement(ItemProp.items.keySet(), 1));
 	}
 
 	public boolean isEquipment() {

@@ -13,9 +13,10 @@ public class Globals {
 	public static final String VERSION = "Alpha v0.49.5-pre6";
 
 	public static String TRAVEL_ITEM = "travelItem", TIMESKIP_ITEM = "timeSkipItem";
-	public static String CURRENCY = "currencyId";
 
 	private static Globals instance = new Globals();
+
+	public int currencyId;
 
 	public ArrayList<String> idleNpcText;
 	public ArrayList<String> traderGreetings;
@@ -44,12 +45,12 @@ public class Globals {
 	}
 
 	private static void initPillScripts() {
-		HashMap<String, String> scripts = instance().pills;
-		instance().abilities
+		HashMap<String, String> scripts = values().pills;
+		values().abilities
 				.forEach((id, ability) -> scripts.put(ability.name, "player:addAbility(" + id + ")"));
 	}
 
-	public static Globals instance() {
+	public static Globals values() {
 		return instance;
 	}
 
@@ -62,6 +63,6 @@ public class Globals {
 	}
 
 	public static Item getCurrency() {
-		return ItemProp.getItem(getInt(CURRENCY));
+		return ItemProp.getItem(instance.currencyId);
 	}
 }

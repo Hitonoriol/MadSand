@@ -59,6 +59,9 @@ public abstract class ScriptedConsumable extends Item {
 	}
 
 	public ScriptedConsumable roll() {
+		if (name != null && !name.equals(getBaseName()))
+			return this;
+
 		return load(Utils.randElement(getScriptMap().keySet()));
 	}
 

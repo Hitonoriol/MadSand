@@ -365,7 +365,6 @@ public class Resources {
 	}
 
 	public static String readInternal(String file) {
-		Utils.out("Reading internal file \"" + file + "\"");
 		return Gdx.files.internal(file).readString();
 	}
 

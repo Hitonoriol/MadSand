@@ -16,7 +16,7 @@ public class TradeInventory {
 	}
 
 	public TradeInventory(Inventory seller, Inventory buyer) {
-		this(seller, buyer, Globals.getInt(Globals.CURRENCY));
+		this(seller, buyer, Globals.values().currencyId);
 	}
 
 	public void setCurrency(int id) {
@@ -31,7 +31,7 @@ public class TradeInventory {
 			return false;
 
 		buyer.delItem(currency, cost);
-		buyer.putItem(new Item(item).setQuantity(quantity)); // TODO: Item.copy
+		buyer.putItem(Item.duplicate(item, quantity));
 
 		seller.putItem(currency, cost);
 		seller.delItem(item, quantity);

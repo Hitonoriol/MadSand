@@ -36,7 +36,7 @@ public class LootTable extends RollTable<LootTable.LootEntry> {
 
 	public static LootTable parse(String lootTblString) {
 		if (lootTblString.contains(LOAD_TABLE_TOKEN))
-			return Globals.instance().lootTables.get(lootTblString.substring(1));
+			return Globals.values().lootTables.get(lootTblString.substring(1));
 		
 		if (!lootTblString.contains("|")) {
 			try {

@@ -48,7 +48,7 @@ public abstract class Ability implements DynamicallyCastable<Ability> {
 	}
 
 	public static Ability get(int id) {
-		return Globals.instance().abilities.get(id);
+		return Globals.values().abilities.get(id);
 	}
 	
 	@Override

@@ -5,7 +5,6 @@ import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.dialogs.SliderDialog;
 import hitonoriol.madsand.properties.Globals;
-import hitonoriol.madsand.properties.ItemProp;
 
 public class TradeConfirmDialog extends SliderDialog {
 	private static String chooseTextA = "Choose what amount of ";
@@ -14,7 +13,7 @@ public class TradeConfirmDialog extends SliderDialog {
 	private static String titleBuyText = "Buy ";
 	private static String titleSellText = "Sell ";
 
-	private static String currencyName = ItemProp.getItemName(Globals.getInt(Globals.CURRENCY));
+	private static String currencyName = Globals.getCurrency().name;
 
 	private static String costFor = " for ";
 	private String costLabelText;

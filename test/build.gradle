@@ -19,7 +19,3 @@ dependencies {
     implementation('org.junit.jupiter:junit-jupiter-engine')
     implementation('org.junit.platform:junit-platform-runner')
 }
-
-test {
-    useJUnitPlatform()
-}
