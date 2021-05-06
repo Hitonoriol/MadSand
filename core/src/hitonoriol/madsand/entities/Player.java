@@ -380,11 +380,15 @@ public class Player extends Entity {
             totalKills += getKillCount(id);
         return totalKills;
     }
+    
+    public boolean addToKillCount(int id, int kills) {
+        boolean first = killCount.containsKey(id);
+        killCount.put(id, getKillCount(id) + kills);
+        return !first;
+    }
 
     public boolean addToKillCount(int id) {
-        boolean first = killCount.containsKey(id);
-        killCount.put(id, getKillCount(id) + 1);
-        return !first;
+        return addToKillCount(id, 1);
     }
 
     void satiate(int amt) {

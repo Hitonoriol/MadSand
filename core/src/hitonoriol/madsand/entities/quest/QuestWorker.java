@@ -70,9 +70,7 @@ public class QuestWorker {
 		if (id >= 0)
 			return QuestList.quests.get(id);
 
-		Quest quest = findQuest(id, (ProceduralQuest squest, Long sid) -> squest.id == sid.longValue());
-
-		return quest;
+		return findQuest(id, (ProceduralQuest squest, Long sid) -> squest.id == sid.longValue());
 	}
 
 	public int getPreviousQuest(int id) {

@@ -45,7 +45,7 @@ public class Quest {
 	public String endMsg; // Dialog chain string -- displayed on completion of this quest
 	public String reqMsg; // Dialog chain string -- displayed if player talks to npc with this quest still active
 
-	public String reqKills; // "npcId/killCount:npcId/killCount"
+	public String reqKills = Item.EMPTY_ITEM; // "npcId/killCount:npcId/killCount"
 	public String reqItems = Item.EMPTY_ITEM; // Item string (id/quantity:id/quantity:...) -- items that are required for the quest completion
 	public String giveItems = Item.EMPTY_ITEM; // Item string -- Items to give after the quest start
 	public String rewardItems = Item.EMPTY_ITEM; // Item string -- Items to give on quest completion
@@ -79,6 +79,14 @@ public class Quest {
 	public Quest setPlayer(Player player) {
 		this.player = player;
 		return this;
+	}
+
+	public boolean hasItemObjective() {
+		return !reqItems.equals(Item.EMPTY_ITEM);
+	}
+
+	public boolean hasKillRequirements() {
+		return !reqKills.equals(Item.EMPTY_ITEM);
 	}
 
 	public int getKillObjectiveProgress(int npcId) {

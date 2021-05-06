@@ -8,6 +8,7 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Mouse;
+import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.EquipSlot;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.PlayerStats;
@@ -37,6 +39,7 @@ import hitonoriol.madsand.gui.widgets.OverlayBottomMenu;
 import hitonoriol.madsand.gui.widgets.QuestArrow;
 import hitonoriol.madsand.gui.widgets.StatProgressBar;
 import hitonoriol.madsand.lua.Lua;
+import hitonoriol.madsand.util.Functional;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
 
@@ -259,6 +262,15 @@ public class Overlay extends Stage {
 				arrow.update();
 			}
 		}
+	}
+
+	public void closeAllDialogs() {
+		Functional.with(getActors(), actors -> {
+			Actor actor;
+			for (int i = 0; i < actors.size; ++i)
+				if ((actor = actors.get(i)) instanceof GameDialog)
+					actor.remove();
+		});
 	}
 
 	public void refresh() {
