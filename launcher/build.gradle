@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+}
+
+sourceSets.main.java.srcDirs = [ "src/" ]
+
+eclipse.project.name = appName + "-launcher"
+
+compileJava {
+	options.release = 8
+}
+
+version '1.2'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+	implementation group: 'commons-codec', name: 'commons-codec', version: '1.11'
+	implementation group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
+}

@@ -4,6 +4,8 @@ plugins {
 
 sourceSets.main.java.srcDirs = [ "src/" ]
 
+eclipse.project.name = appName + "-test"
+
 version '1.0'
 
 repositories {
