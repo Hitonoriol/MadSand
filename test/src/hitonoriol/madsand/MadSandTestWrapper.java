@@ -30,7 +30,7 @@ public class MadSandTestWrapper extends MadSand {
 
 		Utils.out();
 		runAll();
-		
+
 		Gdx.app.exit();
 	}
 
@@ -38,7 +38,7 @@ public class MadSandTestWrapper extends MadSand {
 
 	private void runAll() {
 		LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
-				.selectors(selectPackage(getClass().getPackageName()))
+				.selectors(selectPackage(getClass().getPackageName() + ".tests"))
 				.filters(includeClassNamePatterns(".*Test"))
 				.build();
 

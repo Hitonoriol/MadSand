@@ -13,6 +13,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Mouse;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.properties.Tutorial;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
@@ -37,6 +38,7 @@ public class Lua {
 		register("val_utils", CoerceJavaToLua.coerce(new Utils()));
 		register("lambda", CoerceJavaToLua.coerce(new LuaLambda()));
 		register("pair", CoerceJavaToLua.coerce(Pair.getInstance()));
+		register("item", CoerceJavaToLua.coerce(new Item()));
 		register("mouse", CoerceJavaToLua.coerce(new Mouse()));
 		register("world", CoerceJavaToLua.coerce(MadSand.world));
 		register("player", CoerceJavaToLua.coerce(World.player));
@@ -46,7 +48,7 @@ public class Lua {
 
 		onAction = Resources.readInternal(Resources.SCRIPT_DIR + onActionScript);
 	}
-	
+
 	private static void reinitGlobals() {
 		globals = JsePlatform.standardGlobals();
 	}

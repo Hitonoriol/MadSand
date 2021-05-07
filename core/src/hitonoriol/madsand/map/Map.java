@@ -93,7 +93,7 @@ public class Map {
 		rollSize();
 		purge();
 	}
-	
+
 	@JsonIgnore
 	public Graph getPathfindingGraph() {
 		return graph;
@@ -606,7 +606,7 @@ public class Map {
 		return mapTiles.remove(coords) != null;
 	}
 
-	private boolean delTile(Pair coords) {
+	public boolean delTile(Pair coords) {
 		boolean removed = mapTiles.remove(coords) != null;
 		mapTiles.put(coords, new Tile(defTile));
 		return removed;
@@ -803,16 +803,16 @@ public class Map {
 		randPlaceInCircle(lootAction, id, x0, y0, radius);
 	}
 
-	public void randPlaceObject(int id) {
-		randPlace(objectAction, id);
+	public Pair randPlaceObject(int id) {
+		return randPlace(objectAction, id);
 	}
 
-	public void randPlaceObject(ArrayList<Integer> id, int range) {
-		randPlace(objectAction, id.get(Utils.random.nextInt(range)));
+	public Pair randPlaceObject(ArrayList<Integer> id, int range) {
+		return randPlace(objectAction, id.get(Utils.random.nextInt(range)));
 	}
 
-	public void randPlaceTile(int id) {
-		randPlace(tileAction, id);
+	public Pair randPlaceTile(int id) {
+		return randPlace(tileAction, id);
 	}
 
 	public Pair randPlaceLoot(int id) {
@@ -984,11 +984,14 @@ public class Map {
 		return spawnNpc(id, coords.x, coords.y);
 	}
 
-	public boolean putNpc(AbstractNpc npc) {
-		int x = npc.x;
-		int y = npc.y;
+	public AbstractNpc spawnNpc(int id) {
+		Pair npcPos = getRandomPoint().copy();
+		spawnNpc(id, npcPos);
+		return getNpc(npcPos);
+	}
 
-		if (!correctCoords(coords.set(x, y)))
+	public boolean putNpc(AbstractNpc npc) {
+		if (!correctCoords(coords.set(npc.x, npc.y)))
 			return false;
 
 		if (!getNpc(coords.x, coords.y).equals(nullNpc))

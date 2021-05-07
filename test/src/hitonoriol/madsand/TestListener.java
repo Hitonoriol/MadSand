@@ -17,16 +17,13 @@ public class TestListener implements TestExecutionListener {
 
 	@Override
 	public void executionStarted(TestIdentifier testIdentifier) {
-		Utils.out("* Starting %s [%s]...", testIdTypes[testIdentifier.getType().ordinal()],
+		Utils.out("\n* Starting %s [%s]...", testIdTypes[testIdentifier.getType().ordinal()],
 				testIdentifier.getDisplayName());
 	}
 
 	@Override
 	public void executionFinished(TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
-		if (!testIdentifier.isTest())
-			return;
-
-		Utils.out("* [%s] execution finished! [%s]\n",
+		Utils.out("* [%s] execution finished! [%s]",
 				testIdentifier.getDisplayName(),
 				testExecutionResult.getStatus());
 	}

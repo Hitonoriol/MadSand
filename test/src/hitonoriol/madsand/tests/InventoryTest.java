@@ -1,4 +1,4 @@
-package hitonoriol.madsand;
+package hitonoriol.madsand.tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -10,6 +10,7 @@ import org.apache.commons.lang3.mutable.MutableFloat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.inventory.CraftWorker;
 import hitonoriol.madsand.entities.inventory.Inventory;

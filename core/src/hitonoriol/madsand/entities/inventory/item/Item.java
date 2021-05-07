@@ -31,6 +31,7 @@ import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
+import me.xdrop.fuzzywuzzy.FuzzySearch;
 
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
@@ -319,6 +320,19 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 
 	public static Item create(int id) {
 		return create(id, 1);
+	}
+
+	public static Item create(String partialName, int quantity) {
+		return create(
+				FuzzySearch.extractOne(partialName,
+						ItemProp.items.values(), item -> item.name == null ? "" : item.name,
+						(str1, str2) -> FuzzySearch.tokenSortRatio(str1, str2))
+						.getReferent(),
+				quantity);
+	}
+
+	public static Item create(String partialName) {
+		return create(partialName, 1);
 	}
 
 	public static Item createRandom() {

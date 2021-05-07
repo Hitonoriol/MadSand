@@ -225,6 +225,14 @@ public abstract class Entity extends MapEntity {
 		return inventory.putItem(item);
 	}
 
+	public boolean addItem(String partialName, int quantity) {
+		return addItem(Item.create(partialName, quantity));
+	}
+
+	public boolean addItem(String partialName) {
+		return addItem(partialName, 1);
+	}
+
 	public boolean addItem(List<Item> items) {
 		for (Item item : items)
 			addItem(item);
