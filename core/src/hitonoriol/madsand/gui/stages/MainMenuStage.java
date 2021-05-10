@@ -1,6 +1,9 @@
 package hitonoriol.madsand.gui.stages;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -105,6 +108,16 @@ public class MainMenuStage extends Stage {
 		Gui.setAction(settingsButton, () -> new SettingsDialog().show());
 
 		Gui.setAction(exitButton, () -> System.exit(0));
+
+		super.addListener(new InputListener() {
+			@Override
+			public boolean keyUp(InputEvent event, int keycode) {
+				if (!MadSand.isWorldUntouched() && keycode == Keys.ESCAPE)
+					MadSand.switchScreen(MadSand.gameScreen);
+
+				return true;
+			}
+		});
 	}
 
 	static String VER_COLOR = "[LIME]";

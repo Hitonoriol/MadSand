@@ -7,7 +7,7 @@ import com.github.czyzby.noise4j.map.generator.room.dungeon.DungeonGenerator;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
-import hitonoriol.madsand.entities.LootTable;
+import hitonoriol.madsand.containers.rolltable.LootTable;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.Location;

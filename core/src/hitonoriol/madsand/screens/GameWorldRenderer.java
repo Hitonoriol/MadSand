@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.Texture;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Mouse;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.containers.AnimationContainer;
 import hitonoriol.madsand.containers.Line;
@@ -20,6 +19,7 @@ import hitonoriol.madsand.containers.PairFloat;
 import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
+import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.Tile;

@@ -2,7 +2,7 @@ package hitonoriol.madsand.world.worldgen;
 
 import java.util.ArrayList;
 
-import hitonoriol.madsand.entities.LootTable;
+import hitonoriol.madsand.containers.rolltable.LootTable;
 import hitonoriol.madsand.world.World;
 
 public class DungeonContents {

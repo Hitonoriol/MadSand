@@ -1,4 +1,4 @@
-package hitonoriol.madsand;
+package hitonoriol.madsand.input;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,6 +10,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
@@ -256,7 +258,10 @@ public class Mouse {
 		if (Keyboard.inputIgnored())
 			return;
 
-		if (heldButtons.contains(Buttons.LEFT)) {
+		if (heldButtons.contains(Buttons.MIDDLE))
+			World.player.lookAtMouse(wx, wy);
+
+		else if (heldButtons.contains(Buttons.LEFT)) {
 			World.player.lookAtMouse(wx, wy);
 			World.player.walk(World.player.stats.look);
 		}

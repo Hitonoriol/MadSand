@@ -1,10 +1,6 @@
 package hitonoriol.madsand.gui.widgets;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
@@ -19,6 +15,7 @@ import hitonoriol.madsand.gui.dialogs.BuildDialog;
 import hitonoriol.madsand.gui.dialogs.LandDialog;
 import hitonoriol.madsand.gui.dialogs.QuestJournal;
 import hitonoriol.madsand.gui.stages.Overlay;
+import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.world.World;
 
 public class OverlayBottomMenu extends Table {
@@ -27,8 +24,6 @@ public class OverlayBottomMenu extends Table {
 	static float HEIGHT = 35;
 	static float BUTTON_PADDING = 5;
 	static float TABLE_PADDING_LEFT = 25;
-
-	private Map<Integer, Button> keyBoundButtons = new HashMap<>();
 
 	NinePatchDrawable background;
 	Overlay overlay;
@@ -55,21 +50,12 @@ public class OverlayBottomMenu extends Table {
 		super.padLeft(TABLE_PADDING_LEFT);
 	}
 
-	public boolean isKeyBoundToButton(int key) {
-		return keyBoundButtons.containsKey(key);
-	}
-
-	public void toggleButton(int buttonKey) {
-		if (keyBoundButtons.containsKey(buttonKey))
-			keyBoundButtons.get(buttonKey).toggle();
-	}
-
 	private void addButton(String text, int key, Runnable action) {
 		TextButton button = new TextButton(text + " [" + Keys.toString(key) + "]", Gui.skin);
 		button.addListener(OverlayMouseoverListener.instance());
 		super.add(button).size(WIDTH, HEIGHT).pad(BUTTON_PADDING);
 		Gui.setAction(button, action);
-		keyBoundButtons.put(key, button);
+		Keyboard.getKeyBindManager().bind(key, () -> action.run());
 	}
 
 }

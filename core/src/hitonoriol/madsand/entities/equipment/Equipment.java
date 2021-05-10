@@ -1,4 +1,4 @@
-package hitonoriol.madsand.entities;
+package hitonoriol.madsand.entities.equipment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.CombatEquipment;

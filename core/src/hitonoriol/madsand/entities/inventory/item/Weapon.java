@@ -1,7 +1,7 @@
 package hitonoriol.madsand.entities.inventory.item;
 
-import hitonoriol.madsand.entities.EquipSlot;
 import hitonoriol.madsand.entities.Stat;
+import hitonoriol.madsand.entities.equipment.EquipSlot;
 
 public class Weapon extends CombatEquipment {
 

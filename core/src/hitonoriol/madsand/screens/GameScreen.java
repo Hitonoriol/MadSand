@@ -3,9 +3,9 @@ package hitonoriol.madsand.screens;
 import com.badlogic.gdx.Gdx;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.Keyboard;
-import hitonoriol.madsand.Mouse;
 import hitonoriol.madsand.gui.stages.Overlay;
+import hitonoriol.madsand.input.Keyboard;
+import hitonoriol.madsand.input.Mouse;
 
 public class GameScreen extends AbstractScreen<Overlay> {
 

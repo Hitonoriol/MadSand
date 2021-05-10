@@ -2,8 +2,8 @@ package hitonoriol.madsand.entities.inventory.item;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import hitonoriol.madsand.entities.EquipSlot;
 import hitonoriol.madsand.entities.Stat;
+import hitonoriol.madsand.entities.equipment.EquipSlot;
 
 public class Armor extends CombatEquipment {
 

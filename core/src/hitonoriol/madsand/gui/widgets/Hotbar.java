@@ -69,7 +69,7 @@ public class Hotbar extends Table {
 			this.item = item;
 			button = new TextButton(item.getHotbarString(), Gui.skin);
 			button.addListener(OverlayMouseoverListener.instance());
-			Gui.setFontSize(button.getLabel(), Gui.FONT_XS);
+			Gui.setFontSize(button.getLabel(), Gui.FONT_XXS);
 			Gui.setAction(button, () -> item.hotbarAction());
 		}
 

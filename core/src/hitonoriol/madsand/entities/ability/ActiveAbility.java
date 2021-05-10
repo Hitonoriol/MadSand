@@ -8,7 +8,6 @@ import hitonoriol.madsand.HotbarAssignable;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.properties.Prefs;
 import hitonoriol.madsand.world.World;
 
 public class ActiveAbility extends Ability implements HotbarAssignable {
@@ -47,7 +46,7 @@ public class ActiveAbility extends Ability implements HotbarAssignable {
 	}
 
 	public String getBindKeyString() {
-		return "[" + Optional.of(Prefs.values().getAbilityKey(id))
+		return "[" + Optional.of(MadSand.player().getAbilityKey(id))
 				.filter(key -> key != -1)
 				.map(key -> Keys.toString(key))
 				.orElse("None") + "]";
@@ -59,7 +58,7 @@ public class ActiveAbility extends Ability implements HotbarAssignable {
 
 	@Override
 	public String getHotbarString() {
-		return toString() + " " + getBindKeyString();
+		return toString() + Resources.LINEBREAK + getBindKeyString();
 	}
 
 	@Override

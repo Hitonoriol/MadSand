@@ -1,7 +1,7 @@
 package hitonoriol.madsand.world;
 
-import hitonoriol.madsand.entities.RollTable;
-import hitonoriol.madsand.entities.Skill;
+import hitonoriol.madsand.containers.rolltable.RollTable;
+import hitonoriol.madsand.entities.skill.Skill;
 
 public enum WorkerType {
 	Sweeper,

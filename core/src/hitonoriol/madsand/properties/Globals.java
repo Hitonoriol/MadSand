@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import hitonoriol.madsand.Resources;
-import hitonoriol.madsand.entities.LootTable;
+import hitonoriol.madsand.containers.rolltable.LootTable;
 import hitonoriol.madsand.entities.ability.Ability;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.quest.ProceduralQuest;

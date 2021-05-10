@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Timer;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.entities.SkillContainer;
+import hitonoriol.madsand.entities.skill.SkillContainer;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.world.World;
 

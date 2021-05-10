@@ -10,10 +10,10 @@ import org.junit.jupiter.api.Test;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.entities.Skill;
-import hitonoriol.madsand.entities.SkillContainer;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.quest.QuestWorker;
+import hitonoriol.madsand.entities.skill.Skill;
+import hitonoriol.madsand.entities.skill.SkillContainer;
 import hitonoriol.madsand.gui.stages.Overlay;
 import hitonoriol.madsand.properties.QuestList;
 

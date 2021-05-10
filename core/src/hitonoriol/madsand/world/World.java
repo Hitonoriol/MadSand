@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.Keyboard;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.containers.Pair;
@@ -20,6 +19,7 @@ import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.pathfinding.Graph;

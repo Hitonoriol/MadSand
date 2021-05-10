@@ -4,12 +4,16 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import hitonoriol.madsand.entities.equipment.EquipSlot;
+import hitonoriol.madsand.entities.equipment.Equipment;
 import hitonoriol.madsand.entities.inventory.EquipStats;
 import hitonoriol.madsand.entities.inventory.item.CombatEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Projectile;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.inventory.item.Weapon;
+import hitonoriol.madsand.entities.skill.Skill;
+import hitonoriol.madsand.entities.skill.SkillContainer;
 import hitonoriol.madsand.util.Functional;
 import hitonoriol.madsand.util.Utils;
 

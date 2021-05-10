@@ -1,4 +1,4 @@
-package hitonoriol.madsand.entities;
+package hitonoriol.madsand.containers.rolltable;
 
 import java.util.ArrayList;
 import java.util.Arrays;

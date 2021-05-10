@@ -235,14 +235,7 @@ public class GameSaver {
 			MadSand.world = Resources.mapper.readValue(readFile(wfl), World.class);
 			MadSand.world.initWorld();
 			World.player = Resources.mapper.readValue(readFile(fl), Player.class);
-			Player player = World.player;
-
-			player.inventory.initUI();
-			player.inventory.refreshContents();
-			player.initStatActions();
-			player.quests.setPlayer(player);
-			player.turn(player.stats.look);
-			player.stats.equipment.refreshUI();
+			World.player.postLoadInit();
 
 			Utils.out("Done loading character.");
 			return true;

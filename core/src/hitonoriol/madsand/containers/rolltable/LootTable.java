@@ -1,4 +1,4 @@
-package hitonoriol.madsand.entities;
+package hitonoriol.madsand.containers.rolltable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import hitonoriol.madsand.Resources;
-import hitonoriol.madsand.entities.LootTable.Deserializer;
+import hitonoriol.madsand.containers.rolltable.LootTable.Deserializer;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.util.Utils;

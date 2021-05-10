@@ -10,11 +10,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
+import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.ability.Ability;
 import hitonoriol.madsand.entities.ability.ActiveAbility;
 import hitonoriol.madsand.entities.ability.PassiveAbility;
-import hitonoriol.madsand.properties.Prefs;
 import hitonoriol.madsand.util.Functional;
 import hitonoriol.madsand.util.Utils;
 
@@ -34,6 +35,7 @@ public class AbilityDialog extends GameDialog {
 		super.skipLine().padTop(PAD);
 		super.addCloseButton();
 
+		container.defaults().padBottom(5);
 		refresh();
 	}
 
@@ -76,7 +78,7 @@ public class AbilityDialog extends GameDialog {
 		abstrAbility.as(ActiveAbility.class)
 				.ifPresent(
 						ability -> {
-							Prefs prefs = Prefs.values();
+							Player player = MadSand.player();
 
 							addButton(abstrAbility,
 									() -> {
@@ -86,7 +88,7 @@ public class AbilityDialog extends GameDialog {
 
 							addButton(ability.getBindKeyString(),
 									() -> new KeyDialog(key -> {
-										prefs.bindAbility(key, ability.id);
+										player.bindAbility(key, ability.id);
 										refresh();
 									}).show())
 											.size(75, BTN_HEIGHT)

@@ -2,8 +2,6 @@ package hitonoriol.madsand.properties;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Optional;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
@@ -11,10 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.entities.ability.ActiveAbility;
 import hitonoriol.madsand.util.Utils;
-import hitonoriol.madsand.world.World;
 
 public class Prefs {
 	public static String PREFS_FILE = "prefs.json";
@@ -23,7 +18,7 @@ public class Prefs {
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	}
 
-	private static Prefs values = new Prefs();
+	private static Prefs values;
 
 	/* Video */
 	public static int MIN_SCREEN_WIDTH = 1100;
@@ -31,8 +26,9 @@ public class Prefs {
 	public boolean fullscreen = false;
 	DisplayMode displayModes[];
 
-	/* Keybinds */
-	public LinkedHashMap<Integer, Integer> abilityKeyBinds;
+	/* Global Keybinds ? 
+	 * ----------
+	 */
 
 	/* Gameplay */
 	public boolean enableRealtimeMechanics = true;
@@ -66,23 +62,6 @@ public class Prefs {
 		return getDisplayModes()[getCurDisplayModeIdx()];
 	}
 
-	public int getAbilityKey(int id) {
-		return values.abilityKeyBinds.entrySet().stream()
-				.filter(bind -> bind.getValue() == id)
-				.findFirst()
-				.map(bind -> bind.getKey())
-				.orElse(-1);
-	}
-
-	public void bindAbility(int key, int abilityId) {
-		Optional.of(getAbilityKey(abilityId))
-				.filter(boundKey -> boundKey != -1)
-				.ifPresent(boundKey -> abilityKeyBinds.remove(boundKey));
-
-		abilityKeyBinds.put(key, abilityId);
-		Gui.overlay.hotbar.addEntry(World.player.getAbility(abilityId).as(ActiveAbility.class).get());
-	}
-
 	public void apply() {
 		if (fullscreen)
 			Gdx.graphics.setFullscreenMode(getCurDisplayMode());
@@ -95,19 +74,16 @@ public class Prefs {
 	}
 
 	public static void loadPrefs() {
-		if (values.abilityKeyBinds == null)
-			values.abilityKeyBinds = new LinkedHashMap<>();
-
 		File prefs = new File(PREFS_FILE);
-		if (!prefs.exists())
-			return;
-
-		try {
-			values = mapper.readValue(prefs, Prefs.class);
-		} catch (Exception e) {
-			Utils.out("Failed to restore preferences from " + PREFS_FILE);
-			e.printStackTrace();
-		}
+		if (prefs.exists())
+			try {
+				values = mapper.readValue(prefs, Prefs.class);
+			} catch (Exception e) {
+				Utils.out("Failed to restore preferences from " + PREFS_FILE);
+				e.printStackTrace();
+			}
+		else
+			values = new Prefs();
 	}
 
 	public static void savePrefs() {

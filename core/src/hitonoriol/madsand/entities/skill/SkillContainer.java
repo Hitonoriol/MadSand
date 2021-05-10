@@ -1,4 +1,4 @@
-package hitonoriol.madsand.entities;
+package hitonoriol.madsand.entities.skill;
 
 import java.util.HashMap;
 

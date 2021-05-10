@@ -1,31 +1,52 @@
-package hitonoriol.madsand;
+package hitonoriol.madsand.input;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
+import hitonoriol.madsand.GameSaver;
+import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.Resources;
+import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.enums.Direction;
-import hitonoriol.madsand.properties.Prefs;
 import hitonoriol.madsand.util.Utils;
-import hitonoriol.madsand.world.Location;
 import hitonoriol.madsand.world.World;
 
 public class Keyboard {
 
+	private static KeyBindManager keyBinds = new KeyBindManager();
 	private static boolean ignoreInput = false;
 
+	public static void initDefaultKeyBinds() {
+		Player player = MadSand.player();
+		World world = MadSand.world();
+
+		/* Turning keys */
+		keyBinds.bind(Keys.UP, () -> player.meleeAttack(Direction.UP))
+				.bind(Keys.DOWN, () -> player.meleeAttack(Direction.DOWN))
+				.bind(Keys.LEFT, () -> player.meleeAttack(Direction.LEFT))
+				.bind(Keys.RIGHT, () -> player.meleeAttack(Direction.RIGHT));
+
+		/* Action keys */
+		keyBinds.bind(Keys.ENTER, () -> player.interact())
+				.bind(Keys.U, () -> player.useItem())
+				.bind(Keys.F, () -> player.freeHands())
+				.bind(Keys.SPACE, () -> player.rest())
+				.bind(Keys.N, () -> world.travel());
+
+		/* Function keys */
+		keyBinds.bind(Keys.ESCAPE, () -> MadSand.switchScreen(MadSand.mainMenu))
+				.bind(Keys.G, () -> GameSaver.saveWorld());
+	}
+
 	public static void pollGameKeys() {
-		if (!ignoreInput) {
+		if (!ignoreInput)
 			pollMovementKeys();
-			pollTurnKeys();
-			pollActionKeys();
-		}
 
 		pollDebugKeys();
-		pollFunctionKeys();
 	}
 
 	public static void pollGlobalHotkeys() {
@@ -35,7 +56,6 @@ public class Keyboard {
 
 	public static void initListener() {
 		Gui.overlay.addListener(new InputListener() {
-			Prefs prefs = Prefs.values();
 
 			@Override
 			public boolean keyUp(InputEvent event, int keycode) {
@@ -49,13 +69,7 @@ public class Keyboard {
 				if (Gui.isGameUnfocused())
 					return true;
 
-				if (Gui.overlay.bottomMenu.isKeyBoundToButton(keycode))
-					Gui.overlay.bottomMenu.toggleButton(keycode);
-
-				if (!prefs.abilityKeyBinds.isEmpty())
-					if (prefs.abilityKeyBinds.containsKey(keycode))
-						World.player.getAbility(prefs.abilityKeyBinds.get(keycode)).apply();
-
+				keyBinds.runBoundAction(keycode);
 				return true;
 			}
 		});
@@ -73,51 +87,6 @@ public class Keyboard {
 		ignoreInput = false;
 	}
 
-	private static void pollFunctionKeys() {
-		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE))
-			MadSand.switchScreen(MadSand.mainMenu);
-
-		if (Gdx.input.isKeyJustPressed(Keys.G))
-			GameSaver.saveWorld();
-	}
-
-	private static void pollTurnKeys() {
-		if (World.player.isMoving())
-			return;
-
-		if (Gdx.input.isKeyJustPressed(Keys.UP))
-			World.player.meleeAttack(Direction.UP);
-
-		else if (Gdx.input.isKeyJustPressed(Keys.DOWN))
-			World.player.meleeAttack(Direction.DOWN);
-
-		else if (Gdx.input.isKeyJustPressed(Keys.LEFT))
-			World.player.meleeAttack(Direction.LEFT);
-
-		else if (Gdx.input.isKeyJustPressed(Keys.RIGHT))
-			World.player.meleeAttack(Direction.RIGHT);
-	}
-
-	private static void pollActionKeys() {
-		if (Gdx.input.isButtonPressed(Buttons.MIDDLE))
-			World.player.lookAtMouse(Mouse.wx, Mouse.wy);
-
-		if (Gdx.input.isKeyJustPressed(Keys.ENTER))
-			World.player.interact();
-
-		if (Gdx.input.isKeyJustPressed(Keys.U))
-			World.player.useItem();
-
-		if ((Gdx.input.isKeyJustPressed(Keys.F)) && (World.player.stats.hand().id != 0))
-			World.player.freeHands();
-
-		if (Gdx.input.isKeyJustPressed(Keys.SPACE))
-			World.player.rest();
-
-		if (Gdx.input.isKeyJustPressed(Keys.N) && MadSand.world.curLayer() == Location.LAYER_OVERWORLD)
-			MadSand.world.travel();
-	}
-
 	private static void pollMovementKeys() {
 		if (Gdx.input.isKeyPressed(Keys.A))
 			World.player.walk(Direction.LEFT);
@@ -133,7 +102,6 @@ public class Keyboard {
 
 		if (Keyboard.movementKeyJustPressed())
 			World.player.attackHostile();
-
 	}
 
 	private static boolean movementKeyJustPressed() {
@@ -185,7 +153,10 @@ public class Keyboard {
 
 		if (Gdx.input.isKeyJustPressed(Keys.F5))
 			MadSand.world.timeTick(150);
+	}
 
+	public static KeyBindManager getKeyBindManager() {
+		return keyBinds;
 	}
 
 }

@@ -82,7 +82,7 @@ public class CreateWorldDialog extends GameDialog {
 
 					MadSand.switchScreen(MadSand.gameScreen);
 
-					if (!MadSand.isWorldUntouched) {
+					if (!MadSand.isWorldUntouched()) {
 						MadSand.initNewGame();
 						MadSand.world.generate();
 					}

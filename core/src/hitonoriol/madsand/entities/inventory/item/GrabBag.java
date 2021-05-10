@@ -2,7 +2,7 @@ package hitonoriol.madsand.entities.inventory.item;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import hitonoriol.madsand.entities.LootTable;
+import hitonoriol.madsand.containers.rolltable.LootTable;
 import hitonoriol.madsand.entities.Player;
 
 public class GrabBag extends Item {

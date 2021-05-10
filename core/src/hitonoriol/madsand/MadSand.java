@@ -12,6 +12,8 @@ import com.badlogic.gdx.utils.Timer;
 import hitonoriol.madsand.containers.Storage;
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.input.Keyboard;
+import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.properties.Prefs;
 import hitonoriol.madsand.screens.AbstractScreen;
@@ -36,7 +38,7 @@ public class MadSand extends Game {
 	public static final String WORLDFILE = "/World" + SAVE_EXT;
 	public static String WORLDNAME = "";
 
-	public static boolean isWorldUntouched = true; // flag for once-per-launch actions
+	private static boolean worldUntouched = true;
 
 	public static int MAXSAVESLOTS = 10;
 
@@ -71,6 +73,7 @@ public class MadSand extends Game {
 		GameSaver.createDirs();
 		initNewGame();
 		initScreens();
+		Keyboard.initDefaultKeyBinds();
 
 		Utils.out("End of initialization!");
 	}
@@ -192,10 +195,14 @@ public class MadSand extends Game {
 
 	// New world is generated on game launch, so this thing ensures that new world won't be generated twice when you press "New Game" button
 	public static void worldEntered() {
-		if (MadSand.isWorldUntouched)
-			MadSand.isWorldUntouched = false;
+		if (MadSand.worldUntouched)
+			MadSand.worldUntouched = false;
 
 		world.enter();
+	}
+
+	public static boolean isWorldUntouched() {
+		return worldUntouched;
 	}
 
 	public static void setWorldName(String arg) {
