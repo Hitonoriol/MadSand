@@ -39,7 +39,7 @@ public class BestiaryDialog extends GameDialog {
 		emptyLabel.setAlignment(Align.center);
 		scroll = new AutoFocusScrollPane(scrollTable);
 		scrollTable.align(Align.topLeft);
-		HashMap<Integer, Integer> killCount = player.killCount;
+		HashMap<Integer, Integer> killCount = player.getTotalKillCount();
 
 		if (killCount.isEmpty())
 			scrollTable.add(emptyLabel).align(Align.center).expand();

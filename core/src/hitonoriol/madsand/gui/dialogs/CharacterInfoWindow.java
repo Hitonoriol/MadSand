@@ -107,7 +107,7 @@ public class CharacterInfoWindow {
 		info.defaults().align(Align.left).padBottom(LINE_PAD);
 		Player player = World.player;
 		info.add("Creatures killed: " + player.getKillCount()).row();
-		info.add("Settlements established: " + player.settlementsEstablished).row();
+		info.add("Settlements established: " + player.getEstablishedSettlements()).row();
 		return info;
 	}
 
@@ -138,7 +138,7 @@ public class CharacterInfoWindow {
 					.setRange(-Reputation.RANGE, Reputation.RANGE)
 					.roundValues(false)
 					.setStatText("") // TODO: Reputation levels
-					.setValue(World.player.reputation.get(faction))
+					.setValue(World.player.getReputation().get(faction))
 					.setProgressSize(BAR_WIDTH, BAR_HEIGHT))
 					.size(BAR_WIDTH, BAR_HEIGHT)
 					.padBottom(LINE_PAD)

@@ -70,7 +70,7 @@ public class ProceduralQuest extends Quest {
 			randomHuntQuest();
 			break;
 		case Craft:
-			if (World.player.craftRecipes.isEmpty()) {
+			if (World.player.getCraftRecipes().isEmpty()) {
 				generate();
 				return;
 			}
@@ -166,7 +166,7 @@ public class ProceduralQuest extends Quest {
 	}
 
 	private void randomCraftQuest() {
-		randomItemQuest(World.player.craftRecipes);
+		randomItemQuest(World.player.getCraftRecipes());
 	}
 
 	private void randomFetchQuest() {

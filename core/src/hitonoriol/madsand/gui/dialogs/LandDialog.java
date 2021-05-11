@@ -102,7 +102,7 @@ public class LandDialog extends GameDialog {
 			public void changed(ChangeEvent event, Actor actor) {
 				player.inventory.delItem(reqItems);
 				location.createSettlement().setPlayerOwned();
-				++player.settlementsEstablished;
+				player.establishSettlement();
 				settlement = location.settlement;
 				Gui.overlay.refresh();
 				refreshDialogContents();

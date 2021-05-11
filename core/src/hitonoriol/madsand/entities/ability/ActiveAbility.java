@@ -42,7 +42,7 @@ public class ActiveAbility extends Ability implements HotbarAssignable {
 	@Override
 	public String toString() {
 		return super.toString() + Resources.LINEBREAK
-				+ "[" + staminaCost + " stamina]";
+				+ "(" + staminaCost + " stamina)";
 	}
 
 	public String getBindKeyString() {

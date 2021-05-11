@@ -64,7 +64,7 @@ public class CraftStage extends Stage {
 		String stationName = titleString;
 
 		if (craftStationId == 0) {
-			itemList = player.craftRecipes;
+			itemList = player.getCraftRecipes();
 			unlockProgressLabel = new Label("Craft recipes unlocked: " + player.craftRecipeProgress(), Gui.skin);
 			unlockProgressLabel.setAlignment(Align.center);
 		} else {

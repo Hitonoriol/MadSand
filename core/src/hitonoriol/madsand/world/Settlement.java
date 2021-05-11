@@ -53,7 +53,7 @@ public class Settlement {
 	@JsonIgnore
 	public int getHireCost() {
 		return (int) (Math.sqrt(getPopulation() + 1d) * BASE_HIRE_COST
-				* (1d + Math.sqrt(World.player.settlementsEstablished) / 25d));
+				* (1d + Math.sqrt(World.player.getEstablishedSettlements()) / 25d));
 	}
 
 	public boolean isOccupied(long npcUid) {

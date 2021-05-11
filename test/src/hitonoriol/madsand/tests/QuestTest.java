@@ -19,7 +19,7 @@ import hitonoriol.madsand.properties.QuestList;
 
 public class QuestTest {
 	Player player = MadSand.player();
-	QuestWorker quests = player.quests;
+	QuestWorker quests = player.getQuestWorker();
 	Overlay overlay = Gui.overlay;
 
 	SkillContainer skills = player.stats().skills, expectedSkills = new SkillContainer();

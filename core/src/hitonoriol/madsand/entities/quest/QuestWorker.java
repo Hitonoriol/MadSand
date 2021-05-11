@@ -189,7 +189,7 @@ public class QuestWorker {
 		player.inventory.delItem(quest.removeOnCompletion);
 		player.inventory.putItem(quest.rewardItems);
 		player.addExp(quest.exp);
-		player.reputation.change(quest.getNpc().stats.faction, Reputation.QUEST_REWARD);
+		player.getReputation().change(quest.getNpc().stats.faction, Reputation.QUEST_REWARD);
 		MadSand.notice("You get " + quest.exp + " EXP!");
 
 		if (!quest.repeatable)

@@ -36,7 +36,7 @@ public class TraderDialog extends GameDialog {
 			helpButton.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
-					ProceduralQuest quest = player.quests.startProceduralQuest(npc.uid);
+					ProceduralQuest quest = player.getQuestWorker().startProceduralQuest(npc.uid);
 					if (quest != ProceduralQuest.timeoutQuest)
 						addQuestReward(quest);
 					remove();

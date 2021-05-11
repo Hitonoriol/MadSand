@@ -79,6 +79,7 @@ public class AbilityDialog extends GameDialog {
 				.ifPresent(
 						ability -> {
 							Player player = MadSand.player();
+							int currentKey = player.getAbilityKey(ability.id);
 
 							addButton(abstrAbility,
 									() -> {
@@ -90,10 +91,15 @@ public class AbilityDialog extends GameDialog {
 									() -> new KeyDialog(key -> {
 										player.bindAbility(key, ability.id);
 										refresh();
-									}).show())
-											.size(75, BTN_HEIGHT)
-											.padRight(5)
-											.row();
+									}, currentKey).setRemoveBindingAction(
+											() -> {
+												player.unbindAbility(currentKey);
+												refresh();
+											})
+											.show())
+													.size(75, BTN_HEIGHT)
+													.padRight(5)
+													.row();
 						});
 
 		abstrAbility.as(PassiveAbility.class)

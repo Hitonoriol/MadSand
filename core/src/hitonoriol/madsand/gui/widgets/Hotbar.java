@@ -1,8 +1,11 @@
 package hitonoriol.madsand.gui.widgets;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+
+import org.apache.commons.lang3.mutable.MutableBoolean;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -11,10 +14,13 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.HotbarAssignable;
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.gui.OverlayMouseoverListener;
+import hitonoriol.madsand.util.Functional;
 
 public class Hotbar extends Table {
-	static float E_WIDTH = 175, HEIGHT = OverlayBottomMenu.HEIGHT;
+	static float E_WIDTH = 175, HEIGHT = OverlayBottomMenu.HEIGHT + Gui.FONT_XXS;
+	static final String NO_BIND = "None";
 
 	private List<Entry> hotEntries = new ArrayList<>();
 
@@ -25,13 +31,24 @@ public class Hotbar extends Table {
 
 		AutoFocusScrollPane scroll = new AutoFocusScrollPane(container);
 		scroll.setScrollingDisabled(false, true);
-		super.add(scroll).size(Gdx.graphics.getWidth(), HEIGHT);
+		super.add(scroll).size(Gdx.graphics.getWidth(), HEIGHT + Gui.FONT_XXS);
 
-		container.defaults().padRight(5);
+		container.defaults().padRight(5).padLeft(5).size(E_WIDTH, HEIGHT);
 		container.align(Align.left);
 		super.align(Align.bottomLeft);
+		super.setBackground(Gui.darkBackgroundSizeable);
 		super.pack();
-		super.moveBy(0, HEIGHT + OverlayBottomMenu.BUTTON_PADDING * 2);
+		super.moveBy(0, OverlayBottomMenu.HEIGHT + OverlayBottomMenu.BUTTON_PADDING * 2);
+		container.moveBy(5, 0);
+	}
+
+	public void refreshVisibility() {
+		boolean visible = super.isVisible();
+		boolean noAbilities = MadSand.player().getAbilities().isEmpty();
+		if (visible && noAbilities)
+			super.setVisible(false);
+		else if (!visible && !noAbilities)
+			super.setVisible(true);
 	}
 
 	public void addEntry(HotbarAssignable hotAssignable) {
@@ -40,7 +57,7 @@ public class Hotbar extends Table {
 
 		Entry entry = new Entry(hotAssignable);
 		hotEntries.add(entry);
-		container.add(entry.button).padLeft(5).size(E_WIDTH, HEIGHT);
+		container.add(entry.button);
 	}
 
 	public void removeEntry(HotbarAssignable hotAssignable) {
@@ -58,7 +75,23 @@ public class Hotbar extends Table {
 	}
 
 	public void refresh() {
-		hotEntries.forEach(entry -> entry.refresh());
+		MutableBoolean layoutChanged = new MutableBoolean(false);
+		Iterator<Entry> it = hotEntries.iterator();
+		while (it.hasNext()) {
+			Functional.with(it.next(), entry -> {
+				entry.refresh();
+				if (entry.button.getText().toString().contains(NO_BIND)) {
+					it.remove();
+					layoutChanged.setTrue();
+				}
+			});
+		}
+
+		if (layoutChanged.isTrue()) {
+			container.clear();
+			hotEntries.forEach(entry -> container.add(entry.button));
+		}
+		refreshVisibility();
 	}
 
 	private static class Entry {

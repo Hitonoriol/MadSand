@@ -17,6 +17,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -78,23 +80,24 @@ import hitonoriol.madsand.world.Location;
 import hitonoriol.madsand.world.WorkerType;
 import hitonoriol.madsand.world.World;
 
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class Player extends Entity {
 	@JsonIgnore
 	public PlayerStats stats; // Reference to the same Stats object as super.stats
 	float elapsedTime;// For player animation
 	float origMoveSpeed = 0, runSpeedCoef = 3.5f;
 
-	public int targetedByNpcs = 0;
-	public Set<Integer> unlockedItems = new HashSet<>(); // set of items player obtained at least once
-	public List<Integer> craftRecipes = new ArrayList<>(); // list of items which recipes are available to the player
-	public List<Integer> buildRecipes = new ArrayList<>();
-	public QuestWorker quests = new QuestWorker();
-	public Set<String> luaActions = new HashSet<>(); // Set for one-time lua actions
-	public HashMap<Integer, Integer> killCount = new HashMap<>();
-	public Reputation reputation = new Reputation();
-	public List<Ability> abilities = new ArrayList<>();
-	public LinkedHashMap<Integer, Integer> abilityKeyBinds = new LinkedHashMap<>();
-	public int settlementsEstablished = 0;
+	private int targetedByNpcs = 0;
+	private Set<Integer> unlockedItems = new HashSet<>(); // set of items player obtained at least once
+	private List<Integer> craftRecipes = new ArrayList<>(); // list of items which recipes are available to the player
+	private List<Integer> buildRecipes = new ArrayList<>();
+	private QuestWorker quests = new QuestWorker();
+	private Set<String> luaActions = new HashSet<>(); // Set for one-time lua actions
+	private HashMap<Integer, Integer> killCount = new HashMap<>();
+	private Reputation reputation = new Reputation();
+	private List<Ability> abilities = new ArrayList<>();
+	private LinkedHashMap<Integer, Integer> abilityKeyBinds = new LinkedHashMap<>();
+	private int settlementsEstablished = 0;
 
 	private TimedAction scheduledAction;
 
@@ -125,6 +128,38 @@ public class Player extends Entity {
 		turn(stats.look);
 		stats.equipment.refreshUI();
 		abilityKeyBinds.forEach((key, abilityId) -> bindAbility(key, abilityId));
+	}
+
+	public int getEstablishedSettlements() {
+		return settlementsEstablished;
+	}
+
+	public void establishSettlement() {
+		++settlementsEstablished;
+	}
+
+	public QuestWorker getQuestWorker() {
+		return quests;
+	}
+
+	public List<Ability> getAbilities() {
+		return abilities;
+	}
+
+	public HashMap<Integer, Integer> getTotalKillCount() {
+		return killCount;
+	}
+
+	public Reputation getReputation() {
+		return reputation;
+	}
+
+	public List<Integer> getBuildRecipes() {
+		return buildRecipes;
+	}
+
+	public List<Integer> getCraftRecipes() {
+		return craftRecipes;
 	}
 
 	public PlayerStats stats() {
@@ -173,6 +208,10 @@ public class Player extends Entity {
 	}
 
 	public void bindAbility(int key, int abilityId) {
+		int oldKey;
+		if ((oldKey = getAbilityKey(abilityId)) != -1 && oldKey != key)
+			unbindAbility(oldKey);
+
 		if (abilityKeyBinds.getOrDefault(key, -1) != abilityId)
 			abilityKeyBinds.put(key, abilityId);
 
@@ -183,6 +222,7 @@ public class Player extends Entity {
 	public void unbindAbility(int key) {
 		abilityKeyBinds.remove(key);
 		Keyboard.getKeyBindManager().unbind(key);
+		Gui.overlay.hotbar.refresh();
 	}
 
 	public void refreshEquipment() {

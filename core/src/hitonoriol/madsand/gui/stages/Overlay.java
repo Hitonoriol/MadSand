@@ -24,6 +24,7 @@ import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.quest.Quest;
+import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.gui.dialogs.CharacterCreationDialog;
 import hitonoriol.madsand.gui.dialogs.CharacterInfoWindow;
@@ -240,11 +241,12 @@ public class Overlay extends Stage {
 		QuestArrow arrow;
 		boolean objectiveDone;
 		HashSet<Integer> hasArrow = new HashSet<>();
+		QuestWorker quests = player.getQuestWorker();
 
 		while (it.hasNext()) {
 			arrow = it.next();
 			objectiveDone = arrow.quest.isComplete();
-			if (!player.quests.isQuestInProgress(arrow.quest.id) || !objectiveDone) {
+			if (!quests.isQuestInProgress(arrow.quest.id) || !objectiveDone) {
 				arrow.remove();
 				it.remove();
 			} else if (objectiveDone) {
@@ -253,7 +255,7 @@ public class Overlay extends Stage {
 			}
 		}
 
-		for (Quest quest : player.quests.questsInProgress) {
+		for (Quest quest : quests.questsInProgress) {
 			if (quest.isComplete() && !hasArrow.contains(quest.id)) {
 				quest.completionNotice();
 				arrow = new QuestArrow(quest);
@@ -289,6 +291,7 @@ public class Overlay extends Stage {
 		timeLabel.setText(getTimeString());
 		overlayStatLabel.setText(info);
 
+		hotbar.refreshVisibility();
 		refreshQuestArrows();
 	}
 

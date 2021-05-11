@@ -10,7 +10,7 @@ import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.quest.ProceduralQuest;
 
 public class Globals {
-	public static final String VERSION = "Alpha v0.49.5-pre6";
+	public static final String VERSION = getVersion();
 
 	public static String TRAVEL_ITEM = "travelItem", TIMESKIP_ITEM = "timeSkipItem";
 
@@ -37,6 +37,15 @@ public class Globals {
 	public HashMap<String, String> pills = new HashMap<>();
 
 	public HashMap<String, String> values;
+
+	private static String getVersion() {
+		String version = Globals.class.getPackage().getImplementationVersion();
+
+		if (version == null)
+			version = "[Development Build]";
+
+		return version;
+	}
 
 	public static void loadGlobals() throws Exception {
 		instance = Resources.mapper.readValue(Resources.readInternal(Resources.GLOBALS_FILE), Globals.class);

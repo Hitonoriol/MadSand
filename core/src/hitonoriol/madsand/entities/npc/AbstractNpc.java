@@ -375,7 +375,7 @@ public abstract class AbstractNpc extends Entity {
 	}
 
 	public void act(float time) {
-		boolean badRep = World.player.reputation.isHostile(stats.faction);
+		boolean badRep = World.player.getReputation().isHostile(stats.faction);
 		tickCharge += (timePassed = time);
 
 		if (pauseFlag) {

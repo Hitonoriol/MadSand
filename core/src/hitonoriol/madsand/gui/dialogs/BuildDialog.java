@@ -54,7 +54,7 @@ public class BuildDialog extends GameDialog {
 		BuildDialogEntry buildEntry;
 		Player player = World.player;
 		for (Entry<Integer, String> object : ObjectProp.buildRecipes.entrySet()) {
-			if (player.buildRecipes.contains(object.getKey())) {
+			if (player.getBuildRecipes().contains(object.getKey())) {
 				buildEntry = new BuildDialogEntry(this, object.getKey(), object.getValue());
 				buildTable.add(buildEntry).size(buildEntry.WIDTH, buildEntry.HEIGHT).padBottom(PAD).row();
 			}
@@ -66,7 +66,7 @@ public class BuildDialog extends GameDialog {
 		emptyLabel.setWrap(true);
 		emptyLabel.setAlignment(Align.center);
 
-		if (player.buildRecipes.isEmpty())
+		if (player.getBuildRecipes().isEmpty())
 			buildTable.add(emptyLabel).width(WIDTH);
 
 		buildScroll = new AutoFocusScrollPane(buildTable);
