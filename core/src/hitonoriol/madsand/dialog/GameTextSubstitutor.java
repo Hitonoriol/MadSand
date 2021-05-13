@@ -35,7 +35,7 @@ public class GameTextSubstitutor {
 	}
 
 	public static void add(String var, String subText) {
-		Utils.out("Substitutor: Setting " + DELIM_L + var + DELIM_R + " to \"" + subText + "\"");
+		Utils.dbg("Substitutor: Setting " + DELIM_L + var + DELIM_R + " to \"" + subText + "\"");
 		instance.globalConstants.put(var, subText);
 	}
 

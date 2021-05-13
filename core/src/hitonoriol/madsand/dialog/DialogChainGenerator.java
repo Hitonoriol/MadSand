@@ -65,7 +65,7 @@ public class DialogChainGenerator {
 			buttonString = buttonMatcher.group(1);
 
 			if (buttonString.contains(DIALOG_BTN_SCRIPT_DELIMITER)) {
-				Utils.out("Contains Script Character! buttonString: [" + buttonString + "]");
+				Utils.dbg("Contains Script Character! buttonString: [" + buttonString + "]");
 				buttonTokens = buttonString.split(DIALOG_BTN_SCRIPT_DELIMITER); // [Button Text @ lua code]
 				scriptButton = new TextButton(buttonTokens[0], Gui.skin);
 				final String buttonScriptString = buttonTokens[1];

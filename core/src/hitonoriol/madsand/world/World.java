@@ -306,7 +306,7 @@ public class World {
 		if (!inEncounter)
 			GameSaver.saveWorld();
 		else {
-			Utils.out("Removing encounter location");
+			Utils.dbg("Removing encounter location");
 			worldMap.remove();
 		}
 
@@ -502,7 +502,7 @@ public class World {
 	}
 
 	public void clearCurLoc() {
-		Utils.out("Clearing current sector...");
+		Utils.dbg("Clearing current sector...");
 		getCurLoc().purge();
 	}
 

@@ -1,6 +1,6 @@
 {
 	"Crafting" : {
-		"requiredExp" : 5,
+		"requiredExp" : 10,
 		"lvUpMultiplier" : 1.0
 	},
 	"Fishing" : {
@@ -8,8 +8,8 @@
 		"lvUpMultiplier" : 0.35
 	},
 	"Woodcutting" : {
-		"requiredExp" : 15,
-		"lvUpMultiplier" : 0.1
+		"requiredExp" : 30,
+		"lvUpMultiplier" : 0.25
 	},
 	"Evasion" : {
 		"requiredExp" : 50,

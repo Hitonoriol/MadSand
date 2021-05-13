@@ -22,10 +22,10 @@ import com.badlogic.gdx.utils.Timer;
 
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
+import hitonoriol.madsand.properties.Globals;
 import me.xdrop.jrand.JRand;
 
 public class Utils {
-	public static boolean debugMode = false;
 	private static boolean printTimestamp = true;
 	static NumberFormat numberFormatter = NumberFormat.getInstance(Locale.US);
 
@@ -82,7 +82,7 @@ public class Utils {
 	static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
 
 	public static void out(String arg) {
-		if (!debugMode)
+		if (Globals.silentMode)
 			return;
 
 		if (printTimestamp)
@@ -95,8 +95,17 @@ public class Utils {
 		out(String.format(arg, args));
 	}
 
+	public static void dbg(String arg) {
+		if (Globals.debugMode)
+			out("* " + arg);
+	}
+
+	public static void dbg(String arg, Object... args) {
+		dbg(String.format(arg, args));
+	}
+
 	public static void out() {
-		if (debugMode)
+		if (!Globals.silentMode)
 			System.out.println();
 	}
 

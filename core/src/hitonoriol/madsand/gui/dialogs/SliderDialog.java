@@ -50,6 +50,8 @@ public class SliderDialog extends GameDialog {
 	protected int minValue, maxValue;
 	protected int currentQuantity;
 
+	private Consumer<Integer> sliderChangeAction;
+
 	private SliderDialog(Stage stage) {
 		super(stage);
 		super.row();
@@ -68,6 +70,7 @@ public class SliderDialog extends GameDialog {
 
 		topLabel = new Label("", Gui.skin);
 		bottomLabel = new Label("", Gui.skin);
+		setCancelAction(() -> remove());
 	}
 
 	public SliderDialog(int min, int max) {
@@ -83,13 +86,6 @@ public class SliderDialog extends GameDialog {
 		super.add(slider).size(SLIDER_WIDTH, DEFAULT_HEIGHT).align(Align.top).row();
 		super.add(bottomLabel).align(Align.center).row();
 		super.add(buttonTable).width(WIDTH).align(Align.center).padTop(BUTTONS_PAD_TOP).row();
-
-		setCancelListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				remove();
-			}
-		});
 	}
 
 	public SliderDialog(int max) {
@@ -108,6 +104,7 @@ public class SliderDialog extends GameDialog {
 	}
 
 	public SliderDialog setSliderAction(Consumer<Integer> action) {
+		sliderChangeAction = action;
 		slider.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -137,8 +134,8 @@ public class SliderDialog extends GameDialog {
 		return this;
 	}
 
-	public void setCancelListener(ChangeListener listener) {
-		cancelButton.addListener(listener);
+	public void setCancelAction(Runnable action) {
+		Gui.setAction(cancelButton, action);
 	}
 
 	public int getSliderValue() {
@@ -148,16 +145,14 @@ public class SliderDialog extends GameDialog {
 	public void setSliderText(String text) { // Set text under the slider
 		bottomLabel.setText(text);
 	}
-	
+
 	public Label getBottomLabel() {
 		return bottomLabel;
 	}
 
 	@Override
 	public Dialog show(Stage stage) {
-		// Refresh bottomLabel by triggering change event
-		slider.setValue(slider.getMaxValue());
-		slider.setValue(minValue);
+		sliderChangeAction.accept(minValue);
 		return super.show(stage);
 	}
 

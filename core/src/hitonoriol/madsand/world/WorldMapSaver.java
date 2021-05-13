@@ -94,7 +94,7 @@ public class WorldMapSaver {
 
 	byte[] sectorToBytes(int wx, int wy, int layer) {
 		try {
-			Utils.out("Saving sector " + wx + ", " + wy + " Layer: " + layer);
+			Utils.out("Saving sector [%d, %d] Layer: %d", wx, wy, layer);
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			Pair loc = new Pair(wx, wy);
 			Map map = worldMap.locations.get(loc).getLayer(layer);

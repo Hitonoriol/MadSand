@@ -151,7 +151,7 @@ public class DungeonGen extends DungeonGenerator {
 			map.drawObjectRectangle(room.getX() - 1, room.getY() - 1, room.getWidth() + 1, room.getHeight() + 1,
 					specialWallObject);
 
-			Utils.out("Spawned special mob (id: " + npcId + ") at " + coords);
+			Utils.dbg("Spawned special mob (id: " + npcId + ") at " + coords);
 		}
 
 	}

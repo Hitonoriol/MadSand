@@ -10,6 +10,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.CraftWorker;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.gui.dialogs.ConfirmDialog;
 import hitonoriol.madsand.gui.dialogs.SliderDialog;
 import hitonoriol.madsand.world.World;
 
@@ -55,8 +56,12 @@ public class CraftButton extends ItemButton {
 			int maxQuantity = craftWorker.getMaxCraftQuantity();
 			Consumer<Integer> craftAction = quantity -> player.craftItem(craftWorker, quantity);
 
-			if (maxQuantity == 1)
-				craftAction.accept(maxQuantity);
+			if (maxQuantity == 1) {
+				new ConfirmDialog(
+						"Are you sure you want to craft " + buttonItem.craftQuantity + " " + buttonItem.name + "?",
+						() -> craftAction.accept(maxQuantity)).show();
+				return;
+			}
 
 			SliderDialog craftDialog = new SliderDialog(maxQuantity);
 			craftDialog.setTitle("Crafting " + buttonItem.name)

@@ -116,7 +116,7 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public void setActDelay(float actDelay) {
-		Utils.out(getName() + ": adding actDelay: +" + actDelay);
+		Utils.dbg(getName() + ": adding actDelay: +" + actDelay);
 		this.actDelay += actDelay;
 	}
 
@@ -124,7 +124,7 @@ public abstract class Entity extends MapEntity {
 		float delay = actDelay;
 
 		if (delay > 0)
-			Utils.out(getName() + ": actDelay=" + delay);
+			Utils.dbg(getName() + ": actDelay=" + delay);
 
 		actDelay = 0;
 		return delay;

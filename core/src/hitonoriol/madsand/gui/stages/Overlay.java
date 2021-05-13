@@ -40,6 +40,7 @@ import hitonoriol.madsand.gui.widgets.QuestArrow;
 import hitonoriol.madsand.gui.widgets.StatProgressBar;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.lua.Lua;
+import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.util.Functional;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
@@ -143,7 +144,7 @@ public class Overlay extends Stage {
 	String prevConsoleInput;
 
 	public void pollGameConsole() {
-		if (!Utils.debugMode)
+		if (!Globals.debugMode)
 			return;
 
 		if (getKeyboardFocus() != gameLog.inputField)

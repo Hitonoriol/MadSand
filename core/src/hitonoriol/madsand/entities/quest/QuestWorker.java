@@ -162,7 +162,7 @@ public class QuestWorker {
 	}
 
 	private void startQuest(Quest quest, long npcUID) {
-		Utils.out("Trying to start quest " + quest.id);
+		Utils.dbg("Trying to start quest " + quest.id);
 
 		if (isQuestCompleted(quest.id))
 			return;
@@ -201,7 +201,7 @@ public class QuestWorker {
 	}
 
 	public void processQuest(int id, long npcUID) {
-		Utils.out("Processing quest " + id);
+		Utils.dbg("Processing quest " + id);
 
 		Quest quest = questById(id);
 

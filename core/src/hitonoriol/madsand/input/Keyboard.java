@@ -12,7 +12,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.enums.Direction;
-import hitonoriol.madsand.util.Utils;
+import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.world.World;
 
 public class Keyboard {
@@ -113,9 +113,9 @@ public class Keyboard {
 
 	private static void pollDebugKeys() {
 		if (Gdx.input.isKeyJustPressed(Keys.Z))
-			Utils.debugMode = !Utils.debugMode;
+			Globals.debugMode = !Globals.debugMode;
 
-		if (!Utils.debugMode)
+		if (!Globals.debugMode)
 			return;
 
 		if (Gdx.input.isKeyJustPressed(Keys.GRAVE)) {

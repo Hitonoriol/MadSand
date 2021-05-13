@@ -10,7 +10,8 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.Prefs;
-import hitonoriol.madsand.util.Utils;
+import hitonoriol.madsand.util.Functional;
+import hitonoriol.madsand.util.If;
 
 public class Launcher {
 
@@ -46,7 +47,10 @@ public class Launcher {
 	private static void applyArgs(String[] args) throws Exception {
 		ArgParser parser = new ArgParser(args);
 
-		if (!(Utils.debugMode = parser.argExists("debug"))) {
+		Functional.with(parser.argExists("debug"), dbgArg -> If.then(dbgArg, () -> Globals.debugMode = true));
+		Globals.silentMode = parser.argExists("silent");
+
+		if (!Globals.debugMode) {
 			System.setOut(new PrintStream(Resources.OUT_FILE));
 			System.setErr(new PrintStream(Resources.ERR_FILE));
 		}

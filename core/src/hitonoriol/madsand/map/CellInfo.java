@@ -8,6 +8,7 @@ import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.map.object.ItemFactory;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.pathfinding.Node;
+import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
@@ -89,7 +90,7 @@ public class CellInfo {
 		infoBuilder.setLength(0);
 		infoBuilder.append("Looking at (" + x + ", " + y + ")").append(NEWLINE);
 
-		if (Utils.debugMode)
+		if (Globals.debugMode)
 			getDebugInfo();
 
 		if (player.at(x, y))

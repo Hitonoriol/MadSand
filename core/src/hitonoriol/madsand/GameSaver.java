@@ -266,7 +266,7 @@ public class GameSaver {
 		try {
 			Path fileLocation = Paths.get(getSectorFile(wx, wy).toURI());
 			byte[] data = Files.readAllBytes(fileLocation);
-			Utils.out("Loading location " + wx + ", " + wy);
+			Utils.out("Loading location [%d, %d]", wx, wy);
 
 			MadSand.world.worldMapSaver.loadLocationInfo(wx, wy);
 			MadSand.world.worldMapSaver.bytesToLocation(data, wx, wy);

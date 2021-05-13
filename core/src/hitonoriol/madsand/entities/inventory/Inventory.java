@@ -86,9 +86,9 @@ public class Inventory {
 	}
 
 	public void dump() {
-		Utils.out("Inventory dump: ");
-		Utils.out("Weight: " + curWeight + " / " + maxWeight);
-		items.forEach(item -> Utils.out(item.toString()));
+		Utils.dbg("Inventory dump: ");
+		Utils.dbg("Weight: " + curWeight + " / " + maxWeight);
+		items.forEach(item -> Utils.dbg(item.toString()));
 	}
 
 	public int getIndex(Item item) {

@@ -84,7 +84,7 @@ public class WorldGen {
 			curMap.setSize(width, height);
 
 		scaleBy = curMap.getScaleFactor();
-		Utils.out("Scaling rollLists by: " + scaleBy);
+		Utils.dbg("Scaling rollLists by: " + scaleBy);
 
 		curMap.purge();
 
@@ -93,7 +93,7 @@ public class WorldGen {
 			if (curBiome.equals(WorldGenProp.nullPreset))
 				setBiome(chooseRandomBiome());
 
-			Utils.out("Biome: " + curBiomeId);
+			Utils.dbg("Biome: " + curBiomeId);
 			curLocation.biome = curBiomeId;
 
 			setBiome(curBiomeId);
@@ -116,7 +116,7 @@ public class WorldGen {
 
 		if (curBiome.postGenScript != null)
 			Lua.execute(curBiome.postGenScript);
-		
+
 		reset();
 	}
 
@@ -129,7 +129,7 @@ public class WorldGen {
 
 		if (Utils.percentRoll(curBiome.settlementProbability)) {
 			curLocation.createSettlement().randPopulate();
-			Utils.out("Created an NPC-owned settlement! Population: " + curLocation.settlement.getPopulation());
+			Utils.dbg("Created an NPC-owned settlement! Population: " + curLocation.settlement.getPopulation());
 		}
 	}
 
@@ -143,7 +143,7 @@ public class WorldGen {
 
 		int maxStructures = (int) (curBiome.overworld.maxStructures * Math.max(scaleBy * STRUCTURE_SCALE_FACTOR, 1));
 		int rolls = Utils.rand(curBiome.overworld.minStructures, maxStructures);
-		Utils.out("Generating " + rolls + " structures (" + maxStructures + " max)");
+		Utils.dbg("Generating " + rolls + " structures (" + maxStructures + " max)");
 		for (int i = 0; i < rolls; ++i)
 			curMap.addStructure(Utils.randElement(structures));
 	}
@@ -157,7 +157,7 @@ public class WorldGen {
 		int defaultTile = curBiome.getDefaultTile();
 		curMap.defTile = defaultTile;
 		curMap.fillTile();
-		Utils.out("Default tile: " + defaultTile);
+		Utils.dbg("Default tile: " + defaultTile);
 
 		ArrayList<RollList> tileGenList = curBiome.getBiomeTiles();
 

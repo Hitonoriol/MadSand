@@ -1099,7 +1099,7 @@ public class Map {
 		if (getNpcCount() >= getMaxNpcs())
 			return;
 
-		Utils.out("Auto-spawning mobs, friendly = " + friendly);
+		Utils.dbg("Auto-spawning mobs, friendly = " + friendly);
 
 		if (friendly)
 			spawnFromRollList(overworld.friendlyMobs, overworld.friendlySpawnChance + forceVal);
@@ -1174,7 +1174,7 @@ public class Map {
 			coords.random(xsz, ysz);
 		while (!addStructure(structure.setCoords(coords)));
 
-		Utils.out("Successfully generated " + name + " at " + coords);
+		Utils.dbg("Successfully generated " + name + " at " + coords);
 		return new Pair(coords);
 	}
 

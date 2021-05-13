@@ -79,7 +79,7 @@ public class Prefs {
 			try {
 				values = mapper.readValue(prefs, Prefs.class);
 			} catch (Exception e) {
-				Utils.out("Failed to restore preferences from " + PREFS_FILE);
+				Utils.dbg("Failed to restore preferences from " + PREFS_FILE);
 				e.printStackTrace();
 			}
 		else

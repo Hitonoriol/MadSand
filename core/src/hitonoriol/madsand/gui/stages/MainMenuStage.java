@@ -106,8 +106,7 @@ public class MainMenuStage extends Stage {
 
 		Gui.setAction(loadGameButton, () -> new LoadWorldDialog().show());
 		Gui.setAction(settingsButton, () -> new SettingsDialog().show());
-
-		Gui.setAction(exitButton, () -> System.exit(0));
+		Gui.setAction(exitButton, () -> Gdx.app.exit());
 
 		super.addListener(new InputListener() {
 			@Override

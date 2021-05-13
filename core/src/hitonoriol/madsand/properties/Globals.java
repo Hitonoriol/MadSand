@@ -10,7 +10,9 @@ import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.quest.ProceduralQuest;
 
 public class Globals {
+	private static final String DEV_VER_STR = "[Development Build]";
 	public static final String VERSION = getVersion();
+	public static boolean debugMode = VERSION.equals(DEV_VER_STR), silentMode = false;
 
 	public static String TRAVEL_ITEM = "travelItem", TIMESKIP_ITEM = "timeSkipItem";
 
@@ -41,8 +43,10 @@ public class Globals {
 	private static String getVersion() {
 		String version = Globals.class.getPackage().getImplementationVersion();
 
-		if (version == null)
-			version = "[Development Build]";
+		if (version == null) {
+			version = DEV_VER_STR;
+			debugMode = true;
+		}
 
 		return version;
 	}

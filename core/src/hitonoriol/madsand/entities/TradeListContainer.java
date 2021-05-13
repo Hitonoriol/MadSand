@@ -65,7 +65,7 @@ public class TradeListContainer extends HashMap<TradeCategory, ArrayList<TradeIt
 		list = getTradeItemList(category, tier);
 
 		for (int i = tier; i >= 0; i--) {
-			Utils.out("Rolling tradeList " + category + " tier: " + tier);
+			Utils.dbg("Rolling tradeList " + category + " tier: " + tier);
 
 			if (!all)
 				getTradeItemList(category, tier).roll(items);
