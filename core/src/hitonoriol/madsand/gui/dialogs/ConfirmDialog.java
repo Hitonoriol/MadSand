@@ -1,12 +1,10 @@
 package hitonoriol.madsand.gui.dialogs;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
@@ -26,12 +24,8 @@ public class ConfirmDialog extends GameDialog {
 
 	private Label msgLabel;
 
-	private ConfirmDialog(Stage stage) {
-		super(stage);
-	}
-
 	public ConfirmDialog(String msg, Runnable action, Stage stage) {
-		this(stage);
+		super(stage);
 		super.setBackground(Gui.getColorDrawable(Color.DARK_GRAY));
 		super.setSize(WIDTH, HEIGHT);
 		super.setTitle("Confirm action");
@@ -46,20 +40,11 @@ public class ConfirmDialog extends GameDialog {
 
 		super.add(buttonTable);
 
-		confirmBtn.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				action.run();
-				remove();
-			}
+		Gui.setAction(confirmBtn, () -> {
+			action.run();
+			remove();
 		});
-
-		cancelBtn.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				remove();
-			}
-		});
+		Gui.setAction(cancelBtn, () -> remove());
 	}
 
 	public ConfirmDialog(String msg, Runnable action) {

@@ -1,14 +1,10 @@
 package hitonoriol.madsand.gui.dialogs;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
@@ -27,19 +23,16 @@ public class OkDialog extends GameDialog {
 	float LBL_MAX_WIDTH = 350;
 
 	float CONTAINER_PADDING = 5;
-	
+
 	public static String DEFAULT_TITLE = "Info";
 
 	Table dialogContainer;
-
-	boolean isOnTop = false; // If the dialog is displayed on top of another dialog
 
 	public OkDialog(String title, String text, Stage stage) {
 		super(stage);
 		super.clear();
 		super.setBackground(Gui.getColorDrawable(Color.DARK_GRAY));
 		super.align(Align.left);
-		isOnTop = Gui.dialogActive;
 		super.setTitle(title);
 
 		dialogContainer = new Table();
@@ -59,23 +52,9 @@ public class OkDialog extends GameDialog {
 		super.add(dialogContainer).pad(CONTAINER_PADDING).padTop(20);
 		super.getTitleLabel().setAlignment(Align.center);;
 
-		okButton.addListener(new ChangeListener() {
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				remove();
-				Gui.dialogActive = Gui.gameUnfocused = isOnTop;
-			}
-
-		});
-		
-		dialogContainer.addListener(new InputListener() {
-			@Override
-			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-				Gui.gameUnfocused = true;
-				Gui.overlay.hideTooltip();
-			}
-		});
+		Gui.setAction(okButton, () -> remove());
 	}
-	
+
 	public OkDialog(String text, Stage stage) {
 		this(DEFAULT_TITLE, text, stage);
 	}

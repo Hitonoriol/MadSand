@@ -184,9 +184,13 @@ public class Gui {
 
 	public static void gameResumeFocus(GameDialog dialog) {
 		boolean noDialogsLeft = false;
+		Stage stage = MadSand.getStage();
+		
+		if (stage != overlay)
+			return;
 
 		if (dialog == null)
-			noDialogsLeft = !hasDialogs(MadSand.getStage());
+			noDialogsLeft = !hasDialogs(stage);
 		else
 			noDialogsLeft = dialog.isOnlyDialog();
 

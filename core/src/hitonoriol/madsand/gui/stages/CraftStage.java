@@ -121,11 +121,7 @@ public class CraftStage extends Stage {
 		containerTable.add(backBtn).size(BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT).align(Align.center).row();
 		super.addActor(containerTable);
 
-		Gui.setAction(backBtn, () -> {
-			if (craftStationId == 0)
-				MadSand.switchScreen(MadSand.gameScreen);
-			else
-				MadSand.reset();
-		});
+		Gui.setAction(backBtn,
+				craftStationId == 0 ? () -> MadSand.switchScreen(MadSand.gameScreen) : () -> MadSand.reset());
 	}
 }

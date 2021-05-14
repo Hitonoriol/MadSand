@@ -69,18 +69,21 @@ public class ActionButton extends Table {
 		super.setVisible(false);
 	}
 
+	private void setAction(int button, Runnable action) {
+		Gui.setClickAction(interactButton, button, () -> {
+			action.run();
+			hideButton();
+			Gui.gameResumeFocus();
+		});
+	}
+
 	private void activateButton(String text, Runnable lmbAction, Runnable rmbAction) {
 		super.setVisible(true);
 		interactButton.setVisible(true);
 		interactButton.setText(text);
-		Gui.setClickAction(interactButton, Buttons.LEFT, () -> {
-			lmbAction.run();
-			hideButton();
-		});
-		Gui.setClickAction(interactButton, Buttons.RIGHT, () -> {
-			rmbAction.run();
-			hideButton();
-		});
+
+		setAction(Buttons.LEFT, lmbAction);
+		setAction(Buttons.RIGHT, rmbAction);
 	}
 
 	private void activateButton(String text, Runnable lmbAction) {
