@@ -318,10 +318,12 @@ public abstract class AbstractNpc extends Entity {
 		if (!canAct(stats.walkCost))
 			return;
 
-		Node closestNode = findPath(entity.x, entity.y);
-		if (closestNode != null)
-			move(getRelativeDirection(closestNode.x, closestNode.y, true));
-		doAction(stats.walkCost);
+		Utils.tryTo(() -> {
+			Node closestNode = findPath(entity.x, entity.y);
+			if (closestNode != null)
+				move(getRelativeDirection(closestNode.x, closestNode.y, true));
+			doAction(stats.walkCost);
+		});
 	}
 
 	private void actMeleeAttack(Entity enemy) {

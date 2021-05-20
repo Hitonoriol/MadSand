@@ -64,7 +64,7 @@ public class CellInfo {
 
 		station = null;
 		object.as(ItemFactory.class)
-				.ifPresent(itemFactory -> station = itemFactory.itemProducer);
+				.ifPresent(itemFactory -> station = itemFactory.getItemProducer());
 	}
 
 	public boolean isCellOccupied() {

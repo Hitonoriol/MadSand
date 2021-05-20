@@ -591,6 +591,8 @@ public class World {
 	}
 
 	private void timeTick() { // Called every whole tick player spends
+		Graph graph = getCurLoc().getPathfindingGraph();
+		graph.reIndex();
 		player.stats.perTickCheck();
 		player.tileDmg();
 		++globalTick;
@@ -600,7 +602,7 @@ public class World {
 			hourTick();
 		}
 
-		getCurLoc().getPathfindingGraph().reIndex();
+		graph.reIndex();
 	}
 
 	public void timeSubtick(float time) { // Gets called on every action player does, time = % of max AP(speed) 

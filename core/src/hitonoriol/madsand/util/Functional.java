@@ -31,6 +31,18 @@ public class Functional {
 		return StreamSupport.stream(new PredicateSpliterator<>(stream.spliterator(), predicate), false);
 	}
 
+	public static void tryTo(SafeRunnable action, Consumer<Exception> catcher) {
+		try {
+			action.run();
+		} catch (Exception e) {
+			catcher.accept(e);
+		}
+	}
+
+	public static interface SafeRunnable {
+		void run() throws Exception;
+	}
+
 	private static class PredicateSpliterator<T> extends AbstractSpliterator<T> {
 		private Spliterator<T> spliterator;
 		private Predicate<T> predicate;

@@ -34,8 +34,6 @@ public class SliderDialog extends GameDialog {
 	private static float SLIDER_HEIGHT = DEFAULT_HEIGHT / 2;
 
 	private static int SLIDER_STEP = 1;
-	private static String cancelText = "Cancel";
-	private static String confirmText = "Confirm";
 
 	private Label titleLabel; // Dialog title
 
@@ -62,8 +60,8 @@ public class SliderDialog extends GameDialog {
 
 		titleTbl.padTop(TITLE_YPADDING).padLeft(TITLE_XPADDING);
 
-		cancelButton = new TextButton(cancelText, Gui.skin);
-		confirmButton = new TextButton(confirmText, Gui.skin);
+		cancelButton = new TextButton("Cancel", Gui.skin);
+		confirmButton = new TextButton("Confirm", Gui.skin);
 		buttonTable = new Table();
 		buttonTable.add(confirmButton).size(BUTTON_WIDTH, BUTTON_HEIGHT).pad(BUTTON_PADDING);
 		buttonTable.add(cancelButton).size(BUTTON_WIDTH, BUTTON_HEIGHT).pad(BUTTON_PADDING);

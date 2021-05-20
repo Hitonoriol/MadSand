@@ -1,5 +1,8 @@
 package hitonoriol.madsand.input;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -13,12 +16,14 @@ import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.properties.Globals;
+import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
 
 public class Keyboard {
 
 	private static KeyBindManager keyBinds = new KeyBindManager();
 	private static boolean ignoreInput = false;
+	private static Set<Integer> heldKeys = new HashSet<>();
 
 	public static void initDefaultKeyBinds() {
 		Player player = MadSand.player();
@@ -40,13 +45,16 @@ public class Keyboard {
 		/* Function keys */
 		keyBinds.bind(Keys.ESCAPE, () -> MadSand.switchScreen(MadSand.mainMenu))
 				.bind(Keys.G, () -> GameSaver.saveWorld());
+
+		/* Debug keys */
+		keyBinds.bind(Keys.Z, () -> Globals.debugMode = !Globals.debugMode)
+				.bind(Keys.BACKSPACE, () -> Utils.out("%d", 1337 / 0))
+				.bind(key -> pollDebugKeys(key));
 	}
 
 	public static void pollGameKeys() {
 		if (!ignoreInput)
 			pollMovementKeys();
-
-		pollDebugKeys();
 	}
 
 	public static void pollGlobalHotkeys() {
@@ -70,9 +78,20 @@ public class Keyboard {
 					return true;
 
 				keyBinds.runBoundAction(keycode);
+				heldKeys.remove(keycode);
 				return true;
 			}
+
+			@Override
+			public boolean keyDown(InputEvent event, int keycode) {
+				heldKeys.add(keycode);
+				return super.keyDown(event, keycode);
+			}
 		});
+	}
+
+	public static boolean isKeyPressed(int key) {
+		return heldKeys.contains(key);
 	}
 
 	public static boolean inputIgnored() {
@@ -111,48 +130,45 @@ public class Keyboard {
 				Gdx.input.isKeyJustPressed(Keys.D));
 	}
 
-	private static void pollDebugKeys() {
-		if (Gdx.input.isKeyJustPressed(Keys.Z))
-			Globals.debugMode = !Globals.debugMode;
-
+	private static void pollDebugKeys(int key) {
 		if (!Globals.debugMode)
 			return;
 
-		if (Gdx.input.isKeyJustPressed(Keys.GRAVE)) {
+		if (key == Keys.GRAVE) {
 			Gui.gameUnfocus();
 			TextField console = Gui.overlay.getConsoleField();
 			console.setVisible(!console.isVisible());
 			Gui.overlay.setKeyboardFocus(console);
 		}
 
-		if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) {
-			if (Gdx.input.isKeyJustPressed(Keys.DOWN))
+		if (key == Keys.Y)
+			Mouse.setClickAction((x, y) -> MadSand.player().run(Mouse.getPathToCursor()), MadSand.player().fov);
+
+		if (key == Keys.NUMPAD_3)
+			MadSand.getRenderer().changeZoom(0.01f);
+
+		if (key == Keys.NUMPAD_1) {
+			MadSand.getRenderer().changeZoom(-0.01f);
+		}
+
+		if (key == Keys.F5)
+			MadSand.world.timeTick(150);
+
+		if (isKeyPressed(Keys.CONTROL_LEFT)) {
+			if (key == Keys.DOWN)
 				MadSand.world.descend();
-			else if (Gdx.input.isKeyJustPressed(Keys.UP))
+
+			else if (key == Keys.UP)
 				MadSand.world.ascend();
 
-			else if (Gdx.input.isKeyJustPressed(Keys.R)) {
+			else if (key == Keys.R) {
 				MadSand.world.generate();
 				MadSand.worldEntered();
 			}
 
-			else if (Gdx.input.isKeyJustPressed(Keys.W))
+			else if (key == Keys.W)
 				World.player.skipTime();
 		}
-
-		if (Gdx.input.isKeyJustPressed(Keys.Y))
-			Mouse.setClickAction((x, y) -> World.player.move(Mouse.getPathToCursor()), World.player.fov);
-
-		if (Gdx.input.isKeyPressed(Keys.NUMPAD_3)) {
-			MadSand.getRenderer().changeZoom(0.01f);
-		}
-
-		if (Gdx.input.isKeyPressed(Keys.NUMPAD_1)) {
-			MadSand.getRenderer().changeZoom(-0.01f);
-		}
-
-		if (Gdx.input.isKeyJustPressed(Keys.F5))
-			MadSand.world.timeTick(150);
 	}
 
 	public static KeyBindManager getKeyBindManager() {

@@ -8,11 +8,11 @@ import hitonoriol.madsand.properties.ItemProp;
 
 public class ItemFactory extends BuiltObject {
 
-	public ItemProducer itemProducer;
+	private ItemProducer itemProducer;
 
 	public ItemFactory(ItemFactory protoObject) {
 		super(protoObject);
-		itemProducer = new ItemProducer(id);
+		initItemProducer();
 	}
 
 	@Override
@@ -22,6 +22,21 @@ public class ItemFactory extends BuiltObject {
 
 	public ItemFactory() {
 		super();
+	}
+
+	public ItemProducer getItemProducer() {
+		if (itemProducer == null)
+			initItemProducer();
+
+		return itemProducer;
+	}
+	
+	public void setItemProducer(ItemProducer producer) {
+		this.itemProducer = producer;
+	}
+
+	private void initItemProducer() {
+		itemProducer = new ItemProducer(id);
 	}
 
 	@Override

@@ -18,7 +18,7 @@ public class Stats {
 	public final static float BASE_MAX_WEIGHT = 50;
 	public final static int BASE_FOOD_TICKS = 2;
 	public static final int HP_MULTIPLIER = 10; // maxHp = constitution * HP_MULTIPLIER
-	final float MIN_HP_AUTODAMAGE_PERCENT = 10;
+	final float MIN_HP_AUTODAMAGE_PERCENT = 40;
 	final static int STARVE_DMG = 1;
 	final static int STAMINA_DMG = 1;
 	final static int FOOD_HEAL = 1;

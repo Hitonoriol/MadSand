@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.dialog.GameDialog;
+import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 
 public class OkDialog extends GameDialog {
 
@@ -39,9 +40,14 @@ public class OkDialog extends GameDialog {
 		dialogContainer.align(Align.left);
 		textLbl = new Label(text, Gui.skin);
 		textLbl.setWrap(true);
+		textLbl.setFillParent(true);
 		textLbl.setAlignment(Align.left);
 		dialogContainer.setBackground(Gui.getColorDrawable(Color.LIGHT_GRAY));
-		dialogContainer.add(textLbl).align(Align.left).width(LBL_MAX_WIDTH).pad(25).row();
+		dialogContainer.add(new AutoFocusScrollPane(textLbl))
+				.align(Align.left)
+				.width(Math.max(LBL_MAX_WIDTH, Gui.getTextWidth(text))).maxHeight(LBL_MAX_WIDTH)
+				.pad(25)
+				.row();
 
 		TextButton okButton = new TextButton("Ok", Gui.skin);
 
@@ -50,7 +56,7 @@ public class OkDialog extends GameDialog {
 				.padBottom(BUTTON_PAD_BOTTOM).row();
 
 		super.add(dialogContainer).pad(CONTAINER_PADDING).padTop(20);
-		super.getTitleLabel().setAlignment(Align.center);;
+		super.getTitleLabel().setAlignment(Align.center);
 
 		Gui.setAction(okButton, () -> remove());
 	}

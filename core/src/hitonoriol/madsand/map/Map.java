@@ -197,7 +197,7 @@ public class Map {
 
 		for (Pair coords : mapProductionStations)
 			getObject(coords).as(ItemFactory.class)
-					.ifPresent(itemfactory -> prodStations.put(coords, itemfactory.itemProducer));
+					.ifPresent(itemfactory -> prodStations.put(coords, itemfactory.getItemProducer()));
 
 		return prodStations;
 	}
@@ -208,7 +208,7 @@ public class Map {
 			Pair coords = entry.getKey();
 			getObject(coords).as(ItemFactory.class)
 					.ifPresent(itemFactory -> {
-						itemFactory.itemProducer = entry.getValue();
+						itemFactory.setItemProducer(entry.getValue());
 						mapProductionStations.add(coords);
 					});
 
@@ -1078,7 +1078,7 @@ public class Map {
 	public void updateProductionStations() {
 		for (Pair coords : mapProductionStations)
 			getObject(coords).as(ItemFactory.class)
-					.ifPresent(itemFactory -> itemFactory.itemProducer.produce());
+					.ifPresent(itemFactory -> itemFactory.getItemProducer().produce());
 
 		for (Entry<Pair, AbstractNpc> entry : mapNpcs.entrySet()) {
 			if (!(entry.getValue() instanceof FarmAnimal))

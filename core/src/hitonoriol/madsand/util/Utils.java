@@ -15,14 +15,18 @@ import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.math3.random.RandomDataGenerator;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Timer;
 
+import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.properties.Globals;
+import hitonoriol.madsand.util.Functional.SafeRunnable;
 import me.xdrop.jrand.JRand;
 
 public class Utils {
@@ -110,12 +114,42 @@ public class Utils {
 	}
 
 	public static void die(String... msg) {
-		out("Seems like some fatal error occured. Check " + Resources.ERR_FILE + " for details.");
+		out("Seems like some fatal error has occured.");
 		if (msg.length > 0) {
 			for (String m : msg)
 				out(m);
 		}
-		System.exit(-1);
+		Gdx.app.exit();
+	}
+
+	private static final int MAX_ERRORS = 5;
+	private static long ERR_INTERVAL = 200;
+	private static long errors = 0, lastError = 0;
+
+	public static void panic(String msg) {
+		if (Globals.isDebugBuild())
+			die("Panic in debug mode");
+
+		long timeDelta = System.currentTimeMillis() - lastError;
+		lastError = System.currentTimeMillis();
+		if (timeDelta > ERR_INTERVAL)
+			errors -= timeDelta / ERR_INTERVAL;
+		if (errors < 0)
+			errors = 0;
+		++errors;
+
+		if (errors > MAX_ERRORS)
+			die("Too many errors");
+
+		Gui.drawOkDialog("Panic", "Oops, something went horribly wrong." + Resources.LINEBREAK + Resources.LINEBREAK
+				+ "You can continue playing, though. But if you notice more strange behavior, just relaunch the game."
+				+ Resources.LINEBREAK + Resources.LINEBREAK
+				+ "Here's some useless info (this will also be saved to " + Resources.ERR_FILE + "):"
+				+ Resources.LINEBREAK + Resources.LINEBREAK + msg);
+	}
+
+	public static void tryTo(SafeRunnable action) {
+		Functional.tryTo(action, exception -> panic(ExceptionUtils.getStackTrace(exception)));
 	}
 
 	public static String round(double num) {

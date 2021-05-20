@@ -4,6 +4,7 @@ import java.io.PrintStream;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Files.FileType;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 import hitonoriol.madsand.MadSand;
@@ -41,7 +42,7 @@ public class Launcher {
 		config.foregroundFPS = 59;
 		config.backgroundFPS = -1;
 
-		new com.badlogic.gdx.backends.lwjgl.LwjglApplication(app, config);
+		new LwjglApplication(app, config);
 	}
 
 	private static void applyArgs(String[] args) throws Exception {

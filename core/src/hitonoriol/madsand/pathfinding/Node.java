@@ -44,8 +44,25 @@ public class Node implements IndexedNode<Node>, Comparable<Node> {
 	}
 
 	public void addNeighbor(Node node) {
-		if (node != null)
+		if (node == null)
+			return;
+
+		if (!hasNeighbor(node))
 			connections.add(new DefaultConnection<Node>(this, node));
+	}
+
+	public boolean hasNeighbor(Node node) {
+		if (connections.isEmpty())
+			return false;
+
+		Connection<Node> connection;
+		for (int i = 0; i < connections.size; ++i) {
+			connection = connections.get(i);
+			if (connection.getToNode() == node)
+				return true;
+		}
+
+		return false;
 	}
 
 	public void removeNeighbor(Node node) {

@@ -14,7 +14,7 @@ mouse:setClickAction(
 			end
 			
 			change_stamina(ability:addBonusCost(path_cost));
-			player:move(path);
+			player:run(path);
 		end
 	)
 , 5 + ability.lvl);

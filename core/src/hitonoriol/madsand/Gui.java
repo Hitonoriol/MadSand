@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -58,6 +59,7 @@ public class Gui {
 
 	public static ScreenViewport uiViewport = new ScreenViewport();
 	public static Overlay overlay;
+	private static GlyphLayout glyphLayout = new GlyphLayout();
 
 	static Color mouseOverColor = new Color(0xa5a5a5ff);
 	private static Map<Integer, LabelStyle> labelStyles = new HashMap<>();
@@ -185,7 +187,7 @@ public class Gui {
 	public static void gameResumeFocus(GameDialog dialog) {
 		boolean noDialogsLeft = false;
 		Stage stage = MadSand.getStage();
-		
+
 		if (stage != overlay)
 			return;
 
@@ -293,6 +295,21 @@ public class Gui {
 	public static Label setFontSize(Label label, int size) {
 		label.setStyle(Gui.getLabelStyle(size));
 		return label;
+	}
+
+	public static int getFontSize(BitmapFont font) {
+		return labelStyles.keySet().stream()
+				.filter(size -> getFont(size) == font)
+				.findFirst().orElse(-1);
+	}
+
+	public static float getTextWidth(String text, int fontSize) {
+		glyphLayout.setText(getFont(fontSize), text);
+		return glyphLayout.width;
+	}
+
+	public static float getTextWidth(String text) {
+		return getTextWidth(text, FONT_S);
 	}
 
 	public static ProgressBarStyle createProgressBarStyle(float width, float height, Color color, boolean transparent) {

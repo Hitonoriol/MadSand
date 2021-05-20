@@ -48,14 +48,8 @@ public class ResourceProgressBar extends TimedProgressBar {
 
 	float ANIMATION_MULTIPLIER = 1.3f;
 
-	private ResourceProgressBar(float delay) {
-		super(delay);
-	}
-
 	public ResourceProgressBar(MapObject object) {
-		this(BASE_DELAY
-				- (D_MULTIPLIER * (float) SkillContainer.skillLvlPercent(
-						World.player.stats.skills.getLvl(object.getInteractionSkill()))));
+		super(BASE_DELAY - getDelayDelta(object));
 		super.setAnimateDuration(delay);
 		nextValue = delay;
 
@@ -107,6 +101,11 @@ public class ResourceProgressBar extends TimedProgressBar {
 					this.cancel();
 			}
 		};
+	}
+
+	private static float getDelayDelta(MapObject object) {
+		return (D_MULTIPLIER * (float) SkillContainer.skillLvlPercent(
+				MadSand.player().stats.skills.getLvl(object.getInteractionSkill()))) / 5f;
 	}
 
 	public void draw(Batch batch, float parentAlpha) {

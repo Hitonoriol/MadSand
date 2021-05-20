@@ -1,7 +1,7 @@
 allprojects {
 	apply plugin: "eclipse"
 
-	version = 'v0.49.5a-rc2'
+	version = 'v0.49.5a-rc3'
 	
 	ext {
 		appName = "MadSand"

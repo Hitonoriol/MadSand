@@ -70,6 +70,7 @@ import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.map.object.ResourceObject;
+import hitonoriol.madsand.pathfinding.Path;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.NpcProp;
@@ -84,8 +85,9 @@ import hitonoriol.madsand.world.World;
 public class Player extends Entity {
 	@JsonIgnore
 	public PlayerStats stats; // Reference to the same Stats object as super.stats
-	float elapsedTime;// For player animation
-	float origMoveSpeed = 0, runSpeedCoef = 3.5f;
+	float elapsedTime; // TODO: move to AnimationContainer
+	private float runSpeedCoef = 3.5f;
+	private boolean running = false;
 
 	private int targetedByNpcs = 0;
 	private Set<Integer> unlockedItems = new HashSet<>(); // set of items player obtained at least once
@@ -1182,13 +1184,22 @@ public class Player extends Entity {
 
 	@Override
 	public void stopMovement() {
-		if (origMoveSpeed > 0 && origMoveSpeed < movementSpeed) {
-			movementSpeed = origMoveSpeed;
-			if (!hasQueuedMovement())
-				Keyboard.resumeInput();
+		if (!hasQueuedMovement()) {
+			Keyboard.resumeInput();
+			if (running) {
+				Utils.dbg("Stopped running");
+				running = false;
+				calcMovementSpeed();
+			}
 		}
 
 		super.stopMovement();
+	}
+
+	public void run(Path path) {
+		movementSpeed *= runSpeedCoef;
+		running = true;
+		super.move(path);
 	}
 
 	@Override
@@ -1198,8 +1209,6 @@ public class Player extends Entity {
 
 		Keyboard.stopInput();
 
-		origMoveSpeed = movementSpeed;
-		movementSpeed *= runSpeedCoef;
 		walk(movementQueue.poll());
 	}
 

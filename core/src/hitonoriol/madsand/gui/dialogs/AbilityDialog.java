@@ -22,7 +22,7 @@ import hitonoriol.madsand.util.Utils;
 public class AbilityDialog extends GameDialog {
 
 	private List<Ability> abilities;
-	static float BTN_HEIGHT = 50;
+	static final float BTN_HEIGHT = 50, MIN_BTN_WIDTH = 75;
 	static float PAD = 30;
 	Table container = new Table(Gui.skin);
 
@@ -39,7 +39,10 @@ public class AbilityDialog extends GameDialog {
 		refresh();
 	}
 
+	private float maxBindCellWidth;
+
 	private void refresh() {
+		maxBindCellWidth = MIN_BTN_WIDTH;
 		container.clear();
 
 		if (abilities.isEmpty())
@@ -87,7 +90,8 @@ public class AbilityDialog extends GameDialog {
 										Utils.scheduleTask(() -> remove(), 0.1f);
 									}).padRight(5).padLeft(5);
 
-							addButton(ability.getBindKeyString(),
+							String bindString = ability.getBindKeyString();
+							addButton(bindString,
 									() -> new KeyDialog(key -> {
 										player.bindAbility(key, ability.id);
 										refresh();
@@ -97,7 +101,9 @@ public class AbilityDialog extends GameDialog {
 												refresh();
 											})
 											.show())
-													.size(75, BTN_HEIGHT)
+													.size(maxBindCellWidth = Math.max(maxBindCellWidth,
+															Gui.getTextWidth(bindString) + 10), BTN_HEIGHT)
+													.fill()
 													.padRight(5)
 													.row();
 						});

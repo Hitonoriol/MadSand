@@ -48,7 +48,7 @@ public class LuaUtils {
 	public static void notice(String msg) {
 		MadSand.notice(msg);
 	}
-	
+
 	public static void warn(String msg) {
 		MadSand.warn(msg);
 	}

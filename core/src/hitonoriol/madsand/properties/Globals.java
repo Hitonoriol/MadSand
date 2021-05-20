@@ -40,6 +40,11 @@ public class Globals {
 
 	public HashMap<String, String> values;
 
+	
+	public static boolean isDebugBuild() {
+		return VERSION == DEV_VER_STR;
+	}
+	
 	private static String getVersion() {
 		String version = Globals.class.getPackage().getImplementationVersion();
 
