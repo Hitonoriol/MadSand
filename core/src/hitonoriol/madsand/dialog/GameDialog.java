@@ -118,7 +118,7 @@ public class GameDialog extends Dialog {
 	public void chainReply(TextButton replyButton, final GameDialog nextDialog) {
 		replyButton.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				remove();
+				hide();
 				nextDialog.show(stage);
 			}
 		});
@@ -134,7 +134,7 @@ public class GameDialog extends Dialog {
 		TextButton okBtn = new TextButton(text, Gui.skin);
 		okBtn.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				remove();
+				hide();
 			}
 		});
 		addButton(okBtn);
@@ -220,6 +220,17 @@ public class GameDialog extends Dialog {
 
 	public boolean isOnlyDialog() { // If this dialog is the only one in stage
 		return !Gui.hasDialogs(stage, this);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this)
+			return true;
+
+		if (!(obj instanceof GameDialog))
+			return false;
+
+		return getClass().getSimpleName().equals(obj.getClass().getSimpleName());
 	}
 
 }

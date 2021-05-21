@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -22,7 +21,7 @@ import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.world.World;
 
-public class QuestJournal extends Dialog {
+public class QuestJournal extends GameDialog {
 
 	static float TABLE_WIDTH = 600;
 	static float TABLE_HEIGHT = 300;
@@ -39,7 +38,7 @@ public class QuestJournal extends Dialog {
 	static float OBJECTIVE_LABEL_WIDTH = 200;
 	static float NPC_INFO_LABEL_WIDTH = 200;
 
-	Skin skin;
+	Skin skin = Gui.skin;
 	static String titleString = "Quest Journal";
 	static String statusString = "Status";
 	static String nameString = "Quest";
@@ -57,14 +56,8 @@ public class QuestJournal extends Dialog {
 	Label statusLabel, nameLabel, reqLabel, npcLocationLabel;
 	Label emptyJournalLabel;
 
-	public QuestJournal(String title, Skin skin) {
-		super(title, skin);
-		this.skin = skin;
-
-	}
-
 	public QuestJournal(QuestWorker quests) {
-		this(titleString, Gui.skin);
+		super(titleString, Gui.overlay);
 		this.quests = quests;
 		super.getTitleTable().padTop(TITLE_YPADDING).align(Align.center);
 		super.getTitleLabel().setAlignment(Align.center);
@@ -162,15 +155,8 @@ public class QuestJournal extends Dialog {
 	}
 
 	public void show() {
-		Gui.gameUnfocused = Gui.dialogActive = true;
 		refresh();
-		super.show(Gui.overlay);
-	}
-
-	public boolean remove() {
-		Gui.gameUnfocused = Gui.dialogActive = false;
-		Gui.overlay.showTooltip();
-		return super.remove();
+		super.show();
 	}
 
 }

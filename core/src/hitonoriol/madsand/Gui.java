@@ -37,7 +37,6 @@ import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.dialogs.OkDialog;
 import hitonoriol.madsand.gui.stages.Overlay;
 import hitonoriol.madsand.screens.TravelScreen;
-import hitonoriol.madsand.world.World;
 
 public class Gui {
 	public static final float DEFWIDTH = 250f;
@@ -46,7 +45,6 @@ public class Gui {
 	public final static int FONT_XXS = 12, FONT_XS = 14, FONT_S = 16, FONT_M = 20, FONT_L = 24, FONT_XL = 28;
 
 	public static boolean gameUnfocused = false;
-	public static boolean inventoryActive = false;
 	public static boolean dialogActive = false;
 
 	public static NinePatchDrawable transparency;
@@ -227,13 +225,6 @@ public class Gui {
 
 	public static float horizontalCenter(Actor actor) {
 		return (Gdx.graphics.getWidth() / 2) - actor.getWidth();
-	}
-
-	public static void toggleInventory() {
-		if (inventoryActive)
-			World.player.hideInventory();
-		else
-			World.player.showInventory();
 	}
 
 	public static Drawable getColorDrawable(Color color) {

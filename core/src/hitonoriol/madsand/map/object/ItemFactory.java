@@ -46,7 +46,7 @@ public class ItemFactory extends BuiltObject {
 
 	@Override
 	public String getBuildInfo() {
-		String info = "Produces " + ItemProp.getItemName(itemProducer.producedMaterial);
+		String info = "Produces " + ItemProp.getItemName(getItemProducer().producedMaterial);
 
 		if (!itemProducer.isEndless())
 			info += Resources.LINEBREAK + "Consumes " + ItemProp.getItemName(itemProducer.consumedMaterial);

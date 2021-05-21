@@ -14,8 +14,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
-import hitonoriol.madsand.entities.inventory.item.Tool;
-import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.util.Utils;
 
 public class Inventory {
@@ -234,8 +232,8 @@ public class Inventory {
 		}
 	}
 
-	public boolean damageTool(Tool item, Skill skill) {
-		if (!item.damageTool(skill)) {
+	public boolean damageEquipment(AbstractEquipment item, int dmg) {
+		if (!item.damage(dmg)) {
 			refreshItem(item);
 			return false;
 		} else {

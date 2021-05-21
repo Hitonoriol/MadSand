@@ -21,6 +21,8 @@ import hitonoriol.madsand.gui.widgets.GameTooltip;
 import hitonoriol.madsand.map.CellInfo;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
+import hitonoriol.madsand.map.MapEntity;
+import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.pathfinding.Path;
 import hitonoriol.madsand.screens.GameWorldRenderer;
@@ -217,8 +219,8 @@ public class Mouse {
 
 	public static boolean isClickActionPossible() {
 		int clickDst = getClickDistance();
-		return pointingAtObject ||
-				clickDst == CLICK_CUR_TILE;
+		return pointingAtObject &&
+				(clickDst == CLICK_CUR_TILE || clickDst == CLICK_ADJ_TILE || MadSand.player().canPerformRangedAttack());
 	}
 
 	public static void mouseClickAction() {
@@ -227,6 +229,8 @@ public class Mouse {
 		boolean currentTileClicked = (clickDst == CLICK_CUR_TILE);
 		Loot loot = cellInfo.getLoot();
 		AbstractNpc npc = cellInfo.getNpc();
+		MapObject object = cellInfo.getObject();
+		MapEntity target = object != Map.nullObject ? cellInfo.getObject() : npc;
 		Player player = World.player;
 
 		if ((player.isMoving()) || Gui.isGameUnfocused() || !pointingAtObject)
@@ -250,8 +254,10 @@ public class Mouse {
 				player.interact();
 		}
 
-		else if (clickDst > 1 && npc != Map.nullNpc)
-			player.rangedAttack(npc);
+		else if (clickDst > 1 && !target.isEmpty())
+			player.rangedAttack(target);
+
+		refreshTooltip();
 	}
 
 	public static void pollMouseMovement() {

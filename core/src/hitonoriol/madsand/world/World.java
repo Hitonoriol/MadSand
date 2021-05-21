@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+import org.apache.commons.lang3.mutable.MutableBoolean;
+import org.apache.commons.lang3.mutable.MutableInt;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Timer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -613,7 +616,7 @@ public class World {
 
 		graph.reIndex();
 
-		//Utils.out("\n\n* New subtick, time passed=" + time);
+		//Utils.out("New subtick, time passed = %f", time);
 
 		npcs.forEach((position, npc) -> {
 			npc.getActDelay();
@@ -628,32 +631,34 @@ public class World {
 		float actionDelay = timeSkip ? 0 : ACT_DELAY;
 		float maxSimDst = getMaxSimDistance();
 		float maxDelay = 0;
+		MutableInt stopLevel = new MutableInt(0);
+		MutableBoolean playerPaused = new MutableBoolean(false);
 		for (Entity entity : queue) {
 			if (timeSkip && entity.distanceTo(player) > maxSimDst)
 				continue;
-
-			//Utils.out(entity.getName() + " plans to act...");
 
 			if ((player.canSee(entity) && entity != player) || (entity == player && pausePlayer)) {
 				hostile = false;
 				if (entity != player) {
 					hostile = ((AbstractNpc) entity).state == AbstractNpc.State.Hostile;
-					pausePlayer |= hostile;
-
-					if (pausePlayer)
+					pausePlayer |= hostile && entity.getSpeed() >= player.getSpeed();
+					if (pausePlayer) {
 						Keyboard.stopInput();
+						stopLevel.increment();
+					}
 				}
 
-				float actDelay = ((hostile && pausePlayer) ? 0 : actionDelay) + entity.getActDelay();
+				float actDelay = (pausePlayer ? 0 : actionDelay) + entity.getActDelay();
 				maxDelay = Math.max(maxDelay, actDelay);
+				if (!playerPaused.isTrue())
+					playerPaused.setValue(pausePlayer);
 
 				actDelayTimer.scheduleTask(new Timer.Task() {
 					@Override
 					public void run() {
 						entity.act(time);
-						/*Utils.out(entity.getName() + " finished acting. " + entity.x + ", " + entity.y);*/
-						if (!entity.isMoving())
-							Keyboard.resumeInput();
+						if (entity == player && playerPaused.isTrue())
+							Keyboard.resumeInput(stopLevel.getValue());
 					}
 				}, actDelay);
 			} else

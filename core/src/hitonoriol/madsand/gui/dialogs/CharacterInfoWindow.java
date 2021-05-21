@@ -95,10 +95,14 @@ public class CharacterInfoWindow {
 
 		ok.addListener(new ChangeListener() {
 			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				Gui.overlay.toggleStatsWindow();
+				dialog.hide();
 			}
 
 		});
+	}
+	
+	public GameDialog getDialog() {
+		return dialog;
 	}
 
 	private Table createMiscInfoTable() {

@@ -74,7 +74,7 @@ public class DialogChainGenerator {
 				scriptButton.addListener(new ChangeListener() {
 					@Override
 					public void changed(ChangeEvent event, Actor actor) {
-						dialog.remove();
+						dialog.hide();
 						Lua.execute(buttonScriptString);
 					}
 				});
@@ -85,7 +85,7 @@ public class DialogChainGenerator {
 				nextDialogButton.addListener(new ChangeListener() {
 					@Override
 					public void changed(ChangeEvent event, Actor actor) {
-						dialog.remove();
+						dialog.hide();
 					}
 				});
 

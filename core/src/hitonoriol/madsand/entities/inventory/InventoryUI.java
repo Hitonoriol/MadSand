@@ -99,15 +99,8 @@ public class InventoryUI extends GameDialog {
 	}
 
 	public void hide() {
-		super.remove();
-		Gui.inventoryActive = false;
+		super.hide();
 		World.player.inventory.clearContextMenus();
-	}
-
-	public void show() {
-		super.show();
-		Gui.inventoryActive = true;
-		dialogActive = false;
 	}
 
 	void setHeader(String str) {

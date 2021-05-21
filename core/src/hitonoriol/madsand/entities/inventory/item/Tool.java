@@ -43,14 +43,6 @@ public class Tool extends AbstractEquipment {
 			return Utils.rand(MIN_SKILL_DMG, (int) (dmg * Skill.SKILL_DMG_COEF));
 	}
 
-	public boolean damageTool(Skill skill) {
-		return damage();
-	}
-
-	public boolean damageTool() {
-		return damageTool(Skill.None);
-	}
-
 	public static enum Type {
 		None, // -- Bare hands 
 		Axe, Shovel, Pickaxe, Hoe, Hammer,

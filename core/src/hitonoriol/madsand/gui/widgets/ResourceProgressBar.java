@@ -12,6 +12,7 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.skill.SkillContainer;
+import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.world.World;
 
@@ -25,7 +26,7 @@ public class ResourceProgressBar extends TimedProgressBar {
 
 	static ProgressBarStyle style;
 
-	static float BASE_DELAY = 0.29f;
+	static float BASE_DELAY = 0.295f;
 	static float D_MULTIPLIER = 0.8f * (BASE_DELAY / (float) SkillContainer.MAX_SKILL_ROLL_PERCENT);
 
 	float HEIGHT = 20;
@@ -69,19 +70,17 @@ public class ResourceProgressBar extends TimedProgressBar {
 		progressLabel.setAlignment(Align.center);
 		progressLabel.setWidth(WIDTH + 150);
 
-		super.setAction(new TimedProgressBar.TimedAction() {
-			@Override
-			public void doAction() {
-				remove();
-				Gui.gameResumeFocus();
-				Gui.refreshOverlay();
-				Timer.instance().scheduleTask(new Timer.Task() {
-					@Override
-					public void run() {
-						progressLabel.remove();
-					}
-				}, 0.5f);
-			}
+		super.setAction(() -> {
+			remove();
+			Gui.gameResumeFocus();
+			Gui.refreshOverlay();
+			Mouse.refreshTooltip();
+			Timer.instance().scheduleTask(new Timer.Task() {
+				@Override
+				public void run() {
+					progressLabel.remove();
+				}
+			}, 0.5f);
 		});
 
 		skipTask = new Timer.Task() {
@@ -116,10 +115,10 @@ public class ResourceProgressBar extends TimedProgressBar {
 
 		if (getVisualValue() >= getValue()) {
 			if (gatherResources() < -1)
-				action.doAction();
+				action.run();
 
 			if (object.hp <= 0 || initialObjectHp != object.hp)
-				action.doAction();
+				action.run();
 
 			if (damage > 0) {
 				nextValue = delay / (float) damage;

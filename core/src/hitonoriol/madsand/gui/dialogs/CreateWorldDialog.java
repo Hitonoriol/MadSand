@@ -90,7 +90,6 @@ public class CreateWorldDialog extends GameDialog {
 					MadSand.worldEntered();
 
 					World.player.updCoords();
-					Gui.inventoryActive = false;
 					remove();
 					Gui.overlay.createCharDialog();
 					Gdx.graphics.setContinuousRendering(false);

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
 import hitonoriol.madsand.entities.equipment.Equipment;
 import hitonoriol.madsand.entities.inventory.EquipStats;
+import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.CombatEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Projectile;
@@ -174,7 +175,7 @@ public class PlayerStats extends Stats {
 	public boolean isToolEquipped(Tool.Type type) {
 		return Functional.test(getEquippedTool(), tool -> tool.type == type);
 	}
-	
+
 	public int getEquippedToolDamage(Skill skill) {
 		return getEquippedTool()
 				.map(tool -> tool.getSkillDamage(skill))
@@ -185,6 +186,10 @@ public class PlayerStats extends Stats {
 		return getEquippedTool()
 				.map(tool -> tool.type)
 				.orElse(Tool.Type.None);
+	}
+
+	public Optional<AbstractEquipment> getHeldEquipment() {
+		return hand().as(AbstractEquipment.class);
 	}
 
 	public Optional<Tool> getEquippedTool() {

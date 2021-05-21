@@ -58,12 +58,12 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 		super.useIfPossible(player, () -> equip(player));
 	}
 
-	boolean damage(int amt) {
+	public boolean damage(int amt) {
 		hp -= amt;
 		return (hp <= 0);
 	}
 
-	boolean damage() {
+	public boolean damage() {
 		return damage(1);
 	}
 

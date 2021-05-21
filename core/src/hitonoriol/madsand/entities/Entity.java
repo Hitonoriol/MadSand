@@ -138,33 +138,6 @@ public abstract class Entity extends MapEntity {
 		return this.x == x && this.y == y;
 	}
 
-	public boolean isMoving() {
-		return moving;
-	}
-
-	public void setMoving(boolean val) {
-		moving = val;
-	}
-
-	public void queueMovement(Direction dir) {
-		movementQueue.add(dir);
-	}
-
-	public boolean hasQueuedMovement() {
-		return !movementQueue.isEmpty();
-	}
-
-	protected void pollMovementQueue() {
-		if (hasQueuedMovement())
-			move(movementQueue.poll());
-	}
-
-	public void stopMovement() {
-		moving = false;
-		stepx = stepy = MadSand.TILESIZE;
-		pollMovementQueue();
-	}
-
 	public Inventory initInventory() {
 		inventory = new Inventory();
 		return inventory;
@@ -475,12 +448,39 @@ public abstract class Entity extends MapEntity {
 
 		return worldPos;
 	}
+	
+	public boolean isMoving() {
+		return moving;
+	}
+
+	public void setMoving(boolean val) {
+		moving = val;
+	}
+
+	public void queueMovement(Direction dir) {
+		movementQueue.add(dir);
+	}
+
+	public boolean hasQueuedMovement() {
+		return !movementQueue.isEmpty();
+	}
+
+	protected void pollMovementQueue() {
+		if (hasQueuedMovement())
+			move(movementQueue.poll());
+	}
+
+	public void stopMovement() {
+		moving = false;
+		stepx = stepy = MadSand.TILESIZE;
+		pollMovementQueue();
+	}
 
 	public void animateMovement() {
 		stepx -= movementSpeed;
 		stepy -= movementSpeed;
 
-		if (stepx <= 1)
+		if (stepx <= 0 && stepy <= 0)
 			stopMovement();
 	}
 

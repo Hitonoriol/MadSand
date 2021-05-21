@@ -42,9 +42,6 @@ public class InventoryUICell extends ItemUI {
 		super.addActor(equippedLabel);
 
 		Gui.setClickAction(this, Buttons.LEFT, () -> {
-			if (!Gui.inventoryActive)
-				return;
-
 			if (item.is(AbstractEquipment.class) || item.is(Placeable.class)) {
 				if (player.stats.equipment.itemEquipped(item)) {
 					if (player.unEquip(item))
@@ -67,9 +64,6 @@ public class InventoryUICell extends ItemUI {
 		});
 
 		Gui.setClickAction(this, Buttons.RIGHT, () -> {
-			if (!Gui.inventoryActive)
-				return;
-
 			if (!invCellContextContainer.isVisible()) {
 				toFront();
 				World.player.inventory.clearContextMenus();

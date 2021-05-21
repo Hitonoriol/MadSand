@@ -22,7 +22,7 @@ import hitonoriol.madsand.world.World;
 public class Keyboard {
 
 	private static KeyBindManager keyBinds = new KeyBindManager();
-	private static boolean ignoreInput = false;
+	private static int ignoreInput = 0;
 	private static Set<Integer> heldKeys = new HashSet<>();
 
 	public static void initDefaultKeyBinds() {
@@ -43,7 +43,12 @@ public class Keyboard {
 				.bind(Keys.N, () -> world.travel());
 
 		/* Function keys */
-		keyBinds.bind(Keys.ESCAPE, () -> MadSand.switchScreen(MadSand.mainMenu))
+		keyBinds.bind(Keys.ESCAPE, true, () -> {
+			if (Gui.hasDialogs(Gui.overlay))
+				Gui.overlay.closeAllDialogs();
+			else
+				MadSand.switchScreen(MadSand.mainMenu);
+		})
 				.bind(Keys.G, () -> GameSaver.saveWorld());
 
 		/* Debug keys */
@@ -53,7 +58,7 @@ public class Keyboard {
 	}
 
 	public static void pollGameKeys() {
-		if (!ignoreInput)
+		if (!inputIgnored())
 			pollMovementKeys();
 	}
 
@@ -67,16 +72,6 @@ public class Keyboard {
 
 			@Override
 			public boolean keyUp(InputEvent event, int keycode) {
-				if (keycode == Keys.E) {
-					if ((!Gui.inventoryActive && !Gui.isGameUnfocused())
-							|| ((Gui.inventoryActive && Gui.isGameUnfocused())))
-						Gui.toggleInventory();
-					return true;
-				}
-
-				if (Gui.isGameUnfocused())
-					return true;
-
 				keyBinds.runBoundAction(keycode);
 				heldKeys.remove(keycode);
 				return true;
@@ -95,15 +90,25 @@ public class Keyboard {
 	}
 
 	public static boolean inputIgnored() {
-		return ignoreInput || Mouse.hasClickAction();
+		return ignoreInput > 0 || Mouse.hasClickAction();
 	}
 
-	public static void stopInput() {
-		ignoreInput = true;
+	public static int stopInput() {
+		return ++ignoreInput;
 	}
 
 	public static void resumeInput() {
-		ignoreInput = false;
+		if (--ignoreInput < 0)
+			ignoreInput = 0;
+	}
+
+	public static int resumeInput(int stopLevel) {
+		ignoreInput -= stopLevel;
+
+		if (ignoreInput < 0)
+			ignoreInput = 0;
+
+		return ignoreInput;
 	}
 
 	private static void pollMovementKeys() {

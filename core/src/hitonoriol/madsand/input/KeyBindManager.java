@@ -9,9 +9,9 @@ import java.util.function.Consumer;
 import hitonoriol.madsand.util.Utils;
 
 public class KeyBindManager {
-	private Map<Integer, Runnable> bindings = new LinkedHashMap<>();
+	private Map<Integer, KeyBind> bindings = new LinkedHashMap<>();
 	private List<Consumer<Integer>> listeners = new ArrayList<>(1);
-	private static final Runnable noAction = () -> {};
+	private static final KeyBind noAction = new KeyBind(() -> {});
 
 	public void runBoundAction(int key) {
 		Utils.tryTo(() -> {
@@ -21,9 +21,13 @@ public class KeyBindManager {
 		});
 	}
 
-	public KeyBindManager bind(int key, Runnable action) {
-		bindings.put(key, action);
+	public KeyBindManager bind(int key, boolean execAlways, Runnable action) {
+		bindings.put(key, new KeyBind(action, execAlways));
 		return this;
+	}
+	
+	public KeyBindManager bind(int key, Runnable action) {
+		return bind(key, false, action);
 	}
 
 	public KeyBindManager bind(Consumer<Integer> keyListener) {
@@ -36,7 +40,7 @@ public class KeyBindManager {
 	}
 
 	public void bindAll(Map<Integer, Runnable> bindings) {
-		this.bindings.putAll(bindings);
+		bindings.forEach((key, action) -> bind(key, action));
 	}
 
 	public boolean bindingExists(int key) {

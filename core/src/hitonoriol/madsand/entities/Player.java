@@ -356,7 +356,7 @@ public class Player extends Entity {
 			MadSand.print("You miss " + npc.stats.name);
 		else {
 			MadSand.print("You deal " + dmg + " damage to " + npc.stats.name);
-			damageHeldTool();
+			damageHeldEquipment();
 		}
 
 		if (npc.stats.dead) {
@@ -413,16 +413,16 @@ public class Player extends Entity {
 	private void performRangedAttack(Pair targetPos) {
 		stats.getEquippedProjectile().ifPresent(projectile -> {
 			super.rangedAttack(targetPos, projectile);
-			damageHeldTool();
+			damageHeldEquipment();
 			delItem(projectile, 1);
 		});
 	}
 
-	public void rangedAttack(AbstractNpc npc) {
+	public void rangedAttack(MapEntity target) {
 		if (!canPerformRangedAttack())
 			return;
 
-		doAction(stats.rangedAttackCost, () -> performRangedAttack(npc.getPosition()));
+		doAction(stats.rangedAttackCost, () -> performRangedAttack(target.getPosition()));
 	}
 
 	private void performMeleeAttack(Direction dir) {
@@ -509,10 +509,10 @@ public class Player extends Entity {
 		MadSand.warn("You died");
 	}
 
-	void damageHeldTool(Skill objectSkill) {
-		stats.getEquippedTool().ifPresent(heldTool -> {
-			if (inventory.damageTool(heldTool, objectSkill)) {
-				MadSand.notice("Your " + heldTool.name + " broke");
+	void damageHeldEquipment(MapEntity damagedEntity) {
+		stats.getHeldEquipment().ifPresent(heldTool -> {
+			if (heldTool.damage()) {
+				MadSand.warn("Your " + heldTool.name + " broke");
 
 				unEquip(heldTool);
 
@@ -521,6 +521,10 @@ public class Player extends Entity {
 			} else
 				Gui.overlay.equipmentSidebar.refreshSlot(EquipSlot.MainHand);
 		});
+	}
+
+	public void damageHeldEquipment() {
+		damageHeldEquipment(Map.nullObject);
 	}
 
 	private void unlockRecipe(List<Integer> recipeList, int recipe) {
@@ -607,10 +611,6 @@ public class Player extends Entity {
 	public void refreshAvailableRecipes() {
 		refreshRecipes(ItemProp.craftReq, craftRecipes);
 		refreshRecipes(ItemProp.buildReq, buildRecipes);
-	}
-
-	public void damageHeldTool() {
-		damageHeldTool(Skill.None);
 	}
 
 	@Override
@@ -825,7 +825,7 @@ public class Player extends Entity {
 			return -1;
 
 		doAction(stats.minorCost);
-		damageHeldTool(obj.getInteractionSkill());
+		damageHeldEquipment(obj);
 		changeStamina(-stats.calcStaminaCost());
 
 		return obj.acceptHit(this);
@@ -905,7 +905,7 @@ public class Player extends Entity {
 
 	public void useItem(Tool item) {
 		changeStamina(-item.weight);
-		damageHeldTool();
+		damageHeldEquipment();
 
 		if (item.type == Tool.Type.Shovel) {
 			int ptile = MadSand.world.getTileId(x, y);
@@ -1150,7 +1150,7 @@ public class Player extends Entity {
 		MadSand.world.timeTick(ticks); // committing our action and then letting world catch up to time we've spent
 		MadSand.world.timeSubtick(getActionLength(ap)); // letting NPCs catch up
 		Gui.overlay.refresh();
-		Lua.execute(Lua.onAction);
+		Lua.onAction.run();
 		return ticks;
 	}
 
@@ -1174,9 +1174,6 @@ public class Player extends Entity {
 
 	@Override
 	public boolean walk(Direction dir) {
-		if (!hasQueuedMovement() && Keyboard.inputIgnored())
-			return false;
-
 		if (canWalk(dir))
 			doAction(stats.walkCost, () -> performWalk(dir));
 		return true;
@@ -1207,9 +1204,13 @@ public class Player extends Entity {
 		if (!hasQueuedMovement())
 			return;
 
-		Keyboard.stopInput();
-
 		walk(movementQueue.poll());
+	}
+
+	@Override
+	public void move(Path path) {
+		Keyboard.stopInput();
+		super.move(path);
 	}
 
 	@Override
@@ -1303,14 +1304,6 @@ public class Player extends Entity {
 
 	public boolean luaActionDone(String name) {
 		return luaActions.contains(name);
-	}
-
-	public void hideInventory() {
-		inventory.inventoryUI.hide();
-	}
-
-	public void showInventory() {
-		inventory.inventoryUI.show();
 	}
 
 	@JsonGetter("equipment")

@@ -28,7 +28,6 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.gui.widgets.TimedProgressBar;
-import hitonoriol.madsand.gui.widgets.TimedProgressBar.TimedAction;
 import hitonoriol.madsand.map.FishingSpot;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
@@ -115,7 +114,7 @@ public class FishingUI extends GameDialog {
 		Player player = World.player;
 		player.addItem(spot.catchFish());
 		player.stats.skills.increaseSkill(Skill.Fishing);
-		player.damageHeldTool();
+		player.damageHeldEquipment();
 
 		if (!player.stats.skills.skillRoll(Skill.Fishing))
 			player.inventory.delItem(player.stats.offHand(), 1);
@@ -267,12 +266,9 @@ public class FishingUI extends GameDialog {
 			catchBar.addAction(Actions.color(Color.RED, catchTime, Interpolation.smoother));
 			catchBar.setVisible(true);
 			catchBar.setDelay(catchTime);
-			catchBar.start(new TimedAction() {
-				@Override
-				public void doAction() {
-					MadSand.warn("The fish got away!");
-					remove();
-				}
+			catchBar.start(() -> {
+				MadSand.warn("The fish got away!");
+				remove();
 			});
 			return catchTime;
 		}

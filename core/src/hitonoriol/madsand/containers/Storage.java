@@ -11,8 +11,9 @@ public class Storage<T> {
 		this(null);
 	}
 
-	public void set(T value) {
+	public T set(T value) {
 		this.value = value;
+		return value;
 	}
 
 	public T get() {

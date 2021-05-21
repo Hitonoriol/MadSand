@@ -21,7 +21,7 @@ import hitonoriol.madsand.world.World;
 public class Lua {
 
 	public static Globals globals;
-	public static String onAction;
+	public static Runnable onAction;
 
 	public static final String initScript = "map_init_newgame.lua";
 	public static final String onActionScript = "player_onaction.lua";
@@ -45,8 +45,7 @@ public class Lua {
 		register("tutorial", CoerceJavaToLua.coerce(new Tutorial()));
 
 		executeScript("globals.lua", Resources.SCRIPT_DIR);
-
-		onAction = Resources.readInternal(Resources.SCRIPT_DIR + onActionScript);
+		onAction = scriptAsRunnable(onActionScript);
 	}
 
 	private static void reinitGlobals() {
@@ -67,6 +66,10 @@ public class Lua {
 
 	public static Varargs executeScript(String file, Object... args) {
 		return callChunk(loadScript(file), args);
+	}
+
+	public static Runnable scriptAsRunnable(String file) {
+		return LuaLambda.runnable(loadScript(file));
 	}
 
 	public static LuaValue execute(String str) {

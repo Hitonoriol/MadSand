@@ -27,7 +27,7 @@ public class TravelStage extends Stage {
 
 	public TravelStage() {
 		super();
-		
+
 		travelLabel = new Label(travelString, Gui.skin);
 		travelProgressBar = new TimedProgressBar(travelDelay);
 		travelContainer = new Table();
@@ -48,13 +48,6 @@ public class TravelStage extends Stage {
 	}
 
 	public void travel() {
-		travelProgressBar.start(new TimedProgressBar.TimedAction() {
-
-			@Override
-			public void doAction() {
-				MadSand.reset();
-			}
-			
-		});
+		travelProgressBar.start(() -> MadSand.reset());
 	}
 }

@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -41,13 +40,9 @@ public class BuildDialog extends GameDialog {
 	AutoFocusScrollPane buildScroll;
 	float PAD = 50;
 
-	private BuildDialog(Stage stage) {
-		super(stage);
-		super.setTitle("Build menu");
-	}
-
 	public BuildDialog() {
-		this(Gui.overlay);
+		super(Gui.overlay);
+		super.setTitle("Build menu");
 		super.add().padTop(15).row();
 		super.add(unlockProgressLabel).width(WIDTH).row();
 		buildTable.setBackground(Gui.darkBackgroundSizeable);

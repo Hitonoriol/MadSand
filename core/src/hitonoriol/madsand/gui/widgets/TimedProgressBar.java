@@ -16,7 +16,7 @@ public class TimedProgressBar extends ProgressBar {
 	float defaultValue = 0;
 
 	protected float delay;
-	protected TimedAction action;
+	protected Runnable action;
 	protected boolean done;
 
 	private TimedProgressBar(float min, float max, float stepSize, boolean vertical, Skin skin) {
@@ -52,13 +52,13 @@ public class TimedProgressBar extends ProgressBar {
 		super.setAnimateDuration(delay);
 	}
 
-	public void start(TimedAction action) {
+	public void start(Runnable action) {
 		reset();
 		setAction(action);
 		super.setValue(triggerValue);
 	}
 
-	protected void setAction(TimedAction action) {
+	protected void setAction(Runnable action) {
 		this.action = action;
 	}
 
@@ -66,13 +66,8 @@ public class TimedProgressBar extends ProgressBar {
 		super.draw(batch, parentAlpha);
 
 		if (!done && super.getVisualValue() == triggerValue) {
-			action.doAction();
+			action.run();
 			done = true;
 		}
 	}
-
-	public interface TimedAction {
-		public void doAction();
-	}
-
 }

@@ -1,5 +1,7 @@
 package hitonoriol.madsand.gui.widgets;
 
+import java.util.function.Supplier;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -9,10 +11,13 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.containers.Storage;
+import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.OverlayMouseoverListener;
 import hitonoriol.madsand.gui.dialogs.AbilityDialog;
 import hitonoriol.madsand.gui.dialogs.BestiaryDialog;
 import hitonoriol.madsand.gui.dialogs.BuildDialog;
+import hitonoriol.madsand.gui.dialogs.CharacterInfoWindow;
 import hitonoriol.madsand.gui.dialogs.LandDialog;
 import hitonoriol.madsand.gui.dialogs.QuestJournal;
 import hitonoriol.madsand.gui.stages.Overlay;
@@ -34,13 +39,13 @@ public class OverlayBottomMenu extends Table {
 
 		this.overlay = overlay;
 
-		addButton("Character", Keys.Q, () -> overlay.toggleStatsWindow());
-		addButton("Inventory", Keys.E, () -> Gui.toggleInventory());
-		addButton("Abilities", Keys.R, () -> new AbilityDialog(World.player.getAbilities()).show());
-		addButton("Journal", Keys.J, () -> new QuestJournal(World.player.getQuestWorker()).show());
-		addButton("Build", Keys.B, () -> new BuildDialog().show());
-		addButton("Bestiary", Keys.X, () -> new BestiaryDialog(World.player).show());
-		addButton("Land", Keys.L, () -> new LandDialog(MadSand.world.getLocation()).show());
+		addButton("Character", Keys.Q, () -> new CharacterInfoWindow().getDialog());
+		addButton("Inventory", Keys.E, () -> MadSand.player().inventory.inventoryUI);
+		addButton("Abilities", Keys.R, () -> new AbilityDialog(World.player.getAbilities()));
+		addButton("Journal", Keys.J, () -> new QuestJournal(World.player.getQuestWorker()));
+		addButton("Build", Keys.B, () -> new BuildDialog());
+		addButton("Bestiary", Keys.X, () -> new BestiaryDialog(World.player));
+		addButton("Land", Keys.L, () -> new LandDialog(MadSand.world.getLocation()));
 
 		container.setBackground(new NinePatchDrawable(Gui.darkBackgroundSizeable));
 
@@ -50,12 +55,22 @@ public class OverlayBottomMenu extends Table {
 		super.padLeft(TABLE_PADDING_LEFT);
 	}
 
+	private void addButton(String text, int key, Supplier<GameDialog> dialogCreator) {
+		Storage<GameDialog> dialog = new Storage<>();
+		addButton(text, key, () -> {
+			if (Gui.overlay.getActors().contains(dialog.get(), true))
+				dialog.get().remove();
+			else if (!Gui.dialogActive)
+				dialog.set(dialogCreator.get()).show();
+		});
+	}
+
 	private void addButton(String text, int key, Runnable action) {
 		TextButton button = new TextButton(text + " [" + Keys.toString(key) + "]", Gui.skin);
 		button.addListener(OverlayMouseoverListener.instance());
 		container.add(button).size(WIDTH, HEIGHT).pad(BUTTON_PADDING);
 		Gui.setAction(button, action);
-		Keyboard.getKeyBindManager().bind(key, () -> action.run());
+		Keyboard.getKeyBindManager().bind(key, true, () -> action.run());
 	}
 
 }

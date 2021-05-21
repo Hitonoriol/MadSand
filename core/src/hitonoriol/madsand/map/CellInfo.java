@@ -35,19 +35,18 @@ public class CellInfo {
 		set(x, y);
 	}
 
-	public CellInfo() {
-	}
+	public CellInfo() {}
 
 	public void set(int x, int y) {
 		this.x = x;
 		this.y = y;
 		refresh();
 	}
-	
+
 	public int getX() {
 		return x;
 	}
-	
+
 	public int getY() {
 		return y;
 	}
@@ -84,6 +83,10 @@ public class CellInfo {
 
 	public Loot getLoot() {
 		return loot;
+	}
+
+	public MapObject getObject() {
+		return object;
 	}
 
 	public String getInfo() {
