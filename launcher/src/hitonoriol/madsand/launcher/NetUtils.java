@@ -5,12 +5,17 @@ import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
 
 public class NetUtils {
+
+	static final String HOST = "api.github.com";
 
 	public static void downloadFile(String remotePath, String localPath) {
 		BufferedInputStream in = null;
@@ -68,20 +73,16 @@ public class NetUtils {
 
 	public static String getResponse(String pageAddress) {
 		try {
-			String codePage = "utf-8";
-			StringBuilder sb = new StringBuilder();
-			URL pageURL = new URL(pageAddress);
-			URLConnection uc = pageURL.openConnection();
-			BufferedReader br = new BufferedReader(new InputStreamReader(uc.getInputStream(), codePage));
-			try {
-				String inputLine;
-				while ((inputLine = br.readLine()) != null) {
-					sb.append(inputLine);
-				}
-			} finally {
-				br.close();
-			}
-			return sb.toString();
+			URL url = new URL(pageAddress);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestProperty("Accept", "application/vnd.github.v3+json");
+			String response = new BufferedReader(
+					new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))
+					.lines()
+					.collect(Collectors.joining(System.lineSeparator()));
+			connection.disconnect();
+			return response;
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "error";

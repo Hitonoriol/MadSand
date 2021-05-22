@@ -4,10 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.jar.JarInputStream;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,24 +16,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 public class Launcher extends JFrame {
-	private static final long serialVersionUID = 8629061487833976448L;
-	static final String HOST = "github.com";
-	static final String RELEASES_URL = "https://" + HOST + "/Hitonoriol/MadSand/releases/";
-	static final String LATEST_RELEASE_URL = RELEASES_URL + "latest";
-
 	static final String GAME_FILE = "madsand.jar";
-	static final String VER_FILE = "version.dat";
-
 	static final String RUN_CONF = "java -jar -Xmx1024m -Xms256m " + GAME_FILE;
 
 	static String noConnectionMsg = "Oops! Either GitHub is down, or there's no network connection.";
-
 	static int CHANGELOG_PADDING = 55;
 
 	JLabel infoLabel = new JLabel("");
@@ -45,10 +32,9 @@ public class Launcher extends JFrame {
 	JPanel bottomPanel = new JPanel();
 
 	JPanel containerPanel = new JPanel();
-
-	String latestVersion, gameLink;
-	Document releasePage;
 	String changelogTemplate, infoTemplate = "<html><h3>%s</h3></html>";
+
+	ReleaseParser parser = new ReleaseParser();
 
 	public Launcher() {
 		super("MadSand Launcher " + Main.VERSION);
@@ -75,8 +61,7 @@ public class Launcher extends JFrame {
 		containerPanel.add(bottomPanel, BorderLayout.PAGE_END);
 		add(containerPanel, BorderLayout.CENTER);
 		changelogLabel.setVerticalAlignment(JLabel.TOP);
-		changelogTemplate = "<html><div width = " + (super.getWidth() - CHANGELOG_PADDING) + ">"
-				+ "<h1>Version %s</h1>%s</html>";
+		changelogTemplate = "<html><div width = " + (super.getWidth() - CHANGELOG_PADDING) + ">%s</div></html>";
 
 		if (new File(GAME_FILE).exists())
 			launchButton.setEnabled(true);
@@ -103,6 +88,15 @@ public class Launcher extends JFrame {
 		});
 	}
 
+	String getGameVersion() {
+		try (JarInputStream jarStream = new JarInputStream(new FileInputStream(GAME_FILE))) {
+			return jarStream.getManifest().getMainAttributes().getValue("Implementation-Version");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "-";
+		}
+	}
+
 	void launchGame() {
 		try {
 			Runtime.getRuntime().exec(RUN_CONF);
@@ -113,42 +107,18 @@ public class Launcher extends JFrame {
 		}
 	}
 
-	void parseReleasePage() {
-		releasePage = Jsoup.parse(NetUtils.getResponse(LATEST_RELEASE_URL));
-	}
-
-	String getLatestVersion() {
-		String link = "";
-		Elements links = releasePage.select("a");
-		for (Element element : links) {
-			link = element.attr("href");
-			if (link.indexOf("releases/download/") != -1)
-				return link.split("/")[5]; // github.com/Hitonoriol/MadSand/releases/download/<version>/...
-		}
-		return null;
-	}
-
-	String getChangelog() {
-		String changelog = "";
-		changelog = releasePage.getElementsByClass("markdown-body").html();
-		Element time = releasePage.select("relative-time").first();
-		//String date = time.ownText();
-		return time.text() + changelog;
-	}
-
 	void printInfo(String arg) {
 		infoLabel.setText(String.format(infoTemplate, arg));
 	}
 
 	void refreshChangelog() {
-		latestVersion = getLatestVersion();
-		gameLink = RELEASES_URL + "download/" + latestVersion + "/" + GAME_FILE;
-		changelogLabel.setText(String.format(changelogTemplate, latestVersion, getChangelog()));
+		String contents = String.format(changelogTemplate, parser.getChangelog());
+		changelogLabel.setText(contents);
 	}
 
 	void checkForUpdates() {
-		parseReleasePage();
 		printInfo("Checking for updates...");
+		parser.refresh();
 		if (checkConnection()) {
 			refreshChangelog();
 			try {
@@ -169,8 +139,7 @@ public class Launcher extends JFrame {
 		launchButton.setEnabled(false);
 		forceUpdateButton.setEnabled(false);
 
-		NetUtils.downloadFile(gameLink, GAME_FILE);
-		Main.writeFile(new File(VER_FILE), latestVersion);
+		parser.downloadGame();
 
 		launchButton.setEnabled(true);
 		forceUpdateButton.setEnabled(true);
@@ -179,17 +148,16 @@ public class Launcher extends JFrame {
 
 	void update() throws Exception {
 		File gameFile = new File(GAME_FILE);
-		File versionFile = new File(VER_FILE);
+		String latestVersion = parser.getLatestVersion();
 
-		if (gameFile.exists() && versionFile.exists()) {
+		if (gameFile.exists()) {
 			launchButton.setEnabled(true);
 			forceUpdateButton.setEnabled(true);
 
-			BufferedReader brTest = new BufferedReader(new FileReader(VER_FILE));
-			String text = brTest.readLine();
-			brTest.close();
+			if (latestVersion == null)
+				return;
 
-			if (text.equals(latestVersion))
+			if (getGameVersion().equals(latestVersion))
 				printInfo("Your game version is up-to-date!");
 			else {
 				printInfo("Newer Version (" + latestVersion + ") found, downloading.\n");
@@ -197,7 +165,7 @@ public class Launcher extends JFrame {
 				updateGame();
 			}
 		} else {
-			printInfo("No game and version file. Downloading for the first time.");
+			printInfo("No game file. Downloading for the first time.");
 			Thread.sleep(1000L);
 			updateGame();
 		}
@@ -205,6 +173,6 @@ public class Launcher extends JFrame {
 
 	boolean checkConnection() {
 		printInfo("Connecting...");
-		return NetUtils.pingHost(HOST, 80, 10000);
+		return NetUtils.pingHost(NetUtils.HOST, 80, 10000);
 	}
 }

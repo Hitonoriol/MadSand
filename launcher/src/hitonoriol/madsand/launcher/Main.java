@@ -6,18 +6,16 @@ import java.io.FileReader;
 import java.io.PrintWriter;
 
 public class Main {
-	static final String VERSION = "v1.2";
-	static Launcher launcher;
-	
+	static final String VERSION = Main.class.getPackage().getImplementationVersion();
+	static Launcher launcher = new Launcher();
+
 	public static void main(String[] args) {
-		launcher = new Launcher();
 		launcher.checkForUpdates();
 	}
 
 	public static String readLine(String name) {
 		try {
-			File file = new File(name);
-			BufferedReader br = new BufferedReader(new FileReader(file));
+			BufferedReader br = new BufferedReader(new FileReader(name));
 			String line = br.readLine();
 			br.close();
 			return line;
