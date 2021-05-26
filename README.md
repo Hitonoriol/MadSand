@@ -2,16 +2,21 @@
 ### Open-world sandbox roguelike
 ### <a href="https://github.com/Hitonoriol/MadSand/releases/download/launcher/MadSandLauncher.jar">Download Launcher</a>
 ### <a href="https://github.com/Hitonoriol/MadSand/wiki">Wiki</a>
+<br>
 
-
-### Dependencies
+### How to build
+#### Game
 <pre>
-libgdx
-commons-lang
-jackson-annotations
-jackson-core
-jackson-databind
+./gradlew desktop:dist
 </pre>
+--> desktop/build/libs/MadSand-\<VERSION\>.jar
+<br><br>
+#### Launcher/Auto-updater
+<pre>
+./gradlew launcher:dist
+</pre>
+--> launcher/build/libs/MadSandLauncher-\<VERSION\>.jar
+<br><br>
 ### Screenshots
 ![screenshot](https://raw.githubusercontent.com/Hitonoriol/MadSand/master/screenshots/title%20screen.png)
 ![screenshot](https://raw.githubusercontent.com/Hitonoriol/MadSand/master/screenshots/big%20dungeon%20room.png)

@@ -74,7 +74,7 @@ public class Map {
 	private HashMap<Pair, Loot> mapLoot;
 	private HashMap<Pair, Crop> mapCrops;
 	private HashMap<Pair, AbstractNpc> mapNpcs;
-	private ArrayList<Pair> mapProductionStations;
+	private ArrayList<Pair> mapItemFactories;
 
 	IndexedAStarPathFinder<Node> pathFinder;
 	Graph graph;
@@ -192,24 +192,24 @@ public class Map {
 	}
 
 	@JsonIgnore
-	public HashMap<Pair, ItemProducer> getMapProductionStations() {
-		HashMap<Pair, ItemProducer> prodStations = new HashMap<>();
+	public HashMap<Pair, ItemProducer> getMapItemFactories() {
+		HashMap<Pair, ItemProducer> itemFactories = new HashMap<>();
 
-		for (Pair coords : mapProductionStations)
+		for (Pair coords : mapItemFactories)
 			getObject(coords).as(ItemFactory.class)
-					.ifPresent(itemfactory -> prodStations.put(coords, itemfactory.getItemProducer()));
+					.ifPresent(factory -> itemFactories.put(coords, factory.getItemProducer()));
 
-		return prodStations;
+		return itemFactories;
 	}
 
-	public void setMapProductionStations(HashMap<Pair, ItemProducer> productionStations) {
-		mapProductionStations.clear();
-		for (Entry<Pair, ItemProducer> entry : productionStations.entrySet()) {
+	public void setMapItemFactories(HashMap<Pair, ItemProducer> itemFactories) {
+		mapItemFactories.clear();
+		for (Entry<Pair, ItemProducer> entry : itemFactories.entrySet()) {
 			Pair coords = entry.getKey();
 			getObject(coords).as(ItemFactory.class)
 					.ifPresent(itemFactory -> {
 						itemFactory.setItemProducer(entry.getValue());
-						mapProductionStations.add(coords);
+						mapItemFactories.add(coords);
 					});
 
 		}
@@ -359,7 +359,7 @@ public class Map {
 		mapLoot = new HashMap<>();
 		mapNpcs = new HashMap<>();
 		mapCrops = new HashMap<>();
-		mapProductionStations = new ArrayList<>();
+		mapItemFactories = new ArrayList<>();
 
 		graph = new Graph();
 		nodeMap = new NodeMap(graph, xsz, ysz);
@@ -712,7 +712,7 @@ public class Map {
 			setObjectSize(x, y, id);
 
 			object.as(ItemFactory.class)
-					.ifPresent(itemFactory -> mapProductionStations.add(coords));
+					.ifPresent(itemFactory -> mapItemFactories.add(coords));
 
 			if (graph.getNodeCount() > 0) {
 				if (!object.nocollide) {
@@ -1076,7 +1076,7 @@ public class Map {
 	}
 
 	public void updateProductionStations() {
-		for (Pair coords : mapProductionStations)
+		for (Pair coords : mapItemFactories)
 			getObject(coords).as(ItemFactory.class)
 					.ifPresent(itemFactory -> itemFactory.getItemProducer().produce());
 

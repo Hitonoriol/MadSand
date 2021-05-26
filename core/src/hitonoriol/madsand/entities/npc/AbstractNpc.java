@@ -38,6 +38,7 @@ public abstract class AbstractNpc extends Entity {
 	public static int NULL_NPC = 0;
 	static double IDLE_MOVE_CHANCE = 15;
 	static float MAX_FOV_COEF = 1.5f;
+	public static final float HOSTILE_SPEEDUP = 1.35f;
 
 	public int id;
 	public long uid;
@@ -59,7 +60,9 @@ public abstract class AbstractNpc extends Entity {
 
 	public State state = State.Idle;
 
+	@JsonIgnore
 	Path path = new Path();
+	@JsonIgnore
 	Pair prevDestination = new Pair();
 	int pathIdx = 0;
 

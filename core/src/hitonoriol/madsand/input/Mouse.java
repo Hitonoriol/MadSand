@@ -128,12 +128,12 @@ public class Mouse {
 
 		cellInfo.set(wx, wy);
 		pointingAtObject = cellInfo.isCellOccupied();
-		highlightRangedTarget();
 		refreshTooltip();
 	}
 
 	public static void refreshTooltip() {
 		Gui.overlay.getTooltip().setText(cellInfo.getInfo());
+		highlightRangedTarget();
 	}
 
 	private static void refreshPathToCursor() {

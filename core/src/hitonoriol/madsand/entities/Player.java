@@ -60,6 +60,7 @@ import hitonoriol.madsand.gui.dialogs.TraderDialog;
 import hitonoriol.madsand.gui.dialogs.WaitDialog;
 import hitonoriol.madsand.gui.widgets.ResourceProgressBar;
 import hitonoriol.madsand.input.Keyboard;
+import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.map.FishingSpot;
 import hitonoriol.madsand.map.Loot;
@@ -84,7 +85,6 @@ public class Player extends Entity {
 	public PlayerStats stats; // Reference to the same Stats object as super.stats
 	float elapsedTime; // TODO: move to AnimationContainer
 	private float runSpeedCoef = 3.5f;
-	private boolean running = false;
 
 	private int targetedByNpcs = 0;
 	private Set<Integer> unlockedItems = new HashSet<>(); // set of items player obtained at least once
@@ -357,6 +357,7 @@ public class Player extends Entity {
 		}
 
 		if (npc.stats.dead) {
+			Mouse.refreshTooltip();
 			MadSand.notice("You kill " + npc.stats.name + "! [+" + npc.rewardExp + " exp]");
 			addExp(npc.rewardExp);
 			reputation.change(npc.stats.faction, Reputation.KILL_PENALTY);
@@ -1178,21 +1179,14 @@ public class Player extends Entity {
 
 	@Override
 	public void stopMovement() {
-		if (!hasQueuedMovement()) {
+		if (!hasQueuedMovement())
 			Keyboard.resumeInput();
-			if (running) {
-				Utils.dbg("Stopped running");
-				running = false;
-				calcMovementSpeed();
-			}
-		}
 
 		super.stopMovement();
 	}
 
 	public void run(Path path) {
-		movementSpeed *= runSpeedCoef;
-		running = true;
+		speedUp(runSpeedCoef);
 		super.move(path);
 	}
 

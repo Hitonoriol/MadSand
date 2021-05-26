@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.function.Consumer;
 
 import org.apache.commons.lang3.mutable.MutableFloat;
@@ -614,18 +615,13 @@ public class World {
 
 	private void forEachEntity(Consumer<Entity> action) {
 		Map loc = getCurLoc();
-		HashMap<Pair, AbstractNpc> npcs = loc.getNpcs();
-		ArrayList<Entity> queue = new ArrayList<Entity>();
+		List<Entity> queue = new ArrayList<Entity>();
 		Graph graph = loc.getPathfindingGraph();
 
 		graph.reIndex();
-		player.resetActDelay();
-		npcs.forEach((position, npc) -> {
-			npc.resetActDelay();
-			queue.add(npc);
-		});
+		queue.addAll(loc.getNpcs().values());
 		queue.add(player);
-
+		queue.forEach(entity -> entity.prepareToAct());
 		Collections.sort(queue, Entity.speedComparator);
 		queue.forEach(entity -> action.accept(entity));
 		graph.reIndex();
@@ -640,17 +636,24 @@ public class World {
 		MutableFloat maxDelay = new MutableFloat(0);
 		MutableInt stopLevel = new MutableInt(0);
 		float totalTick = globalTick + time;
-		
+
 		forEachEntity(entity -> {
 			if (timeSkip && entity.distanceTo(player) > maxSimDst)
 				return;
 
-			float actDelay = cumulativeDelay.getValue() + entity.getAnimationDuration() + entity.getActDelay();
-			maxDelay.setValue(Math.max(maxDelay.getValue(), actDelay));
-
 			if (player.canSee(entity)) {
+				boolean hostile = entity != player && !((AbstractNpc) entity).isNeutral();
+				boolean actBeforePlayer = hostile && entity.getSpeed() >= player.getSpeed();
+
+				if (actBeforePlayer)
+					entity.speedUp(AbstractNpc.HOSTILE_SPEEDUP);
+
+				float actDelay = entity.getAnimationDuration() + entity.getActDelay();
+
 				if (entity != player) {
-					if (!((AbstractNpc) entity).isNeutral() && entity.getSpeed() >= player.getSpeed()) {
+					actDelay += cumulativeDelay.getValue();
+					if (actBeforePlayer) {
+						maxDelay.setValue(Math.max(maxDelay.getValue(), actDelay));
 						Keyboard.stopInput();
 						stopLevel.increment();
 						player.setActDelay(maxDelay.getValue());
@@ -677,7 +680,7 @@ public class World {
 			if (timeSkip)
 				endTimeSkip();
 			Utils.dbg("[end of subtick #%f]", totalTick);
-		}, maxDelay.getValue());
+		}, maxDelay.getValue() + 0.01f);
 	}
 
 	public void updateLight() {

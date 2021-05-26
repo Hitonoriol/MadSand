@@ -13,8 +13,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
@@ -41,12 +41,7 @@ public abstract class Entity extends MapEntity {
 	@JsonIgnore
 	private Sprite upSpr, downSpr, leftSpr, rightSpr;
 
-	public static Comparator<Entity> speedComparator = new Comparator<Entity>() {
-		@Override
-		public int compare(Entity o1, Entity o2) {
-			return Double.compare(o2.getSpeed(), o1.getSpeed());
-		}
-	};
+	public static final Comparator<Entity> speedComparator = (e1, e2) -> Double.compare(e2.getSpeed(), e1.getSpeed());
 
 	@JsonIgnore
 	private Sprite sprite;
@@ -72,7 +67,8 @@ public abstract class Entity extends MapEntity {
 	@JsonIgnore
 	public float stepx = MadSand.TILESIZE;
 
-	boolean moving = false;
+	protected boolean moving = false, hasMoved = false;
+	protected boolean running = false;
 
 	public Entity(String name) {
 		stats = isPlayer() ? new PlayerStats() : new Stats();
@@ -142,8 +138,9 @@ public abstract class Entity extends MapEntity {
 		return actDelay;
 	}
 
-	public void resetActDelay() {
+	public void prepareToAct() {
 		actDelay = 0;
+		hasMoved = false;
 	}
 
 	public boolean hasActDelay() {
@@ -442,6 +439,19 @@ public abstract class Entity extends MapEntity {
 		movementSpeed = speed / 17f + (float) Math.pow(Math.sqrt(speed), 1.225f) * 1.075f;
 	}
 
+	public void speedUp(float by) {
+		movementSpeed *= by;
+		running = true;
+	}
+
+	public void stopRunning() {
+		if (!running)
+			return;
+
+		calcMovementSpeed();
+		running = false;
+	}
+
 	@JsonIgnore
 	public PairFloat getWorldPos() {
 		if (!isMoving())
@@ -461,12 +471,17 @@ public abstract class Entity extends MapEntity {
 		return worldPos;
 	}
 
+	public boolean hasMoved() {
+		return hasMoved;
+	}
+
 	public boolean isMoving() {
 		return moving;
 	}
 
 	public void setMoving(boolean val) {
-		moving = val;
+		if (moving = val)
+			hasMoved = true;
 	}
 
 	public void queueMovement(Direction dir) {
@@ -485,6 +500,9 @@ public abstract class Entity extends MapEntity {
 	public void stopMovement() {
 		moving = false;
 		stepx = stepy = MadSand.TILESIZE;
+		if (!hasQueuedMovement())
+			stopRunning();
+
 		pollMovementQueue();
 	}
 
@@ -520,7 +538,7 @@ public abstract class Entity extends MapEntity {
 				++x;
 				globalPos.x += MadSand.TILESIZE;
 			}
-			moving = true;
+			setMoving(true);
 			return true;
 		}
 		return false;

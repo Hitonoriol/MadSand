@@ -103,8 +103,8 @@ public class WorldMapSaver {
 			Resources.mapper.writerFor(Resources.getMapType(Pair.class, AbstractNpc.class))
 					.writeValue(new File(GameSaver.getNpcFile(wx, wy, layer)), map.getNpcs());
 
-			Resources.mapper.writeValue(new File(GameSaver.getProdStationFile(wx, wy, layer)),
-					map.getMapProductionStations());
+			Resources.mapper.writeValue(new File(GameSaver.getItemFactoryFile(wx, wy, layer)),
+					map.getMapItemFactories());
 
 			int xsz = map.getWidth();
 			int ysz = map.getHeight();
@@ -212,9 +212,9 @@ public class WorldMapSaver {
 
 			// Load production stations
 			HashMap<Pair, ItemProducer> prodStations = Resources.mapper.readValue(
-					new File(GameSaver.getProdStationFile(wx, wy, layer)),
+					new File(GameSaver.getItemFactoryFile(wx, wy, layer)),
 					Resources.getMapType(Pair.class, ItemProducer.class));
-			map.setMapProductionStations(prodStations);
+			map.setMapItemFactories(prodStations);
 
 			// Load loot
 			byte[] lootNode = new byte[(int) loadNextLongBlock(stream, longBlock)];

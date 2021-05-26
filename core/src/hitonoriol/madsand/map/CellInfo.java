@@ -90,6 +90,7 @@ public class CellInfo {
 	}
 
 	public String getInfo() {
+		refresh();
 		infoBuilder.setLength(0);
 		infoBuilder.append("Looking at (" + x + ", " + y + ")").append(NEWLINE);
 

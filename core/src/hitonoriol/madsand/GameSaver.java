@@ -112,8 +112,8 @@ public class GameSaver {
 		return readFile(name, false);
 	}
 
-	public static String getProdStationFile(int wx, int wy, int layer) {
-		return getCurSaveDir() + "productionstations" + getSectorString(wx, wy, layer)
+	public static String getItemFactoryFile(int wx, int wy, int layer) {
+		return getCurSaveDir() + "itemfactories" + getSectorString(wx, wy, layer)
 				+ MadSand.SAVE_EXT;
 	}
 
@@ -197,7 +197,6 @@ public class GameSaver {
 				"Couldn't to load this world. \n"
 						+ "Maybe it was saved in older/newer version of the game or some files are corrupted.\n"
 						+ "Check " + Resources.ERR_FILE + " for details.");
-		// MadSand.justStarted = false;
 	}
 
 	public static boolean verifyNextSector(int x, int y) {
