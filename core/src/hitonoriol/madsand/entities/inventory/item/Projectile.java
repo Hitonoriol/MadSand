@@ -82,7 +82,7 @@ public class Projectile extends LevelBoundItem {
 							if (target != Map.nullNpc) {
 								impactAction.accept(target);
 								target.as(Entity.class)
-										.ifPresent(entity -> entity.setActDelay(BASE_PROJECTILE_SPEED));
+										.ifPresent(entity -> entity.addActDelay(BASE_PROJECTILE_SPEED));
 							} else
 								map.putLoot(to.x, to.y, id, 1);
 						}),

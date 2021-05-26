@@ -8,10 +8,13 @@ import java.util.function.Predicate;
 
 import org.apache.commons.lang3.mutable.MutableBoolean;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
@@ -33,6 +36,7 @@ import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.util.Utils;
 
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public abstract class Entity extends MapEntity {
 	@JsonIgnore
 	private Sprite upSpr, downSpr, leftSpr, rightSpr;
@@ -115,19 +119,35 @@ public abstract class Entity extends MapEntity {
 		return sprite;
 	}
 
-	public void setActDelay(float actDelay) {
-		Utils.dbg(getName() + ": adding actDelay: +" + actDelay);
+	public float getAnimationDuration() {
+		return ((float) MadSand.TILESIZE / movementSpeed) * Gdx.graphics.getDeltaTime();
+	}
+
+	/* Act delay -- delay Entity's action execution during World.timeSubtick()
+	 * (including movement animations)
+	 */
+	public void addActDelay(float actDelay) {
+		Utils.dbg("%s: adding actDelay: +%f", getName(), actDelay);
 		this.actDelay += actDelay;
 	}
 
+	public void setActDelay(float actDelay) {
+		this.actDelay = actDelay;
+	}
+
 	public float getActDelay() {
-		float delay = actDelay;
+		if (actDelay > 0)
+			Utils.dbg("%s: actDelay = %f", getName(), actDelay);
 
-		if (delay > 0)
-			Utils.dbg(getName() + ": actDelay=" + delay);
+		return actDelay;
+	}
 
+	public void resetActDelay() {
 		actDelay = 0;
-		return delay;
+	}
+
+	public boolean hasActDelay() {
+		return actDelay > 0;
 	}
 
 	public void initStatActions() {
@@ -410,24 +430,16 @@ public abstract class Entity extends MapEntity {
 	public boolean isOnMapBound(Direction dir) {
 		Map map = MadSand.world.getCurLoc();
 		boolean ret = false;
-		if (x >= map.getWidth() - 1 && (dir == Direction.RIGHT)) {
-			ret = true;
-		}
-		if (y >= map.getHeight() - 1 && (dir == Direction.UP)) {
-			ret = true;
-		}
-		if (x < 1 && (dir == Direction.LEFT)) {
-			ret = true;
-		}
-		if (y < 1 && (dir == Direction.DOWN)) {
-			ret = true;
-		}
+		ret |= x >= map.getWidth() - 1 && (dir == Direction.RIGHT);
+		ret |= y >= map.getHeight() - 1 && (dir == Direction.UP);
+		ret |= x < 1 && (dir == Direction.LEFT);
+		ret |= y < 1 && (dir == Direction.DOWN);
 		return ret;
 	}
 
 	public void calcMovementSpeed() {
 		float speed = getSpeed();
-		movementSpeed = speed / 17f + (float) Math.pow(Math.sqrt(speed), 1.225f) * 0.975f;
+		movementSpeed = speed / 17f + (float) Math.pow(Math.sqrt(speed), 1.225f) * 1.075f;
 	}
 
 	@JsonIgnore
@@ -448,7 +460,7 @@ public abstract class Entity extends MapEntity {
 
 		return worldPos;
 	}
-	
+
 	public boolean isMoving() {
 		return moving;
 	}
@@ -620,6 +632,9 @@ public abstract class Entity extends MapEntity {
 	};
 
 	public boolean canSee(Entity entity) {
+		if (entity == this)
+			return true;
+
 		return distanceTo(entity) <= fov && rayCast(entity, canSeePredicate);
 	}
 
@@ -636,7 +651,7 @@ public abstract class Entity extends MapEntity {
 
 	@Override
 	public void playDamageAnimation() {
-		setActDelay(Resources.ACTION_ANIM_DURATION);
+		addActDelay(Resources.ACTION_ANIM_DURATION);
 		super.playAnimation(Resources.createAnimation(Resources.attackAnimStrip));
 	}
 

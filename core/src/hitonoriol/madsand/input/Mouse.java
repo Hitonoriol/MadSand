@@ -255,7 +255,7 @@ public class Mouse {
 		}
 
 		else if (clickDst > 1 && !target.isEmpty())
-			player.rangedAttack(target);
+			player.rangedAttack(target.getPosition());
 
 		refreshTooltip();
 	}

@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.input.Mouse;
@@ -43,7 +44,7 @@ public class GameContextMenu extends Table {
 			addButton("Attack", () -> {
 				player.lookAtMouse(clickX, clickY, true);
 				if (player.canPerformRangedAttack())
-					player.rangedAttack(map.getNpc(clickX, clickY));
+					player.rangedAttack(new Pair(clickX, clickY));
 				else
 					player.meleeAttack();
 			});

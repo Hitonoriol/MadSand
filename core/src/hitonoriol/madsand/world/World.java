@@ -4,8 +4,9 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.function.Consumer;
 
-import org.apache.commons.lang3.mutable.MutableBoolean;
+import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import com.badlogic.gdx.Gdx;
@@ -33,9 +34,10 @@ import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.worldgen.WorldGen;
 
 public class World {
-	Map nullLoc = new Map(0, 0);
+	private static Map nullLoc = new Map(0, 0);
+	public static int DEFAULT_MAPSIZE = Map.MIN_MAPSIZE;
 	private static final float MAX_SIM_DISTANCE_COEF = 2.5f;
-	private static final float ACT_DELAY = 0.1f;
+	private static final float ACT_DELAY_STEP = 0.00125f;
 	public static final int DEFAULT_WORLDSIZE = 10;
 	public static final int TILE_CAVE_EXIT = 25; //TODO move this to cave preset
 
@@ -43,8 +45,6 @@ public class World {
 
 	private int MAX_PREVIOUS_LOCATIONS = 2; // Max amount of maps allowed to be in WorldMap at the same time
 	private ArrayDeque<Pair> previousLocations = new ArrayDeque<>(); // Maps that are currently loaded in WorldMap
-
-	public static int DEFAULT_MAPSIZE = Map.MIN_MAPSIZE;
 
 	@JsonIgnore
 	public WorldGen worldGen;
@@ -593,7 +593,11 @@ public class World {
 			timeTick();
 	}
 
-	private void timeTick() { // Called every whole tick player spends
+	/* Main world time processor (for "whole" time ticks)
+	 * Gets called once for every 100% of AP spent by player
+	 * 
+	 */
+	private void timeTick() {
 		Graph graph = getCurLoc().getPathfindingGraph();
 		graph.reIndex();
 		player.stats.perTickCheck();
@@ -608,73 +612,72 @@ public class World {
 		graph.reIndex();
 	}
 
-	public void timeSubtick(float time) { // Gets called on every action player does, time = % of max AP(speed) 
+	private void forEachEntity(Consumer<Entity> action) {
 		Map loc = getCurLoc();
 		HashMap<Pair, AbstractNpc> npcs = loc.getNpcs();
 		ArrayList<Entity> queue = new ArrayList<Entity>();
 		Graph graph = loc.getPathfindingGraph();
 
 		graph.reIndex();
-
-		//Utils.out("New subtick, time passed = %f", time);
-
+		player.resetActDelay();
 		npcs.forEach((position, npc) -> {
-			npc.getActDelay();
+			npc.resetActDelay();
 			queue.add(npc);
 		});
 		queue.add(player);
 
 		Collections.sort(queue, Entity.speedComparator);
+		queue.forEach(entity -> action.accept(entity));
+		graph.reIndex();
+	}
 
-		boolean pausePlayer = false; // if a hostile mob acts before player, we pause player until the action is completed
-		boolean hostile;
-		float actionDelay = timeSkip ? 0 : ACT_DELAY;
+	/* Main time processor for all living creatures
+	 * time - % of max AP player spent on their latest action
+	 */
+	public void timeSubtick(float time) {
 		float maxSimDst = getMaxSimDistance();
-		float maxDelay = 0;
+		MutableFloat cumulativeDelay = new MutableFloat(0);
+		MutableFloat maxDelay = new MutableFloat(0);
 		MutableInt stopLevel = new MutableInt(0);
-		MutableBoolean playerPaused = new MutableBoolean(false);
-		for (Entity entity : queue) {
+		float totalTick = globalTick + time;
+		
+		forEachEntity(entity -> {
 			if (timeSkip && entity.distanceTo(player) > maxSimDst)
-				continue;
+				return;
 
-			if ((player.canSee(entity) && entity != player) || (entity == player && pausePlayer)) {
-				hostile = false;
+			float actDelay = cumulativeDelay.getValue() + entity.getAnimationDuration() + entity.getActDelay();
+			maxDelay.setValue(Math.max(maxDelay.getValue(), actDelay));
+
+			if (player.canSee(entity)) {
 				if (entity != player) {
-					hostile = ((AbstractNpc) entity).state == AbstractNpc.State.Hostile;
-					pausePlayer |= hostile && entity.getSpeed() >= player.getSpeed();
-					if (pausePlayer) {
+					if (!((AbstractNpc) entity).isNeutral() && entity.getSpeed() >= player.getSpeed()) {
 						Keyboard.stopInput();
 						stopLevel.increment();
+						player.setActDelay(maxDelay.getValue());
 					}
+
+					cumulativeDelay.add(ACT_DELAY_STEP);
 				}
 
-				float actDelay = (pausePlayer ? 0 : actionDelay) + entity.getActDelay();
-				maxDelay = Math.max(maxDelay, actDelay);
-				if (!playerPaused.isTrue())
-					playerPaused.setValue(pausePlayer);
+				if (entity == player && !player.hasActDelay())
+					actDelay = 0;
 
-				actDelayTimer.scheduleTask(new Timer.Task() {
-					@Override
-					public void run() {
-						entity.act(time);
-						if (entity == player && playerPaused.isTrue())
-							Keyboard.resumeInput(stopLevel.getValue());
-					}
+				Utils.scheduleTask(actDelayTimer, () -> {
+					Utils.dbg("[#%f | +%f] %s acts", totalTick, time, entity.getName());
+					entity.act(time);
+					if (entity == player && player.hasActDelay())
+						Keyboard.resumeInput(stopLevel.getValue());
 				}, actDelay);
 			} else
 				entity.act(time);
-		}
+		});
 
-		Timer.instance().scheduleTask(new Timer.Task() {
-			@Override
-			public void run() {
-				/*Utils.out("Post-act actions");*/
-				Gui.overlay.refreshActionButton();
-				graph.reIndex();
-				if (timeSkip)
-					endTimeSkip();
-			}
-		}, maxDelay + 0.01f);
+		Utils.scheduleTask(() -> {
+			Gui.overlay.refreshActionButton();
+			if (timeSkip)
+				endTimeSkip();
+			Utils.dbg("[end of subtick #%f]", totalTick);
+		}, maxDelay.getValue());
 	}
 
 	public void updateLight() {

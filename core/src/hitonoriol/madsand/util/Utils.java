@@ -48,13 +48,17 @@ public class Utils {
 
 	public static Random random = new Random();
 
-	public static void scheduleTask(Runnable task, float delaySec) {
-		Timer.instance().scheduleTask(new Timer.Task() {
+	public static void scheduleTask(Timer timer, Runnable task, float delaySec) {
+		timer.scheduleTask(new Timer.Task() {
 			@Override
 			public void run() {
 				task.run();
 			}
 		}, delaySec);
+	}
+
+	public static void scheduleTask(Runnable task, float delaySec) {
+		scheduleTask(Timer.instance(), task, delaySec);
 	}
 
 	public static String str(int val) {

@@ -17,8 +17,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -81,7 +79,6 @@ import hitonoriol.madsand.world.Location;
 import hitonoriol.madsand.world.WorkerType;
 import hitonoriol.madsand.world.World;
 
-@JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class Player extends Entity {
 	@JsonIgnore
 	public PlayerStats stats; // Reference to the same Stats object as super.stats
@@ -418,11 +415,11 @@ public class Player extends Entity {
 		});
 	}
 
-	public void rangedAttack(MapEntity target) {
+	public void rangedAttack(Pair target) {
 		if (!canPerformRangedAttack())
 			return;
 
-		doAction(stats.rangedAttackCost, () -> performRangedAttack(target.getPosition()));
+		doAction(stats.rangedAttackCost, () -> performRangedAttack(target));
 	}
 
 	private void performMeleeAttack(Direction dir) {
