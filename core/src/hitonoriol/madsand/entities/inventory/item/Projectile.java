@@ -12,7 +12,6 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Entity;
-import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
@@ -40,8 +39,8 @@ public class Projectile extends LevelBoundItem {
 	}
 
 	@Override
-	public void use(Player player) {
-		player.stats.equipment.equip(this);
+	public void leftClickAction() {
+		toggleEquipped();
 	}
 
 	static FloatGenerator dmgRangeGen = JRand.flt().range(0.4f, 1.25f);

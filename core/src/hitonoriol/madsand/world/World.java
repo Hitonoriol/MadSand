@@ -635,7 +635,6 @@ public class World {
 		MutableFloat cumulativeDelay = new MutableFloat(0);
 		MutableFloat maxDelay = new MutableFloat(0);
 		MutableInt stopLevel = new MutableInt(0);
-		float totalTick = globalTick + time;
 
 		forEachEntity(entity -> {
 			if (timeSkip && entity.distanceTo(player) > maxSimDst)
@@ -666,7 +665,6 @@ public class World {
 					actDelay = 0;
 
 				Utils.scheduleTask(actDelayTimer, () -> {
-					Utils.dbg("[#%f | +%f] %s acts", totalTick, time, entity.getName());
 					entity.act(time);
 					if (entity == player && player.hasActDelay())
 						Keyboard.resumeInput(stopLevel.getValue());
@@ -679,7 +677,6 @@ public class World {
 			Gui.overlay.refreshActionButton();
 			if (timeSkip)
 				endTimeSkip();
-			Utils.dbg("[end of subtick #%f]", totalTick);
 		}, maxDelay.getValue() + 0.01f);
 	}
 

@@ -7,7 +7,6 @@ import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.util.Utils;
 
 public class Placeable extends Item {
-
 	public Type type;
 	public int altObject;
 
@@ -28,6 +27,11 @@ public class Placeable extends Item {
 	@Override
 	public void use(Player player) {
 		player.useItem(this);
+	}
+
+	@Override
+	public void leftClickAction() {
+		toggleEquipped();
 	}
 
 	@JsonSetter("altObject")

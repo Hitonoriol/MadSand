@@ -57,6 +57,11 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 	public void use(Player player) {
 		super.useIfPossible(player, () -> equip(player));
 	}
+	
+	@Override
+	public void leftClickAction() {
+		toggleEquipped();
+	}
 
 	public boolean damage(int amt) {
 		hp -= amt;

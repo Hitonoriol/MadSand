@@ -1,15 +1,12 @@
 package hitonoriol.madsand.entities.inventory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import org.apache.commons.lang3.mutable.MutableBoolean;
 
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
@@ -23,10 +20,8 @@ public class Inventory {
 
 	public float curWeight, maxWeight;
 
-	private HashMap<Item, InventoryUICell> itemUI;
-
 	@JsonIgnore
-	public InventoryUI inventoryUI;
+	private InventoryUI inventoryUI;
 
 	public Inventory(float maxWeight) {
 		setMaxWeight(maxWeight);
@@ -38,8 +33,21 @@ public class Inventory {
 	}
 
 	public void initUI() {
-		inventoryUI = new InventoryUI();
-		itemUI = new HashMap<Item, InventoryUICell>();
+		inventoryUI = new InventoryUI(this);
+	}
+
+	@JsonIgnore
+	public InventoryUI getUI() {
+		return inventoryUI;
+	}
+
+	public boolean hasUI() {
+		return inventoryUI != null;
+	}
+
+	private void updateUI(Consumer<InventoryUI> action) {
+		if (hasUI())
+			action.accept(inventoryUI);
 	}
 
 	public void setMaxWeight(float val) {
@@ -48,8 +56,7 @@ public class Inventory {
 	}
 
 	public void refreshUITitle() {
-		if (itemUI != null)
-			inventoryUI.setHeader(getWeightString());
+		updateUI(ui -> ui.setHeader(getWeightString()));
 	}
 
 	@JsonIgnore
@@ -63,15 +70,16 @@ public class Inventory {
 	}
 
 	public void refreshContents() {
-		Item item;
 		for (int i = 0; i < items.size(); ++i) {
-			item = items.get(i);
+			Item item = items.get(i);
 			item.reinit();
 
-			if (item.id == 0)
-				refreshRemoveItem(item);
-			else
-				refreshItem(item);
+			updateUI(ui -> {
+				if (item.id == 0)
+					ui.refreshRemoveItem(item);
+				else
+					ui.refreshItem(item);
+			});
 		}
 		refreshWeight();
 	}
@@ -181,63 +189,12 @@ public class Inventory {
 		curWeight = 0;
 	}
 
-	private void refreshRemoveItem(Item item) {
-		if (itemUI == null)
-			return;
-		if (item.id == 0)
-			return;
-		if (itemUI.containsKey(item)) {
-			refreshUITitle();
-			Group rcell = itemUI.get(item);
-			Cell<Group> cell = inventoryUI.invTable.getCell(rcell);
-			clearContextMenus();
-			rcell.remove();
-			// remove cell from table
-			inventoryUI.invTable.getCells().removeValue(cell, true);
-			inventoryUI.invTable.invalidate();
-			// itemUI.get(item).cell.remove();
-			itemUI.remove(item);
-			inventoryUI.stacks -= 1;
-
-			inventoryUI.refresh(itemUI.entrySet());
-		}
-	}
-
-	public void refreshItem(Item item) {
-		if (itemUI == null)
-			return;
-		if (item.id == 0)
-			return;
-		refreshUITitle();
-		if (itemUI.containsKey(item)) {
-			itemUI.get(item).setText(item.quantity + "");
-			if (item instanceof AbstractEquipment)
-				itemUI.get(item).refreshHp();
-			itemUI.get(item).refreshEquippedStatus();
-		} else {
-			InventoryUICell cell = new InventoryUICell(item);
-			itemUI.put(item, cell);
-			inventoryUI.putNewItem(cell);
-			inventoryUI.refresh(itemUI.entrySet());
-		}
-	}
-
-	public void clearContextMenus() {
-		if (itemUI == null)
-			return;
-		for (Entry<Item, InventoryUICell> pair : itemUI.entrySet()) {
-			InventoryUICell cell = pair.getValue();
-			if (cell.contextActive())
-				cell.hideContext();
-		}
-	}
-
 	public boolean damageEquipment(AbstractEquipment item, int dmg) {
 		if (!item.damage(dmg)) {
-			refreshItem(item);
+			updateUI(ui -> ui.refreshItem(item));
 			return false;
 		} else {
-			refreshRemoveItem(item);
+			updateUI(ui -> ui.refreshRemoveItem(item));
 			return true;
 		}
 	}
@@ -269,7 +226,7 @@ public class Inventory {
 				updItem = item;
 			}
 			curWeight = newWeight;
-			refreshItem(updItem);
+			updateUI(ui -> ui.refreshItem(updItem));
 
 			return true;
 		}
@@ -319,18 +276,17 @@ public class Inventory {
 		if (quantity > item.quantity)
 			return false;
 
-		Item foundItem;
 		for (int i = items.size() - 1; i >= 0; --i) {
-			foundItem = items.get(i);
+			Item foundItem = items.get(i);
 			if (foundItem.equals(item)) {
 				curWeight -= foundItem.weight * (float) quantity;
 				foundItem.quantity -= quantity;
 
 				if (foundItem.quantity < 1) {
-					refreshRemoveItem(foundItem);
+					updateUI(ui -> ui.refreshRemoveItem(foundItem));
 					items.remove(i);
 				} else
-					refreshItem(foundItem);
+					updateUI(ui -> ui.refreshItem(foundItem));
 
 				refreshUITitle();
 				return true;

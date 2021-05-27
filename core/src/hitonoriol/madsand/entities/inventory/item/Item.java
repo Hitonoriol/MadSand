@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import hitonoriol.madsand.DynamicallyCastable;
 import hitonoriol.madsand.HotbarAssignable;
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
@@ -96,6 +97,17 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 
 	public void equip(Player player) {
 		player.stats.equipment.equip(this);
+	}
+
+	protected void toggleEquipped() {
+		MadSand.player().inventory.getUI().equipItem(this);
+	}
+
+	/* Some Items may perform different actions when left-clicked from InventoryUI
+	 * 		and when used with inventory closed
+	 */
+	public void leftClickAction() {
+		use(MadSand.player());
 	}
 
 	@JsonIgnore

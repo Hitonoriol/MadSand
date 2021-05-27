@@ -926,7 +926,7 @@ public class Player extends Entity {
 		if (!silent && item.id != Item.NULL_ITEM)
 			MadSand.print("You put " + item.name + " back to your inventory");
 		stats.equipment.unEquip(slot);
-		inventory.refreshItem(item);
+		inventory.getUI().refreshItem(item);
 	}
 
 	public void freeHands(EquipSlot slot) {

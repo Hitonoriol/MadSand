@@ -1,9 +1,11 @@
 package hitonoriol.madsand.entities.inventory;
 
+import java.util.HashMap;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -11,10 +13,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
+import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
-import hitonoriol.madsand.world.World;
 
 public class InventoryUI extends GameDialog {
 
@@ -34,11 +38,15 @@ public class InventoryUI extends GameDialog {
 	Label header;
 	public TextButton craftMenuButton;
 
+	private Inventory inventory;
+	private HashMap<Item, InventoryUICell> itemUI = new HashMap<>();
+
 	boolean dialogActive;
 	int stacks = 0;
 
-	public InventoryUI() {
+	public InventoryUI(Inventory inventory) {
 		super(Gui.overlay);
+		this.inventory = inventory;
 		setUpInventory();
 	}
 
@@ -82,12 +90,10 @@ public class InventoryUI extends GameDialog {
 		});
 	}
 
-	void refresh(Set<Entry<Item, InventoryUICell>> set) {
+	void refresh() {
 		stacks = 0;
 		invTable.clear();
-		for (Entry<Item, InventoryUICell> pair : set) {
-			putNewItem(pair.getValue());
-		}
+		itemUI.forEach((item, itemUICell) -> putNewItem(itemUICell));
 	}
 
 	void putNewItem(InventoryUICell cell) {
@@ -98,12 +104,85 @@ public class InventoryUI extends GameDialog {
 		invTable.add(cell);
 	}
 
+	void refreshRemoveItem(Item item) {
+		if (item.id == 0)
+			return;
+		if (itemExists(item)) {
+			inventory.refreshUITitle();
+			Group rcell = itemUI.get(item);
+			Cell<Group> cell = invTable.getCell(rcell);
+			clearContextMenus();
+			rcell.remove();
+			// remove cell from table
+			invTable.getCells().removeValue(cell, true);
+			invTable.invalidate();
+			// itemUI.get(item).cell.remove();
+			itemUI.remove(item);
+			stacks -= 1;
+
+			refresh();
+		}
+	}
+
+	public void refreshItem(Item item) {
+		if (item.id == 0)
+			return;
+		inventory.refreshUITitle();
+		if (itemUI.containsKey(item)) {
+			itemUI.get(item).setText(item.quantity + "");
+			if (item instanceof AbstractEquipment)
+				itemUI.get(item).refreshHp();
+			itemUI.get(item).refreshEquippedStatus();
+		} else {
+			InventoryUICell cell = new InventoryUICell(item);
+			itemUI.put(item, cell);
+			putNewItem(cell);
+			refresh();
+		}
+	}
+
+	public InventoryUICell getUICell(Item item) {
+		return itemUI.get(item);
+	}
+
+	public void clearContextMenus() {
+		if (itemUI == null)
+			return;
+		for (Entry<Item, InventoryUICell> pair : itemUI.entrySet()) {
+			InventoryUICell cell = pair.getValue();
+			if (cell.contextActive())
+				cell.hideContext();
+		}
+	}
+
+	/* Equip/Unequip for equippable & usable items */
+	public void equipItem(Item item) {
+		Player player = MadSand.player();
+		InventoryUICell itemCell = getUICell(item);
+		if (player.stats.equipment.itemEquipped(item)) {
+			if (player.unEquip(item))
+				itemCell.unEquipItem();
+		} else {
+			Item prev = player.stats.equipment.previousEquipment(item);
+			if (player.unEquip(prev))
+				getUICell(prev).unEquipItem();
+
+			player.equip(item);
+			refreshItem(prev);
+			itemCell.equipItem();
+		}
+	}
+
 	public void hide() {
 		super.hide();
-		World.player.inventory.clearContextMenus();
+		clearContextMenus();
 	}
 
 	void setHeader(String str) {
 		header.setText(str);
+	}
+
+	boolean itemExists(Item item) {
+		return itemUI.containsKey(item);
 	}
 }

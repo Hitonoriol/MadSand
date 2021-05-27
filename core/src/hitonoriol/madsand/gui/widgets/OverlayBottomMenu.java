@@ -40,7 +40,7 @@ public class OverlayBottomMenu extends Table {
 		this.overlay = overlay;
 
 		addButton("Character", Keys.Q, () -> new CharacterInfoWindow().getDialog());
-		addButton("Inventory", Keys.E, () -> MadSand.player().inventory.inventoryUI);
+		addButton("Inventory", Keys.E, () -> MadSand.player().inventory.getUI());
 		addButton("Abilities", Keys.R, () -> new AbilityDialog(World.player.getAbilities()));
 		addButton("Journal", Keys.J, () -> new QuestJournal(World.player.getQuestWorker()));
 		addButton("Build", Keys.B, () -> new BuildDialog());

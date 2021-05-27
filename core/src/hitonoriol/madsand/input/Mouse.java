@@ -108,9 +108,13 @@ public class Mouse {
 		});
 	}
 
-	public static void updCoords() {
+	public static void updScreenCoords() {
 		x = Gdx.input.getX();
 		y = Gdx.graphics.getHeight() - Gdx.input.getY();
+	}
+
+	public static void updCoords() {
+		updScreenCoords();
 		tooltipContainer.moveTo(x, y);
 
 		wx = (int) Math.floor(mouseWorldCoords.x / MadSand.TILESIZE);

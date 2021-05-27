@@ -436,7 +436,7 @@ public abstract class Entity extends MapEntity {
 
 	public void calcMovementSpeed() {
 		float speed = getSpeed();
-		movementSpeed = speed / 17f + (float) Math.pow(Math.sqrt(speed), 1.225f) * 1.075f;
+		movementSpeed = speed / 17f + (float) Math.pow(Math.sqrt(speed), 1.225f) * 0.985f;
 	}
 
 	public void speedUp(float by) {
