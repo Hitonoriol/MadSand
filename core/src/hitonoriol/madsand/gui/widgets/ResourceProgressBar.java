@@ -14,6 +14,7 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.skill.SkillContainer;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.map.object.MapObject;
+import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
 
 /*
@@ -71,35 +72,16 @@ public class ResourceProgressBar extends TimedProgressBar {
 		progressLabel.setWidth(WIDTH + 150);
 
 		super.setAction(() -> {
+			progressLabel.remove();
 			remove();
 			Gui.gameResumeFocus();
 			Gui.refreshOverlay();
 			Mouse.refreshTooltip();
-			Timer.instance().scheduleTask(new Timer.Task() {
-				@Override
-				public void run() {
-					progressLabel.remove();
-				}
-			}, 0.5f);
+			/*Utils.scheduleTask(() -> progressLabel.remove(), 0.5f);*/
 		});
 
-		skipTask = new Timer.Task() {
-			@Override
-			public void run() {
-				skip = false;
-				this.cancel();
-			}
-		};
-
-		wakeTask = new Timer.Task() {
-			@Override
-			public void run() {
-				Gdx.graphics.requestRendering();
-
-				if (!Gui.gameUnfocused)
-					this.cancel();
-			}
-		};
+		skipTask = Utils.createTask(() -> skip = false);
+		wakeTask = Utils.createTask(() -> Gdx.graphics.requestRendering());
 	}
 
 	private static float getDelayDelta(MapObject object) {

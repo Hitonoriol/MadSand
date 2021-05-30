@@ -9,14 +9,15 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.gui.OverlayMouseoverListener;
+import hitonoriol.madsand.input.Mouse;
 
 public class GameLog extends Table {
 	final float WIDTH = 335;
 	public final static float HEIGHT = 240;
-	
+
 	private static final int LOG_LENGTH = 20;
 
-	public static final String WARNING_COLOR = "[#ff9185]";
+	private static final String WARNING_COLOR = "[#ff9185]";
 	public static final String NOTICE_ALT_COLOR = "[#58FFB1]";
 	public static String NOTICE_COLOR = "[#16E1EA]";
 
@@ -93,19 +94,24 @@ public class GameLog extends Table {
 
 	public void print(String msg, String color) {
 		print(color + msg + "[]");
+		addNotification();
 	}
 
-	public void notice(String msg) {
+	public void notify(String msg) {
 		if (printedLine.contains(NOTICE_COLOR) || printedLine.contains(NOTICE_ALT_COLOR))
 			noticeColor = !noticeColor;
 		else
 			noticeColor = true;
-		
+
 		print("* " + msg, noticeColor ? NOTICE_COLOR : NOTICE_ALT_COLOR);
 	}
 
 	public void warn(String msg) {
 		print(msg, WARNING_COLOR);
+	}
+
+	private void addNotification() {
+		Mouse.getNotificator().notify(printedLine);
 	}
 
 	public String getLastPrintedLine() {

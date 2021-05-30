@@ -81,7 +81,7 @@ public class Overlay extends Stage {
 		skin = Gui.skin;
 
 		actionButton = new ActionButton();
-		gameTooltip = new GameTooltip();
+		gameTooltip = GameTooltip.instance();
 		gameContextMenu = new GameContextMenu();
 		gameLog = new GameLog();
 		bottomMenu = new OverlayBottomMenu(this);
@@ -197,10 +197,6 @@ public class Overlay extends Stage {
 		gameContextMenu.closeGameContextMenu();
 	}
 
-	public Label getTooltip() {
-		return gameTooltip.tooltipLabel;
-	}
-
 	public void hideActionBtn() {
 		actionButton.hideButton();
 	}
@@ -285,7 +281,7 @@ public class Overlay extends Stage {
 
 	private String getTimeString() {
 		World world = MadSand.world;
-		String hour = fixTime(Utils.str(world.worldtime));
+		String hour = fixTime(Utils.str(world.getWorldTimeHour()));
 		String minute = fixTime(Utils.str(world.getWorldTimeMinute()));
 
 		String time = "Day " + world.getWorldTimeDay();

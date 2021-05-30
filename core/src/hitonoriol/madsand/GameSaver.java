@@ -17,54 +17,135 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
+import hitonoriol.madsand.world.WorldMapSaver;
 
 public class GameSaver {
 	public static String SECTOR_DELIM = "!";
 	public final static long saveFormatVersion = 8;
 
-	public static byte[] concat(byte[]... arrays) {
-		int totalLength = 0;
-		for (int i = 0; i < arrays.length; i++)
-			totalLength += arrays[i].length;
+	public static void saveWorld() {
+		World world = MadSand.world();
+		if (world.inEncounter) {
+			Gui.drawOkDialog("You can't save during an encounter!");
+			return;
+		}
+		GameSaver.createDirs();
+		world.logout();
+		saveLog();
+		if (saveLocation() && saveCharacter())
+			MadSand.print("Game saved!");
+		else
+			MadSand.print("Couldn't save the game. Check logs.");
+	}
 
-		byte[] result = new byte[totalLength];
+	public static boolean loadWorld(String filename) {
+		MadSand.WORLDNAME = filename;
+		File f = new File(MadSand.MAPDIR + filename);
 
-		int currentIndex = 0;
-		for (int i = 0; i < arrays.length; i++) {
-			System.arraycopy(arrays[i], 0, result, currentIndex, arrays[i].length);
-			currentIndex += arrays[i].length;
+		if (!f.exists() || !f.isDirectory()) {
+			MadSand.switchScreen(MadSand.mainMenu);
+			Gui.drawOkDialog("Couldn't load this world");
+			return false;
 		}
 
-		return result;
-	}
+		MadSand.initNewGame();
+		createDirs();
 
-	public static byte[] encode8(long l) {
-		byte[] result = new byte[8];
-		for (int i = 7; i >= 0; i--) {
-			result[i] = (byte) (l & 0xFF);
-			l >>= 8;
+		if (!loadCharacter()) {
+			loadErrMsg();
+			return false;
 		}
-		return result;
-	}
 
-	public static long decode8(byte[] b) {
-		long result = 0;
-		for (int i = 0; i < 8; i++) {
-			result <<= 8;
-			result |= (b[i] & 0xFF);
+		if (loadLocation()) {
+			Lua.init();
+			MadSand.world.updateLight();
+			loadLog();
+			MadSand.print("Loaded Game!");
+			return true;
+		} else {
+			loadErrMsg();
+			return false;
 		}
-		return result;
 	}
 
-	public static byte[] encode2(int val) {
-		byte data[] = new byte[2];
-		data[1] = (byte) (val & 0xFF);
-		data[0] = (byte) ((val >> 8) & 0xFF);
-		return data;
+	public static boolean saveLocation(int wx, int wy) {
+		WorldMapSaver saver = MadSand.world().getMapSaver();
+		try {
+			OutputStream os = new FileOutputStream(getSectorFile(wx, wy));
+			os.write(saver.locationToBytes(wx, wy));
+			os.close();
+			saver.saveLocationInfo(wx, wy);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
-	public static int decode2(byte[] bytes) {
-		return (bytes[0] << 8) | (bytes[1] & 0xFF);
+	public static boolean saveLocation() {
+		return saveLocation(MadSand.world.wx(), MadSand.world.wy());
+	}
+
+	public static boolean loadLocation(int wx, int wy) {
+		WorldMapSaver saver = MadSand.world().getMapSaver();
+		try {
+			Path fileLocation = Paths.get(getSectorFile(wx, wy).toURI());
+			byte[] data = Files.readAllBytes(fileLocation);
+			Utils.out("Loading location [%d, %d]", wx, wy);
+
+			saver.loadLocationInfo(wx, wy);
+			saver.bytesToLocation(data, wx, wy);
+
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public static boolean loadLocation() {
+		World world = MadSand.world();
+		return loadLocation(world.wx(), world.wy());
+	}
+
+	private static boolean saveCharacter() {
+		try {
+			String fl = getCurSaveDir() + MadSand.PLAYERFILE;
+			String wfl = getCurSaveDir() + MadSand.WORLDFILE;
+			Player player = World.player;
+
+			if (player.newlyCreated)
+				player.newlyCreated = false;
+
+			player.stats.equipment.setStatBonus(false);
+			Resources.mapper.writeValue(new File(fl), player);
+			Resources.mapper.writeValue(new File(wfl), MadSand.world());
+			player.stats.equipment.setStatBonus(true);
+
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	private static boolean loadCharacter() {
+		try {
+			Utils.out("Loading character...");
+			String fl = getCurSaveDir() + MadSand.PLAYERFILE;
+			String wfl = getCurSaveDir() + MadSand.WORLDFILE;
+
+			MadSand.world = Resources.mapper.readValue(readFile(wfl), World.class);
+			MadSand.world.initWorld();
+			World.player = Resources.mapper.readValue(readFile(fl), Player.class);
+			World.player.postLoadInit();
+
+			Utils.out("Done loading character.");
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	public static boolean deleteDirectory(File dir) {
@@ -113,7 +194,7 @@ public class GameSaver {
 	}
 
 	public static String getItemFactoryFile(int wx, int wy, int layer) {
-		return getCurSaveDir() + "itemfactories" + getSectorString(wx, wy, layer)
+		return getCurSaveDir() + Utils.fileBaseName(Resources.ITEMFACTORY_FILE) + getSectorString(wx, wy, layer)
 				+ MadSand.SAVE_EXT;
 	}
 
@@ -146,51 +227,6 @@ public class GameSaver {
 				+ MadSand.SAVE_EXT;
 	}
 
-	public static void saveWorld() {
-		if (MadSand.world.inEncounter) {
-			Gui.drawOkDialog("You can't save during an encounter!");
-			return;
-		}
-		GameSaver.createDirs();
-		MadSand.world.logout();
-		saveLog();
-		if (saveLocation() && saveChar())
-			MadSand.print("Game saved!");
-		else
-			MadSand.print("Couldn't save the game. Check logs.");
-	}
-
-	public static boolean loadWorld(String filename) {
-		MadSand.WORLDNAME = filename;
-		File f = new File(MadSand.MAPDIR + filename);
-
-		if (!f.exists() || !f.isDirectory()) {
-			MadSand.switchScreen(MadSand.mainMenu);
-			Gui.drawOkDialog("Couldn't load this world");
-			return false;
-		}
-
-		MadSand.initNewGame();
-		createDirs();
-
-		if (!loadChar()) {
-			loadErrMsg();
-			return false;
-		}
-
-		if (loadLocation()) {
-			Lua.init();
-			MadSand.world.updateLight();
-			loadLog();
-			MadSand.print("Loaded Game!");
-			return true;
-		} else {
-			loadErrMsg();
-			return false;
-		}
-
-	}
-
 	public static void loadErrMsg() {
 		MadSand.switchScreen(MadSand.mainMenu);
 		Gui.drawOkDialog(
@@ -202,83 +238,6 @@ public class GameSaver {
 	public static boolean verifyNextSector(int x, int y) {
 		File sectorFile = getSectorFile(x, y);
 		return sectorFile.exists();
-	}
-
-	static boolean saveChar() {
-		try {
-			String fl = getCurSaveDir() + MadSand.PLAYERFILE;
-			String wfl = getCurSaveDir() + MadSand.WORLDFILE;
-			Player player = World.player;
-
-			if (player.newlyCreated)
-				player.newlyCreated = false;
-
-			player.stats.equipment.setStatBonus(false);
-			Resources.mapper.writeValue(new File(fl), player);
-			Resources.mapper.writeValue(new File(wfl), MadSand.world);
-			player.stats.equipment.setStatBonus(true);
-
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
-
-	static boolean loadChar() {
-		try {
-			Utils.out("Loading character...");
-			String fl = getCurSaveDir() + MadSand.PLAYERFILE;
-			String wfl = getCurSaveDir() + MadSand.WORLDFILE;
-
-			MadSand.world = Resources.mapper.readValue(readFile(wfl), World.class);
-			MadSand.world.initWorld();
-			World.player = Resources.mapper.readValue(readFile(fl), Player.class);
-			World.player.postLoadInit();
-
-			Utils.out("Done loading character.");
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
-
-	public static boolean saveLocation(int wx, int wy) {
-		try {
-			OutputStream os = new FileOutputStream(getSectorFile(wx, wy));
-			os.write(MadSand.world.worldMapSaver.locationToBytes(wx, wy));
-			os.close();
-			MadSand.world.worldMapSaver.saveLocationInfo(wx, wy);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
-
-	public static boolean saveLocation() {
-		return saveLocation(MadSand.world.wx(), MadSand.world.wy());
-	}
-
-	public static boolean loadLocation(int wx, int wy) {
-		try {
-			Path fileLocation = Paths.get(getSectorFile(wx, wy).toURI());
-			byte[] data = Files.readAllBytes(fileLocation);
-			Utils.out("Loading location [%d, %d]", wx, wy);
-
-			MadSand.world.worldMapSaver.loadLocationInfo(wx, wy);
-			MadSand.world.worldMapSaver.bytesToLocation(data, wx, wy);
-
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
-
-	public static boolean loadLocation() {
-		return loadLocation(MadSand.world.wx(), MadSand.world.wy());
 	}
 
 	private static boolean saveLog() {

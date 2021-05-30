@@ -58,7 +58,7 @@ public class LandDialog extends GameDialog {
 				if (location.isSettlement())
 					refreshDialogContents();
 			}
-		}, 0, MadSand.world.realtimeTickRate);
+		}, 0, MadSand.world.getRealtimeTickRate());
 	}
 
 	private void refreshDialogContents() {
@@ -139,7 +139,8 @@ public class LandDialog extends GameDialog {
 				continue;
 
 			sb.append("* " + type.name() + ": " + workers.getQuantity() + " ");
-			sb.append("(" + Utils.round(workers.getGatheringRate() / MadSand.world.realtimeTickRate, DEC_PLACES) + " actions/sec) ")
+			sb.append("(" + Utils.round(workers.getGatheringRate() / MadSand.world.getRealtimeTickRate(), DEC_PLACES)
+					+ " actions/sec) ")
 					.append("[[" + Utils.round(workers.itemCharge * 100f) + "%]")
 					.append(Resources.LINEBREAK);
 		}

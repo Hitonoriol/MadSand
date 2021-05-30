@@ -9,10 +9,13 @@ import java.util.function.Consumer;
 
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.apache.commons.lang3.mutable.MutableLong;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Timer;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
 import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
@@ -34,6 +37,7 @@ import hitonoriol.madsand.properties.WorldGenProp;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.worldgen.WorldGen;
 
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class World {
 	private static Map nullLoc = new Map(0, 0);
 	public static int DEFAULT_MAPSIZE = Map.MIN_MAPSIZE;
@@ -45,35 +49,37 @@ public class World {
 	private Pair coords = new Pair();
 
 	private int MAX_PREVIOUS_LOCATIONS = 2; // Max amount of maps allowed to be in WorldMap at the same time
+	@JsonIgnore
 	private ArrayDeque<Pair> previousLocations = new ArrayDeque<>(); // Maps that are currently loaded in WorldMap
 
 	@JsonIgnore
-	public WorldGen worldGen;
+	private WorldGen worldGen;
 	@JsonIgnore
-	public WorldMapSaver worldMapSaver;
+	private WorldMapSaver worldMapSaver;
 
 	@JsonIgnore
 	public static Player player;
 
-	public WorldMap worldMap; // container of "Locations": maps grouped by world coords
+	private WorldMap worldMap; // container of "Locations": maps grouped by world coords
 
+	@JsonIgnore
 	private Timer actDelayTimer;
+	@JsonIgnore
 	private Timer realTimeRefresher;
 	private boolean timeSkip = false;
-	public float realtimeTickRate = 5; // seconds per 1 tick
-	public long globalRealtimeTick = 0; // global realtime tick counter, never resets
+	private float realtimeTickRate = 5; // seconds per 1 tick
+	private long globalRealtimeTick = 0; // global realtime tick counter, never resets
 
-	public int ticksPerHour = 150; // ticks per one hourTick() trigger
-	public int worldtime = 6; // time (00 - 23)
-	public int tick = 0; // tick counter, resets every <ticksPerHour> ticks
-	public long globalTick = 0; // global tick counter, never resets
+	private int ticksPerHour = 150; // ticks per one hourTick() trigger
+	private int worldtime = 6; // time (00 - 23)
+	private int tick = 0; // tick counter, resets every <ticksPerHour> ticks
+	private long globalTick = 0; // global tick counter, never resets
 
-	public long npcCounter = 0;
-	public long itemCounter = 0;
-	public long textureFxCounter = 0;
+	private MutableLong npcCounter = new MutableLong(0);
+	private MutableLong itemCounter = new MutableLong(0);
 
 	private long logoutTimeStamp;
-	public HashMap<String, String> luaStorage = new HashMap<>();
+	private HashMap<String, String> luaStorage = new HashMap<>();
 
 	public World(int sz) {
 		player = new Player();
@@ -153,6 +159,30 @@ public class World {
 
 	Map getLoc(int x, int y, int layer) {
 		return getLoc(coords.set(x, y), layer);
+	}
+
+	public WorldMap getWorldMap() {
+		return worldMap;
+	}
+
+	public long currentTick() {
+		return globalTick;
+	}
+
+	public int getWorldTimeHour() {
+		return worldtime;
+	}
+
+	public long currentRealtimeTick() {
+		return globalRealtimeTick;
+	}
+
+	public float getRealtimeTickRate() {
+		return realtimeTickRate;
+	}
+
+	public void setRealtimeTickRate(float value) {
+		realtimeTickRate = value;
 	}
 
 	public int wx() {
@@ -766,6 +796,24 @@ public class World {
 	@JsonIgnore
 	public String getStorageValue(String name) {
 		return luaStorage.getOrDefault(name, "");
+	}
+
+	@JsonIgnore
+	public WorldMapSaver getMapSaver() {
+		return worldMapSaver;
+	}
+
+	@JsonIgnore
+	public WorldGen getWorldGenerator() {
+		return worldGen;
+	}
+
+	public MutableLong npcCounter() {
+		return npcCounter;
+	}
+
+	public MutableLong itemCounter() {
+		return itemCounter;
 	}
 
 }

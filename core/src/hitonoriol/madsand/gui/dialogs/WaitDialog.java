@@ -28,14 +28,14 @@ public class WaitDialog extends SliderDialog {
 					timeSkipItemSpent = (int) Math.max((float) ticks / Player.TIMESKIP_COEF, 1);
 					worldSeconds = MadSand.world.toWorldTimeSeconds(ticks);
 					realtimeTicks = (int) (timeSkipItemSpent * Player.REALTIME_SKIP_COEF);
-					super.setSliderText("+"+Utils.timeString(worldSeconds) + " [[World time]"
+					super.setSliderText("+" + Utils.timeString(worldSeconds) + " [[World time]"
 							+ Resources.LINEBREAK
 
-							+ "+"+Utils.timeString((long) (realtimeTicks * MadSand.world.realtimeTickRate))
+							+ "+" + Utils.timeString((long) (realtimeTicks * MadSand.world.getRealtimeTickRate()))
 							+ " [[Realtime]"
 							+ Resources.LINEBREAK
 
-							+ "-"+timeSkipItemSpent + " " + timeSkipItem);
+							+ "-" + timeSkipItemSpent + " " + timeSkipItem);
 				});
 
 		super.setConfirmAction(ticks -> {

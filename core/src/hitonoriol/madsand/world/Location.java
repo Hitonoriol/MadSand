@@ -116,16 +116,17 @@ public class Location {
 	}
 
 	public static Settlement.Status isSettlement(int wx, int wy) {
-		World world = MadSand.world;
+		World world = MadSand.world();
+		WorldMap worldMap = world.getWorldMap();
 		Location tmpLoc;
 		Pair coords = new Pair(wx, wy);
 		boolean locLoaded = false;
 		Settlement.Status status;
 		try {
 			if (world.locExists(coords))
-				tmpLoc = world.worldMap.getLocation(coords);
+				tmpLoc = worldMap.getLocation(coords);
 			else {
-				tmpLoc = world.worldMapSaver.loadLocationInfo(wx, wy);
+				tmpLoc = world.getMapSaver().loadLocationInfo(wx, wy);
 				locLoaded = true;
 			}
 
@@ -137,7 +138,7 @@ public class Location {
 				status = Status.DoesNotExist;
 
 			if (locLoaded)
-				world.worldMap.remove(coords);
+				worldMap.remove(coords);
 			return status;
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -186,7 +186,7 @@ public class MadSand extends Game {
 	}
 
 	public static void notice(String msg) {
-		Gui.overlay.gameLog.notice(msg);
+		Gui.overlay.gameLog.notify(msg);
 	}
 
 	public static void notice(String msg, Object... args) {

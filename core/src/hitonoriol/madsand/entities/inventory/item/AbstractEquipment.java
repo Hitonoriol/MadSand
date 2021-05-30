@@ -33,7 +33,7 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 		maxHp = hp;
 
 		if (protoItem.uid == 0) {
-			uid = ++MadSand.world.itemCounter;
+			uid = MadSand.world.itemCounter().incrementAndGet();
 			cursed = Utils.percentRoll(7.5);
 		} else {
 			uid = protoItem.uid;

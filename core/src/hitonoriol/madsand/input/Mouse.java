@@ -17,8 +17,10 @@ import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.gui.stages.Overlay;
+import hitonoriol.madsand.gui.textgenerator.CellInfoGenerator;
+import hitonoriol.madsand.gui.textgenerator.NotificationGenerator;
+import hitonoriol.madsand.gui.textgenerator.StaticTextGenerator;
 import hitonoriol.madsand.gui.widgets.GameTooltip;
-import hitonoriol.madsand.map.CellInfo;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
@@ -26,6 +28,7 @@ import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.pathfinding.Path;
 import hitonoriol.madsand.screens.GameWorldRenderer;
+import hitonoriol.madsand.util.Functional;
 import hitonoriol.madsand.world.World;
 
 public class Mouse {
@@ -40,7 +43,9 @@ public class Mouse {
 
 	private static boolean pointingAtObject = false;
 	private static BiConsumer<Integer, Integer> clickAction = null;
-	private static CellInfo cellInfo = new CellInfo();
+
+	private static CellInfoGenerator cellInfo = new CellInfoGenerator();
+	private static NotificationGenerator notifications = new NotificationGenerator();
 
 	private static Path rangedPath;
 	private static Path pathToCursor = new Path();
@@ -48,6 +53,7 @@ public class Mouse {
 
 	public static void initListener() {
 		Overlay overlay = Gui.overlay;
+		initTooltip();
 		overlay.addListener(new ClickListener(Buttons.LEFT) {
 			private boolean ignoreClick = false;
 
@@ -108,6 +114,19 @@ public class Mouse {
 		});
 	}
 
+	private static void initTooltip() {
+		notifications.setEnabled(false);
+		Functional.with(GameTooltip.instance(), tooltip -> {
+			tooltip.addTextGenerator(new StaticTextGenerator((x, y) -> String.format("Looking at (%d, %d)", x, y)))
+					.addTextGenerator(notifications)
+					.addTextGenerator(cellInfo);
+		});
+	}
+
+	public static NotificationGenerator getNotificator() {
+		return notifications;
+	}
+
 	public static void updScreenCoords() {
 		x = Gdx.input.getX();
 		y = Gdx.graphics.getHeight() - Gdx.input.getY();
@@ -130,13 +149,12 @@ public class Mouse {
 		if (hasClickAction())
 			refreshPathToCursor();
 
-		cellInfo.set(wx, wy);
-		pointingAtObject = cellInfo.isCellOccupied();
 		refreshTooltip();
+		pointingAtObject = cellInfo.isCellOccupied();
 	}
 
 	public static void refreshTooltip() {
-		Gui.overlay.getTooltip().setText(cellInfo.getInfo());
+		GameTooltip.instance().refresh(wx, wy);
 		highlightRangedTarget();
 	}
 
@@ -181,7 +199,7 @@ public class Mouse {
 		return pathToCursor;
 	}
 
-	public static CellInfo pointingAt() {
+	public static CellInfoGenerator pointingAt() {
 		return cellInfo;
 	}
 

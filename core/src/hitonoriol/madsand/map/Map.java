@@ -939,7 +939,7 @@ public class Map {
 		if (getTile(x, y).id != ItemProp.getCropSoil(id))
 			return false;
 
-		Crop newCrop = new Crop(id, MadSand.world.globalRealtimeTick);
+		Crop newCrop = new Crop(id, MadSand.world.currentRealtimeTick());
 		mapCrops.put(new Pair(coords), newCrop);
 		addObject(x, y, newCrop.objId);
 		return true;

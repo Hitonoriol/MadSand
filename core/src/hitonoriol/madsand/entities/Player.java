@@ -954,7 +954,7 @@ public class Player extends Entity {
 		stats.stamina = stats.maxstamina;
 		stats.dead = false;
 		freeHands();
-		stats.spawnTime = MadSand.world.globalTick;
+		stats.spawnTime = MadSand.world.currentTick();
 
 		if (stats.hasRespawnPoint) {
 			if (stats.respawnWX == wx && stats.respawnWY == wy) {
@@ -1286,7 +1286,7 @@ public class Player extends Entity {
 	}
 
 	public long getSurvivedTime() {
-		return MadSand.world.toWorldTimeSeconds(MadSand.world.globalTick - stats.spawnTime);
+		return MadSand.world.toWorldTimeSeconds(MadSand.world.currentTick() - stats.spawnTime);
 	}
 
 	public void registerLuaAction(String name) {

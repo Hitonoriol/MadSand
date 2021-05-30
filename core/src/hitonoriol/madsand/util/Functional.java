@@ -19,6 +19,10 @@ public class Functional {
 		return obj;
 	}
 
+	public static void sequence(Runnable... actions) {
+		Stream.of(actions).forEach(action -> action.run());
+	}
+
 	public static void repeat(int times, Consumer<Integer> action) {
 		IntStream.range(0, times).forEach(i -> action.accept(i));
 	}

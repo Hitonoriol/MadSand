@@ -48,17 +48,27 @@ public class Utils {
 
 	public static Random random = new Random();
 
-	public static void scheduleTask(Timer timer, Runnable task, float delaySec) {
-		timer.scheduleTask(new Timer.Task() {
+	public static Timer.Task createTask(Runnable task) {
+		return new Timer.Task() {
 			@Override
 			public void run() {
 				task.run();
 			}
-		}, delaySec);
+		};
 	}
 
-	public static void scheduleTask(Runnable task, float delaySec) {
-		scheduleTask(Timer.instance(), task, delaySec);
+	public static Timer.Task scheduleTask(Timer timer, Runnable task, float delaySec) {
+		Timer.Task timerTask;
+		timer.scheduleTask(timerTask = createTask(task), delaySec);
+		return timerTask;
+	}
+
+	public static Timer.Task scheduleTask(Runnable task, float delaySec) {
+		return scheduleTask(Timer.instance(), task, delaySec);
+	}
+
+	public static float timeToExecution(Timer.Task task) {
+		return (float) (task.getExecuteTimeMillis() - System.nanoTime() / 1000000) / 1000f;
 	}
 
 	public static String str(int val) {
@@ -67,6 +77,10 @@ public class Utils {
 
 	public static int val(String str) {
 		return Integer.parseInt(str);
+	}
+
+	public static String fileBaseName(String fileName) {
+		return fileName.split("\\.", 2)[0];
 	}
 
 	public static ArrayList<Integer> parseList(String str) {
@@ -310,6 +324,11 @@ public class Utils {
 		if (value < 1)
 			return 0;
 		return Math.log(value) / Math.log(base);
+	}
+
+	public static StringBuilder clearBuilder(StringBuilder sb) {
+		sb.setLength(0);
+		return sb;
 	}
 
 	public static StringBuilder newLine(StringBuilder sb) {

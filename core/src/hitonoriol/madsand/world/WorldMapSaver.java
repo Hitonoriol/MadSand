@@ -15,6 +15,7 @@ import hitonoriol.madsand.map.ItemProducer;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.object.MapObject;
+import hitonoriol.madsand.util.ByteUtils;
 import hitonoriol.madsand.util.Utils;
 
 public class WorldMapSaver {
@@ -37,15 +38,15 @@ public class WorldMapSaver {
 		try {
 			Location location = worldMap.getLocation(coords.set(wx, wy));
 			// Header: format version, sector layer count
-			stream.write(GameSaver.encode8(GameSaver.saveFormatVersion));
-			stream.write(GameSaver.encode2(location.getLayerCount()));
+			stream.write(ByteUtils.encode8(GameSaver.saveFormatVersion));
+			stream.write(ByteUtils.encode2(location.getLayerCount()));
 
 			// Save all layers of sector
 			for (Entry<Integer, Map> entry : location.layers.entrySet()) {
 				layer = sectorToBytes(wx, wy, entry.getKey());
 				size = layer.length;
-				stream.write(GameSaver.encode2(entry.getKey()));
-				stream.write(GameSaver.encode8(size));
+				stream.write(ByteUtils.encode2(entry.getKey()));
+				stream.write(ByteUtils.encode8(size));
 				stream.write(layer);
 			}
 
@@ -109,11 +110,11 @@ public class WorldMapSaver {
 			int xsz = map.getWidth();
 			int ysz = map.getHeight();
 			// header: width, height
-			stream.write(GameSaver.encode2(xsz));
-			stream.write(GameSaver.encode2(ysz));
+			stream.write(ByteUtils.encode2(xsz));
+			stream.write(ByteUtils.encode2(ysz));
 
 			// Misc map properties as a json string
-			stream.write(GameSaver.encode8(mapProperties.length));
+			stream.write(ByteUtils.encode8(mapProperties.length));
 			stream.write(mapProperties);
 
 			MapObject obj = new MapObject();
@@ -125,35 +126,35 @@ public class WorldMapSaver {
 			for (int y = 0; y < ysz; ++y) {
 				for (int x = 0; x < xsz; ++x) {
 					// Save tiles
-					stream.write(GameSaver.encode2(map.getTile(x, y).id));
-					stream.write(GameSaver.encode2(map.getTile(x, y).visited ? 1 : 0));
+					stream.write(ByteUtils.encode2(map.getTile(x, y).id));
+					stream.write(ByteUtils.encode2(map.getTile(x, y).visited ? 1 : 0));
 
 					// Save objects
 					obj = map.getObject(x, y);
-					stream.write(GameSaver.encode2(obj.id));
-					stream.write(GameSaver.encode2(obj.hp));
-					stream.write(GameSaver.encode2(obj.maxHp));
+					stream.write(ByteUtils.encode2(obj.id));
+					stream.write(ByteUtils.encode2(obj.hp));
+					stream.write(ByteUtils.encode2(obj.maxHp));
 
 					// Save crops
 					crop = map.getCrop(x, y);
 					if (crop.id == Map.nullCrop.id)
 						continue;
-					cropStream.write(GameSaver.encode2(x));
-					cropStream.write(GameSaver.encode2(y));
-					cropStream.write(GameSaver.encode2(crop.id));
-					cropStream.write(GameSaver.encode8(crop.plantTime));
-					cropStream.write(GameSaver.encode2(crop.curStage));
+					cropStream.write(ByteUtils.encode2(x));
+					cropStream.write(ByteUtils.encode2(y));
+					cropStream.write(ByteUtils.encode2(crop.id));
+					cropStream.write(ByteUtils.encode8(crop.plantTime));
+					cropStream.write(ByteUtils.encode2(crop.curStage));
 					++cropBlocks;
 				}
 			}
 
 			// Save loot
 			loot = Resources.mapper.writeValueAsString(map.getLoot()).getBytes();
-			lootStream.write(GameSaver.encode8(loot.length));
+			lootStream.write(ByteUtils.encode8(loot.length));
 			lootStream.write(loot);
 
 			// Get all bytes from streams & concat them into one array
-			byte[] cropCount = GameSaver.encode8(cropBlocks);
+			byte[] cropCount = ByteUtils.encode8(cropBlocks);
 			byte[] _crops = cropStream.toByteArray();
 			cropStream.close();
 
@@ -162,7 +163,7 @@ public class WorldMapSaver {
 			byte ret[] = stream.toByteArray();
 			stream.close();
 
-			ret = GameSaver.concat(ret, _loot, cropCount, _crops);
+			ret = ByteUtils.concat(ret, _loot, cropCount, _crops);
 			return ret;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -251,11 +252,11 @@ public class WorldMapSaver {
 
 	private long loadNextLongBlock(ByteArrayInputStream stream, byte[] buffer) throws Exception {
 		stream.read(buffer);
-		return GameSaver.decode8(buffer);
+		return ByteUtils.decode8(buffer);
 	}
 
 	private int loadNextBlock(ByteArrayInputStream stream, byte[] buffer) throws Exception {
 		stream.read(buffer);
-		return GameSaver.decode2(buffer);
+		return ByteUtils.decode2(buffer);
 	}
 }

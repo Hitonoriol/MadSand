@@ -69,9 +69,9 @@ public abstract class AbstractNpc extends Entity {
 	public AbstractNpc(NpcContainer protoNpc) {
 		super();
 		id = protoNpc.id;
-		uid = MadSand.world.npcCounter++;
-		stats.spawnTime = MadSand.world.globalTick;
-		stats.spawnRealTime = MadSand.world.globalRealtimeTick;
+		uid = MadSand.world.npcCounter().getAndIncrement();
+		stats.spawnTime = MadSand.world.currentTick();
+		stats.spawnRealTime = MadSand.world.currentRealtimeTick();
 		loadProperties(protoNpc);
 		if (id != NULL_NPC)
 			loadSprite();

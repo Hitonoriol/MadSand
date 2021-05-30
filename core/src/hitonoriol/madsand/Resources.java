@@ -63,7 +63,7 @@ public class Resources {
 	static String TRADELIST_FILE = "tradelists.json";
 	static String TILE_FILE = "tiles.json";
 	static String OBJECT_FILE = "objects.json";
-	static String PRODSTATION_FILE = "productionstations.json";
+	static String ITEMFACTORY_FILE = "itemfactories.json";
 	static String NPC_FILE = "npcs.json";
 	static String ITEM_FILE = "items.json";
 	public static String GLOBALS_FILE = "globals.json";
@@ -307,7 +307,7 @@ public class Resources {
 
 	private static void loadProductionStations() throws Exception {
 		ObjectProp.productionStations = mapper.readValue(
-				readInternal(Resources.PRODSTATION_FILE),
+				readInternal(Resources.ITEMFACTORY_FILE),
 				getMapType(Integer.class, ItemProducer.class));
 
 		ObjectProp.buildRecipes = mapper.readValue(

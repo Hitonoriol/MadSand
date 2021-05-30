@@ -1,0 +1,92 @@
+{
+	"6" : {
+		"producedMaterial" : 56,
+		"consumedMaterial" : 1,
+		"maxLvl" : 100,
+		"upgradeRequirement" : 10,
+		"upgradeProductionMultiplier" : 0.1,
+		"upgradeRequirementMultiplier" : 0.25,
+		"maxProductStorage" : 10,
+		"productionRate" : 0.05,
+		"consumptionRate": 0.07
+	},
+	"92" : {
+		"producedMaterial" : 103,
+		"consumedMaterial" : 102,
+		"maxLvl" : 100,
+		"upgradeRequirement" : 3,
+		"upgradeProductionMultiplier" : 0.16,
+		"upgradeRequirementMultiplier" : 0.17,
+		"maxProductStorage" : 5,
+		"productionRate" : 0.1,
+		"consumptionRate": 0.1
+	},
+	"90" : {
+		"producedMaterial" : 104,
+		"consumedMaterial" : 68,
+		"maxLvl" : 100,
+		"upgradeRequirement" : 5,
+		"upgradeProductionMultiplier" : 0.15,
+		"upgradeRequirementMultiplier" : 0.1,
+		"maxProductStorage" : 15,
+		"productionRate" : 0.2,
+		"consumptionRate": 0.2
+	},
+	"156" : {
+		"producedMaterial" : 1,
+		"maxLvl" : 100,
+		"upgradeRequirement" : 11,
+		"upgradeProductionMultiplier" : 0.15,
+		"maxProductStorage" : 50,
+		"productionRate" : 0.02
+	},
+	"157" : {
+		"producedMaterial" : 44,
+		"maxLvl" : 100,
+		"upgradeRequirement" : 10,
+		"upgradeProductionMultiplier" : 0.15,
+		"maxProductStorage" : 20,
+		"productionRate" : 0.05
+	},
+	"158" : {
+		"producedMaterial" : 96,
+		"maxLvl" : 100,
+		"upgradeRequirement" : 15,
+		"upgradeProductionMultiplier" : 0.2,
+		"maxProductStorage" : 35,
+		"productionRate" : 0.075
+	},
+	"-37" : {
+		"producedMaterial" : 125,
+		"consumedMaterial" : 104,
+		"maxLvl" : 10,
+		"upgradeRequirement" : 5,
+		"upgradeProductionMultiplier" : 0.1,
+		"upgradeRequirementMultiplier" : 0.07,
+		"maxProductStorage" : 10,
+		"productionRate" : 0.25,
+		"consumptionRate": 0.26
+	},
+	"-38" : {
+		"producedMaterial" : 126,
+		"consumedMaterial" : 104,
+		"maxLvl" : 10,
+		"upgradeRequirement" : 10,
+		"upgradeProductionMultiplier" : 0.1,
+		"upgradeRequirementMultiplier" : 0.07,
+		"maxProductStorage" : 10,
+		"productionRate" : 0.25,
+		"consumptionRate": 0.3
+	},
+	"-39" : {
+		"producedMaterial" : 127,
+		"consumedMaterial" : 104,
+		"maxLvl" : 10,
+		"upgradeRequirement" : 5,
+		"upgradeProductionMultiplier" : 0.1,
+		"upgradeRequirementMultiplier" : 0.07,
+		"maxProductStorage" : 10,
+		"productionRate" : 0.25,
+		"consumptionRate": 0.3
+	}
+}

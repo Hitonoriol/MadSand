@@ -1,4 +1,4 @@
-world.worldGen:initPosition():setBiome(0):skipLandPropGen():generate();
+world:getWorldGenerator():initPosition():setBiome(0):skipLandPropGen():generate();
 
 local map = world:getCurLoc();
 local player = world.player;

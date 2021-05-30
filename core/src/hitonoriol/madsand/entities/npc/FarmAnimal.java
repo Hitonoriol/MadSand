@@ -1,7 +1,7 @@
 package hitonoriol.madsand.entities.npc;
 
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.map.CellInfo;
+import hitonoriol.madsand.gui.textgenerator.CellInfoGenerator;
 import hitonoriol.madsand.map.ItemProducer;
 import hitonoriol.madsand.properties.NpcContainer;
 
@@ -20,7 +20,7 @@ public class FarmAnimal extends AbstractNpc {
 	@Override
 	public String getInfoString() {
 		StringBuilder sb = new StringBuilder();
-		CellInfo.getProdStationInfo(sb, animalProduct);
+		CellInfoGenerator.getItemProducerInfo(sb, animalProduct);
 		return sb.toString() + super.getInfoString();
 	}
 
