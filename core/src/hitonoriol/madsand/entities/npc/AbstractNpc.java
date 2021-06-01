@@ -180,7 +180,7 @@ public abstract class AbstractNpc extends Entity {
 	}
 
 	public boolean isNeutral() {
-		if (state == State.Hostile)
+		if (state == State.Hostile || provoked)
 			return false;
 
 		return friendly || state != State.Hostile;

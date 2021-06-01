@@ -515,6 +515,9 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public boolean move(Direction dir) {
+		if (isDead())
+			return false;
+
 		if (dir.isDiagonal())
 			return false;
 
@@ -549,6 +552,10 @@ public abstract class Entity extends MapEntity {
 
 		if (!isMoving())
 			pollMovementQueue();
+	}
+
+	public boolean isDead() {
+		return stats.dead;
 	}
 
 	public int tileDmg() {

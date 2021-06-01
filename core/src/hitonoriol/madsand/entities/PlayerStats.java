@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
 import hitonoriol.madsand.entities.equipment.Equipment;
 import hitonoriol.madsand.entities.inventory.EquipStats;
@@ -56,11 +57,15 @@ public class PlayerStats extends Stats {
 		perTickStaminaCheck();
 
 		if (getHpPercent() > MIN_HP_AUTODAMAGE_PERCENT) {
-			if (getStaminaPercent() < staminaLowPercent && !skills.skillRoll(Skill.Survival))
+			if (getStaminaPercent() < staminaLowPercent && !skills.skillRoll(Skill.Survival)) {
 				owner.damage(STAMINA_DMG);
+				MadSand.warn("You are exhausted");
+			}
 
-			if (food <= 0)
+			if (food <= 0) {
 				owner.damage(STARVE_DMG);
+				MadSand.warn("You are starving");
+			}
 		}
 
 		if (isSatiated() && skills.skillRoll(Skill.Survival))

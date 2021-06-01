@@ -16,6 +16,7 @@ import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.gui.OverlayMouseoverListener;
+import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.Tile;
@@ -23,6 +24,7 @@ import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
+import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
 
 public class ActionButton extends Table {
@@ -74,6 +76,7 @@ public class ActionButton extends Table {
 			action.run();
 			hideButton();
 			Gui.gameResumeFocus();
+			Utils.scheduleTask(() -> Gdx.graphics.requestRendering(), 0.125f);
 		});
 	}
 
@@ -108,13 +111,12 @@ public class ActionButton extends Table {
 	}
 
 	public void refresh() {
-		if (Gui.isGameUnfocused()) {
+		if (Gui.isGameUnfocused() || Keyboard.inputIgnored()) {
 			hideButton();
 			return;
 		}
 
 		Map loc = MadSand.world.getCurLoc();
-
 		Player player = World.player;
 		Pair coords = new Pair(player.x, player.y);
 

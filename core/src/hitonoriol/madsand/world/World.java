@@ -705,6 +705,7 @@ public class World {
 
 		Utils.scheduleTask(() -> {
 			Gui.overlay.refreshActionButton();
+
 			if (timeSkip)
 				endTimeSkip();
 		}, maxDelay.getValue() + 0.01f);

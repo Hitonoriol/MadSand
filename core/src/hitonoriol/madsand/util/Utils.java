@@ -58,13 +58,15 @@ public class Utils {
 	}
 
 	public static Timer.Task scheduleTask(Timer timer, Runnable task, float delaySec) {
-		Timer.Task timerTask;
-		timer.scheduleTask(timerTask = createTask(task), delaySec);
-		return timerTask;
+		return timer.scheduleTask(createTask(task), delaySec);
 	}
 
 	public static Timer.Task scheduleTask(Runnable task, float delaySec) {
 		return scheduleTask(Timer.instance(), task, delaySec);
+	}
+
+	public static Timer.Task scheduleRepeatingTask(Runnable task, float intervalSec) {
+		return Timer.instance().scheduleTask(createTask(task), 0, intervalSec);
 	}
 
 	public static float timeToExecution(Timer.Task task) {
@@ -324,6 +326,10 @@ public class Utils {
 		if (value < 1)
 			return 0;
 		return Math.log(value) / Math.log(base);
+	}
+
+	public static boolean builderEquals(StringBuilder builder, String contents) {
+		return builder.length() == contents.length() && builder.indexOf(contents) == 0;
 	}
 
 	public static StringBuilder clearBuilder(StringBuilder sb) {

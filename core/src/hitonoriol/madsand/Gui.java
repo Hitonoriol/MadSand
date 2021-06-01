@@ -294,13 +294,29 @@ public class Gui {
 				.findFirst().orElse(-1);
 	}
 
-	public static float getTextWidth(String text, int fontSize) {
+	private static GlyphLayout modifyGlyph(String text, int fontSize) {
 		glyphLayout.setText(getFont(fontSize), text);
-		return glyphLayout.width;
+		return glyphLayout;
+	}
+
+	private static GlyphLayout modifyGlyph(String text) {
+		return modifyGlyph(text, FONT_S);
+	}
+
+	public static float getTextWidth(String text, int fontSize) {
+		return modifyGlyph(text, fontSize).width;
 	}
 
 	public static float getTextWidth(String text) {
 		return getTextWidth(text, FONT_S);
+	}
+
+	public static float getTextHeight(String text) {
+		return modifyGlyph(text).height;
+	}
+
+	public static float getTextHeight(String text, int fontSize) {
+		return modifyGlyph(text, fontSize).height;
 	}
 
 	public static ProgressBarStyle createProgressBarStyle(float width, float height, Color color, boolean transparent) {

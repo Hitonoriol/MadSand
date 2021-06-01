@@ -11,7 +11,7 @@ public abstract class TooltipTextGenerator {
 	public abstract void update(int x, int y);
 
 	public String getText() {
-		if (builder.indexOf(text) != -1)
+		if (Utils.builderEquals(builder, text))
 			return text;
 
 		return text = builder.toString();
