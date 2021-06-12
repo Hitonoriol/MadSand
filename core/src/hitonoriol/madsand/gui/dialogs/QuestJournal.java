@@ -13,13 +13,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.map.Map;
-import hitonoriol.madsand.world.World;
 
 public class QuestJournal extends GameDialog {
 
@@ -116,7 +116,7 @@ public class QuestJournal extends GameDialog {
 		Label questName, questObjective, npcInfo;
 		AbstractNpc npc;
 		for (Quest quest : allQuests) {
-			quest.setPlayer(World.player);
+			quest.setPlayer(MadSand.player());
 			questName = new Label(quest.name, skin);
 			questName.setWrap(true);
 			questName.setAlignment(Align.topLeft);

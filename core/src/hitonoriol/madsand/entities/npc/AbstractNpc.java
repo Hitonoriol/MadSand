@@ -29,7 +29,6 @@ import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.pathfinding.Path;
 import hitonoriol.madsand.properties.NpcContainer;
 import hitonoriol.madsand.util.Utils;
-import hitonoriol.madsand.world.World;
 
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
@@ -127,7 +126,7 @@ public abstract class AbstractNpc extends Entity {
 	private int CAN_GIVE_QUESTS_CHANCE = 30;
 
 	void loadProperties(NpcContainer properties) {
-		int maxLvl = World.player.getLvl() + MAX_LVL_GAP;
+		int maxLvl = MadSand.player().getLvl() + MAX_LVL_GAP;
 		int lvl = Utils.rand(properties.lvl, maxLvl);
 
 		stats.roll(lvl);
@@ -196,9 +195,10 @@ public abstract class AbstractNpc extends Entity {
 	@Override
 	public boolean move(Direction dir) {
 		super.turn(dir);
-		boolean outOfView = distanceTo(World.player) > World.player.fov;
+		Entity player = MadSand.player();
+		boolean outOfView = distanceTo(player) > player.fov;
 		if (!outOfView)
-			outOfView |= !World.player.canSee(this) || MadSand.world.timeSkipInProgress();
+			outOfView |= !player.canSee(this) || MadSand.world.timeSkipInProgress();
 
 		if (isMoving() && !outOfView) {
 			queueMovement(dir);
@@ -207,7 +207,7 @@ public abstract class AbstractNpc extends Entity {
 		int originalX = this.x, originalY = this.y;
 
 		coords.set(x, y).addDirection(dir);
-		if (coords.x == World.player.x && coords.y == World.player.y)
+		if (coords.x == player.x && coords.y == player.y)
 			return false;
 
 		if (!super.move(dir))
@@ -264,7 +264,7 @@ public abstract class AbstractNpc extends Entity {
 	@Override
 	public void meleeAttack(Direction dir) {
 		Pair coords = new Pair(x, y).addDirection(dir);
-		Player player = World.player;
+		Player player = MadSand.player();
 		if (player.stats.dead)
 			return;
 		if (!(player.x == coords.x && player.y == coords.y))
@@ -380,7 +380,7 @@ public abstract class AbstractNpc extends Entity {
 	}
 
 	public void act(float time) {
-		boolean badRep = World.player.getReputation().isHostile(stats.faction);
+		boolean badRep = MadSand.player().getReputation().isHostile(stats.faction);
 		tickCharge += (timePassed = time);
 
 		if (pauseFlag) {
@@ -419,7 +419,7 @@ public abstract class AbstractNpc extends Entity {
 		else
 			prevTickCharge = tickCharge;
 
-		Player player = World.player;
+		Player player = MadSand.player();
 		double dist = distanceTo(player);
 
 		switch (state) {
@@ -474,9 +474,9 @@ public abstract class AbstractNpc extends Entity {
 	}
 
 	public String getInfoString() {
-		String info = super.getInfoString();
+		String info = super.getInfoString() + Resources.LINEBREAK;
 
-		if (World.player.knowsNpc(id))
+		if (MadSand.player().knowsNpc(id))
 			info += "Faction: " + stats.faction + Resources.LINEBREAK;
 
 		if (canGiveQuests && isNeutral())

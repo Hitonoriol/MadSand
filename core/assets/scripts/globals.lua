@@ -4,7 +4,6 @@ script_dir = ...;
 structure_header = "structure/structure.lua";
 root_package = "hitonoriol.madsand";
 
-player = world.player;
 stats = player.stats;
 
 stamina_tutorial = "LowStamina";

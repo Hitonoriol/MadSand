@@ -6,21 +6,21 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.gui.widgets.StatLabels;
-import hitonoriol.madsand.world.World;
 
 public class LevelupDialog extends PlayerStatDialog {
 	static String title = "Level Up!";
 	static String okButtonText = "Done";
 
 	private LevelupDialog(Stage stage, StatLabels statLabels, String title) {
-		super(stage, statLabels, title, World.player.stats.baseStats.maxStatSum - 1);
+		super(stage, statLabels, title, MadSand.player().stats.baseStats.maxStatSum - 1);
 	}
 
 	public LevelupDialog() {
 		this(Gui.overlay, new StatLabels(), title);
 		super.nameField.setDisabled(true);
-		super.nameField.setText(World.player.stats.name);
+		super.nameField.setText(MadSand.player().stats.name);
 		TextButton okButton = new TextButton(okButtonText, Gui.skin);
 		super.add(okButton).width(Gui.defLblWidth).row();
 

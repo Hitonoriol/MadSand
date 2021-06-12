@@ -8,7 +8,6 @@ import hitonoriol.madsand.HotbarAssignable;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.world.World;
 
 public class ActiveAbility extends Ability implements HotbarAssignable {
 
@@ -17,7 +16,7 @@ public class ActiveAbility extends Ability implements HotbarAssignable {
 
 	@Override
 	public void apply() {
-		Player player = World.player;
+		Player player = MadSand.player();
 		if (player.stats.stamina < staminaCost) {
 			MadSand.warn("You don't have enough stamina to use this ability!");
 			return;

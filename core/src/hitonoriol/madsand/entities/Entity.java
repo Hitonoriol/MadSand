@@ -726,7 +726,7 @@ public abstract class Entity extends MapEntity {
 	@JsonIgnore
 	public String getInfoString() {
 		String ret = "";
-		ret += "Health: " + getHealthState() + Resources.LINEBREAK;
+		ret += "Health: " + getHealthState();
 		return ret;
 	}
 

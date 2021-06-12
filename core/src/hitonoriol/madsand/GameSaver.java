@@ -21,9 +21,9 @@ import hitonoriol.madsand.world.WorldMapSaver;
 
 public class GameSaver {
 	public static String SECTOR_DELIM = "!";
-	public final static long saveFormatVersion = 8;
+	public final static long saveFormatVersion = 9;
 
-	public static void saveWorld() {
+	public static void save() {
 		World world = MadSand.world();
 		if (world.inEncounter) {
 			Gui.drawOkDialog("You can't save during an encounter!");
@@ -32,13 +32,13 @@ public class GameSaver {
 		GameSaver.createDirs();
 		world.logout();
 		saveLog();
-		if (saveLocation() && saveCharacter())
+		if (saveLocation() && saveWorld())
 			MadSand.print("Game saved!");
 		else
 			MadSand.print("Couldn't save the game. Check logs.");
 	}
 
-	public static boolean loadWorld(String filename) {
+	public static boolean load(String filename) {
 		MadSand.WORLDNAME = filename;
 		File f = new File(MadSand.MAPDIR + filename);
 
@@ -51,7 +51,7 @@ public class GameSaver {
 		MadSand.initNewGame();
 		createDirs();
 
-		if (!loadCharacter()) {
+		if (!loadWorld()) {
 			loadErrMsg();
 			return false;
 		}
@@ -108,18 +108,17 @@ public class GameSaver {
 		return loadLocation(world.wx(), world.wy());
 	}
 
-	private static boolean saveCharacter() {
+	private static boolean saveWorld() {
 		try {
-			String fl = getCurSaveDir() + MadSand.PLAYERFILE;
-			String wfl = getCurSaveDir() + MadSand.WORLDFILE;
-			Player player = World.player;
+			File worldFile = new File(getCurSaveDir() + MadSand.WORLDFILE);
+			Player player = MadSand.player();
 
 			if (player.newlyCreated)
 				player.newlyCreated = false;
 
 			player.stats.equipment.setStatBonus(false);
-			Resources.mapper.writeValue(new File(fl), player);
-			Resources.mapper.writeValue(new File(wfl), MadSand.world());
+			/*Resources.mapper.writeValue(new File(fl), player);*/
+			Resources.mapper.writeValue(worldFile, MadSand.world());
 			player.stats.equipment.setStatBonus(true);
 
 			return true;
@@ -129,18 +128,17 @@ public class GameSaver {
 		}
 	}
 
-	private static boolean loadCharacter() {
+	private static boolean loadWorld() {
 		try {
-			Utils.out("Loading character...");
-			String fl = getCurSaveDir() + MadSand.PLAYERFILE;
-			String wfl = getCurSaveDir() + MadSand.WORLDFILE;
+			Utils.out("Loading world...");
+			String worldFile = getCurSaveDir() + MadSand.WORLDFILE;
 
-			MadSand.world = Resources.mapper.readValue(readFile(wfl), World.class);
-			MadSand.world.initWorld();
-			World.player = Resources.mapper.readValue(readFile(fl), Player.class);
-			World.player.postLoadInit();
+			World world = Resources.mapper.readValue(readFile(worldFile), World.class);
+			world.initWorld();
+			world.getPlayer().postLoadInit();
+			MadSand.world = world;
 
-			Utils.out("Done loading character.");
+			Utils.out("Done loading world.");
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

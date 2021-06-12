@@ -78,7 +78,6 @@ import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.Location;
 import hitonoriol.madsand.world.WorkerType;
-import hitonoriol.madsand.world.World;
 
 public class Player extends Entity {
 	@JsonIgnore
@@ -214,7 +213,7 @@ public class Player extends Entity {
 		if (abilityKeyBinds.getOrDefault(key, -1) != abilityId)
 			abilityKeyBinds.put(key, abilityId);
 
-		Gui.overlay.hotbar.addEntry(World.player.getAbility(abilityId).as(ActiveAbility.class).get());
+		Gui.overlay.hotbar.addEntry(MadSand.player().getAbility(abilityId).as(ActiveAbility.class).get());
 		Keyboard.getKeyBindManager().bind(key, () -> MadSand.player().getAbility(abilityId).apply());
 	}
 

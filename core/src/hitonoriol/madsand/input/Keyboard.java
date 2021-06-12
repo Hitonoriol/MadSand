@@ -49,7 +49,7 @@ public class Keyboard {
 			else
 				MadSand.switchScreen(MadSand.mainMenu);
 		})
-				.bind(Keys.G, () -> GameSaver.saveWorld());
+				.bind(Keys.G, () -> GameSaver.save());
 
 		/* Debug keys */
 		keyBinds.bind(Keys.Z, () -> Globals.debugMode = !Globals.debugMode)
@@ -112,20 +112,21 @@ public class Keyboard {
 	}
 
 	private static void pollMovementKeys() {
+		Player player = MadSand.player();
 		if (Gdx.input.isKeyPressed(Keys.A))
-			World.player.walk(Direction.LEFT);
+			player.walk(Direction.LEFT);
 
 		else if (Gdx.input.isKeyPressed(Keys.D))
-			World.player.walk(Direction.RIGHT);
+			player.walk(Direction.RIGHT);
 
 		else if (Gdx.input.isKeyPressed(Keys.W))
-			World.player.walk(Direction.UP);
+			player.walk(Direction.UP);
 
 		else if (Gdx.input.isKeyPressed(Keys.S))
-			World.player.walk(Direction.DOWN);
+			player.walk(Direction.DOWN);
 
 		if (Keyboard.movementKeyJustPressed())
-			World.player.attackHostile();
+			player.attackHostile();
 	}
 
 	private static boolean movementKeyJustPressed() {
@@ -172,7 +173,7 @@ public class Keyboard {
 			}
 
 			else if (key == Keys.W)
-				World.player.skipTime();
+				MadSand.player().skipTime();
 		}
 	}
 

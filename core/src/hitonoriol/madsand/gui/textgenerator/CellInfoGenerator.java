@@ -16,7 +16,6 @@ import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.util.Utils;
-import hitonoriol.madsand.world.World;
 
 public class CellInfoGenerator extends TooltipTextGenerator {
 	private int x, y;
@@ -52,7 +51,7 @@ public class CellInfoGenerator extends TooltipTextGenerator {
 	public void update(int x, int y) {
 		this.x = x;
 		this.y = y;
-		player = World.player;
+		player = MadSand.player();
 		loc = MadSand.world.getCurLoc();
 		npc = loc.getNpc(x, y);
 		tile = loc.getTile(x, y);

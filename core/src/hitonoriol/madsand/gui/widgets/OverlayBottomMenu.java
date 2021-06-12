@@ -22,7 +22,6 @@ import hitonoriol.madsand.gui.dialogs.LandDialog;
 import hitonoriol.madsand.gui.dialogs.QuestJournal;
 import hitonoriol.madsand.gui.stages.Overlay;
 import hitonoriol.madsand.input.Keyboard;
-import hitonoriol.madsand.world.World;
 
 public class OverlayBottomMenu extends Table {
 
@@ -41,10 +40,10 @@ public class OverlayBottomMenu extends Table {
 
 		addButton("Character", Keys.Q, () -> new CharacterInfoWindow().getDialog());
 		addButton("Inventory", Keys.E, () -> MadSand.player().inventory.getUI());
-		addButton("Abilities", Keys.R, () -> new AbilityDialog(World.player.getAbilities()));
-		addButton("Journal", Keys.J, () -> new QuestJournal(World.player.getQuestWorker()));
+		addButton("Abilities", Keys.R, () -> new AbilityDialog(MadSand.player().getAbilities()));
+		addButton("Journal", Keys.J, () -> new QuestJournal(MadSand.player().getQuestWorker()));
 		addButton("Build", Keys.B, () -> new BuildDialog());
-		addButton("Bestiary", Keys.X, () -> new BestiaryDialog(World.player));
+		addButton("Bestiary", Keys.X, () -> new BestiaryDialog(MadSand.player()));
 		addButton("Land", Keys.L, () -> new LandDialog(MadSand.world.getLocation()));
 
 		container.setBackground(new NinePatchDrawable(Gui.darkBackgroundSizeable));

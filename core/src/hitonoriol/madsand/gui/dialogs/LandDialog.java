@@ -25,7 +25,6 @@ import hitonoriol.madsand.world.Location;
 import hitonoriol.madsand.world.Settlement;
 import hitonoriol.madsand.world.Settlement.WorkerContainer;
 import hitonoriol.madsand.world.WorkerType;
-import hitonoriol.madsand.world.World;
 
 public class LandDialog extends GameDialog {
 
@@ -78,7 +77,7 @@ public class LandDialog extends GameDialog {
 	}
 
 	private void addSettlementCreationMenu(Table container) {
-		Player player = World.player;
+		Player player = MadSand.player();
 		ArrayList<Item> reqItems = player.getSettlementCreationReq();
 
 		container.add("There's no civilization nearby").align(Align.center).row();

@@ -18,7 +18,6 @@ import hitonoriol.madsand.properties.NpcContainer;
 import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.properties.WorldGenProp;
 import hitonoriol.madsand.util.Utils;
-import hitonoriol.madsand.world.World;
 import hitonoriol.madsand.world.worldgen.OverworldPreset;
 
 public class ProceduralQuest extends Quest {
@@ -70,7 +69,7 @@ public class ProceduralQuest extends Quest {
 			randomHuntQuest();
 			break;
 		case Craft:
-			if (World.player.getCraftRecipes().isEmpty()) {
+			if (MadSand.player().getCraftRecipes().isEmpty()) {
 				generate();
 				return;
 			}
@@ -98,7 +97,7 @@ public class ProceduralQuest extends Quest {
 
 	@JsonIgnore
 	private double getLvlFactor() {
-		double lvl = World.player.getLvl() + 3d;
+		double lvl = MadSand.player().getLvl() + 3d;
 		return (Math.sqrt(Utils.log(lvl, 3)) - 1d) / 10d;
 	}
 
@@ -166,7 +165,7 @@ public class ProceduralQuest extends Quest {
 	}
 
 	private void randomCraftQuest() {
-		randomItemQuest(World.player.getCraftRecipes());
+		randomItemQuest(MadSand.player().getCraftRecipes());
 	}
 
 	private void randomFetchQuest() {

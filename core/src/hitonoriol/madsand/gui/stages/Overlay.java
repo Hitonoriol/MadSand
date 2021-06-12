@@ -220,7 +220,7 @@ public class Overlay extends Stage {
 	}
 
 	private void refreshQuestArrows() {
-		Player player = World.player;
+		Player player = MadSand.player();
 		Iterator<QuestArrow> it = questArrows.iterator();
 		QuestArrow arrow;
 		boolean objectiveDone;
@@ -260,7 +260,7 @@ public class Overlay extends Stage {
 	}
 
 	public void refresh() {
-		Player player = World.player;
+		Player player = MadSand.player();
 		PlayerStats stats = player.stats;
 
 		hpBar.setRange(0, stats.mhp).setValue(stats.hp);

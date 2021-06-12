@@ -44,7 +44,6 @@ import hitonoriol.madsand.properties.WorldGenProp;
 import hitonoriol.madsand.util.Functional;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.Location;
-import hitonoriol.madsand.world.World;
 import hitonoriol.madsand.world.worldgen.OverworldPreset;
 import hitonoriol.madsand.world.worldgen.RollList;
 import hitonoriol.madsand.world.worldgen.WorldGenPreset;
@@ -328,7 +327,7 @@ public class Map {
 	}
 
 	public Pair getRandomPoint(int distanceFromPlayer, int maxDistanceFromPlayer) {
-		Player player = World.player;
+		Player player = MadSand.player();
 		int x, y;
 		int distance;
 
@@ -1133,7 +1132,7 @@ public class Map {
 	}
 
 	private void spawnFromRollList(RollList list, double chance) {
-		spawnFromRollList(list, chance, World.player.fov);
+		spawnFromRollList(list, chance, MadSand.player().fov);
 	}
 
 	public void naturalRegeneration() {

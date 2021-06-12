@@ -53,7 +53,7 @@ public class Settlement {
 	@JsonIgnore
 	public int getHireCost() {
 		return (int) (Math.sqrt(getPopulation() + 1d) * BASE_HIRE_COST
-				* (1d + Math.sqrt(World.player.getEstablishedSettlements()) / 25d));
+				* (1d + Math.sqrt(MadSand.player().getEstablishedSettlements()) / 25d));
 	}
 
 	public boolean isOccupied(long npcUid) {
@@ -173,7 +173,7 @@ public class Settlement {
 
 	@JsonIgnore
 	public String getLeaderName() {
-		return playerOwned ? World.player.stats.name : MadSand.world.getCurLoc().getNpc(leaderUid).stats.name;
+		return playerOwned ? MadSand.player().stats.name : MadSand.world.getCurLoc().getNpc(leaderUid).stats.name;
 	}
 
 	public static class WorkerContainer { // Info about all workers of certain type

@@ -1,8 +1,8 @@
 package hitonoriol.madsand.screens;
 
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.gui.stages.DeathStage;
 import hitonoriol.madsand.util.Utils;
-import hitonoriol.madsand.world.World;
 
 public class DeathScreen extends AbstractScreen<DeathStage> {
 
@@ -16,7 +16,7 @@ public class DeathScreen extends AbstractScreen<DeathStage> {
 	@Override
 	public void show() {
 		super.show();
-		stage.setDeathMessage("You survived " + Utils.timeString(World.player.getSurvivedTime()));
+		stage.setDeathMessage("You survived " + Utils.timeString(MadSand.player().getSurvivedTime()));
 	}
 
 	@Override

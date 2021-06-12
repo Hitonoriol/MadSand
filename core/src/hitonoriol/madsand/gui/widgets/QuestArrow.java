@@ -12,7 +12,6 @@ import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.map.Map;
-import hitonoriol.madsand.world.World;
 
 public class QuestArrow extends Image {
 	static float RADIUS = 100;
@@ -42,7 +41,7 @@ public class QuestArrow extends Image {
 	public void update() {
 		AbstractNpc npc = quest.getNpc();
 		if (!npc.equals(Map.nullNpc))
-			update(World.player.x, World.player.y, npc.x, npc.y);
+			update(MadSand.player().x, MadSand.player().y, npc.x, npc.y);
 		else {
 			Pair curWCoords = MadSand.world.getCurWPos();
 			Pair npcWCoords = quest.npcWorldPos;

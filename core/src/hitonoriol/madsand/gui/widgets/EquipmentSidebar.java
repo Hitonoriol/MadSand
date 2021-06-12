@@ -9,12 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
 import hitonoriol.madsand.entities.inventory.ItemUI;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.OverlayMouseoverListener;
-import hitonoriol.madsand.world.World;
 
 public class EquipmentSidebar extends Table {
 	public static final int EQ_SLOTS = 6;
@@ -82,7 +82,7 @@ public class EquipmentSidebar extends Table {
 		case MainHand:
 			itemDisplay.addListener(new ClickListener(Buttons.LEFT) {
 				public void clicked(InputEvent event, float x, float y) {
-					World.player.useItem(item);
+					MadSand.player().useItem(item);
 				}
 			});
 			break;
@@ -96,7 +96,7 @@ public class EquipmentSidebar extends Table {
 
 	public void refresh() {
 		for (ItemUI itemUI : equip)
-			if (!World.player.hasItem(itemUI.getItem()))
+			if (!MadSand.player().hasItem(itemUI.getItem()))
 				clearSlot(itemUI.getItem().getEquipSlot());
 
 	}

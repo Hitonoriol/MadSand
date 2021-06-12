@@ -7,10 +7,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.util.Utils;
-import hitonoriol.madsand.world.World;
 
 public class StatLabels {
 	public List<StatLabel> labels = new ArrayList<>();
@@ -18,7 +18,7 @@ public class StatLabels {
 	public Label freeStatPointsLbl;
 	public Label hpStatLbl, staminaStatLbl;
 
-	public PlayerStats stats = World.player.stats;
+	public PlayerStats stats = MadSand.player().stats;
 
 	public StatLabels(Skin skin) {
 

@@ -14,7 +14,6 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
-import hitonoriol.madsand.world.World;
 
 public class CreateWorldDialog extends GameDialog {
 
@@ -89,7 +88,7 @@ public class CreateWorldDialog extends GameDialog {
 
 					MadSand.worldEntered();
 
-					World.player.updCoords();
+					MadSand.player().updCoords();
 					remove();
 					Gui.overlay.createCharDialog();
 					Gdx.graphics.setContinuousRendering(false);

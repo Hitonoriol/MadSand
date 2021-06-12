@@ -16,11 +16,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.minigames.Card;
 import hitonoriol.madsand.minigames.CardGameUI;
 import hitonoriol.madsand.minigames.videopoker.PokerHand.Combination;
-import hitonoriol.madsand.world.World;
 
 public class VideoPokerUI extends CardGameUI {
 
@@ -63,7 +63,7 @@ public class VideoPokerUI extends CardGameUI {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				showBetDialog(bet -> {
-					World.player.inventory.delItem(currency, bet);
+					MadSand.player().inventory.delItem(currency, bet);
 					startGame(bet);
 				});
 			}
@@ -83,7 +83,7 @@ public class VideoPokerUI extends CardGameUI {
 		createCardImages();
 		refreshCardTable();
 		combLabel.setText(combLabel.getText() + ": You win " + videoPoker.bank + " " + currencyName + "s!");
-		World.player.addItem(currency, videoPoker.bank);
+		MadSand.player().addItem(currency, videoPoker.bank);
 		drawButton.setVisible(false);
 		betButton.setVisible(true);
 	}

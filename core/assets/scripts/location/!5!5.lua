@@ -1,7 +1,6 @@
 world:getWorldGenerator():initPosition():setBiome(0):skipLandPropGen():generate();
 
 local map = world:getCurLoc();
-local player = world.player;
 
 for i = 1,4 do
 	map:spawnMobs(true, true);

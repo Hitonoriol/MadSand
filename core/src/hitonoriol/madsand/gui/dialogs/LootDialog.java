@@ -9,19 +9,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.ItemUI;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.map.Loot;
-import hitonoriol.madsand.world.World;
 
 public class LootDialog extends GameDialog {
 	private static int ITEMS_PER_ROW = 5;
 	private static int TABLE_PADDING = 25;
 
-	Player player = World.player;
+	Player player = MadSand.player();
 	Table lootTable = new Table(Gui.skin);
 	Loot loot;
 

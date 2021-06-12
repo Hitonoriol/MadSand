@@ -5,7 +5,6 @@ import java.util.HashMap;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.util.Utils;
-import hitonoriol.madsand.world.World;
 
 public class SkillContainer extends HashMap<Skill, SkillValue> {
 	public final static int MAX_SKILL_LVL = 100; // max effective lvl (possible to get higher lvls, but lvl bonuses won't increase further than this)
@@ -43,7 +42,7 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 			MadSand.notice(skill.toString() + " increased!");
 
 			if (skill.equals(Skill.Level)) {
-				World.player.stats.baseStats.increaseMaxStatSum();
+				MadSand.player().stats.baseStats.increaseMaxStatSum();
 				Gui.overlay.levelUpDialog();
 			}
 		}

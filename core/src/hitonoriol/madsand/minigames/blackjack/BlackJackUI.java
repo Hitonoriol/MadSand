@@ -9,13 +9,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Timer;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.minigames.Card;
 import hitonoriol.madsand.minigames.CardGameUI;
 import hitonoriol.madsand.minigames.Hand;
 import hitonoriol.madsand.minigames.blackjack.BlackJack.GameResult;
 import hitonoriol.madsand.minigames.blackjack.BlackJack.PlayerAction;
-import hitonoriol.madsand.world.World;
 
 public class BlackJackUI extends CardGameUI {
 	BlackJack blackjack = new BlackJack();
@@ -40,7 +40,7 @@ public class BlackJackUI extends CardGameUI {
 		super.skipLine();
 		super.skipLine();
 
-		super.add(World.player.stats.name).padBottom(PAD).row();
+		super.add(MadSand.player().stats.name).padBottom(PAD).row();
 		super.add(betLabel).row();
 		super.skipLine();
 		super.add(playerCards).height(Card.HEIGHT).padBottom(PAD).row();
@@ -94,7 +94,7 @@ public class BlackJackUI extends CardGameUI {
 
 	protected void endGame() {
 		super.endGame();
-		World.player.addItem(currency, blackjack.bank);
+		MadSand.player().addItem(currency, blackjack.bank);
 		buttonTable.setVisible(false);
 		betButton.setVisible(true);
 		GameResult result = blackjack.gameResult;
@@ -127,7 +127,7 @@ public class BlackJackUI extends CardGameUI {
 		stopGame();
 		super.showBetDialog(bet -> {
 			if (bet > 0) {
-				World.player.inventory.delItem(currency, bet);
+				MadSand.player().inventory.delItem(currency, bet);
 				blackjack.startGame(bet);
 				setBetText(bet);
 				buttonTable.setVisible(true);

@@ -25,7 +25,6 @@ import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.properties.ObjectProp;
-import hitonoriol.madsand.world.World;
 
 public class BuildDialog extends GameDialog {
 
@@ -47,7 +46,7 @@ public class BuildDialog extends GameDialog {
 		super.add(unlockProgressLabel).width(WIDTH).row();
 		buildTable.setBackground(Gui.darkBackgroundSizeable);
 		BuildDialogEntry buildEntry;
-		Player player = World.player;
+		Player player = MadSand.player();
 		for (Entry<Integer, String> object : ObjectProp.buildRecipes.entrySet()) {
 			if (player.getBuildRecipes().contains(object.getKey())) {
 				buildEntry = new BuildDialogEntry(this, object.getKey(), object.getValue());
@@ -84,7 +83,7 @@ class BuildDialogEntry extends Group {
 	final float PAD = 10;
 	BuildDialog dialog;
 	Table container = new Table(Gui.skin);
-	Player player = World.player;
+	Player player = MadSand.player();
 	String recipe;
 	int id;
 

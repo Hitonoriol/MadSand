@@ -91,7 +91,7 @@ public class LoadWorldDialog extends GameDialog {
 				public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 					MadSand.WORLDNAME = worldName;
 					remove();
-					if (GameSaver.loadWorld(worldName)) {
+					if (GameSaver.load(worldName)) {
 						MadSand.switchScreen(MadSand.gameScreen);
 						MadSand.worldEntered();
 					}

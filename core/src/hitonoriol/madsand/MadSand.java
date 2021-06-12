@@ -88,7 +88,7 @@ public class MadSand extends Game {
 
 	public static void initNewGame() {
 		world = new World();
-		World.player.updCoords();
+		MadSand.player().updCoords();
 		Lua.init();
 		Gui.overlay.gameLog.clear();
 		world.generate();
@@ -158,7 +158,7 @@ public class MadSand extends Game {
 	}
 
 	public Player getPlayer() {
-		return world.player;
+		return world.getPlayer();
 	}
 
 	public static World world() {

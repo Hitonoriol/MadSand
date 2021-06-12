@@ -25,7 +25,6 @@ import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.pathfinding.Path;
-import hitonoriol.madsand.world.World;
 
 public class GameWorldRenderer {
 	static final int TILESIZE = MadSand.TILESIZE;
@@ -171,7 +170,7 @@ public class GameWorldRenderer {
 		AbstractNpc npc;
 		Tile tile;
 		MapObject object;
-		Player player = World.player;
+		Player player = MadSand.player();
 		boolean tileVisited;
 
 		int x, y;

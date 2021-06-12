@@ -48,7 +48,7 @@ public class World {
 
 	private Pair coords = new Pair();
 
-	private int MAX_PREVIOUS_LOCATIONS = 2; // Max amount of maps allowed to be in WorldMap at the same time
+	private final int MAX_PREVIOUS_LOCATIONS = 2; // Max amount of maps allowed to be in WorldMap at the same time
 	@JsonIgnore
 	private ArrayDeque<Pair> previousLocations = new ArrayDeque<>(); // Maps that are currently loaded in WorldMap
 
@@ -57,9 +57,7 @@ public class World {
 	@JsonIgnore
 	private WorldMapSaver worldMapSaver;
 
-	@JsonIgnore
-	public static Player player;
-
+	private Player player;
 	private WorldMap worldMap; // container of "Locations": maps grouped by world coords
 
 	@JsonIgnore
@@ -121,6 +119,14 @@ public class World {
 		}, realtimeTickRate, realtimeTickRate);
 
 		actDelayTimer = new Timer();
+	}
+
+	public Player getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(Player player) {
+		this.player = player;
 	}
 
 	public long getLogoutTimeStamp() {
@@ -338,7 +344,7 @@ public class World {
 		Utils.out("Switch location in direction " + dir);
 
 		if (!inEncounter)
-			GameSaver.saveWorld();
+			GameSaver.save();
 		else {
 			Utils.dbg("Removing encounter location");
 			worldMap.remove();

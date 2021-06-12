@@ -15,7 +15,6 @@ import hitonoriol.madsand.entities.skill.SkillContainer;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.util.Utils;
-import hitonoriol.madsand.world.World;
 
 /*
  * Progress bar that is displayed on interaction with objects (when gathering resources)
@@ -115,7 +114,7 @@ public class ResourceProgressBar extends TimedProgressBar {
 	}
 
 	public int gatherResources() {
-		damage = World.player.gatherResources(object);
+		damage = MadSand.player().gatherResources(object);
 		progressLabel.setText(Gui.overlay.gameLog.getLastPrintedLine());
 		return damage;
 	}
@@ -128,7 +127,7 @@ public class ResourceProgressBar extends TimedProgressBar {
 
 		Timer.instance().scheduleTask(wakeTask, WAKE_TIME, WAKE_TIME);
 
-		Player player = World.player;
+		Player player = MadSand.player();
 		Vector3 coords = new Vector3(player.x * MadSand.TILESIZE, player.y * MadSand.TILESIZE, 0);
 
 		MadSand.getCamera().project(coords);

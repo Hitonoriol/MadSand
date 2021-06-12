@@ -2,11 +2,11 @@ package hitonoriol.madsand.entities.inventory.item;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.entities.inventory.EquipStats;
 import hitonoriol.madsand.util.Utils;
-import hitonoriol.madsand.world.World;
 
 public abstract class CombatEquipment extends AbstractEquipment {
 	private static final int EQUIPMENT_HP_PER_LVL = 500;
@@ -29,7 +29,7 @@ public abstract class CombatEquipment extends AbstractEquipment {
 	}
 
 	protected CombatEquipment rollProperties() {
-		if (World.player.stats.luckRoll()) {
+		if (MadSand.player().stats.luckRoll()) {
 			++this.lvl;
 			name += " of " + Utils.randWord();
 		}

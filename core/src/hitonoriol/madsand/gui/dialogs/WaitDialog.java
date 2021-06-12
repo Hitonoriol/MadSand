@@ -8,7 +8,6 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.util.Utils;
-import hitonoriol.madsand.world.World;
 
 public class WaitDialog extends SliderDialog {
 
@@ -39,8 +38,8 @@ public class WaitDialog extends SliderDialog {
 				});
 
 		super.setConfirmAction(ticks -> {
-			World.player.inventory.delItem(Globals.getInt(Globals.TIMESKIP_ITEM), timeSkipItemSpent);
-			World.player.skipTicks(ticks);
+			MadSand.player().inventory.delItem(Globals.getInt(Globals.TIMESKIP_ITEM), timeSkipItemSpent);
+			MadSand.player().skipTicks(ticks);
 			MadSand.world.skipRealtimeTicks(realtimeTicks);
 			MadSand.notice("Skipped " + Utils.timeString(worldSeconds));
 		});

@@ -12,7 +12,6 @@ import hitonoriol.madsand.entities.inventory.CraftWorker;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.dialogs.ConfirmDialog;
 import hitonoriol.madsand.gui.dialogs.SliderDialog;
-import hitonoriol.madsand.world.World;
 
 public class CraftButton extends ItemButton {
 
@@ -44,7 +43,7 @@ public class CraftButton extends ItemButton {
 
 	@Override
 	protected ClickListener setButtonPressListener() {
-		Player player = World.player;
+		Player player = MadSand.player();
 		return Gui.setClickAction(this, () -> {
 			CraftWorker craftWorker = new CraftWorker(player, buttonItem);
 

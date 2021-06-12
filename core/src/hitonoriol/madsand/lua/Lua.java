@@ -16,7 +16,6 @@ import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.properties.Tutorial;
 import hitonoriol.madsand.util.Utils;
-import hitonoriol.madsand.world.World;
 
 public class Lua {
 
@@ -41,7 +40,7 @@ public class Lua {
 		register("item", CoerceJavaToLua.coerce(new Item()));
 		register("mouse", CoerceJavaToLua.coerce(new Mouse()));
 		register("world", CoerceJavaToLua.coerce(MadSand.world));
-		register("player", CoerceJavaToLua.coerce(World.player));
+		register("player", CoerceJavaToLua.coerce(MadSand.player()));
 		register("tutorial", CoerceJavaToLua.coerce(new Tutorial()));
 
 		executeScript("globals.lua", Resources.SCRIPT_DIR);

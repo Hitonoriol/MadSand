@@ -7,12 +7,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.dialogs.SliderDialog;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
-import hitonoriol.madsand.world.World;
 
 public class CardGameUI extends GameDialog {
 
@@ -30,12 +30,12 @@ public class CardGameUI extends GameDialog {
 	}
 
 	protected void showBetDialog(Consumer<Integer> confirmAction) {
-		if (!World.player.inventory.hasItem(currency, 1)) {
+		if (!MadSand.player().inventory.hasItem(currency, 1)) {
 			Gui.drawOkDialog("You don't have any money!");
 			endGame();
 			return;
 		}
-		new SliderDialog(World.player.inventory.getItem(currency).quantity)
+		new SliderDialog(MadSand.player().inventory.getItem(currency).quantity)
 				.setSliderTitle("Place your bet:")
 				.setOnUpdateText(currencyName + "s")
 				.setConfirmAction(confirmAction)

@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.world.World;
 
 public class DeathStage extends Stage {
 	Label titleLabel, deathMsgLabel;
@@ -35,7 +34,7 @@ public class DeathStage extends Stage {
 		super.addActor(container);
 
 		Gui.setAction(respawnButton, () -> {
-			World.player.respawn();
+			MadSand.player().respawn();
 			MadSand.world.updateLight();
 			MadSand.reset();
 		});

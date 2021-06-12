@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Faction;
 import hitonoriol.madsand.entities.Player;
@@ -21,7 +22,6 @@ import hitonoriol.madsand.entities.skill.SkillContainer;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.gui.widgets.StatLabels;
 import hitonoriol.madsand.gui.widgets.StatProgressBar;
-import hitonoriol.madsand.world.World;
 
 /*
  * Character info in-game menu 
@@ -51,10 +51,11 @@ public class CharacterInfoWindow {
 		Table scrollTable = new Table();
 		scrollTable.defaults().width(Gui.defLblWidth);
 		AutoFocusScrollPane dialogScroll = new AutoFocusScrollPane(scrollTable);
-		PlayerStats stats = World.player.stats;
-		Label nameLbl = new Label(World.player.stats.name, skin);
-		Label levelLbl = new Label("Level: " + World.player.stats.skills.getLvl(Skill.Level) + " ("
-				+ World.player.stats.skills.getExpString(Skill.Level) + ")", skin);
+		Player player = MadSand.player();
+		PlayerStats stats = player.stats;
+		Label nameLbl = new Label(player.stats.name, skin);
+		Label levelLbl = new Label("Level: " + player.stats.skills.getLvl(Skill.Level) + " ("
+				+ player.stats.skills.getExpString(Skill.Level) + ")", skin);
 
 		Gui.setFontSize(levelLbl, Gui.FONT_M);
 		Gui.setFontSize(nameLbl, Gui.FONT_M);
@@ -109,7 +110,7 @@ public class CharacterInfoWindow {
 		Table info = new Table(Gui.skin);
 		info.align(Align.left);
 		info.defaults().align(Align.left).padBottom(LINE_PAD);
-		Player player = World.player;
+		Player player = MadSand.player();
 		info.add("Creatures killed: " + player.getKillCount()).row();
 		info.add("Settlements established: " + player.getEstablishedSettlements()).row();
 		return info;
@@ -142,7 +143,7 @@ public class CharacterInfoWindow {
 					.setRange(-Reputation.RANGE, Reputation.RANGE)
 					.roundValues(false)
 					.setStatText("") // TODO: Reputation levels
-					.setValue(World.player.getReputation().get(faction))
+					.setValue(MadSand.player().getReputation().get(faction))
 					.setProgressSize(BAR_WIDTH, BAR_HEIGHT))
 					.size(BAR_WIDTH, BAR_HEIGHT)
 					.padBottom(LINE_PAD)
@@ -153,7 +154,7 @@ public class CharacterInfoWindow {
 
 	private Table createSkillTable() {
 		Label skillLbl;
-		SkillContainer skills = World.player.stats.skills;
+		SkillContainer skills = MadSand.player().stats.skills;
 		Table skillTable = new Table();
 		skillTable.align(Align.left);
 

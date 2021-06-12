@@ -11,7 +11,6 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.map.Map;
-import hitonoriol.madsand.world.World;
 
 public class GameContextMenu extends Table {
 	Skin skin;
@@ -29,7 +28,7 @@ public class GameContextMenu extends Table {
 	private void refresh() {
 		super.clear();
 		Map map = MadSand.world.getCurLoc();
-		Player player = World.player;
+		Player player = MadSand.player();
 		Item hand = player.stats.hand();
 
 		super.defaults().size(WIDTH, HEIGHT);
@@ -52,7 +51,7 @@ public class GameContextMenu extends Table {
 		if (clickX == player.x && clickY == player.y)
 			addButton("Rest fully", () -> player.restFully());
 		else
-			addButton("Turn", () -> World.player.lookAtMouse(clickX, clickY));
+			addButton("Turn", () -> MadSand.player().lookAtMouse(clickX, clickY));
 
 		if (!hand.equals(Item.nullItem))
 			addButton("Unequip " + hand.name, () -> player.freeHands());

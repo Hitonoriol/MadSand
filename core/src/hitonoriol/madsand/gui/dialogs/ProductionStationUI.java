@@ -19,7 +19,6 @@ import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.util.Utils;
-import hitonoriol.madsand.world.World;
 
 public class ProductionStationUI extends GameDialog {
 
@@ -84,7 +83,7 @@ public class ProductionStationUI extends GameDialog {
 	public ProductionStationUI(ItemProducer station) {
 		this(Gui.overlay);
 		this.station = station;
-		this.player = World.player;
+		this.player = MadSand.player();
 		consumedMaterial = ItemProp.getItemName(station.consumedMaterial);
 		producedMaterial = ItemProp.getItemName(station.producedMaterial);
 

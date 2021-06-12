@@ -30,7 +30,6 @@ import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.gui.widgets.TimedProgressBar;
 import hitonoriol.madsand.map.FishingSpot;
 import hitonoriol.madsand.util.Utils;
-import hitonoriol.madsand.world.World;
 import me.xdrop.jrand.JRand;
 
 public class FishingUI extends GameDialog {
@@ -65,8 +64,8 @@ public class FishingUI extends GameDialog {
 	public FishingUI(FishingSpot spot) {
 		this(Gui.overlay);
 		this.spot = spot;
-		baitId = World.player.stats.offHand().id;
-		maxFish += World.player.stats.skills.getLvl(Skill.Fishing);
+		baitId = MadSand.player().stats.offHand().id;
+		maxFish += MadSand.player().stats.skills.getLvl(Skill.Fishing);
 		super.setTitle("Fishing").centerTitle();
 		catchBar.setTriggerMode(false);
 		catchBar.setVisualInterpolation(Interpolation.fade);
@@ -111,7 +110,7 @@ public class FishingUI extends GameDialog {
 			return;
 
 		activeFish.remove();
-		Player player = World.player;
+		Player player = MadSand.player();
 		player.addItem(spot.catchFish());
 		player.stats.skills.increaseSkill(Skill.Fishing);
 		player.damageHeldEquipment();
@@ -119,7 +118,7 @@ public class FishingUI extends GameDialog {
 		if (!player.stats.skills.skillRoll(Skill.Fishing))
 			player.inventory.delItem(player.stats.offHand(), 1);
 
-		World.player.stats.equipment.refreshUI();
+		MadSand.player().stats.equipment.refreshUI();
 
 		if (!player.hasItem(baitId)) {
 			MadSand.warn("You're out of bait!");
@@ -132,7 +131,7 @@ public class FishingUI extends GameDialog {
 	}
 
 	private boolean spawnRoll() {
-		return Utils.percentRoll(World.player.stats.skills.getSkillRollPercent(Skill.Fishing) + 10);
+		return Utils.percentRoll(MadSand.player().stats.skills.getSkillRollPercent(Skill.Fishing) + 10);
 	}
 
 	private void initSpawner() {
@@ -223,7 +222,7 @@ public class FishingUI extends GameDialog {
 			animDuration = JRand.flt().range(ANIM_MIN, ANIM_MAX).gen();
 			lifeTime = -animDuration;
 
-			float skillTimeBonus = (float) World.player.stats.skills.getLvl(Skill.Fishing) / 25f;
+			float skillTimeBonus = (float) MadSand.player().stats.skills.getLvl(Skill.Fishing) / 25f;
 			catchTime = JRand.flt().range(minCatchTime + skillTimeBonus, maxCatchTime + skillTimeBonus).gen();
 
 			super.addAction(Actions.fadeIn(FADE_DUR));
@@ -231,7 +230,7 @@ public class FishingUI extends GameDialog {
 		}
 
 		private boolean catchRoll() {
-			return Utils.percentRoll(World.player.stats.skills.getSkillRollPercent(Skill.Fishing) + 5);
+			return Utils.percentRoll(MadSand.player().stats.skills.getSkillRollPercent(Skill.Fishing) + 5);
 		}
 
 		private void initAnimation() {

@@ -2,9 +2,9 @@ package hitonoriol.madsand.screens;
 
 import com.badlogic.gdx.Gdx;
 
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.PairFloat;
 import hitonoriol.madsand.gui.stages.MainMenuStage;
-import hitonoriol.madsand.world.World;
 
 public class MainMenu extends AbstractScreen<MainMenuStage> {
 
@@ -35,7 +35,7 @@ public class MainMenu extends AbstractScreen<MainMenuStage> {
 	}
 
 	private void initMenuAnimation() {
-		PairFloat playerPos = World.player.globalPos;
+		PairFloat playerPos = MadSand.player().globalPos;
 		gameWorld.setCamPosition(xmid = playerPos.x, ymid = playerPos.y);
 		gameWorld.updateCamPosition();
 	}

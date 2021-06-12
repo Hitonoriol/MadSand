@@ -13,6 +13,7 @@ import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
+import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.util.Utils;
@@ -71,6 +72,7 @@ public class Projectile extends LevelBoundItem {
 		to.toWorld();
 		Map map = MadSand.world.getCurLoc();
 		Utils.dbg("Projectile " + name + " will land on " + to.toString());
+		Keyboard.stopInput();
 
 		projectileImg.addAction(
 				Actions.sequence(
@@ -84,6 +86,7 @@ public class Projectile extends LevelBoundItem {
 										.ifPresent(entity -> entity.addActDelay(BASE_PROJECTILE_SPEED));
 							} else
 								map.putLoot(to.x, to.y, id, 1);
+							Keyboard.resumeInput();
 						}),
 						Actions.run(() -> projectileImg.remove())));
 	}

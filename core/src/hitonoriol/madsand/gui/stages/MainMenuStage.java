@@ -100,7 +100,7 @@ public class MainMenuStage extends Stage {
 		Gui.setAction(resumeButton, () -> MadSand.switchScreen(MadSand.gameScreen));
 
 		Gui.setAction(saveGameButton, () -> {
-			GameSaver.saveWorld();
+			GameSaver.save();
 			MadSand.switchScreen(MadSand.gameScreen);
 		});
 

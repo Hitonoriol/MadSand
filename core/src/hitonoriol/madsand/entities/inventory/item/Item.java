@@ -31,7 +31,6 @@ import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.util.Utils;
-import hitonoriol.madsand.world.World;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -216,7 +215,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 
 	@Override
 	public void hotbarAction() {
-		use(World.player);
+		use(MadSand.player());
 	}
 
 	// list string format: id1/quantity1:id2/quantity2:...

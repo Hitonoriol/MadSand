@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
@@ -15,7 +16,6 @@ import hitonoriol.madsand.gui.dialogs.ConfirmDialog;
 import hitonoriol.madsand.gui.dialogs.SliderDialog;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.util.Functional;
-import hitonoriol.madsand.world.World;
 
 public class InventoryUICell extends ItemUI {
 
@@ -29,7 +29,7 @@ public class InventoryUICell extends ItemUI {
 
 	static String equippedText = "[#387aff]E []";
 	private Label equippedLabel = new Label(equippedText, Gui.skin);
-	Player player = World.player;
+	Player player = MadSand.player();
 
 	public InventoryUICell(Item item) {
 		super(item);
@@ -63,7 +63,7 @@ public class InventoryUICell extends ItemUI {
 				return;
 			}
 
-			Consumer<Integer> dropAction = quantity -> World.player.dropItem(item, quantity);
+			Consumer<Integer> dropAction = quantity -> MadSand.player().dropItem(item, quantity);
 
 			if (item.quantity > 1)
 				new SliderDialog(item.quantity).setTitle("Drop " + item.name)

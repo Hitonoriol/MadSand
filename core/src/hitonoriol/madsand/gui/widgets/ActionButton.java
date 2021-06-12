@@ -25,7 +25,6 @@ import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.util.Utils;
-import hitonoriol.madsand.world.World;
 
 public class ActionButton extends Table {
 	public Skin skin;
@@ -54,11 +53,11 @@ public class ActionButton extends Table {
 
 		inGameBtnListener = new OverlayMouseoverListener();
 
-		useItemAction = () -> World.player.useItem();
-		npcInteractAction = () -> World.player.interact();
+		useItemAction = () -> MadSand.player().useItem();
+		npcInteractAction = () -> MadSand.player().interact();
 
 		objInteractAction = () -> {
-			World.player.interact();
+			MadSand.player().interact();
 			Gui.gameUnfocused = true;
 			refresh();
 		};
@@ -117,7 +116,7 @@ public class ActionButton extends Table {
 		}
 
 		Map loc = MadSand.world.getCurLoc();
-		Player player = World.player;
+		Player player = MadSand.player();
 		Pair coords = new Pair(player.x, player.y);
 
 		Tile tile = loc.getTile(coords.x, coords.y);

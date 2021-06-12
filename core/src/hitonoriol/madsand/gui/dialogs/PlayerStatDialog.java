@@ -10,17 +10,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.entities.StatContainer;
 import hitonoriol.madsand.gui.widgets.StatLabels;
-import hitonoriol.madsand.world.World;
 import me.xdrop.jrand.JRand;
 
 public class PlayerStatDialog extends GameDialog {
 
 	static int DEFAULT_STAT_SUM = 6;
-	int maxStatSum = World.player.stats.baseStats.maxStatSum;
+	int maxStatSum = MadSand.player().stats.baseStats.maxStatSum;
 	int minStatSum;
 	boolean restoreOnChange = false;
 	protected StatLabels statLabels;
