@@ -35,7 +35,7 @@ public class DeathStage extends Stage {
 
 		Gui.setAction(respawnButton, () -> {
 			MadSand.player().respawn();
-			MadSand.world.updateLight();
+			MadSand.world().updateLight();
 			MadSand.reset();
 		});
 	}

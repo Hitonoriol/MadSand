@@ -49,7 +49,7 @@ public class InventoryTest {
 		Functional.repeat(15, () -> {
 			Item item = getRandomItemStack();
 			if (inventory.putItem(item))
-				expectedWeight.add(item.getWeight());
+				expectedWeight.add(item.getTotalWeight());
 		});
 		assertEquals(expectedWeight.getValue(), inventory.getTotalWeight(),
 				"Total weight of inventory should be the same");

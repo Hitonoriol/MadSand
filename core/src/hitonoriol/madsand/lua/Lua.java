@@ -39,7 +39,7 @@ public class Lua {
 		register("pair", CoerceJavaToLua.coerce(Pair.getInstance()));
 		register("item", CoerceJavaToLua.coerce(new Item()));
 		register("mouse", CoerceJavaToLua.coerce(new Mouse()));
-		register("world", CoerceJavaToLua.coerce(MadSand.world));
+		register("world", CoerceJavaToLua.coerce(MadSand.world()));
 		register("player", CoerceJavaToLua.coerce(MadSand.player()));
 		register("tutorial", CoerceJavaToLua.coerce(new Tutorial()));
 

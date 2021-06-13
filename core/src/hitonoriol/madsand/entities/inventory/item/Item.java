@@ -115,6 +115,11 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 	}
 
 	@JsonIgnore
+	public int getTotalPrice() {
+		return cost * quantity;
+	}
+
+	@JsonIgnore
 	public String getFullName() {
 		return name;
 	}
@@ -124,17 +129,26 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 		return "";
 	}
 
+	private String getStackInfo(String propertyName, String units, String singleVal, String stackVal) {
+		String info;
+		info = String.format("%s: %s %s", propertyName, singleVal, units);
+
+		if (quantity > 1 && !singleVal.equals("0"))
+			info += String.format(" (%s %s all)", stackVal, units);
+
+		return info;
+	}
+
 	@JsonIgnore
 	public String getInfoString() {
-		String info = "";
-		info += getFullName()
+		String info;
+		info = getFullName()
 				+ Resources.LINEBREAK + Resources.LINEBREAK;
 
-		info += getMiscInfo();
-
-		info += Resources.LINEBREAK;
-		info += "Weight: " + Utils.round(weight) + " kg" + Resources.LINEBREAK;
-		info += "Cost: " + cost + "$";
+		info += getMiscInfo() + Resources.LINEBREAK;
+		info += getStackInfo("Weight", "kg", Utils.round(weight), Utils.round(getTotalWeight())) + Resources.LINEBREAK;
+		if (cost > 0)
+			info += getStackInfo("Cost", "coins", Utils.str(cost), Utils.str(getTotalPrice()));
 		return info;
 	}
 
@@ -167,7 +181,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 	}
 
 	@JsonIgnore
-	public float getWeight() {
+	public float getTotalWeight() {
 		return weight * (float) quantity;
 	}
 
@@ -205,7 +219,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 				id,
 				quantity,
 				name,
-				getWeight());
+				getTotalWeight());
 	}
 
 	@Override

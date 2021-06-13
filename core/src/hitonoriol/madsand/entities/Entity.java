@@ -196,7 +196,7 @@ public abstract class Entity extends MapEntity {
 	public abstract void meleeAttack(Direction dir);
 
 	protected void rangedAttack(Pair targetPos, Projectile projectile) {
-		Map map = MadSand.world.getCurLoc();
+		Map map = MadSand.world().getCurLoc();
 		Pair thisCoords = new Pair(x, y);
 		Pair obstacleCoords = map.rayCast(thisCoords, targetPos);
 		if (obstacleCoords.isEmpty())
@@ -245,7 +245,7 @@ public abstract class Entity extends MapEntity {
 		if (!hasItem(item))
 			return false;
 
-		MadSand.world.getCurLoc().putLoot(x, y, Item.duplicate(item, quantity));
+		MadSand.world().getCurLoc().putLoot(x, y, Item.duplicate(item, quantity));
 		inventory.delItem(item, quantity);
 		return true;
 	}
@@ -279,7 +279,7 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public void pickUpLoot() {
-		Loot loot = MadSand.world.getCurLoc().getLoot(x, y);
+		Loot loot = MadSand.world().getCurLoc().getLoot(x, y);
 
 		if (loot.equals(Map.nullLoot))
 			return;
@@ -290,7 +290,7 @@ public abstract class Entity extends MapEntity {
 	public boolean colliding(Direction direction) {
 		Pair coords = new Pair(x, y).addDirection(direction);
 		int nx = coords.x, ny = coords.y;
-		Map loc = MadSand.world.getCurLoc();
+		Map loc = MadSand.world().getCurLoc();
 
 		MapObject obj = loc.getObject(nx, ny);
 		AbstractNpc npc = loc.getNpc(nx, ny);
@@ -303,14 +303,14 @@ public abstract class Entity extends MapEntity {
 
 	@JsonIgnore
 	public boolean isInBackground() {
-		Map loc = MadSand.world.getCurLoc();
+		Map loc = MadSand.world().getCurLoc();
 		return (loc.getObject(x, y).isCollisionMask() || loc.getTile(x, y).foreground);
 	}
 
 	public boolean standingOnLoot(int x, int y) {
 		if (stats.dead)
 			return false;
-		if (MadSand.world.getCurLoc().getLoot(x, y).equals(Map.nullLoot))
+		if (MadSand.world().getCurLoc().getLoot(x, y).equals(Map.nullLoot))
 			return false;
 		else
 			return true;
@@ -344,7 +344,7 @@ public abstract class Entity extends MapEntity {
 
 	public void dropInventory() {
 		Item item;
-		Map curLoc = MadSand.world.getCurLoc();
+		Map curLoc = MadSand.world().getCurLoc();
 		for (int i = inventory.items.size() - 1; i >= 0; --i) {
 			item = inventory.items.get(i);
 			curLoc.putLoot(x, y, item.copy());
@@ -393,7 +393,7 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public void updCoords() {
-		Map map = MadSand.world.getCurLoc();
+		Map map = MadSand.world().getCurLoc();
 		if (x >= map.getWidth())
 			x = map.getWidth() - 1;
 		if (y >= map.getHeight())
@@ -407,12 +407,12 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public void teleport(int x, int y) {
-		if (!MadSand.world.getCurLoc().isFreeTile(x, y))
+		if (!MadSand.world().getCurLoc().isFreeTile(x, y))
 			return;
 
 		setGridCoords(x, y);
 		updCoords();
-		MadSand.world.updateLight();
+		MadSand.world().updateLight();
 	}
 
 	public void teleport(Pair coords) {
@@ -425,7 +425,7 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public boolean isOnMapBound(Direction dir) {
-		Map map = MadSand.world.getCurLoc();
+		Map map = MadSand.world().getCurLoc();
 		boolean ret = false;
 		ret |= x >= map.getWidth() - 1 && (dir == Direction.RIGHT);
 		ret |= y >= map.getHeight() - 1 && (dir == Direction.UP);
@@ -559,7 +559,7 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public int tileDmg() {
-		int tid = MadSand.world.getTileId(x, y);
+		int tid = MadSand.world().getTileId(x, y);
 		int dmg = TileProp.getTileProp(tid).damage;
 		if (dmg > 0)
 			damage(dmg);
@@ -634,7 +634,7 @@ public abstract class Entity extends MapEntity {
 
 	public boolean rayCast(Entity entity, Predicate<MapEntity> obstaclePredicate) {
 		MutableBoolean result = new MutableBoolean(true);
-		Map map = MadSand.world.getCurLoc();
+		Map map = MadSand.world().getCurLoc();
 		Pair coords = new Pair();
 
 		Line.rayCast(x, y, entity.x, entity.y, (x, y) -> {
@@ -693,30 +693,22 @@ public abstract class Entity extends MapEntity {
 		return spriteWidth;
 	}
 
-	private String HEALTH_STATE_FULL = "full";
-	private String HEALTH_STATE_75 = "couple of scratches";
-	private String HEALTH_STATE_50 = "slightly damaged";
-	private String HEALTH_STATE_25 = "severe injuries";
-	private String HEALTH_STATE_10 = "at death's door";
-
-	private float HEALTH_75 = 0.75f;
-	private float HEALTH_50 = 0.5f;
-	private float HEALTH_25 = 0.25f;
-	private float HEALTH_10 = 0.1f;
-
 	@JsonIgnore
-	public String getHealthState() {
-		float state = (float) stats.hp / (float) stats.mhp;
-		if (state > HEALTH_75)
-			return HEALTH_STATE_FULL;
-		else if (state > HEALTH_50)
-			return HEALTH_STATE_75;
-		else if (state > HEALTH_25)
-			return HEALTH_STATE_50;
-		else if (state > HEALTH_10)
-			return HEALTH_STATE_25;
+	public String getHealthState(int percent) {
+		if (percent > 75)
+			return "full";
+
+		else if (percent > 50)
+			return "couple of scratches";
+
+		else if (percent > 25)
+			return "slight injuries";
+
+		else if (percent > 10)
+			return "severe injuries";
+
 		else
-			return HEALTH_STATE_10;
+			return "at death's door";
 	}
 
 	public String getName() {
@@ -725,8 +717,9 @@ public abstract class Entity extends MapEntity {
 
 	@JsonIgnore
 	public String getInfoString() {
-		String ret = "";
-		ret += "Health: " + getHealthState();
+		int hpPercent = (int) (((float) stats.hp / (float) stats.mhp) * 100);
+		String ret;
+		ret = String.format("Health: %s (%d%%)", getHealthState(hpPercent), hpPercent);
 		return ret;
 	}
 

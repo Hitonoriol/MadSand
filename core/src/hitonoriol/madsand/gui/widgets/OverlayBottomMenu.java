@@ -44,7 +44,7 @@ public class OverlayBottomMenu extends Table {
 		addButton("Journal", Keys.J, () -> new QuestJournal(MadSand.player().getQuestWorker()));
 		addButton("Build", Keys.B, () -> new BuildDialog());
 		addButton("Bestiary", Keys.X, () -> new BestiaryDialog(MadSand.player()));
-		addButton("Land", Keys.L, () -> new LandDialog(MadSand.world.getLocation()));
+		addButton("Land", Keys.L, () -> new LandDialog(MadSand.world().getLocation()));
 
 		container.setBackground(new NinePatchDrawable(Gui.darkBackgroundSizeable));
 

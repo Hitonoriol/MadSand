@@ -269,7 +269,7 @@ public class Overlay extends Stage {
 		expBar.setRange(0, stats.skills.get(Skill.Level).requiredExp).setStatText("LVL " + stats.skills.getLvl())
 				.setValue(stats.skills.getExp());
 
-		String info = (MadSand.world.getLocation().name +
+		String info = (MadSand.world().getLocation().name +
 				", Cell (" + player.x + ", " + player.y + ")" + getSectorString());
 
 		timeLabel.setText(getTimeString());
@@ -280,7 +280,7 @@ public class Overlay extends Stage {
 	}
 
 	private String getTimeString() {
-		World world = MadSand.world;
+		World world = MadSand.world();
 		String hour = fixTime(Utils.str(world.getWorldTimeHour()));
 		String minute = fixTime(Utils.str(world.getWorldTimeMinute()));
 
@@ -296,9 +296,9 @@ public class Overlay extends Stage {
 	}
 
 	private String getSectorString() {
-		return (MadSand.world.inEncounter
+		return (MadSand.world().inEncounter
 				? " @ Random Encounter"
-				: " @ Sector (" + MadSand.world.getCurWPos() + ")");
+				: " @ Sector (" + MadSand.world().getCurWPos() + ")");
 
 	}
 

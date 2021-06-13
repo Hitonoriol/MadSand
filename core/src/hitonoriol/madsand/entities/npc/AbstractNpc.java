@@ -68,9 +68,9 @@ public abstract class AbstractNpc extends Entity {
 	public AbstractNpc(NpcContainer protoNpc) {
 		super();
 		id = protoNpc.id;
-		uid = MadSand.world.npcCounter().getAndIncrement();
-		stats.spawnTime = MadSand.world.currentTick();
-		stats.spawnRealTime = MadSand.world.currentRealtimeTick();
+		uid = MadSand.world().npcCounter().getAndIncrement();
+		stats.spawnTime = MadSand.world().currentTick();
+		stats.spawnRealTime = MadSand.world().currentRealtimeTick();
 		loadProperties(protoNpc);
 		if (id != NULL_NPC)
 			loadSprite();
@@ -85,7 +85,7 @@ public abstract class AbstractNpc extends Entity {
 	}
 
 	public Node findPath(int x, int y) {
-		Map map = MadSand.world.getCurLoc();
+		Map map = MadSand.world().getCurLoc();
 
 		if (!prevDestination.equals(x, y)) {
 			path.clear();
@@ -198,7 +198,7 @@ public abstract class AbstractNpc extends Entity {
 		Entity player = MadSand.player();
 		boolean outOfView = distanceTo(player) > player.fov;
 		if (!outOfView)
-			outOfView |= !player.canSee(this) || MadSand.world.timeSkipInProgress();
+			outOfView |= !player.canSee(this) || MadSand.world().timeSkipInProgress();
 
 		if (isMoving() && !outOfView) {
 			queueMovement(dir);
@@ -215,7 +215,7 @@ public abstract class AbstractNpc extends Entity {
 
 		int newX = this.x, newY = this.y;
 		setGridCoords(originalX, originalY);
-		MadSand.world.getCurLoc().moveNpc(this, newX, newY);
+		MadSand.world().getCurLoc().moveNpc(this, newX, newY);
 		setGridCoords(newX, newY);
 
 		if (outOfView) {
@@ -277,7 +277,7 @@ public abstract class AbstractNpc extends Entity {
 
 	public void die() {
 		super.die();
-		MadSand.world.delNpc(this);
+		MadSand.world().delNpc(this);
 	}
 
 	boolean canAct(double ap) {
@@ -466,7 +466,7 @@ public abstract class AbstractNpc extends Entity {
 		return "Interact with ";
 	}
 
-	public String spottedMsg() {
+	private String spottedMsg() {
 		if (enemySpotted)
 			return "Looks like " + stats.name + " spotted you";
 		else
@@ -481,6 +481,9 @@ public abstract class AbstractNpc extends Entity {
 
 		if (canGiveQuests && isNeutral())
 			info += "* Might need some help" + Resources.LINEBREAK;
+
+		if (state == State.Hostile)
+			info += spottedMsg();
 
 		return info;
 	}

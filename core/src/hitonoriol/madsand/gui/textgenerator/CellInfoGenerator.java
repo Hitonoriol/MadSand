@@ -52,7 +52,7 @@ public class CellInfoGenerator extends TooltipTextGenerator {
 		this.x = x;
 		this.y = y;
 		player = MadSand.player();
-		loc = MadSand.world.getCurLoc();
+		loc = MadSand.world().getCurLoc();
 		npc = loc.getNpc(x, y);
 		tile = loc.getTile(x, y);
 		object = loc.getObject(x, y);
@@ -139,10 +139,6 @@ public class CellInfoGenerator extends TooltipTextGenerator {
 								: "Hostile"));
 
 		addLine(npc.getInfoString());
-
-		if (npc.state == AbstractNpc.State.Hostile)
-			addLine(npc.spottedMsg());
-
 	}
 
 	private void getPlayerInfo() {
@@ -173,7 +169,7 @@ public class CellInfoGenerator extends TooltipTextGenerator {
 	}
 
 	private void getCropInfo() {
-		long time = (long) (crop.getHarvestTime() * MadSand.world.getRealtimeTickRate());
+		long time = (long) (crop.getHarvestTime() * MadSand.world().getRealtimeTickRate());
 		addLine((time <= 0)
 				? ("* Ready to harvest!")
 				: ("[#58FFB1]* Will fully grow in " + Utils.timeString(time) + "[]"));

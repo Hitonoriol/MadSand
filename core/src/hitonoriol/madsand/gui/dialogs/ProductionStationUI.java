@@ -159,7 +159,7 @@ public class ProductionStationUI extends GameDialog {
 
 	public void show() {
 		super.show();
-		float tickRate = MadSand.world.getRealtimeTickRate();
+		float tickRate = MadSand.world().getRealtimeTickRate();
 		Timer.instance().scheduleTask(refreshTask, tickRate, tickRate);
 	}
 
@@ -170,7 +170,7 @@ public class ProductionStationUI extends GameDialog {
 	}
 
 	private void refreshRateLabels() {
-		float tickRate = MadSand.world.getRealtimeTickRate();
+		float tickRate = MadSand.world().getRealtimeTickRate();
 		produceLabel.setText(produceString + producedMaterial + " (+" + Utils.round(station.productionRate / tickRate)
 				+ " per second)");
 		consumeLabel.setText(consumeString + consumedMaterial + " (-" + Utils.round(station.consumptionRate / tickRate)

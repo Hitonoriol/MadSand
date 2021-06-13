@@ -62,7 +62,7 @@ public class ActionButton extends Table {
 			refresh();
 		};
 
-		travelAction = () -> MadSand.world.travel();
+		travelAction = () -> MadSand.world().travel();
 	}
 
 	public void hideButton() {
@@ -115,7 +115,7 @@ public class ActionButton extends Table {
 			return;
 		}
 
-		Map loc = MadSand.world.getCurLoc();
+		Map loc = MadSand.world().getCurLoc();
 		Player player = MadSand.player();
 		Pair coords = new Pair(player.x, player.y);
 

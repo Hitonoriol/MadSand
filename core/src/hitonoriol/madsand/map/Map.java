@@ -756,7 +756,7 @@ public class Map {
 			delObject(coords);
 
 			if (ret.isDestroyed())
-				MadSand.world.updateLight();
+				MadSand.world().updateLight();
 
 			return nullObject;
 		}
@@ -938,7 +938,7 @@ public class Map {
 		if (getTile(x, y).id != ItemProp.getCropSoil(id))
 			return false;
 
-		Crop newCrop = new Crop(id, MadSand.world.currentRealtimeTick());
+		Crop newCrop = new Crop(id, MadSand.world().currentRealtimeTick());
 		mapCrops.put(new Pair(coords), newCrop);
 		addObject(x, y, newCrop.objId);
 		return true;
@@ -1088,10 +1088,10 @@ public class Map {
 	}
 
 	public void spawnMobs(boolean friendly, boolean force) {
-		if (MadSand.world.curLayer() != Location.LAYER_OVERWORLD)
+		if (MadSand.world().curLayer() != Location.LAYER_OVERWORLD)
 			return;
 
-		WorldGenPreset preset = WorldGenProp.getBiome(MadSand.world.getLocBiome());
+		WorldGenPreset preset = WorldGenProp.getBiome(MadSand.world().getLocBiome());
 		OverworldPreset overworld = preset.overworld;
 		double forceVal = force ? 100 : 0;
 
@@ -1136,10 +1136,10 @@ public class Map {
 	}
 
 	public void naturalRegeneration() {
-		if (MadSand.world.curLayer() != Location.LAYER_OVERWORLD)
+		if (MadSand.world().curLayer() != Location.LAYER_OVERWORLD)
 			return;
 
-		WorldGenPreset preset = WorldGenProp.getBiome(MadSand.world.getLocBiome());
+		WorldGenPreset preset = WorldGenProp.getBiome(MadSand.world().getLocBiome());
 		OverworldPreset overworld = preset.overworld;
 
 		if (overworld.regenerateObjects == null)

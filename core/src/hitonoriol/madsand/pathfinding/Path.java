@@ -46,7 +46,7 @@ public class Path extends DefaultGraphPath<Node> {
 	}
 
 	public static Path create(int x1, int y1, int x2, int y2) {
-		Map map = MadSand.world.getCurLoc();
+		Map map = MadSand.world().getCurLoc();
 		Path path = new Path();
 		Line.forEachPoint(x1, y1, x2, y2, (x, y) -> {
 			Node node = map.getNode(x, y);

@@ -158,17 +158,17 @@ public class Keyboard {
 		}
 
 		if (key == Keys.F5)
-			MadSand.world.timeTick(150);
+			MadSand.world().timeTick(150);
 
 		if (isKeyPressed(Keys.CONTROL_LEFT)) {
 			if (key == Keys.DOWN)
-				MadSand.world.descend();
+				MadSand.world().descend();
 
 			else if (key == Keys.UP)
-				MadSand.world.ascend();
+				MadSand.world().ascend();
 
 			else if (key == Keys.R) {
-				MadSand.world.generate();
+				MadSand.world().generate();
 				MadSand.worldEntered();
 			}
 

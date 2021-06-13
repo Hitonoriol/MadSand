@@ -27,7 +27,7 @@ public class GameContextMenu extends Table {
 
 	private void refresh() {
 		super.clear();
-		Map map = MadSand.world.getCurLoc();
+		Map map = MadSand.world().getCurLoc();
 		Player player = MadSand.player();
 		Item hand = player.stats.hand();
 

@@ -173,7 +173,7 @@ public class Settlement {
 
 	@JsonIgnore
 	public String getLeaderName() {
-		return playerOwned ? MadSand.player().stats.name : MadSand.world.getCurLoc().getNpc(leaderUid).stats.name;
+		return playerOwned ? MadSand.player().stats.name : MadSand.world().getCurLoc().getNpc(leaderUid).stats.name;
 	}
 
 	public static class WorkerContainer { // Info about all workers of certain type

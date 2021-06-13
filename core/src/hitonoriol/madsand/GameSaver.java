@@ -58,7 +58,7 @@ public class GameSaver {
 
 		if (loadLocation()) {
 			Lua.init();
-			MadSand.world.updateLight();
+			MadSand.world().updateLight();
 			loadLog();
 			MadSand.print("Loaded Game!");
 			return true;
@@ -83,7 +83,7 @@ public class GameSaver {
 	}
 
 	public static boolean saveLocation() {
-		return saveLocation(MadSand.world.wx(), MadSand.world.wy());
+		return saveLocation(MadSand.world().wx(), MadSand.world().wy());
 	}
 
 	public static boolean loadLocation(int wx, int wy) {
@@ -136,7 +136,7 @@ public class GameSaver {
 			World world = Resources.mapper.readValue(readFile(worldFile), World.class);
 			world.initWorld();
 			world.getPlayer().postLoadInit();
-			MadSand.world = world;
+			MadSand.instance().setWorld(world);
 
 			Utils.out("Done loading world.");
 			return true;

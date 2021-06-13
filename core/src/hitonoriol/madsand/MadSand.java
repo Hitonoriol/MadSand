@@ -1,5 +1,7 @@
 package hitonoriol.madsand;
 
+import java.util.function.Consumer;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -43,8 +45,8 @@ public class MadSand extends Game {
 	public static int MAXSAVESLOTS = 10;
 
 	public static SpriteBatch batch;
-	public static World world;
 
+	private World world;
 	Storage<AbstractScreen<?>> currentScreen = new Storage<>();
 	private static MadSand game;
 	private static GameWorldRenderer gameWorld;
@@ -87,11 +89,11 @@ public class MadSand extends Game {
 	}
 
 	public static void initNewGame() {
-		world = new World();
+		game.world = new World();
 		MadSand.player().updCoords();
 		Lua.init();
 		Gui.overlay.gameLog.clear();
-		world.generate();
+		game.world.generate();
 	}
 
 	public static void switchScreen(Screen screen) {
@@ -157,6 +159,10 @@ public class MadSand extends Game {
 		return world;
 	}
 
+	public void setWorld(World world) {
+		this.world = world;
+	}
+
 	public Player getPlayer() {
 		return world.getPlayer();
 	}
@@ -167,6 +173,10 @@ public class MadSand extends Game {
 
 	public static Player player() {
 		return game.getPlayer();
+	}
+
+	public static void exec(Consumer<World> action) {
+		action.accept(world());
 	}
 
 	public static void warn(String msg) {
@@ -198,7 +208,7 @@ public class MadSand extends Game {
 		if (MadSand.worldUntouched)
 			MadSand.worldUntouched = false;
 
-		world.enter();
+		game.world.enter();
 	}
 
 	public static boolean isWorldUntouched() {
@@ -207,5 +217,9 @@ public class MadSand extends Game {
 
 	public static void setWorldName(String arg) {
 		WORLDNAME = arg;
+	}
+
+	public static MadSand instance() {
+		return game;
 	}
 }

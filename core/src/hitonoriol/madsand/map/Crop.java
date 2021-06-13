@@ -40,7 +40,7 @@ public class Crop {
 	}
 
 	public long getTimeSincePlanted() {
-		return MadSand.world.currentRealtimeTick() - plantTime;
+		return MadSand.world().currentRealtimeTick() - plantTime;
 	}
 
 	public int getGrowthTime() {

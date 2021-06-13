@@ -20,4 +20,8 @@ public class StaticTextGenerator extends TooltipTextGenerator {
 		if (textUpdater != null)
 			super.setText(textUpdater.apply(x, y));
 	}
+
+	public void update() {
+		update(0, 0);
+	}
 }

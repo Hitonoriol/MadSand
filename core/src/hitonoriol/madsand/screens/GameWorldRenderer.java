@@ -123,7 +123,7 @@ public class GameWorldRenderer {
 	private static final float LOOT_OFFSET = (TILESIZE - LOOT_SIZE) * 0.5f;
 
 	void drawLoot(float x, float y) {
-		Loot loot = MadSand.world.getCurLoc().getLoot((int) x, (int) y);
+		Loot loot = MadSand.world().getCurLoc().getLoot((int) x, (int) y);
 		Texture lootTx;
 
 		if (loot.contents.size() == 1)
@@ -166,7 +166,7 @@ public class GameWorldRenderer {
 	}
 
 	void drawGame() {
-		Map loc = MadSand.world.getCurLoc();
+		Map loc = MadSand.world().getCurLoc();
 		AbstractNpc npc;
 		Tile tile;
 		MapObject object;
@@ -188,10 +188,10 @@ public class GameWorldRenderer {
 			if (!tile.visible && !tile.visited) //Don't render tiles which were never seen
 				continue;
 
-			if ((x > xsz || y > ysz || x < 0 || y < 0) && MadSand.world.isUnderGround()) // Don't render default tile while underground
+			if ((x > xsz || y > ysz || x < 0 || y < 0) && MadSand.world().isUnderGround()) // Don't render default tile while underground
 				continue;
 
-			MadSand.batch.draw(Resources.tile[MadSand.world.getTileOrDefault(x, y)], x * TILESIZE, y * TILESIZE);
+			MadSand.batch.draw(Resources.tile[MadSand.world().getTileOrDefault(x, y)], x * TILESIZE, y * TILESIZE);
 		}
 
 		for (Pair cell : renderArea) { // Render objects, loot, NPCs and player
@@ -203,7 +203,7 @@ public class GameWorldRenderer {
 			npc = loc.getNpc(x, y);
 			tileVisited = tile.visited && !tile.visible;
 
-			if ((x > xsz || y > ysz || x < 0 || y < 0) && MadSand.world.isUnderGround())
+			if ((x > xsz || y > ysz || x < 0 || y < 0) && MadSand.world().isUnderGround())
 				continue;
 
 			if (!tile.visible && !tile.visited) //Don't render anything on tiles which were never seen

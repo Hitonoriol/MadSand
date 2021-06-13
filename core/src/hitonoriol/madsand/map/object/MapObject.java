@@ -73,7 +73,7 @@ public class MapObject extends MapEntity {
 	}
 
 	public void interactIfPossible(Runnable interaction) {
-		if (MadSand.world.getCurLoc().editable)
+		if (MadSand.world().getCurLoc().editable)
 			interaction.run();
 		else
 			MadSand.notice("You try to interact with " + name + "..." + Resources.LINEBREAK
@@ -106,7 +106,7 @@ public class MapObject extends MapEntity {
 
 		Pair coords = getPosition();
 		if (dropOnDestruction != 0)
-			MadSand.world.getCurLoc().putLoot(coords.x, coords.y, dropOnDestruction);
+			MadSand.world().getCurLoc().putLoot(coords.x, coords.y, dropOnDestruction);
 	}
 
 	public boolean isDestroyed() {
@@ -172,7 +172,7 @@ public class MapObject extends MapEntity {
 
 	@Override
 	public Pair getPosition() {
-		return new Pair(MadSand.world.getCurLoc().locateObject(this));
+		return new Pair(MadSand.world().getCurLoc().locateObject(this));
 	}
 
 	@Override

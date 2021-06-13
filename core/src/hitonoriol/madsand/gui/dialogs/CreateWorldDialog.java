@@ -83,7 +83,7 @@ public class CreateWorldDialog extends GameDialog {
 
 					if (!MadSand.isWorldUntouched()) {
 						MadSand.initNewGame();
-						MadSand.world.generate();
+						MadSand.world().generate();
 					}
 
 					MadSand.worldEntered();

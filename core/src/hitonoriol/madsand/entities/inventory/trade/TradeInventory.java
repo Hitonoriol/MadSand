@@ -24,7 +24,7 @@ public class TradeInventory {
 	}
 
 	public boolean sell(Item item, int quantity) { //Sell from Seller to Buyer
-		int cost = item.getPrice() * quantity;
+		int cost = item.getTotalPrice();
 		Item buyerMoney = buyer.getItem(currency);
 
 		if (buyerMoney.quantity < cost)

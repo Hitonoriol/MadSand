@@ -43,7 +43,7 @@ public class QuestArrow extends Image {
 		if (!npc.equals(Map.nullNpc))
 			update(MadSand.player().x, MadSand.player().y, npc.x, npc.y);
 		else {
-			Pair curWCoords = MadSand.world.getCurWPos();
+			Pair curWCoords = MadSand.world().getCurWPos();
 			Pair npcWCoords = quest.npcWorldPos;
 			update(curWCoords.x, curWCoords.y, npcWCoords.x, npcWCoords.y);
 		}

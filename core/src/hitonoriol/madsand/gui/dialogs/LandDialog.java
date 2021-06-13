@@ -57,7 +57,7 @@ public class LandDialog extends GameDialog {
 				if (location.isSettlement())
 					refreshDialogContents();
 			}
-		}, 0, MadSand.world.getRealtimeTickRate());
+		}, 0, MadSand.world().getRealtimeTickRate());
 	}
 
 	private void refreshDialogContents() {
@@ -138,7 +138,7 @@ public class LandDialog extends GameDialog {
 				continue;
 
 			sb.append("* " + type.name() + ": " + workers.getQuantity() + " ");
-			sb.append("(" + Utils.round(workers.getGatheringRate() / MadSand.world.getRealtimeTickRate(), DEC_PLACES)
+			sb.append("(" + Utils.round(workers.getGatheringRate() / MadSand.world().getRealtimeTickRate(), DEC_PLACES)
 					+ " actions/sec) ")
 					.append("[[" + Utils.round(workers.itemCharge * 100f) + "%]")
 					.append(Resources.LINEBREAK);
@@ -152,7 +152,7 @@ public class LandDialog extends GameDialog {
 	private String getWarehouseContents() {
 		StringBuilder sb = new StringBuilder();
 		for (Item item : settlement.warehouse.items)
-			sb.append("* " + item.quantity + " " + item.name + " (" + Utils.round(item.getWeight()) + " kg)")
+			sb.append("* " + item.quantity + " " + item.name + " (" + Utils.round(item.getTotalWeight()) + " kg)")
 					.append(Resources.LINEBREAK);
 
 		return settlement.warehouse.items.isEmpty() ? "Empty" : sb.toString();

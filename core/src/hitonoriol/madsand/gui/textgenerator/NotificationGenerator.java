@@ -9,7 +9,7 @@ import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.util.Utils;
 
 public class NotificationGenerator extends StaticTextGenerator {
-	private static float NOTIFICATION_DELAY = 1.55f;
+	private static float NOTIFICATION_DELAY = 1.85f;
 	private Timer timer = new Timer();
 	private Queue<Runnable> pendingNotifications = new ArrayDeque<>();
 

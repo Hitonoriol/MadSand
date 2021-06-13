@@ -222,6 +222,10 @@ public class World {
 		return getLoc(worldMap.curWorldPos, worldMap.curLayer);
 	}
 
+	public void exec(Consumer<Map> action) {
+		action.accept(getCurLoc());
+	}
+
 	@JsonIgnore
 	public Map getOverworld() {
 		return getLoc(worldMap.curWorldPos, Location.LAYER_OVERWORLD);

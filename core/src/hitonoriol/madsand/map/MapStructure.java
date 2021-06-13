@@ -13,7 +13,7 @@ public class MapStructure {
 	// width & height are specified in each structure's script separately and then passed to the java object
 	public int xMax, yMax;
 	public int width, height;
-	public Map map = MadSand.world.getCurLoc();
+	public Map map = MadSand.world().getCurLoc();
 
 	LuaPredicate builder;
 
@@ -58,7 +58,7 @@ public class MapStructure {
 
 	public Pair getFreeTile() {
 		Pair coords = new Pair();
-		Map map = MadSand.world.getCurLoc();
+		Map map = MadSand.world().getCurLoc();
 		int attempt = 0;
 		do {
 			coords.set(randX(), randY());

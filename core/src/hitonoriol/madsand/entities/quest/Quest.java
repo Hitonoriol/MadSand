@@ -219,7 +219,7 @@ public class Quest {
 
 	@JsonIgnore
 	public AbstractNpc getNpc() { // Returns nullNpc if quest npc does not exist or is not in the current location
-		return MadSand.world.getCurLoc().getNpc(npcUID);
+		return MadSand.world().getCurLoc().getNpc(npcUID);
 	}
 
 	public void completionNotice() {
@@ -238,8 +238,8 @@ public class Quest {
 	public void start(Player player, long npcUID) {
 		this.player = player;
 		this.npcUID = npcUID;
-		this.npcWorldPos = new Pair(MadSand.world.getCurWPos());
-		this.startTime = MadSand.world.currentRealtimeTick();
+		this.npcWorldPos = new Pair(MadSand.world().getCurWPos());
+		this.startTime = MadSand.world().currentRealtimeTick();
 		isComplete = false;
 		itemObjective = new HashMap<>();
 		killObjective = new HashMap<>();

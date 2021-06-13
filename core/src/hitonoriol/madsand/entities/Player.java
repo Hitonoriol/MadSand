@@ -279,8 +279,8 @@ public class Player extends Entity {
 	public void setFov(int val) {
 		super.setFov(val);
 		MadSand.setRenderRadius(val);
-		if (MadSand.world != null)
-			MadSand.world.updateLight();
+		if (MadSand.world() != null)
+			MadSand.world().updateLight();
 	}
 
 	@Override
@@ -345,7 +345,7 @@ public class Player extends Entity {
 	}
 
 	private void attack(AbstractNpc npc, int dmg) {
-		Map map = MadSand.world.getCurLoc();
+		Map map = MadSand.world().getCurLoc();
 
 		npc.provoke();
 		if (dmg == 0)
@@ -364,7 +364,7 @@ public class Player extends Entity {
 			if (addToKillCount(npc.id)) // If killed for the first time
 				MadSand.print("You now know more about " + npc.stats.name + "s");
 
-			if (!map.editable && map.getHostileNpcCount() == 0 && MadSand.world.isUnderGround()) {
+			if (!map.editable && map.getHostileNpcCount() == 0 && MadSand.world().isUnderGround()) {
 				MadSand.print("The curse of the dungeon has been lifted!" + Resources.LINEBREAK
 						+ "You can now break objects on this floor of the dungeon.");
 				map.editable = true;
@@ -382,7 +382,7 @@ public class Player extends Entity {
 
 	/* Melee Attack method for Ability scripts */
 	private void performAttack(Pair coords, int dmg) {
-		Map map = MadSand.world.getCurLoc();
+		Map map = MadSand.world().getCurLoc();
 		if (super.distanceTo(coords) > 1)
 			return;
 
@@ -424,7 +424,7 @@ public class Player extends Entity {
 
 	private void performMeleeAttack(Direction dir) {
 		turn(dir);
-		Map map = MadSand.world.getCurLoc();
+		Map map = MadSand.world().getCurLoc();
 		AbstractNpc npc = map.getNpc(coords.set(x, y).addDirection(dir));
 
 		if (npc == Map.nullNpc)
@@ -442,7 +442,7 @@ public class Player extends Entity {
 		if (isMoving())
 			return;
 
-		if (MadSand.world.getCurLoc().npcExists(coords.set(x, y).addDirection(dir)))
+		if (MadSand.world().getCurLoc().npcExists(coords.set(x, y).addDirection(dir)))
 			doAction(stats.meleeAttackCost, () -> performMeleeAttack(dir));
 		else
 			turn(dir);
@@ -613,17 +613,20 @@ public class Player extends Entity {
 	@Override
 	public boolean addItem(Item item) {
 		if (super.addItem(item)) {
-			if (!item.name.isEmpty() && item.quantity > 0)
-				MadSand.notice("You get " + item.quantity + " " + item.name);
+			if (!item.name.isEmpty() && item.quantity > 0) {
+				String notifStr = String.format("You get %d %s", item.quantity, item.name);
+				Item stack = inventory.getItem(item);
+				if (stack.quantity != item.quantity)
+					notifStr += String.format(" (%d in inventory)", stack.quantity);
+				MadSand.notice(notifStr);
+			}
 
 			stats().equipment.refreshUI();
-
 			if (unlockedItems.add(item.id))
 				refreshAvailableRecipes();
-
 			return true;
 		} else {
-			MadSand.world.getCurLoc().putLoot(x, y, item);
+			MadSand.world().getCurLoc().putLoot(x, y, item);
 			MadSand.notice("You can't carry any more items.");
 			return false;
 		}
@@ -706,7 +709,7 @@ public class Player extends Entity {
 
 	private void talkToNpc(AbstractNpc npc) {
 		int currency = Globals.values().currencyId;
-		Location location = MadSand.world.getLocation();
+		Location location = MadSand.world().getLocation();
 		if (!npc.stats.faction.isHuman()) {
 			MadSand.print("Doesn't seem like " + npc.stats.name + " can talk");
 			return;
@@ -772,7 +775,7 @@ public class Player extends Entity {
 	private void performInteraction(Direction direction) {
 		coords.set(x, y).addDirection(direction);
 
-		Map loc = MadSand.world.getCurLoc();
+		Map loc = MadSand.world().getCurLoc();
 		MapObject obj = loc.getObject(coords.x, coords.y);
 		AbstractNpc npc = loc.getNpc(coords.x, coords.y);
 		Tile tileInFront = loc.getTile(coords.x, coords.y);
@@ -786,7 +789,7 @@ public class Player extends Entity {
 			fish(tileInFront.fishingSpot);
 
 		obj.interact(this);
-		MadSand.world.updateLight();
+		MadSand.world().updateLight();
 	}
 
 	public void interact(ResourceObject resourceObj) {
@@ -861,7 +864,7 @@ public class Player extends Entity {
 	}
 
 	public void useItem(Placeable item) {
-		Map map = MadSand.world.getCurLoc();
+		Map map = MadSand.world().getCurLoc();
 		if (item.type == Placeable.Type.Object)
 			map.addObject(x, y, stats.look, item.altObject);
 		else
@@ -872,7 +875,7 @@ public class Player extends Entity {
 
 	public void useItem(CropSeeds item) {
 		Pair coords = new Pair(x, y);
-		if (MadSand.world.getCurLoc().putCrop(coords.x, coords.y, item.id)) {
+		if (MadSand.world().getCurLoc().putCrop(coords.x, coords.y, item.id)) {
 			increaseSkill(Skill.Farming);
 			MadSand.print("You plant " + item.name);
 			inventory.delItem(item, 1);
@@ -891,7 +894,7 @@ public class Player extends Entity {
 	}
 
 	private boolean useScriptedTile() {
-		String tileAction = TileProp.getOnInteract(MadSand.world.getTileId(x, y));
+		String tileAction = TileProp.getOnInteract(MadSand.world().getTileId(x, y));
 		if (!tileAction.equals(Resources.emptyField)) {
 			Lua.execute(tileAction);
 			return true;
@@ -905,11 +908,11 @@ public class Player extends Entity {
 		damageHeldEquipment();
 
 		if (item.type == Tool.Type.Shovel) {
-			int ptile = MadSand.world.getTileId(x, y);
+			int ptile = MadSand.world().getTileId(x, y);
 			int altItem = MapObject.rollTileResource(ptile, item.type);
 
 			if (altItem != -1) {
-				MadSand.world.getCurLoc().delTile(x, y);
+				MadSand.world().getCurLoc().delTile(x, y);
 				Item gotItem = Item.create(altItem);
 
 				addItem(gotItem);
@@ -942,29 +945,29 @@ public class Player extends Entity {
 
 	public void respawn() {
 		Gui.overlay.refreshActionButton();
-		MadSand.world.setLayer(Location.LAYER_OVERWORLD);
-		MadSand.world.getCurWPos();
-		int wx = MadSand.world.wx();
-		int wy = MadSand.world.wy();
-		Map map = MadSand.world.getCurLoc();
+		MadSand.world().setLayer(Location.LAYER_OVERWORLD);
+		MadSand.world().getCurWPos();
+		int wx = MadSand.world().wx();
+		int wy = MadSand.world().wy();
+		Map map = MadSand.world().getCurLoc();
 		stats.food = stats.maxFood;
 		stats.actionPts = stats.actionPtsMax;
 		stats.hp = stats.mhp;
 		stats.stamina = stats.maxstamina;
 		stats.dead = false;
 		freeHands();
-		stats.spawnTime = MadSand.world.currentTick();
+		stats.spawnTime = MadSand.world().currentTick();
 
 		if (stats.hasRespawnPoint) {
 			if (stats.respawnWX == wx && stats.respawnWY == wy) {
 				x = stats.respawnX;
 				y = stats.respawnY;
 			} else {
-				MadSand.world.switchLocation(stats.respawnWX, stats.respawnWY, Location.LAYER_OVERWORLD);
+				MadSand.world().switchLocation(stats.respawnWX, stats.respawnWY, Location.LAYER_OVERWORLD);
 			}
 		} else {
 			x = Utils.rand(0, map.getWidth());
-			y = Utils.rand(0, MadSand.world.getCurLoc().getHeight());
+			y = Utils.rand(0, MadSand.world().getCurLoc().getHeight());
 		}
 
 		updCoords();
@@ -1009,11 +1012,11 @@ public class Player extends Entity {
 	}
 
 	public MapEntity mapEntityInFront() {
-		return MadSand.world.getCurLoc().getMapEntity(coords.set(x, y).addDirection(stats.look));
+		return MadSand.world().getCurLoc().getMapEntity(coords.set(x, y).addDirection(stats.look));
 	}
 
 	public MapObject objectLookingAt() {
-		return MadSand.world.getCurLoc().getObject(x, y, stats.look);
+		return MadSand.world().getCurLoc().getObject(x, y, stats.look);
 	}
 
 	public Direction lookAtMouse(int x, int y) {
@@ -1044,7 +1047,7 @@ public class Player extends Entity {
 		if (!super.move(dir))
 			return false;
 
-		if ((MadSand.world.curLayer() == Location.LAYER_OVERWORLD) && canTravel())
+		if ((MadSand.world().curLayer() == Location.LAYER_OVERWORLD) && canTravel())
 			MadSand.print("Press [GRAY]N[WHITE] to travel to the next sector.");
 
 		return true;
@@ -1069,8 +1072,8 @@ public class Player extends Entity {
 	private void rest(int ticks, boolean verbose) {
 		double ap = stats.actionPts;
 		stats.actionPts = stats.actionPtsMax;
-		MadSand.world.timeTick(ticks);
-		MadSand.world.timeSubtick(getActionLength(ap + (ticks - 1) * getSpeed()));
+		MadSand.world().timeTick(ticks);
+		MadSand.world().timeSubtick(getActionLength(ap + (ticks - 1) * getSpeed()));
 		Gui.refreshOverlay();
 
 		if (verbose)
@@ -1083,12 +1086,12 @@ public class Player extends Entity {
 
 	public void skipTicks(int ticks) {
 		if (ticks > 1)
-			MadSand.world.startTimeSkip();
+			MadSand.world().startTimeSkip();
 		rest(ticks, false);
 	}
 
 	private void skipTime(int ticks, BooleanSupplier skipCondition) { // Skips <ticks> ticks while skipCondition is true
-		MadSand.world.startTimeSkip();
+		MadSand.world().startTimeSkip();
 		int step = Utils.largestDivisor(ticks);
 		for (int i = 0; i < ticks; i += step) {
 			if (!skipCondition.getAsBoolean())
@@ -1120,7 +1123,7 @@ public class Player extends Entity {
 			return true;
 		});
 
-		MadSand.notice("Rested for " + Utils.timeString(MadSand.world.toWorldTimeSeconds(ticksToRest)));
+		MadSand.notice("Rested for " + Utils.timeString(MadSand.world().toWorldTimeSeconds(ticksToRest)));
 	}
 
 	public static float TIMESKIP_COEF = 18f, REALTIME_SKIP_COEF = 5.5f;
@@ -1144,8 +1147,8 @@ public class Player extends Entity {
 
 		int ticks = super.doAction(ap);
 		scheduledAction = action;
-		MadSand.world.timeTick(ticks); // committing our action and then letting world catch up to time we've spent
-		MadSand.world.timeSubtick(getActionLength(ap)); // letting NPCs catch up
+		MadSand.world().timeTick(ticks); // committing our action and then letting world catch up to time we've spent
+		MadSand.world().timeSubtick(getActionLength(ap)); // letting NPCs catch up
 		Gui.overlay.refresh();
 		Lua.onAction.run();
 		return ticks;
@@ -1164,7 +1167,7 @@ public class Player extends Entity {
 		if (!super.walk(dir))
 			return;
 
-		MadSand.world.updateLight();
+		MadSand.world().updateLight();
 		objectInFront();
 		lootMsg();
 	}
@@ -1209,15 +1212,13 @@ public class Player extends Entity {
 	}
 
 	public void attackHostile() {
-		AbstractNpc npc = MadSand.world.getCurLoc().getNpc(lookingAt());
+		AbstractNpc npc = MadSand.world().getCurLoc().getNpc(lookingAt());
 
 		if (npc.equals(Map.nullNpc))
 			return;
 
-		if (!npc.friendly) {
+		if (!npc.isNeutral())
 			meleeAttack();
-			return;
-		}
 	}
 
 	public void damage(int to) {
@@ -1227,7 +1228,7 @@ public class Player extends Entity {
 
 	public void lootMsg() {
 		if (standingOnLoot()) {
-			Loot loot = MadSand.world.getCurLoc().getLoot(x, y);
+			Loot loot = MadSand.world().getCurLoc().getLoot(x, y);
 			MadSand.print("You see [" + loot.getInfo() + "] lying on the floor");
 		}
 	}
@@ -1285,7 +1286,7 @@ public class Player extends Entity {
 	}
 
 	public long getSurvivedTime() {
-		return MadSand.world.toWorldTimeSeconds(MadSand.world.currentTick() - stats.spawnTime);
+		return MadSand.world().toWorldTimeSeconds(MadSand.world().currentTick() - stats.spawnTime);
 	}
 
 	public void registerLuaAction(String name) {

@@ -87,7 +87,7 @@ public class Inventory {
 	public void refreshWeight() {
 		curWeight = 0;
 		for (Item item : items)
-			curWeight += item.getWeight();
+			curWeight += item.getTotalWeight();
 		refreshUITitle();
 	}
 
@@ -211,7 +211,7 @@ public class Inventory {
 			return true;
 
 		Item updItem;
-		float newWeight = item.getWeight() + curWeight;
+		float newWeight = item.getTotalWeight() + curWeight;
 		int existingIdx = getIndex(item);
 
 		if (!item.equals(getItemByIndex(existingIdx)))

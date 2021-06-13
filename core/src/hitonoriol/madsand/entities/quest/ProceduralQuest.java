@@ -116,7 +116,7 @@ public class ProceduralQuest extends Quest {
 	}
 
 	public long timeSinceCreated() {
-		return MadSand.world.currentRealtimeTick() - startTime;
+		return MadSand.world().currentRealtimeTick() - startTime;
 	}
 
 	/*
@@ -171,7 +171,7 @@ public class ProceduralQuest extends Quest {
 	private void randomFetchQuest() {
 		List<Integer> fetchItem = new ArrayList<>();
 		fetchItem.add(Utils.randElement(Globals.values().fetchQuestItems));
-		Pair coords = MadSand.world.getCurLoc().randPlaceLoot(fetchItem.get(0));
+		Pair coords = MadSand.world().getCurLoc().randPlaceLoot(fetchItem.get(0));
 		super.reqItems += randomQuest(fetchItem, 1, 1);
 		super.startMsg += " I think the lost item is somewhere near (" + coords + ").";
 	}
@@ -181,7 +181,7 @@ public class ProceduralQuest extends Quest {
 	}
 
 	private void randomKillQuest() {
-		OverworldPreset biome = WorldGenProp.getBiome(MadSand.world.getLocBiome()).overworld;
+		OverworldPreset biome = WorldGenProp.getBiome(MadSand.world().getLocBiome()).overworld;
 		ArrayList<Integer> mobs = new ArrayList<>();
 		mobs.addAll(biome.friendlyMobs.idList);
 		mobs.addAll(biome.hostileMobs.idList);

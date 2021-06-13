@@ -293,7 +293,7 @@ public class WorldGen {
 	}
 
 	private WorldGenPreset getLocationBiome() { // Sets current generator biome to the overworld biome
-		return setCurBiome(MadSand.world.getLocBiome());
+		return setCurBiome(MadSand.world().getLocBiome());
 	}
 
 	public int chooseRandomBiome() {

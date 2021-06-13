@@ -31,7 +31,7 @@ public class TraderDialog extends GameDialog {
 
 		super.addButton(tradeButton);
 
-		if (!MadSand.world.inEncounter && MadSand.world.curLayer() == Location.LAYER_OVERWORLD) {
+		if (!MadSand.world().inEncounter && MadSand.world().curLayer() == Location.LAYER_OVERWORLD) {
 			super.addButton(helpButton);
 			helpButton.addListener(new ChangeListener() {
 				@Override

@@ -10,27 +10,27 @@ import hitonoriol.madsand.util.Utils;
 
 public class LuaUtils {
 	public static Pair locateTile(int id) {
-		return MadSand.world.getCurLoc().locateTile(id);
+		return MadSand.world().getCurLoc().locateTile(id);
 	}
 
 	public static void placeTile(int x, int y, int id) {
-		MadSand.world.getCurLoc().addTile(x, y, id, true);
+		MadSand.world().getCurLoc().addTile(x, y, id, true);
 	}
 
 	public static void delObject(int x, int y) {
-		MadSand.world.getCurLoc().delObject(x, y);
+		MadSand.world().getCurLoc().delObject(x, y);
 	}
 
 	public static void addObject(int x, int y, int id) {
-		MadSand.world.getCurLoc().addObject(x, y, id);
+		MadSand.world().getCurLoc().addObject(x, y, id);
 	}
 
 	public static void descend() {
-		MadSand.world.descend();
+		MadSand.world().descend();
 	}
 
 	public static void ascend() {
-		MadSand.world.ascend();
+		MadSand.world().ascend();
 	}
 
 	public static void showDialog(String query) {
