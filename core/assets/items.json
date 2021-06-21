@@ -2,10 +2,10 @@
 	"0" : { "@type" : "Item", "name": "Nothing"},
 	"1" : {
 		"name" : "Wood",
-		"altObject" : 9,
-		"cost" : 5,
 		"@type" : "Placeable",
-		"type" : "Object"
+		"type" : "Object",
+		"altObject" : 9,
+		"cost" : 5		
 	},
 	"2" : {
 		"@type" : "Item",
@@ -1849,5 +1849,13 @@
 		"@type" : "Pill",
 		"cost": 1000,
 		"weight": 0.01
+	},
+	"180" : {
+		"name" : "Stone pipe",
+		"@type" : "Placeable",
+		"directional" : true,
+		"altObject" : 177,
+		"cost" : 17,
+		"type" : "Object"
 	}
 }

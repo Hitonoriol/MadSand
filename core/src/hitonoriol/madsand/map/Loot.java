@@ -1,13 +1,18 @@
 package hitonoriol.madsand.map;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
 import hitonoriol.madsand.entities.inventory.item.Item;
 
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class Loot {
-	public ArrayList<Item> contents = new ArrayList<Item>();
+	private ArrayList<Item> contents = new ArrayList<Item>();
+	@JsonIgnore
 	private String lootStr;
 
 	public Loot(Item cont) {
@@ -55,10 +60,18 @@ public class Loot {
 	public Item remove(Item item) {
 		int i = 0;
 		for (Item itemStack : contents) {
-			if (itemStack == item)
-				return remove(i);
+			if (itemStack == item || itemStack.quantity == item.quantity) {
+				remove(i);
+				break;
+			}
+
+			if (itemStack.quantity > item.quantity) {
+				itemStack.quantity -= item.quantity;
+				break;
+			}
 			++i;
 		}
+		genInfo();
 		return Item.nullItem;
 	}
 
@@ -76,5 +89,31 @@ public class Loot {
 		contents.add(item);
 		genInfo();
 		return this;
+	}
+
+	public void mergeItemStacks() {
+		Iterator<Item> it = contents.iterator();
+		int idx;
+		Item item, foundItem;
+		while (it.hasNext()) {
+			item = it.next();
+			if ((idx = contents.indexOf(item)) != -1 && (foundItem = contents.get(idx)) != item) {
+				foundItem.quantity += item.quantity;
+				it.remove();
+			}
+		}
+		genInfo();
+	}
+
+	public int getItemCount() {
+		return contents.size();
+	}
+
+	public Item get(int idx) {
+		return contents.get(idx);
+	}
+
+	public ArrayList<Item> getContents() {
+		return contents;
 	}
 }

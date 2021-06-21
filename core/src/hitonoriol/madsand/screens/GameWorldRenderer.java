@@ -56,15 +56,19 @@ public class GameWorldRenderer {
 		}
 	}
 
-	private void renderObject(MapObject object, int x, int y) {
+	private void renderObject(MapObject object, float x, float y) {
 		x *= TILESIZE;
 		y *= TILESIZE;
 
 		if (object.centered)
 			x -= object.getRenderOffset();
 
+		Texture texture = object.getTexture();
+		float w = texture.getWidth(), h = texture.getHeight();
 		if ((object.id != MapObject.NULL_OBJECT_ID) && (object.id != MapObject.COLLISION_MASK_ID))
-			MadSand.batch.draw(Resources.objects[object.id], x, y);
+			MadSand.batch.draw(texture, x, y, w / 2f, h / 2f, w, h, 1f, 1f,
+					object.getDirection().getRotation(),
+					0, 0, (int) w, (int) h, false, false);
 	}
 
 	public void queueAnimation(AnimationContainer animation, float x, float y) {
@@ -126,8 +130,8 @@ public class GameWorldRenderer {
 		Loot loot = MadSand.world().getCurLoc().getLoot((int) x, (int) y);
 		Texture lootTx;
 
-		if (loot.contents.size() == 1)
-			lootTx = loot.contents.get(0).getTexture();
+		if (loot.getItemCount() == 1)
+			lootTx = loot.get(0).getTexture();
 		else
 			lootTx = Resources.objects[OBJECT_LOOT];
 

@@ -11,12 +11,14 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
@@ -33,6 +35,7 @@ import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.util.Utils;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
 @JsonSubTypes({ @Type(Armor.class), @Type(Consumable.class), @Type(CropSeeds.class), @Type(FishingBait.class),
@@ -187,6 +190,29 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 
 	public boolean isCraftable() {
 		return recipe != null;
+	}
+
+	/*
+	 *	Returns a new stack with max weight of <weight>
+	 *	Current stack is unchanged 
+	 */
+	public Item split(float weight) {
+		Utils.dbg("Split item %s || weight %f", this, weight);
+		if (getTotalWeight() <= weight)
+			return this;
+		
+		int quantity = this.quantity;
+
+		Item newStack = copy().setQuantity(0);
+		while (newStack.getTotalWeight() < weight) {
+			--quantity;
+			++newStack.quantity;
+			if (quantity == 0)
+				break;
+		}
+		
+		Utils.dbg("new stack: %s", newStack);
+		return newStack;
 	}
 
 	@Override

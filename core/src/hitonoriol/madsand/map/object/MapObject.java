@@ -6,10 +6,13 @@ import java.util.function.Supplier;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
@@ -19,6 +22,7 @@ import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.skill.Skill;
+import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
@@ -26,8 +30,10 @@ import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.util.Utils;
 
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
-@JsonSubTypes({ @Type(CraftingStation.class), @Type(ItemFactory.class), @Type(ResourceObject.class) })
+@JsonSubTypes({ @Type(CraftingStation.class), @Type(ItemFactory.class), @Type(ResourceObject.class),
+		@Type(ItemPipeline.class) })
 public class MapObject extends MapEntity {
 	public static final int NULL_OBJECT_ID = 0;
 	public static final int COLLISION_MASK_ID = 666;
@@ -45,7 +51,8 @@ public class MapObject extends MapEntity {
 
 	public int maskWidth = 0, maskHeight = 0; // Collision mask dimensions for objects larger than 1x1 cell
 
-	public int dropOnDestruction;
+	private int dropOnDestruction;
+	protected Direction directionFacing = Direction.RIGHT;
 	public String onInteract = Resources.emptyField;
 
 	public MapObject(MapObject protoObject) {
@@ -92,13 +99,20 @@ public class MapObject extends MapEntity {
 	}
 
 	public void interact(Player player) {
-		interact(player, () -> {
-		});
+		interact(player, () -> {});
 	}
 
 	@JsonIgnore
 	public boolean isCollisionMask() {
 		return (id == Map.COLLISION_MASK_ID);
+	}
+
+	public int getDropOnDestruction() {
+		return dropOnDestruction;
+	}
+
+	public void setDropOnDestruction(int dropOnDestruction) {
+		this.dropOnDestruction = dropOnDestruction;
 	}
 
 	public void destroy() {
@@ -170,6 +184,14 @@ public class MapObject extends MapEntity {
 		return ((double) hp / (double) maxHp) * 100d;
 	}
 
+	public Direction getDirection() {
+		return directionFacing;
+	}
+
+	public void setDirection(Direction direction) {
+		directionFacing = direction;
+	}
+
 	@Override
 	public Pair getPosition() {
 		return new Pair(MadSand.world().getCurLoc().locateObject(this));
@@ -229,5 +251,10 @@ public class MapObject extends MapEntity {
 
 	public static MapObject create(int id) {
 		return ObjectProp.getObject(id).copy();
+	}
+
+	@JsonIgnore
+	public Texture getTexture() {
+		return Resources.objects[id];
 	}
 }

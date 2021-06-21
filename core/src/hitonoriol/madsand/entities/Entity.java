@@ -273,8 +273,8 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public void pickUpLoot(Loot loot) {
-		for (int i = loot.contents.size() - 1; i >= 0; --i)
-			if (!pickUpLoot(loot, loot.contents.get(i)))
+		for (int i = loot.getItemCount() - 1; i >= 0; --i)
+			if (!pickUpLoot(loot, loot.get(i)))
 				break;
 	}
 

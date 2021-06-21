@@ -99,6 +99,11 @@ public class ItemProducer {
 	}
 
 	@JsonIgnore
+	public Item getProduct() {
+		return getProduct((int) productStorage);
+	}
+
+	@JsonIgnore
 	public String getConsumableName() {
 		return ItemProp.getItemName(consumedMaterial);
 	}

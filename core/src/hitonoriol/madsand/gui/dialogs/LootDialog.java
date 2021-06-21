@@ -60,7 +60,7 @@ public class LootDialog extends GameDialog {
 		}
 
 		lootTable.clear();
-		ItemUI.createItemList(lootTable, loot.contents, ITEMS_PER_ROW);
+		ItemUI.createItemList(lootTable, loot.getContents(), ITEMS_PER_ROW);
 		Actor actor;
 		for (Cell<Actor> cell : lootTable.getCells()) {
 			if (!((actor = cell.getActor()) instanceof ItemUI))

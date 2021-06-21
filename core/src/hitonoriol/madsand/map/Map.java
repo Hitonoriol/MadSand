@@ -30,6 +30,7 @@ import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.map.object.ItemFactory;
+import hitonoriol.madsand.map.object.ItemPipeline;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.map.object.ResourceObject;
 import hitonoriol.madsand.pathfinding.DistanceHeuristic;
@@ -73,7 +74,9 @@ public class Map {
 	private HashMap<Pair, Loot> mapLoot;
 	private HashMap<Pair, Crop> mapCrops;
 	private HashMap<Pair, AbstractNpc> mapNpcs;
-	private ArrayList<Pair> mapItemFactories;
+
+	// TODO: Generalize all time-dependent objects, npcs, etc. 
+	private ArrayList<Pair> mapItemFactories, itemPipelines;
 
 	IndexedAStarPathFinder<Node> pathFinder;
 	Graph graph;
@@ -359,6 +362,7 @@ public class Map {
 		mapNpcs = new HashMap<>();
 		mapCrops = new HashMap<>();
 		mapItemFactories = new ArrayList<>();
+		itemPipelines = new ArrayList<>();
 
 		graph = new Graph();
 		nodeMap = new NodeMap(graph, xsz, ysz);
@@ -713,6 +717,9 @@ public class Map {
 			object.as(ItemFactory.class)
 					.ifPresent(itemFactory -> mapItemFactories.add(coords));
 
+			object.as(ItemPipeline.class)
+					.ifPresent(itemPipeline -> itemPipelines.add(coords));
+
 			if (graph.getNodeCount() > 0) {
 				if (!object.nocollide) {
 					unlinkFromNeighbors(x, y);
@@ -738,9 +745,12 @@ public class Map {
 		return addObject(coord.x, coord.y, id);
 	}
 
-	public boolean addObject(int x, int y, Direction dir, int id) {
+	public MapObject addObject(int x, int y, Direction dir, int id) {
 		coords.set(x, y).addDirection(dir);
-		return addObject(coords.x, coords.y, id);
+		if (addObject(coords.x, coords.y, id))
+			return getObject(coords);
+		else
+			return Map.nullObject;
 	}
 
 	public MapObject getObject(int x, int y) {
@@ -841,6 +851,10 @@ public class Map {
 			return nullLoot;
 	}
 
+	public Loot getLoot(Pair coords) {
+		return getLoot(coords.x, coords.y);
+	}
+
 	void removeLoot(int x, int y) {
 		if (correctCoords(coords.set(x, y)))
 			mapLoot.remove(coords);
@@ -860,8 +874,12 @@ public class Map {
 				mapLoot.get(coords).add(item);
 			else
 				mapLoot.put(new Pair(coords), new Loot(item));
-
 		}
+	}
+
+	public void putLoot(Pair coords, Item item) {
+		Utils.dbg("Putloot %s %s", coords, item);
+		putLoot(coords.x, coords.y, item);
 	}
 
 	public void putLoot(int x, int y, List<Item> loot) {
@@ -1085,6 +1103,11 @@ public class Map {
 
 			((FarmAnimal) entry.getValue()).animalProduct.produce();
 		}
+	}
+
+	public void updateItemPipelines() {
+		itemPipelines.forEach(coords -> getObject(coords).as(ItemPipeline.class)
+				.ifPresent(pipeline -> pipeline.update()));
 	}
 
 	public void spawnMobs(boolean friendly, boolean force) {

@@ -1323,5 +1323,14 @@
 		"@type" : "CraftingStation",
 		"centered" : true,
 		"name" : "Fletching table"
+	},
+	"177" : {
+		"hp" : 1,
+		"harvestHp" : 15,
+		"@type" : "ItemPipeline",
+		"transportLimit" : 1.5,
+		"centered" : true,
+		"nocollide" : true,
+		"name" : "Stone pipe"
 	}
 }

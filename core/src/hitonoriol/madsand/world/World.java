@@ -725,19 +725,16 @@ public class World {
 		getCurLoc().updateLight(player.x, player.y, player.fov);
 	}
 
-	private void realtimeRefresh() {
+	private void realtimeTick() {
+		++globalRealtimeTick;
 		Location loc = getLocation();
 		Map map = loc.getLayer(Location.LAYER_OVERWORLD);
 		map.updateCrops();
 		map.updateProductionStations();
+		map.updateItemPipelines();
 
 		if (loc.isSettlement())
 			loc.getSettlement().timeTick();
-	}
-
-	private void realtimeTick() {
-		++globalRealtimeTick;
-		realtimeRefresh();
 	}
 
 	public void skipRealtimeTicks(long ticks) {

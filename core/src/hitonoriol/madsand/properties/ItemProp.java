@@ -53,7 +53,7 @@ public class ItemProp {
 	}
 
 	public static int getAltObject(int id) {
-		return ((Placeable)items.get(id)).altObject;
+		return ((Placeable)items.get(id)).getAltObject();
 	}
 
 	public static String getOnUseAction(int id) {

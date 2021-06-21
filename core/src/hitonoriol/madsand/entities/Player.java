@@ -865,10 +865,13 @@ public class Player extends Entity {
 
 	public void useItem(Placeable item) {
 		Map map = MadSand.world().getCurLoc();
-		if (item.type == Placeable.Type.Object)
-			map.addObject(x, y, stats.look, item.altObject);
+		if (item.getType() == Placeable.Type.Object) {
+			MapObject object = map.addObject(x, y, stats.look, item.getAltObject());
+			if (item.isDirectional())
+				object.setDirection(stats.look);
+		}
 		else
-			map.addTile(x, y, stats.look, item.altObject);
+			map.addTile(x, y, stats.look, item.getAltObject());
 
 		inventory.delItem(item, 1);
 	}

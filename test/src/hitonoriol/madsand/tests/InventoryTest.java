@@ -71,10 +71,10 @@ public class InventoryTest {
 		assertTrue(inventory.isEmpty(), "Inventory should be empty after drop");
 
 		Loot loot = map.getLoot(player.x, player.y);
-		items.removeAll(loot.contents);
+		items.removeAll(loot.getContents());
 		Utils.out("Inventory \\ Loot:");
 		items.forEach(item -> Utils.out(item.toString()));
-		assertTrue(loot.contents.containsAll(items), "All dropped items must be present at the drop location");
+		assertTrue(loot.getContents().containsAll(items), "All dropped items must be present at the drop location");
 	}
 
 	@RepeatedTest(10)
