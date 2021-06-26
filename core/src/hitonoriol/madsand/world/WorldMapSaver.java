@@ -10,10 +10,9 @@ import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
-import hitonoriol.madsand.map.Crop;
-import hitonoriol.madsand.map.ItemProducer;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
+import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.util.ByteUtils;
 import hitonoriol.madsand.util.Utils;
@@ -104,8 +103,8 @@ public class WorldMapSaver {
 			Resources.mapper.writerFor(Resources.getMapType(Pair.class, AbstractNpc.class))
 					.writeValue(new File(GameSaver.getNpcFile(wx, wy, layer)), map.getNpcs());
 
-			Resources.mapper.writeValue(new File(GameSaver.getItemFactoryFile(wx, wy, layer)),
-					map.getMapItemFactories());
+			Resources.mapper.writeValue(new File(GameSaver.getTimeDependentFile(wx, wy, layer)),
+					map.getTimeDependentMapEntities());
 
 			int xsz = map.getWidth();
 			int ysz = map.getHeight();
@@ -119,10 +118,7 @@ public class WorldMapSaver {
 
 			MapObject obj = new MapObject();
 			ByteArrayOutputStream lootStream = new ByteArrayOutputStream();
-			ByteArrayOutputStream cropStream = new ByteArrayOutputStream();
 			byte loot[];
-			Crop crop;
-			int cropBlocks = 0;
 			for (int y = 0; y < ysz; ++y) {
 				for (int x = 0; x < xsz; ++x) {
 					// Save tiles
@@ -134,17 +130,6 @@ public class WorldMapSaver {
 					stream.write(ByteUtils.encode2(obj.id));
 					stream.write(ByteUtils.encode2(obj.hp));
 					stream.write(ByteUtils.encode2(obj.maxHp));
-
-					// Save crops
-					crop = map.getCrop(x, y);
-					if (crop.id == Map.nullCrop.id)
-						continue;
-					cropStream.write(ByteUtils.encode2(x));
-					cropStream.write(ByteUtils.encode2(y));
-					cropStream.write(ByteUtils.encode2(crop.id));
-					cropStream.write(ByteUtils.encode8(crop.plantTime));
-					cropStream.write(ByteUtils.encode2(crop.curStage));
-					++cropBlocks;
 				}
 			}
 
@@ -154,16 +139,12 @@ public class WorldMapSaver {
 			lootStream.write(loot);
 
 			// Get all bytes from streams & concat them into one array
-			byte[] cropCount = ByteUtils.encode8(cropBlocks);
-			byte[] _crops = cropStream.toByteArray();
-			cropStream.close();
-
 			byte[] _loot = lootStream.toByteArray();
 			lootStream.close();
 			byte ret[] = stream.toByteArray();
 			stream.close();
 
-			ret = ByteUtils.concat(ret, _loot, cropCount, _crops);
+			ret = ByteUtils.concat(ret, _loot);
 			return ret;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -188,6 +169,12 @@ public class WorldMapSaver {
 			map.setSize(xsz, ysz);
 			map.purge();
 
+			// Load time dependent entities
+			HashMap<Pair, MapEntity> timeDepMap = Resources.mapper.readValue(
+					new File(GameSaver.getTimeDependentFile(wx, wy, layer)),
+					Resources.getMapType(Pair.class, MapEntity.class));
+			map.setTimeDependentMapEntities(timeDepMap);
+
 			// Load NPCs
 			HashMap<Pair, AbstractNpc> npcs = Resources.mapper.readValue(
 					new File(GameSaver.getNpcFile(wx, wy, layer)),
@@ -205,17 +192,11 @@ public class WorldMapSaver {
 				for (int x = 0; x < xsz; ++x) {
 					map.addTile(x, y, loadNextBlock(stream, block), true);
 					map.getTile(x, y).visited = loadNextBlock(stream, block) != 0;
-					map.addObject(x, y, loadNextBlock(stream, block));
+					map.addObject(x, y, loadNextBlock(stream, block), false);
 					map.getObject(x, y).hp = loadNextBlock(stream, block);
 					map.getObject(x, y).maxHp = loadNextBlock(stream, block);
 				}
 			}
-
-			// Load production stations
-			HashMap<Pair, ItemProducer> prodStations = Resources.mapper.readValue(
-					new File(GameSaver.getItemFactoryFile(wx, wy, layer)),
-					Resources.getMapType(Pair.class, ItemProducer.class));
-			map.setMapItemFactories(prodStations);
 
 			// Load loot
 			byte[] lootNode = new byte[(int) loadNextLongBlock(stream, longBlock)];
@@ -223,27 +204,11 @@ public class WorldMapSaver {
 			HashMap<Pair, Loot> mapLoot = Resources.mapper.readValue(new String(lootNode),
 					Resources.getMapType(Pair.class, Loot.class));
 			map.setLoot(mapLoot);
-
-			// Load crops
-			int cropsCount = (int) loadNextLongBlock(stream, longBlock);
-			int x, y, id, stage;
-			long ptime;
-			Crop crop;
-			for (int i = 0; i < cropsCount; ++i) {
-				x = loadNextBlock(stream, block);
-				y = loadNextBlock(stream, block);
-				id = loadNextBlock(stream, block);
-				ptime = loadNextLongBlock(stream, longBlock);
-				stage = loadNextBlock(stream, block);
-				crop = new Crop(id, ptime, stage);
-				map.putCrop(x, y, crop);
-			}
-
 			stream.close();
 
 			// Add self to Location list
+			map.postLoadInit();
 			worldMap.addMap(loc, layer, map);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			Utils.die();

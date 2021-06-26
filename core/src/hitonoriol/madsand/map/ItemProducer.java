@@ -91,8 +91,11 @@ public class ItemProducer {
 
 	@JsonIgnore
 	public Item getProduct(int quantity) {
-		if (productStorage - quantity < 0)
+		if (quantity <= 0)
 			return Item.nullItem;
+
+		if (productStorage - quantity < 0)
+			return getProduct((int) productStorage);
 
 		productStorage -= quantity;
 		return Item.create(producedMaterial, quantity);

@@ -1,11 +1,12 @@
 package hitonoriol.madsand.entities.npc;
 
+import hitonoriol.madsand.TimeDependent;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.gui.textgenerator.CellInfoGenerator;
 import hitonoriol.madsand.map.ItemProducer;
 import hitonoriol.madsand.properties.NpcContainer;
 
-public class FarmAnimal extends AbstractNpc {
+public class FarmAnimal extends AbstractNpc implements TimeDependent {
 	public ItemProducer animalProduct;
 
 	public FarmAnimal(NpcContainer protoNpc) {
@@ -27,5 +28,10 @@ public class FarmAnimal extends AbstractNpc {
 	@Override
 	public void interact(Player player) {
 		player.interact(this);
+	}
+
+	@Override
+	public void update() {
+		animalProduct.produce();
 	}
 }

@@ -1,22 +1,27 @@
 package hitonoriol.madsand.map;
 
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.TimeDependent;
+import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.properties.ItemProp;
+import hitonoriol.madsand.properties.ObjectProp;
 
-public class Crop {
+public class Crop extends MapObject implements TimeDependent {
 	static final int STAGE_COUNT = 4;
 	CropGrowthStageContainer growthStages;
 	int totalGrowthTime = 0;
 	public int curStage = 0;
 	public long plantTime;
-	public int id;
-	int objId;
+	int objId, itemId;
 
 	public Crop(int id, long plantTime) {
-		this.id = id;
+		super();
+		itemId = id;
 		growthStages = ItemProp.getCropStages(id);
 		this.plantTime = plantTime;
 		objId = growthStages.getStageObject(curStage);
+		initProperties(ObjectProp.getObject(objId));
 	}
 
 	public Crop(int id, long plantTime, int stage) {
@@ -26,17 +31,24 @@ public class Crop {
 	}
 
 	public Crop() {
-		id = 0;
+		itemId = 0;
 	}
 
-	boolean upd() {
+	@Override
+	public void update() {
 		if ((curStage + 1) >= STAGE_COUNT)
-			return false;
+			return;
 
-		if (getTimeSincePlanted() >= growthStages.getStageLength(curStage))
+		if (getTimeSincePlanted() >= growthStages.getStageLength(curStage)) {
 			objId = growthStages.getStageObject(++curStage);
-
-		return true;
+			id = objId;
+			if (curStage == STAGE_COUNT - 1)
+				MadSand.world().exec(map -> {
+					Pair position = getPosition();
+					map.delObject(position);
+					map.addObject(position, id);
+				});
+		}
 	}
 
 	public long getTimeSincePlanted() {
@@ -48,7 +60,7 @@ public class Crop {
 			return totalGrowthTime;
 
 		int time = 0;
-		for (CropGrowthStage stageLen : growthStages) 
+		for (CropGrowthStage stageLen : growthStages)
 			time += stageLen.stageLength;
 
 		totalGrowthTime = time;

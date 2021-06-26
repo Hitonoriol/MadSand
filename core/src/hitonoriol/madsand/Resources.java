@@ -179,6 +179,7 @@ public class Resources {
 	private static void initObjectMapper() {
 		mapper.configure(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS.mappedFeature(), true);
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		mapper.enableDefaultTyping();
 
 		SimpleModule simpleModule = new SimpleModule();
 		simpleModule.addKeyDeserializer(Pair.class, new PairKeyDeserializer());

@@ -20,7 +20,7 @@ import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.util.Utils;
 
-public class ProductionStationUI extends GameDialog {
+public class ItemFactoryUI extends GameDialog {
 
 	final float WIDTH = 500;
 	final float HEIGHT = 400;
@@ -69,18 +69,13 @@ public class ProductionStationUI extends GameDialog {
 	Label produceLabel;
 	Label consumeLabel;
 
-	Timer.Task refreshTask = new Timer.Task() {
-		@Override
-		public void run() {
-			refresh();
-		}
-	};
+	Timer.Task refreshTask = Utils.createTask(() -> refresh());
 
-	private ProductionStationUI(Stage stage) {
+	private ItemFactoryUI(Stage stage) {
 		super(stage);
 	}
 
-	public ProductionStationUI(ItemProducer station) {
+	public ItemFactoryUI(ItemProducer station) {
 		this(Gui.overlay);
 		this.station = station;
 		this.player = MadSand.player();
@@ -122,44 +117,45 @@ public class ProductionStationUI extends GameDialog {
 			produceLabel.setAlignment(Align.center);
 		}
 
-		super.add(produceLabel).width(ENTRY_WIDTH).padTop(TITLE_PAD / 3).row();
+		add(produceLabel).width(ENTRY_WIDTH).padTop(TITLE_PAD / 3).row();
 		if (!endless)
-			super.add(consumeLabel).width(ENTRY_WIDTH).row();
+			add(consumeLabel).width(ENTRY_WIDTH).row();
 
-		super.add(productStorageLabel).colspan(2).padTop(PAD_VERTICAL - 5).row();
+		add(productStorageLabel).colspan(2).padTop(PAD_VERTICAL - 5).row();
+		if (!endless)
+			add(consumableStorageLabel).colspan(2).padBottom(PAD_VERTICAL * 2).row();
+
+		add(new Label(takeProductString + producedMaterial, Gui.skin));
+		if (!endless)
+			add(new Label(addConsumableString + consumedMaterial, Gui.skin));
+		row();
+
+		add(productSlider).size(ENTRY_WIDTH, ENTRY_HEIGHT);
+		if (!endless)
+			add(consumableSlider).size(ENTRY_WIDTH, ENTRY_HEIGHT);
+		row();
+
+		add(takeProductButton).size(ENTRY_WIDTH, ENTRY_HEIGHT);
+		if (!endless)
+			add(addConsumableButton).size(ENTRY_WIDTH, ENTRY_HEIGHT);
+		row();
+
 		if (!endless) {
-			super.add(consumableStorageLabel).colspan(2).padBottom(PAD_VERTICAL * 2).row();
-
-			super.add(new Label(upgradeLblString, Gui.skin)).colspan(2).align(Align.center).row();
-			super.add(upgradeButton).size(ENTRY_WIDTH, ENTRY_HEIGHT).padBottom(PAD_VERTICAL * 2).colspan(2)
+			/*add(new Label(upgradeLblString, Gui.skin)).colspan(2).align(Align.center).row();*/
+			add(upgradeButton).size(ENTRY_WIDTH, ENTRY_HEIGHT).padBottom(PAD_VERTICAL * 2).colspan(2)
 					.align(Align.center).row();
 		} else
-			super.add().padBottom(PAD_VERTICAL * 2).row();
+			add().padBottom(PAD_VERTICAL * 2).row();
 
-		super.add(new Label(takeProductString + producedMaterial, Gui.skin));
-		if (!endless)
-			super.add(new Label(addConsumableString + consumedMaterial, Gui.skin));
-		super.row();
-
-		super.add(productSlider).size(ENTRY_WIDTH, ENTRY_HEIGHT);
-		if (!endless)
-			super.add(consumableSlider).size(ENTRY_WIDTH, ENTRY_HEIGHT);
-		super.row();
-
-		super.add(takeProductButton).size(ENTRY_WIDTH, ENTRY_HEIGHT);
-		if (!endless)
-			super.add(addConsumableButton).size(ENTRY_WIDTH, ENTRY_HEIGHT);
-		super.row();
-
-		super.add(closeButton).colspan(2).size(BUTTON_WIDTH, BUTTON_HEIGHT).padTop(PAD_VERTICAL / 2)
+		add(closeButton).colspan(2).size(BUTTON_WIDTH, BUTTON_HEIGHT).padTop(PAD_VERTICAL / 2)
 				.align(Align.center);
-		super.setSize(WIDTH, HEIGHT);
-		super.pack();
+		setSize(WIDTH, HEIGHT);
+		pack();
 	}
 
 	public void show() {
 		super.show();
-		float tickRate = MadSand.world().getRealtimeTickRate();
+		float tickRate = MadSand.world().getRealtimeActionPeriod();
 		Timer.instance().scheduleTask(refreshTask, tickRate, tickRate);
 	}
 
@@ -170,7 +166,7 @@ public class ProductionStationUI extends GameDialog {
 	}
 
 	private void refreshRateLabels() {
-		float tickRate = MadSand.world().getRealtimeTickRate();
+		float tickRate = MadSand.world().getRealtimeActionPeriod();
 		produceLabel.setText(produceString + producedMaterial + " (+" + Utils.round(station.productionRate / tickRate)
 				+ " per second)");
 		consumeLabel.setText(consumeString + consumedMaterial + " (-" + Utils.round(station.consumptionRate / tickRate)

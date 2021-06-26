@@ -83,6 +83,11 @@ public abstract class AbstractNpc extends Entity {
 	public void loadSprite() {
 		setSprites(new Sprite(Resources.npc[id]));
 	}
+	
+	@Override
+	public boolean add(Map map, Pair coords) {
+		return map.add(coords, this);
+	}
 
 	public Node findPath(int x, int y) {
 		Map map = MadSand.world().getCurLoc();

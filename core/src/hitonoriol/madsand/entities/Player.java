@@ -55,7 +55,7 @@ import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.gui.dialogs.FishingUI;
 import hitonoriol.madsand.gui.dialogs.GrabBagDialog;
-import hitonoriol.madsand.gui.dialogs.ProductionStationUI;
+import hitonoriol.madsand.gui.dialogs.ItemFactoryUI;
 import hitonoriol.madsand.gui.dialogs.TraderDialog;
 import hitonoriol.madsand.gui.dialogs.WaitDialog;
 import hitonoriol.madsand.gui.widgets.ResourceProgressBar;
@@ -126,6 +126,11 @@ public class Player extends Entity {
 		turn(stats.look);
 		stats.equipment.refreshUI();
 		abilityKeyBinds.forEach((key, abilityId) -> bindAbility(key, abilityId));
+	}
+
+	@Override
+	public boolean add(Map map, Pair coords) {
+		return true;
 	}
 
 	public int getEstablishedSettlements() {
@@ -698,7 +703,7 @@ public class Player extends Entity {
 	}
 
 	public void interact(FarmAnimal animal) {
-		new ProductionStationUI(animal.animalProduct).show();
+		new ItemFactoryUI(animal.animalProduct).show();
 	}
 
 	public void interact(AbstractNpc npc) {
@@ -869,8 +874,7 @@ public class Player extends Entity {
 			MapObject object = map.addObject(x, y, stats.look, item.getAltObject());
 			if (item.isDirectional())
 				object.setDirection(stats.look);
-		}
-		else
+		} else
 			map.addTile(x, y, stats.look, item.getAltObject());
 
 		inventory.delItem(item, 1);

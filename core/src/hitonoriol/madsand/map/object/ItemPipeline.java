@@ -6,15 +6,17 @@ import java.util.List;
 import org.apache.commons.lang3.mutable.MutableFloat;
 
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.TimeDependent;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.map.ItemProducer;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.util.Functional;
 import hitonoriol.madsand.util.Utils;
 
-public class ItemPipeline extends MapObject {
+public class ItemPipeline extends MapObject implements TimeDependent {
 	private float transportLimit; // kgs per tick
 	private boolean sentItems = false, receivedItems = false;
 
@@ -56,22 +58,38 @@ public class ItemPipeline extends MapObject {
 	}
 
 	/*
-	 *	Called once per tick
 	 *	Move items from current tile in set direction - to the next tile or as a material for ItemFactory 
 	 *	Or, if there's an ItemFactory in an opposite direction one tile away,
 	 *	Pull factory's product to the current tile 
 	 */
+	@Override
 	public void update() {
+		if (receivedItems) {
+			receivedItems = false;
+			if (!sentItems)
+				return;
+		}
 		Pair position = getPosition();
 		MadSand.world().exec(map -> {
 			map.getObject(position.copy().addDirection(directionFacing.opposite()))
 					.as(ItemFactory.class)
 					.ifPresentOrElse(
-							factory -> map.putLoot(position, factory.getItemProducer().getProduct()),
+							factory -> {
+								ItemProducer producer = factory.getItemProducer();
+								Item product = Item.create(producer.producedMaterial);
+								Utils.dbg("Extracting ItemFactory items at %s", position);
+								map.putLoot(position, producer.getProduct((int) (transportLimit / product.weight)));
+							},
+
 							() -> {
 								Loot loot = map.getLoot(position);
 								if (loot == Map.nullLoot || loot.isEmpty())
 									return;
+
+								if (sentItems) {
+									sentItems = false;
+									return;
+								}
 
 								Utils.dbg("Movin items from %s", position);
 								sentItems = true;

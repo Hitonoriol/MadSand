@@ -17,6 +17,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.TimeDependent;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
@@ -24,13 +25,10 @@ import hitonoriol.madsand.entities.TradeListContainer;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
-import hitonoriol.madsand.entities.npc.FarmAnimal;
 import hitonoriol.madsand.entities.npc.Npc;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.TradeCategory;
-import hitonoriol.madsand.map.object.ItemFactory;
-import hitonoriol.madsand.map.object.ItemPipeline;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.map.object.ResourceObject;
 import hitonoriol.madsand.pathfinding.DistanceHeuristic;
@@ -72,11 +70,9 @@ public class Map {
 	private HashMap<Pair, Tile> mapTiles;
 	private HashMap<Pair, MapObject> mapObjects;
 	private HashMap<Pair, Loot> mapLoot;
-	private HashMap<Pair, Crop> mapCrops;
 	private HashMap<Pair, AbstractNpc> mapNpcs;
 
-	// TODO: Generalize all time-dependent objects, npcs, etc. 
-	private ArrayList<Pair> mapItemFactories, itemPipelines;
+	private List<TimeDependent> timeDependent;
 
 	IndexedAStarPathFinder<Node> pathFinder;
 	Graph graph;
@@ -94,6 +90,10 @@ public class Map {
 	public Map() {
 		rollSize();
 		purge();
+	}
+
+	public void postLoadInit() {
+		/*mapNpcs.forEach((coords, npc) -> registerTimeDependent(npc));*/
 	}
 
 	@JsonIgnore
@@ -194,27 +194,18 @@ public class Map {
 	}
 
 	@JsonIgnore
-	public HashMap<Pair, ItemProducer> getMapItemFactories() {
-		HashMap<Pair, ItemProducer> itemFactories = new HashMap<>();
-
-		for (Pair coords : mapItemFactories)
-			getObject(coords).as(ItemFactory.class)
-					.ifPresent(factory -> itemFactories.put(coords, factory.getItemProducer()));
-
-		return itemFactories;
+	public HashMap<Pair, MapEntity> getTimeDependentMapEntities() {
+		HashMap<Pair, MapEntity> timeDependentMap = new HashMap<>();
+		timeDependent
+				.forEach(tdEntity -> {
+					MapEntity entity = (MapEntity) tdEntity;
+					timeDependentMap.put(entity.getPosition(), entity);
+				});
+		return timeDependentMap;
 	}
 
-	public void setMapItemFactories(HashMap<Pair, ItemProducer> itemFactories) {
-		mapItemFactories.clear();
-		for (Entry<Pair, ItemProducer> entry : itemFactories.entrySet()) {
-			Pair coords = entry.getKey();
-			getObject(coords).as(ItemFactory.class)
-					.ifPresent(itemFactory -> {
-						itemFactory.setItemProducer(entry.getValue());
-						mapItemFactories.add(coords);
-					});
-
-		}
+	public void setTimeDependentMapEntities(HashMap<Pair, MapEntity> timeDependentMap) {
+		timeDependentMap.forEach((coords, entity) -> entity.add(this, coords));
 	}
 
 	@JsonIgnore
@@ -360,9 +351,7 @@ public class Map {
 		mapObjects = new HashMap<>();
 		mapLoot = new HashMap<>();
 		mapNpcs = new HashMap<>();
-		mapCrops = new HashMap<>();
-		mapItemFactories = new ArrayList<>();
-		itemPipelines = new ArrayList<>();
+		timeDependent = new ArrayList<>();
 
 		graph = new Graph();
 		nodeMap = new NodeMap(graph, xsz, ysz);
@@ -675,6 +664,9 @@ public class Map {
 	}
 
 	public boolean delObject(Pair coords) {
+		if (objectExists(coords.x, coords.y))
+			removeTimeDependent(getObject(coords));
+
 		return mapObjects.remove(coords) != null;
 	}
 
@@ -693,32 +685,21 @@ public class Map {
 		return removed;
 	}
 
-	private boolean addObject(Pair coords, MapObject object) {
+	public boolean add(Pair coords, MapObject object) {
+		registerTimeDependent(object);
 		return mapObjects.put(coords, object) == null;
 	}
 
 	public boolean addObject(int x, int y, int id, boolean force) {
-		if (!correctCoords(coords.set(x, y)) || id == Map.nullObject.id)
+		if (!correctCoords(coords.set(x, y)) || id == nullObject.id)
 			return false;
 
-		if (mapObjects.containsKey(coords)) {
-			if (force)
-				mapObjects.remove(coords);
-			else
-				return false;
-		}
+		if (!force && mapObjects.containsKey(coords))
+			return false;
 
-		Pair coords = new Pair(this.coords);
 		MapObject object = MapObject.create(id);
-
-		if (addObject(coords, object)) {
+		if (add(coords.copy(), object)) {
 			setObjectSize(x, y, id);
-
-			object.as(ItemFactory.class)
-					.ifPresent(itemFactory -> mapItemFactories.add(coords));
-
-			object.as(ItemPipeline.class)
-					.ifPresent(itemPipeline -> itemPipelines.add(coords));
 
 			if (graph.getNodeCount() > 0) {
 				if (!object.nocollide) {
@@ -730,10 +711,8 @@ public class Map {
 				}
 				refreshPathFinder();
 			}
-
 			return true;
 		}
-
 		return false;
 	}
 
@@ -783,6 +762,18 @@ public class Map {
 			return !getObject(x, y).equals(nullObject);
 		else
 			return false;
+	}
+
+	private void registerTimeDependent(MapEntity entity) {
+		if (!(entity instanceof TimeDependent))
+			return;
+		timeDependent.add((TimeDependent) entity);
+	}
+
+	private void removeTimeDependent(MapEntity entity) {
+		if (!(entity instanceof TimeDependent))
+			return;
+		timeDependent.remove((TimeDependent) entity);
 	}
 
 	private void brutePlace(Runnable coordModifier, MapAction action, int id) {
@@ -928,24 +919,9 @@ public class Map {
 		}
 	}
 
-	public void updateCrops() {
-		Pair coord = new Pair();
-		Crop newCrop;
-		ArrayList<Pair> del = new ArrayList<Pair>();
-		for (Entry<Pair, Crop> crop : mapCrops.entrySet()) {
-			if (crop.getValue().upd()) {
-				coord = crop.getKey();
-				newCrop = crop.getValue();
-
-				if (newCrop.curStage == Crop.STAGE_COUNT - 1)
-					del.add(coord);
-
-				addObject(new Pair(coord), newCrop.objId);
-
-			}
-		}
-		for (int i = 0; i < del.size(); ++i)
-			mapCrops.remove(del.get(i));
+	public void updateTimeDependent() {
+		for (int i = timeDependent.size() - 1; i >= 0; --i)
+			timeDependent.get(i).update();
 	}
 
 	public boolean putCrop(int x, int y, int id) { // item id
@@ -957,8 +933,7 @@ public class Map {
 			return false;
 
 		Crop newCrop = new Crop(id, MadSand.world().currentRealtimeTick());
-		mapCrops.put(new Pair(coords), newCrop);
-		addObject(x, y, newCrop.objId);
+		add(coords.copy().set(x, y), newCrop);
 		return true;
 	}
 
@@ -969,22 +944,14 @@ public class Map {
 			return false;
 
 		addObject(x, y, crop.objId);
-		mapCrops.put(new Pair(coords), crop);
 		return true;
 	}
 
 	public Crop getCrop(int x, int y) {
-		if (correctCoords(coords.set(x, y))) {
-			Crop ret = mapCrops.get(new Pair(coords));
-			if (ret != null)
-				return ret;
-		}
-		return nullCrop;
-	}
+		if (!correctCoords(coords.set(x, y)))
+			return nullCrop;
 
-	void removeCrop(int x, int y) {
-		if (correctCoords(coords.set(x, y)))
-			mapCrops.remove(new Pair(coords));
+		return getObject(coords.copy()).as(Crop.class).orElse(nullCrop);
 	}
 
 	public boolean spawnNpc(int id, int x, int y) {
@@ -994,7 +961,9 @@ public class Map {
 		if (!getNpc(coords.x, coords.y).equals(nullNpc))
 			return false;
 
-		return putNpc(NpcProp.spawnNpc(id, x, y));
+		AbstractNpc npc = NpcProp.spawnNpc(id, x, y);
+		registerTimeDependent(npc);
+		return add(new Pair(x, y), npc);
 	}
 
 	public boolean spawnNpc(int id, Pair coords) {
@@ -1007,20 +976,20 @@ public class Map {
 		return getNpc(npcPos);
 	}
 
-	public boolean putNpc(AbstractNpc npc) {
-		if (!correctCoords(coords.set(npc.x, npc.y)))
+	public boolean add(Pair coords, AbstractNpc npc) {
+		if (!correctCoords(coords))
 			return false;
 
-		if (!getNpc(coords.x, coords.y).equals(nullNpc))
+		if (!getNpc(coords).equals(nullNpc))
 			return false;
 
-		mapNpcs.put(new Pair(coords), npc);
+		npc.setGridCoords(coords.x, coords.y);
+		mapNpcs.put(coords, npc);
 		return true;
 	}
 
 	public boolean putNpc(AbstractNpc npc, int x, int y) {
-		npc.teleport(x, y);
-		return moveNpc(npc, x, y);
+		return add(new Pair(x, y), npc);
 	}
 
 	public AbstractNpc getNpc(long uid) {
@@ -1057,19 +1026,21 @@ public class Map {
 		return npcExists(coords.x, coords.y);
 	}
 
-	public boolean moveNpc(AbstractNpc npc, int x, int y) { // moves npc only on the grid(not on the screen) to process smooth movement;
-		// should be called by an npc before changing its own position.
+	/*
+	 * Moves NPC on the grid (not on the screen) before processing movement animation
+	 * called by NPC when changing its position
+	 */
+	public boolean moveNpc(AbstractNpc npc, int x, int y) {
 		int xold = npc.x, yold = npc.y;
-		AbstractNpc destNpc = getNpc(coords.x, coords.y);
 
 		if (!correctCoords(coords.set(x, y)))
 			return false;
 
-		if (destNpc != nullNpc && destNpc != npc)
+		AbstractNpc destNpc = getNpc(coords.x, coords.y);
+		if (destNpc != nullNpc)
 			return false;
 
-		npc.setGridCoords(x, y);
-		putNpc(npc);
+		add(coords.copy(), npc);
 
 		if (!(xold == x && yold == y))
 			removeNpc(xold, yold);
@@ -1088,26 +1059,10 @@ public class Map {
 		if (getNpc(coords.x, coords.y).equals(nullNpc))
 			return false;
 
-		mapNpcs.remove(coords);
+		AbstractNpc npc = mapNpcs.remove(coords);
+		if (npc != null && npc.isDead())
+			removeTimeDependent(npc);
 		return true;
-	}
-
-	public void updateProductionStations() {
-		for (Pair coords : mapItemFactories)
-			getObject(coords).as(ItemFactory.class)
-					.ifPresent(itemFactory -> itemFactory.getItemProducer().produce());
-
-		for (Entry<Pair, AbstractNpc> entry : mapNpcs.entrySet()) {
-			if (!(entry.getValue() instanceof FarmAnimal))
-				continue;
-
-			((FarmAnimal) entry.getValue()).animalProduct.produce();
-		}
-	}
-
-	public void updateItemPipelines() {
-		itemPipelines.forEach(coords -> getObject(coords).as(ItemPipeline.class)
-				.ifPresent(pipeline -> pipeline.update()));
 	}
 
 	public void spawnMobs(boolean friendly, boolean force) {

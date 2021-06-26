@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import static hitonoriol.madsand.Resources.*;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
@@ -118,7 +119,7 @@ public class GameSaver {
 
 			player.stats.equipment.setStatBonus(false);
 			/*Resources.mapper.writeValue(new File(fl), player);*/
-			Resources.mapper.writeValue(worldFile, MadSand.world());
+			mapper.writeValue(worldFile, MadSand.world());
 			player.stats.equipment.setStatBonus(true);
 
 			return true;
@@ -133,7 +134,7 @@ public class GameSaver {
 			Utils.out("Loading world...");
 			String worldFile = getCurSaveDir() + MadSand.WORLDFILE;
 
-			World world = Resources.mapper.readValue(readFile(worldFile), World.class);
+			World world = mapper.readValue(readFile(worldFile), World.class);
 			world.initWorld();
 			world.getPlayer().postLoadInit();
 			MadSand.instance().setWorld(world);
@@ -191,8 +192,8 @@ public class GameSaver {
 		return readFile(name, false);
 	}
 
-	public static String getItemFactoryFile(int wx, int wy, int layer) {
-		return getCurSaveDir() + Utils.fileBaseName(Resources.ITEMFACTORY_FILE) + getSectorString(wx, wy, layer)
+	public static String getTimeDependentFile(int wx, int wy, int layer) {
+		return getCurSaveDir() + "timedependent" + getSectorString(wx, wy, layer)
 				+ MadSand.SAVE_EXT;
 	}
 
@@ -230,7 +231,7 @@ public class GameSaver {
 		Gui.drawOkDialog(
 				"Couldn't to load this world. \n"
 						+ "Maybe it was saved in older/newer version of the game or some files are corrupted.\n"
-						+ "Check " + Resources.ERR_FILE + " for details.");
+						+ "Check " + ERR_FILE + " for details.");
 	}
 
 	public static boolean verifyNextSector(int x, int y) {
@@ -243,7 +244,7 @@ public class GameSaver {
 			FileWriter fw = new FileWriter(getCurSaveDir() + MadSand.LOGFILE);
 
 			for (Label logLabel : Gui.overlay.getLogLabels())
-				fw.write(logLabel.getText().toString() + Resources.LINEBREAK);
+				fw.write(logLabel.getText().toString() + LINEBREAK);
 
 			fw.close();
 

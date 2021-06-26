@@ -169,7 +169,7 @@ public class CellInfoGenerator extends TooltipTextGenerator {
 	}
 
 	private void getCropInfo() {
-		long time = (long) (crop.getHarvestTime() * MadSand.world().getRealtimeTickRate());
+		long time = (long) (crop.getHarvestTime() * MadSand.world().getRealtimeActionPeriod());
 		addLine((time <= 0)
 				? ("* Ready to harvest!")
 				: ("[#58FFB1]* Will fully grow in " + Utils.timeString(time) + "[]"));

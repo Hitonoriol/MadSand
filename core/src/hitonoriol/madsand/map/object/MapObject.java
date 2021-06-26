@@ -56,6 +56,18 @@ public class MapObject extends MapEntity {
 	public String onInteract = Resources.emptyField;
 
 	public MapObject(MapObject protoObject) {
+		initProperties(protoObject);
+	}
+
+	public MapObject copy() {
+		return new MapObject(this);
+	}
+
+	public MapObject() {
+		id = 0;
+	}
+
+	public void initProperties(MapObject protoObject) {
 		id = protoObject.id;
 		name = protoObject.name;
 		harvestHp = protoObject.harvestHp;
@@ -71,12 +83,9 @@ public class MapObject extends MapEntity {
 		maskWidth = protoObject.maskWidth;
 	}
 
-	public MapObject copy() {
-		return new MapObject(this);
-	}
-
-	public MapObject() {
-		id = 0;
+	@Override
+	public boolean add(Map map, Pair coords) {
+		return map.add(coords, this);
 	}
 
 	public void interactIfPossible(Runnable interaction) {

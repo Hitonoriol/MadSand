@@ -65,7 +65,8 @@ public class World {
 	@JsonIgnore
 	private Timer realTimeRefresher;
 	private boolean timeSkip = false;
-	private float realtimeTickRate = 5; // seconds per 1 tick
+	private float reatlimeTickRate = 0.1f;
+	private long realtimeActionPeriod = 50; // realtime ticks per 1 action tick
 	private long globalRealtimeTick = 0; // global realtime tick counter, never resets
 
 	private int ticksPerHour = 150; // ticks per one hourTick() trigger
@@ -111,14 +112,20 @@ public class World {
 		}
 
 		realTimeRefresher = new Timer();
-		realTimeRefresher.scheduleTask(new Timer.Task() {
-			@Override
-			public void run() {
-				realtimeTick();
-			}
-		}, realtimeTickRate, realtimeTickRate);
-
+		realtimeSchedule(() -> realtimeTick());
 		actDelayTimer = new Timer();
+	}
+
+	public void realtimeSchedule(Runnable task, long ticks) {
+		Utils.scheduleRepeatingTask(realTimeRefresher, task, ticksToTime(ticks));
+	}
+
+	public void realtimeSchedule(Runnable task) {
+		realtimeSchedule(task, realtimeActionPeriod);
+	}
+
+	private float ticksToTime(long realtimeTicks) {
+		return (float) realtimeTicks * reatlimeTickRate;
 	}
 
 	public Player getPlayer() {
@@ -183,12 +190,12 @@ public class World {
 		return globalRealtimeTick;
 	}
 
-	public float getRealtimeTickRate() {
-		return realtimeTickRate;
+	public float getRealtimeActionPeriod() {
+		return ticksToTime(realtimeActionPeriod);
 	}
 
-	public void setRealtimeTickRate(float value) {
-		realtimeTickRate = value;
+	public void setRealtimeActionPeriod(long ticks) {
+		realtimeActionPeriod = ticks;
 	}
 
 	public int wx() {
@@ -728,10 +735,7 @@ public class World {
 	private void realtimeTick() {
 		++globalRealtimeTick;
 		Location loc = getLocation();
-		Map map = loc.getLayer(Location.LAYER_OVERWORLD);
-		map.updateCrops();
-		map.updateProductionStations();
-		map.updateItemPipelines();
+		loc.getLayer(Location.LAYER_OVERWORLD).updateTimeDependent();
 
 		if (loc.isSettlement())
 			loc.getSettlement().timeTick();
@@ -743,7 +747,7 @@ public class World {
 	}
 
 	private void offlineReward(long offlineTime) {
-		long offlineTicks = (long) (offlineTime / realtimeTickRate);
+		long offlineTicks = (long) (offlineTime / realtimeActionPeriod);
 		globalRealtimeTick += offlineTicks;
 		Lua.executeScript(Lua.offlineRewardScript, offlineTime);
 		skipRealtimeTicks(offlineTicks);

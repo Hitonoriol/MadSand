@@ -65,8 +65,12 @@ public class Utils {
 		return scheduleTask(Timer.instance(), task, delaySec);
 	}
 
+	public static Timer.Task scheduleRepeatingTask(Timer timer, Runnable task, float intervalSec) {
+		return timer.scheduleTask(createTask(task), intervalSec, intervalSec);
+	}
+
 	public static Timer.Task scheduleRepeatingTask(Runnable task, float intervalSec) {
-		return Timer.instance().scheduleTask(createTask(task), 0, intervalSec);
+		return scheduleRepeatingTask(Timer.instance(), task, intervalSec);
 	}
 
 	public static float timeToExecution(Timer.Task task) {
