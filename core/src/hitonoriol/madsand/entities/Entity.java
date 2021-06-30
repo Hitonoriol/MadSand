@@ -245,7 +245,7 @@ public abstract class Entity extends MapEntity {
 		if (!hasItem(item))
 			return false;
 
-		MadSand.world().getCurLoc().putLoot(x, y, Item.duplicate(item, quantity));
+		MadSand.world().getCurLoc().putLoot(x, y, item.copy().setQuantity(quantity));
 		inventory.delItem(item, quantity);
 		return true;
 	}

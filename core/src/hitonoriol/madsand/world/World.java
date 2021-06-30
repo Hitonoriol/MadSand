@@ -124,7 +124,7 @@ public class World {
 		realtimeSchedule(task, realtimeActionPeriod);
 	}
 
-	private float ticksToTime(long realtimeTicks) {
+	public float ticksToTime(long realtimeTicks) {
 		return (float) realtimeTicks * reatlimeTickRate;
 	}
 
@@ -190,8 +190,13 @@ public class World {
 		return globalRealtimeTick;
 	}
 
-	public float getRealtimeActionPeriod() {
+	@JsonIgnore
+	public float getRealtimeActionSeconds() {
 		return ticksToTime(realtimeActionPeriod);
+	}
+	
+	public long getRealtimeActionPeriod() {
+		return realtimeActionPeriod;
 	}
 
 	public void setRealtimeActionPeriod(long ticks) {
@@ -431,6 +436,7 @@ public class World {
 				return;
 			}
 
+		getCurLoc().close();
 		switchLocation(direction);
 		Gui.refreshOverlay();
 	}
@@ -735,7 +741,6 @@ public class World {
 	private void realtimeTick() {
 		++globalRealtimeTick;
 		Location loc = getLocation();
-		loc.getLayer(Location.LAYER_OVERWORLD).updateTimeDependent();
 
 		if (loc.isSettlement())
 			loc.getSettlement().timeTick();

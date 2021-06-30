@@ -14,15 +14,16 @@ import hitonoriol.madsand.map.ItemProducer;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.util.Functional;
-import hitonoriol.madsand.util.Utils;
 
 public class ItemPipeline extends MapObject implements TimeDependent {
 	private float transportLimit; // kgs per tick
+	private long transportPeriod; // realtime ticks per update() call 
 	private boolean sentItems = false, receivedItems = false;
 
 	public ItemPipeline(ItemPipeline protoObject) {
 		super(protoObject);
 		transportLimit = protoObject.transportLimit;
+		transportPeriod = protoObject.transportPeriod;
 	}
 
 	public ItemPipeline() {}
@@ -34,7 +35,7 @@ public class ItemPipeline extends MapObject implements TimeDependent {
 
 	@Override
 	public void interact(Player player) {
-		super.setDirection(directionFacing.counterClockwise());
+		super.setDirection(directionFacing.rotateClockwise());
 	}
 
 	private List<Item> getItems(Loot loot) {
@@ -52,9 +53,20 @@ public class ItemPipeline extends MapObject implements TimeDependent {
 	}
 
 	private void moveItems(Loot from, Pair to) {
-		getItems(from).forEach(item -> MadSand.world().exec(map -> map.putLoot(to, item)));
-		MadSand.world().exec(map -> map.getObject(to).as(ItemPipeline.class)
-				.ifPresent(pipeline -> pipeline.receivedItems = true));
+		getItems(from).forEach(item -> MadSand.world().exec(map -> {
+			MapObject destObject = map.getObject(to);
+			destObject.as(ItemFactory.class)
+					.ifPresent(factory -> {
+						ItemProducer producer = factory.getItemProducer();
+						if (item.equals(producer.getConsumedMaterialId())) {
+							producer.addConsumableItem(item.quantity);
+							item.clear();
+						}
+					});
+			destObject.as(ItemPipeline.class)
+					.ifPresent(pipeline -> pipeline.receivedItems = true);
+			map.putLoot(to, item);
+		}));
 	}
 
 	/*
@@ -76,8 +88,9 @@ public class ItemPipeline extends MapObject implements TimeDependent {
 					.ifPresentOrElse(
 							factory -> {
 								ItemProducer producer = factory.getItemProducer();
-								Item product = Item.create(producer.producedMaterial);
-								Utils.dbg("Extracting ItemFactory items at %s", position);
+								if (!producer.hasProduct())
+									return;
+								Item product = Item.create(producer.getProductId());
 								map.putLoot(position, producer.getProduct((int) (transportLimit / product.weight)));
 							},
 
@@ -90,8 +103,6 @@ public class ItemPipeline extends MapObject implements TimeDependent {
 									sentItems = false;
 									return;
 								}
-
-								Utils.dbg("Movin items from %s", position);
 								sentItems = true;
 								moveItems(loot, position.addDirection(directionFacing));
 							});
@@ -100,5 +111,10 @@ public class ItemPipeline extends MapObject implements TimeDependent {
 
 	public float getTransportLimit() {
 		return transportLimit;
+	}
+
+	@Override
+	public long getUpdateRate() {
+		return transportPeriod;
 	}
 }

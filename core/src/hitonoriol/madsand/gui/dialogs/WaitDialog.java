@@ -30,7 +30,7 @@ public class WaitDialog extends SliderDialog {
 					super.setSliderText("+" + Utils.timeString(worldSeconds) + " [[World time]"
 							+ Resources.LINEBREAK
 
-							+ "+" + Utils.timeString((long) (realtimeTicks * MadSand.world().getRealtimeActionPeriod()))
+							+ "+" + Utils.timeString((long) (realtimeTicks * MadSand.world().getRealtimeActionSeconds()))
 							+ " [[Realtime]"
 							+ Resources.LINEBREAK
 

@@ -46,10 +46,10 @@ public class ItemFactory extends BuiltObject implements TimeDependent {
 
 	@Override
 	public String getBuildInfo() {
-		String info = "Produces " + ItemProp.getItemName(getItemProducer().producedMaterial);
+		String info = "Produces " + ItemProp.getItemName(getItemProducer().getProductId());
 
 		if (!itemProducer.isEndless())
-			info += Resources.LINEBREAK + "Consumes " + ItemProp.getItemName(itemProducer.consumedMaterial);
+			info += Resources.LINEBREAK + "Consumes " + ItemProp.getItemName(itemProducer.getConsumedMaterialId());
 
 		return info;
 	}

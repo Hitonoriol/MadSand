@@ -307,7 +307,7 @@ public class Resources {
 	}
 
 	private static void loadProductionStations() throws Exception {
-		ObjectProp.productionStations = mapper.readValue(
+		ObjectProp.itemProducers = mapper.readValue(
 				readInternal(Resources.ITEMFACTORY_FILE),
 				getMapType(Integer.class, ItemProducer.class));
 

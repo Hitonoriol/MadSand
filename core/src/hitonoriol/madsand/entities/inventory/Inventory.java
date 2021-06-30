@@ -227,7 +227,6 @@ public class Inventory {
 			}
 			curWeight = newWeight;
 			updateUI(ui -> ui.refreshItem(updItem));
-
 			return true;
 		}
 

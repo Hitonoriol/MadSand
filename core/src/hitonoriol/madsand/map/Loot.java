@@ -2,16 +2,17 @@ package hitonoriol.madsand.map;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.entities.inventory.item.Item;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class Loot {
-	private ArrayList<Item> contents = new ArrayList<Item>();
+	private List<Item> contents = new ArrayList<>();
 	@JsonIgnore
 	private String lootStr;
 
@@ -20,7 +21,7 @@ public class Loot {
 	}
 
 	public Loot() {
-		this(new Item());
+		this(Item.nullItem);
 	}
 
 	@JsonIgnore
@@ -60,14 +61,15 @@ public class Loot {
 	public Item remove(Item item) {
 		int i = 0;
 		for (Item itemStack : contents) {
-			if (itemStack == item || itemStack.quantity == item.quantity) {
-				remove(i);
-				break;
-			}
+			if (itemStack == item)
+				return remove(i);
+
+			if (!itemStack.equals(item))
+				continue;
 
 			if (itemStack.quantity > item.quantity) {
 				itemStack.quantity -= item.quantity;
-				break;
+				return item;
 			}
 			++i;
 		}
@@ -113,7 +115,11 @@ public class Loot {
 		return contents.get(idx);
 	}
 
-	public ArrayList<Item> getContents() {
+	public List<Item> getContents() {
 		return contents;
+	}
+
+	public void setContents(List<Item> contents) {
+		this.contents = contents;
 	}
 }

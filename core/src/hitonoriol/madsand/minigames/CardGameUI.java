@@ -32,7 +32,7 @@ public class CardGameUI extends GameDialog {
 	protected void showBetDialog(Consumer<Integer> confirmAction) {
 		if (!MadSand.player().inventory.hasItem(currency, 1)) {
 			Gui.drawOkDialog("You don't have any money!");
-			endGame();
+			//endGame();
 			return;
 		}
 		new SliderDialog(MadSand.player().inventory.getItem(currency).quantity)

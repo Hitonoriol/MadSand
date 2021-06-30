@@ -91,7 +91,7 @@
 		"harvestHp" : 10,
 		"onInteract" : "
 			this(...):destroy();
-			world:getCurLoc():addObject(world.player:lookingAt(), 12);
+			world:getCurLoc():addObject(player:lookingAt(), 12);
 		",
 		"name" : "Closed door"
 	},
@@ -102,7 +102,7 @@
 		"nocollide" : true,
 		"onInteract" : "
 			this(...):destroy();
-			world:getCurLoc():addObject(world.player:lookingAt(), 11);
+			world:getCurLoc():addObject(player:lookingAt(), 11);
 		",
 		"name" : "Opened door"
 	},
@@ -1314,7 +1314,7 @@
 		"hp" : 1,
 		"harvestHp" : 50,
 		"centered" : true,
-		"onInteract" : "world.player:skipTime()",
+		"onInteract" : "player:skipTime()",
 		"name" : "Time machine"
 	},
 	"176" : {
@@ -1329,8 +1329,9 @@
 		"harvestHp" : 15,
 		"@type" : "ItemPipeline",
 		"transportLimit" : 1.5,
-		"centered" : true,
+		"transportPeriod" : 30,
 		"nocollide" : true,
+		"centered" : true,
 		"name" : "Stone pipe"
 	}
 }

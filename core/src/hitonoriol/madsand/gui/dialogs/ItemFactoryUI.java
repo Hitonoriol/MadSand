@@ -75,17 +75,18 @@ public class ItemFactoryUI extends GameDialog {
 		super(stage);
 	}
 
-	public ItemFactoryUI(ItemProducer station) {
+	public ItemFactoryUI(ItemProducer producer) {
 		this(Gui.overlay);
-		this.station = station;
+		this.station = producer;
 		this.player = MadSand.player();
-		consumedMaterial = ItemProp.getItemName(station.consumedMaterial);
-		producedMaterial = ItemProp.getItemName(station.producedMaterial);
+		consumedMaterial = ItemProp.getItemName(producer.getConsumedMaterialId());
+		producedMaterial = ItemProp.getItemName(producer.getProductId());
+		int id = producer.getId();
 
-		if (station.id > 0)
-			stationName = ObjectProp.getName(station.id);
+		if (id > 0)
+			stationName = ObjectProp.getName(id);
 		else
-			stationName = NpcProp.npcs.get(-station.id).name;
+			stationName = NpcProp.npcs.get(-id).name;
 
 		closeButton = new TextButton(closeBtnString, Gui.skin);
 
@@ -155,7 +156,7 @@ public class ItemFactoryUI extends GameDialog {
 
 	public void show() {
 		super.show();
-		float tickRate = MadSand.world().getRealtimeActionPeriod();
+		float tickRate = MadSand.world().getRealtimeActionSeconds();
 		Timer.instance().scheduleTask(refreshTask, tickRate, tickRate);
 	}
 
@@ -166,60 +167,47 @@ public class ItemFactoryUI extends GameDialog {
 	}
 
 	private void refreshRateLabels() {
-		float tickRate = MadSand.world().getRealtimeActionPeriod();
-		produceLabel.setText(produceString + producedMaterial + " (+" + Utils.round(station.productionRate / tickRate)
-				+ " per second)");
-		consumeLabel.setText(consumeString + consumedMaterial + " (-" + Utils.round(station.consumptionRate / tickRate)
-				+ " per second)");
+		float tickRate = MadSand.world().getRealtimeActionSeconds();
+		produceLabel
+				.setText(produceString + producedMaterial + " (+" + Utils.round(station.getProductionRate() / tickRate)
+						+ " per second)");
+		consumeLabel
+				.setText(consumeString + consumedMaterial + " (-" + Utils.round(station.getConsumptionRate() / tickRate)
+						+ " per second)");
 	}
 
 	private void refreshStorageLabels() {
 		productStorageLabel
-				.setText(producedMaterial + storageString + Utils.round(station.productStorage));
+				.setText(producedMaterial + storageString + Utils.round(station.getProductStorage()));
 
 		consumableStorageLabel
-				.setText(consumedMaterial + storageString + Utils.round(station.consumableMaterialStorage));
+				.setText(consumedMaterial + storageString + Utils.round(station.getConsumedMaterialStorage()));
 	}
 
 	private void initButtonListeners() {
-		upgradeButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				if (!station.upgrade())
-					Gui.drawOkDialog(
-							"There's not enough " + consumedMaterial + " in storage for upgrade!");
-				else
-					refresh();
-			}
+		Gui.setAction(upgradeButton, () -> {
+			if (!station.upgrade())
+				Gui.drawOkDialog(
+						"There's not enough " + consumedMaterial + " in storage for upgrade!");
+			else
+				refresh();
 		});
 
-		addConsumableButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				int quantity = (int) consumableSlider.getValue();
-				if (!player.inventory.delItem(station.consumedMaterial, quantity))
-					Gui.drawOkDialog("You don't have this many " + consumedMaterial);
-				else {
-					station.addConsumableItem(quantity);
-					refresh();
-				}
-			}
-		});
-
-		takeProductButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				player.addItem(station.getProduct((int) productSlider.getValue()));
+		Gui.setAction(addConsumableButton, () -> {
+			int quantity = (int) consumableSlider.getValue();
+			if (!player.inventory.delItem(station.getConsumedMaterialId(), quantity))
+				Gui.drawOkDialog("You don't have this many " + consumedMaterial);
+			else {
+				station.addConsumableItem(quantity);
 				refresh();
 			}
 		});
 
-		closeButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				remove();
-			}
+		Gui.setAction(takeProductButton, () -> {
+			player.addItem(station.getProduct((int) productSlider.getValue()));
+			refresh();
 		});
+		Gui.setAction(closeButton, () -> remove());
 	}
 
 	private void initSliderListeners() {
@@ -249,13 +237,13 @@ public class ItemFactoryUI extends GameDialog {
 	}
 
 	private void refreshTitle() {
-		super.setTitle(stationName + lvlString + station.lvl);
+		super.setTitle(stationName + lvlString + station.getLvl());
 	}
 
 	private void refreshSliders() {
-		Item consumable = player.inventory.getItem(station.consumedMaterial);
+		Item consumable = player.inventory.getItem(station.getConsumedMaterialId());
 		consumableSlider.setRange(0, consumable.quantity);
-		productSlider.setRange(0, station.productStorage);
+		productSlider.setRange(0, station.getProductStorage());
 	}
 
 	private void refreshAddButton(int quantity) {
@@ -279,8 +267,8 @@ public class ItemFactoryUI extends GameDialog {
 	}
 
 	private String getUpgradeString() {
-		if (station.lvl < station.maxLvl)
-			return upgradeString + Utils.round(station.upgradeRequirement) + " " + consumedMaterial;
+		if (station.getLvl() < station.getMaxLvl())
+			return upgradeString + Utils.round(station.getUpgradeRequirement()) + " " + consumedMaterial;
 		else
 			return maxLvlString;
 	}

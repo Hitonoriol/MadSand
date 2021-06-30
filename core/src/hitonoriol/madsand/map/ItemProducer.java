@@ -1,29 +1,32 @@
 package hitonoriol.madsand.map;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.ObjectProp;
 
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class ItemProducer {
-	public int id;
-	public int lvl = 0, maxLvl;
+	private int id;
+	private int lvl = 0, maxLvl;
 
-	public float upgradeProductionMultiplier = 0.1f;
-	public float upgradeRequirementMultiplier = 0.25f;
+	private float upgradeProductionMultiplier = 0.1f;
+	private float upgradeRequirementMultiplier = 0.25f;
 
-	public float upgradeRequirement; // quantity of upgradeMaterial required for upgrade
+	private float upgradeRequirement; // quantity of upgradeMaterial required for upgrade
 
-	public float productionRate = 0; // amount of product to produce per realTimeTick
-	public float consumptionRate = 0; // amount of "fuel" material to consume per realTimeTick
+	private float productionRate = 0; // amount of product to produce per realTimeTick
+	private float consumptionRate = 0; // amount of "fuel" material to consume per realTimeTick
 
-	public float consumableMaterialStorage = 0; // amount of "fuel" material currently in station's storage
-	public float productStorage = 0; // amount of product currently accumulated by the stations's storage
-	public float maxProductStorage;
+	private float consumableMaterialStorage = 0; // amount of "fuel" material currently in station's storage
+	private float productStorage = 0; // amount of product currently accumulated by the stations's storage
+	private float maxProductStorage;
 
-	public int producedMaterial; // Item id -- item produced by the station
-	public int consumedMaterial; // Item id -- item required for station upgrade & as "fuel"
+	private int producedMaterial; // Item id -- item produced by the station
+	private int consumedMaterial; // Item id -- item required for station upgrade & as "fuel"
 
 	public ItemProducer(int id) {
 		this.id = id;
@@ -35,19 +38,18 @@ public class ItemProducer {
 	}
 
 	private void loadProperties() {
-		ItemProducer properties = ObjectProp.productionStations.get(this.id);
-		this.producedMaterial = properties.producedMaterial;
-		this.consumedMaterial = properties.consumedMaterial;
+		ItemProducer properties = ObjectProp.itemProducers.get(this.id);
+		producedMaterial = properties.producedMaterial;
+		consumedMaterial = properties.consumedMaterial;
 
-		this.maxLvl = properties.maxLvl;
-		this.upgradeRequirement = properties.upgradeRequirement;
-		this.upgradeProductionMultiplier = properties.upgradeProductionMultiplier;
-		this.upgradeRequirementMultiplier = properties.upgradeRequirementMultiplier;
-		this.maxProductStorage = properties.maxProductStorage;
+		maxLvl = properties.maxLvl;
+		upgradeRequirement = properties.upgradeRequirement;
+		upgradeProductionMultiplier = properties.upgradeProductionMultiplier;
+		upgradeRequirementMultiplier = properties.upgradeRequirementMultiplier;
+		maxProductStorage = properties.maxProductStorage;
 
-		this.productionRate = properties.productionRate;
-		this.consumptionRate = properties.consumptionRate;
-
+		productionRate = properties.productionRate;
+		consumptionRate = properties.consumptionRate;
 	}
 
 	// Called every realTimeTick
@@ -65,6 +67,10 @@ public class ItemProducer {
 
 	public boolean hasRawMaterial() {
 		return consumableMaterialStorage - consumptionRate >= 0;
+	}
+	
+	public boolean hasProduct() {
+		return productStorage >= 1;
 	}
 
 	public boolean isEndless() {
@@ -114,5 +120,49 @@ public class ItemProducer {
 	@JsonIgnore
 	public String getProductName() {
 		return ItemProp.getItemName(producedMaterial);
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public float getConsumedMaterialStorage() {
+		return consumableMaterialStorage;
+	}
+
+	public float getProductStorage() {
+		return productStorage;
+	}
+
+	public float getMaxProductStorage() {
+		return maxProductStorage;
+	}
+
+	public int getConsumedMaterialId() {
+		return consumedMaterial;
+	}
+
+	public int getProductId() {
+		return producedMaterial;
+	}
+
+	public float getProductionRate() {
+		return productionRate;
+	}
+
+	public float getConsumptionRate() {
+		return consumptionRate;
+	}
+
+	public int getLvl() {
+		return lvl;
+	}
+
+	public int getMaxLvl() {
+		return maxLvl;
+	}
+
+	public float getUpgradeRequirement() {
+		return upgradeRequirement;
 	}
 }

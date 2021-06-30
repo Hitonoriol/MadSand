@@ -153,10 +153,10 @@ public class CellInfoGenerator extends TooltipTextGenerator {
 
 		if (producer.canProduce()) {
 			builder.append("producing " + productName)
-					.append(" (" + Utils.round(producer.productStorage) + "/" + producer.maxProductStorage + ")")
+					.append(" (" + Utils.round(producer.getProductStorage()) + "/" + producer.getMaxProductStorage() + ")")
 					.append(NEWLINE);
 			if (!producer.isEndless())
-				builder.append(rawMaterialName + " left: " + Utils.round(producer.consumableMaterialStorage));
+				builder.append(rawMaterialName + " left: " + Utils.round(producer.getConsumedMaterialStorage()));
 		} else
 			builder.append("Idle");
 
@@ -169,7 +169,7 @@ public class CellInfoGenerator extends TooltipTextGenerator {
 	}
 
 	private void getCropInfo() {
-		long time = (long) (crop.getHarvestTime() * MadSand.world().getRealtimeActionPeriod());
+		long time = (long) (crop.getHarvestTime() * MadSand.world().getRealtimeActionSeconds());
 		addLine((time <= 0)
 				? ("* Ready to harvest!")
 				: ("[#58FFB1]* Will fully grow in " + Utils.timeString(time) + "[]"));

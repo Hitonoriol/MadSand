@@ -134,7 +134,8 @@ public class WorldMapSaver {
 			}
 
 			// Save loot
-			loot = Resources.mapper.writeValueAsString(map.getLoot()).getBytes();
+			loot = Resources.mapper.writerFor(Resources.getMapType(Pair.class, Loot.class))
+					.writeValueAsString(map.getLoot()).getBytes();
 			lootStream.write(ByteUtils.encode8(loot.length));
 			lootStream.write(loot);
 

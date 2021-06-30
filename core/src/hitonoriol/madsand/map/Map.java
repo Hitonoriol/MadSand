@@ -72,7 +72,7 @@ public class Map {
 	private HashMap<Pair, Loot> mapLoot;
 	private HashMap<Pair, AbstractNpc> mapNpcs;
 
-	private List<TimeDependent> timeDependent;
+	private TimeScheduler timeScheduler;
 
 	IndexedAStarPathFinder<Node> pathFinder;
 	Graph graph;
@@ -94,6 +94,11 @@ public class Map {
 
 	public void postLoadInit() {
 		/*mapNpcs.forEach((coords, npc) -> registerTimeDependent(npc));*/
+	}
+
+	/* Cleanup, called on map switch */
+	public void close() {
+		timeScheduler.stop();
 	}
 
 	@JsonIgnore
@@ -196,16 +201,18 @@ public class Map {
 	@JsonIgnore
 	public HashMap<Pair, MapEntity> getTimeDependentMapEntities() {
 		HashMap<Pair, MapEntity> timeDependentMap = new HashMap<>();
-		timeDependent
-				.forEach(tdEntity -> {
-					MapEntity entity = (MapEntity) tdEntity;
-					timeDependentMap.put(entity.getPosition(), entity);
-				});
+		timeScheduler.forEach(tdEntity -> {
+			MapEntity entity = (MapEntity) tdEntity;
+			timeDependentMap.put(entity.getPosition(), entity);
+		});
 		return timeDependentMap;
 	}
 
 	public void setTimeDependentMapEntities(HashMap<Pair, MapEntity> timeDependentMap) {
-		timeDependentMap.forEach((coords, entity) -> entity.add(this, coords));
+		timeDependentMap.forEach((coords, entity) -> {
+			Utils.dbg("Restoring TimeDependent entity %s at %s", entity.getName(), coords);
+			entity.add(this, coords);
+		});
 	}
 
 	@JsonIgnore
@@ -351,7 +358,10 @@ public class Map {
 		mapObjects = new HashMap<>();
 		mapLoot = new HashMap<>();
 		mapNpcs = new HashMap<>();
-		timeDependent = new ArrayList<>();
+
+		if (timeScheduler != null)
+			timeScheduler.stop();
+		timeScheduler = new TimeScheduler();
 
 		graph = new Graph();
 		nodeMap = new NodeMap(graph, xsz, ysz);
@@ -645,9 +655,8 @@ public class Map {
 		int i = objectProp.maskHeight;
 		if (y + 1 < ysz - 1) {
 			while (i > 0) {
-				if (y + i < ysz) {
+				if (y + i < ysz)
 					addObject(x, y + i, COLLISION_MASK_ID);
-				}
 				i--;
 			}
 		}
@@ -655,19 +664,19 @@ public class Map {
 		i = objectProp.maskWidth;
 		if (x + 1 < xsz - 1) {
 			while (i > 0) {
-				if (x + i < xsz) {
+				if (x + i < xsz)
 					addObject(x + i, y, COLLISION_MASK_ID);
-				}
 				i--;
 			}
 		}
 	}
 
 	public boolean delObject(Pair coords) {
-		if (objectExists(coords.x, coords.y))
-			removeTimeDependent(getObject(coords));
+		MapObject deletedObject = mapObjects.remove(coords);
+		if (deletedObject != null)
+			removeTimeDependent(deletedObject);
 
-		return mapObjects.remove(coords) != null;
+		return deletedObject != null;
 	}
 
 	public boolean delObject(int x, int y) {
@@ -767,13 +776,13 @@ public class Map {
 	private void registerTimeDependent(MapEntity entity) {
 		if (!(entity instanceof TimeDependent))
 			return;
-		timeDependent.add((TimeDependent) entity);
+		timeScheduler.register((TimeDependent) entity);
 	}
 
 	private void removeTimeDependent(MapEntity entity) {
 		if (!(entity instanceof TimeDependent))
 			return;
-		timeDependent.remove((TimeDependent) entity);
+		timeScheduler.remove((TimeDependent) entity);
 	}
 
 	private void brutePlace(Runnable coordModifier, MapAction action, int id) {
@@ -917,11 +926,6 @@ public class Map {
 				});
 			}
 		}
-	}
-
-	public void updateTimeDependent() {
-		for (int i = timeDependent.size() - 1; i >= 0; --i)
-			timeDependent.get(i).update();
 	}
 
 	public boolean putCrop(int x, int y, int id) { // item id

@@ -7,18 +7,17 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
@@ -42,7 +41,6 @@ import me.xdrop.fuzzywuzzy.FuzzySearch;
 		@Type(GrabBag.class), @Type(Placeable.class), @Type(Projectile.class), @Type(Tool.class), @Type(Weapon.class),
 		@Type(Scroll.class), @Type(Pill.class) })
 public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
-
 	public int id;
 	public int quantity;
 	public String name;
@@ -79,8 +77,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 	}
 
 	public Item() {
-		this.id = NULL_ITEM;
-		quantity = 0;
+		clear();
 	}
 
 	public Item copy() {
@@ -198,21 +195,17 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 	 */
 	public Item split(float weight) {
 		Utils.dbg("Split item %s || weight %f", this, weight);
-		if (getTotalWeight() <= weight)
+		if (this.weight == 0 || getTotalWeight() <= weight)
 			return this;
-		
-		int quantity = this.quantity;
 
-		Item newStack = copy().setQuantity(0);
-		while (newStack.getTotalWeight() < weight) {
-			--quantity;
-			++newStack.quantity;
-			if (quantity == 0)
-				break;
-		}
-		
+		Item newStack = copy().setQuantity((int) (weight / this.weight));
 		Utils.dbg("new stack: %s", newStack);
 		return newStack;
+	}
+
+	public void clear() {
+		id = NULL_ITEM;
+		quantity = 0;
 	}
 
 	@Override
@@ -222,10 +215,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 		if (obj == this)
 			return true;
 
-		Item rhs = (Item) obj;
-		return new EqualsBuilder()
-				.append(id, rhs.id)
-				.isEquals();
+		return equals(((Item) obj).id);
 	}
 
 	public boolean equals(int id) {

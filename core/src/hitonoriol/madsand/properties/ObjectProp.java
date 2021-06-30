@@ -8,7 +8,7 @@ import hitonoriol.madsand.map.object.MapObject;
 
 public class ObjectProp {
 	public static HashMap<Integer, MapObject> objects = new HashMap<>();
-	public static HashMap<Integer, ItemProducer> productionStations = new HashMap<>();
+	public static HashMap<Integer, ItemProducer> itemProducers = new HashMap<>();
 	public static HashMap<Integer, String> buildRecipes = new HashMap<>();
 
 	public final static MapObject getObject(int id) {
