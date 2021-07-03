@@ -14,8 +14,8 @@ import org.apache.commons.lang3.mutable.MutableLong;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Timer;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
@@ -28,6 +28,7 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.input.Keyboard;
+import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.pathfinding.Graph;
@@ -93,16 +94,21 @@ public class World {
 	public void initWorld() {
 		worldMapSaver = new WorldMapSaver(worldMap);
 		worldGen = new WorldGen(worldMap);
+		initRealtimeRefresher();
 	}
 
 	public void enter() {
-		initRealtimeRefresher();
-		realTimeRefresher.start();
 		GameTextSubstitutor.add(GameTextSubstitutor.PLAYER_NAME, player.stats.name);
 		getCurLoc().refreshGraph();
 
 		if (!player.newlyCreated)
 			calcOfflineTime();
+	}
+
+	public void close() {
+		realTimeRefresher.clear();
+		realTimeRefresher.stop();
+		getCurLoc().getTimeScheduler().stop();
 	}
 
 	private void initRealtimeRefresher() {
@@ -194,7 +200,7 @@ public class World {
 	public float getRealtimeActionSeconds() {
 		return ticksToTime(realtimeActionPeriod);
 	}
-	
+
 	public long getRealtimeActionPeriod() {
 		return realtimeActionPeriod;
 	}
@@ -649,7 +655,6 @@ public class World {
 
 	/* Main world time processor (for "whole" time ticks)
 	 * Gets called once for every 100% of AP spent by player
-	 * 
 	 */
 	private void timeTick() {
 		Graph graph = getCurLoc().getPathfindingGraph();
@@ -664,6 +669,18 @@ public class World {
 		}
 
 		graph.reIndex();
+		showTips();
+	}
+
+	private long lastTip = 0;
+
+	private void showTips() {
+		long ticksPassed = globalTick - lastTip;
+		if (ticksPassed < ticksPerHour / 3 || !Utils.percentRoll((double) ticksPassed / 50d))
+			return;
+
+		lastTip = globalTick;
+		MadSand.warn("[Tip] " + Utils.randElement(Globals.values().tips));
 	}
 
 	private void forEachEntity(Consumer<Entity> action) {
@@ -744,6 +761,8 @@ public class World {
 
 		if (loc.isSettlement())
 			loc.getSettlement().timeTick();
+
+		Mouse.refreshTooltip();
 	}
 
 	public void skipRealtimeTicks(long ticks) {

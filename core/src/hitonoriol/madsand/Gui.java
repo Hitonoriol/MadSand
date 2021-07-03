@@ -37,12 +37,14 @@ import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.dialogs.OkDialog;
 import hitonoriol.madsand.gui.stages.Overlay;
 import hitonoriol.madsand.screens.TravelScreen;
+import hitonoriol.madsand.util.Utils;
 
 public class Gui {
 	public static final float DEFWIDTH = 250f;
 	public static final float defLblWidth = Gdx.graphics.getWidth() / 4;
 	public static int BTN_WIDTH = 150, BTN_HEIGHT = 30;
 	public final static int FONT_XXS = 12, FONT_XS = 14, FONT_S = 16, FONT_M = 20, FONT_L = 24, FONT_XL = 28;
+	public final static float DELAY = 0.05f;
 
 	public static boolean gameUnfocused = false;
 	public static boolean dialogActive = false;
@@ -166,7 +168,7 @@ public class Gui {
 	}
 
 	private static void drawOkDialog(String title, String msg, Stage stage) {
-		new OkDialog(title, msg, stage).show();
+		Utils.scheduleTask(() -> new OkDialog(title, msg, stage).show(), DELAY);
 	}
 
 	public static void drawOkDialog(String title, String msg) {
@@ -195,9 +197,13 @@ public class Gui {
 			noDialogsLeft = dialog.isOnlyDialog();
 
 		if (noDialogsLeft) {
-			dialogActive = gameUnfocused = false;
+			forceResumeFocus();
 			overlay.showTooltip();
 		}
+	}
+
+	public static void forceResumeFocus() {
+		dialogActive = gameUnfocused = false;
 	}
 
 	public static boolean hasDialogs(Stage stage, GameDialog dialog) { // If stage has dialogs except <dialog>

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.util.Utils;
 
 public class KeyBindManager {
@@ -16,7 +17,7 @@ public class KeyBindManager {
 	public void runBoundAction(int key) {
 		Utils.tryTo(() -> {
 			bindings.getOrDefault(key, noAction).run();
-			if (!listeners.isEmpty())
+			if (!listeners.isEmpty() && !Gui.isGameUnfocused())
 				listeners.forEach(listener -> listener.accept(key));
 		});
 	}

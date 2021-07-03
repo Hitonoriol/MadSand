@@ -1,5 +1,6 @@
 package hitonoriol.madsand.properties;
 
+import static hitonoriol.madsand.Resources.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -20,6 +21,7 @@ public class Globals {
 
 	public int currencyId;
 
+	public ArrayList<String> tips;
 	public ArrayList<String> idleNpcText;
 	public ArrayList<String> traderGreetings;
 
@@ -40,11 +42,10 @@ public class Globals {
 
 	public HashMap<String, String> values;
 
-	
 	public static boolean isDebugBuild() {
 		return VERSION == DEV_VER_STR;
 	}
-	
+
 	private static String getVersion() {
 		String version = Globals.class.getPackage().getImplementationVersion();
 
@@ -60,12 +61,17 @@ public class Globals {
 		instance = Resources.mapper.readValue(Resources.readInternal(Resources.GLOBALS_FILE), Globals.class);
 		instance.abilities.entrySet().stream().forEach(entry -> entry.getValue().id = entry.getKey());
 		initPillScripts();
+		instance.loadMisc();
 	}
 
 	private static void initPillScripts() {
 		HashMap<String, String> scripts = values().pills;
 		values().abilities
 				.forEach((id, ability) -> scripts.put(ability.name, "player:addAbility(" + id + ")"));
+	}
+
+	private void loadMisc() {
+		tips = loadStringList("tips.json");
 	}
 
 	public static Globals values() {

@@ -26,7 +26,6 @@ import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.entities.skill.Skill;
-import hitonoriol.madsand.gui.dialogs.CharacterCreationDialog;
 import hitonoriol.madsand.gui.dialogs.LevelupDialog;
 import hitonoriol.madsand.gui.widgets.ActionButton;
 import hitonoriol.madsand.gui.widgets.EquipmentSidebar;
@@ -53,8 +52,6 @@ public class Overlay extends Stage {
 	static float SIDEBAR_XPADDING = 5;
 
 	Table overlayTable = new Table();
-
-	public CharacterCreationDialog charCreateDialog;
 
 	private Table topTable = new Table();
 	public GameTooltip gameTooltip;
@@ -199,12 +196,6 @@ public class Overlay extends Stage {
 
 	public void hideActionBtn() {
 		actionButton.hideButton();
-	}
-
-	public void createCharDialog() {
-		if (charCreateDialog == null)
-			charCreateDialog = new CharacterCreationDialog();
-		charCreateDialog.show();
 	}
 
 	public void setHandDisplay(Item item) {

@@ -26,7 +26,7 @@ public class MadSandTestWrapper extends MadSand {
 		Player player = player();
 		player.stats.roll(10);
 		player.reinit();
-		worldEntered();
+		enterWorld();
 
 		Utils.out();
 		runAll();

@@ -723,4 +723,11 @@ public abstract class Entity extends MapEntity {
 		return ret;
 	}
 
+	public String toString() {
+		return String.format("{%s} %s Lvl. %d [HP: %d/%d]",
+				getClass().getSimpleName(),
+				getName(),
+				getLvl(),
+				stats.hp, stats.mhp);
+	}
 }

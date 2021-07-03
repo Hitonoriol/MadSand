@@ -382,17 +382,15 @@
 		"name" : "Stone hoe",
 		"recipe" : "2/5:8/5",
 		"useAction" : "
-			local player = world.player;
 			local tile = world:getTileId(player.x, player.y);
 			print('Current tile: ' .. tile);
 			if tile == 0 then 
+				utils:print('You plow the soil');
 				utils:placeTile(player.x, player.y, 15);
-				utils:print('You plowed soil');
-				print('Plowing at' .. player.x .. ' ' .. player.y);
 			end
 		",
 		"dmg" : 2,
-		"hp" : 256,
+		"hp" : 50,
 		"cost" : 14,
 		"@type" : "Tool",
 		"type" : "Hoe",
@@ -1856,6 +1854,48 @@
 		"directional" : true,
 		"altObject" : 177,
 		"cost" : 17,
+		"recipe" : "181|25/5",
 		"type" : "Object"
+	},
+	"181" : {
+		"name" : "Copper pipe",
+		"@type" : "Placeable",
+		"directional" : true,
+		"altObject" : 178,
+		"cost" : 34,
+		"recipe" : "181|184/5",
+		"type" : "Object"
+	},
+	"182" : {
+		"name" : "Iron pipe",
+		"@type" : "Placeable",
+		"directional" : true,
+		"altObject" : 179,
+		"cost" : 70,
+		"recipe" : "181|72/5",
+		"type" : "Object"
+	},
+	"183" : {
+		"name" : "Gold pipe",
+		"@type" : "Placeable",
+		"directional" : true,
+		"altObject" : 180,
+		"cost" : 145,
+		"recipe" : "181|73/5",
+		"type" : "Object"
+	},
+	"184" : {
+		"@type" : "Item",
+		"name" : "Copper ingot",
+		"recipe" : "67|185/1:56/1",
+		"craftQuantity" : 2,
+		"cost" : 15,
+		"weight" : 0.7
+	},
+	"185" : {
+		"@type" : "Item",
+		"name" : "Copper ore",
+		"cost" : 9,
+		"weight" : 0.7
 	}
 }

@@ -25,8 +25,10 @@ public abstract class LevelBoundItem extends Item {
 		if (!canBeUsed(player))
 			Gui.drawOkDialog(
 					"Your level is too low! You need to be at least level " + lvl + " to equip this item.");
-		else
+		else {
+			super.use(player);
 			useAction.run();
+		}
 	}
 
 	@Override

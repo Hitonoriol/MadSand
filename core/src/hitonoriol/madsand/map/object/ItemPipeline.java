@@ -35,7 +35,7 @@ public class ItemPipeline extends MapObject implements TimeDependent {
 
 	@Override
 	public void interact(Player player) {
-		super.setDirection(directionFacing.rotateClockwise());
+		super.interact(player, () -> setDirection(directionFacing.rotateClockwise()));
 	}
 
 	private List<Item> getItems(Loot loot) {

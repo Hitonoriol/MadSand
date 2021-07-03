@@ -169,7 +169,7 @@ public class Keyboard {
 
 			else if (key == Keys.R) {
 				MadSand.world().generate();
-				MadSand.worldEntered();
+				MadSand.enterWorld();
 			}
 
 			else if (key == Keys.W)

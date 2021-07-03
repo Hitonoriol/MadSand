@@ -1,9 +1,11 @@
 package hitonoriol.madsand.map;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.function.Consumer;
 
 import com.badlogic.gdx.utils.Timer;
@@ -15,6 +17,7 @@ import hitonoriol.madsand.util.Utils;
 public class TimeScheduler {
 	private Timer timer = new Timer();
 	private Map<Long, List<TimeDependent>> updateMap = new HashMap<>();
+	private Queue<Runnable> postUpdateActions = new ArrayDeque<>();
 
 	public void register(TimeDependent entity) {
 		long updateRate = entity.getUpdateRate();
@@ -30,9 +33,7 @@ public class TimeScheduler {
 	public void remove(TimeDependent entity) {
 		long updateRate = entity.getUpdateRate();
 		List<TimeDependent> updateList = updateMap.get(updateRate);
-		updateList.remove(entity);
-		if (updateList.isEmpty())
-			updateMap.remove(updateRate);
+		postUpdateActions.add(() -> updateList.remove(entity));
 	}
 
 	public void stop() {
@@ -49,5 +50,6 @@ public class TimeScheduler {
 
 	private void update(List<TimeDependent> entities) {
 		entities.forEach(entity -> entity.update());
+		postUpdateActions.forEach(action -> action.run());
 	}
 }

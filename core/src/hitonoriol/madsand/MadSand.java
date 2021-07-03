@@ -42,8 +42,6 @@ public class MadSand extends Game {
 
 	private static boolean worldUntouched = true;
 
-	public static int MAXSAVESLOTS = 10;
-
 	public static SpriteBatch batch;
 
 	private World world;
@@ -89,11 +87,17 @@ public class MadSand extends Game {
 	}
 
 	public static void initNewGame() {
-		game.world = new World();
+		game.createWorld();
 		MadSand.player().updCoords();
 		Lua.init();
 		Gui.overlay.gameLog.clear();
 		game.world.generate();
+	}
+
+	private void createWorld() {
+		if (world != null)
+			world.close();
+		world = new World();
 	}
 
 	public static void switchScreen(Screen screen) {
@@ -108,7 +112,7 @@ public class MadSand extends Game {
 	}
 
 	public static void reset() {
-		Gui.gameResumeFocus();
+		Gui.forceResumeFocus();
 		switchScreen(gameScreen);
 	}
 
@@ -204,8 +208,8 @@ public class MadSand extends Game {
 	}
 
 	// New world is generated on game launch, so this thing ensures that new world won't be generated twice when you press "New Game" button
-	public static void worldEntered() {
-		if (MadSand.worldUntouched)
+	public static void enterWorld() {
+		if (MadSand.isWorldUntouched())
 			MadSand.worldUntouched = false;
 
 		game.world.enter();

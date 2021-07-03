@@ -24,6 +24,9 @@ public class Equipment {
 	}
 
 	public boolean equip(Item item) {
+		if (itemEquipped(item))
+			return false;
+
 		EquipSlot slot = item.getEquipSlot();
 		if (equipped.containsKey(slot))
 			equipped.remove(slot);

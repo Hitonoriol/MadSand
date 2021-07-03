@@ -29,6 +29,7 @@ import hitonoriol.madsand.entities.npc.Npc;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.TradeCategory;
+import hitonoriol.madsand.map.object.Crop;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.map.object.ResourceObject;
 import hitonoriol.madsand.pathfinding.DistanceHeuristic;
@@ -929,26 +930,18 @@ public class Map {
 	}
 
 	public boolean putCrop(int x, int y, int id) { // item id
-		if (!correctCoords(coords.set(x, y)))
-			return false;
-		if (objectExists(x, y))
-			return false;
-		if (getTile(x, y).id != ItemProp.getCropSoil(id))
-			return false;
-
-		Crop newCrop = new Crop(id, MadSand.world().currentRealtimeTick());
-		add(coords.copy().set(x, y), newCrop);
-		return true;
+		return putCrop(x, y, new Crop(id, MadSand.world().currentRealtimeTick()));
 	}
 
 	public boolean putCrop(int x, int y, Crop crop) {
 		if (!correctCoords(coords.set(x, y)))
 			return false;
-		if (getTile(x, y).id != ItemProp.getCropSoil(crop.id))
+		if (objectExists(x, y))
+			return false;
+		if (getTile(x, y).id != ItemProp.getCropSoil(crop.getSeedsId()))
 			return false;
 
-		addObject(x, y, crop.objId);
-		return true;
+		return add(coords.copy().set(x, y), crop);
 	}
 
 	public Crop getCrop(int x, int y) {
@@ -1301,4 +1294,8 @@ public class Map {
 		}
 	}
 
+	@JsonIgnore
+	public TimeScheduler getTimeScheduler() {
+		return timeScheduler;
+	}
 }

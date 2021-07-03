@@ -24,6 +24,7 @@ import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -135,7 +136,7 @@ public class Resources {
 			Utils.die("Exception on init: " + ExceptionUtils.getStackTrace(e));
 		}
 	}
-	
+
 	private static void init() throws Exception {
 		Utils.out("Loading resources...");
 
@@ -322,6 +323,15 @@ public class Resources {
 	public static void loadSkillReqs() throws Exception {
 		SkillContainer.reqList = mapper.readValue(readInternal(Resources.SKILL_FILE),
 				getMapType(Skill.class, SkillValue.class));
+	}
+
+	private static JavaType stringList = typeFactory.constructCollectionType(ArrayList.class, String.class);
+	public static ArrayList<String> loadStringList(String internalFile) {
+		try {
+			return mapper.readValue(readInternal(internalFile),	stringList);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	static final int PLAYER_ANIM_WIDTH = 35;

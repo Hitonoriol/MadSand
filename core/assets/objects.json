@@ -452,7 +452,7 @@
 		"harvestHp" : 1,
 		"nocollide" : true,
 		"altItems" : {
-			"None" : [ 47, 54 ]
+			"None" : [ 47, 52 ]
 		},
 		"skill" : "Farming",
 		"name" : "Carrot"
@@ -1333,5 +1333,42 @@
 		"nocollide" : true,
 		"centered" : true,
 		"name" : "Stone pipe"
+	},
+	"178" : {
+		"hp" : 1,
+		"harvestHp" : 25,
+		"@type" : "ItemPipeline",
+		"transportLimit" : 6,
+		"transportPeriod" : 25,
+		"nocollide" : true,
+		"centered" : true,
+		"name" : "Copper pipe"
+	},
+	"179" : {
+		"hp" : 1,
+		"harvestHp" : 35,
+		"@type" : "ItemPipeline",
+		"transportLimit" : 15,
+		"transportPeriod" : 20,
+		"nocollide" : true,
+		"centered" : true,
+		"name" : "Iron pipe"
+	},
+	"180" : {
+		"hp" : 1,
+		"harvestHp" : 10,
+		"@type" : "ItemPipeline",
+		"transportLimit" : 8,
+		"transportPeriod" : 10,
+		"nocollide" : true,
+		"centered" : true,
+		"name" : "Gold pipe"
+	},
+	"181" : {
+		"hp" : 1,
+		"harvestHp" : 35,
+		"@type" : "CraftingStation",
+		"centered" : true,
+		"name" : "Mechanical workbench"
 	}
 }
