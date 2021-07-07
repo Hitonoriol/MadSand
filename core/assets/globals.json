@@ -1,17 +1,16 @@
 {
 	"currencyId" : 21,
-	"values" : {
-		"travelItem" : "130",
-		"timeSkipItem" : "101",
-		"drowningDamage" : "3"
-	},
+	"travelItem" : 130,
+	"timeSkipItem" : 101,
+	"drowningDamage" : 3,
+
 	"lootTables" : {
 		"wild_animal_l" : "(97.5|96/2)(95|22/4)",
 		"wild_animal_m" : "(97.5|96/1)(95|22/3)",
 		"wild_animal_s" : "(97|96/1)"
 	},
-	"baseScrollId" : 75,
 
+	"baseScrollId" : 75,
 	"scrolls" : {
 		"Dungeon Entrance Search" : "
 			local tileCoords = utils:locateTile(45);
@@ -30,7 +29,6 @@
 	},
 
 	"basePillId" : 179,
-
 	"abilities" : {
 		"1" : {
 			"@type" : "ActiveAbility",
@@ -63,6 +61,7 @@
 	",
 	"huntQuestItems" : [96, 141],
 	"fetchQuestItems" : [137, 138],
+
 	"idleNpcText" : [
 			"What a nice day! Isn't it, {PLAYER}?",
 			"Hello, {PLAYER}!",

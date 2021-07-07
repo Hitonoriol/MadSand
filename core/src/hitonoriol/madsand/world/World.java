@@ -49,7 +49,7 @@ public class World {
 
 	private Pair coords = new Pair();
 
-	private final int MAX_PREVIOUS_LOCATIONS = 2; // Max amount of maps allowed to be in WorldMap at the same time
+	private final static int MAX_PREVIOUS_LOCATIONS = 3; // Max amount of maps allowed to be in WorldMap at the same time
 	@JsonIgnore
 	private ArrayDeque<Pair> previousLocations = new ArrayDeque<>(); // Maps that are currently loaded in WorldMap
 
@@ -108,7 +108,7 @@ public class World {
 	public void close() {
 		realTimeRefresher.clear();
 		realTimeRefresher.stop();
-		getCurLoc().getTimeScheduler().stop();
+		getCurLoc().close();
 	}
 
 	private void initRealtimeRefresher() {
@@ -385,7 +385,7 @@ public class World {
 		if (worldMap.curLayer != Location.LAYER_OVERWORLD)
 			return false;
 
-		player.inventory.delItem(Globals.getInt(Globals.TRAVEL_ITEM));
+		player.inventory.delItem(Globals.values().travelItem);
 
 		coords.set(worldMap.wx(), worldMap.wy()).addDirection(dir);
 		MadSand.print("You travel to sector (" + coords.x + ", " + coords.y + ")");
@@ -426,12 +426,11 @@ public class World {
 	}
 
 	public void travel() {
-		Direction direction = player.stats.look;
-
 		if (!player.canTravel())
 			return;
 
-		int travelItem = Globals.getInt(Globals.TRAVEL_ITEM);
+		Direction direction = player.stats.look;
+		int travelItem = Globals.values().travelItem;
 		Pair nextSector = coords.set(worldMap.wx(), worldMap.wy()).addDirection(direction);
 
 		if (!GameSaver.verifyNextSector(nextSector.x, nextSector.y))

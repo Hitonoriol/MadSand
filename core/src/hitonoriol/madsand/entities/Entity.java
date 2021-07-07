@@ -724,10 +724,16 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public String toString() {
-		return String.format("{%s} %s Lvl. %d [HP: %d/%d]",
+		return String.format("{%s} %s (%d, %d) Lvl. %d [HP: %d/%d]",
 				getClass().getSimpleName(),
 				getName(),
+				x, y,
 				getLvl(),
 				stats.hp, stats.mhp);
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return this == Map.nullNpc;
 	}
 }

@@ -247,7 +247,13 @@ public class Inventory {
 		if (id == Item.NULL_ITEM)
 			return true;
 
-		return putItem(Item.create(id, quantity));
+		Item item = Item.create(id, quantity);
+		if (item.isEquipment()) {
+			item.setQuantity(1);
+			putItem(id, quantity - 1);
+		}
+
+		return putItem(item);
 	}
 
 	public boolean putItem(String query) {

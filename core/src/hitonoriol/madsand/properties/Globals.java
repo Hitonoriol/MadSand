@@ -15,11 +15,10 @@ public class Globals {
 	public static final String VERSION = getVersion();
 	public static boolean debugMode = VERSION.equals(DEV_VER_STR), silentMode = false;
 
-	public static String TRAVEL_ITEM = "travelItem", TIMESKIP_ITEM = "timeSkipItem";
-
 	private static Globals instance = new Globals();
 
 	public int currencyId;
+	public int travelItem, timeSkipItem;
 
 	public ArrayList<String> tips;
 	public ArrayList<String> idleNpcText;
@@ -39,8 +38,6 @@ public class Globals {
 
 	public int basePillId;
 	public HashMap<String, String> pills = new HashMap<>();
-
-	public HashMap<String, String> values;
 
 	public static boolean isDebugBuild() {
 		return VERSION == DEV_VER_STR;
@@ -76,14 +73,6 @@ public class Globals {
 
 	public static Globals values() {
 		return instance;
-	}
-
-	public static int getInt(String name) {
-		return Integer.parseInt(instance.values.get(name));
-	}
-
-	public static String getString(String name) {
-		return instance.values.get(name);
 	}
 
 	public static Item getCurrency() {

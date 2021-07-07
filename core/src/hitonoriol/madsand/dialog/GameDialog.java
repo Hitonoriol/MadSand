@@ -101,8 +101,10 @@ public class GameDialog extends Dialog {
 	@Override
 	public boolean remove() {
 		boolean ret = super.remove();
-		Gui.overlay.refreshActionButton();
-		Utils.scheduleTask(() -> Gui.gameResumeFocus(this), Gui.DELAY);
+		Utils.scheduleTask(() -> {
+			Gui.gameResumeFocus(this);
+			Gui.overlay.refreshActionButton();
+		}, Gui.DELAY);
 		return ret;
 	}
 

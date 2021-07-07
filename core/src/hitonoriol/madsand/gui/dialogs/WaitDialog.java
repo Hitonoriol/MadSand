@@ -21,7 +21,7 @@ public class WaitDialog extends SliderDialog {
 		super.setSliderTitle("How much time to skip:");
 		super.getBottomLabel().setAlignment(Align.center);
 
-		String timeSkipItem = ItemProp.getItemName(Globals.getInt(Globals.TIMESKIP_ITEM));
+		String timeSkipItem = ItemProp.getItemName(Globals.values().timeSkipItem);
 		super.setSliderAction(
 				ticks -> {
 					timeSkipItemSpent = (int) Math.max((float) ticks / Player.TIMESKIP_COEF, 1);
@@ -38,7 +38,7 @@ public class WaitDialog extends SliderDialog {
 				});
 
 		super.setConfirmAction(ticks -> {
-			MadSand.player().inventory.delItem(Globals.getInt(Globals.TIMESKIP_ITEM), timeSkipItemSpent);
+			MadSand.player().inventory.delItem(Globals.values().timeSkipItem, timeSkipItemSpent);
 			MadSand.player().skipTicks(ticks);
 			MadSand.world().skipRealtimeTicks(realtimeTicks);
 			MadSand.notice("Skipped " + Utils.timeString(worldSeconds));

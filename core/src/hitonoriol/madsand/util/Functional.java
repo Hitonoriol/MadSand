@@ -43,6 +43,13 @@ public class Functional {
 		}
 	}
 
+	public static <T> void ifPresentOrElse(Optional<T> opt, Consumer<? super T> present, Runnable elseAction) {
+		if (opt.isPresent())
+			present.accept(opt.get());
+		else
+			elseAction.run();
+	}
+
 	public static interface SafeRunnable {
 		void run() throws Exception;
 	}

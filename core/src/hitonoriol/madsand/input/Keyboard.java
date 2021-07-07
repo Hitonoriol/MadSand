@@ -15,6 +15,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
@@ -148,14 +149,16 @@ public class Keyboard {
 		}
 
 		if (key == Keys.Y)
-			Mouse.setClickAction((x, y) -> MadSand.player().run(Mouse.getPathToCursor()), MadSand.player().fov);
+			Mouse.setClickAction((x, y) -> {
+				Node dest = Mouse.getPathToCursor().getDestination();
+				MadSand.player().teleport(dest.x, dest.y);
+			}, MadSand.player().fov);
 
 		if (key == Keys.NUMPAD_3)
-			MadSand.getRenderer().changeZoom(0.01f);
+			MadSand.getRenderer().changeZoom(0.05f);
 
-		if (key == Keys.NUMPAD_1) {
-			MadSand.getRenderer().changeZoom(-0.01f);
-		}
+		if (key == Keys.NUMPAD_1) 
+			MadSand.getRenderer().changeZoom(-0.05f);
 
 		if (key == Keys.F5)
 			MadSand.world().timeTick(150);
@@ -168,6 +171,7 @@ public class Keyboard {
 				MadSand.world().ascend();
 
 			else if (key == Keys.R) {
+				MadSand.world().close();
 				MadSand.world().generate();
 				MadSand.enterWorld();
 			}

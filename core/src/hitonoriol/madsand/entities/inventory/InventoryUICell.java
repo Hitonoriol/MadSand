@@ -22,14 +22,10 @@ public class InventoryUICell extends ItemUI {
 	private static final float CONTEXT_BTN_WIDTH = 100F;
 	private static final float CONTEXT_BTN_HEIGHT = 30F;
 	public static final float CONTEXT_W_DENOMINATOR = 1.75f;
-
+	
 	private Table invCellContextContainer; // RMB context menu container and buttons
-
 	private TextButton dropBtn;
-
-	static String equippedText = "[#387aff]E []";
-	private Label equippedLabel = new Label(equippedText, Gui.skin);
-	Player player = MadSand.player();
+	private Label equippedLabel = new Label("[#387aff]E []", Gui.skin);
 
 	public InventoryUICell(Item item) {
 		super(item);
@@ -40,6 +36,7 @@ public class InventoryUICell extends ItemUI {
 		super.addActor(equippedLabel);
 
 		Gui.setClickAction(this, Buttons.LEFT, () -> {
+			Player player = MadSand.player();
 			item.leftClickAction();
 			refreshEquippedStatus();
 			player.doAction(player.stats.minorCost);
@@ -78,7 +75,7 @@ public class InventoryUICell extends ItemUI {
 	private void toggleContextMenu() {
 		if (!invCellContextContainer.isVisible()) {
 			toFront();
-			player.inventory.getUI().clearContextMenus();
+			MadSand.player().inventory.getUI().clearContextMenus();
 			invCellContextContainer.setVisible(true);
 			Mouse.updScreenCoords();
 			invCellContextContainer.setPosition(SIZE / 2, SIZE / 2);
@@ -112,7 +109,6 @@ public class InventoryUICell extends ItemUI {
 	}
 
 	public void refreshEquippedStatus() {
-		equippedLabel.setVisible(player.stats.equipment.itemEquipped(item) || player.stats.hand() == item
-				|| player.stats.offHand() == item);
+		equippedLabel.setVisible(MadSand.player().stats.equipment.itemEquipped(item));
 	}
 }

@@ -34,7 +34,5 @@ public abstract class MapEntity implements DynamicallyCastable<MapEntity> {
 	public abstract void playDamageAnimation();
 
 	@JsonIgnore
-	public boolean isEmpty() {
-		return this == Map.nullNpc || this == Map.nullObject;
-	}
+	public abstract boolean isEmpty();
 }

@@ -1,12 +1,10 @@
 package hitonoriol.madsand.entities.inventory.trade;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
@@ -50,8 +48,6 @@ public class TradeInventoryUI {
 		containerTable = new Table();
 		tradeUITable = new Table();
 
-		//tradeUITable.setDebug(true, true);
-
 		tradeUITable.setSize(WIDTH, HEIGHT);
 		sellTable = new Table();
 		buyTable = new Table();
@@ -88,20 +84,10 @@ public class TradeInventoryUI {
 
 		Gui.overlay.addActor(containerTable);
 
-		refresher = new TradeUIRefresher() {
-			@Override
-			public void refreshUI() {
-				refresh();
-			}
-		};
-
-		exitBtn.addListener(new ChangeListener() {
-
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				remove();
-				MadSand.reset();
-			}
+		refresher = () -> refresh();
+		Gui.setAction(exitBtn, () -> {
+			remove();
+			MadSand.reset();
 		});
 	}
 

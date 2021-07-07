@@ -47,6 +47,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 	@JsonProperty
 	public float weight = DEFAULT_WEIGHT;
 	public int cost;
+	@JsonIgnore
 	private boolean textureFxModified = true;
 
 	public String recipe;
@@ -238,6 +239,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 				getTotalWeight());
 	}
 
+	@JsonIgnore
 	@Override
 	public String getHotbarString() {
 		return getFullName();

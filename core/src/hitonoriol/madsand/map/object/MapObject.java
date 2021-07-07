@@ -258,12 +258,17 @@ public class MapObject extends MapEntity {
 		return Resources.objects[id].getWidth() / 4;
 	}
 
-	public static MapObject create(int id) {
-		return ObjectProp.getObject(id).copy();
-	}
-
 	@JsonIgnore
 	public Texture getTexture() {
 		return Resources.objects[id];
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return this == Map.nullObject;
+	}
+
+	public static MapObject create(int id) {
+		return ObjectProp.getObject(id).copy();
 	}
 }

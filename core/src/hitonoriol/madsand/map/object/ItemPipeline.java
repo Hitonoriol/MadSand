@@ -83,29 +83,30 @@ public class ItemPipeline extends MapObject implements TimeDependent {
 		}
 		Pair position = getPosition();
 		MadSand.world().exec(map -> {
-			map.getObject(position.copy().addDirection(directionFacing.opposite()))
-					.as(ItemFactory.class)
-					.ifPresentOrElse(
-							factory -> {
-								ItemProducer producer = factory.getItemProducer();
-								if (!producer.hasProduct())
-									return;
-								Item product = Item.create(producer.getProductId());
-								map.putLoot(position, producer.getProduct((int) (transportLimit / product.weight)));
-							},
+			Functional.ifPresentOrElse(
+					map.getObject(position.copy().addDirection(directionFacing.opposite()))
+							.as(ItemFactory.class),
 
-							() -> {
-								Loot loot = map.getLoot(position);
-								if (loot == Map.nullLoot || loot.isEmpty())
-									return;
+					factory -> {
+						ItemProducer producer = factory.getItemProducer();
+						if (!producer.hasProduct())
+							return;
+						Item product = Item.create(producer.getProductId());
+						map.putLoot(position, producer.getProduct((int) (transportLimit / product.weight)));
+					},
 
-								if (sentItems) {
-									sentItems = false;
-									return;
-								}
-								sentItems = true;
-								moveItems(loot, position.addDirection(directionFacing));
-							});
+					() -> {
+						Loot loot = map.getLoot(position);
+						if (loot == Map.nullLoot || loot.isEmpty())
+							return;
+
+						if (sentItems) {
+							sentItems = false;
+							return;
+						}
+						sentItems = true;
+						moveItems(loot, position.addDirection(directionFacing));
+					});
 		});
 	}
 

@@ -14,9 +14,7 @@ import java.util.function.BooleanSupplier;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -120,12 +118,12 @@ public class Player extends Entity {
 
 	public void postLoadInit() {
 		inventory.initUI();
-		inventory.refreshContents();
 		initStatActions();
 		quests.setPlayer(this);
 		turn(stats.look);
 		stats.equipment.refreshUI();
 		abilityKeyBinds.forEach((key, abilityId) -> bindAbility(key, abilityId));
+		inventory.refreshContents();
 	}
 
 	@Override
@@ -400,7 +398,6 @@ public class Player extends Entity {
 	public void attack(Pair coords, int dmg) {
 		doAction(stats.meleeAttackCost, () -> performAttack(coords, dmg));
 	}
-	/* ***** */
 
 	public boolean canPerformRangedAttack() {
 		Optional<Projectile> projectile = stats.getEquippedProjectile();
@@ -732,12 +729,9 @@ public class Player extends Entity {
 		if (npc.canGiveQuests) {
 			TextButton questButton = new TextButton("Do you need any help?", Gui.skin);
 			npcDialog.addButton(questButton);
-			questButton.addListener(new ChangeListener() {
-				@Override
-				public void changed(ChangeEvent event, Actor actor) {
-					npcDialog.remove();
-					quests.startProceduralQuest(npc.uid);
-				}
+			Gui.setAction(questButton, () -> {
+				npcDialog.remove();
+				quests.startProceduralQuest(npc.uid);
 			});
 		}
 
@@ -748,20 +742,17 @@ public class Player extends Entity {
 			if (!location.settlement.isOccupied(npc.uid))
 				npcDialog.addButton(recruitButton);
 
-			recruitButton.addListener(new ChangeListener() {
-				@Override
-				public void changed(ChangeEvent event, Actor actor) {
-					npcDialog.remove();
-					WorkerType worker = location.settlement.recruitWorker(npc.uid);
-					if (!canAfford(hireCost)) {
-						Gui.drawOkDialog("You don't have enough money to recruit this worker!");
-						return;
-					}
-					inventory.delItem(currency, hireCost);
-					new DialogChainGenerator(
-							"Sure. I'll be the best " + worker.name() + " of the " + location.name + " settlement!")
-									.setAllTitles(npc.stats.name).generate(Gui.overlay).show();
+			Gui.setAction(recruitButton, () -> {
+				npcDialog.remove();
+				WorkerType worker = location.settlement.recruitWorker(npc.uid);
+				if (!canAfford(hireCost)) {
+					Gui.drawOkDialog("You don't have enough money to recruit this worker!");
+					return;
 				}
+				inventory.delItem(currency, hireCost);
+				new DialogChainGenerator(
+						"Sure. I'll be the best " + worker.name() + " of the " + location.name + " settlement!")
+								.setAllTitles(npc.stats.name).generate(Gui.overlay).show();
 			});
 		}
 
@@ -1039,7 +1030,7 @@ public class Player extends Entity {
 	public boolean canTravel() {
 		Map map = MadSand.world().getCurLoc();
 		Direction direction = stats.look;
-		boolean canTravel = false;
+		boolean canTravel;
 
 		canTravel = (x == map.getWidth() - 1 && direction == Direction.RIGHT);
 		canTravel |= (y == map.getHeight() - 1 && direction == Direction.UP);
@@ -1136,7 +1127,7 @@ public class Player extends Entity {
 	public static float TIMESKIP_COEF = 18f, REALTIME_SKIP_COEF = 5.5f;
 
 	public void skipTime() {
-		int timeSkipItemId = Globals.getInt(Globals.TIMESKIP_ITEM);
+		int timeSkipItemId = Globals.values().timeSkipItem;
 		Item timeSkipItem = inventory.getItem(timeSkipItemId);
 		if (timeSkipItem.equals(Item.nullItem)) {
 			Gui.drawOkDialog(
@@ -1158,6 +1149,13 @@ public class Player extends Entity {
 		MadSand.world().timeSubtick(getActionLength(ap)); // letting NPCs catch up
 		Gui.overlay.refresh();
 		Lua.onAction.run();
+		return ticks;
+	}
+
+	@Override
+	public int doAction(double ap) {
+		int ticks = super.doAction(ap);
+		Gui.overlay.refreshActionButton();
 		return ticks;
 	}
 
