@@ -14,7 +14,7 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.skill.SkillContainer;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.map.object.MapObject;
-import hitonoriol.madsand.util.Utils;
+import hitonoriol.madsand.util.TimeUtils;
 
 /*
  * Progress bar that is displayed on interaction with objects (when gathering resources)
@@ -79,8 +79,8 @@ public class ResourceProgressBar extends TimedProgressBar {
 			/*Utils.scheduleTask(() -> progressLabel.remove(), 0.5f);*/
 		});
 
-		skipTask = Utils.createTask(() -> skip = false);
-		wakeTask = Utils.createTask(() -> Gdx.graphics.requestRendering());
+		skipTask = TimeUtils.createTask(() -> skip = false);
+		wakeTask = TimeUtils.createTask(() -> Gdx.graphics.requestRendering());
 	}
 
 	private static float getDelayDelta(MapObject object) {

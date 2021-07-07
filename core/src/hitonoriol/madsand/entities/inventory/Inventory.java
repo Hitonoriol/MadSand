@@ -56,7 +56,7 @@ public class Inventory {
 	}
 
 	public void refreshUITitle() {
-		updateUI(ui -> ui.setHeader(getWeightString()));
+		updateUI(ui -> ui.refreshTitle());
 	}
 
 	@JsonIgnore

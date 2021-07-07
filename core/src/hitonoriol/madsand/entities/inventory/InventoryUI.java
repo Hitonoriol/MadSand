@@ -16,7 +16,6 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 
@@ -96,6 +95,10 @@ public class InventoryUI extends GameDialog {
 		itemUI.forEach((item, itemUICell) -> putNewItem(itemUICell));
 	}
 
+	void refreshTitle() {
+		setHeader(inventory.getWeightString());
+	}
+
 	void putNewItem(InventoryUICell cell) {
 		cell.refreshEquippedStatus();
 		++stacks;
@@ -127,13 +130,11 @@ public class InventoryUI extends GameDialog {
 	public void refreshItem(Item item) {
 		if (item.id == 0)
 			return;
+
 		inventory.refreshUITitle();
-		if (itemUI.containsKey(item)) {
-			itemUI.get(item).setText(item.quantity + "");
-			if (item instanceof AbstractEquipment)
-				itemUI.get(item).refreshHp();
-			itemUI.get(item).refreshEquippedStatus();
-		} else {
+		if (itemUI.containsKey(item))
+			itemUI.get(item).refresh();
+		else {
 			InventoryUICell cell = new InventoryUICell(item);
 			itemUI.put(item, cell);
 			putNewItem(cell);

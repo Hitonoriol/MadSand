@@ -18,6 +18,7 @@ import hitonoriol.madsand.map.ItemProducer;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.properties.ObjectProp;
+import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
 
 public class ItemFactoryUI extends GameDialog {
@@ -69,7 +70,7 @@ public class ItemFactoryUI extends GameDialog {
 	Label produceLabel;
 	Label consumeLabel;
 
-	Timer.Task refreshTask = Utils.createTask(() -> refresh());
+	Timer.Task refreshTask = TimeUtils.createTask(() -> refresh());
 
 	private ItemFactoryUI(Stage stage) {
 		super(stage);

@@ -26,6 +26,7 @@ public class LootDialog extends GameDialog {
 	Loot loot;
 
 	TextButton pickUpAllBtn = new TextButton("Pick Up All", Gui.skin);
+	TextButton mergeBtn = new TextButton("Merge All Stacks", Gui.skin);
 
 	public LootDialog(Loot loot) {
 		super(Gui.overlay);
@@ -40,7 +41,8 @@ public class LootDialog extends GameDialog {
 		Table buttonTable = new Table();
 		buttonTable.defaults().size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT).pad(5);
 		buttonTable.add(pickUpAllBtn);
-		buttonTable.add(super.createCloseButton());
+		buttonTable.add(mergeBtn).row();
+		buttonTable.add(super.createCloseButton()).colspan(2);
 		super.add(buttonTable).padTop(PADDING);
 
 		lootTable.align(Align.top);
@@ -49,6 +51,11 @@ public class LootDialog extends GameDialog {
 		Gui.setAction(pickUpAllBtn, () -> {
 			player.pickUpLoot(loot);
 			remove();
+		});
+
+		Gui.setAction(mergeBtn, () -> {
+			loot.mergeItemStacks();
+			refreshLootTable();
 		});
 	}
 

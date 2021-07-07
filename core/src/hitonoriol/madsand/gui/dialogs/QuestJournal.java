@@ -4,12 +4,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
@@ -57,17 +55,17 @@ public class QuestJournal extends GameDialog {
 	Label emptyJournalLabel;
 
 	public QuestJournal(QuestWorker quests) {
-		super(titleString, Gui.overlay);
 		this.quests = quests;
+		setTitle("Quest Journal");
 		super.getTitleTable().padTop(TITLE_YPADDING).align(Align.center);
 		super.getTitleLabel().setAlignment(Align.center);
-		super.row();
 
 		statusLabel = new Label(statusString, skin);
 		nameLabel = new Label(nameString, skin);
 		reqLabel = new Label(reqString, skin);
 		npcLocationLabel = new Label("Turn in to", skin);
 		emptyJournalLabel = new Label(emptyJournalString, skin);
+		closeButton = new TextButton(closeText, skin);
 
 		Gui.setFontSize(statusLabel, Gui.FONT_M);
 		Gui.setFontSize(nameLabel, Gui.FONT_M);
@@ -75,7 +73,6 @@ public class QuestJournal extends GameDialog {
 		Gui.setFontSize(npcLocationLabel, Gui.FONT_M);
 
 		questTable = new Table();
-		questTable.setHeight(TABLE_HEIGHT);
 		questTable.setBackground(Gui.darkBackgroundSizeable);
 		questTable.align(Align.top);
 
@@ -83,16 +80,9 @@ public class QuestJournal extends GameDialog {
 		questScroll.setOverscroll(false, false);
 		questScroll.setScrollingDisabled(true, false);
 
-		closeButton = new TextButton(closeText, skin);
 		super.add(questScroll).minSize(TABLE_WIDTH, TABLE_HEIGHT).padTop(SCROLL_YPADDING).row();
 		super.add(closeButton).size(GameDialog.BTN_WIDTH, GameDialog.BTN_HEIGHT).padBottom(CLOSE_BUTTON_YPADDING).row();
-
-		closeButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				remove();
-			}
-		});
+		Gui.setAction(closeButton, () -> remove());
 	}
 
 	public void refresh() {

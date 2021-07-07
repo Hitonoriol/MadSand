@@ -1,5 +1,6 @@
 package hitonoriol.madsand.util;
 
+import static hitonoriol.madsand.Resources.*;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -20,10 +21,8 @@ import org.apache.commons.math3.random.RandomDataGenerator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.utils.Timer;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.util.Functional.SafeRunnable;
@@ -32,7 +31,7 @@ import me.xdrop.jrand.JRand;
 public class Utils {
 	private static boolean printTimestamp = true;
 	static NumberFormat numberFormatter = NumberFormat.getInstance(Locale.US);
-
+	public static Random random = new Random();
 	static {
 		numberFormatter.setMinimumFractionDigits(0);
 		numberFormatter.setRoundingMode(RoundingMode.HALF_UP);
@@ -44,37 +43,6 @@ public class Utils {
 
 	public static void disableTimestampOutput() {
 		printTimestamp = false;
-	}
-
-	public static Random random = new Random();
-
-	public static Timer.Task createTask(Runnable task) {
-		return new Timer.Task() {
-			@Override
-			public void run() {
-				task.run();
-			}
-		};
-	}
-
-	public static Timer.Task scheduleTask(Timer timer, Runnable task, float delaySec) {
-		return timer.scheduleTask(createTask(task), delaySec);
-	}
-
-	public static Timer.Task scheduleTask(Runnable task, float delaySec) {
-		return scheduleTask(Timer.instance(), task, delaySec);
-	}
-
-	public static Timer.Task scheduleRepeatingTask(Timer timer, Runnable task, float intervalSec) {
-		return timer.scheduleTask(createTask(task), intervalSec, intervalSec);
-	}
-
-	public static Timer.Task scheduleRepeatingTask(Runnable task, float intervalSec) {
-		return scheduleRepeatingTask(Timer.instance(), task, intervalSec);
-	}
-
-	public static float timeToExecution(Timer.Task task) {
-		return (float) (task.getExecuteTimeMillis() - System.nanoTime() / 1000000) / 1000f;
 	}
 
 	public static String str(int val) {
@@ -107,7 +75,7 @@ public class Utils {
 		return randElement(Stream.of(stringList.split(",", -1)).collect(Collectors.toList()));
 	}
 
-	static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
+	private static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
 
 	public static void out(String arg) {
 		if (Globals.silentMode)
@@ -165,11 +133,11 @@ public class Utils {
 		if (errors > MAX_ERRORS)
 			die("Too many errors");
 
-		Gui.drawOkDialog("Panic", "Oops, something went horribly wrong." + Resources.LINEBREAK + Resources.LINEBREAK
+		Gui.drawOkDialog("Panic", "Oops, something went horribly wrong." + LINEBREAK + LINEBREAK
 				+ "You can continue playing, though. But if you notice more strange behavior, just relaunch the game."
-				+ Resources.LINEBREAK + Resources.LINEBREAK
-				+ "Here's some useless info (this will also be saved to " + Resources.ERR_FILE + "):"
-				+ Resources.LINEBREAK + Resources.LINEBREAK + msg);
+				+ LINEBREAK + LINEBREAK
+				+ "Here's some useless info (this will also be saved to " + ERR_FILE + "):"
+				+ LINEBREAK + LINEBREAK + msg);
 	}
 
 	public static void tryTo(SafeRunnable action) {
@@ -342,7 +310,7 @@ public class Utils {
 	}
 
 	public static StringBuilder newLine(StringBuilder sb) {
-		return sb.append(Resources.LINEBREAK);
+		return sb.append(LINEBREAK);
 	}
 
 	public static int val(boolean bool) {

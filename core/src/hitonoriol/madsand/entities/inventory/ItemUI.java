@@ -18,6 +18,7 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.util.Utils;
 
 public class ItemUI extends Group {
 	static float TOP_LABEL_YPADDING = 8;
@@ -30,7 +31,6 @@ public class ItemUI extends Group {
 	private Image highlight; // for mouseover highlighting of items
 
 	protected Item item;
-
 	protected ItemTooltip tooltip;
 
 	public ItemUI(Item item) {
@@ -43,8 +43,6 @@ public class ItemUI extends Group {
 		itemQuantityLabel = new Label(item.quantity + "", Gui.skin);
 		tooltip = new ItemTooltip(item);
 
-		refresh();
-
 		toolHpLabel.setPosition(itemQuantityLabel.getX() + SIZE / 1.95f, itemQuantityLabel.getY() + 6);
 
 		topLabel.setWidth(SIZE);
@@ -52,7 +50,6 @@ public class ItemUI extends Group {
 		topLabel.setPosition(SIZE, SIZE - TOP_LABEL_YPADDING, Align.topRight);
 
 		super.addActor(itemBtn);
-		super.addActor(itemQuantityLabel);
 		super.addActor(toolHpLabel);
 		super.addActor(topLabel);
 		super.addActor(highlight);
@@ -60,8 +57,12 @@ public class ItemUI extends Group {
 
 		highlight.setVisible(false);
 
-		if (!item.equals(Item.nullItem))
+		if (!item.equals(Item.nullItem)) {
 			super.addListener(tooltip);
+			super.addActor(itemQuantityLabel);
+		}
+
+		refresh();
 
 		super.addListener(new InputListener() {
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -86,8 +87,8 @@ public class ItemUI extends Group {
 		topLabel.setText(str);
 	}
 
-	void setText(String str) {
-		itemQuantityLabel.setText(str);
+	void setQuantity(int quantity) {
+		itemQuantityLabel.setText(Utils.str(quantity));
 	}
 
 	private void setHp(int hp) {
@@ -95,18 +96,19 @@ public class ItemUI extends Group {
 	}
 
 	void refreshHp() {
-		setHp((int) ((AbstractEquipment)item).getHpPercent());
+		setHp((int) ((AbstractEquipment) item).getHpPercent());
 	}
 
 	public void refresh() {
 		if (item.equals(Item.nullItem))
-			setText("");
-		else
-			setText(item.quantity + "");
+			return;
+
+		setQuantity(item.quantity);
 
 		if (item.isEquipment())
 			refreshHp();
 
+		tooltip.refresh();
 	}
 
 	public static Table createItemList(Table itemTable, List<Item> items, int itemsPerRow) {

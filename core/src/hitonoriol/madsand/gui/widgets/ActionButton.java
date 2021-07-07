@@ -23,7 +23,7 @@ import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
-import hitonoriol.madsand.util.Utils;
+import hitonoriol.madsand.util.TimeUtils;
 
 public class ActionButton extends Table {
 	public TextButton interactButton;
@@ -57,7 +57,7 @@ public class ActionButton extends Table {
 				rAction.run();
 			hideButton();
 			Gui.gameResumeFocus();
-			Utils.scheduleTask(() -> Gdx.graphics.requestRendering(), 0.125f);
+			TimeUtils.scheduleTask(() -> Gdx.graphics.requestRendering(), 0.125f);
 		};
 	}
 

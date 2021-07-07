@@ -17,7 +17,7 @@ import hitonoriol.madsand.entities.ability.Ability;
 import hitonoriol.madsand.entities.ability.ActiveAbility;
 import hitonoriol.madsand.entities.ability.PassiveAbility;
 import hitonoriol.madsand.util.Functional;
-import hitonoriol.madsand.util.Utils;
+import hitonoriol.madsand.util.TimeUtils;
 
 public class AbilityDialog extends GameDialog {
 
@@ -87,7 +87,7 @@ public class AbilityDialog extends GameDialog {
 							addButton(abstrAbility,
 									() -> {
 										ability.apply();
-										Utils.scheduleTask(() -> remove(), 0.1f);
+										TimeUtils.scheduleTask(() -> remove(), 0.1f);
 									}).padRight(5).padLeft(5);
 
 							String bindString = ability.getBindKeyString();

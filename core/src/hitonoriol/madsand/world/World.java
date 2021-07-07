@@ -35,6 +35,7 @@ import hitonoriol.madsand.pathfinding.Graph;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.WorldGenProp;
+import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.worldgen.WorldGen;
 
@@ -123,7 +124,7 @@ public class World {
 	}
 
 	public void realtimeSchedule(Runnable task, long ticks) {
-		Utils.scheduleRepeatingTask(realTimeRefresher, task, ticksToTime(ticks));
+		TimeUtils.scheduleRepeatingTask(realTimeRefresher, task, ticksToTime(ticks));
 	}
 
 	public void realtimeSchedule(Runnable task) {
@@ -733,7 +734,7 @@ public class World {
 				if (entity == player && !player.hasActDelay())
 					actDelay = 0;
 
-				Utils.scheduleTask(actDelayTimer, () -> {
+				TimeUtils.scheduleTask(actDelayTimer, () -> {
 					entity.act(time);
 					if (entity == player && player.hasActDelay())
 						Keyboard.resumeInput(stopLevel.getValue());
@@ -742,7 +743,7 @@ public class World {
 				entity.act(time);
 		});
 
-		Utils.scheduleTask(() -> {
+		TimeUtils.scheduleTask(() -> {
 			Gui.overlay.refreshActionButton();
 
 			if (timeSkip)

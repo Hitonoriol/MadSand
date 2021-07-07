@@ -37,7 +37,7 @@ import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.dialogs.OkDialog;
 import hitonoriol.madsand.gui.stages.Overlay;
 import hitonoriol.madsand.screens.TravelScreen;
-import hitonoriol.madsand.util.Utils;
+import hitonoriol.madsand.util.TimeUtils;
 
 public class Gui {
 	public static final float DEFWIDTH = 250f;
@@ -168,7 +168,7 @@ public class Gui {
 	}
 
 	private static void drawOkDialog(String title, String msg, Stage stage) {
-		Utils.scheduleTask(() -> new OkDialog(title, msg, stage).show(), DELAY);
+		TimeUtils.scheduleTask(() -> new OkDialog(title, msg, stage).show(), DELAY);
 	}
 
 	public static void drawOkDialog(String title, String msg) {

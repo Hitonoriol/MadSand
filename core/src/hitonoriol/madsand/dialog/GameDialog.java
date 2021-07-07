@@ -16,7 +16,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.screens.AbstractScreen;
-import hitonoriol.madsand.util.Utils;
+import hitonoriol.madsand.util.TimeUtils;
 
 public class GameDialog extends Dialog {
 	public static final float BTN_WIDTH = Gdx.graphics.getWidth() / 4;
@@ -101,7 +101,7 @@ public class GameDialog extends Dialog {
 	@Override
 	public boolean remove() {
 		boolean ret = super.remove();
-		Utils.scheduleTask(() -> {
+		TimeUtils.scheduleTask(() -> {
 			Gui.gameResumeFocus(this);
 			Gui.overlay.refreshActionButton();
 		}, Gui.DELAY);
@@ -113,7 +113,7 @@ public class GameDialog extends Dialog {
 		Dialog ret = super.show(stage);
 		Gui.overlay.hideTooltip();
 		Gui.overlay.gameContextMenu.setVisible(false);
-		Utils.scheduleTask(() -> Gui.gameUnfocus(), Gui.DELAY);
+		TimeUtils.scheduleTask(() -> Gui.gameUnfocus(), Gui.DELAY);
 		return ret;
 	}
 

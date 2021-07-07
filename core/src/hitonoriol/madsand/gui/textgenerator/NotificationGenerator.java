@@ -6,7 +6,7 @@ import java.util.Queue;
 import com.badlogic.gdx.utils.Timer;
 
 import hitonoriol.madsand.input.Mouse;
-import hitonoriol.madsand.util.Utils;
+import hitonoriol.madsand.util.TimeUtils;
 
 public class NotificationGenerator extends StaticTextGenerator {
 	private static float NOTIFICATION_DELAY = 1.85f;
@@ -29,7 +29,7 @@ public class NotificationGenerator extends StaticTextGenerator {
 		setText(text);
 		setEnabled(true);
 		Mouse.refreshTooltip();
-		Utils.scheduleTask(timer, () -> {
+		TimeUtils.scheduleTask(timer, () -> {
 			if (hasPendingNotifications())
 				showNextNotification();
 			else

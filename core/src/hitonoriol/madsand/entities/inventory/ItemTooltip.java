@@ -1,7 +1,5 @@
 package hitonoriol.madsand.entities.inventory;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Tooltip;
@@ -45,12 +43,8 @@ public class ItemTooltip extends Tooltip<Table> {
 	}
 
 	public void refresh() {
-		itemInfoLbl.setText(item.getInfoString());
-	}
-
-	@Override
-	public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-		refresh();
-		super.enter(event, x, y, pointer, fromActor);
+		String infoString = item.getInfoString();
+		itemInfoLbl.setText(infoString);
+		tooltipTbl.getCell(itemInfoLbl).width(Gui.getTextWidth(infoString));
 	}
 }

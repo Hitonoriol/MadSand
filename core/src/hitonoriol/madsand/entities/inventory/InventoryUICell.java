@@ -22,10 +22,10 @@ public class InventoryUICell extends ItemUI {
 	private static final float CONTEXT_BTN_WIDTH = 100F;
 	private static final float CONTEXT_BTN_HEIGHT = 30F;
 	public static final float CONTEXT_W_DENOMINATOR = 1.75f;
-	
+
 	private Table invCellContextContainer; // RMB context menu container and buttons
 	private TextButton dropBtn;
-	private Label equippedLabel = new Label("[#387aff]E []", Gui.skin);
+	private Label equippedLabel;
 
 	public InventoryUICell(Item item) {
 		super(item);
@@ -109,6 +109,15 @@ public class InventoryUICell extends ItemUI {
 	}
 
 	public void refreshEquippedStatus() {
+		if (equippedLabel == null)
+			equippedLabel = new Label("[#387aff]E []", Gui.skin);
+
 		equippedLabel.setVisible(MadSand.player().stats.equipment.itemEquipped(item));
+	}
+
+	@Override
+	public void refresh() {
+		super.refresh();
+		refreshEquippedStatus();
 	}
 }
