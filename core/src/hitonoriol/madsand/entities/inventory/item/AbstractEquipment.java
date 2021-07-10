@@ -9,13 +9,14 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.gfx.ConditionalEffects;
 import hitonoriol.madsand.gfx.Effects;
+import hitonoriol.madsand.util.Functional;
 import hitonoriol.madsand.util.Utils;
 
 public abstract class AbstractEquipment extends LevelBoundItem {
 	public int hp = -1;
 	public int maxHp = hp;
 	public long uid = 0;
-	public boolean cursed = false;
+	private boolean cursed = false;
 
 	public static ConditionalEffects<AbstractEquipment> textureFx = ConditionalEffects.create(fx -> fx
 			.addEffect(equipment -> Utils.percentRoll(fx.random(), 40),
@@ -47,9 +48,7 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 
 	@Override
 	public Item setQuantity(int quantity) {
-		if (this.quantity != 1)
-			this.quantity = 1;
-
+		this.quantity = 1;
 		return this;
 	}
 
@@ -57,7 +56,7 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 	public void use(Player player) {
 		super.useIfPossible(player, () -> equip(player));
 	}
-	
+
 	@Override
 	public void leftClickAction() {
 		toggleEquipped();
@@ -106,5 +105,9 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 			return false;
 
 		return uid == ((AbstractEquipment) obj).uid;
+	}
+
+	public static boolean isCursed(Item item) {
+		return Functional.test(item.as(AbstractEquipment.class), eq -> eq.cantBeDropped());
 	}
 }

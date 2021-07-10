@@ -73,13 +73,7 @@ public class Inventory {
 		for (int i = 0; i < items.size(); ++i) {
 			Item item = items.get(i);
 			item.reinit();
-
-			updateUI(ui -> {
-				if (item.id == 0)
-					ui.refreshRemoveItem(item);
-				else
-					ui.refreshItem(item);
-			});
+			updateUI(ui -> ui.refreshItem(item));
 		}
 		refreshWeight();
 	}
@@ -190,13 +184,9 @@ public class Inventory {
 	}
 
 	public boolean damageEquipment(AbstractEquipment item, int dmg) {
-		if (!item.damage(dmg)) {
-			updateUI(ui -> ui.refreshItem(item));
-			return false;
-		} else {
-			updateUI(ui -> ui.refreshRemoveItem(item));
-			return true;
-		}
+		boolean itemDestroyed = item.damage(dmg);
+		updateUI(ui -> ui.refreshItem(item));
+		return itemDestroyed;
 	}
 
 	/*
@@ -239,21 +229,22 @@ public class Inventory {
 		return true;
 	}
 
-	public boolean putItem(int id) {
+	public Item putItem(int id) {
 		return putItem(id, 1);
 	}
 
-	public boolean putItem(int id, int quantity) {
+	/*
+	 * Returns empty Item on success, or newly created Item with specified id & quantity otherwise
+	 */
+	public Item putItem(int id, int quantity) {
 		if (id == Item.NULL_ITEM)
-			return true;
+			return Item.nullItem;
 
 		Item item = Item.create(id, quantity);
-		if (item.isEquipment()) {
-			item.setQuantity(1);
+		if (item.isEquipment() && quantity > 1)
 			putItem(id, quantity - 1);
-		}
 
-		return putItem(item);
+		return putItem(item) ? Item.nullItem : item;
 	}
 
 	public boolean putItem(String query) {
@@ -286,14 +277,9 @@ public class Inventory {
 			if (foundItem.equals(item)) {
 				curWeight -= foundItem.weight * (float) quantity;
 				foundItem.quantity -= quantity;
-
-				if (foundItem.quantity < 1) {
-					updateUI(ui -> ui.refreshRemoveItem(foundItem));
+				if (foundItem.quantity < 1)
 					items.remove(i);
-				} else
-					updateUI(ui -> ui.refreshItem(foundItem));
-
-				refreshUITitle();
+				updateUI(ui -> ui.refreshItem(foundItem));
 				return true;
 			}
 		}

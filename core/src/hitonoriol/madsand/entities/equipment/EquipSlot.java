@@ -12,7 +12,7 @@ public enum EquipSlot {
 		this.text = slotString;
 	}
 
-	private static EquipSlot values[] = EquipSlot.values();
+	public final static EquipSlot values[] = EquipSlot.values();
 
 	public static EquipSlot getByNumber(int i) {
 		return values[i];

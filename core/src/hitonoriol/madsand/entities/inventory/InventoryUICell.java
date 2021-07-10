@@ -15,7 +15,6 @@ import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.dialogs.ConfirmDialog;
 import hitonoriol.madsand.gui.dialogs.SliderDialog;
 import hitonoriol.madsand.input.Mouse;
-import hitonoriol.madsand.util.Functional;
 
 public class InventoryUICell extends ItemUI {
 
@@ -23,8 +22,7 @@ public class InventoryUICell extends ItemUI {
 	private static final float CONTEXT_BTN_HEIGHT = 30F;
 	public static final float CONTEXT_W_DENOMINATOR = 1.75f;
 
-	private Table invCellContextContainer; // RMB context menu container and buttons
-	private TextButton dropBtn;
+	private Table contextContainer; // RMB context menu container and buttons
 	private Label equippedLabel;
 
 	public InventoryUICell(Item item) {
@@ -46,22 +44,22 @@ public class InventoryUICell extends ItemUI {
 	}
 
 	private void initContextMenu(Item item) {
-		invCellContextContainer = new Table(Gui.skin);
-		dropBtn = new TextButton("Drop", Gui.skin);
+		contextContainer = new Table(Gui.skin);
+		TextButton dropBtn = new TextButton("Drop", Gui.skin);
 		addContextBtn(dropBtn);
-		invCellContextContainer.setVisible(false);
-		super.addActor(invCellContextContainer);
+		contextContainer.setVisible(false);
+		super.addActor(contextContainer);
 
 		Gui.setAction(dropBtn, () -> {
 			hideContext();
 
-			if (Functional.test(item.as(AbstractEquipment.class), eq -> eq.cantBeDropped())) {
+			if (MadSand.player().stats().equipment.itemEquipped(item)
+					&& AbstractEquipment.isCursed(item)) {
 				Gui.drawOkDialog("Cursed item", item.name + " is cursed and can't be dropped!");
 				return;
 			}
 
 			Consumer<Integer> dropAction = quantity -> MadSand.player().dropItem(item, quantity);
-
 			if (item.quantity > 1)
 				new SliderDialog(item.quantity).setTitle("Drop " + item.name)
 						.setSliderTitle("Quantity of " + item.name + " to drop").setOnUpdateText(item.name)
@@ -73,15 +71,14 @@ public class InventoryUICell extends ItemUI {
 	}
 
 	private void toggleContextMenu() {
-		if (!invCellContextContainer.isVisible()) {
+		if (!contextContainer.isVisible()) {
 			toFront();
 			MadSand.player().inventory.getUI().clearContextMenus();
-			invCellContextContainer.setVisible(true);
+			contextContainer.setVisible(true);
 			Mouse.updScreenCoords();
-			invCellContextContainer.setPosition(SIZE / 2, SIZE / 2);
-
+			contextContainer.setPosition(SIZE / 2, SIZE / 2);
 		} else
-			invCellContextContainer.setVisible(false);
+			contextContainer.setVisible(false);
 	}
 
 	public void equipItem() {
@@ -93,15 +90,15 @@ public class InventoryUICell extends ItemUI {
 	}
 
 	private void closeContextMenu() {
-		invCellContextContainer.setVisible(false);
+		contextContainer.setVisible(false);
 	}
 
 	private void addContextBtn(TextButton btn) {
-		invCellContextContainer.add(btn).width(CONTEXT_BTN_WIDTH).height(CONTEXT_BTN_HEIGHT).row();
+		contextContainer.add(btn).width(CONTEXT_BTN_WIDTH).height(CONTEXT_BTN_HEIGHT).row();
 	}
 
 	boolean contextActive() {
-		return invCellContextContainer.isVisible();
+		return contextContainer.isVisible();
 	}
 
 	void hideContext() {

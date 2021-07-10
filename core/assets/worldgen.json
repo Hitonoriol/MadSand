@@ -48,8 +48,8 @@
 		"cave" : {
 			"caveTile" : 5,
 			"caveObject" : 13,
-			"caveOre" : [ 22, 23 ],
-			"maxVeinSize" : 10,
+			"caveOre" : [ 22, 23, 182 ],
+			"maxVeinSize" : 12,
 			"maxVeinCount" : 100
 		},
 		"dungeonProbability" : 100,

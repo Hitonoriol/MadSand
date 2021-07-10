@@ -1370,5 +1370,16 @@
 		"@type" : "CraftingStation",
 		"centered" : true,
 		"name" : "Mechanical workbench"
+	},
+	"182" : {
+		"@type" : "ResourceObject",
+		"hp" : 1,
+		"harvestHp" : 12,
+		"altItems" : {
+			"Pickaxe" : [ 185 ]
+		},
+		"skill" : "Mining",
+		"isWall" : true,
+		"name" : "Copper ore"
 	}
 }

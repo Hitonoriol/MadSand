@@ -211,8 +211,17 @@ public abstract class Entity extends MapEntity {
 		MadSand.getRenderer().queuePath(Path.create(thisCoords.toWorld(), obstacleCoords.toWorld()), 0.675f, Color.RED);
 	}
 
+	protected void dropOverflowingItem(Item item) {
+		MadSand.world().getCurLoc().putLoot(x, y, item);
+	}
+
 	public boolean addItem(Item item) {
-		return inventory.putItem(item);
+		boolean itemAdded = inventory.putItem(item);
+
+		if (!itemAdded)
+			dropOverflowingItem(item);
+
+		return itemAdded;
 	}
 
 	public boolean addItem(String partialName, int quantity) {
@@ -223,14 +232,18 @@ public abstract class Entity extends MapEntity {
 		return addItem(partialName, 1);
 	}
 
-	public boolean addItem(List<Item> items) {
-		for (Item item : items)
-			addItem(item);
-		return true;
+	public void addItem(List<Item> items) {
+		items.forEach(item -> addItem(item));
 	}
 
 	public boolean addItem(int id, int quantity) {
-		return addItem(Item.create(id, quantity));
+		Item overflowingItem = inventory.putItem(id, quantity);
+		boolean itemAdded = overflowingItem.equals(Item.nullItem);
+
+		if (!itemAdded)
+			dropOverflowingItem(overflowingItem);
+
+		return itemAdded;
 	}
 
 	public void delItem(Item item, int quantity) {

@@ -12,7 +12,6 @@ import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.CombatEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
-import hitonoriol.madsand.util.Functional;
 
 public class Equipment {
 	private HashMap<EquipSlot, Item> equipped = new HashMap<>();
@@ -26,50 +25,48 @@ public class Equipment {
 	public boolean equip(Item item) {
 		if (itemEquipped(item))
 			return false;
+		
+		if (AbstractEquipment.isCursed(previouslyEquipped(item)))
+			return false;
 
 		EquipSlot slot = item.getEquipSlot();
-		if (equipped.containsKey(slot))
-			equipped.remove(slot);
-
 		equipped.put(slot, item);
-
 		Gui.overlay.equipmentSidebar.equipItem(slot, item);
 		equipmentWeight += item.weight;
 		return true;
 	}
 
 	public boolean equip(CombatEquipment item) {
-		equip((Item) item);
-		stats.applyBonus(item);
-		return true;
+		if (equip((Item) item)) {
+			stats.applyBonus(item);
+			return true;
+		}
+
+		return false;
 	}
 
-	public Item previousEquipment(Item item) {
-		return getItem(item.getEquipSlot());
+	public Item previouslyEquipped(Item newItem) {
+		return getItem(newItem.getEquipSlot());
 	}
 
 	public boolean unEquip(EquipSlot slot) {
 		if (!equipped.containsKey(slot))
 			return false;
 
-		getItem(slot).as(CombatEquipment.class).ifPresent(equipment -> {
-			equipmentWeight -= equipment.weight;
-			stats.removeBonus(equipment);
-		});
-
+		Item item = getItem(slot);
+		item.as(CombatEquipment.class).ifPresent(equipment -> stats.removeBonus(equipment));
+		equipmentWeight -= item.weight;
 		Gui.overlay.equipmentSidebar.equipItem(slot, Item.nullItem);
 		return equipped.remove(slot) != null;
 	}
 
 	public void unEquipAll() {
-		for (EquipSlot slot : EquipSlot.values())
+		for (EquipSlot slot : EquipSlot.values)
 			unEquip(slot);
 	}
 
 	public boolean unEquip(Item item) {
-		boolean cursedEquipment = Functional.test(item.as(AbstractEquipment.class), eq -> eq.cantBeDropped());
-
-		if (cursedEquipment)
+		if (AbstractEquipment.isCursed(item))
 			return false;
 
 		return unEquip(item.getEquipSlot());

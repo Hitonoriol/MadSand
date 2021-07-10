@@ -73,7 +73,7 @@
 		## * To dig something up from the ground you need a tool. To be more specific - a shovel.=>
 		## * You can make one from sticks and small rocks. Just gather them, open your inventory, then craft menu and craft a stone shovel.=>
 		## * Then you need to find Flint and Clay somewhere.
-		When you find a thing to dig up, just take your shovel to your hand, stand on the tile that contains the item you want to dig up
+		When you find a thing to dig up, just take your shovel in your hand, stand on the tile that contains the item you want to dig up
 		and press the button that appears on the screen. Alternatively, you can use \"U\" button on the keyboard.=>
 		Hmmm... I believe you. Okay, dig up {ITEM_OBJECTIVE} pieces and bring them to me. I'll pay you {ITEM_REWARD} for your work.
 	",

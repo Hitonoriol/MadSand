@@ -30,13 +30,13 @@ public class CraftWorker {
 				.mapToInt(item -> entity.inventory.getItem(item).quantity / item.quantity)
 				.boxed()
 				.collect(Collectors.toList());
-		maxCraftQuantity = Collections.min(reqQuantities);
+		maxCraftQuantity = itemToCraft.isEquipment() ? 1 : Collections.min(reqQuantities);
 	}
-	
+
 	public int getMaxCraftQuantity() {
 		return maxCraftQuantity;
 	}
-	
+
 	public boolean canBeCrafted() {
 		return maxCraftQuantity > 0;
 	}
@@ -52,7 +52,7 @@ public class CraftWorker {
 		entity.addItem(craftedItem);
 		return craftedItem;
 	}
-	
+
 	public Item getItem() {
 		return itemToCraft;
 	}

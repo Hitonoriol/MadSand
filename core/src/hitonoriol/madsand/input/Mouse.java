@@ -40,8 +40,6 @@ public class Mouse {
 	public static Vector3 mouseWorldCoords = new Vector3(0.0F, 0.0F, 0.0F);
 
 	public static GameTooltip tooltipContainer;
-
-	private static boolean pointingAtObject = false;
 	private static BiConsumer<Integer, Integer> clickAction = null;
 
 	private static CellInfoGenerator cellInfo = new CellInfoGenerator();
@@ -100,12 +98,12 @@ public class Mouse {
 				if (skipClick())
 					return;
 
-				Mouse.mouseClickAction();
+				Mouse.handleMouseClick();
 			}
 
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				ignoreClick = Gui.isGameUnfocused() || Gui.dialogActive;
-				ignoreClick |= !Mouse.isClickActionPossible();
+				ignoreClick |= !Mouse.isInteractionPossible();
 
 				if (ignoreClick)
 					Mouse.heldButtons.add(button);
@@ -154,7 +152,6 @@ public class Mouse {
 			refreshPathToCursor();
 
 		refreshTooltip();
-		pointingAtObject = cellInfo.isCellOccupied();
 	}
 
 	public static void refreshTooltip() {
@@ -240,6 +237,10 @@ public class Mouse {
 		Node destination = pathToCursor.getDestination();
 		action.accept(destination.x, destination.y);
 	}
+	
+	public static boolean pointingAtObject() {
+		return cellInfo.isCellOccupied();
+	}
 
 	private static final int CLICK_CUR_TILE = 0, CLICK_ADJ_TILE = 1;
 
@@ -247,26 +248,25 @@ public class Mouse {
 		return (int) Line.calcDistance(MadSand.player().x, MadSand.player().y, wx, wy);
 	}
 
-	public static boolean isClickActionPossible() {
+	public static boolean isInteractionPossible() {
 		int clickDst = getClickDistance();
-		return pointingAtObject &&
+		return pointingAtObject() &&
 				(clickDst == CLICK_CUR_TILE || clickDst == CLICK_ADJ_TILE || MadSand.player().canPerformRangedAttack());
 	}
 
-	public static void mouseClickAction() {
+	public static void handleMouseClick() {
 		int clickDst = getClickDistance();
 		boolean adjacentTileClicked = (clickDst == CLICK_ADJ_TILE);
 		boolean currentTileClicked = (clickDst == CLICK_CUR_TILE);
+		cellInfo.update(wx, wy);
 		Loot loot = cellInfo.getLoot();
 		AbstractNpc npc = cellInfo.getNpc();
 		MapObject object = cellInfo.getObject();
 		MapEntity target = object != Map.nullObject ? cellInfo.getObject() : npc;
 		Player player = MadSand.player();
 
-		if ((player.isMoving()) || Gui.isGameUnfocused() || !pointingAtObject)
+		if ((player.isMoving()) || Gui.isGameUnfocused() || !pointingAtObject())
 			return;
-
-		refreshTooltip();
 
 		if (currentTileClicked) {
 			if (loot != Map.nullLoot)

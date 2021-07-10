@@ -613,25 +613,29 @@ public class Player extends Entity {
 	}
 
 	@Override
-	public boolean addItem(Item item) {
-		if (super.addItem(item)) {
-			if (!item.name.isEmpty() && item.quantity > 0) {
-				String notifStr = String.format("You get %d %s", item.quantity, item.name);
-				Item stack = inventory.getItem(item);
-				if (stack.quantity != item.quantity)
-					notifStr += String.format(" (%d in inventory)", stack.quantity);
-				MadSand.notice(notifStr);
-			}
+	protected void dropOverflowingItem(Item item) {
+		super.dropOverflowingItem(item);
+		MadSand.warn("You can't carry any more items.");
+	}
 
-			stats().equipment.refreshUI();
-			if (unlockedItems.add(item.id))
-				refreshAvailableRecipes();
-			return true;
-		} else {
-			MadSand.world().getCurLoc().putLoot(x, y, item);
-			MadSand.notice("You can't carry any more items.");
+	@Override
+	public boolean addItem(Item item) {
+		if (!super.addItem(item))
 			return false;
+
+		if (!item.name.isEmpty() && item.quantity > 0) {
+			String notifStr = String.format("You get %d %s", item.quantity, item.name);
+			Item stack = inventory.getItem(item);
+			if (stack.quantity != item.quantity)
+				notifStr += String.format(" (%d in inventory)", stack.quantity);
+			MadSand.notice(notifStr);
 		}
+
+		stats().equipment.refreshUI();
+		if (unlockedItems.add(item.id))
+			refreshAvailableRecipes();
+
+		return true;
 	}
 
 	@Override
@@ -670,7 +674,6 @@ public class Player extends Entity {
 			}
 			return true;
 		}
-
 		return false;
 	}
 
@@ -700,7 +703,7 @@ public class Player extends Entity {
 	}
 
 	public void interact(FarmAnimal animal) {
-		new ItemFactoryUI(animal.animalProduct).show();
+		new ItemFactoryUI(animal.getItemProducer()).show();
 	}
 
 	public void interact(AbstractNpc npc) {

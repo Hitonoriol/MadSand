@@ -130,7 +130,7 @@ public class Settlement {
 				producedItem = NpcProp.tradeLists.rollId(TradeCategory.Food);
 
 			if (workers.gatherResources().itemCharge > 1f)
-				itemAdded = warehouse.putItem(producedItem, workers.getResourceQuantity());
+				itemAdded = warehouse.putItem(producedItem, workers.getResourceQuantity()).equals(Item.nullItem);
 			else
 				continue;
 
