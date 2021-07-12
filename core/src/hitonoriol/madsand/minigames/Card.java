@@ -9,7 +9,7 @@ import hitonoriol.madsand.Resources;
 public class Card implements Comparable<Card> {
 	public static Card nullCard = new Card(0, null).hide();
 
-	private static TextureRegion[][] cards;
+	private static TextureRegion[][] cards = TextureRegion.split(Resources.loadTexture("misc/cards.png"), 81, 117);
 	public static int WIDTH = 81, HEIGHT = 117;
 
 	public int rank;
@@ -57,11 +57,6 @@ public class Card implements Comparable<Card> {
 
 		Card rhs = (Card) obj;
 		return new EqualsBuilder().append(suit, rhs.suit).append(rank, rhs.rank).isEquals();
-	}
-
-	public static void loadTextures() {
-		if (cards == null)
-			cards = TextureRegion.split(Resources.loadTexture("misc/cards.png"), 81, 117);
 	}
 
 	public static int SUITS = 4;

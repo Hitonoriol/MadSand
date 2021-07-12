@@ -18,8 +18,12 @@ local door_coords = pair:make(structure.x + structure.width/2, structure.y);
 map:delObject(door_coords);
 map:addObject(door_coords, val_utils:oneOf("11,12"));
 
-for i = 0, math.random(4) do
-	map:addObject(structure:getFreeTile(), val_utils:oneOf("5,172"));
+for i = 0, math.random(5) do
+	map:addObject(structure:getFreeTile(), val_utils:oneOf("5,172,183"));
+end
+
+if val_utils:percentRoll(25) then
+	map:putLoot(structure:getFreeTile(), 21, val_utils:rand(15, 200));
 end
 
 return true;

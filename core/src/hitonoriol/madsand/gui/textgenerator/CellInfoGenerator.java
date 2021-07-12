@@ -47,6 +47,10 @@ public class CellInfoGenerator extends TooltipTextGenerator {
 		return y;
 	}
 
+	public boolean pointsAt(int x, int y) {
+		return this.x == x && this.y == y;
+	}
+
 	@Override
 	public void update(int x, int y) {
 		this.x = x;
@@ -153,7 +157,8 @@ public class CellInfoGenerator extends TooltipTextGenerator {
 
 		if (producer.canProduce()) {
 			builder.append("producing " + productName)
-					.append(" (" + Utils.round(producer.getProductStorage()) + "/" + producer.getMaxProductStorage() + ")")
+					.append(" (" + Utils.round(producer.getProductStorage()) + "/" + producer.getMaxProductStorage()
+							+ ")")
 					.append(NEWLINE);
 			if (!producer.isEndless())
 				builder.append(rawMaterialName + " left: " + Utils.round(producer.getConsumedMaterialStorage()));
@@ -196,5 +201,12 @@ public class CellInfoGenerator extends TooltipTextGenerator {
 			return;
 
 		addLine("Node: " + node);
+	}
+
+	@Override
+	public String toString() {
+		return String.format("[%d, %d] Object: %s",
+				x, y,
+				object);
 	}
 }

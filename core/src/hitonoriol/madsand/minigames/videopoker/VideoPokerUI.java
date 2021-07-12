@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
@@ -32,7 +30,6 @@ public class VideoPokerUI extends CardGameUI {
 	Table combTable = new Table(Gui.skin);
 	Label combLabel = new Label("", Gui.skin);
 	TextButton drawButton = new TextButton("Draw", Gui.skin);
-	TextButton betButton = new TextButton("Bet", Gui.skin);
 	List<Image> cardUI = new ArrayList<>(PokerHand.CARDS);
 
 	public VideoPokerUI(MapObject object) {
@@ -59,22 +56,18 @@ public class VideoPokerUI extends CardGameUI {
 		setBetText(0);
 		refreshCardTable();
 
-		betButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				showBetDialog(bet -> {
-					MadSand.player().inventory.delItem(currency, bet);
-					startGame(bet);
-				});
-			}
+		Gui.setAction(betButton, () -> {
+			showBetDialog(bet -> {
+				MadSand.player().inventory.delItem(currency, bet);
+				startGame(bet);
+			});
 		});
 
-		drawButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				endGame();
-			}
-		});
+		Gui.setAction(drawButton, () -> endGame());
+	}
+
+	public VideoPokerUI() {
+		this(null);
 	}
 
 	protected void endGame() {
@@ -85,14 +78,12 @@ public class VideoPokerUI extends CardGameUI {
 		combLabel.setText(combLabel.getText() + ": You win " + videoPoker.bank + " " + currencyName + "s!");
 		MadSand.player().addItem(currency, videoPoker.bank);
 		drawButton.setVisible(false);
-		betButton.setVisible(true);
 	}
 
 	private void startGame(int bet) {
 		super.startGame();
 		setBetText(bet);
 		drawButton.setVisible(true);
-		betButton.setVisible(false);
 		videoPoker.startGame(bet);
 		createCardImages();
 

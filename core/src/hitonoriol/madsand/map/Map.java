@@ -879,8 +879,11 @@ public class Map {
 	}
 
 	public void putLoot(Pair coords, Item item) {
-		Utils.dbg("Putloot %s %s", coords, item);
 		putLoot(coords.x, coords.y, item);
+	}
+	
+	public void putLoot(Pair coords, int id, int quantity) {
+		putLoot(coords.x, coords.y, id, quantity);
 	}
 
 	public void putLoot(int x, int y, List<Item> loot) {

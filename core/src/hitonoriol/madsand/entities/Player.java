@@ -787,6 +787,7 @@ public class Player extends Entity {
 		if (stats.isToolEquipped(Tool.Type.FishingRod) && tileInFront.hasFishingSpot())
 			fish(tileInFront.fishingSpot);
 
+		Utils.dbg("Interacting with %s", obj);
 		obj.interact(this);
 		MadSand.world().updateLight();
 	}
@@ -1157,7 +1158,7 @@ public class Player extends Entity {
 
 	@Override
 	public int doAction(double ap) {
-		int ticks = super.doAction(ap);
+		int ticks = doAction(ap, () -> {});
 		Gui.overlay.refreshActionButton();
 		return ticks;
 	}

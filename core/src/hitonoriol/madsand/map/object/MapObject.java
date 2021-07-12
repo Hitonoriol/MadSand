@@ -271,4 +271,12 @@ public class MapObject extends MapEntity {
 	public static MapObject create(int id) {
 		return ObjectProp.getObject(id).copy();
 	}
+
+	@Override
+	public String toString() {
+		return String.format("{%s} %s [%d/%d]",
+				getClass().getSimpleName(),
+				getName(),
+				hp, maxHp);
+	}
 }

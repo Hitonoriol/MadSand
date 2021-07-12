@@ -119,7 +119,7 @@ public class Utils {
 	private static long errors = 0, lastError = 0;
 
 	public static void panic(String msg) {
-		if (Globals.isDebugBuild())
+		if (Globals.isDevBuild())
 			die("Panic in debug mode");
 
 		long timeDelta = System.currentTimeMillis() - lastError;

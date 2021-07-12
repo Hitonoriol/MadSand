@@ -1,5 +1,6 @@
 package hitonoriol.madsand.minigames;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
@@ -10,23 +11,27 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.dialogs.SliderDialog;
+import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
 
 public class CardGameUI extends GameDialog {
 
-	protected int currency = Globals.getCurrency().id;
-	protected String currencyName = ItemProp.getItemName(currency);
+	protected final int currency = Globals.getCurrency().id;
+	protected final String currencyName = ItemProp.getItemName(currency);
 
 	protected Label betLabel = new Label("", Gui.skin);
-	protected MapObject object;
-	protected TextButton closeButton;
+	protected Optional<MapEntity> gameMachine;
+	protected TextButton closeButton, betButton = new TextButton("Place Bet", Gui.skin);
 
-	public CardGameUI(MapObject object) {
+	public CardGameUI(MapEntity gameMachine) {
 		super(Gui.overlay);
-		Card.loadTextures();
-		this.object = object;
+		this.gameMachine = Optional.ofNullable(gameMachine);
+	}
+
+	public CardGameUI() {
+		this(null);
 	}
 
 	protected void showBetDialog(Consumer<Integer> confirmAction) {
@@ -48,19 +53,25 @@ public class CardGameUI extends GameDialog {
 	}
 
 	protected void startGame() {
+		betButton.setVisible(false);
 		closeButton.setVisible(false);
-		object.takeFullDamage();
-		if (object.id == MapObject.NULL_OBJECT_ID) {
-			remove();
-			Gui.drawOkDialog("Oops",
-					"As you were about to press one of the machine's buttons it exploded into pieces!");
-			Gui.overlay.refreshActionButton();
-			return;
-		}
+		gameMachine.ifPresent(machine -> {
+			machine.as(MapObject.class).ifPresent(object -> {
+				object.takeFullDamage();
+				if (object.id == MapObject.NULL_OBJECT_ID) {
+					remove();
+					Gui.drawOkDialog("Oops",
+							"As you were about to press one of the machine's buttons it exploded into pieces!");
+					Gui.overlay.refreshActionButton();
+					return;
+				}
+			});
+		});
 	}
 
 	protected void endGame() {
 		closeButton.setVisible(true);
+		betButton.setVisible(true);
 	}
 
 	@Override

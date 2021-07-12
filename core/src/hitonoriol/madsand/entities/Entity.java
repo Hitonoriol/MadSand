@@ -251,7 +251,7 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public void delItem(int id, int quantity) {
-		delItem(Item.create(id), quantity);
+		inventory.delItem(id, quantity);
 	}
 
 	public boolean dropItem(Item item, int quantity) {

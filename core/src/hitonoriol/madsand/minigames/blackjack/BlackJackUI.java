@@ -1,11 +1,9 @@
 package hitonoriol.madsand.minigames.blackjack;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Timer;
 
 import hitonoriol.madsand.Gui;
@@ -21,17 +19,13 @@ public class BlackJackUI extends CardGameUI {
 	BlackJack blackjack = new BlackJack();
 
 	int PAD = 5;
-
-	MapObject object;
 	Label resultLabel = new Label("", Gui.skin);
 	Table playerCards = new Table(Gui.skin), dealerCards = new Table(Gui.skin);
 	Table buttonTable = new Table();
 	TextButton hitButton = new TextButton("Hit", Gui.skin), standButton = new TextButton("Stand", Gui.skin);
-	TextButton betButton = new TextButton("Place Bet", Gui.skin);
 
 	public BlackJackUI(MapObject object) {
 		super(object);
-		this.object = object;
 		super.setTitle("BlackJack");
 		super.skipLine();
 
@@ -55,34 +49,21 @@ public class BlackJackUI extends CardGameUI {
 		super.addCloseButton().row();
 		stopGame();
 
-		betButton.addListener(new ChangeListener() {
+		Gui.setAction(betButton, () -> startGame());
+		Gui.setAction(hitButton, () -> play(PlayerAction.Hit));
+		Gui.setAction(standButton, () -> Timer.instance().scheduleTask(new Timer.Task() {
 			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				startGame();
+			public void run() {
+				play(PlayerAction.Stand);
+				buttonTable.setVisible(false);
+				if (blackjack.gameEnded())
+					this.cancel();
 			}
-		});
-
-		hitButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				play(PlayerAction.Hit);
-			}
-		});
-
-		standButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				Timer.instance().scheduleTask(new Timer.Task() {
-					@Override
-					public void run() {
-						play(PlayerAction.Stand);
-						buttonTable.setVisible(false);
-						if (blackjack.gameEnded())
-							this.cancel();
-					}
-				}, 0, 0.85f);
-			}
-		});
+		}, 0, 0.85f));
+	}
+	
+	public BlackJackUI() {
+		this(null);
 	}
 
 	private void play(PlayerAction action) {
@@ -96,7 +77,6 @@ public class BlackJackUI extends CardGameUI {
 		super.endGame();
 		MadSand.player().addItem(currency, blackjack.bank);
 		buttonTable.setVisible(false);
-		betButton.setVisible(true);
 		GameResult result = blackjack.gameResult;
 		String resultStr = "";
 		if (result == GameResult.BlackJack || result == GameResult.Bust)
@@ -114,7 +94,6 @@ public class BlackJackUI extends CardGameUI {
 
 	private void stopGame() {
 		buttonTable.setVisible(false);
-		betButton.setVisible(true);
 		setBetText(0);
 		blackjack.player.clear();
 		blackjack.dealer.clear();
@@ -131,7 +110,6 @@ public class BlackJackUI extends CardGameUI {
 				blackjack.startGame(bet);
 				setBetText(bet);
 				buttonTable.setVisible(true);
-				betButton.setVisible(false);
 				refreshHands();
 
 				if (blackjack.gameEnded())

@@ -1381,5 +1381,13 @@
 		"skill" : "Mining",
 		"isWall" : true,
 		"name" : "Copper ore"
+	},
+	"183" : {
+		"@type" : "MapObject",
+		"hp" : 1,
+		"onInteract" : "luajava.newInstance(
+							package('minigames.farkle.FarkleUI'),
+							world:getCurLoc():getObject(player:lookingAt())):show()",
+		"name" : "Farkle machine"
 	}
 }

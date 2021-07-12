@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip;
@@ -323,6 +324,10 @@ public class Gui {
 
 	public static float getTextHeight(String text, int fontSize) {
 		return modifyGlyph(text, fontSize).height;
+	}
+
+	public static void skipLine(Table table) {
+		table.add(new Label("", skin)).row();
 	}
 
 	public static ProgressBarStyle createProgressBarStyle(float width, float height, Color color, boolean transparent) {

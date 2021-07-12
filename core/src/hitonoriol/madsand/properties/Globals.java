@@ -39,7 +39,7 @@ public class Globals {
 	public int basePillId;
 	public HashMap<String, String> pills = new HashMap<>();
 
-	public static boolean isDebugBuild() {
+	public static boolean isDevBuild() {
 		return VERSION == DEV_VER_STR;
 	}
 

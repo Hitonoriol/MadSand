@@ -66,7 +66,8 @@ public class Mouse {
 
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				Mouse.heldButtons.remove(button);
+				super.touchUp(event, x, y, pointer, button);
+				heldButtons.remove(button);
 
 				if (overlay.getKeyboardFocus() != null)
 					return;
@@ -90,15 +91,13 @@ public class Mouse {
 					} else
 						overlay.gameContextMenu.closeGameContextMenu();
 				}
-
-				super.touchUp(event, x, y, pointer, button);
 			}
 
 			public void clicked(InputEvent event, float x, float y) {
 				if (skipClick())
 					return;
 
-				Mouse.handleMouseClick();
+				handleMouseClick();
 			}
 
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -106,7 +105,7 @@ public class Mouse {
 				ignoreClick |= !Mouse.isInteractionPossible();
 
 				if (ignoreClick)
-					Mouse.heldButtons.add(button);
+					heldButtons.add(button);
 
 				super.touchDown(event, x, y, pointer, button);
 				return true;
@@ -237,7 +236,7 @@ public class Mouse {
 		Node destination = pathToCursor.getDestination();
 		action.accept(destination.x, destination.y);
 	}
-	
+
 	public static boolean pointingAtObject() {
 		return cellInfo.isCellOccupied();
 	}
@@ -258,7 +257,6 @@ public class Mouse {
 		int clickDst = getClickDistance();
 		boolean adjacentTileClicked = (clickDst == CLICK_ADJ_TILE);
 		boolean currentTileClicked = (clickDst == CLICK_CUR_TILE);
-		cellInfo.update(wx, wy);
 		Loot loot = cellInfo.getLoot();
 		AbstractNpc npc = cellInfo.getNpc();
 		MapObject object = cellInfo.getObject();

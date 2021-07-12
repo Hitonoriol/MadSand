@@ -1,5 +1,8 @@
 package hitonoriol.madsand.input;
 
+import static hitonoriol.madsand.MadSand.player;
+import static hitonoriol.madsand.MadSand.world;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,12 +16,15 @@ import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.Resources;
+import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.minigames.blackjack.BlackJackUI;
+import hitonoriol.madsand.minigames.farkle.FarkleUI;
+import hitonoriol.madsand.minigames.videopoker.VideoPokerUI;
 import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.util.Utils;
-import hitonoriol.madsand.world.World;
 
 public class Keyboard {
 
@@ -27,21 +33,18 @@ public class Keyboard {
 	private static Set<Integer> heldKeys = new HashSet<>();
 
 	public static void initDefaultKeyBinds() {
-		Player player = MadSand.player();
-		World world = MadSand.world();
-
 		/* Turning keys */
-		keyBinds.bind(Keys.UP, () -> player.meleeAttack(Direction.UP))
-				.bind(Keys.DOWN, () -> player.meleeAttack(Direction.DOWN))
-				.bind(Keys.LEFT, () -> player.meleeAttack(Direction.LEFT))
-				.bind(Keys.RIGHT, () -> player.meleeAttack(Direction.RIGHT));
+		keyBinds.bind(Keys.UP, () -> player().meleeAttack(Direction.UP))
+				.bind(Keys.DOWN, () -> player().meleeAttack(Direction.DOWN))
+				.bind(Keys.LEFT, () -> player().meleeAttack(Direction.LEFT))
+				.bind(Keys.RIGHT, () -> player().meleeAttack(Direction.RIGHT));
 
 		/* Action keys */
-		keyBinds.bind(Keys.ENTER, () -> player.interact())
-				.bind(Keys.U, () -> player.useItem())
-				.bind(Keys.F, () -> player.freeHands())
-				.bind(Keys.SPACE, () -> player.rest())
-				.bind(Keys.N, () -> world.travel());
+		keyBinds.bind(Keys.ENTER, () -> player().interact())
+				.bind(Keys.U, () -> player().useItem())
+				.bind(Keys.F, () -> player().freeHands())
+				.bind(Keys.SPACE, () -> player().rest())
+				.bind(Keys.N, () -> world().travel());
 
 		/* Function keys */
 		keyBinds.bind(Keys.ESCAPE, true, () -> {
@@ -53,9 +56,12 @@ public class Keyboard {
 				.bind(Keys.G, () -> GameSaver.save());
 
 		/* Debug keys */
-		keyBinds.bind(Keys.Z, () -> Globals.debugMode = !Globals.debugMode)
-				.bind(Keys.BACKSPACE, () -> Utils.out("%d", 1337 / 0))
-				.bind(key -> pollDebugKeys(key));
+		if (Globals.debugMode) {
+			GameDialog minigames[] = { new BlackJackUI(), new VideoPokerUI(), new FarkleUI() };
+			keyBinds.bind(Keys.Z, () -> Globals.debugMode = !Globals.debugMode)
+					.bind(Keys.BACKSPACE, () -> Utils.randElement(minigames).show())
+					.bind(key -> pollDebugKeys(key));
+		}
 	}
 
 	public static void pollGameKeys() {
@@ -157,7 +163,7 @@ public class Keyboard {
 		if (key == Keys.NUMPAD_3)
 			MadSand.getRenderer().changeZoom(0.05f);
 
-		if (key == Keys.NUMPAD_1) 
+		if (key == Keys.NUMPAD_1)
 			MadSand.getRenderer().changeZoom(-0.05f);
 
 		if (key == Keys.F5)
