@@ -59,6 +59,14 @@ public class Card implements Comparable<Card> {
 		return new EqualsBuilder().append(suit, rhs.suit).append(rank, rhs.rank).isEquals();
 	}
 
+	@Override
+	public String toString() {
+		return String.format("[%s(%d) of %s]",
+				rank <= 10 ? rank : Rank.byValue(rank),
+				rank,
+				suit.name());
+	}
+
 	public static int SUITS = 4;
 
 	public static enum Suit {
@@ -83,7 +91,7 @@ public class Card implements Comparable<Card> {
 			if (value < 11)
 				return Rank.NUMBER;
 
-			return vals[value - 11];
+			return vals[value - 10];
 		}
 	}
 }

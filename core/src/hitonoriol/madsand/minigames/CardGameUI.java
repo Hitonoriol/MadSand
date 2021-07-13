@@ -27,6 +27,9 @@ public class CardGameUI extends GameDialog {
 
 	public CardGameUI(MapEntity gameMachine) {
 		super(Gui.overlay);
+		makeBordered();
+		centerTitle();
+		Gui.setFontSize(getTitleLabel(), Gui.FONT_XL);
 		this.gameMachine = Optional.ofNullable(gameMachine);
 	}
 
@@ -36,19 +39,25 @@ public class CardGameUI extends GameDialog {
 
 	protected void showBetDialog(Consumer<Integer> confirmAction) {
 		if (!MadSand.player().inventory.hasItem(currency, 1)) {
-			Gui.drawOkDialog("You don't have any money!");
-			//endGame();
+			noMoney();
 			return;
 		}
 		new SliderDialog(MadSand.player().inventory.getItem(currency).quantity)
 				.setSliderTitle("Place your bet:")
 				.setOnUpdateText(currencyName + "s")
-				.setConfirmAction(confirmAction)
+				.setConfirmAction(bet -> {
+					setBetText(bet);
+					confirmAction.accept(bet);
+				})
 				.setTitle("Bet")
 				.show();
 	}
 
-	public void setBetText(int bet) {
+	protected void noMoney() {
+		Gui.drawOkDialog("You don't have any money!");
+	}
+
+	protected void setBetText(int bet) {
 		betLabel.setText("Bet: " + bet + " " + currencyName + "s");
 	}
 

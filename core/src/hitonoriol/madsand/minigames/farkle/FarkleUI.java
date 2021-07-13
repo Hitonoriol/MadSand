@@ -37,8 +37,6 @@ public class FarkleUI extends CardGameUI {
 	public FarkleUI() {
 		setTitle("Farkle");
 		skipLine();
-		centerTitle();
-		Gui.setFontSize(getTitleLabel(), Gui.FONT_XL);
 		Gui.setFontSize(roundLabel, Gui.FONT_L);
 		Gui.setFontSize(scoreLabel, Gui.FONT_L);
 		add(roundLabel).row();
@@ -65,11 +63,13 @@ public class FarkleUI extends CardGameUI {
 		scoreTable.setBackground(Gui.darkBackgroundSizeable);
 		binTable.setBackground(Gui.darkBackgroundSizeable);
 		handTable.setBackground(Gui.darkBackgroundSizeable);
+		add(betLabel).row();
 		addButton(betButton).row();
 		addButton(shuffleButton).row();
 		addButton(endRoundButton).row();
 		addCloseButton().row();
 
+		betLabel.setVisible(false);
 		shuffleButton.setVisible(false);
 		endRoundButton.setVisible(false);
 		updateRoundLabel();
@@ -91,6 +91,7 @@ public class FarkleUI extends CardGameUI {
 						"Cool, you created combinations with all your dice. Here's your bonus round!");
 				farkle.bonusRound();
 				update();
+				checkForFarkle();
 			} else {
 				farkle.endRound();
 				startRound();
@@ -101,6 +102,7 @@ public class FarkleUI extends CardGameUI {
 	@Override
 	protected void startGame() {
 		super.startGame();
+		betLabel.setVisible(true);
 		clearScoreTable();
 		MadSand.player().delItem(currency, bank);
 		shuffleButton.setVisible(true);
@@ -117,6 +119,9 @@ public class FarkleUI extends CardGameUI {
 	@Override
 	protected void endGame() {
 		super.endGame();
+		betLabel.setVisible(false);
+		binTable.clear();
+		handTable.clear();
 		updateScores();
 		if (farkle.gameWon()) {
 			float multiplier = ((float) farkle.getScore() / (float) Farkle.WINNING_SCORE) + 1f;

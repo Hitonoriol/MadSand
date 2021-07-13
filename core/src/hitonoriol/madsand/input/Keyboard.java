@@ -27,7 +27,6 @@ import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.util.Utils;
 
 public class Keyboard {
-
 	private static KeyBindManager keyBinds = new KeyBindManager();
 	private static int ignoreInput = 0;
 	private static Set<Integer> heldKeys = new HashSet<>();

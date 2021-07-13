@@ -1,9 +1,7 @@
 package hitonoriol.madsand.gui.dialogs;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 
@@ -27,22 +25,16 @@ public class OkDialog extends GameDialog {
 
 	public static String DEFAULT_TITLE = "Info";
 
-	Table dialogContainer;
-
 	public OkDialog(String title, String text, Stage stage) {
 		super(stage);
-		super.clear();
-		super.setBackground(Gui.getColorDrawable(Color.DARK_GRAY));
+		super.makeBordered();
 		super.align(Align.left);
 		super.setTitle(title);
 
-		dialogContainer = new Table();
-		dialogContainer.align(Align.left);
 		textLbl = new Label(text, Gui.skin);
 		textLbl.setWrap(true);
 		textLbl.setFillParent(true);
 		textLbl.setAlignment(Align.left);
-		dialogContainer.setBackground(Gui.getColorDrawable(Color.LIGHT_GRAY));
 		dialogContainer.add(new AutoFocusScrollPane(textLbl))
 				.align(Align.left)
 				.width(Math.max(LBL_MAX_WIDTH, Gui.getTextWidth(text))).maxHeight(LBL_MAX_WIDTH)
@@ -55,7 +47,7 @@ public class OkDialog extends GameDialog {
 		dialogContainer.add(okButton).size(BUTTON_WIDTH, BUTTON_HEIGHT).padTop(BUTTON_PAD_TOP)
 				.padBottom(BUTTON_PAD_BOTTOM).row();
 
-		super.add(dialogContainer).pad(CONTAINER_PADDING).padTop(20);
+		
 		super.getTitleLabel().setAlignment(Align.center);
 
 		Gui.setAction(okButton, () -> remove());

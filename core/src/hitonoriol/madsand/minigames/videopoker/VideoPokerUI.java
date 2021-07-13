@@ -32,25 +32,25 @@ public class VideoPokerUI extends CardGameUI {
 	TextButton drawButton = new TextButton("Draw", Gui.skin);
 	List<Image> cardUI = new ArrayList<>(PokerHand.CARDS);
 
+	private static int GAME_WIDTH = Card.WIDTH * (PokerHand.CARDS + 1);
+
 	public VideoPokerUI(MapObject object) {
 		super(object);
 		super.setTitle("Video Poker");
 		super.skipLine();
-		super.add("Combination multipliers:").row();
-		super.skipLine();
-		super.add(createCombTable()).align(Align.center).row();
-		super.skipLine();
 		super.add(betLabel).row();
 		super.skipLine();
-		super.add(cards).size(Card.WIDTH * (PokerHand.CARDS + 1), Card.HEIGHT).pad(PAD).row();
+		super.add(createCombTable()).width(GAME_WIDTH).align(Align.center).row();
+		super.add(cards).size(GAME_WIDTH, Card.HEIGHT * 1.5f).pad(PAD).row();
 		super.skipLine();
 		super.add(combLabel).row();
 		super.skipLine();
-		super.add(betButton).size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT).row();
-		super.add(drawButton).size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT).row();
+		addButton(betButton).size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT).row();
+		addButton(drawButton).size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT).row();
 		super.addCloseButton();
 
 		combTable.align(Align.center);
+		cards.setBackground(Gui.darkBackgroundSizeable);
 		cards.defaults().align(Align.center);
 		drawButton.setVisible(false);
 		setBetText(0);
@@ -82,7 +82,6 @@ public class VideoPokerUI extends CardGameUI {
 
 	private void startGame(int bet) {
 		super.startGame();
-		setBetText(bet);
 		drawButton.setVisible(true);
 		videoPoker.startGame(bet);
 		createCardImages();
@@ -127,6 +126,10 @@ public class VideoPokerUI extends CardGameUI {
 
 	private Table createCombTable() {
 		combTable.clear();
+		combTable.pad(PAD);
+		combTable.add("Combination multipliers:").align(Align.center).colspan(4).row();
+		Gui.skipLine(combTable);
+		combTable.setBackground(Gui.darkBackgroundSizeable);
 		int opposite = Combination.COMBINATIONS / 2;
 		Combination combinations[] = Combination.values();
 		Cell<Label> lastCell;

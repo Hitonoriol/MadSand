@@ -149,8 +149,10 @@
 
 	"reqMsg" : "Kill {KILL_OBJECTIVE} in the dungeon.",
 	"reqKills" : "14/10",
-	"execOnStart" : "local scroll = luajava.newInstance(package('entities.inventory.item.Scroll')):load('Dungeon Entrance Search');
-			 world.player:addItem(scroll);",
+	"execOnStart" : "
+			local scroll = luajava.newInstance(package('entities.inventory.item.Scroll')):load('Dungeon Entrance Search');
+			player:addItem(scroll);
+	",
 	"rewardItems" : "21/200",
 	"removeOnCompletion" : "n",
 	"previousQuest" : 3,

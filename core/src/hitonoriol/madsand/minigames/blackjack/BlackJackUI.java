@@ -23,27 +23,32 @@ public class BlackJackUI extends CardGameUI {
 	Table playerCards = new Table(Gui.skin), dealerCards = new Table(Gui.skin);
 	Table buttonTable = new Table();
 	TextButton hitButton = new TextButton("Hit", Gui.skin), standButton = new TextButton("Stand", Gui.skin);
+	
+	private static float GAME_WIDTH = Card.WIDTH * 7, GAME_HEIGHT = Card.HEIGHT * 1.5f;
 
 	public BlackJackUI(MapObject object) {
 		super(object);
 		super.setTitle("BlackJack");
+		skipLine();
+		super.add(betLabel).row();
 		super.skipLine();
 
 		super.add("Dealer").padBottom(PAD).row();
-		super.add(dealerCards).size(Card.WIDTH * 7, Card.HEIGHT).row();
-		super.skipLine();
-		super.skipLine();
+		super.add(dealerCards).size(GAME_WIDTH, GAME_HEIGHT).row();
+		super.skipLine().padBottom(PAD);
 
-		super.add(MadSand.player().stats.name).padBottom(PAD).row();
-		super.add(betLabel).row();
-		super.skipLine();
-		super.add(playerCards).height(Card.HEIGHT).padBottom(PAD).row();
+		super.add("Your hand").padBottom(PAD).row();
+		super.add(playerCards).size(GAME_WIDTH, GAME_HEIGHT).padBottom(PAD).row();
+
+		playerCards.setBackground(Gui.darkBackgroundSizeable);
+		dealerCards.setBackground(Gui.darkBackgroundSizeable);
 
 		buttonTable.defaults().size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT).pad(5);
 		buttonTable.add(hitButton);
 		buttonTable.add(standButton);
 		super.add(buttonTable).row();
 		super.add(resultLabel).row();
+		skipLine();
 		super.add(betButton).size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT).row();
 		super.skipLine();
 		super.addCloseButton().row();
@@ -61,7 +66,7 @@ public class BlackJackUI extends CardGameUI {
 			}
 		}, 0, 0.85f));
 	}
-	
+
 	public BlackJackUI() {
 		this(null);
 	}
@@ -108,7 +113,6 @@ public class BlackJackUI extends CardGameUI {
 			if (bet > 0) {
 				MadSand.player().inventory.delItem(currency, bet);
 				blackjack.startGame(bet);
-				setBetText(bet);
 				buttonTable.setVisible(true);
 				refreshHands();
 
@@ -116,6 +120,12 @@ public class BlackJackUI extends CardGameUI {
 					endGame();
 			}
 		});
+	}
+	
+	@Override
+	protected void noMoney() {
+		super.noMoney();
+		closeButton.setVisible(true);
 	}
 
 	private void refreshHands() {

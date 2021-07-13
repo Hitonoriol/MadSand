@@ -1630,11 +1630,10 @@
 		"weight" : 0.01
 	},
 	"154" : {
-		"@type" : "Item",
+		"@type" : "FishingBait",
 		"name" : "Worm",
 		"cost" : 2,
-		"weight" : 0.01,
-		"type" : "FishingBait"
+		"weight" : 0.01
 	},
 	"155" : {
 		"@type" : "Item",

@@ -13,9 +13,9 @@ public class MapStructure {
 	// width & height are specified in each structure's script separately and then passed to the java object
 	public int xMax, yMax;
 	public int width, height;
-	public Map map = MadSand.world().getCurLoc();
 
-	LuaPredicate builder;
+	private Map map = MadSand.world().getCurLoc();
+	private LuaPredicate builder;
 
 	public MapStructure(int x, int y) {
 		setCoords(x, y);
@@ -54,7 +54,7 @@ public class MapStructure {
 		return Utils.rand(y, yMax);
 	}
 
-	private int maxAttempts = 10000;
+	private static final int maxAttempts = 10000;
 
 	public Pair getFreeTile() {
 		Pair coords = new Pair();
@@ -67,9 +67,8 @@ public class MapStructure {
 				break;
 
 			++attempt;
-		} while (MadSand.player().at(coords.x, coords.y) ||
-				map.objectExists(coords.x, coords.y) ||
-				!map.getNpc(coords).equals(Map.nullNpc));
+		} while (MadSand.player().at(coords) ||
+				!map.isFreeTile(coords));
 
 		return coords;
 	}

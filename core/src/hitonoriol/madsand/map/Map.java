@@ -20,6 +20,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.TimeDependent;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.TradeListContainer;
 import hitonoriol.madsand.entities.inventory.item.Item;
@@ -97,7 +98,7 @@ public class Map {
 		/*mapNpcs.forEach((coords, npc) -> registerTimeDependent(npc));*/
 	}
 
-	/* Cleanup, called on map switch */
+	/* Cleanup, called on map switch/World.close() */
 	public void close() {
 		timeScheduler.stop();
 	}
@@ -212,6 +213,7 @@ public class Map {
 	public void setTimeDependentMapEntities(HashMap<Pair, MapEntity> timeDependentMap) {
 		timeDependentMap.forEach((coords, entity) -> {
 			Utils.dbg("Restoring TimeDependent entity %s at %s", entity.getName(), coords);
+			entity.as(Entity.class).ifPresent(creature -> creature.postLoadInit());
 			entity.add(this, coords);
 		});
 	}
@@ -222,7 +224,7 @@ public class Map {
 	}
 
 	public void setNpcs(HashMap<Pair, AbstractNpc> npcs) {
-		mapNpcs = npcs;
+		npcs.forEach((coords, npc) -> add(coords, npc));
 	}
 
 	@JsonIgnore
@@ -881,7 +883,7 @@ public class Map {
 	public void putLoot(Pair coords, Item item) {
 		putLoot(coords.x, coords.y, item);
 	}
-	
+
 	public void putLoot(Pair coords, int id, int quantity) {
 		putLoot(coords.x, coords.y, id, quantity);
 	}
@@ -962,7 +964,6 @@ public class Map {
 			return false;
 
 		AbstractNpc npc = NpcProp.spawnNpc(id, x, y);
-		registerTimeDependent(npc);
 		return add(new Pair(x, y), npc);
 	}
 
@@ -983,6 +984,7 @@ public class Map {
 		if (!getNpc(coords).equals(nullNpc))
 			return false;
 
+		registerTimeDependent(npc);
 		npc.setGridCoords(coords.x, coords.y);
 		mapNpcs.put(coords, npc);
 		return true;
@@ -1143,7 +1145,7 @@ public class Map {
 		return addStructure(new MapStructure(x, y).setName(name));
 	}
 
-	public Pair addStructure(String name) {
+	public MapStructure addStructure(String name) {
 		Pair coords = new Pair();
 		MapStructure structure = new MapStructure(coords.random(xsz, ysz)).setName(name);
 
@@ -1152,7 +1154,7 @@ public class Map {
 		while (!addStructure(structure.setCoords(coords)));
 
 		Utils.dbg("Successfully generated " + name + " at " + coords);
-		return new Pair(coords);
+		return structure;
 	}
 
 	public void delAll(int x, int y) {

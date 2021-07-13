@@ -81,6 +81,8 @@ public abstract class Entity extends MapEntity {
 		this("");
 	}
 
+	public abstract void postLoadInit();
+
 	public Stats stats() {
 		return stats;
 	}
@@ -153,6 +155,10 @@ public abstract class Entity extends MapEntity {
 
 	public boolean at(int x, int y) {
 		return this.x == x && this.y == y;
+	}
+
+	public boolean at(Pair coords) {
+		return at(coords.x, coords.y);
 	}
 
 	public Inventory initInventory() {

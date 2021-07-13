@@ -24,12 +24,19 @@ public class Farkle {
 	}
 
 	/* Re-shuffle leftover dice */
-	public void subRound() {
+	private void subRound(boolean isBonusRound) {
 		cumulativeScore = evaluateRound();
 		diceHand.clear();
-		diceBin.shuffle();
+
+		if (!isBonusRound)
+			diceBin.shuffle();
+
 		if (isFarkle())
 			cumulativeScore = 0;
+	}
+
+	public void subRound() {
+		subRound(false);
 	}
 
 	public void endRound() {
@@ -38,6 +45,8 @@ public class Farkle {
 
 	public void bonusRound() {
 		diceBin.fill();
+		if (isFarkle())
+			endRound();
 		subRound();
 	}
 

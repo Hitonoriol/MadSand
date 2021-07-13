@@ -1,6 +1,7 @@
 package hitonoriol.madsand.dialog;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
@@ -31,6 +32,7 @@ public class GameDialog extends Dialog {
 	public static final float PADDING = 10;
 
 	private AutoFocusScrollPane textScroll;
+	protected Table dialogContainer = new Table(Gui.skin);
 	protected Label textLbl;
 	protected TextButton proceedButton;
 	protected Stage stage;
@@ -48,7 +50,9 @@ public class GameDialog extends Dialog {
 		setText(text);
 		textLbl.setAlignment(Align.topLeft);
 		textLbl.setWrap(true);
-		add(textScroll = new AutoFocusScrollPane(textLbl)).size(WIDTH, HEIGHT)
+		dialogContainer.add(textLbl);
+		dialogContainer.align(Align.topLeft);
+		add(textScroll = new AutoFocusScrollPane(dialogContainer)).size(WIDTH, HEIGHT)
 				.pad(PADDING)
 				.padTop(TEXT_YPADDING).row();
 		this.stage = stage;
@@ -180,7 +184,7 @@ public class GameDialog extends Dialog {
 	}
 
 	public Cell<TextButton> addCloseButton(float width, float height) {
-		return super.add(createCloseButton()).size(width, height);
+		return add(createCloseButton()).size(width, height);
 	}
 
 	public Cell<TextButton> addCloseButton() {
@@ -214,6 +218,27 @@ public class GameDialog extends Dialog {
 			return super.getPrefHeight();
 		else
 			return cHeight;
+	}
+
+	@Override
+	public <T extends Actor> Cell<T> add(T actor) {
+		if (bordered)
+			return dialogContainer.add(actor);
+		else
+			return super.add(actor);
+	}
+
+	private boolean bordered = false;
+	private final static int TITLE_PAD = 20, BORDER_PAD = 5;
+
+	protected final void makeBordered() {
+		clear();
+		dialogContainer.clear();
+		setBackground(Gui.getColorDrawable(Color.DARK_GRAY));
+		dialogContainer.setBackground(Gui.getColorDrawable(Color.LIGHT_GRAY));
+		add(dialogContainer).pad(BORDER_PAD).padTop(TITLE_PAD);
+		dialogContainer.pad(BORDER_PAD);
+		bordered = true;
 	}
 
 	public static GameDialog generateDialogChain(String text, Stage stage) {

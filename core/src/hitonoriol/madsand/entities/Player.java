@@ -116,6 +116,7 @@ public class Player extends Entity {
 		this("");
 	}
 
+	@Override
 	public void postLoadInit() {
 		inventory.initUI();
 		initStatActions();

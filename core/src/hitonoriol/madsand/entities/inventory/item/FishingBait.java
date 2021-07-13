@@ -1,12 +1,13 @@
 package hitonoriol.madsand.entities.inventory.item;
 
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.entities.equipment.EquipSlot;
 
 public class FishingBait extends LevelBoundItem {
 	public FishingBait(FishingBait protoItem) {
 		super(protoItem);
 	}
-	
+
 	public FishingBait() {
 		super();
 	}
@@ -18,6 +19,11 @@ public class FishingBait extends LevelBoundItem {
 
 	@Override
 	public void use(Player player) {
-		equip(player);
+		super.useIfPossible(player, () -> toggleEquipped());
+	}
+
+	@Override
+	public EquipSlot getEquipSlot() {
+		return EquipSlot.Offhand;
 	}
 }

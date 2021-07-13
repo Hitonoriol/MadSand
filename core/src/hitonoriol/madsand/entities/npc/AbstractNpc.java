@@ -85,6 +85,12 @@ public abstract class AbstractNpc extends Entity {
 	}
 	
 	@Override
+	public void postLoadInit() {
+		loadSprite();
+		initStatActions();	
+	}
+	
+	@Override
 	public boolean add(Map map, Pair coords) {
 		return map.add(coords, this);
 	}

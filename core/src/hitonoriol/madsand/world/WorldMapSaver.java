@@ -180,12 +180,7 @@ public class WorldMapSaver {
 			HashMap<Pair, AbstractNpc> npcs = Resources.mapper.readValue(
 					new File(GameSaver.getNpcFile(wx, wy, layer)),
 					Resources.getMapType(Pair.class, AbstractNpc.class));
-
-			for (Entry<Pair, AbstractNpc> npc : npcs.entrySet()) {
-				npc.getValue().loadSprite();
-				npc.getValue().initStatActions();
-			}
-
+			npcs.forEach((coords, npc) -> npc.postLoadInit());
 			map.setNpcs(npcs);
 
 			// Load tiles & objects
