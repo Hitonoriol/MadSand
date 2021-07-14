@@ -239,7 +239,7 @@ public class Quest {
 		this.player = player;
 		this.npcUID = npcUID;
 		this.npcWorldPos = new Pair(MadSand.world().getCurWPos());
-		this.startTime = MadSand.world().currentRealtimeTick();
+		this.startTime = MadSand.world().currentActionTick();
 		isComplete = false;
 		itemObjective = new HashMap<>();
 		killObjective = new HashMap<>();

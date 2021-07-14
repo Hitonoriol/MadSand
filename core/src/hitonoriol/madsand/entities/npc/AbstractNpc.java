@@ -70,7 +70,7 @@ public abstract class AbstractNpc extends Entity {
 		id = protoNpc.id;
 		uid = MadSand.world().npcCounter().getAndIncrement();
 		stats.spawnTime = MadSand.world().currentTick();
-		stats.spawnRealTime = MadSand.world().currentRealtimeTick();
+		stats.spawnRealTime = MadSand.world().currentActionTick();
 		loadProperties(protoNpc);
 		if (id != NULL_NPC)
 			loadSprite();
@@ -83,13 +83,13 @@ public abstract class AbstractNpc extends Entity {
 	public void loadSprite() {
 		setSprites(new Sprite(Resources.npc[id]));
 	}
-	
+
 	@Override
 	public void postLoadInit() {
 		loadSprite();
-		initStatActions();	
+		initStatActions();
 	}
-	
+
 	@Override
 	public boolean add(Map map, Pair coords) {
 		return map.add(coords, this);
@@ -390,7 +390,8 @@ public abstract class AbstractNpc extends Entity {
 
 	}
 
-	public void act(float time) {
+	@Override
+	public final void act(float time) {
 		boolean badRep = MadSand.player().getReputation().isHostile(stats.faction);
 		tickCharge += (timePassed = time);
 
@@ -434,7 +435,6 @@ public abstract class AbstractNpc extends Entity {
 		double dist = distanceTo(player);
 
 		switch (state) {
-
 		case Still:
 			skipAction();
 			return;

@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.TimeDependent;
+import hitonoriol.madsand.containers.Circle;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Entity;
@@ -164,14 +165,14 @@ public class Map {
 	}
 
 	private void removeNodeNeighbor(Node node, int x, int y) {
-		if (!correctCoords(coords.set(x, y)) || node == null)
+		if (!validCoords(coords.set(x, y)) || node == null)
 			return;
 
 		node.removeNeighbor(nodeMap.get(x, y));
 	}
 
 	private void addNodeNeighbor(Node aNode, int x, int y) {
-		if (!correctCoords(coords.set(x, y)))
+		if (!validCoords(coords.set(x, y)))
 			return;
 
 		aNode.addNeighbor(nodeMap.get(x, y));
@@ -451,7 +452,7 @@ public class Map {
 			x = x0 + (int) (radius * Math.cos(angle));
 			y = y0 + (int) (radius * Math.sin(angle));
 
-			if (coords.equals(x, y) || !correctCoords(x, y))
+			if (coords.equals(x, y) || !validCoords(x, y))
 				continue;
 
 			coords.set(x, y);
@@ -579,15 +580,15 @@ public class Map {
 		return drawRect(cropAction, x, y, w, h, id, true);
 	}
 
-	private boolean correctCoords(int x, int y) {
+	private boolean validCoords(int x, int y) {
 		if (x <= xsz && y <= ysz && x >= 0 && y >= 0)
 			return true;
 		else
 			return false;
 	}
 
-	private boolean correctCoords(Pair coords) {
-		return correctCoords(coords.x, coords.y);
+	private boolean validCoords(Pair coords) {
+		return validCoords(coords.x, coords.y);
 	}
 
 	private boolean addTile(Pair coords, Tile tile) {
@@ -595,7 +596,7 @@ public class Map {
 	}
 
 	public boolean addTile(int x, int y, int id, boolean force) {
-		if (!correctCoords(coords.set(x, y)))
+		if (!validCoords(coords.set(x, y)))
 			return false;
 
 		int prevTile = getTile(x, y).id;
@@ -626,7 +627,7 @@ public class Map {
 	}
 
 	public boolean addTile(int x, int y, Direction dir, int id) {
-		if (correctCoords(coords.set(x, y))) {
+		if (validCoords(coords.set(x, y))) {
 			coords.addDirection(dir);
 			addTile(coords.x, coords.y, id, false);
 			return true;
@@ -635,7 +636,7 @@ public class Map {
 	}
 
 	public Tile getTile(int x, int y) {
-		if (correctCoords(coords.set(x, y))) {
+		if (validCoords(coords.set(x, y))) {
 			Tile ret = mapTiles.get(coords);
 			if (ret == null)
 				ret = nullTile;
@@ -683,7 +684,7 @@ public class Map {
 	}
 
 	public boolean delObject(int x, int y) {
-		if (!correctCoords(coords.set(x, y)))
+		if (!validCoords(coords.set(x, y)))
 			return false;
 
 		boolean removed = delObject(coords);
@@ -698,12 +699,15 @@ public class Map {
 	}
 
 	public boolean add(Pair coords, MapObject object) {
+		if (!validCoords(coords))
+			return false;
+
 		registerTimeDependent(object);
 		return mapObjects.put(coords, object) == null;
 	}
 
 	public boolean addObject(int x, int y, int id, boolean force) {
-		if (!correctCoords(coords.set(x, y)) || id == nullObject.id)
+		if (!validCoords(coords.set(x, y)) || id == nullObject.id)
 			return false;
 
 		if (!force && mapObjects.containsKey(coords))
@@ -745,7 +749,7 @@ public class Map {
 	}
 
 	public MapObject getObject(int x, int y) {
-		if (!correctCoords(coords.set(x, y)))
+		if (!validCoords(coords.set(x, y)))
 			return nullObject;
 
 		MapObject ret = mapObjects.get(coords);
@@ -770,7 +774,7 @@ public class Map {
 	}
 
 	boolean objectExists(int x, int y) {
-		if (correctCoords(coords.set(x, y)))
+		if (validCoords(coords.set(x, y)))
 			return !getObject(x, y).equals(nullObject);
 		else
 			return false;
@@ -832,7 +836,7 @@ public class Map {
 	}
 
 	public MapObject getObject(int x, int y, Direction dir) {
-		if (correctCoords(coords.set(x, y))) {
+		if (validCoords(coords.set(x, y))) {
 			coords.addDirection(dir);
 			return getObject(coords.x, coords.y);
 		} else
@@ -840,7 +844,7 @@ public class Map {
 	}
 
 	public Loot getLoot(int x, int y) {
-		if (correctCoords(coords.set(x, y))) {
+		if (validCoords(coords.set(x, y))) {
 			Loot ret = mapLoot.get(coords.set(x, y));
 			if (ret != null) {
 				if (ret.isEmpty()) {
@@ -859,7 +863,7 @@ public class Map {
 	}
 
 	void removeLoot(int x, int y) {
-		if (correctCoords(coords.set(x, y)))
+		if (validCoords(coords.set(x, y)))
 			mapLoot.remove(coords);
 	}
 
@@ -872,7 +876,7 @@ public class Map {
 	}
 
 	public void putLoot(int x, int y, Item item) {
-		if (correctCoords(coords.set(x, y))) {
+		if (validCoords(coords.set(x, y))) {
 			if (mapLoot.get(coords) != null)
 				mapLoot.get(coords).add(item);
 			else
@@ -901,45 +905,42 @@ public class Map {
 	}
 
 	public void updateLight(int wx, int wy, int r) {
-		Tile tile;
 		MutableBoolean blocksLight = new MutableBoolean(false);
-		for (int x = -r; x < r; x++) {
-			for (int y = -r; y < r; y++) {
+		Circle.forEachPoint(wx, wy, r, (x, y) -> {
+			if (!validCoords(wx + x, wy + y))
+				return;
 
-				if (x * x + y * y > r * r)
-					continue;
+			Tile tile = getTile(wx + x, wy + y);
+			tile.visible = true;
+			blocksLight.setFalse();
 
-				if (wx + x < 0 || wx + x > xsz || wy + y < 0 || wy + y > ysz)
-					continue;
+			Line.forEachPoint(wx, wy, wx + x, wy + y, (rx, ry) -> {
+				Tile rTile = getTile(rx, ry);
+				MapObject rObject = getObject(rx, ry);
 
-				tile = getTile(wx + x, wy + y);
+				if (blocksLight.booleanValue())
+					rTile.visible = false;
 
-				tile.visible = true;
-				blocksLight.setFalse();
+				if (rObject != nullObject && !rObject.nocollide)
+					blocksLight.setTrue();
 
-				Line.forEachPoint(wx, wy, wx + x, wy + y, (rx, ry) -> {
-					Tile rTile = getTile(rx, ry);
-					MapObject rObject = getObject(rx, ry);
+				if (rTile.visible)
+					rTile.visited = true;
+			});
 
-					if (blocksLight.booleanValue())
-						rTile.visible = false;
+		});
+	}
 
-					if (rObject != nullObject && !rObject.nocollide)
-						blocksLight.setTrue();
-
-					if (rTile.visible)
-						rTile.visited = true;
-				});
-			}
-		}
+	public void updateLight(int wx, int wy, int renderRadius, int updateRadius) {
+		Circle.forEachPoint(wx, wy, updateRadius, (x, y) -> updateLight(x, y, renderRadius));
 	}
 
 	public boolean putCrop(int x, int y, int id) { // item id
-		return putCrop(x, y, new Crop(id, MadSand.world().currentRealtimeTick()));
+		return putCrop(x, y, new Crop(id, MadSand.world().currentActionTick()));
 	}
 
 	public boolean putCrop(int x, int y, Crop crop) {
-		if (!correctCoords(coords.set(x, y)))
+		if (!validCoords(coords.set(x, y)))
 			return false;
 		if (objectExists(x, y))
 			return false;
@@ -950,14 +951,14 @@ public class Map {
 	}
 
 	public Crop getCrop(int x, int y) {
-		if (!correctCoords(coords.set(x, y)))
+		if (!validCoords(coords.set(x, y)))
 			return nullCrop;
 
 		return getObject(coords.copy()).as(Crop.class).orElse(nullCrop);
 	}
 
 	public boolean spawnNpc(int id, int x, int y) {
-		if (!correctCoords(coords.set(x, y)))
+		if (!validCoords(coords.set(x, y)))
 			return false;
 
 		if (!getNpc(coords.x, coords.y).equals(nullNpc))
@@ -978,7 +979,7 @@ public class Map {
 	}
 
 	public boolean add(Pair coords, AbstractNpc npc) {
-		if (!correctCoords(coords))
+		if (!validCoords(coords))
 			return false;
 
 		if (!getNpc(coords).equals(nullNpc))
@@ -1002,7 +1003,7 @@ public class Map {
 	}
 
 	public AbstractNpc getNpc(int x, int y) {
-		if (!correctCoords(coords.set(x, y)))
+		if (!validCoords(coords.set(x, y)))
 			return nullNpc;
 
 		AbstractNpc npc = mapNpcs.get(coords);
@@ -1035,7 +1036,7 @@ public class Map {
 	public boolean moveNpc(AbstractNpc npc, int x, int y) {
 		int xold = npc.x, yold = npc.y;
 
-		if (!correctCoords(coords.set(x, y)))
+		if (!validCoords(coords.set(x, y)))
 			return false;
 
 		AbstractNpc destNpc = getNpc(coords.x, coords.y);
@@ -1055,7 +1056,7 @@ public class Map {
 	}
 
 	public boolean removeNpc(int x, int y) {
-		if (!correctCoords(coords.set(x, y)))
+		if (!validCoords(coords.set(x, y)))
 			return false;
 
 		if (getNpc(coords.x, coords.y).equals(nullNpc))

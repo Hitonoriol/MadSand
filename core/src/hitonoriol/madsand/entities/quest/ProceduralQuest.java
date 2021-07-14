@@ -116,7 +116,7 @@ public class ProceduralQuest extends Quest {
 	}
 
 	public long timeSinceCreated() {
-		return MadSand.world().currentRealtimeTick() - startTime;
+		return MadSand.world().currentActionTick() - startTime;
 	}
 
 	/*

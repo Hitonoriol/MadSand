@@ -7,6 +7,7 @@ import hitonoriol.madsand.map.CropGrowthStage;
 import hitonoriol.madsand.map.CropGrowthStageContainer;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.ObjectProp;
+import hitonoriol.madsand.util.Utils;
 
 public class Crop extends MapObject implements TimeDependent {
 	static final int STAGE_COUNT = 4, LAST_STAGE = STAGE_COUNT - 1;
@@ -37,13 +38,9 @@ public class Crop extends MapObject implements TimeDependent {
 
 	@Override
 	public void update() {
-		if ((curStage + 1) >= STAGE_COUNT)
-			return;
-
 		if (isFullyGrown())
 			setGrowthStage(LAST_STAGE);
-
-		if (getTimeSincePlanted() >= growthStages.getStageLength(curStage))
+		else if (getTimeSincePlanted() >= growthStages.getStageLength(curStage))
 			setGrowthStage(curStage + 1);
 	}
 
@@ -53,16 +50,18 @@ public class Crop extends MapObject implements TimeDependent {
 
 		curStage = stage;
 		id = objId = growthStages.getStageObject(stage);
+		Utils.dbg("%s has grown: stage %d/%d", getName(), curStage, LAST_STAGE);
 		if (curStage == LAST_STAGE)
 			MadSand.world().exec(map -> {
 				Pair position = getPosition();
+				Utils.dbg("%s has reached its final growth stage: replacing object at %s", getName(), position);
 				map.delObject(position);
 				map.addObject(position, id);
 			});
 	}
 
 	public long getTimeSincePlanted() {
-		return MadSand.world().currentRealtimeTick() - plantTime;
+		return MadSand.world().currentActionTick() - plantTime;
 	}
 
 	public int getGrowthTime() {

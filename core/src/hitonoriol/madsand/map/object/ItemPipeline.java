@@ -59,7 +59,7 @@ public class ItemPipeline extends MapObject implements TimeDependent {
 					.ifPresent(factory -> {
 						ItemProducer producer = factory.getItemProducer();
 						if (item.equals(producer.getConsumedMaterialId())) {
-							producer.addConsumableItem(item.quantity);
+							producer.addRawMaterial(item.quantity);
 							item.clear();
 						}
 					});

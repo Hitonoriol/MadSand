@@ -47,10 +47,11 @@ public class World {
 	private static final float ACT_DELAY_STEP = 0.00125f;
 	public static final int DEFAULT_WORLDSIZE = 10;
 	public static final int TILE_CAVE_EXIT = 25; //TODO move this to cave preset
+	private final static int MAX_PREVIOUS_LOCATIONS = 3; // Max amount of maps allowed to be in WorldMap at the same time
+	private static final float realtimeTickRate = 0.1f;
 
 	private Pair coords = new Pair();
 
-	private final static int MAX_PREVIOUS_LOCATIONS = 3; // Max amount of maps allowed to be in WorldMap at the same time
 	@JsonIgnore
 	private ArrayDeque<Pair> previousLocations = new ArrayDeque<>(); // Maps that are currently loaded in WorldMap
 
@@ -67,9 +68,8 @@ public class World {
 	@JsonIgnore
 	private Timer realTimeRefresher;
 	private boolean timeSkip = false;
-	private float reatlimeTickRate = 0.1f;
-	private long realtimeActionPeriod = 50; // realtime ticks per 1 action tick
-	private long globalRealtimeTick = 0; // global realtime tick counter, never resets
+	private long realtimeActionPeriod = 10; // realtime ticks per 1 action tick
+	private long globalRealtimeTick = 0; // global action tick counter, never resets
 
 	private int ticksPerHour = 150; // ticks per one hourTick() trigger
 	private int worldtime = 6; // time (00 - 23)
@@ -119,7 +119,7 @@ public class World {
 		}
 
 		realTimeRefresher = new Timer();
-		realtimeSchedule(() -> realtimeTick());
+		realtimeSchedule(() -> actionTick());
 		actDelayTimer = new Timer();
 	}
 
@@ -131,8 +131,12 @@ public class World {
 		realtimeSchedule(task, realtimeActionPeriod);
 	}
 
-	public float ticksToTime(long realtimeTicks) {
-		return (float) realtimeTicks * reatlimeTickRate;
+	public static float ticksToTime(long realtimeTicks) {
+		return (float) realtimeTicks * realtimeTickRate;
+	}
+
+	public long timeToActionTicks(long seconds) {
+		return (long) (seconds / ticksToTime(realtimeActionPeriod));
 	}
 
 	public Player getPlayer() {
@@ -193,7 +197,7 @@ public class World {
 		return worldtime;
 	}
 
-	public long currentRealtimeTick() {
+	public long currentActionTick() {
 		return globalRealtimeTick;
 	}
 
@@ -582,7 +586,7 @@ public class World {
 			return getDefaultTile();
 	}
 
-	private int H_DAY = 24;
+	private static int H_DAY = 24;
 
 	public int toWorldTimeSeconds(long ticks) {
 		return (int) (((float) ticks / (float) ticksPerHour) * Utils.S_HOUR);
@@ -755,7 +759,7 @@ public class World {
 		getCurLoc().updateLight(player.x, player.y, player.fov);
 	}
 
-	private void realtimeTick() {
+	private void actionTick() {
 		++globalRealtimeTick;
 		Location loc = getLocation();
 
@@ -765,19 +769,19 @@ public class World {
 		Mouse.refreshTooltip();
 	}
 
-	public void skipRealtimeTicks(long ticks) {
+	public void skipActionTicks(long ticks) {
 		for (; ticks > 0; --ticks)
-			realtimeTick();
+			actionTick();
 	}
 
-	private void offlineReward(long offlineTime) {
-		long offlineTicks = (long) (offlineTime / realtimeActionPeriod);
+	private void offlineReward(long offlineSeconds) {
+		long offlineTicks = timeToActionTicks(offlineSeconds);
 		globalRealtimeTick += offlineTicks;
-		Lua.executeScript(Lua.offlineRewardScript, offlineTime);
-		skipRealtimeTicks(offlineTicks);
+		Lua.executeScript(Lua.offlineRewardScript, offlineSeconds);
+		skipActionTicks(offlineTicks);
 	}
 
-	private float HOUR = 3600;
+	private static float HOUR = 3600;
 
 	public void calcOfflineTime() {
 		long offlineTime = Utils.now() - logoutTimeStamp;
@@ -825,7 +829,6 @@ public class World {
 
 	@JsonIgnore
 	public void setStorageValue(String name, String value) {
-		luaStorage.remove(name);
 		luaStorage.put(name, value);
 	}
 
@@ -851,5 +854,4 @@ public class World {
 	public MutableLong itemCounter() {
 		return itemCounter;
 	}
-
 }

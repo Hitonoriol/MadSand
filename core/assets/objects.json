@@ -43,7 +43,7 @@
 	},
 	"5" : {
 		"@type" : "MapObject",
-		"hp" : 11,
+		"hp" : 15,
 		"onInteract" : "luajava.newInstance(
 							package('minigames.blackjack.BlackJackUI'),
 							world:getCurLoc():getObject(player:lookingAt())):show()",
@@ -1287,7 +1287,7 @@
 	},
 	"172" : {
 		"@type" : "MapObject",
-		"hp" : 11,
+		"hp" : 15,
 		"onInteract" : "luajava.newInstance(
 							package('minigames.videopoker.VideoPokerUI'),
 							world:getCurLoc():getObject(player:lookingAt())):show()",
@@ -1384,7 +1384,7 @@
 	},
 	"183" : {
 		"@type" : "MapObject",
-		"hp" : 1,
+		"hp" : 15,
 		"onInteract" : "luajava.newInstance(
 							package('minigames.farkle.FarkleUI'),
 							world:getCurLoc():getObject(player:lookingAt())):show()",

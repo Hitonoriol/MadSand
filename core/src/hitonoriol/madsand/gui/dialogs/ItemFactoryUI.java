@@ -199,7 +199,7 @@ public class ItemFactoryUI extends GameDialog {
 			if (!player.inventory.delItem(station.getConsumedMaterialId(), quantity))
 				Gui.drawOkDialog("You don't have this many " + consumedMaterial);
 			else {
-				station.addConsumableItem(quantity);
+				station.addRawMaterial(quantity);
 				refresh();
 			}
 		});

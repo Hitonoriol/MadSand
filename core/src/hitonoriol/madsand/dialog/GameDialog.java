@@ -50,7 +50,7 @@ public class GameDialog extends Dialog {
 		setText(text);
 		textLbl.setAlignment(Align.topLeft);
 		textLbl.setWrap(true);
-		dialogContainer.add(textLbl);
+		dialogContainer.add(textLbl).size(WIDTH, HEIGHT);
 		dialogContainer.align(Align.topLeft);
 		add(textScroll = new AutoFocusScrollPane(dialogContainer)).size(WIDTH, HEIGHT)
 				.pad(PADDING)

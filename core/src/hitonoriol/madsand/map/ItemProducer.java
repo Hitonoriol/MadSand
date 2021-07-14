@@ -91,7 +91,7 @@ public class ItemProducer {
 		return true;
 	}
 
-	public void addConsumableItem(int quantity) {
+	public void addRawMaterial(int quantity) {
 		consumableMaterialStorage += quantity;
 	}
 
