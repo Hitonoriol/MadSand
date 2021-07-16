@@ -157,7 +157,7 @@ public class Keyboard {
 			Mouse.setClickAction((x, y) -> {
 				Node dest = Mouse.getPathToCursor().getDestination();
 				MadSand.player().teleport(dest.x, dest.y);
-			}, MadSand.player().fov);
+			}, MadSand.player().getFov());
 
 		if (key == Keys.NUMPAD_3)
 			MadSand.getRenderer().changeZoom(0.05f);

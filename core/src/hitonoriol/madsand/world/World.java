@@ -100,7 +100,7 @@ public class World {
 
 	public void enter() {
 		GameTextSubstitutor.add(GameTextSubstitutor.PLAYER_NAME, player.stats.name);
-		getCurLoc().refreshGraph();
+		getCurLoc().refreshPathfindingGraph();
 
 		if (!player.newlyCreated)
 			calcOfflineTime();
@@ -131,7 +131,7 @@ public class World {
 		realtimeSchedule(task, realtimeActionPeriod);
 	}
 
-	public static float ticksToTime(long realtimeTicks) {
+	public float ticksToTime(long realtimeTicks) {
 		return (float) realtimeTicks * realtimeTickRate;
 	}
 
@@ -363,7 +363,7 @@ public class World {
 
 		player.updCoords();
 		updateLight();
-		getCurLoc().refreshGraph();
+		getCurLoc().refreshPathfindingGraph();
 		return true;
 	}
 
@@ -458,7 +458,7 @@ public class World {
 		clearCurLoc();
 
 		Lua.executeScript(Resources.ENCOUNTER_DIR + Utils.randElement(WorldGenProp.encounters) + ".lua");
-		getCurLoc().refreshGraph();
+		getCurLoc().refreshPathfindingGraph();
 	}
 
 	public boolean switchLocation(int layer) {
@@ -633,15 +633,16 @@ public class World {
 		Map curLoc = getCurLoc();
 
 		++worldtime;
-
+		
 		if (worldtime == TIME_MIDNIGHT)
 			worldtime = 0;
 
+		int fov = player.getFov();
 		if (worldtime > TIME_FOV_DECREASE_START && worldtime <= TIME_FOV_DECREASE_END)
-			player.setFov(player.fov - 1);
+			player.setFov(fov - 1);
 
-		if (worldtime > TIME_FOV_INCREASE_START && worldtime <= TIME_FOV_INCREASE_END)
-			player.setFov(player.fov + 1);
+		else if (worldtime > TIME_FOV_INCREASE_START && worldtime <= TIME_FOV_INCREASE_END)
+			player.setFov(fov + 1);
 
 		if (!inEncounter)
 			curLoc.naturalRegeneration();
@@ -756,7 +757,7 @@ public class World {
 	}
 
 	public void updateLight() {
-		getCurLoc().updateLight(player.x, player.y, player.fov);
+		getCurLoc().updateLight(player.x, player.y, player.getFov());
 	}
 
 	private void actionTick() {
@@ -824,7 +825,7 @@ public class World {
 
 	@JsonIgnore
 	public int getMaxSimDistance() {
-		return (int) (player.fov * MAX_SIM_DISTANCE_COEF);
+		return (int) (player.getFov() * MAX_SIM_DISTANCE_COEF);
 	}
 
 	@JsonIgnore

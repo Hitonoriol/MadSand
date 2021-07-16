@@ -62,7 +62,7 @@ public class CellInfoGenerator extends TooltipTextGenerator {
 		object = loc.getObject(x, y);
 		loot = loc.getLoot(x, y);
 		crop = loc.getCrop(x, y);
-		node = loc.getNode(x, y);
+		node = loc.getPathfindingEngine().getNode(x, y);
 
 		station = null;
 		object.as(ItemFactory.class)

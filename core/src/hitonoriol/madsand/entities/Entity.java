@@ -52,8 +52,7 @@ public abstract class Entity extends MapEntity {
 	public float movementSpeed;
 	private float actDelay = 0;
 
-	public int fov = 15;
-	public int maxFov, minFov;
+	private int fov = 15;
 
 	protected Pair coords = new Pair();
 
@@ -92,9 +91,12 @@ public abstract class Entity extends MapEntity {
 		return this instanceof Player;
 	}
 
-	@JsonIgnore
-	void setFov(int val) {
+	public void setFov(int val) {
 		fov = val;
+	}
+	
+	public int getFov() {
+		return fov;
 	}
 
 	@JsonIgnore
@@ -191,9 +193,6 @@ public abstract class Entity extends MapEntity {
 
 	protected void attack(MapEntity target, int dmg) {
 		target.damage(dmg);
-
-		if (dmg > 0)
-			target.playDamageAnimation();
 
 		if (target instanceof MapObject)
 			attack((MapObject) target, dmg);
@@ -339,8 +338,12 @@ public abstract class Entity extends MapEntity {
 		return standingOnLoot(x, y);
 	}
 
-	public void damage(int to) {
-		stats.hp -= to;
+	public void damage(int dmg) {
+		if (dmg <= 0)
+			return;
+
+		playDamageAnimation();
+		stats.hp -= dmg;
 		stats.check();
 	}
 

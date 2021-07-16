@@ -167,6 +167,7 @@ public class MapObject extends MapEntity {
 		if (amt == 0)
 			return;
 
+		playDamageAnimation();
 		takeHarvestDamage(amt + 1);
 	}
 

@@ -160,7 +160,8 @@ public class Mouse {
 
 	private static void refreshPathToCursor() {
 		pathToCursor.clear();
-		MadSand.world().getCurLoc().searchPath(MadSand.player().x, MadSand.player().y, wx, wy, pathToCursor);
+		MadSand.world().getCurLoc().getPathfindingEngine()
+				.searchPath(MadSand.player().x, MadSand.player().y, wx, wy, pathToCursor);
 
 		if (!pathToCursor.isEmpty() && pathToCursor.getCount() > maxCurPathLen)
 			pathToCursor.truncate(maxCurPathLen);

@@ -107,7 +107,7 @@ public class Player extends Entity {
 		super.setSprites(Resources.playerUpSpr, Resources.playerDownSpr, Resources.playerLeftSpr,
 				Resources.playerRightSpr);
 		initInventory();
-		setFov(fov);
+		setFov();
 		quests.setPlayer(this);
 		Optional.ofNullable(Gui.overlay).ifPresent(overlay -> overlay.equipmentSidebar.init());
 	}
@@ -285,6 +285,10 @@ public class Player extends Entity {
 		MadSand.setRenderRadius(val);
 		if (MadSand.world() != null)
 			MadSand.world().updateLight();
+	}
+	
+	public void setFov() {
+		setFov(getFov());
 	}
 
 	@Override

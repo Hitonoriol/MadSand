@@ -102,7 +102,7 @@ public abstract class AbstractNpc extends Entity {
 			path.clear();
 			pathIdx = 0;
 			prevDestination.set(x, y);
-			if (!map.searchPath(this.x, this.y, x, y, path))
+			if (!map.getPathfindingEngine().searchPath(this.x, this.y, x, y, path))
 				return null;
 		} else if (pathIdx + 1 >= path.getCount())
 			return null;
@@ -207,7 +207,7 @@ public abstract class AbstractNpc extends Entity {
 	public boolean move(Direction dir) {
 		super.turn(dir);
 		Entity player = MadSand.player();
-		boolean outOfView = distanceTo(player) > player.fov;
+		boolean outOfView = distanceTo(player) > player.getFov();
 		if (!outOfView)
 			outOfView |= !player.canSee(this) || MadSand.world().timeSkipInProgress();
 
@@ -453,7 +453,7 @@ public abstract class AbstractNpc extends Entity {
 			if (!enemySpotted && canSee(player))
 				detectEnemy(player);
 
-			if (enemySpotted && dist > fov * MAX_FOV_COEF)
+			if (enemySpotted && dist > getFov() * MAX_FOV_COEF)
 				loseSightOf(player);
 
 			if (!enemySpotted) {

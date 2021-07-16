@@ -11,8 +11,6 @@ import java.util.stream.Stream;
 
 import org.apache.commons.lang3.mutable.MutableBoolean;
 
-import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
-import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
 import com.badlogic.gdx.math.Vector2;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -34,10 +32,8 @@ import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.map.object.Crop;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.map.object.ResourceObject;
-import hitonoriol.madsand.pathfinding.DistanceHeuristic;
 import hitonoriol.madsand.pathfinding.Graph;
-import hitonoriol.madsand.pathfinding.Node;
-import hitonoriol.madsand.pathfinding.NodeMap;
+import hitonoriol.madsand.pathfinding.PathfinfingEngine;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.properties.ObjectProp;
@@ -76,11 +72,7 @@ public class Map {
 	private HashMap<Pair, AbstractNpc> mapNpcs;
 
 	private TimeScheduler timeScheduler;
-
-	IndexedAStarPathFinder<Node> pathFinder;
-	Graph graph;
-	DistanceHeuristic heuristic;
-	NodeMap nodeMap;
+	private PathfinfingEngine pathfinding = new PathfinfingEngine(this);
 
 	Pair coords = new Pair(0, 0);
 
@@ -104,94 +96,6 @@ public class Map {
 		timeScheduler.stop();
 	}
 
-	@JsonIgnore
-	public Graph getPathfindingGraph() {
-		return graph;
-	}
-
-	public void refreshGraph() {
-		Utils.out("Rebuilding pathfinding graph...");
-		MapObject object;
-		graph.clear();
-		nodeMap.clear();
-		for (int y = 0; y < ysz; ++y) {
-			for (int x = 0; x < xsz; ++x) {
-				object = getObject(x, y);
-				if (object.equals(nullObject) || object.nocollide)
-					graph.addNode(nodeMap.putNew(x, y));
-			}
-		}
-
-		for (int y = 0; y < ysz; ++y) {
-			for (int x = 0; x < xsz; ++x)
-				linkToNeighbors(x, y);
-		}
-		refreshPathFinder();
-		Utils.out("Created " + graph.getNodeCount() + " nodes");
-	}
-
-	private void linkToNeighbors(int x, int y) {
-		Node node = getNode(x, y);
-		if (node == null)
-			return;
-
-		Pair nCoords = new Pair();
-		for (Direction dir : Direction.baseValues) {
-			nCoords.set(x, y).addDirection(dir);
-
-			if (nodeMap.nodeExists(nCoords.x, nCoords.y)) {
-				addNodeNeighbor(node, nCoords.x, nCoords.y);
-				addNodeNeighbor(nodeMap.get(nCoords), x, y);
-			}
-		}
-	}
-
-	// Unlink node at x, y from all its neighbors
-	private void unlinkFromNeighbors(int x, int y) {
-		Node node = nodeMap.get(x, y);
-
-		if (node == null)
-			return;
-
-		for (Direction dir : Direction.baseValues) {
-			removeNodeNeighbor(nodeMap.get(coords.set(x, y).addDirection(dir)), x, y);
-			removeNodeNeighbor(nodeMap.get(x, y), coords.x, coords.y);
-		}
-
-	}
-
-	private void refreshPathFinder() {
-		pathFinder = new IndexedAStarPathFinder<Node>(graph, true);
-	}
-
-	private void removeNodeNeighbor(Node node, int x, int y) {
-		if (!validCoords(coords.set(x, y)) || node == null)
-			return;
-
-		node.removeNeighbor(nodeMap.get(x, y));
-	}
-
-	private void addNodeNeighbor(Node aNode, int x, int y) {
-		if (!validCoords(coords.set(x, y)))
-			return;
-
-		aNode.addNeighbor(nodeMap.get(x, y));
-
-	}
-
-	public Node getNode(int x, int y) {
-		return nodeMap.get(x, y);
-	}
-
-	public boolean searchPath(int startX, int startY, int endX, int endY, DefaultGraphPath<Node> path) {
-		Node start = nodeMap.get(startX, startY), end = nodeMap.get(endX, endY);
-
-		if (start == null || end == null)
-			return false;
-
-		return pathFinder.searchNodePath(start, end, heuristic, path);
-	}
-
 	public void rollSize(int min, int max) {
 		this.setSize(Utils.rand(min, max), Utils.rand(min, max));
 		Utils.out("Rolled map size: " + xsz + ", " + ysz);
@@ -199,6 +103,20 @@ public class Map {
 
 	public void rollSize() {
 		rollSize(MIN_MAPSIZE, MAX_MAPSIZE);
+	}
+
+	@JsonIgnore
+	public PathfinfingEngine getPathfindingEngine() {
+		return pathfinding;
+	}
+
+	@JsonIgnore
+	public Graph getPathfindingGraph() {
+		return pathfinding.getGraph();
+	}
+
+	public void refreshPathfindingGraph() {
+		pathfinding.refreshGraph();
 	}
 
 	@JsonIgnore
@@ -367,9 +285,7 @@ public class Map {
 			timeScheduler.stop();
 		timeScheduler = new TimeScheduler();
 
-		graph = new Graph();
-		nodeMap = new NodeMap(graph, xsz, ysz);
-		heuristic = new DistanceHeuristic();
+		pathfinding.init();
 		return this;
 	}
 
@@ -580,14 +496,14 @@ public class Map {
 		return drawRect(cropAction, x, y, w, h, id, true);
 	}
 
-	private boolean validCoords(int x, int y) {
+	public boolean validCoords(int x, int y) {
 		if (x <= xsz && y <= ysz && x >= 0 && y >= 0)
 			return true;
 		else
 			return false;
 	}
 
-	private boolean validCoords(Pair coords) {
+	public boolean validCoords(Pair coords) {
 		return validCoords(coords.x, coords.y);
 	}
 
@@ -689,11 +605,8 @@ public class Map {
 
 		boolean removed = delObject(coords);
 
-		if (removed && graph.getNodeCount() > 0) {
-			graph.addNode(nodeMap.putNew(x, y));
-			linkToNeighbors(x, y);
-			refreshPathFinder();
-		}
+		if (removed)
+			pathfinding.objectRemoved(x, y);
 
 		return removed;
 	}
@@ -716,17 +629,7 @@ public class Map {
 		MapObject object = MapObject.create(id);
 		if (add(coords.copy(), object)) {
 			setObjectSize(x, y, id);
-
-			if (graph.getNodeCount() > 0) {
-				if (!object.nocollide) {
-					unlinkFromNeighbors(x, y);
-					graph.remove(nodeMap.remove(x, y));
-				} else {
-					graph.addNode(nodeMap.putNew(x, y));
-					linkToNeighbors(x, y);
-				}
-				refreshPathFinder();
-			}
+			pathfinding.objectAdded(object, x, y);
 			return true;
 		}
 		return false;
@@ -940,14 +843,15 @@ public class Map {
 	}
 
 	public boolean putCrop(int x, int y, Crop crop) {
-		if (!validCoords(coords.set(x, y)))
+		Pair coords = new Pair(x, y);
+		if (!validCoords(coords))
 			return false;
 		if (objectExists(x, y))
 			return false;
 		if (getTile(x, y).id != ItemProp.getCropSoil(crop.getSeedsId()))
 			return false;
 
-		return add(coords.copy().set(x, y), crop);
+		return add(coords, crop);
 	}
 
 	public Crop getCrop(int x, int y) {
@@ -1113,7 +1017,7 @@ public class Map {
 	}
 
 	private void spawnFromRollList(RollList list, double chance) {
-		spawnFromRollList(list, chance, MadSand.player().fov);
+		spawnFromRollList(list, chance, MadSand.player().getFov());
 	}
 
 	public void naturalRegeneration() {
