@@ -6,13 +6,13 @@ import java.util.function.Supplier;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
@@ -256,12 +256,12 @@ public class MapObject extends MapEntity {
 
 	@JsonIgnore
 	public float getRenderOffset() {
-		return Resources.objects[id].getWidth() / 4;
+		return getTexture().getRegionWidth() / 4;
 	}
 
 	@JsonIgnore
-	public Texture getTexture() {
-		return Resources.objects[id];
+	public TextureRegion getTexture() {
+		return Resources.getObject(id);
 	}
 
 	@Override

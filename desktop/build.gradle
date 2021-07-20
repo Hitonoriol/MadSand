@@ -3,6 +3,7 @@ sourceSets.main.resources.srcDirs = ["../core/assets"]
 sourceSets.test.java.srcDirs = []
 
 project.ext.mainClassName = "hitonoriol.madsand.desktop.Launcher"
+project.ext.rootDir = file(".")
 project.ext.assetsDir = new File("../core/assets")
 archivesBaseName = appName
 
@@ -16,6 +17,18 @@ task run(dependsOn: classes, type: JavaExec) {
 	standardInput = System.in
 	workingDir = project.assetsDir
 	ignoreExitValue = true
+}
+
+import com.badlogic.gdx.tools.texturepacker.TexturePacker
+import static groovy.io.FileType.DIRECTORIES
+task texturePacker {
+	doLast {
+		def root = project.rootDir.absolutePath + "/core"
+		def dirs = [];
+		new File(root + "/textures").traverse(type: DIRECTORIES, maxDepth: 0) {
+			TexturePacker.process(it.absolutePath, root + "/assets/textures", it.name)
+		};
+	}
 }
 
 task debug(dependsOn: classes, type: JavaExec) {

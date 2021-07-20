@@ -57,7 +57,7 @@ public class Projectile extends LevelBoundItem {
 
 	public void launchProjectile(Pair from, Pair to, Consumer<MapEntity> impactAction) {
 		final int imgSize = (int) (MadSand.TILESIZE * MadSand.getRenderer().getCamZoom());
-		Image projectileImg = new Image(Resources.item[id]);
+		Image projectileImg = new Image(Resources.getItem(id));
 		Vector3 screenCoords = new Vector3();
 		projectileImg.setOrigin(Align.center);
 		projectileImg.setSize(imgSize, imgSize);

@@ -93,7 +93,7 @@ class BuildDialogEntry extends Group {
 		this.id = id;
 		this.recipe = recipe;
 
-		Image objImage = new Image(Resources.objects[id]);
+		Image objImage = new Image(Resources.getObject(id));
 		Label resourceLabel = new Label(
 				"Resources required to build:" + Resources.LINEBREAK + Item.createReadableItemList(recipe),
 				Gui.skin);

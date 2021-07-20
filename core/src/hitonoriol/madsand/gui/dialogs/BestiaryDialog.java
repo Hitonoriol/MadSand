@@ -76,7 +76,7 @@ public class BestiaryDialog extends GameDialog {
 		bottomLabel.setAlignment(Align.center);
 
 		entry.add(topLabel).align(Align.center).width(ENTRY_WIDTH).row();
-		entry.add(new Image(Resources.npc[id])).expandY().row();
+		entry.add(new Image(Resources.getNpc(id))).expandY().row();
 
 		if (kills >= STAT_KILLS) {
 			entry.add(new Label("HP: " + npc.hp, Gui.skin)).align(Align.center).row();

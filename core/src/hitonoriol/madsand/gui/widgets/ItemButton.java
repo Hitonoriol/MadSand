@@ -32,7 +32,7 @@ public abstract class ItemButton extends Group {
 		String buttonText = createButtonText();
 		itemLabel = new Label(buttonText, Gui.skin);
 		itemLabel.setWrap(true);
-		itemImage = new Image(Resources.item[item.id]);
+		itemImage = new Image(Resources.getItem(item.id));
 		itemImage.setSize(IMAGE_SIZE, IMAGE_SIZE);
 
 		buttonTable = new Table();

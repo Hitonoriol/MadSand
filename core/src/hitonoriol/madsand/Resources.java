@@ -12,10 +12,12 @@ import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
@@ -80,11 +82,12 @@ public class Resources {
 	static final int ANIM_FRAME_SIZE = 32;
 	public static final float ACTION_ANIM_DURATION = 0.15f;
 
-	public static Texture[] item;
-	public static Texture[] objects;
-	public static Texture[] tile;
+	private static TextureContainer tile;
+	private static TextureContainer objects;
+	private static TextureContainer item;
+	private static TextureContainer npc;
+
 	public static Texture visitedMask;
-	public static Texture[] npc;
 
 	static Texture animsheet;
 	public static NinePatchDrawable transparency = loadNinePatch("misc/transparency.png");
@@ -180,11 +183,10 @@ public class Resources {
 	private static void initObjectMapper() {
 		mapper.configure(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS.mappedFeature(), true);
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		mapper.enableDefaultTyping();
+		mapper.activateDefaultTyping(mapper.getPolymorphicTypeValidator());
 
 		SimpleModule simpleModule = new SimpleModule();
 		simpleModule.addKeyDeserializer(Pair.class, new PairKeyDeserializer());
-
 		mapper.registerModule(simpleModule);
 	}
 
@@ -214,16 +216,8 @@ public class Resources {
 		NpcProp.npcs = Resources.mapper.readValue(readInternal(Resources.NPC_FILE), npcMap);
 		npcCount = NpcProp.npcs.size();
 		Utils.out(npcCount + " NPCs");
-
-		npc = new Texture[npcCount];
-
-		int i = 0;
-		for (Entry<Integer, NpcContainer> npcEntry : NpcProp.npcs.entrySet()) {
-			i = npcEntry.getKey();
-			npc[i] = loadTexture("npc/" + i + ".png");
-			npcEntry.getValue().id = i;
-		}
-
+		npc = new TextureContainer(loadAtlas("npc"));
+		NpcProp.npcs.forEach((id, npc) -> npc.id = id);
 	}
 
 	private static void loadMapTiles() throws Exception {
@@ -231,17 +225,9 @@ public class Resources {
 		TileProp.tiles = Resources.mapper.readValue(readInternal(Resources.TILE_FILE), tileMap);
 
 		tileCount = TileProp.tiles.size();
-		tile = new Texture[tileCount];
+		tile = new TextureContainer(loadAtlas("terrain"));
 		Utils.out(tileCount + " tiles");
-
-		// Load tile textures
-		int i = 0;
-		for (Entry<Integer, Tile> tileEntry : TileProp.tiles.entrySet()) {
-			i = tileEntry.getKey();
-
-			tile[i] = loadTexture("terrain/" + i + ".png");
-			tileEntry.getValue().id = i;
-		}
+		TileProp.tiles.forEach((id, tile) -> tile.id = id);
 	}
 
 	private static void loadMapObjects() throws Exception {
@@ -249,49 +235,30 @@ public class Resources {
 		ObjectProp.objects = Resources.mapper.readValue(readInternal(Resources.OBJECT_FILE), objectMap);
 
 		mapObjectCount = ObjectProp.objects.size();
-		objects = new Texture[mapObjectCount + 1];
+		objects = new TextureContainer(loadAtlas("obj"));
 		Utils.out(mapObjectCount + " map objects");
-
-		// Load object textures
-		int i;
-		for (Entry<Integer, MapObject> objectEntry : ObjectProp.objects.entrySet()) {
-			i = objectEntry.getKey();
-
-			objects[i] = loadTexture("obj/" + i + ".png");
-			objectEntry.getValue().id = i;
-		}
+		ObjectProp.objects.forEach((id, object) -> object.id = id);
 	}
 
 	private static void loadItems() throws Exception {
 		MapType itemMap = Resources.typeFactory.constructMapType(HashMap.class, Integer.class, Item.class);
 		ItemProp.items = Resources.mapper.readValue(readInternal(Resources.ITEM_FILE), itemMap);
 		itemCount = ItemProp.items.size();
-		item = new Texture[itemCount];
+		item = new TextureContainer(loadAtlas("inv"));
 
-		int i = 0;
-		Item valItem;
-		String craftStationRecipe[];
-		for (Entry<Integer, ? extends Item> entry : ItemProp.items.entrySet()) {
-			i = entry.getKey();
-			valItem = entry.getValue();
-
-			item[i] = loadTexture("inv/" + i + ".png");
-			valItem.id = i;
-
+		ItemProp.items.forEach((id, item) -> {
+			item.id = id;
 			// Load item's craft recipe if it has one
-			if (valItem.recipe != null) {
-				if (valItem.recipe.contains(Item.CRAFTSTATION_DELIM)) {
-					craftStationRecipe = valItem.recipe.split("\\" + Item.CRAFTSTATION_DELIM);
-					valItem.recipe = craftStationRecipe[1];
-					ItemProp.addCraftStationRecipe(Utils.val(craftStationRecipe[0]), valItem.id);
-					++craftableItemCount;
-				} else {
-					ItemProp.craftReq.put(i, Item.parseCraftRequirements(valItem.recipe));
-					++craftableItemCount;
-				}
+			if (item.recipe != null) {
+				if (item.recipe.contains(Item.CRAFTSTATION_DELIM)) {
+					String[] craftStationRecipe = item.recipe.split("\\" + Item.CRAFTSTATION_DELIM);
+					item.recipe = craftStationRecipe[1];
+					ItemProp.addCraftStationRecipe(Utils.val(craftStationRecipe[0]), item.id);
+				} else
+					ItemProp.craftReq.put(id, Item.parseCraftRequirements(item.recipe));
+				++craftableItemCount;
 			}
-		}
-
+		});
 		Utils.out(craftableItemCount + " craftable items");
 	}
 
@@ -326,12 +293,29 @@ public class Resources {
 	}
 
 	private static JavaType stringList = typeFactory.constructCollectionType(ArrayList.class, String.class);
+
 	public static ArrayList<String> loadStringList(String internalFile) {
 		try {
-			return mapper.readValue(readInternal(internalFile),	stringList);
+			return mapper.readValue(readInternal(internalFile), stringList);
 		} catch (Exception e) {
 			return null;
 		}
+	}
+
+	public static TextureRegion getTile(int id) {
+		return tile.get(id);
+	}
+
+	public static TextureRegion getObject(int id) {
+		return objects.get(id);
+	}
+
+	public static TextureRegion getItem(int id) {
+		return item.get(id);
+	}
+
+	public static TextureRegion getNpc(int id) {
+		return npc.get(id);
 	}
 
 	static final int PLAYER_ANIM_WIDTH = 35;
@@ -373,6 +357,10 @@ public class Resources {
 		generator.dispose();
 		font.getData().markupEnabled = true;
 		return font;
+	}
+
+	public static TextureAtlas loadAtlas(String name) {
+		return new TextureAtlas(Gdx.files.internal("textures/" + name + ".atlas"));
 	}
 
 	public static String readInternal(String file) {
@@ -419,6 +407,29 @@ public class Resources {
 
 	private static TextureRegion[] loadAnimationStrip(String file) {
 		return loadAnimationStrip(file, ANIM_FRAME_SIZE);
+	}
+
+	private static Pixmap extractPixmap(TextureRegion textureRegion) {
+		TextureData textureData = textureRegion.getTexture().getTextureData();
+		if (!textureData.isPrepared())
+			textureData.prepare();
+		Pixmap pixmap = new Pixmap(
+				textureRegion.getRegionWidth(),
+				textureRegion.getRegionHeight(),
+				textureData.getFormat());
+		pixmap.drawPixmap(
+				textureData.consumePixmap(),
+				0,
+				0,
+				textureRegion.getRegionX(),
+				textureRegion.getRegionY(),
+				textureRegion.getRegionWidth(),
+				textureRegion.getRegionHeight());
+		return pixmap;
+	}
+
+	public static Texture createTexture(TextureRegion region) {
+		return new Texture(extractPixmap(region));
 	}
 
 	public static void takeScreenshot() {

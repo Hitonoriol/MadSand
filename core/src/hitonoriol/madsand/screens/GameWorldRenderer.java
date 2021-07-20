@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
@@ -63,12 +64,11 @@ public class GameWorldRenderer {
 		if (object.centered)
 			x -= object.getRenderOffset();
 
-		Texture texture = object.getTexture();
-		float w = texture.getWidth(), h = texture.getHeight();
+		TextureRegion texture = object.getTexture();
+		float w = texture.getRegionWidth(), h = texture.getRegionHeight();
 		if ((object.id != MapObject.NULL_OBJECT_ID) && (object.id != MapObject.COLLISION_MASK_ID))
 			MadSand.batch.draw(texture, x, y, w / 2f, h / 2f, w, h, 1f, 1f,
-					object.getDirection().getRotation(),
-					0, 0, (int) w, (int) h, false, false);
+					object.getDirection().getRotation());
 	}
 
 	public void queueAnimation(AnimationContainer animation, float x, float y) {
@@ -133,7 +133,7 @@ public class GameWorldRenderer {
 		if (loot.getItemCount() == 1)
 			lootTx = loot.get(0).getTexture();
 		else
-			lootTx = Resources.objects[OBJECT_LOOT];
+			lootTx = Resources.getObject(OBJECT_LOOT).getTexture();
 
 		MadSand.batch.draw(lootTx, x * TILESIZE + LOOT_OFFSET, y * TILESIZE + LOOT_OFFSET, LOOT_SIZE, LOOT_SIZE);
 	}
@@ -195,7 +195,7 @@ public class GameWorldRenderer {
 			if ((x > xsz || y > ysz || x < 0 || y < 0) && MadSand.world().isUnderGround()) // Don't render default tile while underground
 				continue;
 
-			MadSand.batch.draw(Resources.tile[MadSand.world().getTileOrDefault(x, y)], x * TILESIZE, y * TILESIZE);
+			MadSand.batch.draw(Resources.getTile(MadSand.world().getTileOrDefault(x, y)), x * TILESIZE, y * TILESIZE);
 		}
 
 		for (Pair cell : renderArea) { // Render objects, loot, NPCs and player

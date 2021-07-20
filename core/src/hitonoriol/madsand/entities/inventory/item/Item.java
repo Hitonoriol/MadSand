@@ -303,7 +303,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 		}
 
 		if (!dynTexExists)
-			return Resources.item[id];
+			createDynamicTexture();
 
 		return dynamicTxPool.get(this);
 	}
@@ -312,7 +312,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 		if (effectApplier == null)
 			return;
 
-		Texture texture = Resources.item[id];
+		Texture texture = null;
 		if (!dynamicTxPool.containsKey(this))
 			texture = createDynamicTexture();
 
@@ -329,7 +329,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 	}
 
 	protected Texture createDynamicTexture() {
-		Texture dynamicTx = TextureProcessor.copyTexture(Resources.item[id]);
+		Texture dynamicTx = Resources.createTexture(Resources.getItem(id));
 		dynamicTxPool.put(this, dynamicTx);
 		return dynamicTx;
 	}

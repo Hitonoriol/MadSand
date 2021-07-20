@@ -81,7 +81,7 @@ public abstract class AbstractNpc extends Entity {
 	}
 
 	public void loadSprite() {
-		setSprites(new Sprite(Resources.npc[id]));
+		setSprites(new Sprite(Resources.getNpc(id)));
 	}
 
 	@Override
