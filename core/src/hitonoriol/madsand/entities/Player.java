@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.function.BooleanSupplier;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Resources;
+import hitonoriol.madsand.containers.AnimationContainer;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
 import hitonoriol.madsand.dialog.GameDialog;
@@ -73,6 +73,7 @@ import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.Location;
 import hitonoriol.madsand.world.WorkerType;
@@ -80,7 +81,6 @@ import hitonoriol.madsand.world.WorkerType;
 public class Player extends Entity {
 	@JsonIgnore
 	public PlayerStats stats; // Reference to the same Stats object as super.stats
-	float elapsedTime; // TODO: move to AnimationContainer
 	private float runSpeedCoef = 3.5f;
 
 	private int targetedByNpcs = 0;
@@ -100,12 +100,15 @@ public class Player extends Entity {
 	@JsonProperty("newlyCreated")
 	public boolean newlyCreated = true;
 
+	static {
+		loadPlayerAnimation();
+	}
+
 	@JsonIgnore
 	public Player(String name) {
 		super(name);
 		stats = stats();
-		super.setSprites(Resources.playerUpSpr, Resources.playerDownSpr, Resources.playerLeftSpr,
-				Resources.playerRightSpr);
+		super.setSprites(standingSprites);
 		initInventory();
 		setFov();
 		quests.setPlayer(this);
@@ -125,6 +128,23 @@ public class Player extends Entity {
 		stats.equipment.refreshUI();
 		abilityKeyBinds.forEach((key, abilityId) -> bindAbility(key, abilityId));
 		inventory.refreshContents();
+	}
+
+	private static final int ANIM_WIDTH = 35, ANIM_HEIGHT = 74;
+	private static final float animDuration = 0.2f;
+	private static Sprite[] standingSprites;
+	private static AnimationContainer[] walkAnim;
+
+	private static void loadPlayerAnimation() {
+		walkAnim = new AnimationContainer[Direction.BASE_DIRECTIONS];
+		standingSprites = new Sprite[Direction.BASE_DIRECTIONS];
+		TextureRegion[][] animSheet = Resources.getTexture("player/anim").split(ANIM_WIDTH, ANIM_HEIGHT);
+
+		Direction.forEachBase(direction -> {
+			int dirIdx = direction.baseOrdinal();
+			walkAnim[dirIdx] = new AnimationContainer(animDuration, animSheet[dirIdx]);
+			standingSprites[dirIdx] = new Sprite(animSheet[dirIdx][0]);
+		});
 	}
 
 	@Override
@@ -286,7 +306,7 @@ public class Player extends Entity {
 		if (MadSand.world() != null)
 			MadSand.world().updateLight();
 	}
-	
+
 	public void setFov() {
 		setFov(getFov());
 	}
@@ -1284,19 +1304,7 @@ public class Player extends Entity {
 		if (!isMoving())
 			return super.getSprite();
 
-		Animation<TextureRegion> anim = null;
-		elapsedTime += Gdx.graphics.getDeltaTime();
-
-		if (stats.look == Direction.RIGHT)
-			anim = Resources.ranim;
-		else if (stats.look == Direction.LEFT)
-			anim = Resources.lanim;
-		else if (stats.look == Direction.UP)
-			anim = Resources.uanim;
-		else
-			anim = Resources.danim;
-
-		return anim.getKeyFrame(elapsedTime, true);
+		return walkAnim[stats.look.baseOrdinal()].getCurrentKeyFrame(true);
 	}
 
 	public long getSurvivedTime() {

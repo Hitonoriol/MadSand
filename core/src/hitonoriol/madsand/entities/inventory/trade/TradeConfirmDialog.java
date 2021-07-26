@@ -1,10 +1,10 @@
 package hitonoriol.madsand.entities.inventory.trade;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.dialogs.SliderDialog;
 import hitonoriol.madsand.properties.Globals;
+import hitonoriol.madsand.resources.Resources;
 
 public class TradeConfirmDialog extends SliderDialog {
 	private static String chooseTextA = "Choose what amount of ";

@@ -1,5 +1,7 @@
 package hitonoriol.madsand;
 
+import static hitonoriol.madsand.resources.Resources.*;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -10,7 +12,6 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import static hitonoriol.madsand.Resources.*;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 

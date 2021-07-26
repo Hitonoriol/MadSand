@@ -37,6 +37,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.dialogs.OkDialog;
 import hitonoriol.madsand.gui.stages.Overlay;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.screens.TravelScreen;
 import hitonoriol.madsand.util.TimeUtils;
 
@@ -140,12 +141,10 @@ public class Gui {
 	}
 
 	static private void loadNinePatches() {
-		dialogBackground = Resources.loadNinePatch("misc/bg.png");
+		dialogBackground = Resources.loadNinePatch("gui/bg");
 		setMinSize(dialogBackground, 100, 50);
-
-		transparency = Resources.loadNinePatch("misc/transparency.png");
-
-		darkBackground = Resources.loadNinePatch("misc/darkness.png");
+		transparency = Resources.loadNinePatch("misc/transparency");
+		darkBackground = Resources.loadNinePatch("misc/darkness");
 		darkBackgroundSizeable = new NinePatchDrawable(darkBackground);
 		darkBackgroundSizeable.setMinHeight(0);
 		darkBackgroundSizeable.setMinWidth(0);

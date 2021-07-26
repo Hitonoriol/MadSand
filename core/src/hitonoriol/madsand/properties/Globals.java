@@ -1,14 +1,15 @@
 package hitonoriol.madsand.properties;
 
-import static hitonoriol.madsand.Resources.*;
+import static hitonoriol.madsand.resources.Resources.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.containers.rolltable.LootTable;
 import hitonoriol.madsand.entities.ability.Ability;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.quest.ProceduralQuest;
+import hitonoriol.madsand.resources.Resources;
 
 public class Globals {
 	private static final String DEV_VER_STR = "[Development Build]";

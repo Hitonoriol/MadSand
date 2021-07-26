@@ -9,12 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.properties.QuestList;
+import hitonoriol.madsand.resources.Resources;
 
 public class QuestListDialog extends GameDialog {
 

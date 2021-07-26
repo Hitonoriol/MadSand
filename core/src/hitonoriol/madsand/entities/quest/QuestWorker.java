@@ -10,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Reputation;
@@ -19,6 +18,7 @@ import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.gui.dialogs.QuestListDialog;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.properties.QuestList;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
 public class QuestWorker {

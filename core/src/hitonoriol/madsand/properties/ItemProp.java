@@ -3,11 +3,11 @@ package hitonoriol.madsand.properties;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.inventory.item.CropSeeds;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Placeable;
 import hitonoriol.madsand.map.CropGrowthStageContainer;
+import hitonoriol.madsand.resources.Resources;
 
 public class ItemProp {
 	public static HashMap<Integer, ? extends Item> items = new HashMap<>();

@@ -11,13 +11,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
 public class ItemUI extends Group {
@@ -32,12 +34,14 @@ public class ItemUI extends Group {
 
 	protected Item item;
 	protected ItemTooltip tooltip;
+	
+	public final static Drawable emptyItem = new TextureRegionDrawable(Resources.getTexture("gui/placeholder"));
 
 	public ItemUI(Item item) {
 		super();
 		this.item = item;
 		topLabel = new Label("", Gui.skin);
-		highlight = new Image(Resources.noEquip);
+		highlight = new Image(ItemUI.emptyItem);
 		toolHpLabel = new Label("", Gui.skin);
 		itemBtn = new ImageButton(new SpriteDrawable(new Sprite(item.getTexture())));
 		itemQuantityLabel = new Label(item.quantity + "", Gui.skin);

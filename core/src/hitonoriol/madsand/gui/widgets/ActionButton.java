@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.CropSeeds;
@@ -23,6 +22,7 @@ import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.TimeUtils;
 
 public class ActionButton extends Table {

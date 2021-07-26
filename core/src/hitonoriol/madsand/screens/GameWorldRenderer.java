@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.containers.AnimationContainer;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
@@ -26,6 +25,7 @@ import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.pathfinding.Path;
+import hitonoriol.madsand.resources.Resources;
 
 public class GameWorldRenderer {
 	static final int TILESIZE = MadSand.TILESIZE;
@@ -41,6 +41,9 @@ public class GameWorldRenderer {
 	private ConcurrentHashMap<PairFloat, AnimationContainer> animations = new ConcurrentHashMap<>();
 	private ConcurrentHashMap<Path, PathDescriptor> paths = new ConcurrentHashMap<>();
 	private List<Pair> renderArea = new ArrayList<>();
+
+	private static TextureRegion visitedMask = Resources.getTexture("light/light_visited");
+	private static TextureRegion mapCursor = Resources.getTexture("misc/map_cursor");
 
 	public GameWorldRenderer() {
 		updateViewport();
@@ -153,7 +156,7 @@ public class GameWorldRenderer {
 
 	public void drawPath(Path path, Color color) {
 		MadSand.batch.setColor(color);
-		path.forEach(cell -> MadSand.batch.draw(Resources.mapCursor, cell.x * TILESIZE, cell.y * TILESIZE));
+		path.forEach(cell -> MadSand.batch.draw(GameWorldRenderer.mapCursor, cell.x * TILESIZE, cell.y * TILESIZE));
 		MadSand.batch.setColor(defColor);
 	}
 
@@ -164,7 +167,7 @@ public class GameWorldRenderer {
 	void drawMapCursor() {
 		int x = Mouse.wx, y = Mouse.wy;
 		if (!Mouse.hasClickAction())
-			MadSand.batch.draw(Resources.mapCursor, x * TILESIZE, y * TILESIZE);
+			MadSand.batch.draw(GameWorldRenderer.mapCursor, x * TILESIZE, y * TILESIZE);
 		else
 			drawPath(Mouse.getPathToCursor());
 	}
@@ -217,7 +220,7 @@ public class GameWorldRenderer {
 				renderObject(object, x, y);
 
 			if (tileVisited) { // Render visited & not currently visible tiles partially darkened
-				MadSand.batch.draw(Resources.visitedMask, x * TILESIZE, y * TILESIZE);
+				MadSand.batch.draw(GameWorldRenderer.visitedMask, x * TILESIZE, y * TILESIZE);
 				continue;
 			}
 

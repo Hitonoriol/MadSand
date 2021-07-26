@@ -6,8 +6,8 @@ import com.badlogic.gdx.Input.Keys;
 
 import hitonoriol.madsand.HotbarAssignable;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.resources.Resources;
 
 public class ActiveAbility extends Ability implements HotbarAssignable {
 

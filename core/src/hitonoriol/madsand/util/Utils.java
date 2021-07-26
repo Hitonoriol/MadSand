@@ -1,6 +1,7 @@
 package hitonoriol.madsand.util;
 
-import static hitonoriol.madsand.Resources.*;
+import static hitonoriol.madsand.resources.Resources.*;
+
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -75,14 +76,18 @@ public class Utils {
 		return randElement(Stream.of(stringList.split(",", -1)).collect(Collectors.toList()));
 	}
 
-	private static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
+	private static SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss.SSS");
+	
+	public static String now(SimpleDateFormat format) {
+		return format.format(Calendar.getInstance().getTime());
+	}
 
 	public static void out(String arg) {
 		if (Globals.silentMode)
 			return;
 
 		if (printTimestamp)
-			arg = "[" + sdf.format(Calendar.getInstance().getTime()) + "] " + arg;
+			arg = "[" + now(dateFormat) + "] " + arg;
 
 		System.out.print(arg + "\n");
 	}

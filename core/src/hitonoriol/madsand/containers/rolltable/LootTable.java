@@ -12,10 +12,10 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.containers.rolltable.LootTable.Deserializer;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.properties.Globals;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
 @JsonDeserialize(using = Deserializer.class)

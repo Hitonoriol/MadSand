@@ -9,13 +9,13 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
 import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 import me.xdrop.jrand.JRand;
 import me.xdrop.jrand.generators.basics.FloatGenerator;

@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.enums.Direction;
@@ -24,6 +23,7 @@ import hitonoriol.madsand.minigames.farkle.FarkleUI;
 import hitonoriol.madsand.minigames.videopoker.VideoPokerUI;
 import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.properties.Globals;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
 public class Keyboard {

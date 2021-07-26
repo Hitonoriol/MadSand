@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.Entity;
@@ -35,6 +34,7 @@ import hitonoriol.madsand.pathfinding.Graph;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.WorldGenProp;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.worldgen.WorldGen;
@@ -574,16 +574,15 @@ public class World {
 	}
 
 	public int getTileOrDefault(int x, int y) {
-		if (x >= 0 && y >= 0 && x < getCurLoc().getWidth() && y < getCurLoc().getHeight()) {
-
+		if (!getCurLoc().validCoords(x, y))
+			return getDefaultTile();
+		else {
 			int tile = getCurLoc().getTile(x, y).id;
-			if (tile >= 0 && tile <= Resources.tileCount)
+			if (tile >= 0)
 				return tile;
 			else
 				return getDefaultTile();
-
-		} else
-			return getDefaultTile();
+		}
 	}
 
 	private static int H_DAY = 24;
@@ -633,7 +632,7 @@ public class World {
 		Map curLoc = getCurLoc();
 
 		++worldtime;
-		
+
 		if (worldtime == TIME_MIDNIGHT)
 			worldtime = 0;
 

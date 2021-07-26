@@ -10,28 +10,28 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
 import hitonoriol.madsand.entities.inventory.ItemUI;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.OverlayMouseoverListener;
+import hitonoriol.madsand.resources.Resources;
 
 public class EquipmentSidebar extends Table {
 	public static final int EQ_SLOTS = 6;
 
 	static float ITEM_SIZE = 80;
 
-	private static NinePatchDrawable tableBorder;
+	private static NinePatchDrawable tableBorder = Resources.loadNinePatch("gui/sidebar_border");
+	static {
+		tableBorder.setMinWidth(0);
+		tableBorder.setMinHeight(0);
+	}
+
 	ItemUI[] equip;
 
 	public EquipmentSidebar() {
 		super();
 		super.addListener(new OverlayMouseoverListener());
-		if (tableBorder == null) {
-			tableBorder = Resources.loadNinePatch("misc/sidebar_border.png");
-			tableBorder.setMinWidth(0);
-			tableBorder.setMinHeight(0);
-		}
 		super.setBackground(tableBorder);
 
 		super.setOrigin(Align.bottomRight);
@@ -77,7 +77,7 @@ public class EquipmentSidebar extends Table {
 
 		if (slot == null)
 			return;
-		
+
 		switch (slot) {
 		case MainHand:
 			itemDisplay.addListener(new ClickListener(Buttons.LEFT) {

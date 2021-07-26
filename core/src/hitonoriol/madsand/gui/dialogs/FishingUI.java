@@ -2,8 +2,8 @@ package hitonoriol.madsand.gui.dialogs;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -22,13 +22,13 @@ import com.badlogic.gdx.utils.Timer.Task;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.gui.widgets.TimedProgressBar;
 import hitonoriol.madsand.map.FishingSpot;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 import me.xdrop.jrand.JRand;
 
@@ -284,8 +284,8 @@ public class FishingUI extends GameDialog {
 
 	private static String resPath = "misc/fishing/";
 	static Sprite fishR, fishL;
-	static Texture fishTx = Resources.loadTexture(resPath + "fish.png");
-	static Texture bobberTx = Resources.loadTexture(resPath + "bobber.png");
-	static NinePatchDrawable backgroundTx = Resources.loadNinePatch(resPath + "bg.png");
+	static TextureRegion fishTx = Resources.getTexture(resPath + "fish");
+	static TextureRegion bobberTx = Resources.getTexture(resPath + "bobber");
+	static NinePatchDrawable backgroundTx = Resources.loadNinePatch(resPath + "bg");
 	static ProgressBar.ProgressBarStyle barStyle = Gui.createProgressBarStyle(BAR_WIDTH, BAR_HEIGHT, Color.LIME, true);
 }

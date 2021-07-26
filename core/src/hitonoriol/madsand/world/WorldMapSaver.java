@@ -7,13 +7,13 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import hitonoriol.madsand.GameSaver;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.map.object.MapObject;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.ByteUtils;
 import hitonoriol.madsand.util.Utils;
 

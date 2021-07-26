@@ -1,5 +1,6 @@
-package hitonoriol.madsand;
+package hitonoriol.madsand.resources;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -8,20 +9,16 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.TextureData;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.fasterxml.jackson.core.json.JsonReadFeature;
@@ -58,7 +55,6 @@ import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.worldgen.WorldGenPreset;
 
 public class Resources {
-
 	static String QUEST_FILE = "quests.json";
 	static String WORLDGEN_FILE = "worldgen.json";
 	static String ENCOUNTER_FILE = "encounters.json";
@@ -72,44 +68,20 @@ public class Resources {
 	public static String GLOBALS_FILE = "globals.json";
 	public static String BUILDRECIPE_FILE = "buildrecipes.json";
 	static String SKILL_FILE = "skills.json";
-
 	public static final String SCRIPT_DIR = "scripts/";
 	public static final String ENCOUNTER_DIR = "encounter/";
-
 	public static final String ERR_FILE = "MadSandCritical.log";
 	public static final String OUT_FILE = "MadSandOutput.log";
 
 	static final int ANIM_FRAME_SIZE = 32;
 	public static final float ACTION_ANIM_DURATION = 0.15f;
 
-	private static TextureContainer tile;
-	private static TextureContainer objects;
-	private static TextureContainer item;
-	private static TextureContainer npc;
-
-	public static Texture visitedMask;
-
-	static Texture animsheet;
-	public static NinePatchDrawable transparency = loadNinePatch("misc/transparency.png");
-
-	static float playerAnimDuration = 0.2f;
-
-	static TextureRegion[] animup = new TextureRegion[2];
-	static TextureRegion[] animdown = new TextureRegion[2];
-	static TextureRegion[] animleft = new TextureRegion[2];
-	static TextureRegion[] animright = new TextureRegion[2];
-
-	public static Animation<TextureRegion> uanim, danim, lanim, ranim;
-
-	public static Texture mapCursor;
-	public static Texture questArrow;
-	static Texture placeholder;
-	public static TextureRegionDrawable noEquip;
-
-	public static Sprite playerRightSpr;
-	public static Sprite playerLeftSpr;
-	public static Sprite playerUpSpr;
-	public static Sprite playerDownSpr;
+	private static final TextureAtlas textures = loadAtlas("textures");
+	private static TextureMap<String> textureMap = new TextureMap<>(textures);
+	private static TextureMap<Integer> tiles = new TextureMap<>(textures, "terrain");
+	private static TextureMap<Integer> objects = new TextureMap<>(textures, "obj");
+	private static TextureMap<Integer> items = new TextureMap<>(textures, "inv");
+	private static TextureMap<Integer> npcs = new TextureMap<>(textures, "npc");
 
 	public static TextureRegion[] attackAnimStrip, objectHitAnimStrip;
 	public static TextureRegion[] healAnimStrip, detectAnimStrip;
@@ -142,21 +114,8 @@ public class Resources {
 
 	private static void init() throws Exception {
 		Utils.out("Loading resources...");
-
-		mapCursor = loadTexture("misc/cur.png");
-		animsheet = loadTexture("player/anim.png");
-		visitedMask = loadTexture("light/light_visited.png");
-		placeholder = loadTexture("misc/placeholder.png");
-		questArrow = loadTexture("misc/arrow.png");
-		noEquip = new TextureRegionDrawable(new TextureRegion(placeholder));
-
-		loadPlayerAnimation();
-
-		Cursor mouseCursor = Gdx.graphics.newCursor(loadPixmap("cursor.png"), 0, 0);
-		Gdx.graphics.setCursor(mouseCursor);
-
+		Gdx.graphics.setCursor(Gdx.graphics.newCursor(loadPixmap("textures/cursor.png"), 0, 0));
 		initObjectMapper();
-
 		Globals.loadGlobals();
 		loadItems();
 		loadMapTiles();
@@ -169,15 +128,14 @@ public class Resources {
 		loadTutorial();
 		loadActionAnimations();
 		loadSkillReqs();
-
 		Utils.out("Done loading resources.");
 	}
 
 	private static void loadActionAnimations() {
-		attackAnimStrip = loadAnimationStrip("anim/hit.png");
-		objectHitAnimStrip = loadAnimationStrip("anim/obj_hit.png");
-		healAnimStrip = loadAnimationStrip("anim/heal.png");
-		detectAnimStrip = loadAnimationStrip("anim/detect.png");
+		attackAnimStrip = loadAnimationStrip("anim/hit");
+		objectHitAnimStrip = loadAnimationStrip("anim/obj_hit");
+		healAnimStrip = loadAnimationStrip("anim/heal");
+		detectAnimStrip = loadAnimationStrip("anim/detect");
 	}
 
 	private static void initObjectMapper() {
@@ -216,7 +174,7 @@ public class Resources {
 		NpcProp.npcs = Resources.mapper.readValue(readInternal(Resources.NPC_FILE), npcMap);
 		npcCount = NpcProp.npcs.size();
 		Utils.out(npcCount + " NPCs");
-		npc = new TextureContainer(loadAtlas("npc"));
+		//npcs = new TextureMap<>(loadAtlas("npc"));
 		NpcProp.npcs.forEach((id, npc) -> npc.id = id);
 	}
 
@@ -225,7 +183,7 @@ public class Resources {
 		TileProp.tiles = Resources.mapper.readValue(readInternal(Resources.TILE_FILE), tileMap);
 
 		tileCount = TileProp.tiles.size();
-		tile = new TextureContainer(loadAtlas("terrain"));
+		//tiles = new TextureMap<>(loadAtlas("terrain"));
 		Utils.out(tileCount + " tiles");
 		TileProp.tiles.forEach((id, tile) -> tile.id = id);
 	}
@@ -235,7 +193,7 @@ public class Resources {
 		ObjectProp.objects = Resources.mapper.readValue(readInternal(Resources.OBJECT_FILE), objectMap);
 
 		mapObjectCount = ObjectProp.objects.size();
-		objects = new TextureContainer(loadAtlas("obj"));
+		//objects = new TextureMap<>(loadAtlas("obj"));
 		Utils.out(mapObjectCount + " map objects");
 		ObjectProp.objects.forEach((id, object) -> object.id = id);
 	}
@@ -244,7 +202,7 @@ public class Resources {
 		MapType itemMap = Resources.typeFactory.constructMapType(HashMap.class, Integer.class, Item.class);
 		ItemProp.items = Resources.mapper.readValue(readInternal(Resources.ITEM_FILE), itemMap);
 		itemCount = ItemProp.items.size();
-		item = new TextureContainer(loadAtlas("inv"));
+		//items = new TextureMap<>(loadAtlas("inv"));
 
 		ItemProp.items.forEach((id, item) -> {
 			item.id = id;
@@ -303,7 +261,7 @@ public class Resources {
 	}
 
 	public static TextureRegion getTile(int id) {
-		return tile.get(id);
+		return tiles.get(id);
 	}
 
 	public static TextureRegion getObject(int id) {
@@ -311,34 +269,15 @@ public class Resources {
 	}
 
 	public static TextureRegion getItem(int id) {
-		return item.get(id);
+		return items.get(id);
 	}
 
 	public static TextureRegion getNpc(int id) {
-		return npc.get(id);
+		return npcs.get(id);
 	}
 
-	static final int PLAYER_ANIM_WIDTH = 35;
-	static final int PLAYER_ANIM_HEIGHT = 74;
-	static final int PLAYER_ANIM_FRAMES = 2;
-
-	private static void loadPlayerAnimation() {
-		TextureRegion[][] tmpAnim = TextureRegion.split(animsheet, PLAYER_ANIM_WIDTH, PLAYER_ANIM_HEIGHT);
-
-		animdown = getAnimationStrip(tmpAnim, 0, PLAYER_ANIM_FRAMES);
-		animleft = getAnimationStrip(tmpAnim, 1, PLAYER_ANIM_FRAMES);
-		animright = getAnimationStrip(tmpAnim, 2, PLAYER_ANIM_FRAMES);
-		animup = getAnimationStrip(tmpAnim, 3, PLAYER_ANIM_FRAMES);
-
-		uanim = new Animation<TextureRegion>(playerAnimDuration, animup);
-		danim = new Animation<TextureRegion>(playerAnimDuration, animdown);
-		lanim = new Animation<TextureRegion>(playerAnimDuration, animleft);
-		ranim = new Animation<TextureRegion>(playerAnimDuration, animright);
-
-		playerDownSpr = new Sprite(animdown[0]);
-		playerUpSpr = new Sprite(animup[0]);
-		playerRightSpr = new Sprite(animright[0]);
-		playerLeftSpr = new Sprite(animleft[0]);
+	public static TextureRegion getTexture(String name) {
+		return textureMap.get(name);
 	}
 
 	static final String FONT_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"'<>";
@@ -372,11 +311,11 @@ public class Resources {
 	}
 
 	public static NinePatchDrawable loadNinePatch(String file) {
-		return new NinePatchDrawable(new NinePatch(loadTexture(file)));
+		return new NinePatchDrawable(new NinePatch(getTexture(file)));
 	}
 
 	public static Texture loadTexture(String file) {
-		return new Texture(Gdx.files.internal(file));
+		return new Texture(Gdx.files.internal("textures/" + file));
 	}
 
 	public static Pixmap loadPixmap(String file) {
@@ -391,7 +330,7 @@ public class Resources {
 		return createAnimation(strip, ACTION_ANIM_DURATION);
 	}
 
-	private static TextureRegion[] getAnimationStrip(TextureRegion[][] region, int row, int frames) { // convert [][] strip to []
+	public static TextureRegion[] getAnimationStrip(TextureRegion[][] region, int row, int frames) { // convert [][] strip to []
 		TextureRegion[] strip = new TextureRegion[frames];
 
 		for (int i = 0; i < frames; ++i)
@@ -401,7 +340,7 @@ public class Resources {
 	}
 
 	private static TextureRegion[] loadAnimationStrip(String file, int frameSize) { // load 1xN animation strip from file
-		TextureRegion[][] animStrip = TextureRegion.split(loadTexture(file), frameSize, frameSize);
+		TextureRegion[][] animStrip = getTexture(file).split(frameSize, frameSize);
 		return getAnimationStrip(animStrip, 0, animStrip[0].length);
 	}
 
@@ -432,6 +371,8 @@ public class Resources {
 		return new Texture(extractPixmap(region));
 	}
 
+	private static SimpleDateFormat screenshotDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+
 	public static void takeScreenshot() {
 		byte[] pixels = ScreenUtils.getFrameBufferPixels(0, 0, Gdx.graphics.getBackBufferWidth(),
 				Gdx.graphics.getBackBufferHeight(), true);
@@ -443,7 +384,7 @@ public class Resources {
 				Pixmap.Format.RGBA8888);
 
 		BufferUtils.copy(pixels, 0, pixmap.getPixels(), pixels.length);
-		PixmapIO.writePNG(Gdx.files.local(System.currentTimeMillis() + ".png"), pixmap);
+		PixmapIO.writePNG(Gdx.files.local(Utils.now(screenshotDateFormat) + ".png"), pixmap);
 		pixmap.dispose();
 	}
 }

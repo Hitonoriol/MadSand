@@ -4,13 +4,13 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import hitonoriol.madsand.Resources;
+import hitonoriol.madsand.resources.Resources;
 
 public class Card implements Comparable<Card> {
 	public static Card nullCard = new Card(0, null).hide();
 
-	private static TextureRegion[][] cards = TextureRegion.split(Resources.loadTexture("misc/cards.png"), 81, 117);
-	public static int WIDTH = 81, HEIGHT = 117;
+	public static final int WIDTH = 81, HEIGHT = 117;
+	private static TextureRegion[][] cards = Resources.getTexture("gui/cards").split(WIDTH, HEIGHT);
 
 	public int rank;
 	public Suit suit;

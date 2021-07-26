@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
@@ -14,6 +13,7 @@ import hitonoriol.madsand.entities.npc.Trader;
 import hitonoriol.madsand.entities.quest.ProceduralQuest;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.Location;
 

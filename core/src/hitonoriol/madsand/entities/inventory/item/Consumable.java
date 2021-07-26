@@ -1,7 +1,7 @@
 package hitonoriol.madsand.entities.inventory.item;
 
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.resources.Resources;
 
 public class Consumable extends Item {
 	public int satiationAmount;

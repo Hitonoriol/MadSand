@@ -1,17 +1,18 @@
 package hitonoriol.madsand.gui.widgets;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.map.Map;
+import hitonoriol.madsand.resources.Resources;
 
 public class QuestArrow extends Image {
 	static float RADIUS = 100;
@@ -21,8 +22,10 @@ public class QuestArrow extends Image {
 	Vector2 screenCoords = new Vector2((Gdx.graphics.getWidth() / 2 - (MadSand.TILESIZE / 2)),
 			Gdx.graphics.getHeight() / 2);
 
+	private static TextureRegion questArrow = Resources.getTexture("gui/arrow");
+
 	public QuestArrow(Quest quest) {
-		super(Resources.questArrow);
+		super(QuestArrow.questArrow);
 		super.setOrigin(Align.center);
 		this.quest = quest;
 	}

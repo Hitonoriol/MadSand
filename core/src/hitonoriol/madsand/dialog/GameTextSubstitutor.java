@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import org.apache.commons.text.StringSubstitutor;
 
-import hitonoriol.madsand.Resources;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 import me.xdrop.jrand.JRand;
 import me.xdrop.jrand.generators.person.FirstnameGenerator;

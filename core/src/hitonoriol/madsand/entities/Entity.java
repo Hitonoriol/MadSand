@@ -17,7 +17,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.containers.PairFloat;
@@ -34,17 +33,17 @@ import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.pathfinding.Path;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.TileProp;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public abstract class Entity extends MapEntity {
 	@JsonIgnore
-	private Sprite upSpr, downSpr, leftSpr, rightSpr;
+	private Sprite[] sprites; // Same order as in Direction.baseValues
 
 	public static final Comparator<Entity> speedComparator = (e1, e2) -> Double.compare(e2.getSpeed(), e1.getSpeed());
 
 	@JsonIgnore
-	private Sprite sprite;
 	private float spriteWidth;
 
 	public int x, y; // Grid coords
@@ -94,20 +93,23 @@ public abstract class Entity extends MapEntity {
 	public void setFov(int val) {
 		fov = val;
 	}
-	
+
 	public int getFov() {
 		return fov;
 	}
 
+	void setSprites(Sprite[] sprites) {
+		this.sprites = sprites;
+	}
+	
 	@JsonIgnore
-	void setSprites(Sprite u, Sprite d, Sprite l, Sprite r) {
-		upSpr = u;
-		downSpr = d;
-		leftSpr = l;
-		rightSpr = r;
-		sprite = d;
-
-		spriteWidth = downSpr.getWidth();
+	void setSprites(Sprite r, Sprite u, Sprite l, Sprite d) {
+		sprites = new Sprite[Direction.baseValues.length];
+		sprites[Direction.RIGHT.baseOrdinal()] = r;
+		sprites[Direction.UP.baseOrdinal()] = u;
+		sprites[Direction.LEFT.baseOrdinal()] = l;
+		sprites[Direction.DOWN.baseOrdinal()] = d;
+		spriteWidth = d.getWidth();
 	}
 
 	@JsonIgnore
@@ -116,7 +118,7 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public TextureRegion getSprite() {
-		return sprite;
+		return sprites[stats.look.baseOrdinal()];
 	}
 
 	public float getAnimationDuration() {
@@ -593,19 +595,6 @@ public abstract class Entity extends MapEntity {
 			return;
 
 		stats.look = dir;
-
-		if (dir == Direction.UP)
-			sprite = upSpr;
-
-		if (dir == Direction.DOWN)
-			sprite = downSpr;
-
-		if (dir == Direction.LEFT)
-			sprite = leftSpr;
-
-		if (dir == Direction.RIGHT)
-			sprite = rightSpr;
-
 	}
 
 	boolean canWalk(Direction dir) {

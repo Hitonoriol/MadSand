@@ -11,8 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.Resources;
+import hitonoriol.madsand.entities.inventory.ItemUI;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.resources.Resources;
 
 public abstract class ItemButton extends Group {
 	private final float WIDTH = 390;
@@ -40,7 +41,7 @@ public abstract class ItemButton extends Group {
 		buttonTable.add(itemLabel).width(150).align(Align.center);
 		buttonTable.setFillParent(true);
 
-		highlight = new Image(Resources.noEquip);
+		highlight = new Image(ItemUI.emptyItem);
 		highlight.setVisible(false);
 		highlight.setSize(WIDTH, HEIGHT);
 

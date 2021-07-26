@@ -1,6 +1,6 @@
 package hitonoriol.madsand.gui.textgenerator;
 
-import hitonoriol.madsand.Resources;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
 public abstract class TooltipTextGenerator {

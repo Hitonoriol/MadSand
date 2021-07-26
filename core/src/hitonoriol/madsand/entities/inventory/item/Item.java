@@ -24,13 +24,13 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import hitonoriol.madsand.DynamicallyCastable;
 import hitonoriol.madsand.HotbarAssignable;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
 import hitonoriol.madsand.gfx.TextureProcessor;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 

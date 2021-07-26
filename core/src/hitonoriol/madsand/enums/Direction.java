@@ -3,6 +3,7 @@ package hitonoriol.madsand.enums;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -14,6 +15,7 @@ public enum Direction {
 	private static final Direction[] values = Direction.values();
 	public static List<Direction> directions = new ArrayList<>(Arrays.asList(values));
 	public static Direction[] baseValues = { RIGHT, UP, LEFT, DOWN };
+	public static final int BASE_DIRECTIONS = 4, TOTAL_DIRECTIONS = 8;
 
 	public Direction opposite() {
 		switch (this) {
@@ -62,8 +64,24 @@ public enum Direction {
 	public float getRotation() {
 		return ArrayUtils.indexOf(values, this) * 45f;
 	}
+	
+	public static void forEachBase(Consumer<Direction> action) {
+		for (Direction dir : baseValues)
+			action.accept(dir);
+	}
 
 	public static Direction random() {
 		return Utils.randElement(baseValues);
+	}
+	
+	public int baseOrdinal() {
+		if (!isBase())
+			return -1;
+		
+		return ArrayUtils.indexOf(baseValues, this);
+	}
+	
+	public Direction getBase(int idx) {
+		return baseValues[idx];
 	}
 }

@@ -12,7 +12,6 @@ import com.badlogic.gdx.utils.Timer;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Faction;
 import hitonoriol.madsand.entities.Player;
@@ -20,6 +19,7 @@ import hitonoriol.madsand.entities.inventory.ItemUI;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.properties.WorldGenProp;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.Location;
 import hitonoriol.madsand.world.Settlement;

@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
@@ -28,6 +27,7 @@ import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.pathfinding.Path;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.screens.GameWorldRenderer;
 import hitonoriol.madsand.util.Functional;
 

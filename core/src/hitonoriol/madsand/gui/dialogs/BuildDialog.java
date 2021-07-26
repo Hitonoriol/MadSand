@@ -17,14 +17,15 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.entities.inventory.ItemUI;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.properties.ObjectProp;
+import hitonoriol.madsand.resources.Resources;
 
 public class BuildDialog extends GameDialog {
 
@@ -115,7 +116,7 @@ class BuildDialogEntry extends Group {
 	private void initListeners() {
 		super.addListener(new InputListener() {
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-				container.setBackground(Resources.noEquip);
+				container.setBackground(ItemUI.emptyItem);
 			}
 
 			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {

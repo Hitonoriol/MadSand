@@ -18,6 +18,7 @@ import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.properties.Prefs;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.screens.AbstractScreen;
 import hitonoriol.madsand.screens.CraftScreen;
 import hitonoriol.madsand.screens.DeathScreen;

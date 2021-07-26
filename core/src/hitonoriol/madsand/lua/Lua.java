@@ -10,11 +10,11 @@ import org.luaj.vm2.lib.jse.JsePlatform;
 
 import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.properties.Tutorial;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
 public class Lua {

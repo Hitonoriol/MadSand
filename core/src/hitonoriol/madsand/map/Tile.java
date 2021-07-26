@@ -7,10 +7,10 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.properties.TileProp;
+import hitonoriol.madsand.resources.Resources;
 
 public class Tile {
 	@JsonIgnore

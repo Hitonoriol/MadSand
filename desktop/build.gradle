@@ -4,7 +4,8 @@ sourceSets.test.java.srcDirs = []
 
 project.ext.mainClassName = "hitonoriol.madsand.desktop.Launcher"
 project.ext.rootDir = file(".")
-project.ext.assetsDir = new File("../core/assets")
+project.ext.runDir = file(rootDir.absolutePath + "/desktop")
+project.ext.assetsDir = file(rootDir.absolutePath + "/core/assets")
 archivesBaseName = appName
 
 compileJava {
@@ -15,7 +16,7 @@ task run(dependsOn: classes, type: JavaExec) {
 	main = project.mainClassName
 	classpath = sourceSets.main.runtimeClasspath
 	standardInput = System.in
-	workingDir = project.assetsDir
+	workingDir = project.runDir
 	ignoreExitValue = true
 }
 
@@ -24,10 +25,7 @@ import static groovy.io.FileType.DIRECTORIES
 task texturePacker {
 	doLast {
 		def root = project.rootDir.absolutePath + "/core"
-		def dirs = [];
-		new File(root + "/textures").traverse(type: DIRECTORIES, maxDepth: 0) {
-			TexturePacker.process(it.absolutePath, root + "/assets/textures", it.name)
-		};
+		TexturePacker.process(root + "/textures", root + "/assets/textures", "textures")
 	}
 }
 
@@ -35,7 +33,7 @@ task debug(dependsOn: classes, type: JavaExec) {
 	main = project.mainClassName
 	classpath = sourceSets.main.runtimeClasspath
 	standardInput = System.in
-	workingDir = project.assetsDir
+	workingDir = project.runDir
 	ignoreExitValue = true
 	debug = true
 }

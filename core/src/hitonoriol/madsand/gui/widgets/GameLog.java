@@ -7,9 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.gui.OverlayMouseoverListener;
 import hitonoriol.madsand.input.Mouse;
+import hitonoriol.madsand.resources.Resources;
 
 public class GameLog extends Table {
 	final float WIDTH = 335;
@@ -53,7 +53,7 @@ public class GameLog extends Table {
 			logTable.row();
 			tpm++;
 		}
-		logTable.setBackground(Resources.loadNinePatch("misc/darkness75.png"));
+		logTable.setBackground(Resources.loadNinePatch("misc/darkness75"));
 		inputField.debug();
 		inputField.setVisible(false);
 

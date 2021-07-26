@@ -1,11 +1,11 @@
 package hitonoriol.madsand.map.object;
 
-import hitonoriol.madsand.Resources;
 import hitonoriol.madsand.TimeDependent;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.gui.dialogs.ItemFactoryUI;
 import hitonoriol.madsand.map.ItemProducer;
 import hitonoriol.madsand.properties.ItemProp;
+import hitonoriol.madsand.resources.Resources;
 
 public class ItemFactory extends BuiltObject implements TimeDependent {
 	private ItemProducer itemProducer;
