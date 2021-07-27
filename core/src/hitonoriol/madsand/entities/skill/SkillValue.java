@@ -8,21 +8,22 @@ public class SkillValue {
 	final static int DEFAULT_REQUIRED_EXP = 30;
 	final static int DEFAULT_MAX_LEVEL = 100;
 
-	public int lvl, exp, requiredExp;
+	public int lvl;
+	public double exp, requiredExp;
 	public double lvUpMultiplier;
 
-	public SkillValue(int lvl, int exp, int requiredExp, double lvUpMultiplier) {
+	public SkillValue(int lvl, double exp, double requiredExp, double lvUpMultiplier) {
 		this.lvl = lvl;
 		this.exp = exp;
 		this.requiredExp = requiredExp;
 		this.lvUpMultiplier = lvUpMultiplier;
 	}
 
-	public SkillValue(int requiredExp, double multiplier) {
+	public SkillValue(double requiredExp, double multiplier) {
 		this(0, 0, requiredExp, multiplier);
 	}
 
-	public SkillValue(int requiredExp) {
+	public SkillValue(double requiredExp) {
 		this(0, 0, requiredExp, DEFAULT_MULTIPLIER);
 	}
 

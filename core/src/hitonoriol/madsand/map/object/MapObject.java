@@ -97,7 +97,7 @@ public class MapObject extends MapEntity {
 	}
 
 	public void interact(Player player, Runnable interaction) {
-		if (player.stats.isToolEquipped(Tool.Type.Hammer))
+		if (player.stats().isToolEquipped(Tool.Type.Hammer))
 			interactIfPossible(() -> player.startResourceGathering(this));
 
 		else if (!onInteract.equals(Resources.emptyField))
@@ -134,6 +134,10 @@ public class MapObject extends MapEntity {
 
 	public boolean isDestroyed() {
 		return id == 0;
+	}
+
+	public boolean isTransparent() {
+		return nocollide || isDestroyed();
 	}
 
 	private boolean verify() {

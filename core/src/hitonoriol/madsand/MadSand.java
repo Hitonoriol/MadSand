@@ -7,7 +7,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Timer;
 
@@ -43,8 +42,6 @@ public class MadSand extends Game {
 
 	private static boolean worldUntouched = true;
 
-	public static SpriteBatch batch;
-
 	private World world;
 	Storage<AbstractScreen<?>> currentScreen = new Storage<>();
 	private static MadSand game;
@@ -60,7 +57,6 @@ public class MadSand extends Game {
 	public void create() {
 		Utils.out("Starting initialization!");
 		game = this;
-		batch = new SpriteBatch();
 		gameWorld = new GameWorldRenderer();
 		Gdx.graphics.setContinuousRendering(false);
 
@@ -75,7 +71,6 @@ public class MadSand extends Game {
 		initNewGame();
 		initScreens();
 		Keyboard.initDefaultKeyBinds();
-
 		Utils.out("End of initialization!");
 	}
 

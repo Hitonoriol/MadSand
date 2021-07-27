@@ -1,0 +1,9 @@
+{
+	bleed: false,
+	edgePadding: false,
+	duplicatePadding: false,
+	filterMin: Nearest,
+	filterMag: Nearest,
+	premultiplyAlpha: false,
+	scaleResampling: [ bicubic ]
+}

@@ -101,7 +101,7 @@ public abstract class Entity extends MapEntity {
 	void setSprites(Sprite[] sprites) {
 		this.sprites = sprites;
 	}
-	
+
 	@JsonIgnore
 	void setSprites(Sprite r, Sprite u, Sprite l, Sprite d) {
 		sprites = new Sprite[Direction.baseValues.length];
@@ -117,6 +117,7 @@ public abstract class Entity extends MapEntity {
 		setSprites(s, s, s, s);
 	}
 
+	@JsonIgnore
 	public TextureRegion getSprite() {
 		return sprites[stats.look.baseOrdinal()];
 	}
@@ -349,11 +350,16 @@ public abstract class Entity extends MapEntity {
 		stats.check();
 	}
 
-	public void heal(int by) {
+	public void heal(int amt) {
+		if (amt < 0) {
+			damage(-amt);
+			return;
+		}
+
 		if (stats.hp < stats.mhp)
 			playAnimation(Resources.createAnimation(Resources.healAnimStrip));
 
-		stats.hp += by;
+		stats.hp += amt;
 		stats.check();
 
 	}

@@ -68,11 +68,14 @@
 		"name" : "Hewn rock"
 	},
 	"9" : {
-		"@type" : "MapObject",
+		"@type" : "ResourceObject",
 		"hp" : 1,
 		"harvestHp" : 10,
 		"skill" : "Woodcutting",
 		"isWall" : true,
+		"altItems" : {
+			"Axe" : [ 1 ]
+		},
 		"name" : "Wooden planks"
 	},
 	"10" : {

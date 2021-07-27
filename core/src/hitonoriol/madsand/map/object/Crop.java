@@ -54,6 +54,11 @@ public class Crop extends MapObject implements TimeDependent {
 		if (curStage == LAST_STAGE)
 			MadSand.world().exec(map -> {
 				Pair position = getPosition();
+				if (position.isEmpty()) {
+					map.getTimeScheduler().remove(this);
+					Utils.dbg("Crop {%s} was not found on the map, removing...", this);
+					return;
+				}
 				Utils.dbg("%s has reached its final growth stage: replacing object at %s", getName(), position);
 				map.delObject(position);
 				map.addObject(position, id);

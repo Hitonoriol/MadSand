@@ -294,7 +294,7 @@ public class Player extends Entity {
 		scheduledAction = null;
 	}
 
-	public void addExp(int amount) {
+	public void addExp(double amount) {
 		stats.skills.increaseSkill(Skill.Level, amount);
 		Gui.refreshOverlay();
 	}
@@ -319,13 +319,11 @@ public class Player extends Entity {
 		return inventory;
 	}
 
-	public void increaseSkill(Skill skill, int by) {
-		if (by < 1)
-			by = 1;
+	public void increaseSkill(Skill skill, double by) {
 		stats.skills.increaseSkill(skill, by);
 
-		if (!skill.isFightingSkill())
-			stats.skills.increaseSkill(Skill.Level);
+		if (skill.isResourceSkill())
+			stats.skills.increaseSkill(Skill.Level, by * Skill.RES_EXP_COEF);
 	}
 
 	public void increaseSkill(Skill skill) {
@@ -895,7 +893,7 @@ public class Player extends Entity {
 			if (item.isDirectional())
 				object.setDirection(stats.look);
 		} else
-			map.addTile(x, y, stats.look, item.getAltObject());
+			map.addTile(x, y, item.getAltObject());
 
 		inventory.delItem(item, 1);
 	}

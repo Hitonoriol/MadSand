@@ -257,7 +257,8 @@ public class Overlay extends Stage {
 		hpBar.setRange(0, stats.mhp).setValue(stats.hp);
 		foodBar.setRange(0, stats.maxFood).setValue(stats.food);
 		staminaBar.setRange(0, stats.maxstamina).setValue(stats.stamina);
-		expBar.setRange(0, stats.skills.get(Skill.Level).requiredExp).setStatText("LVL " + stats.skills.getLvl())
+		expBar.setRange(0, (int) stats.skills.get(Skill.Level).requiredExp)
+				.setStatText("LVL " + stats.skills.getLvl())
 				.setValue(stats.skills.getExp());
 
 		String info = (MadSand.world().getLocation().name +

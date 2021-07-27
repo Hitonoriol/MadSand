@@ -756,7 +756,7 @@ public class World {
 	}
 
 	public void updateLight() {
-		getCurLoc().updateLight(player.x, player.y, player.getFov());
+		getCurLoc().updateLight(player.x, player.y, player.getFov(), player.stats().luminosity);
 	}
 
 	private void actionTick() {

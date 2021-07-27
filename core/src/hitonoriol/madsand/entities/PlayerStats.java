@@ -20,7 +20,7 @@ import hitonoriol.madsand.util.Functional;
 import hitonoriol.madsand.util.Utils;
 
 public class PlayerStats extends Stats {
-	static float BASE_SATIATION_PERCENT = 90;
+	static float BASE_SATIATION_PERCENT = 85;
 
 	private int statBonus = 0; // Total equipment stat bonus
 
@@ -39,6 +39,7 @@ public class PlayerStats extends Stats {
 	@JsonIgnore
 	public Equipment equipment;
 
+	public double luminosity = 4.5;
 	public final int maxFood = 1000;
 	public int foodTicks = skills.getLvl(Skill.Survival);
 	public int food = maxFood;

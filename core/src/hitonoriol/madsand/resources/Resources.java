@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.type.MapType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
+import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.containers.AnimationContainer;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.containers.Pair.PairKeyDeserializer;
@@ -51,6 +52,7 @@ import hitonoriol.madsand.properties.QuestList;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.properties.Tutorial;
 import hitonoriol.madsand.properties.WorldGenProp;
+import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.worldgen.WorldGenPreset;
 
@@ -280,6 +282,10 @@ public class Resources {
 		return textureMap.get(name);
 	}
 
+	public static TextureAtlas getAtlas() {
+		return textures;
+	}
+
 	static final String FONT_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"'<>";
 	static final String FONT_PATH = "fonts/8bitoperator.ttf";
 
@@ -371,20 +377,24 @@ public class Resources {
 		return new Texture(extractPixmap(region));
 	}
 
-	private static SimpleDateFormat screenshotDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+	private static SimpleDateFormat screenshotDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
 
 	public static void takeScreenshot() {
-		byte[] pixels = ScreenUtils.getFrameBufferPixels(0, 0, Gdx.graphics.getBackBufferWidth(),
-				Gdx.graphics.getBackBufferHeight(), true);
+		Gui.gameUnfocus();
+		TimeUtils.scheduleTask(() -> {
+			byte[] pixels = ScreenUtils.getFrameBufferPixels(0, 0, Gdx.graphics.getBackBufferWidth(),
+					Gdx.graphics.getBackBufferHeight(), true);
 
-		for (int i = 4; i < pixels.length; i += 4)
-			pixels[i - 1] = (byte) 255;
+			for (int i = 4; i < pixels.length; i += 4)
+				pixels[i - 1] = (byte) 255;
 
-		Pixmap pixmap = new Pixmap(Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(),
-				Pixmap.Format.RGBA8888);
+			Pixmap pixmap = new Pixmap(Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(),
+					Pixmap.Format.RGBA8888);
 
-		BufferUtils.copy(pixels, 0, pixmap.getPixels(), pixels.length);
-		PixmapIO.writePNG(Gdx.files.local(Utils.now(screenshotDateFormat) + ".png"), pixmap);
-		pixmap.dispose();
+			BufferUtils.copy(pixels, 0, pixmap.getPixels(), pixels.length);
+			PixmapIO.writePNG(Gdx.files.local(Utils.now(screenshotDateFormat) + ".png"), pixmap);
+			pixmap.dispose();
+			Gui.gameResumeFocus();
+		}, Gui.DELAY);
 	}
 }

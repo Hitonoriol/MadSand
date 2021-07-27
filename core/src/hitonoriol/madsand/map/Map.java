@@ -87,9 +87,7 @@ public class Map {
 		purge();
 	}
 
-	public void postLoadInit() {
-		/*mapNpcs.forEach((coords, npc) -> registerTimeDependent(npc));*/
-	}
+	public void postLoadInit() {}
 
 	/* Cleanup, called on map switch/World.close() */
 	public void close() {
@@ -131,9 +129,10 @@ public class Map {
 
 	public void setTimeDependentMapEntities(HashMap<Pair, MapEntity> timeDependentMap) {
 		timeDependentMap.forEach((coords, entity) -> {
-			Utils.dbg("Restoring TimeDependent entity %s at %s", entity.getName(), coords);
 			entity.as(Entity.class).ifPresent(creature -> creature.postLoadInit());
-			entity.add(this, coords);
+			boolean restored = entity.add(this, coords);
+			Utils.dbg("{%X} Restoring %s at %s: %b",
+					timeScheduler.hashCode(), entity.getName(), coords, restored);
 		});
 	}
 
@@ -807,35 +806,36 @@ public class Map {
 			putLoot(x, y, items.get(i));
 	}
 
-	public void updateLight(int wx, int wy, int r) {
+	public void updateLight(int wx, int wy, int r, double luminosity) {
 		MutableBoolean blocksLight = new MutableBoolean(false);
 		Circle.forEachPoint(wx, wy, r, (x, y) -> {
 			if (!validCoords(wx + x, wy + y))
 				return;
 
-			Tile tile = getTile(wx + x, wy + y);
-			tile.visible = true;
 			blocksLight.setFalse();
-
 			Line.forEachPoint(wx, wy, wx + x, wy + y, (rx, ry) -> {
-				Tile rTile = getTile(rx, ry);
-				MapObject rObject = getObject(rx, ry);
+				double dstToCenter = Line.calcDistance(wx, wy, rx, ry);
+				Tile tile = getTile(rx, ry);
+				MapObject object = getObject(rx, ry);
 
-				if (blocksLight.booleanValue())
-					rTile.visible = false;
+				if (dstToCenter > luminosity)
+					tile.visible = !blocksLight.isTrue();
 
-				if (rObject != nullObject && !rObject.nocollide)
+				if (blocksLight.isFalse())
+					tile.visible = true;
+
+				if (!object.isTransparent())
 					blocksLight.setTrue();
 
-				if (rTile.visible)
-					rTile.visited = true;
+				if (tile.visible)
+					tile.visited = true;
 			});
 
 		});
 	}
 
-	public void updateLight(int wx, int wy, int renderRadius, int updateRadius) {
-		Circle.forEachPoint(wx, wy, updateRadius, (x, y) -> updateLight(x, y, renderRadius));
+	public void updateLight(int wx, int wy, int r) {
+		updateLight(wx, wy, r, 0);
 	}
 
 	public boolean putCrop(int x, int y, int id) { // item id

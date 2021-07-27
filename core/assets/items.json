@@ -1896,5 +1896,13 @@
 		"name" : "Copper ore",
 		"cost" : 9,
 		"weight" : 0.7
+	},
+	"186" : {
+		"name" : "Wooden Door",
+		"@type" : "Placeable",
+		"type" : "Object",
+		"recipe" : "1/3",
+		"altObject" : 11,
+		"cost" : 10
 	}
 }

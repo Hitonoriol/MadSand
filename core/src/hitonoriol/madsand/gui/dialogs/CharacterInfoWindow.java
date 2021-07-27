@@ -66,7 +66,7 @@ public class CharacterInfoWindow {
 		dialog.add().row();
 		statLabels.refreshStatLabels();
 		dialog.add(StatProgressBar.createLevelBar()
-				.setRange(0, stats.skills.get(Skill.Level).requiredExp)
+				.setRange(0, (int) stats.skills.get(Skill.Level).requiredExp)
 				.setStatText("LVL " + stats.skills.getLvl())
 				.setValue(stats.skills.getExp())
 				.setProgressSize(BAR_WIDTH * 1.75f, BAR_HEIGHT))
@@ -101,7 +101,7 @@ public class CharacterInfoWindow {
 
 		});
 	}
-	
+
 	public GameDialog getDialog() {
 		return dialog;
 	}
@@ -171,7 +171,7 @@ public class CharacterInfoWindow {
 					.padBottom(LINE_PAD);
 			skillTable.add(new StatProgressBar(skill.name())
 					.setStyle(skillStyle)
-					.setRange(0, skills.get(skill).requiredExp)
+					.setRange(0, (int) skills.get(skill).requiredExp)
 					.setStatText("LVL " + skills.getLvl(skill))
 					.setValue(skills.getExp(skill))
 					.setProgressSize(BAR_WIDTH, BAR_HEIGHT))

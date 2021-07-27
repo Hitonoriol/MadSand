@@ -64,7 +64,7 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 		return increaseSkill(skill, 1);
 	}
 
-	public boolean increaseSkill(Skill skill, int amt) {
+	public boolean increaseSkill(Skill skill, double amt) {
 		if (skill == Skill.None)
 			return false;
 
@@ -85,7 +85,7 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 	}
 
 	public int getExp(Skill skill) {
-		return get(skill).exp;
+		return (int) get(skill).exp;
 	}
 
 	public int getExp() {

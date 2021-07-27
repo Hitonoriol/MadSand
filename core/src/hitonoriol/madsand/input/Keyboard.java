@@ -160,13 +160,13 @@ public class Keyboard {
 			}, MadSand.player().getFov());
 
 		if (key == Keys.NUMPAD_3)
-			MadSand.getRenderer().changeZoom(0.05f);
+			MadSand.getRenderer().changeZoom(0.1f);
 
 		if (key == Keys.NUMPAD_1)
-			MadSand.getRenderer().changeZoom(-0.05f);
-
-		if (key == Keys.F5)
-			MadSand.world().timeTick(150);
+			MadSand.getRenderer().changeZoom(-0.1f);
+		
+		if (key == Keys.NUMPAD_5)
+			MadSand.getRenderer().setZoom(1);
 
 		if (isKeyPressed(Keys.CONTROL_LEFT)) {
 			if (key == Keys.DOWN)

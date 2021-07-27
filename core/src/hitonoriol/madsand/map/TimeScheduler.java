@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Timer;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.TimeDependent;
 import hitonoriol.madsand.util.TimeUtils;
+import hitonoriol.madsand.util.Utils;
 
 public class TimeScheduler {
 	private Timer timer = new Timer();
@@ -27,6 +28,7 @@ public class TimeScheduler {
 			TimeUtils.scheduleRepeatingTask(timer, () -> update(newUpdateList), MadSand.world().ticksToTime(updateRate));
 		}
 
+		Utils.dbg("Scheduler {%X} registered entity %s", this.hashCode(), entity);
 		updateMap.get(updateRate).add(entity);
 	}
 

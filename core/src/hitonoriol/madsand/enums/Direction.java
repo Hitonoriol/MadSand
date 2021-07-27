@@ -75,10 +75,7 @@ public enum Direction {
 	}
 	
 	public int baseOrdinal() {
-		if (!isBase())
-			return -1;
-		
-		return ArrayUtils.indexOf(baseValues, this);
+		return ordinal() / 2;
 	}
 	
 	public Direction getBase(int idx) {
