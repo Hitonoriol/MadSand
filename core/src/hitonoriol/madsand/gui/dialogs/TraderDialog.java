@@ -1,8 +1,6 @@
 package hitonoriol.madsand.gui.dialogs;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
@@ -18,8 +16,7 @@ import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.Location;
 
 public class TraderDialog extends GameDialog {
-
-	Trader npc;
+	private Trader npc;
 
 	public TraderDialog(Player player, Trader npc) {
 		super(npc.stats.name, Utils.randElement(Globals.values().traderGreetings), Gui.overlay);
@@ -31,35 +28,19 @@ public class TraderDialog extends GameDialog {
 
 		super.addButton(tradeButton);
 
-		if (!MadSand.world().inEncounter && MadSand.world().curLayer() == Location.LAYER_OVERWORLD) {
+		if (!MadSand.world().inEncounter() && MadSand.world().curLayer() == Location.LAYER_OVERWORLD) {
 			super.addButton(helpButton);
-			helpButton.addListener(new ChangeListener() {
-				@Override
-				public void changed(ChangeEvent event, Actor actor) {
-					ProceduralQuest quest = player.getQuestWorker().startProceduralQuest(npc.uid);
-					if (quest != ProceduralQuest.timeoutQuest)
-						addQuestReward(quest);
-					remove();
-				}
+			Gui.setAction(helpButton, () -> {
+				ProceduralQuest quest = player.getQuestWorker().startProceduralQuest(npc.uid);
+				if (quest != ProceduralQuest.timeoutQuest)
+					addQuestReward(quest);
+				remove();
 			});
 		}
 
 		super.addButton(closeButton);
-
-		tradeButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				player.interact(npc);
-				remove();
-			}
-		});
-
-		closeButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				remove();
-			}
-		});
+		Gui.setAction(tradeButton, () -> player.tradeWith(npc));
+		Gui.setAction(closeButton, () -> remove());
 	}
 
 	private void addQuestReward(ProceduralQuest quest) {
@@ -72,5 +53,4 @@ public class TraderDialog extends GameDialog {
 		quest.execOnCompletion = "world:getCurLoc():getNpc(" + npc.uid + "):addItem(" + currency + ", " + curQuantity
 				+ ");";
 	}
-
 }

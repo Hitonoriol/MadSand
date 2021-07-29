@@ -101,7 +101,7 @@ public class CellInfoGenerator extends TooltipTextGenerator {
 		if (player.at(x, y))
 			getPlayerInfo();
 
-		if (!tile.visible) {
+		if (!tile.visible()) {
 			addLine("You can't see anything there");
 			return super.getText();
 		}
@@ -182,6 +182,7 @@ public class CellInfoGenerator extends TooltipTextGenerator {
 
 	private void getDebugInfo() {
 		addLine("[#C3C3C3]" + lineDelimiter)
+				.addLine("Light level: " + tile.getLightLevel() + " (sky: " + MadSand.world().getSkyLight() + ")")
 				.addLine("Objects on map: " + loc.getObjectCount())
 				.addLine("NPCs on map: " + loc.getNpcCount());
 		if (!object.equals(Map.nullObject))

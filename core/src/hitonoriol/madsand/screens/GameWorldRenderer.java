@@ -34,7 +34,6 @@ import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.pathfinding.Path;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.resources.TextureMap;
-import hitonoriol.madsand.util.Utils;
 
 public class GameWorldRenderer {
 	static final int TILESIZE = MadSand.TILESIZE;
@@ -48,7 +47,7 @@ public class GameWorldRenderer {
 
 	private SpriteBatch batch = new SpriteBatch();
 	private OrthographicCamera camera = new OrthographicCamera();
-	private Light light = new Light();
+	private LightMap light = new LightMap();
 	private ConcurrentHashMap<PairFloat, AnimationContainer> animations = new ConcurrentHashMap<>();
 	private ConcurrentHashMap<Path, PathDescriptor> paths = new ConcurrentHashMap<>();
 	private List<Pair> renderArea = new ArrayList<>();
@@ -185,8 +184,8 @@ public class GameWorldRenderer {
 			drawPath(Mouse.getPathToCursor());
 	}
 
-	private void darkenTile(int x, int y, int dstToPlayer) {
-		batch.draw(light.get(dstToPlayer), x * TILESIZE, y * TILESIZE);
+	private void darkenTile(int x, int y, int dstFromLight) {
+		batch.draw(light.get(dstFromLight), x * TILESIZE, y * TILESIZE);
 	}
 
 	private void drawGame() {
@@ -207,7 +206,7 @@ public class GameWorldRenderer {
 
 			tile = map.getTile(x, y);
 
-			if (!tile.visible && !tile.visited) //Don't render tiles which were never seen
+			if (!tile.visible() && !tile.visited) //Don't render tiles which were never seen
 				continue;
 
 			if (!map.validCoords(x, y) && MadSand.world().isUnderGround()) // Don't render default tile while underground
@@ -223,19 +222,19 @@ public class GameWorldRenderer {
 			tile = map.getTile(x, y);
 			object = map.getObject(x, y);
 			npc = map.getNpc(x, y);
-			tileVisited = tile.visited && !tile.visible;
+			tileVisited = tile.visited && !tile.visible();
 
 			if (!map.validCoords(x, y) && MadSand.world().isUnderGround())
 				continue;
 
-			if (!tile.visible && !tile.visited) //Don't render anything on tiles which were never seen
+			if (!tile.visible() && !tile.visited) //Don't render anything on tiles which were never seen
 				continue;
 
 			if (tileVisited && object.isWall) // If object is a wall, it'll be rendered even when not visible
 				renderObject(object, x, y);
 
 			if (tileVisited) { // Render visited & not currently visible tiles partially darkened
-				darkenTile(x, y, player.distanceTo(x, y));
+				darkenTile(x, y, tile.getLightLevel());
 				continue;
 			}
 
@@ -325,24 +324,25 @@ public class GameWorldRenderer {
 		camera.update();
 	}
 
-	private static class Light extends TextureMap<Integer> {
+	private static class LightMap extends TextureMap<Integer> {
 		private final static float LIGHT_START = 0.16f, ALPHA_STEP = 0.055f;
 		private final static int LIGHT_LEVELS = (int) ((1f - LIGHT_START) / ALPHA_STEP);
-		private final static java.util.Map<Integer, Integer> lightMap = new HashMap<>();
-
 		/* How often <n> repeats */
 		private final static IntUnaryOperator lightLevelFunction = n -> (int) Math.log(1.2 * n);
+		private final static int MAX_DISTANCE = IntStream.range(1, LIGHT_LEVELS + 1)
+				.map(lightLevelFunction)
+				.sum();
+		private final static java.util.Map<Integer, Integer> lightLvlMap = new HashMap<>();
+
+		
 		private final static String REGION = "light";
 
-		private Light() {
+		private LightMap() {
 			super(Resources.getAtlas(), REGION);
 			createLightLevels();
-			int lightEntries = IntStream.range(1, LIGHT_LEVELS + 1)
-					.map(lightLevelFunction)
-					.sum();
-			for (int dst = 1, lightLvl = 1, occurences = 0; dst <= lightEntries; ++dst) {
-				Utils.dbg("Light dst=%d lvl=%d", dst, lightLvl);
-				lightMap.put(dst, lightLvl);
+			
+			for (int dst = 1, lightLvl = 1, occurences = 0; dst <= MAX_DISTANCE; ++dst) {
+				lightLvlMap.put(dst, lightLvl);
 				if (lightLvl < LIGHT_LEVELS && ++occurences >= lightLevelFunction.applyAsInt(lightLvl)) {
 					++lightLvl;
 					occurences = 0;
@@ -355,7 +355,6 @@ public class GameWorldRenderer {
 			for (int lvl = 1; lvl <= LIGHT_LEVELS; ++lvl) {
 				Pixmap light = new Pixmap(TILESIZE, TILESIZE, Format.RGBA8888);
 				color.a = Math.min(LIGHT_START + ALPHA_STEP * (lvl - 1), 1f);
-				Utils.dbg("Preparing light level %d alpha=%f", lvl, color.a);
 				light.setColor(color);
 				light.fill();
 				atlas.addRegion(REGION + "/" + lvl, new TextureRegion(new Texture(light)));
@@ -363,8 +362,8 @@ public class GameWorldRenderer {
 		}
 
 		@Override
-		public AtlasRegion get(Integer distanceToPlayer) {
-			return super.get(lightMap.getOrDefault(distanceToPlayer, LIGHT_LEVELS));
+		public AtlasRegion get(Integer distance) {
+			return super.get(lightLvlMap.get(Math.max(1, Math.min(distance, MAX_DISTANCE))));
 		}
 	}
 

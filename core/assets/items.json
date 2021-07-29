@@ -251,10 +251,14 @@
 		"weight" : 1.0
 	},
 	"26" : {
-		"@type" : "Item",
-		"name" : "???",
-		"cost" : 1,
-		"weight" : 1.0
+		"@type" : "Placeable",
+		"type" : "Tile",
+		"altObject" : 51,
+		"recipe" : "2/1:9/1",
+		"craftQuantity" : 10,
+		"name" : "Gravel path",
+		"cost" : 0,
+		"weight" : 0.1
 	},
 	"27" : {
 		"name" : "Wooden floor",
@@ -365,13 +369,13 @@
 		"cropContainer": {
 			"soil" : 15,
 			"cropStages" : [ {
-				"stageLength" : 20,
+				"stageLength" : 50,
 				"objectId" : 20
 			}, {
-				"stageLength" : 30,
+				"stageLength" : 60,
 				"objectId" : 19
 			}, {
-				"stageLength" : 30,
+				"stageLength" : 70,
 				"objectId" : 63
 			}, {
 				"objectId" : 21
@@ -486,13 +490,13 @@
 		"cropContainer": {
 			"soil" : 15,
 			"cropStages" : [ {
-				"stageLength" : 20,
+				"stageLength" : 50,
 				"objectId" : 43
 			}, {
-				"stageLength" : 30,
+				"stageLength" : 60,
 				"objectId" : 44
 			}, {
-				"stageLength" : 60,
+				"stageLength" : 70,
 				"objectId" : 45
 			}, {
 				"objectId" : 46
@@ -509,13 +513,13 @@
 		"cropContainer": {
 			"soil" : 15,
 			"cropStages" : [ {
-				"stageLength" : 20,
+				"stageLength" : 50,
 				"objectId" : 47
 			}, {
-				"stageLength" : 30,
+				"stageLength" : 60,
 				"objectId" : 48
 			}, {
-				"stageLength" : 60,
+				"stageLength" : 70,
 				"objectId" : 49
 			}, {
 				"objectId" : 50
@@ -532,13 +536,13 @@
 		"cropContainer": {
 			"soil" : 15,
 			"cropStages" : [ {
-				"stageLength" : 20,
+				"stageLength" : 50,
 				"objectId" : 51
 			}, {
-				"stageLength" : 40,
+				"stageLength" : 60,
 				"objectId" : 52
 			}, {
-				"stageLength" : 50,
+				"stageLength" : 70,
 				"objectId" : 53
 			}, {
 				"objectId" : 54
@@ -555,13 +559,13 @@
 		"cropContainer": {
 			"soil" : 15,
 			"cropStages" : [ {
-				"stageLength" : 30,
+				"stageLength" : 50,
 				"objectId" : 55
 			}, {
 				"stageLength" : 60,
 				"objectId" : 56
 			}, {
-				"stageLength" : 60,
+				"stageLength" : 70,
 				"objectId" : 57
 			}, {
 				"objectId" : 58
@@ -578,13 +582,13 @@
 		"cropContainer": {
 			"soil" : 15,
 			"cropStages" : [ {
-				"stageLength" : 30,
+				"stageLength" : 60,
 				"objectId" : 59
 			}, {
-				"stageLength" : 60,
+				"stageLength" : 70,
 				"objectId" : 60
 			}, {
-				"stageLength" : 60,
+				"stageLength" : 80,
 				"objectId" : 61
 			}, {
 				"objectId" : 62
@@ -609,17 +613,17 @@
 	},
 	"58" : {
 		"name" : "Pint of beer",
-		"recipe" : "65/3:66/3",
-		"satiationAmount" : 30,
-		"staminaAmount" : 5,
-		"healAmount" : -5,
+		"recipe" : "65/2:66/2",
+		"satiationAmount" : 40,
+		"staminaAmount" : 7.5,
+		"healAmount" : 0,
 		"cost" : 12,
 		"@type" : "Consumable",
 		"weight" : 0.5
 	},
 	"59" : {
 		"name" : "Cooked poultry",
-		"satiationAmount" : 30,
+		"satiationAmount" : 35,
 		"staminaAmount" : 5,
 		"healAmount" : 5,
 		"cost" : 15,
@@ -630,7 +634,7 @@
 		"name" : "Healing potion",
 		"recipe" : "45/3:58/1",
 		"healAmount" : 25,
-		"staminaAmount" : 2.5,
+		"staminaAmount" : 5,
 		"cost" : 25,
 		"@type" : "Consumable",
 		"weight" : 0.2
@@ -1184,13 +1188,13 @@
 		"cropContainer": {
 			"soil" : 15,
 			"cropStages" : [ {
-				"stageLength" : 70,
+				"stageLength" : 140,
 				"objectId" : 115
 			}, {
-				"stageLength" : 80,
+				"stageLength" : 150,
 				"objectId" : 116
 			}, {
-				"stageLength" : 90,
+				"stageLength" : 160,
 				"objectId" : 117
 			}, {
 				"objectId" : 118
@@ -1207,13 +1211,13 @@
 		"cropContainer": {
 			"soil" : 15,
 			"cropStages" : [ {
-				"stageLength" : 70,
+				"stageLength" : 140,
 				"objectId" : 119
 			}, {
-				"stageLength" : 80,
+				"stageLength" : 150,
 				"objectId" : 120
 			}, {
-				"stageLength" : 90,
+				"stageLength" : 160,
 				"objectId" : 121
 			}, {
 				"objectId" : 122
@@ -1230,13 +1234,13 @@
 		"cropContainer": {
 			"soil" : 15,
 			"cropStages" : [ {
-				"stageLength" : 80,
+				"stageLength" : 160,
 				"objectId" : 123
 			}, {
-				"stageLength" : 90,
+				"stageLength" : 170,
 				"objectId" : 124
 			}, {
-				"stageLength" : 100,
+				"stageLength" : 180,
 				"objectId" : 125
 			}, {
 				"objectId" : 126
@@ -1253,13 +1257,13 @@
 		"cropContainer": {
 			"soil" : 15,
 			"cropStages" : [ {
-				"stageLength" : 70,
+				"stageLength" : 140,
 				"objectId" : 127
 			}, {
-				"stageLength" : 80,
+				"stageLength" : 150,
 				"objectId" : 128
 			}, {
-				"stageLength" : 90,
+				"stageLength" : 160,
 				"objectId" : 129
 			}, {
 				"objectId" : 130
@@ -1322,13 +1326,13 @@
 		"cropContainer": {
 			"soil" : 15,
 			"cropStages" : [ {
-				"stageLength" : 70,
+				"stageLength" : 140,
 				"objectId" : 139
 			}, {
-				"stageLength" : 80,
+				"stageLength" : 150,
 				"objectId" : 140
 			}, {
-				"stageLength" : 90,
+				"stageLength" : 160,
 				"objectId" : 141
 			}, {
 				"objectId" : 142
@@ -1345,13 +1349,13 @@
 		"cropContainer": {
 			"soil" : 15,
 			"cropStages" : [ {
-				"stageLength" : 80,
+				"stageLength" : 160,
 				"objectId" : 143
 			}, {
-				"stageLength" : 90,
+				"stageLength" : 170,
 				"objectId" : 144
 			}, {
-				"stageLength" : 100,
+				"stageLength" : 180,
 				"objectId" : 145
 			}, {
 				"objectId" : 146
@@ -1368,13 +1372,13 @@
 		"cropContainer": {
 			"soil" : 15,
 			"cropStages" : [ {
-				"stageLength" : 60,
+				"stageLength" : 120,
 				"objectId" : 147
 			}, {
-				"stageLength" : 70,
+				"stageLength" : 130,
 				"objectId" : 148
 			}, {
-				"stageLength" : 80,
+				"stageLength" : 140,
 				"objectId" : 149
 			}, {
 				"objectId" : 150
@@ -1391,13 +1395,13 @@
 		"cropContainer": {
 			"soil" : 15,
 			"cropStages" : [ {
-				"stageLength" : 150,
+				"stageLength" : 200,
 				"objectId" : 151
 			}, {
-				"stageLength" : 160,
+				"stageLength" : 210,
 				"objectId" : 152
 			}, {
-				"stageLength" : 170,
+				"stageLength" : 220,
 				"objectId" : 153
 			}, {
 				"objectId" : 154
@@ -1405,15 +1409,18 @@
 		}
 	},
 	"125" : {
-		"@type" : "Item",
+		"@type" : "Consumable",
+		"satiationAmount" : 20,
+		"staminaAmount" : 2,
+		"healAmount" : 2,
 		"name" : "Egg",
 		"cost" : 8,
 		"weight" : 0.1
 	},
 	"126" : {
 		"name" : "Milk",
-		"satiationAmount" : 20,
-		"staminaAmount" : 2,
+		"satiationAmount" : 30,
+		"staminaAmount" : 3.5,
 		"healAmount" : 4,
 		"cost" : 9,
 		"@type" : "Consumable",
@@ -1743,13 +1750,13 @@
 		"cropContainer": {
 			"soil" : 0,
 			"cropStages" : [ {
-				"stageLength" : 200,
+				"stageLength" : 150,
 				"objectId" : 160
 			}, {
-				"stageLength" : 200,
+				"stageLength" : 150,
 				"objectId" : 160
 			}, {
-				"stageLength" : 200,
+				"stageLength" : 150,
 				"objectId" : 160
 			}, {
 				"objectId" : 2

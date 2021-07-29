@@ -96,6 +96,10 @@ public class Stats {
 	public void restore() {
 		hp = mhp;
 	}
+	
+	public boolean healthFull() {
+		return hp == mhp;
+	}
 
 	public void calcActionCosts() {
 		int dexterity = get(Stat.Dexterity);

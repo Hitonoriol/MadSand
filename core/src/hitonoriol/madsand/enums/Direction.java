@@ -5,17 +5,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import hitonoriol.madsand.util.Utils;
 
 public enum Direction {
 	RIGHT, UP_RIGHT, UP, UP_LEFT, LEFT, DOWN_LEFT, DOWN, DOWN_RIGHT;
 
 	private static final Direction[] values = Direction.values();
+	public static final Direction[] baseValues = { RIGHT, UP, LEFT, DOWN };
 	public static List<Direction> directions = new ArrayList<>(Arrays.asList(values));
-	public static Direction[] baseValues = { RIGHT, UP, LEFT, DOWN };
-	public static final int BASE_DIRECTIONS = 4, TOTAL_DIRECTIONS = 8;
+	public static final int BASE_DIRECTIONS = baseValues.length, TOTAL_DIRECTIONS = values.length;
 
 	public Direction opposite() {
 		switch (this) {
@@ -48,10 +46,6 @@ public enum Direction {
 		return (this == UP_LEFT || this == UP_RIGHT || this == DOWN_LEFT || this == DOWN_RIGHT);
 	}
 
-	private Direction rotate(int dir) {
-		return values[Math.floorMod(ArrayUtils.indexOf(values, this) + dir, values.length)];
-	}
-
 	public Direction rotateCounterClockwise() {
 		return rotate(1);
 	}
@@ -60,9 +54,21 @@ public enum Direction {
 		return rotate(-1);
 	}
 
+	private Direction rotate(int dir) {
+		return values[Math.floorMod(ordinal() + dir, TOTAL_DIRECTIONS)];
+	}
+
 	/* Rotation in degrees where RIGHT is 0 */
 	public float getRotation() {
-		return ArrayUtils.indexOf(values, this) * 45f;
+		return ordinal() * 45f;
+	}
+
+	public int baseOrdinal() {
+		return ordinal() / 2;
+	}
+
+	public Direction getBase(int idx) {
+		return baseValues[idx];
 	}
 	
 	public static void forEachBase(Consumer<Direction> action) {
@@ -72,13 +78,5 @@ public enum Direction {
 
 	public static Direction random() {
 		return Utils.randElement(baseValues);
-	}
-	
-	public int baseOrdinal() {
-		return ordinal() / 2;
-	}
-	
-	public Direction getBase(int idx) {
-		return baseValues[idx];
 	}
 }

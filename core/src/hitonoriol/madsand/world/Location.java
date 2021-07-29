@@ -146,4 +146,8 @@ public class Location {
 		}
 	}
 
+	public String toString() {
+		return String.format("Location {%s} Settlement: %b",
+				name, isSettlement());
+	}
 }

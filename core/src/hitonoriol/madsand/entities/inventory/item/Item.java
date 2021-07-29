@@ -230,7 +230,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 
 	@Override
 	public String toString() {
-		return String.format("[%d] {%s} [id: %d] %d %s (%.2f kg)",
+		return String.format("[%X] {%s} [id: %d] %d %s (%.2f kg)",
 				hashCode(),
 				getClass().getSimpleName(),
 				id,

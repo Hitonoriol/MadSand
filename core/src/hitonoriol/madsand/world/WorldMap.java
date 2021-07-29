@@ -6,45 +6,44 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.map.Map;
+import hitonoriol.madsand.util.Utils;
 
 public class WorldMap {
-
 	private Pair coords = new Pair();
 
 	int xsz, ysz;
 	public int curLayer = Location.LAYER_OVERWORLD;
 	public Pair curWorldPos = new Pair();
 
-	HashMap<Pair, Location> locations = new HashMap<>();
+	private HashMap<Pair, Location> locations = new HashMap<>();
 
 	public WorldMap(int sz) {
 		xsz = ysz = sz;
 		setCurWPos(xsz / 2, ysz / 2);
 	}
 
-	public WorldMap() {
+	public WorldMap() {}
 
+	public void addLocation(Pair coords, Location location) {
+		locations.put(coords, location);
 	}
 
 	public Location createLocation(int wx, int wy) {
 		Location location = new Location();
-		locations.put(new Pair(wx, wy), location);
+		addLocation(new Pair(wx, wy), location);
 		return location;
-
 	}
 
 	public Location addMap(Pair coords, int layer, Map map) {
-		Location location;
+		if (!locations.containsKey(coords)) {
+			Utils.dbg("Didn't find location @ %s, creating a new one...", coords);
+			addLocation(coords, new Location());
+		}
 
-		if (!locations.containsKey(coords))
-			location = new Location();
-		else
-			location = locations.remove(coords);
-
+		Location location = getLocation(coords);
 		location.putLayer(layer, map);
-
-		locations.put(coords, location);
-
+		Utils.dbg("{%X} Adding map {%X} to Location {%X} @ %s", hashCode(), map.hashCode(), location.hashCode(),
+				coords);
 		return location;
 	}
 

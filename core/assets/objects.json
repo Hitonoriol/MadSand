@@ -254,6 +254,7 @@
 	"29" : {
 		"@type" : "ResourceObject",
 		"hp" : 10,
+		"harvestHp" : 15,
 		"altItems" : {
 			"None" : [ 8 ]
 		},

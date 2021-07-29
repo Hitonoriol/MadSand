@@ -2,6 +2,7 @@ package hitonoriol.madsand.entities.npc;
 
 import java.util.ArrayList;
 
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.enums.TradeCategory;
@@ -9,6 +10,7 @@ import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.NpcContainer;
 import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.util.Utils;
+import hitonoriol.madsand.world.World;
 
 public class Trader extends AbstractNpc {
 	public TradeCategory tradeCategory;
@@ -36,9 +38,17 @@ public class Trader extends AbstractNpc {
 		super();
 	}
 
+	@Override
+	protected void despawnProcess() {
+		World world = MadSand.world();
+		if (!world.isUnderGround() && !world.inEncounter() && !stats().luckRoll())
+			damage(0.05f);
+		Utils.dbg("Despawning Trader {%s}", this);
+	}
+
 	private static int BASE_TRADER_COINS = 500;
 	private static int TIER_COIN_MULTIPLIER = 300;
-	private static float SELL_PRICE_COEF = 0.5f;
+	private static float SELL_PRICE_COEF = 0.75f;
 
 	public int rollTraderCurrency() {
 		int maxCoins = BASE_TRADER_COINS + lvl * TIER_COIN_MULTIPLIER;
@@ -51,8 +61,16 @@ public class Trader extends AbstractNpc {
 	}
 
 	@Override
+	public void dropInventory() {
+		/* Drop items on death only when killed, not auto-despawned */
+		if (!isNeutral())
+			super.dropInventory();
+	}
+
+	@Override
 	public void interact(Player player) {
 		player.interact(this);
+		addLifetime();
 	}
 
 	@Override

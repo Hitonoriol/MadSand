@@ -30,6 +30,12 @@ public class WorldGen {
 	private boolean friendlyOnly, skipLandPropGen;
 
 	public WorldGen(WorldMap worldMap) {
+		setWorldMap(worldMap);
+	}
+
+	public WorldGen() {}
+
+	public void setWorldMap(WorldMap worldMap) {
 		this.worldMap = worldMap;
 		reset();
 	}

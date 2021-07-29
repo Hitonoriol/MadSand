@@ -26,6 +26,7 @@ import com.badlogic.gdx.graphics.Color;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.properties.Globals;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Functional.SafeRunnable;
 import me.xdrop.jrand.JRand;
 
@@ -77,7 +78,7 @@ public class Utils {
 	}
 
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss.SSS");
-	
+
 	public static String now(SimpleDateFormat format) {
 		return format.format(Calendar.getInstance().getTime());
 	}
@@ -125,7 +126,7 @@ public class Utils {
 
 	public static void panic(String msg) {
 		if (Globals.isDevBuild())
-			die("Panic in debug mode");
+			die("Panic!" + Resources.LINEBREAK + msg);
 
 		long timeDelta = System.currentTimeMillis() - lastError;
 		lastError = System.currentTimeMillis();
@@ -250,7 +251,7 @@ public class Utils {
 	}
 
 	public final static int H_DAY = 24;
-	public final static int S_MINUTE = 60;
+	public final static int S_MINUTE = 60, M_HOUR = S_MINUTE;
 	public final static int S_HOUR = 3600;
 	final static int S_DAY = 86400;
 	final static String TIME_DELIM = ":";

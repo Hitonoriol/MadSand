@@ -2,6 +2,7 @@ package hitonoriol.madsand.entities.npc;
 
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.properties.NpcContainer;
+import hitonoriol.madsand.util.Utils;
 
 public class Npc extends AbstractNpc {
 	public boolean canTrade = false;
@@ -19,8 +20,16 @@ public class Npc extends AbstractNpc {
 	}
 
 	@Override
+	protected void despawnProcess() {
+		if (!stats().luckRoll())
+			damage(1);
+		Utils.dbg("Despawning {%s}", this);
+	}
+
+	@Override
 	public void interact(Player player) {
 		player.interact(this);
+		addLifetime();
 	}
 
 	@Override

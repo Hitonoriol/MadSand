@@ -3552,6 +3552,13 @@ terrain/50
   orig: 33, 33
   offset: 0, 0
   index: -1
+terrain/51
+  rotate: false
+  xy: 266, 152
+  size: 33, 33
+  orig: 33, 33
+  offset: 0, 0
+  index: -1
 terrain/6
   rotate: false
   xy: 0, 152

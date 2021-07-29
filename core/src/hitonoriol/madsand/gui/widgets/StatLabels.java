@@ -18,7 +18,7 @@ public class StatLabels {
 	public Label freeStatPointsLbl;
 	public Label hpStatLbl, staminaStatLbl;
 
-	public PlayerStats stats = MadSand.player().stats;
+	private PlayerStats stats = MadSand.player().stats;
 
 	public StatLabels(Skin skin) {
 
@@ -84,5 +84,9 @@ public class StatLabels {
 		private String applyColor(int stat) {
 			return "[#99ffaa]" + stat + "[]";
 		}
+	}
+	
+	public PlayerStats getStats() {
+		return stats;
 	}
 }

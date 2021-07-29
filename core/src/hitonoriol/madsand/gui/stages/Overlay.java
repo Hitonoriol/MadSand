@@ -288,7 +288,7 @@ public class Overlay extends Stage {
 	}
 
 	private String getSectorString() {
-		return (MadSand.world().inEncounter
+		return (MadSand.world().inEncounter()
 				? " @ Random Encounter"
 				: " @ Sector (" + MadSand.world().getCurWPos() + ")");
 

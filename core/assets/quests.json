@@ -87,7 +87,7 @@
 	"reqMsg" : "Bring me {ITEM_OBJECTIVE} pieces.",
 	"reqItems" : "5/5:9/5",
 	"giveItems" : "n",
-	"rewardItems" : "21/25",
+	"rewardItems" : "21/125",
 	"removeOnCompletion" : "n",
 	"previousQuest" : 1,
 	"repeatable" : false
@@ -174,7 +174,7 @@
 	"reqMsg" : "Where's my beer? Bring me my beer! Now!",
 	"reqItems" : "58/1",
 	"giveItems" : "n",
-	"rewardItems" : "21/10",
+	"rewardItems" : "21/75",
 	"removeOnCompletion" : "n",
 	"repeatable" : false,
 	"previousQuest" : 1

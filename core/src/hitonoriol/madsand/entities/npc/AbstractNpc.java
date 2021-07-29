@@ -43,6 +43,7 @@ public abstract class AbstractNpc extends Entity {
 	public long uid;
 	public int lvl = 1;
 	public int rewardExp;
+	protected double lifetime;
 
 	public boolean friendly;
 	public boolean spawnOnce;
@@ -74,6 +75,7 @@ public abstract class AbstractNpc extends Entity {
 		loadProperties(protoNpc);
 		if (id != NULL_NPC)
 			loadSprite();
+		setLifetime(Utils.rand(1, 10));
 	}
 
 	public AbstractNpc() {
@@ -288,6 +290,10 @@ public abstract class AbstractNpc extends Entity {
 
 	public void die() {
 		super.die();
+
+		if (enemySpotted)
+			loseSightOf(MadSand.player());
+
 		MadSand.world().delNpc(this);
 	}
 
@@ -304,8 +310,39 @@ public abstract class AbstractNpc extends Entity {
 	}
 
 	public int doAction(double ap) {
+		if (canBeDespawned())
+			despawnProcess();
 		tickCharge -= getActionLength(ap);
 		return super.doAction(ap);
+	}
+
+	private double daysToTicks(double days) {
+		return MadSand.world().ticksPerHour() * Utils.H_DAY * days;
+	}
+
+	public final void setLifetime(double days) {
+		lifetime = daysToTicks(days);
+	}
+
+	protected final void addLifetime(double days) {
+		if (lifetime < 0)
+			lifetime = 0;
+
+		lifetime += daysToTicks(days);
+	}
+
+	protected void addLifetime() {
+		addLifetime(Math.sqrt(lvl + 1) * (0.25f + Utils.random.nextFloat() * 10f));
+	}
+
+	public boolean canBeDespawned() {
+		return lifetime <= 0;
+	}
+
+	protected void despawnProcess() {}
+
+	protected void live(float time) {
+		lifetime -= time;
 	}
 
 	void randMove() {
@@ -394,6 +431,7 @@ public abstract class AbstractNpc extends Entity {
 	public final void act(float time) {
 		boolean badRep = MadSand.player().getReputation().isHostile(stats.faction);
 		tickCharge += (timePassed = time);
+		live(time);
 
 		if (pauseFlag) {
 			unPause();

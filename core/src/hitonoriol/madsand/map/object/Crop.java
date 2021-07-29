@@ -56,7 +56,9 @@ public class Crop extends MapObject implements TimeDependent {
 				Pair position = getPosition();
 				if (position.isEmpty()) {
 					map.getTimeScheduler().remove(this);
-					Utils.dbg("Crop {%s} was not found on the map, removing...", this);
+					Utils.dbg("{%X} Crop {%s} was not found on the map, removing...",
+							map.getTimeScheduler().hashCode(),
+							this);
 					return;
 				}
 				Utils.dbg("%s has reached its final growth stage: replacing object at %s", getName(), position);

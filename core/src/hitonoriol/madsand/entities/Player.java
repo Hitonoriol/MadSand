@@ -715,10 +715,7 @@ public class Player extends Entity {
 	}
 
 	public void interact(Trader trader) {
-		if (trader.canGiveQuests)
-			new TraderDialog(this, trader).show();
-		else
-			new TradeInventoryUI(trader.inventory, inventory).show();
+		new TraderDialog(this, trader).show();
 	}
 
 	public void interact(Npc npc) {
@@ -733,6 +730,10 @@ public class Player extends Entity {
 		npc.interact(this);
 		Gui.overlay.closeGameContextMenu();
 		Gui.overlay.hideActionBtn();
+	}
+	
+	public void tradeWith(Entity npc) {
+		new TradeInventoryUI(npc.inventory, inventory).show();
 	}
 
 	private void talkToNpc(AbstractNpc npc) {
@@ -1126,27 +1127,44 @@ public class Player extends Entity {
 		}
 	}
 
-	public void restFully() {
-		int ticksToRest = (int) ((stats.maxstamina - stats.stamina) / stats.getStaminaRegenRate());
+	private int skipTime(BooleanSupplier skipCondition) {
+		final int SKIP_STEP = 5;
+		int ticksSkipped = 0;
+		while (skipCondition.getAsBoolean()) {
+			skipTicks(SKIP_STEP);
+			ticksSkipped += SKIP_STEP;
+		}
+		return ticksSkipped;
+	}
 
-		if (ticksToRest == 0) {
-			MadSand.notice("Your stamina is already full");
+	public boolean canRest() {
+		if (!stats.isSatiated()) {
+			MadSand.warn("You are too hungry to rest...");
+			return false;
+		}
+
+		if (isTargeted()) {
+			MadSand.warn("It's no time to rest. A hostile creature is nearby!");
+			return false;
+		}
+
+		return true;
+	}
+
+	public void restFully() {
+		if (!canRest())
+			return;
+
+		int ticksToRest = (int) ((stats.maxstamina - stats.stamina) / stats.getStaminaRegenRate());
+		if (ticksToRest == 0 && stats.healthFull()) {
+			MadSand.notice("Your stamina and health are already full");
 			return;
 		}
 
-		skipTime(ticksToRest, () -> {
-			if (isTargeted()) {
-				MadSand.warn("It's no time to rest. A hostile creature is nearby!");
-				return false;
-			}
-
-			if (!stats.isSatiated()) {
-				MadSand.warn("You are too hungry to rest...");
-				return false;
-			}
-
-			return true;
-		});
+		if (ticksToRest > 0)
+			skipTime(ticksToRest, () -> canRest());
+		else
+			ticksToRest = skipTime(() -> canRest() && !stats.healthFull());
 
 		MadSand.notice("Rested for " + Utils.timeString(MadSand.world().toWorldTimeSeconds(ticksToRest)));
 	}

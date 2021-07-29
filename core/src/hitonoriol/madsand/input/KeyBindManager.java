@@ -11,6 +11,7 @@ import hitonoriol.madsand.util.Utils;
 
 public class KeyBindManager {
 	private Map<Integer, KeyBind> bindings = new LinkedHashMap<>();
+	private Map<Integer, KeyBind> pollingBindings = new LinkedHashMap<>();
 	private List<Consumer<Integer>> listeners = new ArrayList<>(1);
 	private static final KeyBind noAction = new KeyBind(() -> {});
 
@@ -22,11 +23,26 @@ public class KeyBindManager {
 		});
 	}
 
+	public void pollKeys() {
+		if (pollingBindings.isEmpty())
+			return;
+
+		pollingBindings.forEach((key, bind) -> {
+			if (Keyboard.isKeyPressed(key))
+				bind.run();
+		});
+	}
+
+	public KeyBindManager poll(int key, Runnable action) {
+		pollingBindings.put(key, new KeyBind(action));
+		return this;
+	}
+
 	public KeyBindManager bind(int key, boolean execAlways, Runnable action) {
 		bindings.put(key, new KeyBind(action, execAlways));
 		return this;
 	}
-	
+
 	public KeyBindManager bind(int key, Runnable action) {
 		return bind(key, false, action);
 	}
@@ -46,5 +62,11 @@ public class KeyBindManager {
 
 	public boolean bindingExists(int key) {
 		return bindings.containsKey(key);
+	}
+
+	public void clear() {
+		bindings.clear();
+		pollingBindings.clear();
+		listeners.clear();
 	}
 }

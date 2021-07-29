@@ -56,9 +56,9 @@ public class World {
 	private ArrayDeque<Pair> previousLocations = new ArrayDeque<>(); // Maps that are currently loaded in WorldMap
 
 	@JsonIgnore
-	private WorldGen worldGen;
+	private WorldGen worldGen = new WorldGen();
 	@JsonIgnore
-	private WorldMapSaver worldMapSaver;
+	private WorldMapSaver worldMapSaver = new WorldMapSaver();
 
 	private Player player;
 	private WorldMap worldMap; // container of "Locations": maps grouped by world coords
@@ -76,6 +76,8 @@ public class World {
 	private int tick = 0; // tick counter, resets every <ticksPerHour> ticks
 	private long globalTick = 0; // global tick counter, never resets
 
+	private boolean inEncounter = false;
+
 	private MutableLong npcCounter = new MutableLong(0);
 	private MutableLong itemCounter = new MutableLong(0);
 
@@ -84,31 +86,27 @@ public class World {
 
 	public World(int sz) {
 		player = new Player();
-		worldMap = new WorldMap(sz);
-		initWorld();
+		setWorldMap(new WorldMap(sz));
 	}
 
 	public World() {
 		this(DEFAULT_WORLDSIZE);
 	}
 
-	public void initWorld() {
-		worldMapSaver = new WorldMapSaver(worldMap);
-		worldGen = new WorldGen(worldMap);
-		initRealtimeRefresher();
-	}
-
 	public void enter() {
 		GameTextSubstitutor.add(GameTextSubstitutor.PLAYER_NAME, player.stats.name);
 		getCurLoc().refreshPathfindingGraph();
+		initRealtimeRefresher();
 
 		if (!player.newlyCreated)
 			calcOfflineTime();
 	}
 
 	public void close() {
-		realTimeRefresher.clear();
-		realTimeRefresher.stop();
+		if (realTimeRefresher != null) {
+			realTimeRefresher.clear();
+			realTimeRefresher.stop();
+		}
 		getCurLoc().close();
 	}
 
@@ -124,19 +122,23 @@ public class World {
 	}
 
 	public void realtimeSchedule(Runnable task, long ticks) {
-		TimeUtils.scheduleRepeatingTask(realTimeRefresher, task, ticksToTime(ticks));
+		TimeUtils.scheduleRepeatingTask(realTimeRefresher, task, actionTicksToTime(ticks));
 	}
 
 	public void realtimeSchedule(Runnable task) {
 		realtimeSchedule(task, realtimeActionPeriod);
 	}
 
-	public float ticksToTime(long realtimeTicks) {
+	public float actionTicksToTime(long realtimeTicks) {
 		return (float) realtimeTicks * realtimeTickRate;
 	}
 
 	public long timeToActionTicks(long seconds) {
-		return (long) (seconds / ticksToTime(realtimeActionPeriod));
+		return (long) (seconds / actionTicksToTime(realtimeActionPeriod));
+	}
+
+	public int ticksPerHour() {
+		return ticksPerHour;
 	}
 
 	public Player getPlayer() {
@@ -185,6 +187,12 @@ public class World {
 		return getLoc(coords.set(x, y), layer);
 	}
 
+	public void setWorldMap(WorldMap worldMap) {
+		this.worldMap = worldMap;
+		worldGen.setWorldMap(worldMap);
+		worldMapSaver.setWorldMap(worldMap);
+	}
+
 	public WorldMap getWorldMap() {
 		return worldMap;
 	}
@@ -203,7 +211,7 @@ public class World {
 
 	@JsonIgnore
 	public float getRealtimeActionSeconds() {
-		return ticksToTime(realtimeActionPeriod);
+		return actionTicksToTime(realtimeActionPeriod);
 	}
 
 	public long getRealtimeActionPeriod() {
@@ -309,7 +317,6 @@ public class World {
 	}
 
 	private boolean executeLocationScript() {
-
 		if (worldMap.curLayer != Location.LAYER_OVERWORLD)
 			return false;
 
@@ -346,6 +353,7 @@ public class World {
 
 		if (locExists(coords.set(x, y), layer)) {
 			Utils.out("This sector already exists! Noice.");
+			getCurLoc().getTimeScheduler().resume();
 			updateLight();
 			return true;
 		}
@@ -450,8 +458,6 @@ public class World {
 		switchLocation(direction);
 		Gui.refreshOverlay();
 	}
-
-	public boolean inEncounter = false;
 
 	private void switchToEncounter() {
 		inEncounter = true;
@@ -605,13 +611,15 @@ public class World {
 		return q * MadSand.TILESIZE;
 	}
 
-	private static int TIME_NIGHT_START = 22;
-	private static int TIME_NIGHT_END = 6;
+	private static int TIME_MIDNIGHT = 24;
+	private static int NIGHT_START = 22, NIGHT_END = 6, SUNRISE_START = 3;
+	/* Period in minutes with which sky light level increases by one during the sunrise */
+	private static final double SUNRISE_STEP = 30d;
 
 	@JsonIgnore
 	public boolean isNight() {
-		boolean beforeMidnight = worldtime >= TIME_NIGHT_START && worldtime < TIME_MIDNIGHT;
-		boolean afterMidnight = worldtime >= 0 && worldtime < TIME_NIGHT_END;
+		boolean beforeMidnight = worldtime >= NIGHT_START && worldtime < TIME_MIDNIGHT;
+		boolean afterMidnight = worldtime >= 0 && worldtime < NIGHT_END;
 
 		return beforeMidnight || afterMidnight;
 	}
@@ -621,12 +629,26 @@ public class World {
 		return !isNight();
 	}
 
-	private static final int fovDelta = 5;
-	private static int TIME_FOV_DECREASE_START = 18;// hour when the fov begins to decrease
-	private static int TIME_FOV_DECREASE_END = TIME_FOV_DECREASE_START + fovDelta;
-	private static int TIME_FOV_INCREASE_START = 4;// hour when the fov begins to decrease
-	private static int TIME_FOV_INCREASE_END = TIME_FOV_INCREASE_START + fovDelta;
-	private static int TIME_MIDNIGHT = 24;
+	private final static int UNDERGROUND_LIGHT = -5;
+
+	public int getSkyLight() {
+		if (isUnderGround())
+			return UNDERGROUND_LIGHT;
+
+		int hour = getWorldTimeHour();
+		if (isDay())
+			return (hour - H_DAY) - 1;
+		else {
+			int light = NIGHT_START - H_DAY;
+
+			/* Light level doesn't change until sunrise */
+			if (hour < NIGHT_START && hour >= SUNRISE_START) {
+				int minsSinceSunrise = ((hour - SUNRISE_START) * Utils.M_HOUR) + getWorldTimeMinute();
+				light = (int) Math.floor(light - (minsSinceSunrise / SUNRISE_STEP));
+			}
+			return light;
+		}
+	}
 
 	public void hourTick() {
 		Map curLoc = getCurLoc();
@@ -636,18 +658,12 @@ public class World {
 		if (worldtime == TIME_MIDNIGHT)
 			worldtime = 0;
 
-		int fov = player.getFov();
-		if (worldtime > TIME_FOV_DECREASE_START && worldtime <= TIME_FOV_DECREASE_END)
-			player.setFov(fov - 1);
-
-		else if (worldtime > TIME_FOV_INCREASE_START && worldtime <= TIME_FOV_INCREASE_END)
-			player.setFov(fov + 1);
-
 		if (!inEncounter)
 			curLoc.naturalRegeneration();
 
 		curLoc.spawnMobs(!player.stats.luckRoll() || isNight());
 
+		Utils.dbg("Sky light is now %d", getSkyLight());
 		MadSand.notice("Another hour passes...");
 		MadSand.notice("It's " + worldtime + ":00");
 	}
@@ -808,6 +824,10 @@ public class World {
 	@JsonIgnore
 	public boolean isUnderGround() {
 		return worldMap.curLayer != Location.LAYER_OVERWORLD;
+	}
+
+	public boolean inEncounter() {
+		return inEncounter;
 	}
 
 	public void startTimeSkip() {

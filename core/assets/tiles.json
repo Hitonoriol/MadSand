@@ -417,6 +417,10 @@
 	
 	"50" : {
 		"name" : "Stone tile"
+	},
+	
+	"51" : {
+		"name" : "Gravel path"
 	}
 	
 }

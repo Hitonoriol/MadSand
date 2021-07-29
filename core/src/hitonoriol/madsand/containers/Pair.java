@@ -152,7 +152,7 @@ public class Pair {
 			ret = Direction.LEFT;
 
 		if (fourWay)
-			return ret;
+			return ret != null ? ret : Direction.random();
 
 		if (dx < 0 && dy < 0)
 			ret = Direction.DOWN_LEFT;
@@ -178,6 +178,10 @@ public class Pair {
 		return divide(MadSand.TILESIZE);
 	}
 
+	public Pair clear() {
+		return set(nullPair);
+	}
+	
 	public boolean isEmpty() {
 		return equals(nullPair);
 	}

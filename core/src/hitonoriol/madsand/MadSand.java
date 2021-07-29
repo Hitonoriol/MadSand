@@ -69,6 +69,7 @@ public class MadSand extends Game {
 
 		GameSaver.createDirs();
 		initNewGame();
+		game.world.generate();
 		initScreens();
 		Keyboard.initDefaultKeyBinds();
 		Utils.out("End of initialization!");
@@ -87,12 +88,12 @@ public class MadSand extends Game {
 		MadSand.player().updCoords();
 		Lua.init();
 		Gui.overlay.gameLog.clear();
-		game.world.generate();
 	}
 
 	private void createWorld() {
 		if (world != null)
 			world.close();
+		
 		world = new World();
 	}
 

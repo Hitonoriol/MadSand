@@ -26,8 +26,12 @@ public class Tile {
 
 	@JsonIgnore
 	public boolean visited = false; // has tile been seen before
-	@JsonIgnore
-	public boolean visible = true; // can tile currently be seen
+
+	/*
+	 * [-inf; 0] -- fully visible
+	 * [1; +inf] -- darkened using LightMap in GameWorldRenderer, functionally not visible
+	 */
+	private int lightLevel = 0;
 
 	public Tile(int id) {
 		final Tile tileProp = TileProp.getTileProp(id);
@@ -50,6 +54,22 @@ public class Tile {
 
 	public boolean hasFishingSpot() {
 		return fishingSpot != null;
+	}
+
+	public boolean visible() {
+		return lightLevel <= 0;
+	}
+
+	public void setVisible() {
+		lightLevel = 0;
+	}
+
+	public void setVisible(int lightLevel) {
+		this.lightLevel = lightLevel;
+	}
+
+	public int getLightLevel() {
+		return lightLevel;
 	}
 
 	@Override

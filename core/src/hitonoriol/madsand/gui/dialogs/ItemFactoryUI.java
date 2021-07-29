@@ -1,7 +1,6 @@
 package hitonoriol.madsand.gui.dialogs;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -22,74 +21,50 @@ import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
 
 public class ItemFactoryUI extends GameDialog {
-
 	final float WIDTH = 500;
 	final float HEIGHT = 400;
 	final float PAD_RIGHT = 10;
 	final float TITLE_PAD = 50;
 	final float PAD_VERTICAL = 25;
-
 	final float ENTRY_WIDTH = WIDTH / 2;
 	final float ENTRY_HEIGHT = 30;
-
 	final float BUTTON_WIDTH = 80;
 	final float BUTTON_HEIGHT = 40;
 
-	final String closeBtnString = "Close";
+	private final static String addConsumableStr = "Add ", takeProductStr = "Take ";
+	private final static String storageStr = " in storage: ";
 
-	final String upgradeString = "Upgrade with ";
-	final String addConsumableString = "Add ";
-	final String takeProductString = "Take ";
-	final String maxLvlString = "Max level reached";
-	final String lvlString = " Lvl. ";
+	private final static int PRECISION = 4;
 
-	String consumedMaterial, producedMaterial;
-	String stationName;
+	private String producerName;
+	private String consumedMaterial, producedMaterial;
 
-	ItemProducer station;
-	Player player;
+	private ItemProducer producer;
+	private Player player;
 
-	TextButton closeButton;
-
-	TextButton upgradeButton;
-
-	TextButton addConsumableButton;
-	TextButton takeProductButton;
-	Slider consumableSlider;
-	Slider productSlider;
-
-	String produceString = "Produces: ";
-	String consumeString = "Consumes: ";
-
-	String upgradeLblString = "Upgrade:";
-	String storageString = " in storage: ";
-
-	Label productStorageLabel;
-	Label consumableStorageLabel;
-
-	Label produceLabel;
-	Label consumeLabel;
+	private TextButton closeButton;
+	private TextButton upgradeButton;
+	private TextButton addConsumableButton, takeProductButton;
+	private Slider consumableSlider, productSlider;
+	private Label productStorageLabel, consumableStorageLabel;
+	private Label produceLabel, consumeLabel;
 
 	Timer.Task refreshTask = TimeUtils.createTask(() -> refresh());
 
-	private ItemFactoryUI(Stage stage) {
-		super(stage);
-	}
-
 	public ItemFactoryUI(ItemProducer producer) {
-		this(Gui.overlay);
-		this.station = producer;
+		super(Gui.overlay);
+		this.producer = producer;
 		this.player = MadSand.player();
 		consumedMaterial = ItemProp.getItemName(producer.getConsumedMaterialId());
 		producedMaterial = ItemProp.getItemName(producer.getProductId());
 		int id = producer.getId();
 
 		if (id > 0)
-			stationName = ObjectProp.getName(id);
+			producerName = ObjectProp.getName(id);
 		else
-			stationName = NpcProp.npcs.get(-id).name;
+			producerName = NpcProp.npcs.get(-id).name;
 
-		closeButton = new TextButton(closeBtnString, Gui.skin);
+		closeButton = new TextButton("Close", Gui.skin);
 
 		upgradeButton = new TextButton("", Gui.skin);
 		addConsumableButton = new TextButton("", Gui.skin);
@@ -112,7 +87,7 @@ public class ItemFactoryUI extends GameDialog {
 	}
 
 	private void createLayout() {
-		boolean endless = station.isEndless();
+		boolean endless = producer.isEndless();
 
 		if (endless) {
 			produceLabel.setWrap(true);
@@ -127,9 +102,9 @@ public class ItemFactoryUI extends GameDialog {
 		if (!endless)
 			add(consumableStorageLabel).colspan(2).padBottom(PAD_VERTICAL * 2).row();
 
-		add(new Label(takeProductString + producedMaterial, Gui.skin));
+		add(new Label(takeProductStr + producedMaterial, Gui.skin));
 		if (!endless)
-			add(new Label(addConsumableString + consumedMaterial, Gui.skin));
+			add(new Label(addConsumableStr + consumedMaterial, Gui.skin));
 		row();
 
 		add(productSlider).size(ENTRY_WIDTH, ENTRY_HEIGHT);
@@ -170,24 +145,24 @@ public class ItemFactoryUI extends GameDialog {
 	private void refreshRateLabels() {
 		float tickRate = MadSand.world().getRealtimeActionSeconds();
 		produceLabel
-				.setText(produceString + producedMaterial + " (+" + Utils.round(station.getProductionRate() / tickRate)
-						+ " per second)");
+				.setText("Produces: " + producedMaterial
+						+ " (+" + round(producer.getProductionRate() / tickRate) + " per second)");
 		consumeLabel
-				.setText(consumeString + consumedMaterial + " (-" + Utils.round(station.getConsumptionRate() / tickRate)
-						+ " per second)");
+				.setText("Consumes: " + consumedMaterial
+						+ " (-" + round(producer.getConsumptionRate() / tickRate) + " per second)");
 	}
 
 	private void refreshStorageLabels() {
 		productStorageLabel
-				.setText(producedMaterial + storageString + Utils.round(station.getProductStorage()));
+				.setText(producedMaterial + storageStr + Utils.round(producer.getProductStorage()));
 
 		consumableStorageLabel
-				.setText(consumedMaterial + storageString + Utils.round(station.getConsumedMaterialStorage()));
+				.setText(consumedMaterial + storageStr + Utils.round(producer.getConsumedMaterialStorage()));
 	}
 
 	private void initButtonListeners() {
 		Gui.setAction(upgradeButton, () -> {
-			if (!station.upgrade())
+			if (!producer.upgrade())
 				Gui.drawOkDialog(
 						"There's not enough " + consumedMaterial + " in storage for upgrade!");
 			else
@@ -196,16 +171,16 @@ public class ItemFactoryUI extends GameDialog {
 
 		Gui.setAction(addConsumableButton, () -> {
 			int quantity = (int) consumableSlider.getValue();
-			if (!player.inventory.delItem(station.getConsumedMaterialId(), quantity))
+			if (!player.inventory.delItem(producer.getConsumedMaterialId(), quantity))
 				Gui.drawOkDialog("You don't have this many " + consumedMaterial);
 			else {
-				station.addRawMaterial(quantity);
+				producer.addRawMaterial(quantity);
 				refresh();
 			}
 		});
 
 		Gui.setAction(takeProductButton, () -> {
-			player.addItem(station.getProduct((int) productSlider.getValue()));
+			player.addItem(producer.getProduct((int) productSlider.getValue()));
 			refresh();
 		});
 		Gui.setAction(closeButton, () -> remove());
@@ -238,13 +213,13 @@ public class ItemFactoryUI extends GameDialog {
 	}
 
 	private void refreshTitle() {
-		super.setTitle(stationName + lvlString + station.getLvl());
+		super.setTitle(producerName + " Lvl. " + producer.getLvl());
 	}
 
 	private void refreshSliders() {
-		Item consumable = player.inventory.getItem(station.getConsumedMaterialId());
+		Item consumable = player.inventory.getItem(producer.getConsumedMaterialId());
 		consumableSlider.setRange(0, consumable.quantity);
-		productSlider.setRange(0, station.getProductStorage());
+		productSlider.setRange(0, producer.getProductStorage());
 	}
 
 	private void refreshAddButton(int quantity) {
@@ -260,18 +235,21 @@ public class ItemFactoryUI extends GameDialog {
 	}
 
 	private String getAddBtnString(int quantity) {
-		return addConsumableString + quantity + " " + consumedMaterial;
+		return addConsumableStr + quantity + " " + consumedMaterial;
 	}
 
 	private String getTakeBtnString(int quantity) {
-		return takeProductString + quantity + " " + producedMaterial;
+		return takeProductStr + quantity + " " + producedMaterial;
 	}
 
 	private String getUpgradeString() {
-		if (station.getLvl() < station.getMaxLvl())
-			return upgradeString + Utils.round(station.getUpgradeRequirement()) + " " + consumedMaterial;
+		if (producer.getLvl() < producer.getMaxLvl())
+			return "Upgrade with " + Utils.round(producer.getUpgradeRequirement()) + " " + consumedMaterial;
 		else
-			return maxLvlString;
+			return "Max level reached";
 	}
 
+	private static String round(float rate) {
+		return Utils.round(rate, PRECISION);
+	}
 }

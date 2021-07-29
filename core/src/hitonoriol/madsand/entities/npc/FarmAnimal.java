@@ -34,10 +34,15 @@ public class FarmAnimal extends AbstractNpc implements TimeDependent {
 	}
 
 	@Override
-	public int doAction(double ap) {
+	protected void despawnProcess() {
 		if (isStarving())
 			damage(1);
-		return super.doAction(ap);
+	}
+
+	@Override
+	protected void live(float time) {
+		if (isStarving())
+			super.live(time);
 	}
 
 	public boolean isStarving() {
@@ -47,8 +52,11 @@ public class FarmAnimal extends AbstractNpc implements TimeDependent {
 	@Override
 	public void update() {
 		animalProduct.produce();
-		if (animalProduct.hasRawMaterial())
+		if (animalProduct.hasRawMaterial()) {
 			lastFed = MadSand.world().currentActionTick();
+			if (canBeDespawned())
+				addLifetime();
+		}
 	}
 
 	@Override

@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.mutable.MutableBoolean;
+import org.apache.commons.lang3.mutable.MutableInt;
 
 import com.badlogic.gdx.math.Vector2;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -71,7 +72,7 @@ public class Map {
 	private HashMap<Pair, Loot> mapLoot;
 	private HashMap<Pair, AbstractNpc> mapNpcs;
 
-	private TimeScheduler timeScheduler;
+	private final TimeScheduler timeScheduler = new TimeScheduler();
 	private PathfinfingEngine pathfinding = new PathfinfingEngine(this);
 
 	Pair coords = new Pair(0, 0);
@@ -279,11 +280,7 @@ public class Map {
 		mapObjects = new HashMap<>();
 		mapLoot = new HashMap<>();
 		mapNpcs = new HashMap<>();
-
-		if (timeScheduler != null)
-			timeScheduler.stop();
-		timeScheduler = new TimeScheduler();
-
+		timeScheduler.clear();
 		pathfinding.init();
 		return this;
 	}
@@ -807,27 +804,45 @@ public class Map {
 	}
 
 	public void updateLight(int wx, int wy, int r, double luminosity) {
-		MutableBoolean blocksLight = new MutableBoolean(false);
+		Pair obstacle = new Pair(Pair.nullPair);
+		MutableBoolean wall = new MutableBoolean();
+		MutableInt pointCounter = new MutableInt(0);
+		final int skyLight = MadSand.world().getSkyLight();
 		Circle.forEachPoint(wx, wy, r, (x, y) -> {
-			if (!validCoords(wx + x, wy + y))
+			int dx = wx + x, dy = wy + y;
+			if (!validCoords(dx, dy))
 				return;
 
-			blocksLight.setFalse();
-			Line.forEachPoint(wx, wy, wx + x, wy + y, (rx, ry) -> {
+			getTile(dx, dy).setVisible();
+			obstacle.clear();
+			pointCounter.setValue(0);
+			wall.setFalse();
+			Line.forEachPoint(wx, wy, dx, dy, (rx, ry) -> {
 				double dstToCenter = Line.calcDistance(wx, wy, rx, ry);
+				int lightDelta = (int) (dstToCenter - luminosity);
 				Tile tile = getTile(rx, ry);
 				MapObject object = getObject(rx, ry);
 
-				if (dstToCenter > luminosity)
-					tile.visible = !blocksLight.isTrue();
+				/* Walls block light fully */
+				if (wall.isTrue())
+					tile.setVisible((int) dstToCenter - 1);
 
-				if (blocksLight.isFalse())
-					tile.visible = true;
+				/* Non-wall objects take luminosity into account */
+				else if (dstToCenter > luminosity)
+					tile.setVisible(lightDelta);
 
-				if (!object.isTransparent())
-					blocksLight.setTrue();
+				/* Empty tiles are light by the sky */
+				if (obstacle.isEmpty())
+					tile.setVisible(lightDelta + skyLight);
 
-				if (tile.visible)
+				/* Non-transparent objects block light, but are lit themselves */
+				if (!object.isTransparent()) {
+					obstacle.set(rx, ry);
+					wall.setValue(object.isWall);
+				}
+
+				/* If tile is lit, mark it as visited */
+				if (tile.visible())
 					tile.visited = true;
 			});
 

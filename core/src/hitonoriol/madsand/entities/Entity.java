@@ -341,6 +341,10 @@ public abstract class Entity extends MapEntity {
 		return standingOnLoot(x, y);
 	}
 
+	public void damage(float percent) {
+		damage(stats().mhp * percent);
+	}
+
 	public void damage(int dmg) {
 		if (dmg <= 0)
 			return;

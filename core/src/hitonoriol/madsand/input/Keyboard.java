@@ -4,7 +4,11 @@ import static hitonoriol.madsand.MadSand.player;
 import static hitonoriol.madsand.MadSand.world;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
+
+import org.apache.commons.text.WordUtils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -15,8 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.containers.HashMapFactory;
 import hitonoriol.madsand.dialog.GameDialog;
-import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.minigames.blackjack.BlackJackUI;
 import hitonoriol.madsand.minigames.farkle.FarkleUI;
@@ -24,7 +28,9 @@ import hitonoriol.madsand.minigames.videopoker.VideoPokerUI;
 import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.resources.Resources;
+import hitonoriol.madsand.screens.GameWorldRenderer;
 import hitonoriol.madsand.util.Utils;
+import hitonoriol.madsand.world.World;
 
 public class Keyboard {
 	private static KeyBindManager keyBinds = new KeyBindManager();
@@ -32,26 +38,47 @@ public class Keyboard {
 	private static Set<Integer> heldKeys = new HashSet<>();
 
 	public static void initDefaultKeyBinds() {
+		/* Movement key polling */
+		final Map<Integer, Direction> keyDirs = HashMapFactory.create(map -> map
+				.put(Keys.W, Direction.UP)
+				.put(Keys.A, Direction.LEFT)
+				.put(Keys.S, Direction.DOWN)
+				.put(Keys.D, Direction.RIGHT));
+		Stream.of(Keys.W, Keys.A, Keys.S, Keys.D)
+				.forEach(key -> keyBinds.poll(key, () -> {
+					player().walk(keyDirs.get(key));
+					if (Gdx.input.isKeyJustPressed(key))
+						player().attackHostile();
+				}));
+
 		/* Turning keys */
-		keyBinds.bind(Keys.UP, () -> player().meleeAttack(Direction.UP))
-				.bind(Keys.DOWN, () -> player().meleeAttack(Direction.DOWN))
-				.bind(Keys.LEFT, () -> player().meleeAttack(Direction.LEFT))
-				.bind(Keys.RIGHT, () -> player().meleeAttack(Direction.RIGHT));
+		Stream.of(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT)
+				.forEach(dir -> keyBinds.bind(Keys.valueOf(WordUtils.capitalizeFully(dir.toString())),
+						() -> player().meleeAttack(dir)));
 
 		/* Action keys */
-		keyBinds.bind(Keys.ENTER, () -> player().interact())
+		keyBinds
+				.bind(Keys.ENTER, () -> player().interact())
 				.bind(Keys.U, () -> player().useItem())
 				.bind(Keys.F, () -> player().freeHands())
 				.bind(Keys.SPACE, () -> player().rest())
 				.bind(Keys.N, () -> world().travel());
 
 		/* Function keys */
-		keyBinds.bind(Keys.ESCAPE, true, () -> {
-			if (Gui.hasDialogs(Gui.overlay))
-				Gui.overlay.closeAllDialogs();
-			else
-				MadSand.switchScreen(MadSand.mainMenu);
-		})
+		keyBinds
+				.bind(Keys.ESCAPE, true, () -> {
+					if (Gui.hasDialogs(Gui.overlay))
+						Gui.overlay.closeAllDialogs();
+					else
+						MadSand.switchScreen(MadSand.mainMenu);
+				})
+				.bind(Keys.NUMPAD_5, () -> {
+					GameWorldRenderer renderer = MadSand.getRenderer();
+					if (renderer.getCamZoom() != 1)
+						renderer.setZoom(1);
+					else
+						renderer.setZoom(GameWorldRenderer.DEFAULT_ZOOM);
+				})
 				.bind(Keys.G, () -> GameSaver.save());
 
 		/* Debug keys */
@@ -59,13 +86,18 @@ public class Keyboard {
 			GameDialog minigames[] = { new BlackJackUI(), new VideoPokerUI(), new FarkleUI() };
 			keyBinds.bind(Keys.Z, () -> Globals.debugMode = !Globals.debugMode)
 					.bind(Keys.BACKSPACE, () -> Utils.randElement(minigames).show())
+					.bind(Keys.F5, () -> {
+						World world = world();
+						world.timeTick(150);
+						world.updateLight();
+					})
 					.bind(key -> pollDebugKeys(key));
 		}
 	}
 
 	public static void pollGameKeys() {
-		if (!inputIgnored())
-			pollMovementKeys();
+		if (!heldKeys.isEmpty() && !inputIgnored())
+			keyBinds.pollKeys();
 	}
 
 	public static void pollGlobalHotkeys() {
@@ -117,31 +149,6 @@ public class Keyboard {
 		return ignoreInput;
 	}
 
-	private static void pollMovementKeys() {
-		Player player = MadSand.player();
-		if (Gdx.input.isKeyPressed(Keys.A))
-			player.walk(Direction.LEFT);
-
-		else if (Gdx.input.isKeyPressed(Keys.D))
-			player.walk(Direction.RIGHT);
-
-		else if (Gdx.input.isKeyPressed(Keys.W))
-			player.walk(Direction.UP);
-
-		else if (Gdx.input.isKeyPressed(Keys.S))
-			player.walk(Direction.DOWN);
-
-		if (Keyboard.movementKeyJustPressed())
-			player.attackHostile();
-	}
-
-	private static boolean movementKeyJustPressed() {
-		return (Gdx.input.isKeyJustPressed(Keys.W) ||
-				Gdx.input.isKeyJustPressed(Keys.A) ||
-				Gdx.input.isKeyJustPressed(Keys.S) ||
-				Gdx.input.isKeyJustPressed(Keys.D));
-	}
-
 	private static void pollDebugKeys(int key) {
 		if (!Globals.debugMode)
 			return;
@@ -164,9 +171,6 @@ public class Keyboard {
 
 		if (key == Keys.NUMPAD_1)
 			MadSand.getRenderer().changeZoom(-0.1f);
-		
-		if (key == Keys.NUMPAD_5)
-			MadSand.getRenderer().setZoom(1);
 
 		if (isKeyPressed(Keys.CONTROL_LEFT)) {
 			if (key == Keys.DOWN)

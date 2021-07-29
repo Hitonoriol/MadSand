@@ -12,13 +12,13 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
+import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.entities.StatContainer;
 import hitonoriol.madsand.gui.widgets.StatLabels;
 import me.xdrop.jrand.JRand;
 
 public class PlayerStatDialog extends GameDialog {
-
 	static int DEFAULT_STAT_SUM = 6;
 	int maxStatSum = MadSand.player().stats.baseStats.maxStatSum;
 	int minStatSum;
@@ -90,26 +90,36 @@ public class PlayerStatDialog extends GameDialog {
 		TextButton button = new TextButton(inc ? "+" : "-", Gui.skin);
 		ChangeListener listener = new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				int statSum = statLabels.stats.getSum();
-				StatContainer stats = statLabels.stats.baseStats;
+				PlayerStats stats = statLabels.getStats();
+				StatContainer baseStats = stats.baseStats;
+				int statSum = stats.getSum();
+
 				if (inc) {
 					if (statSum < maxStatSum)
-						stats.increase(stat);
+						baseStats.increase(stat);
 				} else {
-					if (statSum > minStatSum && stats.get(stat) > 1)
-						stats.decrease(stat);
+					if (statSum > minStatSum && baseStats.get(stat) > 1)
+						baseStats.decrease(stat);
 				}
 				statLabels.refreshStatLabels();
 
 				if (restoreOnChange)
-					statLabels.stats.restore();
-				
+					stats.restore();
+
 				Gui.refreshOverlay();
 			}
 		};
 
 		button.addListener(listener);
 		return button;
+	}
+
+	public boolean hasUnassignedPoints() {
+		if (statLabels.getStats().baseStats.getFreePoints() > 0) {
+			Gui.drawOkDialog("You still have unassigned stat points left!");
+			return true;
+		}
+		return false;
 	}
 
 }

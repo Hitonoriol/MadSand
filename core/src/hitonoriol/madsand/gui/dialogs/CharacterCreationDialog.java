@@ -17,7 +17,7 @@ public class CharacterCreationDialog {
 
 	public CharacterCreationDialog() {
 		statLabels = new StatLabels();
-		stats = statLabels.stats;
+		stats = statLabels.getStats();
 		createCharDialog();
 	}
 
@@ -40,10 +40,8 @@ public class CharacterCreationDialog {
 		dialog.add(createCharBtn).width(width).row();
 
 		Gui.setAction(createCharBtn, () -> {
-			if (stats.baseStats.getFreePoints() > 0) {
-				Gui.drawOkDialog("You still have unassigned stat points left!");
+			if (dialog.hasUnassignedPoints())
 				return;
-			}
 
 			if (!dialog.nameField.getText().trim().equals("")) {
 				MadSand.player().setName(dialog.nameField.getText());

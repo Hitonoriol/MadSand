@@ -23,11 +23,13 @@ public class WorldMapSaver {
 	final int BLOCK_SIZE = 2;
 	final int LONG_BLOCK_SIZE = 8;
 
-	WorldMap worldMap;
+	private WorldMap worldMap;
 
 	public WorldMapSaver(WorldMap worldMap) {
-		this.worldMap = worldMap;
+		setWorldMap(worldMap);
 	}
+
+	public WorldMapSaver() {}
 
 	public byte[] locationToBytes(int wx, int wy) {
 		Pair coords = new Pair();
@@ -83,12 +85,12 @@ public class WorldMapSaver {
 			stream.read(sectorContents);
 			bytesToSector(sectorContents, wx, wy, layer);
 		}
-
 	}
 
 	public Location loadLocationInfo(int wx, int wy) throws Exception {
 		Location location = Resources.mapper.readValue(GameSaver.getLocationFile(wx, wy), Location.class);
-		worldMap.locations.put(new Pair(wx, wy), location);
+		worldMap.addLocation(new Pair(wx, wy), location);
+		Utils.dbg("{%X} Loaded location {%X} info @ (%d, %d)", worldMap.hashCode(), location.hashCode(), wx, wy);
 		return location;
 	}
 
@@ -97,7 +99,7 @@ public class WorldMapSaver {
 			Utils.out("Saving sector [%d, %d] Layer: %d", wx, wy, layer);
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			Pair loc = new Pair(wx, wy);
-			Map map = worldMap.locations.get(loc).getLayer(layer);
+			Map map = worldMap.getLocation(loc).getLayer(layer);
 			byte mapProperties[] = Resources.mapper.writeValueAsString(map).getBytes();
 
 			Resources.mapper.writerFor(Resources.getMapType(Pair.class, AbstractNpc.class))
@@ -156,6 +158,7 @@ public class WorldMapSaver {
 
 	void bytesToSector(byte[] sector, int wx, int wy, int layer) {
 		try {
+			Utils.dbg("Loading sector (%d, %d) Layer %d...", wx, wy, layer);
 			ByteArrayInputStream stream = new ByteArrayInputStream(sector);
 			byte[] block = new byte[BLOCK_SIZE];
 			byte[] longBlock = new byte[LONG_BLOCK_SIZE];
@@ -219,5 +222,13 @@ public class WorldMapSaver {
 	private int loadNextBlock(ByteArrayInputStream stream, byte[] buffer) throws Exception {
 		stream.read(buffer);
 		return ByteUtils.decode2(buffer);
+	}
+
+	public void setWorldMap(WorldMap worldMap) {
+		this.worldMap = worldMap;
+	}
+
+	public WorldMap getWorldMap() {
+		return worldMap;
 	}
 }

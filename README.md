@@ -26,7 +26,7 @@
 ![screenshot](https://raw.githubusercontent.com/Hitonoriol/MadSand/master/screenshots/plains.png)
 ![screenshot](https://raw.githubusercontent.com/Hitonoriol/MadSand/master/screenshots/starting%20location.png)
 ![screenshot](https://raw.githubusercontent.com/Hitonoriol/MadSand/master/screenshots/inventory.png)
-
+![screenshot](https://raw.githubusercontent.com/Hitonoriol/MadSand/master/screenshots/light%20system.png)
 ![screenshot](https://raw.githubusercontent.com/Hitonoriol/MadSand/master/screenshots/character%20creation.png)
 ![screenshot](https://raw.githubusercontent.com/Hitonoriol/MadSand/master/screenshots/trade%20ui.png)
 ![screenshot](https://raw.githubusercontent.com/Hitonoriol/MadSand/master/screenshots/equipment%20sidebar.png)

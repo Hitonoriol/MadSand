@@ -1,6 +1,8 @@
 package hitonoriol.madsand;
 
-import static hitonoriol.madsand.resources.Resources.*;
+import static hitonoriol.madsand.resources.Resources.ERR_FILE;
+import static hitonoriol.madsand.resources.Resources.LINEBREAK;
+import static hitonoriol.madsand.resources.Resources.mapper;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,7 +12,6 @@ import java.io.FileWriter;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -27,7 +28,7 @@ public class GameSaver {
 
 	public static void save() {
 		World world = MadSand.world();
-		if (world.inEncounter) {
+		if (world.inEncounter()) {
 			Gui.drawOkDialog("You can't save during an encounter!");
 			return;
 		}
@@ -50,7 +51,8 @@ public class GameSaver {
 			return false;
 		}
 
-		MadSand.initNewGame();
+		Gui.overlay.gameLog.clear();
+		MadSand.world().close();
 		createDirs();
 
 		if (!loadWorld()) {
@@ -90,13 +92,14 @@ public class GameSaver {
 
 	public static boolean loadLocation(int wx, int wy) {
 		WorldMapSaver saver = MadSand.world().getMapSaver();
+
 		try {
-			Path fileLocation = Paths.get(getSectorFile(wx, wy).toURI());
-			byte[] data = Files.readAllBytes(fileLocation);
+			byte[] data = Files.readAllBytes(Paths.get(getSectorFile(wx, wy).toURI()));
 			Utils.out("Loading location [%d, %d]", wx, wy);
 
 			saver.loadLocationInfo(wx, wy);
 			saver.bytesToLocation(data, wx, wy);
+			MadSand.world().setWorldMap(saver.getWorldMap());
 
 			return true;
 		} catch (Exception e) {
@@ -132,15 +135,15 @@ public class GameSaver {
 
 	private static boolean loadWorld() {
 		try {
-			Utils.out("Loading world...");
+			Utils.out("Loading world info...");
 			String worldFile = getCurSaveDir() + MadSand.WORLDFILE;
 
 			World world = mapper.readValue(readFile(worldFile), World.class);
-			world.initWorld();
 			world.getPlayer().postLoadInit();
 			MadSand.instance().setWorld(world);
+			Utils.dbg("World: %X", world.hashCode());
 
-			Utils.out("Done loading world.");
+			Utils.out("Done loading world info.");
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
