@@ -7,16 +7,31 @@ public class PairFloat { // jus a container for them float coords
 	public float x, y;
 
 	public PairFloat(float x, float y) {
-		this.x = x;
-		this.y = y;
+		set(x, y);
 	}
-	
+
 	public PairFloat(PairFloat pair) {
 		this(pair.x, pair.y);
 	}
 
 	public PairFloat() {
 		this(0, 0);
+	}
+
+	public PairFloat set(float x, float y) {
+		this.x = x;
+		this.y = y;
+		return this;
+	}
+
+	public PairFloat set(PairFloat pair) {
+		return set(pair.x, pair.y);
+	}
+
+	public PairFloat add(float x, float y) {
+		this.x += x;
+		this.y += y;
+		return this;
 	}
 
 	@Override

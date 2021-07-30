@@ -54,6 +54,7 @@
 		"harvestHp" : 10,
 		"skill" : "Survival",
 		"@type" : "ItemFactory",
+		"luminosity" : 4.5,
 		"name" : "Campfire"
 	},
 	"7" : {
@@ -564,6 +565,7 @@
 		"@type" : "MapObject",
 		"hp" : 1,
 		"harvestHp" : 10,
+		"luminosity" : 2,
 		"name" : "Campfire"
 	},
 	"66" : {
@@ -576,6 +578,7 @@
 		"hp" : 1,
 		"harvestHp" : 15,
 		"@type" : "CraftingStation",
+		"luminosity" : 3.5,
 		"name" : "Furnace"
 	},
 	"68" : {
@@ -606,6 +609,7 @@
 		"hp" : 1,
 		"harvestHp" : 15,
 		"@type" : "CraftingStation",
+		"luminosity" : 4,
 		"name" : "Cooking place"
 	},
 	"73" : {
@@ -1393,5 +1397,12 @@
 							package('minigames.farkle.FarkleUI'),
 							world:getCurLoc():getObject(player:lookingAt())):show()",
 		"name" : "Farkle machine"
+	},
+	"186" : {
+		"@type" : "MapObject",
+		"hp" : 1,
+		"harvestHp" : 9,
+		"luminosity" : 5.5,
+		"name" : "Torch"
 	}
 }

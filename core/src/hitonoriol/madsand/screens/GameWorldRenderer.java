@@ -1,8 +1,8 @@
 package hitonoriol.madsand.screens;
 
-import java.util.ArrayList;
+import static hitonoriol.madsand.MadSand.TILESIZE;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.IntUnaryOperator;
 import java.util.stream.IntStream;
@@ -20,8 +20,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.AnimationContainer;
-import hitonoriol.madsand.containers.Line;
-import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.containers.PairFloat;
 import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.Player;
@@ -36,10 +34,9 @@ import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.resources.TextureMap;
 
 public class GameWorldRenderer {
-	static final int TILESIZE = MadSand.TILESIZE;
 	public static final float DEFAULT_ZOOM = 1.5F;
-	static final int OBJECT_LOOT = 7;
-	final int camxoffset = 17, camyoffset = 37;
+	private static final int OBJECT_LOOT = 7;
+	private static final int CAM_OFFSET_X = 0, CAM_OFFSET_Y = 37;
 
 	private float cameraX, cameraY;
 	private boolean followPlayer;
@@ -50,23 +47,11 @@ public class GameWorldRenderer {
 	private LightMap light = new LightMap();
 	private ConcurrentHashMap<PairFloat, AnimationContainer> animations = new ConcurrentHashMap<>();
 	private ConcurrentHashMap<Path, PathDescriptor> paths = new ConcurrentHashMap<>();
-	private List<Pair> renderArea = new ArrayList<>();
 
 	private static TextureRegion mapCursor = Resources.getTexture("misc/map_cursor");
 
 	public GameWorldRenderer() {
 		updateViewport();
-	}
-
-	public void setRenderRadius(int radius) {
-		final int center = radius, diameter = radius * 2;
-		renderArea = new ArrayList<>();
-		for (int y = 0; y < diameter; ++y) {
-			for (int x = 0; x < diameter; ++x) {
-				if (Line.calcDistance(center, center, x, y) <= radius)
-					renderArea.add(new Pair(center - x, center - y));
-			}
-		}
 	}
 
 	private void renderObject(MapObject object, float x, float y) {
@@ -190,52 +175,41 @@ public class GameWorldRenderer {
 
 	private void drawGame() {
 		Map map = MadSand.world().getCurLoc();
-		AbstractNpc npc;
-		Tile tile;
-		MapObject object;
 		Player player = MadSand.player();
-		boolean tileVisited;
-		int x, y;
 
 		if (player.isInBackground()) // Draw player under tiles & objects if he is currently in the background
 			drawEntity(player);
 
-		for (Pair cell : renderArea) { // Render background tiles
-			x = player.x + cell.x;
-			y = player.y + cell.y;
-
-			tile = map.getTile(x, y);
+		player.forEachInFov((x, y) -> { // Render background tiles
+			Tile tile = map.getTile(x, y);
 
 			if (!tile.visible() && !tile.visited) //Don't render tiles which were never seen
-				continue;
+				return;
 
 			if (!map.validCoords(x, y) && MadSand.world().isUnderGround()) // Don't render default tile while underground
-				continue;
+				return;
 
 			batch.draw(Resources.getTile(MadSand.world().getTileOrDefault(x, y)), x * TILESIZE, y * TILESIZE);
-		}
+		});
 
-		for (Pair cell : renderArea) { // Render objects, loot, NPCs and player
-			x = player.x + cell.x;
-			y = player.y + cell.y;
-
-			tile = map.getTile(x, y);
-			object = map.getObject(x, y);
-			npc = map.getNpc(x, y);
-			tileVisited = tile.visited && !tile.visible();
+		player.forEachInFov((x, y) -> { // Render objects, loot, NPCs and player
+			Tile tile = map.getTile(x, y);
+			MapObject object = map.getObject(x, y);
+			AbstractNpc npc = map.getNpc(x, y);
+			boolean tileVisited = tile.visited && !tile.visible();
 
 			if (!map.validCoords(x, y) && MadSand.world().isUnderGround())
-				continue;
+				return;
 
 			if (!tile.visible() && !tile.visited) //Don't render anything on tiles which were never seen
-				continue;
+				return;
 
 			if (tileVisited && object.isWall) // If object is a wall, it'll be rendered even when not visible
 				renderObject(object, x, y);
 
 			if (tileVisited) { // Render visited & not currently visible tiles partially darkened
 				darkenTile(x, y, tile.getLightLevel());
-				continue;
+				return;
 			}
 
 			renderObject(object, x, y);
@@ -248,7 +222,7 @@ public class GameWorldRenderer {
 
 			if (player.at(x, y) && !player.isInBackground())
 				drawEntity(player);
-		}
+		});
 
 		drawAnimations();
 
@@ -293,7 +267,7 @@ public class GameWorldRenderer {
 		zoom += by;
 		updateViewport();
 	}
-	
+
 	public void setZoom(float val) {
 		zoom = val;
 		updateViewport();
@@ -305,7 +279,7 @@ public class GameWorldRenderer {
 	}
 
 	public void updateCamPosition(float x, float y) {
-		camera.position.set(x + camxoffset, y + camyoffset, 0.0F);
+		camera.position.set(x + CAM_OFFSET_X, y + CAM_OFFSET_Y, 0.0F);
 		batch.setProjectionMatrix(camera.combined);
 		camera.update();
 	}
@@ -334,13 +308,12 @@ public class GameWorldRenderer {
 				.sum();
 		private final static java.util.Map<Integer, Integer> lightLvlMap = new HashMap<>();
 
-		
 		private final static String REGION = "light";
 
 		private LightMap() {
 			super(Resources.getAtlas(), REGION);
 			createLightLevels();
-			
+
 			for (int dst = 1, lightLvl = 1, occurences = 0; dst <= MAX_DISTANCE; ++dst) {
 				lightLvlMap.put(dst, lightLvl);
 				if (lightLvl < LIGHT_LEVELS && ++occurences >= lightLevelFunction.applyAsInt(lightLvl)) {

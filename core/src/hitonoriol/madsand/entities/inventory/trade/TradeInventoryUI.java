@@ -1,6 +1,6 @@
 package hitonoriol.madsand.entities.inventory.trade;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -8,21 +8,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.resources.Resources;
 
-public class TradeInventoryUI {
+public class TradeInventoryUI extends GameDialog {
 	TradeUIRefresher refresher;
 
 	private AutoFocusScrollPane sellPane, buyPane;
 	private Table sellTable, buyTable;
 	private Table tradeUITable;
-	private Table containerTable;
-	private Label header;
 	private Label sellHeader, buyHeader;
 	private TextButton exitBtn;
 
@@ -43,9 +41,9 @@ public class TradeInventoryUI {
 		buyHeader = new Label("Buy", Gui.skin);
 		sellHeader.setAlignment(Align.center);
 		buyHeader.setAlignment(Align.center);
-		header = new Label("Trade", Gui.skin);
+		setTitle("Trade");
+		centerTitle();
 
-		containerTable = new Table();
 		tradeUITable = new Table();
 
 		tradeUITable.setSize(WIDTH, HEIGHT);
@@ -56,17 +54,15 @@ public class TradeInventoryUI {
 
 		exitBtn = new TextButton("Done", Gui.skin);
 
-		containerTable.setBackground(Gui.darkBackground);
-		containerTable.align(Align.topLeft);
+		setBackground(Gui.getColorDrawable(Color.DARK_GRAY));
+		align(Align.topLeft);
 
 		sellPane = new AutoFocusScrollPane(sellTable);
 		buyPane = new AutoFocusScrollPane(buyTable);
 		setPaneParams(sellPane);
 		setPaneParams(buyPane);
 
-		Gui.setFontSize(header, Gui.FONT_M);
-
-		containerTable.add(header).align(Align.center).row();
+		Gui.setFontSize(getTitleLabel(), Gui.FONT_M);
 
 		tradeUITable.add(sellHeader).pad(10).width(WIDTH / 2 - OFFSET).align(Align.center);
 		tradeUITable.add(buyHeader).pad(10).width(WIDTH / 2 - OFFSET).align(Align.center);
@@ -75,20 +71,13 @@ public class TradeInventoryUI {
 		tradeUITable.add(buyPane).prefHeight(HEIGHT).align(Align.topRight);
 		tradeUITable.row();
 
-		containerTable.setSize(WIDTH, HEIGHT);
-		containerTable.setPosition(Gdx.graphics.getWidth() / 2 - WIDTH / 2, Gdx.graphics.getHeight() / 2 - HEIGHT / 2);
+		setSize(WIDTH, HEIGHT);
 
-		containerTable.add(tradeUITable).row();
-		containerTable.add(exitBtn).align(Align.bottom).padBottom(5).row();
-		containerTable.setVisible(false);
-
-		Gui.overlay.addActor(containerTable);
+		add(tradeUITable).row();
+		add(exitBtn).align(Align.bottom).padBottom(5).row();
 
 		refresher = () -> refresh();
-		Gui.setAction(exitBtn, () -> {
-			remove();
-			MadSand.reset();
-		});
+		Gui.setAction(exitBtn, () -> remove());
 	}
 
 	private void setPaneParams(ScrollPane pane) {
@@ -98,10 +87,8 @@ public class TradeInventoryUI {
 	}
 
 	public void show() {
-		Gui.overlay.hideActionBtn();
+		super.show();
 		refresh();
-		containerTable.setVisible(true);
-		Gui.gameUnfocus();
 	}
 
 	public void refreshCurrencyHeader(Inventory inventory, TradeAction action) {
@@ -146,14 +133,5 @@ public class TradeInventoryUI {
 				table.add().row();
 			}
 		}
-	}
-
-	public void remove() {
-		Gui.gameResumeFocus();
-		containerTable.remove();
-	}
-
-	public void toggleVisible() {
-		containerTable.setVisible(!containerTable.isVisible());
 	}
 }

@@ -23,7 +23,6 @@ import hitonoriol.madsand.util.TimeUtils;
  */
 
 public class ResourceProgressBar extends TimedProgressBar {
-
 	static ProgressBarStyle style;
 
 	static float BASE_DELAY = 0.295f;
@@ -76,7 +75,7 @@ public class ResourceProgressBar extends TimedProgressBar {
 			Gui.gameResumeFocus();
 			Gui.refreshOverlay();
 			Mouse.refreshTooltip();
-			/*Utils.scheduleTask(() -> progressLabel.remove(), 0.5f);*/
+			wakeTask.cancel();
 		});
 
 		skipTask = TimeUtils.createTask(() -> skip = false);
@@ -119,7 +118,7 @@ public class ResourceProgressBar extends TimedProgressBar {
 		return damage;
 	}
 
-	float WAKE_TIME = 0.019f; // Request rendering once per WAKE_TIME
+	private final static float WAKE_TIME = 0.019f; // Request rendering once per WAKE_TIME
 
 	public void start() {
 		Gui.overlay.addActor(this);
@@ -139,7 +138,7 @@ public class ResourceProgressBar extends TimedProgressBar {
 	}
 
 	private float centerRelative(float x, float width, float objectWidth) {
-		return (x + (objectWidth * 0.75f)) - (width / 2);
+		return (x + (objectWidth * 0.5f)) - width * 0.5f;
 	}
 
 	private void setStyle() {

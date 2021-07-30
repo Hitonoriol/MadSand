@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.BooleanSupplier;
 
 import com.badlogic.gdx.Gdx;
@@ -23,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.AnimationContainer;
+import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
 import hitonoriol.madsand.dialog.GameDialog;
@@ -82,6 +84,7 @@ public class Player extends Entity {
 	@JsonIgnore
 	public PlayerStats stats; // Reference to the same Stats object as super.stats
 	private float runSpeedCoef = 3.5f;
+	private final static float DEF_LUMINOSITY = 1.5f;
 
 	private int targetedByNpcs = 0;
 	private Set<Integer> unlockedItems = new HashSet<>(); // set of items player obtained at least once
@@ -94,6 +97,8 @@ public class Player extends Entity {
 	private List<Ability> abilities = new ArrayList<>();
 	private LinkedHashMap<Integer, Integer> abilityKeyBinds = new LinkedHashMap<>();
 	private int settlementsEstablished = 0;
+	@JsonIgnore
+	private List<Pair> visibleArea = new ArrayList<>();
 
 	private TimedAction scheduledAction;
 
@@ -112,6 +117,7 @@ public class Player extends Entity {
 		initInventory();
 		setFov();
 		quests.setPlayer(this);
+		setLuminosity(DEF_LUMINOSITY);
 		Optional.ofNullable(Gui.overlay).ifPresent(overlay -> overlay.equipmentSidebar.init());
 	}
 
@@ -128,6 +134,7 @@ public class Player extends Entity {
 		stats.equipment.refreshUI();
 		abilityKeyBinds.forEach((key, abilityId) -> bindAbility(key, abilityId));
 		inventory.refreshContents();
+		refreshAvailableRecipes();
 	}
 
 	private static final int ANIM_WIDTH = 35, ANIM_HEIGHT = 74;
@@ -302,13 +309,34 @@ public class Player extends Entity {
 	@Override
 	public void setFov(int val) {
 		super.setFov(val);
-		MadSand.setRenderRadius(val);
+		setVisibleArea(val);
 		if (MadSand.world() != null)
 			MadSand.world().updateLight();
 	}
 
 	public void setFov() {
 		setFov(getFov());
+	}
+
+	public void setVisibleArea(int radius) {
+		final int center = radius, diameter = radius * 2;
+		visibleArea.clear();
+		for (int y = 0; y < diameter; ++y) {
+			for (int x = 0; x < diameter; ++x) {
+				if (Line.calcDistance(center, center, x, y) <= radius)
+					visibleArea.add(new Pair(center - x, center - y));
+			}
+		}
+	}
+
+	public void forEachInFov(BiConsumer<Integer, Integer> action) {
+		for (Pair coords : visibleArea)
+			action.accept(x + coords.x, y + coords.y);
+	}
+
+	@JsonIgnore
+	public List<Pair> getVisibleArea() {
+		return visibleArea;
 	}
 
 	@Override
@@ -320,10 +348,10 @@ public class Player extends Entity {
 	}
 
 	public void increaseSkill(Skill skill, double by) {
-		stats.skills.increaseSkill(skill, by);
+		stats().skills.increaseSkill(skill, by);
 
 		if (skill.isResourceSkill())
-			stats.skills.increaseSkill(Skill.Level, by * Skill.RES_EXP_COEF);
+			stats().skills.increaseSkill(Skill.Level, by * Skill.RES_EXP_COEF);
 	}
 
 	public void increaseSkill(Skill skill) {
@@ -731,7 +759,7 @@ public class Player extends Entity {
 		Gui.overlay.closeGameContextMenu();
 		Gui.overlay.hideActionBtn();
 	}
-	
+
 	public void tradeWith(Entity npc) {
 		new TradeInventoryUI(npc.inventory, inventory).show();
 	}
@@ -1084,6 +1112,7 @@ public class Player extends Entity {
 		super.teleport(x, y);
 		Gdx.graphics.requestRendering();
 		MadSand.getRenderer().setWorldCamPosition(x, y);
+		MadSand.world().updateLight();
 	}
 
 	@Override

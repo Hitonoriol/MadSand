@@ -39,7 +39,6 @@ public class PlayerStats extends Stats {
 	@JsonIgnore
 	public Equipment equipment;
 
-	public double luminosity = 1.5;
 	public final int maxFood = 1000;
 	public int foodTicks = skills.getLvl(Skill.Survival);
 	public int food = maxFood;

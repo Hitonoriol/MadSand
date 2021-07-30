@@ -90,6 +90,7 @@ public class Keyboard {
 						World world = world();
 						world.timeTick(150);
 						world.updateLight();
+						Gui.refreshOverlay();
 					})
 					.bind(key -> pollDebugKeys(key));
 		}

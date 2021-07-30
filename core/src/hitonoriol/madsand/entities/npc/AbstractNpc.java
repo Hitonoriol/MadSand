@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -29,6 +30,8 @@ import hitonoriol.madsand.pathfinding.Path;
 import hitonoriol.madsand.properties.NpcContainer;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
+import me.xdrop.jrand.JRand;
+import me.xdrop.jrand.generators.basics.FloatGenerator;
 
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
@@ -38,11 +41,15 @@ public abstract class AbstractNpc extends Entity {
 	static double IDLE_MOVE_CHANCE = 15;
 	static float MAX_FOV_COEF = 1.5f;
 	public static final float HOSTILE_SPEEDUP = 1.35f;
+	private final static int meleeAttackDst = 2; // Must be < than this
+	private final static int MAX_LIFETIME = 20;
+	private final static FloatGenerator lifetimeGen = JRand.flt().range(1, 15);
 
 	public int id;
 	public long uid;
 	public int lvl = 1;
 	public int rewardExp;
+	@JsonProperty
 	protected double lifetime;
 
 	public boolean friendly;
@@ -55,9 +62,7 @@ public abstract class AbstractNpc extends Entity {
 	private float timePassed; // time passed since last action
 	public float tickCharge = 0;
 
-	public int meleeAttackDst = 2; // Must be < than this
 	public boolean enemySpotted = false;
-
 	public State state = State.Idle;
 
 	@JsonIgnore
@@ -67,7 +72,6 @@ public abstract class AbstractNpc extends Entity {
 	int pathIdx = 0;
 
 	public AbstractNpc(NpcContainer protoNpc) {
-		super();
 		id = protoNpc.id;
 		uid = MadSand.world().npcCounter().getAndIncrement();
 		stats.spawnTime = MadSand.world().currentTick();
@@ -75,7 +79,7 @@ public abstract class AbstractNpc extends Entity {
 		loadProperties(protoNpc);
 		if (id != NULL_NPC)
 			loadSprite();
-		setLifetime(Utils.rand(1, 10));
+		setLifetime(lifetimeGen.gen());
 	}
 
 	public AbstractNpc() {
@@ -320,19 +324,27 @@ public abstract class AbstractNpc extends Entity {
 		return MadSand.world().ticksPerHour() * Utils.H_DAY * days;
 	}
 
+	@JsonIgnore
 	public final void setLifetime(double days) {
 		lifetime = daysToTicks(days);
+	}
+
+	public double getLifetime() {
+		return lifetime;
 	}
 
 	protected final void addLifetime(double days) {
 		if (lifetime < 0)
 			lifetime = 0;
+		if (lifetime > daysToTicks(MAX_LIFETIME))
+			return;
 
+		Utils.dbg("Adding %f days (%f ticks) of lifetime for %s", days, daysToTicks(days), getName());
 		lifetime += daysToTicks(days);
 	}
 
 	protected void addLifetime() {
-		addLifetime(Math.sqrt(lvl + 1) * (0.25f + Utils.random.nextFloat() * 10f));
+		addLifetime(Math.sqrt(lvl + 1) * (0.25f + Utils.random.nextFloat()));
 	}
 
 	public boolean canBeDespawned() {

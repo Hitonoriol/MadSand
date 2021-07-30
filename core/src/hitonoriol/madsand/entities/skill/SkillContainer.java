@@ -39,12 +39,13 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 	public boolean check(Skill skill, boolean verbose) {
 		boolean lvup = get(skill).check();
 		if (verbose && lvup) {
-			MadSand.notice(skill.toString() + " increased!");
+			MadSand.notice(skill + " increased!");
 
 			if (skill.equals(Skill.Level)) {
 				MadSand.player().stats.baseStats.increaseMaxStatSum();
 				Gui.overlay.levelUpDialog();
-			}
+			} else
+				Gui.drawOkDialog(skill + " up!", "Your " + skill + " is now level " + get(skill).lvl + "!");
 		}
 		return lvup;
 	}
@@ -68,7 +69,7 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 		if (skill == Skill.None)
 			return false;
 
-		get(skill).exp += amt;
+		get(skill).addExp(amt);
 		return check(skill);
 	}
 

@@ -1911,5 +1911,14 @@
 		"recipe" : "1/3",
 		"altObject" : 11,
 		"cost" : 10
+	},
+	"187" : {
+		"@type" : "Placeable",
+		"type" : "Object",
+		"altObject" : 186,
+		"recipe" : "8/3:9/1:2/1",
+		"craftQuantity" : 3,
+		"name" : "Torch",
+		"cost" : 5
 	}
 }

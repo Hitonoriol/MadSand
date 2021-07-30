@@ -1,6 +1,7 @@
 package hitonoriol.madsand.map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -17,6 +18,9 @@ import hitonoriol.madsand.map.object.MapObject;
 @JsonTypeInfo(use = Id.CLASS, include = As.PROPERTY)
 @JsonSubTypes({ @Type(Entity.class), @Type(MapObject.class) })
 public abstract class MapEntity implements DynamicallyCastable<MapEntity> {
+	@JsonProperty
+	private float luminosity = 0;
+
 	public abstract void damage(int amt);
 
 	public abstract String getName();
@@ -35,4 +39,16 @@ public abstract class MapEntity implements DynamicallyCastable<MapEntity> {
 
 	@JsonIgnore
 	public abstract boolean isEmpty();
+
+	public float getLuminosity() {
+		return luminosity;
+	}
+
+	public boolean emitsLight() {
+		return luminosity > 0;
+	}
+
+	protected void setLuminosity(float value) {
+		luminosity = value;
+	}
 }

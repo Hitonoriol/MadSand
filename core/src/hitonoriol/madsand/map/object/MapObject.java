@@ -56,6 +56,7 @@ public class MapObject extends MapEntity {
 	public String onInteract = Resources.emptyField;
 
 	public MapObject(MapObject protoObject) {
+		setLuminosity(protoObject.getLuminosity());
 		initProperties(protoObject);
 	}
 

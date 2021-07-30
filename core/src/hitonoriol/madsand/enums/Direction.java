@@ -38,6 +38,14 @@ public enum Direction {
 		}
 	}
 
+	public boolean isVertical() {
+		return this == UP || this == DOWN;
+	}
+
+	public boolean isHorizontal() {
+		return this == LEFT || this == RIGHT;
+	}
+
 	public boolean isBase() {
 		return !isDiagonal();
 	}
@@ -70,7 +78,7 @@ public enum Direction {
 	public Direction getBase(int idx) {
 		return baseValues[idx];
 	}
-	
+
 	public static void forEachBase(Consumer<Direction> action) {
 		for (Direction dir : baseValues)
 			action.accept(dir);

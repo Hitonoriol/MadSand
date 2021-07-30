@@ -1,6 +1,7 @@
 package hitonoriol.madsand.gui.textgenerator;
 
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
@@ -82,6 +83,10 @@ public class CellInfoGenerator extends TooltipTextGenerator {
 
 	public boolean hasNpc() {
 		return !npc.equals(Map.nullNpc);
+	}
+
+	public boolean hasObject() {
+		return !object.equals(Map.nullObject);
 	}
 
 	public Loot getLoot() {
@@ -180,28 +185,26 @@ public class CellInfoGenerator extends TooltipTextGenerator {
 				: ("[#58FFB1]* Will fully grow in " + Utils.timeString(time) + "[]"));
 	}
 
+	Pair coords = new Pair();
 	private void getDebugInfo() {
 		addLine("[#C3C3C3]" + lineDelimiter)
 				.addLine("Light level: " + tile.getLightLevel() + " (sky: " + MadSand.world().getSkyLight() + ")")
+				.addLine(loc.getLightEngine().getEntityLight(coords.set(x, y)))
 				.addLine("Objects on map: " + loc.getObjectCount())
 				.addLine("NPCs on map: " + loc.getNpcCount());
-		if (!object.equals(Map.nullObject))
-			addLine("Object HP: " + object.hp + " | Object HarvestHp: " + object.harvestHp);
-		if (!npc.equals(Map.nullNpc)) {
+
+		if (hasObject())
+			addLine("Object HP: " + object.hp + " (" + object.harvestHp + ")")
+					.addLine("Luminosity: " + object.getLuminosity());
+
+		if (hasNpc())
 			addLine("Npc hp: " + npc.stats.hp)
-					.addLine("speed: " + npc.getSpeed() + "(" + npc.stats.get(Stat.Dexterity) + ")" + " | tickCharge: "
-							+ npc.tickCharge);
-		}
+					.addLine("Speed: " + npc.getSpeed() + "(" + npc.stats.get(Stat.Dexterity) + ")")
+					.addLine("Lifetime: " + Utils.round(npc.getLifetime()));
 
-		getPathNodeInfo();
+		if (node != null)
+			addLine("Node: " + node);
 		addLine(lineDelimiter + "[]");
-	}
-
-	private void getPathNodeInfo() {
-		if (node == null)
-			return;
-
-		addLine("Node: " + node);
 	}
 
 	@Override

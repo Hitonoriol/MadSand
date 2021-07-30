@@ -33,9 +33,7 @@ public class ResourceObject extends MapObject {
 		return new ResourceObject(this);
 	}
 
-	public ResourceObject() {
-		super();
-	}
+	public ResourceObject() {}
 
 	@Override
 	public void interact(Player player) {
@@ -51,8 +49,9 @@ public class ResourceObject extends MapObject {
 	}
 
 	private void rollResources(Player player, int hpDelta) {
-		PlayerStats stats = player.stats;
+		PlayerStats stats = player.stats();
 		Tool.Type heldTool = stats.getEquippedToolType();
+		Skill skill = Tool.Type.bySkill(this.skill) == heldTool ? this.skill : Skill.Gathering;
 		Item objLoot;
 		int rolls;
 
@@ -66,7 +65,7 @@ public class ResourceObject extends MapObject {
 				player.addItem(objLoot);
 			}
 
-			player.increaseSkill(skill, lvl);
+			player.increaseSkill(skill, Math.max(1, lvl));
 		}
 	}
 
@@ -79,11 +78,12 @@ public class ResourceObject extends MapObject {
 			return -1;
 		}
 
+		PlayerStats stats = player.stats();
 		int preHitHp = hp;
-		int damage = super.acceptHit(player, () -> player.stats.skills.getBaseSkillDamage(skill)
-				+ player.stats.getEquippedToolDamage(skill));
+		int damage = super.acceptHit(player,
+				() -> stats.skills.getBaseSkillDamage(skill) + stats.getEquippedToolDamage(skill));
 
-		if (rollDrop(player.stats.getEquippedToolType()) != -1 && preHitHp != hp)
+		if (rollDrop(stats.getEquippedToolType()) != -1 && preHitHp != hp)
 			rollResources(player, Math.abs(preHitHp - hp));
 
 		return damage;

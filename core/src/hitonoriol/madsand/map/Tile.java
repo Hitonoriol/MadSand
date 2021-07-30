@@ -64,8 +64,12 @@ public class Tile {
 		lightLevel = 0;
 	}
 
-	public void setVisible(int lightLevel) {
+	public void setLightLevel(int lightLevel) {
 		this.lightLevel = lightLevel;
+	}
+	
+	public void addLight(int lightLevel) {
+		this.lightLevel += lightLevel;
 	}
 
 	public int getLightLevel() {

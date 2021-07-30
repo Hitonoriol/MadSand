@@ -43,11 +43,8 @@ public abstract class Entity extends MapEntity {
 
 	public static final Comparator<Entity> speedComparator = (e1, e2) -> Double.compare(e2.getSpeed(), e1.getSpeed());
 
-	@JsonIgnore
-	private float spriteWidth;
-
 	public int x, y; // Grid coords
-	public PairFloat globalPos = new PairFloat(); // Screen space coords
+	public PairFloat globalPos = new PairFloat(), movingPos = new PairFloat(); // Screen space coords
 	public float movementSpeed;
 	private float actDelay = 0;
 
@@ -109,7 +106,6 @@ public abstract class Entity extends MapEntity {
 		sprites[Direction.UP.baseOrdinal()] = u;
 		sprites[Direction.LEFT.baseOrdinal()] = l;
 		sprites[Direction.DOWN.baseOrdinal()] = d;
-		spriteWidth = d.getWidth();
 	}
 
 	@JsonIgnore
@@ -446,7 +442,6 @@ public abstract class Entity extends MapEntity {
 
 		setGridCoords(x, y);
 		updCoords();
-		MadSand.world().updateLight();
 	}
 
 	public void teleport(Pair coords) {
@@ -486,23 +481,26 @@ public abstract class Entity extends MapEntity {
 		running = false;
 	}
 
+	public float movementOffsetX() {
+		if (!isMoving() || !stats.look.isHorizontal())
+			return 0;
+
+		return stats.look == Direction.LEFT ? stepx : -stepx;
+	}
+
+	public float movementOffsetY() {
+		if (!isMoving() || !stats.look.isVertical())
+			return 0;
+
+		return stats.look == Direction.DOWN ? stepy : -stepy;
+	}
+
 	@JsonIgnore
 	public PairFloat getWorldPos() {
 		if (!isMoving())
 			return globalPos;
 
-		PairFloat worldPos = new PairFloat(globalPos);
-
-		if (stats.look == Direction.RIGHT)
-			worldPos.x -= stepx;
-		else if (stats.look == Direction.LEFT)
-			worldPos.x += stepx;
-		else if (stats.look == Direction.UP)
-			worldPos.y -= stepy;
-		else
-			worldPos.y += stepy;
-
-		return worldPos;
+		return movingPos.set(globalPos).add(movementOffsetX(), movementOffsetY());
 	}
 
 	public boolean hasMoved() {
@@ -711,7 +709,7 @@ public abstract class Entity extends MapEntity {
 
 	@JsonIgnore
 	public float getSpriteWidth() {
-		return spriteWidth;
+		return getSprite().getRegionWidth();
 	}
 
 	@JsonIgnore

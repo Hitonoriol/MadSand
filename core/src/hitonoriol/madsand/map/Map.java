@@ -10,14 +10,12 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.mutable.MutableBoolean;
-import org.apache.commons.lang3.mutable.MutableInt;
 
 import com.badlogic.gdx.math.Vector2;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.TimeDependent;
-import hitonoriol.madsand.containers.Circle;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Entity;
@@ -73,7 +71,8 @@ public class Map {
 	private HashMap<Pair, AbstractNpc> mapNpcs;
 
 	private final TimeScheduler timeScheduler = new TimeScheduler();
-	private PathfinfingEngine pathfinding = new PathfinfingEngine(this);
+	private final LightEngine light = new LightEngine(this);
+	private final PathfinfingEngine pathfinding = new PathfinfingEngine(this);
 
 	Pair coords = new Pair(0, 0);
 
@@ -102,6 +101,11 @@ public class Map {
 
 	public void rollSize() {
 		rollSize(MIN_MAPSIZE, MAX_MAPSIZE);
+	}
+
+	@JsonIgnore
+	public LightEngine getLightEngine() {
+		return light;
 	}
 
 	@JsonIgnore
@@ -801,56 +805,6 @@ public class Map {
 		ArrayList<Item> items = trade.roll(category, trade.rollTier());
 		for (int i = 0; i < maxRolls && i < items.size(); ++i)
 			putLoot(x, y, items.get(i));
-	}
-
-	public void updateLight(int wx, int wy, int r, double luminosity) {
-		Pair obstacle = new Pair(Pair.nullPair);
-		MutableBoolean wall = new MutableBoolean();
-		MutableInt pointCounter = new MutableInt(0);
-		final int skyLight = MadSand.world().getSkyLight();
-		Circle.forEachPoint(wx, wy, r, (x, y) -> {
-			int dx = wx + x, dy = wy + y;
-			if (!validCoords(dx, dy))
-				return;
-
-			getTile(dx, dy).setVisible();
-			obstacle.clear();
-			pointCounter.setValue(0);
-			wall.setFalse();
-			Line.forEachPoint(wx, wy, dx, dy, (rx, ry) -> {
-				double dstToCenter = Line.calcDistance(wx, wy, rx, ry);
-				int lightDelta = (int) (dstToCenter - luminosity);
-				Tile tile = getTile(rx, ry);
-				MapObject object = getObject(rx, ry);
-
-				/* Walls block light fully */
-				if (wall.isTrue())
-					tile.setVisible((int) dstToCenter - 1);
-
-				/* Non-wall objects take luminosity into account */
-				else if (dstToCenter > luminosity)
-					tile.setVisible(lightDelta);
-
-				/* Empty tiles are light by the sky */
-				if (obstacle.isEmpty())
-					tile.setVisible(lightDelta + skyLight);
-
-				/* Non-transparent objects block light, but are lit themselves */
-				if (!object.isTransparent()) {
-					obstacle.set(rx, ry);
-					wall.setValue(object.isWall);
-				}
-
-				/* If tile is lit, mark it as visited */
-				if (tile.visible())
-					tile.visited = true;
-			});
-
-		});
-	}
-
-	public void updateLight(int wx, int wy, int r) {
-		updateLight(wx, wy, r, 0);
 	}
 
 	public boolean putCrop(int x, int y, int id) { // item id

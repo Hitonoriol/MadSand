@@ -29,7 +29,9 @@ import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.lua.Lua;
+import hitonoriol.madsand.map.LightEngine;
 import hitonoriol.madsand.map.Map;
+import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.pathfinding.Graph;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
@@ -772,7 +774,19 @@ public class World {
 	}
 
 	public void updateLight() {
-		getCurLoc().updateLight(player.x, player.y, player.getFov(), player.stats().luminosity);
+		Map map = getCurLoc();
+		LightEngine light = map.getLightEngine();
+		Pair coords = new Pair();
+		light.begin();
+		light.update(player);
+		player.forEachInFov((x, y) -> {
+			MapEntity entity = map.getMapEntity(coords.set(x, y));
+			if (entity.isEmpty() || !entity.emitsLight())
+				return;
+
+			light.update(entity);
+		});
+		light.end();
 	}
 
 	private void actionTick() {

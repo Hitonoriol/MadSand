@@ -40,4 +40,13 @@ public class SkillValue {
 		}
 		return false;
 	}
+
+	public void addExp(double amt) {
+		exp += amt;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("{%X} Lvl. %d (%f/%f)", hashCode(), lvl, exp, requiredExp);
+	}
 }

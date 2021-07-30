@@ -140,10 +140,6 @@ public class MadSand extends Game {
 		Utils.out("Bye! Session lasted for [%s]", Utils.timeString(Utils.now() - startTime));
 	}
 
-	public static void setRenderRadius(int radius) {
-		gameWorld.setRenderRadius(radius);
-	}
-
 	public static OrthographicCamera getCamera() {
 		return gameWorld.getCamera();
 	}

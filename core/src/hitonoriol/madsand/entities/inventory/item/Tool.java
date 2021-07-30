@@ -7,7 +7,7 @@ import hitonoriol.madsand.util.Utils;
 
 public class Tool extends AbstractEquipment {
 	public static int MIN_SKILL_DMG = 1;
-	
+
 	public int dmg;
 	public Type type;
 	public Skill skill = Skill.None;
@@ -65,7 +65,6 @@ public class Tool extends AbstractEquipment {
 
 			default:
 				return None;
-
 			}
 		}
 	}
