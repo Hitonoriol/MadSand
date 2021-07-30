@@ -2,7 +2,7 @@ gradle.startParameter.showStacktrace = org.gradle.api.logging.configuration.Show
 allprojects {
 	apply plugin: "eclipse"
 
-	version = 'v0.49.13a'
+	version = 'v0.49.14a'
 	
 	ext {
 		appName = "MadSand"

@@ -1,8 +1,5 @@
 package hitonoriol.madsand.pathfinding;
 
-import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
-import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
-
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.map.Map;
@@ -11,7 +8,7 @@ import hitonoriol.madsand.util.Utils;
 
 public class PathfinfingEngine {
 	private Pair coords = new Pair();
-	private IndexedAStarPathFinder<Node> pathFinder;
+	private PathFinder pathFinder;
 	private Graph graph;
 	private DistanceHeuristic heuristic;
 	private NodeMap nodeMap;
@@ -23,8 +20,12 @@ public class PathfinfingEngine {
 
 	public void init() {
 		graph = new Graph();
-		nodeMap = new NodeMap(graph, map.getWidth(), map.getHeight());
+		nodeMap = new NodeMap(graph);
 		heuristic = new DistanceHeuristic();
+	}
+
+	public boolean ready() {
+		return graph != null && nodeMap != null && !nodeMap.isEmpty();
 	}
 
 	public Graph getGraph() {
@@ -82,7 +83,7 @@ public class PathfinfingEngine {
 	}
 
 	private void refreshPathFinder() {
-		pathFinder = new IndexedAStarPathFinder<Node>(graph, true);
+		pathFinder = new PathFinder(graph, true);
 	}
 
 	private void removeNodeNeighbor(Node node, int x, int y) {
@@ -104,12 +105,15 @@ public class PathfinfingEngine {
 		return nodeMap.get(x, y);
 	}
 
-	public boolean searchPath(int startX, int startY, int endX, int endY, DefaultGraphPath<Node> path) {
+	public boolean searchPath(int startX, int startY, int endX, int endY, Path path) {
 		Node start = nodeMap.get(startX, startY), end = nodeMap.get(endX, endY);
 
 		if (start == null || end == null)
 			return false;
+		graph.reIndex();
+		path.clear();
 
+		//Utils.dbg("<%X> Searching path %s->%s", path.hashCode(), start, end);
 		return pathFinder.searchNodePath(start, end, heuristic, path);
 	}
 
@@ -117,8 +121,10 @@ public class PathfinfingEngine {
 		if (graph.getNodeCount() == 0)
 			return;
 
-		graph.addNode(nodeMap.putNew(x, y));
+		Node node = nodeMap.putNew(x, y);
+		graph.addNode(node);
 		linkToNeighbors(x, y);
+		Utils.dbg("Object @ (%d, %d) removed. Added new node {%s}", x, y, node);
 		refreshPathFinder();
 	}
 
@@ -129,7 +135,7 @@ public class PathfinfingEngine {
 		if (!object.nocollide) {
 			unlinkFromNeighbors(x, y);
 			graph.remove(nodeMap.remove(x, y));
-		} else {
+		} else if (!nodeMap.nodeExists(x, y)) {
 			graph.addNode(nodeMap.putNew(x, y));
 			linkToNeighbors(x, y);
 		}
@@ -137,4 +143,7 @@ public class PathfinfingEngine {
 		refreshPathFinder();
 	}
 
+	public NodeMap getNodeMap() {
+		return nodeMap;
+	}
 }

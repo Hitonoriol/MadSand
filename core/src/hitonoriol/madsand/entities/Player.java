@@ -135,6 +135,7 @@ public class Player extends Entity {
 		abilityKeyBinds.forEach((key, abilityId) -> bindAbility(key, abilityId));
 		inventory.refreshContents();
 		refreshAvailableRecipes();
+		setFov();
 	}
 
 	private static final int ANIM_WIDTH = 35, ANIM_HEIGHT = 74;
@@ -308,6 +309,9 @@ public class Player extends Entity {
 
 	@Override
 	public void setFov(int val) {
+		if (!visibleArea.isEmpty() && val == getFov())
+			return;
+
 		super.setFov(val);
 		setVisibleArea(val);
 		if (MadSand.world() != null)
@@ -315,7 +319,7 @@ public class Player extends Entity {
 	}
 
 	public void setFov() {
-		setFov(getFov());
+		setFov((int) (Gdx.graphics.getWidth() / MadSand.TILESIZE / 1.65));
 	}
 
 	public void setVisibleArea(int radius) {

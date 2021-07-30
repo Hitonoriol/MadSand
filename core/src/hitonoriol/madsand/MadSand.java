@@ -129,6 +129,7 @@ public class MadSand extends Game {
 		gameWorld.updateViewport();
 		Gui.overlay.getViewport().update(width, height, true);
 		Gui.overlay.updateWidgetPositions();
+		player().setFov();
 	}
 
 	@Override

@@ -43,7 +43,7 @@ public abstract class AbstractNpc extends Entity {
 	public static final float HOSTILE_SPEEDUP = 1.35f;
 	private final static int meleeAttackDst = 2; // Must be < than this
 	private final static int MAX_LIFETIME = 20;
-	private final static FloatGenerator lifetimeGen = JRand.flt().range(1, 15);
+	private final static FloatGenerator lifetimeGen = JRand.flt().range(0.35f, 15);
 
 	public int id;
 	public long uid;

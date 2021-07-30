@@ -593,20 +593,21 @@ public class Map {
 
 	public boolean delObject(Pair coords) {
 		MapObject deletedObject = mapObjects.remove(coords);
-		if (deletedObject != null)
+		boolean removed = deletedObject != null;
+		if (removed) {
 			removeTimeDependent(deletedObject);
+			pathfinding.objectRemoved(coords.x, coords.y);
+		}
 
-		return deletedObject != null;
+		return removed;
 	}
 
 	public boolean delObject(int x, int y) {
+		Pair coords = new Pair(x, y);
 		if (!validCoords(coords.set(x, y)))
 			return false;
 
 		boolean removed = delObject(coords);
-
-		if (removed)
-			pathfinding.objectRemoved(x, y);
 
 		return removed;
 	}
@@ -616,6 +617,7 @@ public class Map {
 			return false;
 
 		registerTimeDependent(object);
+		pathfinding.objectAdded(object, coords.x, coords.y);
 		return mapObjects.put(coords, object) == null;
 	}
 
@@ -629,7 +631,6 @@ public class Map {
 		MapObject object = MapObject.create(id);
 		if (add(coords.copy(), object)) {
 			setObjectSize(x, y, id);
-			pathfinding.objectAdded(object, x, y);
 			return true;
 		}
 		return false;

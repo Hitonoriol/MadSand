@@ -63,19 +63,16 @@ public class LightEngine {
 			lightLevel.setValue(0);
 			emitters.stream().forEach(entity -> {
 				int light = getEntityLight(entity, tilePos);
-				if (entity == player) {
-					lightLevel.add(light);
-				}
-
-				else if (entityLightExists(entity, tilePos)) {
+				if (entity != player && entityLightExists(entity, tilePos)) {
 					if (light > 0)
-						light *= -1;
-
-					lightLevel.add(light);
-					return;
+						light *= -1;					
 				}
+				lightLevel.add(light);
 			});
-			map.getTile(x, y).setLightLevel(lightLevel.getValue());
+			Tile tile = map.getTile(x, y);
+			tile.setLightLevel(lightLevel.getValue());
+			if (tile.visible())
+				tile.visited = true;
 		});
 	}
 
@@ -176,11 +173,6 @@ public class LightEngine {
 					return;
 
 				lightConsumer.accept(tilePos, light);
-
-				/* If tile is lit, mark it as visited */
-				Tile tile = map.getTile(rx, ry);
-				if (tile.visible())
-					tile.visited = true;
 			});
 		});
 	}
