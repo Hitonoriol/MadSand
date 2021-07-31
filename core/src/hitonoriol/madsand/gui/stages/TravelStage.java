@@ -26,8 +26,6 @@ public class TravelStage extends Stage {
 	static String travelString = "You are travelling to the next sector...";
 
 	public TravelStage() {
-		super();
-
 		travelLabel = new Label(travelString, Gui.skin);
 		travelProgressBar = new TimedProgressBar(travelDelay);
 		travelContainer = new Table();
@@ -48,6 +46,6 @@ public class TravelStage extends Stage {
 	}
 
 	public void travel() {
-		travelProgressBar.start(() -> MadSand.reset());
+		travelProgressBar.start(() -> MadSand.switchScreen(MadSand.gameScreen));
 	}
 }

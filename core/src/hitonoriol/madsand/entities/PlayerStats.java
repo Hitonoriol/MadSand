@@ -223,7 +223,7 @@ public class PlayerStats extends Stats {
 		calcStats();
 	}
 
-	static float BASE_ENCOUNTER_CHANCE = 9.75f;
+	private final static float BASE_ENCOUNTER_CHANCE = 7.5f;
 
 	public boolean rollEncounter() {
 		return Utils.percentRoll(BASE_ENCOUNTER_CHANCE);

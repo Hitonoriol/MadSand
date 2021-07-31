@@ -1,5 +1,7 @@
 package hitonoriol.madsand.dialog;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -16,6 +18,7 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.lua.Lua;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.screens.AbstractScreen;
 import hitonoriol.madsand.util.TimeUtils;
 
@@ -32,7 +35,7 @@ public class GameDialog extends Dialog {
 	public static final float PADDING = 10;
 
 	private AutoFocusScrollPane textScroll;
-	protected Table dialogContainer = new Table(Gui.skin);
+	private Table dialogContainer = new Table(Gui.skin);
 	protected Label textLbl;
 	protected TextButton proceedButton;
 	protected Stage stage;
@@ -87,6 +90,19 @@ public class GameDialog extends Dialog {
 		Cell<Label> cell = add("");
 		cell.row();
 		return cell;
+	}
+
+	public GameDialog appendText(String text) {
+		setText(textLbl.getText() + text);
+		return this;
+	}
+
+	public GameDialog newLine(int repeat) {
+		return appendText(StringUtils.repeat(Resources.LINEBREAK, repeat));
+	}
+
+	public GameDialog newLine() {
+		return newLine(1);
 	}
 
 	public void setText(String text) {

@@ -1,6 +1,7 @@
 package hitonoriol.madsand.util;
 
-import static hitonoriol.madsand.resources.Resources.*;
+import static hitonoriol.madsand.resources.Resources.ERR_FILE;
+import static hitonoriol.madsand.resources.Resources.LINEBREAK;
 
 import java.math.RoundingMode;
 import java.text.NumberFormat;
@@ -26,7 +27,6 @@ import com.badlogic.gdx.graphics.Color;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.properties.Globals;
-import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Functional.SafeRunnable;
 import me.xdrop.jrand.JRand;
 
@@ -125,9 +125,6 @@ public class Utils {
 	private static long errors = 0, lastError = 0;
 
 	public static void panic(String msg) {
-		if (Globals.isDevBuild())
-			die("Panic!" + Resources.LINEBREAK + msg);
-
 		long timeDelta = System.currentTimeMillis() - lastError;
 		lastError = System.currentTimeMillis();
 		if (timeDelta > ERR_INTERVAL)
@@ -139,15 +136,20 @@ public class Utils {
 		if (errors > MAX_ERRORS)
 			die("Too many errors");
 
-		Gui.drawOkDialog("Panic", "Oops, something went horribly wrong." + LINEBREAK + LINEBREAK
-				+ "You can continue playing, though. But if you notice more strange behavior, just relaunch the game."
-				+ LINEBREAK + LINEBREAK
-				+ "Here's some useless info (this will also be saved to " + ERR_FILE + "):"
-				+ LINEBREAK + LINEBREAK + msg);
+		Gui.drawOkDialog("Panic", "Oops, something went horribly wrong.").fillScreen()
+				.newLine()
+				.appendText("You can continue playing. If you notice more strange behavior, relaunch the game.")
+				.newLine(2)
+				.appendText("Here's some useless info (this will also be saved to " + ERR_FILE + "):")
+				.newLine()
+				.appendText(msg);
 	}
 
 	public static void tryTo(SafeRunnable action) {
-		Functional.tryTo(action, exception -> panic(ExceptionUtils.getStackTrace(exception)));
+		Functional.tryTo(action, exception -> {
+			panic(ExceptionUtils.getStackTrace(exception));
+			exception.printStackTrace();
+		});
 	}
 
 	public static String round(double num) {

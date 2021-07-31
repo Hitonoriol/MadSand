@@ -167,16 +167,18 @@ public class Gui {
 		MadSand.switchScreen(MadSand.craftScreen);
 	}
 
-	private static void drawOkDialog(String title, String msg, Stage stage) {
-		TimeUtils.scheduleTask(() -> new OkDialog(title, msg, stage).show(), DELAY);
+	private static OkDialog drawOkDialog(String title, String msg, Stage stage) {
+		OkDialog dialog = new OkDialog(title, msg, stage);
+		TimeUtils.scheduleTask(() -> dialog.show(), DELAY);
+		return dialog;
 	}
 
-	public static void drawOkDialog(String title, String msg) {
-		drawOkDialog(title, msg, null);
+	public static OkDialog drawOkDialog(String title, String msg) {
+		return drawOkDialog(title, msg, null);
 	}
 
-	public static void drawOkDialog(String msg) {
-		drawOkDialog(OkDialog.DEFAULT_TITLE, msg);
+	public static OkDialog drawOkDialog(String msg) {
+		return drawOkDialog(OkDialog.DEFAULT_TITLE, msg);
 	}
 
 	public static void gameUnfocus() {

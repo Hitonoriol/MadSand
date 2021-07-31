@@ -88,11 +88,12 @@ public class Keyboard {
 					.bind(Keys.BACKSPACE, () -> Utils.randElement(minigames).show())
 					.bind(Keys.F5, () -> {
 						World world = world();
-						world.timeTick(150);
+						world.timeTick((int) (world.ticksPerHour() - world.currentTimeTick()));
 						world.updateLight();
 						Gui.refreshOverlay();
 					})
-					.bind(key -> pollDebugKeys(key));
+					.bind(key -> pollDebugKeys(key))
+					.bind(Keys.T, true, () -> Utils.tryTo(() -> Utils.out("%d", 0 / 0)));
 		}
 	}
 

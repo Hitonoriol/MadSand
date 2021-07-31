@@ -203,6 +203,10 @@ public class World {
 		return globalTick;
 	}
 
+	public int currentTimeTick() {
+		return tick;
+	}
+
 	public int getWorldTimeHour() {
 		return worldtime;
 	}
@@ -301,8 +305,6 @@ public class World {
 	boolean createBasicLoc(int layer) {
 		return createLoc(new Pair(worldMap.curWorldPos), layer, new Map(DEFAULT_MAPSIZE, DEFAULT_MAPSIZE));
 	}
-
-	int biome;
 
 	public void generate(int wx, int wy, int layer) {
 		Utils.out("Generating new sector!");
@@ -616,7 +618,7 @@ public class World {
 	private static int TIME_MIDNIGHT = 24;
 	private static int NIGHT_START = 22, NIGHT_END = 6, SUNRISE_START = 3;
 	/* Period in minutes with which sky light level increases by one during the sunrise */
-	private static final double SUNRISE_STEP = 30d;
+	private static final double SUNRISE_STEP = 25d;
 
 	@JsonIgnore
 	public boolean isNight() {
