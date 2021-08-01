@@ -7,6 +7,6 @@ public class TestLauncher {
 
 	public static void main(String[] args) throws Exception {
 		Launcher.startHidden();
-		Launcher.main(dbgArgs, new MadSandTestWrapper());
+		Launcher.main(dbgArgs, new MadSandTestWrapper(args.length > 0 ? args[0] : null));
 	}
 }

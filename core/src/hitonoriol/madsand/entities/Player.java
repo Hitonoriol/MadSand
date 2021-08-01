@@ -11,6 +11,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -76,9 +77,11 @@ import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.resources.Resources;
+import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.Location;
 import hitonoriol.madsand.world.WorkerType;
+import hitonoriol.madsand.world.World;
 
 public class Player extends Entity {
 	@JsonIgnore
@@ -308,10 +311,16 @@ public class Player extends Entity {
 	}
 
 	@Override
+	public int getEffectiveFov() {
+		return (int) (getFov() * 0.66);
+	}
+
+	@Override
 	public void setFov(int val) {
 		if (!visibleArea.isEmpty() && val == getFov())
 			return;
 
+		Utils.dbg("Player fov=%d", val);
 		super.setFov(val);
 		setVisibleArea(val);
 		if (MadSand.world() != null)
@@ -876,7 +885,7 @@ public class Player extends Entity {
 			gatherResources(object);
 	}
 
-	public int gatherResources(MapObject obj) {
+	public int gatherResources(MapObject obj, Supplier<Integer> dmgSupplier) {
 		if (obj.equals(Map.nullObject))
 			return -1;
 
@@ -884,7 +893,11 @@ public class Player extends Entity {
 		damageHeldEquipment(obj);
 		changeStamina(-stats.calcStaminaCost());
 
-		return obj.acceptHit(this);
+		return obj.acceptHit(this, dmgSupplier);
+	}
+
+	public int gatherResources(MapObject obj) {
+		return gatherResources(obj, () -> obj.simulateHit(this));
 	}
 
 	private int getObjectResource(MapObject object) {
@@ -899,8 +912,10 @@ public class Player extends Entity {
 
 	public void useItem(Item item) {
 		doAction(stats.minorCost, () -> {
-			if (useScriptedTile())
+			if (useScriptedTile()) {
+				TimeUtils.scheduleTask(() -> Gui.overlay.refreshActionButton(), 0.25f);
 				return;
+			}
 
 			item.use(this);
 			checkHands(item.id);
@@ -1002,32 +1017,41 @@ public class Player extends Entity {
 	}
 
 	public void respawn() {
+		World world = MadSand.world();
+		world.skipToNextHour();
 		Gui.overlay.refreshActionButton();
-		MadSand.world().setLayer(Location.LAYER_OVERWORLD);
-		MadSand.world().getCurWPos();
-		int wx = MadSand.world().wx();
-		int wy = MadSand.world().wy();
-		Map map = MadSand.world().getCurLoc();
+		world.setLayer(Location.LAYER_OVERWORLD);
+		int wx = world.wx();
+		int wy = world.wy();
+		Map map = world.getCurLoc();
 		stats.food = stats.maxFood;
 		stats.actionPts = stats.actionPtsMax;
 		stats.hp = stats.mhp;
 		stats.stamina = stats.maxstamina;
 		stats.dead = false;
 		freeHands();
+		Gui.drawOkDialog("Awakening",
+				"You wake up without any memories about the previous " + Utils.timeString(getSurvivedTime()) + ".")
+				.setMaxWidth(500)
+				.newLine(2)
+				.appendText(
+						"Seems like you got into some trouble, but were miraculously saved by an unknown creature... Or force.")
+				.newLine(2)
+				.appendText(
+						"Your wounds are almost completely healed, but all your possessions have disappeared from your backpack...")
+				.newLine(2)
+				.appendText("Perhaps they're still at the place where you lost your consciousness...");
 		stats.spawnTime = MadSand.world().currentTick();
 
 		if (stats.hasRespawnPoint) {
-			if (stats.respawnWX == wx && stats.respawnWY == wy) {
-				x = stats.respawnX;
-				y = stats.respawnY;
-			} else {
-				MadSand.world().switchLocation(stats.respawnWX, stats.respawnWY, Location.LAYER_OVERWORLD);
-			}
-		} else {
-			x = Utils.rand(0, map.getWidth());
-			y = Utils.rand(0, MadSand.world().getCurLoc().getHeight());
-		}
+			if (stats.respawnWX == wx && stats.respawnWY == wy)
+				teleport(stats.respawnX, stats.respawnY);
+			else
+				world.switchLocation(stats.respawnWX, stats.respawnWY, Location.LAYER_OVERWORLD);
 
+		} else
+			teleport(map.getRandomPoint());
+		Gui.refreshOverlay();
 		updCoords();
 	}
 

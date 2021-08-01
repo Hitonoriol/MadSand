@@ -15,7 +15,7 @@ public class OkDialog extends GameDialog {
 	private final static float BTN_WIDTH = 100, BUTTON_HEIGHT = 40;
 	private final static float BUTTON_PAD_BOTTOM = 10, BUTTON_PAD_TOP = 30;
 	public final static String DEFAULT_TITLE = "Info";
-	private final static float LBL_MAX_WIDTH = 350, LBL_MIN_WIDTH = Gui.getTextWidth(DEFAULT_TITLE, Gui.FONT_M);
+	private static float LBL_MAX_WIDTH = 350, LBL_MIN_WIDTH = Gui.getTextWidth(DEFAULT_TITLE, Gui.FONT_M);
 	private Cell<AutoFocusScrollPane> textCell;
 	private boolean fillScreen = false;
 
@@ -64,6 +64,11 @@ public class OkDialog extends GameDialog {
 
 	public OkDialog fillScreen() {
 		setFillScreen(true);
+		return this;
+	}
+	
+	public OkDialog setMaxWidth(float maxWidth) {
+		LBL_MAX_WIDTH = maxWidth;
 		return this;
 	}
 }

@@ -98,6 +98,10 @@ public class Overlay extends Stage {
 		super.addActor(actionButton);
 	}
 
+	public void setPlayer(Player player) {
+		expBar.setSkill(player.stats.skills.get(Skill.Level));
+	}
+
 	public void updateWidgetPositions() {
 		equipmentSidebar.setPosition(this.getWidth() - SIDEBAR_XPADDING,
 				equipmentSidebar.getHeight() + (this.getHeight() - equipmentSidebar.getHeight()) * 0.5f,
@@ -257,9 +261,8 @@ public class Overlay extends Stage {
 		hpBar.setRange(0, stats.mhp).setValue(stats.hp);
 		foodBar.setRange(0, stats.maxFood).setValue(stats.food);
 		staminaBar.setRange(0, stats.maxstamina).setValue(stats.stamina);
-		expBar.setRange(0, (int) stats.skills.get(Skill.Level).requiredExp)
-				.setStatText("LVL " + stats.skills.getLvl())
-				.setValue(stats.skills.getExp());
+		expBar.setStatText("LVL " + stats.skills.getLvl())
+				.update();
 
 		String info = (MadSand.world().getLocation().name +
 				", Cell (" + player.x + ", " + player.y + ")" + getSectorString());

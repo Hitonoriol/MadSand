@@ -672,6 +672,10 @@ public class World {
 		MadSand.notice("It's " + worldtime + ":00");
 	}
 
+	public void skipToNextHour() {
+		timeTick(ticksPerHour() - currentTimeTick());
+	}
+
 	public void timeTick(int n) {
 		for (int i = n; i > 0; --i)
 			timeTick();

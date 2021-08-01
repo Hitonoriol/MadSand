@@ -16,6 +16,7 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.lua.Lua;
+import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.Prefs;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.screens.AbstractScreen;
@@ -69,7 +70,8 @@ public class MadSand extends Game {
 
 		GameSaver.createDirs();
 		initNewGame();
-		game.world.generate();
+		if (!Globals.headless())
+			game.world.generate();
 		initScreens();
 		Keyboard.initDefaultKeyBinds();
 		Utils.out("End of initialization!");
@@ -93,7 +95,7 @@ public class MadSand extends Game {
 	private void createWorld() {
 		if (world != null)
 			world.close();
-		
+
 		world = new World();
 	}
 
@@ -206,6 +208,7 @@ public class MadSand extends Game {
 		if (MadSand.isWorldUntouched())
 			MadSand.worldUntouched = false;
 
+		Gui.overlay.setPlayer(player());
 		game.world.enter();
 	}
 

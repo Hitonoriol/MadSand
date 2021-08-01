@@ -2,6 +2,8 @@ package hitonoriol.madsand.util;
 
 import com.badlogic.gdx.utils.Timer;
 
+import hitonoriol.madsand.Gui;
+
 public class TimeUtils {
 	public static Timer.Task createTask(Runnable task) {
 		return new Timer.Task() {
@@ -18,6 +20,10 @@ public class TimeUtils {
 
 	public static Timer.Task scheduleTask(Runnable task, float delaySec) {
 		return scheduleTask(Timer.instance(), task, delaySec);
+	}
+	
+	public static Timer.Task scheduleTask(Runnable task) {
+		return scheduleTask(task, Gui.DELAY);
 	}
 
 	public static Timer.Task scheduleRepeatingTask(Timer timer, Runnable task, float intervalSec) {

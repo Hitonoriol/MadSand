@@ -4,19 +4,19 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class SkillValue {
-	final static double DEFAULT_MULTIPLIER = 0.3;
+	final static double DEFAULT_MULTIPLIER = 0.031;
 	final static int DEFAULT_REQUIRED_EXP = 30;
 	final static int DEFAULT_MAX_LEVEL = 100;
 
 	public int lvl;
-	public double exp, requiredExp;
+	public double exp, lvlStartExp, requiredExp;
 	public double lvUpMultiplier;
 
 	public SkillValue(int lvl, double exp, double requiredExp, double lvUpMultiplier) {
 		this.lvl = lvl;
 		this.exp = exp;
 		this.requiredExp = requiredExp;
-		this.lvUpMultiplier = lvUpMultiplier;
+		this.lvUpMultiplier = lvUpMultiplier > 0 ? lvUpMultiplier : DEFAULT_MULTIPLIER;
 	}
 
 	public SkillValue(double requiredExp, double multiplier) {
@@ -31,14 +31,23 @@ public class SkillValue {
 		this(0, 0, DEFAULT_REQUIRED_EXP, DEFAULT_MULTIPLIER);
 	}
 
+	public double expToNextLvl() {
+		return requiredExp - exp;
+	}
+
 	public boolean check() {
 		if (exp >= requiredExp) {
 			++lvl;
-			requiredExp += requiredExp * lvUpMultiplier;
-			exp = 0;
+			double prevReqExp = requiredExp - lvlStartExp;
+			lvlStartExp = requiredExp;
+			requiredExp += prevReqExp * (1 + lvUpMultiplier);
 			return true;
 		}
 		return false;
+	}
+
+	public float getProgress() {
+		return (float) (((exp - lvlStartExp) / requiredExp) * 100);
 	}
 
 	public void addExp(double amt) {
@@ -47,6 +56,6 @@ public class SkillValue {
 
 	@Override
 	public String toString() {
-		return String.format("{%X} Lvl. %d (%f/%f)", hashCode(), lvl, exp, requiredExp);
+		return String.format("Lvl. %d lvlStart=%f (%f/%f) [%f%%]", lvl, lvlStartExp, exp, requiredExp, getProgress());
 	}
 }

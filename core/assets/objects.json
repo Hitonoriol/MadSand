@@ -1259,7 +1259,7 @@
 	},
 	"168" : {
 		"@type" : "ResourceObject",
-		"hp" : 8,
+		"harvestHp" : 8,
 		"altItems" : {
 			"Pickaxe" : [ 171 ]
 		},
@@ -1402,7 +1402,7 @@
 		"@type" : "MapObject",
 		"hp" : 1,
 		"harvestHp" : 9,
-		"luminosity" : 5.5,
+		"luminosity" : 6,
 		"name" : "Torch"
 	}
 }

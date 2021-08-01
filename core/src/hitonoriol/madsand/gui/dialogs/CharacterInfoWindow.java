@@ -66,9 +66,8 @@ public class CharacterInfoWindow {
 		dialog.add().row();
 		statLabels.refreshStatLabels();
 		dialog.add(StatProgressBar.createLevelBar()
-				.setRange(0, (int) stats.skills.get(Skill.Level).requiredExp)
 				.setStatText("LVL " + stats.skills.getLvl())
-				.setValue(stats.skills.getExp())
+				.setSkill(player.stats.skills.get(Skill.Level))
 				.setProgressSize(BAR_WIDTH * 1.75f, BAR_HEIGHT))
 				.row();
 		dialog.add().width(Gui.defLblWidth).row();
@@ -157,9 +156,8 @@ public class CharacterInfoWindow {
 		SkillContainer skills = MadSand.player().stats.skills;
 		Table skillTable = new Table();
 		skillTable.align(Align.left);
-
+		Player player = MadSand.player();
 		for (Skill skill : Skill.values()) {
-
 			if (skill == Skill.Level || skill == Skill.None)
 				continue;
 
@@ -171,12 +169,12 @@ public class CharacterInfoWindow {
 					.padBottom(LINE_PAD);
 			skillTable.add(new StatProgressBar(skill.name())
 					.setStyle(skillStyle)
-					.setRange(0, (int) skills.get(skill).requiredExp)
 					.setStatText("LVL " + skills.getLvl(skill))
-					.setValue(skills.getExp(skill))
+					.setSkill(player.stats.skills.get(skill))
 					.setProgressSize(BAR_WIDTH, BAR_HEIGHT))
 					.size(BAR_WIDTH, BAR_HEIGHT)
-					.padBottom(LINE_PAD);
+					.padBottom(LINE_PAD)
+					.getActor().update();
 			skillTable.row();
 		}
 

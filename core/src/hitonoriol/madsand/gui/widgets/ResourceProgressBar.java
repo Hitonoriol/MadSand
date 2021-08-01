@@ -1,5 +1,8 @@
 package hitonoriol.madsand.gui.widgets;
 
+import java.util.ArrayDeque;
+import java.util.Queue;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -11,111 +14,104 @@ import com.badlogic.gdx.utils.Timer;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.entities.skill.SkillContainer;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.util.TimeUtils;
-
-/*
- * Progress bar that is displayed on interaction with objects (when gathering resources)
- * It should call player.interact() with short delays (~BASE - <D_MUL...> * skill lvl) until the object's harvestHp is < 0
- * The progressbar displays range [0; harvestHp]
- */
+import hitonoriol.madsand.util.Utils;
 
 public class ResourceProgressBar extends TimedProgressBar {
-	static ProgressBarStyle style;
+	private static float HEIGHT = 20, WIDTH = 175;
+	private static float YPADDING = 45, LABEL_PADDING = 2.5f;
+	private static ProgressBarStyle style = Gui.createProgressBarStyle(WIDTH, HEIGHT, Color.DARK_GRAY);
 
-	static float BASE_DELAY = 0.295f;
-	static float D_MULTIPLIER = 0.8f * (BASE_DELAY / (float) SkillContainer.MAX_SKILL_ROLL_PERCENT);
+	private Label progressLabel = new Label("", Gui.skin);
 
-	float HEIGHT = 20;
-	float WIDTH = 175;
-	float YPADDING = 45;
-	float LABEL_PADDING = 2.5f;
+	private MapObject object;
 
-	Label progressLabel;
-
-	MapObject object;
-	int initialObjectHp;
-	int damage;
-	float nextValue;
-	float valueStep;
-
-	Timer.Task skipTask;
-	Timer.Task wakeTask;
-
-	boolean skip = false;
-
-	float ANIMATION_MULTIPLIER = 1.3f;
+	private int totalHits;
+	private Timer.Task wakeTask = TimeUtils.createTask(() -> Gdx.graphics.requestRendering());
+	private Queue<Integer> damageQueue = new ArrayDeque<>();
 
 	public ResourceProgressBar(MapObject object) {
-		super(BASE_DELAY - getDelayDelta(object));
-		super.setAnimateDuration(delay);
-		nextValue = delay;
-
-		done = true;
+		finish();
 		setStyle();
-
-		int rangeMax = object.harvestHp;
-
-		if (rangeMax < 1)
-			rangeMax = 1;
-
-		setRange(0, rangeMax);
+		setAnimateDuration(0);
+		setValue(0);
 		this.object = object;
-		initialObjectHp = object.hp;
-
-		progressLabel = new Label("", Gui.skin);
 		progressLabel.setAlignment(Align.center);
 		progressLabel.setWidth(WIDTH + 150);
 
 		super.setAction(() -> {
-			progressLabel.remove();
+			Utils.dbg("Done gathering resources from %s\n", object);
 			remove();
+			progressLabel.remove();
 			Gui.gameResumeFocus();
 			Gui.refreshOverlay();
 			Mouse.refreshTooltip();
 			wakeTask.cancel();
 		});
-
-		skipTask = TimeUtils.createTask(() -> skip = false);
-		wakeTask = TimeUtils.createTask(() -> Gdx.graphics.requestRendering());
 	}
 
-	private static float getDelayDelta(MapObject object) {
-		return (D_MULTIPLIER * (float) SkillContainer.skillLvlPercent(
-				MadSand.player().stats.skills.getLvl(object.getInteractionSkill()))) / 5f;
+	private int hitsLeft() {
+		return damageQueue.size();
 	}
 
+	public void preCalculateGathering() {
+		if (damageQueue.isEmpty()) {
+			int hp = object.harvestHp;
+			int hitDmg;
+			while (hp >= 0) {
+				hitDmg = object.simulateHit(MadSand.player());
+				damageQueue.add(hitDmg);
+
+				if (hitDmg == -1)
+					continue;
+
+				hp -= hitDmg;
+			}
+		}
+		float hitDuration = calcHitDuration(object), hitCoef = calcHitCoef();
+		float duration = hitsLeft() * hitDuration * hitCoef;
+		setAnimateDuration(duration);
+		totalHits = hitsLeft();
+		SkillContainer skills = MadSand.player().stats.skills;
+		Skill skill = object.getInteractionSkill();
+		Utils.dbg(
+				"Hits to be made: %d / total duration: %f secs\n"
+						+ "[hitDuration=%f, maxSkillEffect=%f, hpCoef=%f, skillBonus=%f, skillEffect%%=%f]",
+				totalHits, duration, hitDuration, SkillContainer.maxSkillEffect(skill), hitCoef,
+				skills.calcSkillBonusEffect(skill),
+				skills.getSkillEffectPercent(skill));
+	}
+
+	private float calcHitCoef() {
+		float coef = (float) Math.sqrt(Math.log10(Math.max(1.3, object.harvestHp + object.maxHp)));
+		return Math.max(0.5f, Math.min(3f, coef));
+	}
+
+	private static float calcHitDuration(MapObject object) {
+		float effectiveness = (float) (1
+				/ MadSand.player().stats.skills.getSkillEffectPercent(object.getInteractionSkill()));
+		return (float) Math.sqrt(Math.log(effectiveness + 0.0125)) * 0.135f;
+	}
+
+	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
+		float visualValue = getVisualValue();
+		if ((int) visualValue == totalHits - hitsLeft())
+			gatherResources();
 
-		if (skip)
-			return;
-
-		if (getVisualValue() >= getValue()) {
-			if (gatherResources() < -1)
-				action.run();
-
-			if (object.hp <= 0 || initialObjectHp != object.hp)
-				action.run();
-
-			if (damage > 0) {
-				nextValue = delay / (float) damage;
-				setAnimateDuration(nextValue);
-				setValue(getValue() + damage);
-			} else {
-				skip = true;
-				Timer.instance().scheduleTask(skipTask, nextValue);
-			}
-
-		}
+		if (hitsLeft() == 0 || visualValue >= getValue())
+			action.run();
 	}
 
-	public int gatherResources() {
-		damage = MadSand.player().gatherResources(object);
-		progressLabel.setText(Gui.overlay.gameLog.getLastPrintedLine());
-		return damage;
+	private void gatherResources() {
+		MadSand.player().gatherResources(object, () -> damageQueue.poll());
+		if (!damageQueue.isEmpty())
+			progressLabel.setText(Gui.overlay.gameLog.getLastPrintedLine());
 	}
 
 	private final static float WAKE_TIME = 0.019f; // Request rendering once per WAKE_TIME
@@ -135,6 +131,9 @@ public class ResourceProgressBar extends TimedProgressBar {
 		progressLabel.setPosition(centerRelative(coords.x, progressLabel.getWidth(), player.getSpriteWidth()),
 				coords.y - LABEL_PADDING);
 		Gui.gameUnfocus();
+		preCalculateGathering();
+		setRange(0, Math.max(1, hitsLeft() - 1));
+		setValue(hitsLeft());
 	}
 
 	private float centerRelative(float x, float width, float objectWidth) {
@@ -142,9 +141,6 @@ public class ResourceProgressBar extends TimedProgressBar {
 	}
 
 	private void setStyle() {
-		if (style == null)
-			style = Gui.createProgressBarStyle(WIDTH, HEIGHT, Color.DARK_GRAY);
-
 		setStyle(style);
 	}
 }

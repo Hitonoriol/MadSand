@@ -201,6 +201,10 @@ public class GameWorldRenderer {
 			if (!map.validCoords(x, y) && MadSand.world().isUnderGround())
 				return;
 
+			/* Non-visible NPCs won't be rendered, so only process their movement queue */
+			if (!tile.visible() && !npc.isEmpty())
+				npc.animateMovement();
+
 			if (!tile.visible() && !tile.visited) //Don't render anything on tiles which were never seen
 				return;
 
@@ -217,7 +221,7 @@ public class GameWorldRenderer {
 			if (player.standingOnLoot(x, y))
 				drawLoot(x, y);
 
-			if (npc != Map.nullNpc)
+			if (!npc.isEmpty())
 				drawEntity(npc);
 
 			if (player.at(x, y) && !player.isInBackground())

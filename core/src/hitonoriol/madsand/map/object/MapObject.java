@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.enums.Direction;
@@ -41,8 +42,8 @@ public class MapObject extends MapEntity {
 	public int id;
 	public String name;
 
-	public int hp, maxHp;
-	public int harvestHp;
+	public int hp = 1, maxHp = 1;
+	public int harvestHp = 1;
 	public int lvl;
 
 	public boolean nocollide = false;
@@ -176,8 +177,21 @@ public class MapObject extends MapEntity {
 		takeHarvestDamage(amt + 1);
 	}
 
-	protected int acceptHit(Player player, Supplier<Integer> dmgSupplier) {
+	/* Used when precalculating hits during the resource gathering */
+	protected final int simulateHit(Player player, Skill skill) {
+		PlayerStats stats = player.stats();
+		return stats.skills.getBaseSkillDamage(skill) + stats.getEquippedToolDamage(skill);
+	}
+
+	public int simulateHit(Player player) {
+		return simulateHit(player, Skill.None);
+	}
+
+	public int acceptHit(Player player, Supplier<Integer> dmgSupplier) {
 		int damage = dmgSupplier.get();
+		if (damage < 0)
+			return -1;
+
 		int maxHp = ObjectProp.getObject(id).harvestHp;
 		if (!takeHarvestDamage(damage))
 			MadSand.print("You hit " + name + " [ " + harvestHp + " / " + maxHp + " ]");

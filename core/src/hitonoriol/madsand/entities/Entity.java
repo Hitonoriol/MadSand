@@ -338,7 +338,7 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public void damage(float percent) {
-		damage(stats().mhp * percent);
+		damage((int) (stats().mhp * percent));
 	}
 
 	public void damage(int dmg) {
@@ -675,11 +675,15 @@ public abstract class Entity extends MapEntity {
 		return obstacle.as(MapObject.class).map(object -> object.nocollide).orElse(true);
 	};
 
+	public int getEffectiveFov() {
+		return fov;
+	}
+
 	public boolean canSee(Entity entity) {
 		if (entity == this)
 			return true;
 
-		return distanceTo(entity) <= fov && rayCast(entity, canSeePredicate);
+		return distanceTo(entity) <= getEffectiveFov() && rayCast(entity, canSeePredicate);
 	}
 
 	public boolean canShoot(Entity entity) {

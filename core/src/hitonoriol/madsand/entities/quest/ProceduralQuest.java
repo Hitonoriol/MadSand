@@ -21,15 +21,13 @@ import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.worldgen.OverworldPreset;
 
 public class ProceduralQuest extends Quest {
+	public static final int QUEST_TIMEOUT = 6000;
 
-	public static final int QUEST_TIMEOUT = 500;
-
-	private final int EXP_MIN = 15, EXP_BASE_MAX = 40;
+	private final int EXP_MIN = 15, EXP_BASE_MAX = 65;
 
 	private final float MIN_Q_FACTOR = 0.5f;
 	private final int MAX_KILL_REQS = 3;
-	private final int MAX_KILL_Q = 5;
-	private final int MAX_HUNT_Q = 12;
+	private final int MAX_KILL_Q = 5, MAX_HUNT_Q = 12;
 
 	private final int MAX_RESOURCE_REQS = 3;
 	private final int MAX_ITEM_Q = 10;
@@ -89,7 +87,7 @@ public class ProceduralQuest extends Quest {
 		List<Item> rewards = Globals.values().proceduralQuestRewards.rollItems();
 		for (Item item : rewards) {
 			if (item.isCurrency())
-				item.quantity = (int) (rollRewardAmount() * 1.125);
+				item.quantity = (int) (rollRewardAmount() * 9.125);
 
 			super.rewardItems += item.getString() + Item.BLOCK_DELIM;
 		}

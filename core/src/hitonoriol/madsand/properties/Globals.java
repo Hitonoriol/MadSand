@@ -14,6 +14,7 @@ import hitonoriol.madsand.resources.Resources;
 public class Globals {
 	private static final String DEV_VER_STR = "[Development Build]";
 	public static final String VERSION = getVersion();
+	public static boolean HEADLESS = false;
 	public static boolean debugMode = VERSION.equals(DEV_VER_STR), silentMode = false;
 
 	private static Globals instance = new Globals();
@@ -40,6 +41,10 @@ public class Globals {
 	public int basePillId;
 	public HashMap<String, String> pills = new HashMap<>();
 
+	public static boolean headless() {
+		return HEADLESS;
+	}
+	
 	public static boolean isDevBuild() {
 		return VERSION == DEV_VER_STR;
 	}

@@ -8,6 +8,14 @@ eclipse.project.name = appName + "-test"
 
 version '1.0'
 
+task run(dependsOn: classes, type: JavaExec) {
+	main = "hitonoriol.madsand.TestLauncher"
+	classpath = sourceSets.main.runtimeClasspath
+	standardInput = System.in
+	workingDir = file(".")
+	ignoreExitValue = true
+}
+
 repositories {
     mavenCentral()
 }

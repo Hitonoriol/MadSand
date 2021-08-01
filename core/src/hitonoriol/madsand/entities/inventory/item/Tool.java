@@ -48,24 +48,33 @@ public class Tool extends AbstractEquipment {
 		Axe, Shovel, Pickaxe, Hoe, Hammer,
 		FishingRod;
 
+		private static final Type[] values = values();
+
 		public static Type bySkill(Skill skill) {
-			switch (skill) {
+			for (Type type : values)
+				if (type.isSkillCompatible(skill))
+					return type;
+			return None;
+		}
 
-			case Farming:
-				return Hoe;
-
-			case Digging:
-				return Shovel;
-
-			case Mining:
-				return Pickaxe;
-
-			case Woodcutting:
-				return Axe;
-
+		public boolean isSkillCompatible(Skill skill) {
+			switch (this) {
+			case None:
+				return skill == Skill.Gathering || skill == Skill.Farming;
+			case Axe:
+				return skill == Skill.Woodcutting;
+			case FishingRod:
+				return skill == Skill.Fishing;
+			case Hoe:
+				return skill == Skill.Farming;
+			case Pickaxe:
+				return skill == Skill.Mining;
+			case Shovel:
+				return skill == Skill.Digging;
 			default:
-				return None;
+				break;
 			}
+			return skill == Skill.Gathering;
 		}
 	}
 

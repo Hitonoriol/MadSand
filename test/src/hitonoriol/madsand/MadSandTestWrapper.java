@@ -1,10 +1,11 @@
 package hitonoriol.madsand;
 
-import static org.junit.platform.engine.discovery.ClassNameFilter.includeClassNamePatterns;
+import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectPackage;
 
 import java.io.PrintWriter;
 
+import org.junit.platform.engine.DiscoverySelector;
 import org.junit.platform.launcher.Launcher;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
@@ -18,40 +19,56 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.util.Utils;
 
 public class MadSandTestWrapper extends MadSand {
+	private final String TEST_PACKAGE = getClass().getPackageName() + ".tests";
+	private final SummaryGeneratingListener listener = new SummaryGeneratingListener();
+	private Launcher launcher = LauncherFactory.create();
+	private String testName;
+
+	public MadSandTestWrapper(String testName) {
+		this.testName = testName;
+	}
+
+	public MadSandTestWrapper() {
+		this(null);
+	}
+
 	@Override
 	public void create() {
 		super.create();
 		Utils.disableTimestampOutput();
-
 		Player player = player();
 		player.stats.roll(10);
 		player.reinit();
 		enterWorld();
-
 		Utils.out();
-		runAll();
+		launcher.registerTestExecutionListeners(listener, new TestListener());
 
+		if (testName == null)
+			runAll();
+		else
+			run(testName);
 		Gdx.app.exit();
 	}
 
-	private final SummaryGeneratingListener listener = new SummaryGeneratingListener();
+	public void runAll() {
+		run(selectPackage(TEST_PACKAGE));
+	}
 
-	private void runAll() {
-		LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
-				.selectors(selectPackage(getClass().getPackageName() + ".tests"))
-				.filters(includeClassNamePatterns(".*Test"))
-				.build();
+	public void run(String testName) {
+		run(selectClass(TEST_PACKAGE + "." + testName + "Test"));
+	}
 
-		Launcher launcher = LauncherFactory.create();
-		launcher.registerTestExecutionListeners(listener, new TestListener());
-		launcher.execute(request);
-
+	private void run(DiscoverySelector selector) {
+		launcher.execute(createRequest(selector));
 		TestExecutionSummary summary = listener.getSummary();
 		PrintWriter out = new PrintWriter(System.out);
 		summary.printTo(out);
 		summary.printFailuresTo(out);
+	}
 
-		/*if (summary.getTotalFailureCount() > 0)
-			Gdx.app.exit();*/
+	private LauncherDiscoveryRequest createRequest(DiscoverySelector selector) {
+		return LauncherDiscoveryRequestBuilder.request()
+				.selectors(selector)
+				.build();
 	}
 }

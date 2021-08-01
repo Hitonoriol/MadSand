@@ -1,5 +1,7 @@
 package hitonoriol.madsand.gui.widgets;
 
+import java.util.function.Supplier;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -8,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.entities.skill.SkillValue;
 import hitonoriol.madsand.util.Utils;
 
 public class StatProgressBar extends Group {
@@ -19,6 +22,7 @@ public class StatProgressBar extends Group {
 	ProgressBar progressBar;
 	Label statLabel = new Label("", Gui.skin);
 	boolean round = true;
+	private Supplier<Float> valueSupplier, maxValueSupplier, progressSupplier;
 
 	public StatProgressBar(String stat) {
 		super();
@@ -38,6 +42,28 @@ public class StatProgressBar extends Group {
 		this("");
 	}
 
+	public StatProgressBar setValueUpdater(Supplier<Float> updater) {
+		valueSupplier = updater;
+		return this;
+	}
+
+	public StatProgressBar setMaxValueUpdater(Supplier<Float> updater) {
+		maxValueSupplier = updater;
+		return this;
+	}
+
+	public StatProgressBar setProgressUpdater(Supplier<Float> updater) {
+		progressSupplier = updater;
+		return this;
+	}
+
+	public StatProgressBar setSkill(SkillValue skill) {
+		setValueUpdater(() -> (float) skill.exp);
+		setMaxValueUpdater(() -> (float) skill.requiredExp);
+		setProgressUpdater(() -> skill.getProgress());
+		return this;
+	}
+
 	public StatProgressBar setStatText(String stat) {
 		this.stat = stat;
 		return this;
@@ -53,17 +79,26 @@ public class StatProgressBar extends Group {
 		return this;
 	}
 
-	public StatProgressBar setValue(float value) {
-		String valStr;
-
-		if (round)
-			valStr = Math.round(value) + "/" + Math.round(progressBar.getMaxValue());
-		else
-			valStr = Utils.round(value) + "/" + Utils.round(progressBar.getMaxValue());
-
-		statLabel.setText((stat.isEmpty() ? "" : (stat + ": ")) + valStr);
+	public StatProgressBar setValue(String text, float value, float maxValue) {
+		statLabel.setText((stat.isEmpty() ? "" : (stat + ": ")) + text);
 		progressBar.setValue(value);
 		return this;
+	}
+
+	public StatProgressBar setValue(float value) {
+		float maxValue = progressBar.getMaxValue();
+		String valStr;
+		if (round)
+			valStr = Math.round(value) + "/" + Math.round(maxValue);
+		else
+			valStr = Utils.round(value) + "/" + Utils.round(maxValue);
+		return setValue(valStr, value, maxValue);
+	}
+
+	public void update() {
+		setValue(valueSupplier.get().intValue() + "/" + maxValueSupplier.get().intValue(),
+				progressSupplier.get(),
+				progressBar.getMaxValue());
 	}
 
 	public StatProgressBar setProgressSize(float width, float height) {
@@ -93,6 +128,7 @@ public class StatProgressBar extends Group {
 	}
 
 	public static StatProgressBar createLevelBar() {
-		return new StatProgressBar("LVL").setStyle(Color.GOLDENROD);
+		return new StatProgressBar("LVL")
+				.setStyle(Color.GOLDENROD);
 	}
 }

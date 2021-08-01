@@ -44,6 +44,10 @@ public class TimedProgressBar extends ProgressBar {
 		defaultValue = triggerWhenFull ? MIN_VALUE : MAX_VALUE;
 		reset();
 	}
+	
+	protected void finish() {
+		done = true;
+	}
 
 	public void reset() {
 		done = false;
@@ -67,7 +71,7 @@ public class TimedProgressBar extends ProgressBar {
 
 		if (!done && super.getVisualValue() == triggerValue) {
 			action.run();
-			done = true;
+			finish();
 		}
 	}
 }

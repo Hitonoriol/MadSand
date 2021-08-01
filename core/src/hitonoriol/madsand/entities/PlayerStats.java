@@ -110,12 +110,12 @@ public class PlayerStats extends Stats {
 
 	@JsonIgnore
 	public boolean isSatiated() {
-		double reqSatiationPercent = BASE_SATIATION_PERCENT - skills.getSkillRollPercent(Skill.Survival);
+		double reqSatiationPercent = BASE_SATIATION_PERCENT - skills.getSkillEffect(Skill.Survival);
 		return getSatiationPercent() >= reqSatiationPercent;
 	}
 
 	public double getStaminaRegenRate() {
-		return skills.getSkillRollPercent(Skill.Survival) * 0.02;
+		return skills.getSkillEffect(Skill.Survival) * 0.02;
 	}
 
 	private void perTickStaminaCheck() {
@@ -148,7 +148,7 @@ public class PlayerStats extends Stats {
 	}
 
 	public float calcStaminaCost() {
-		return (float) (STAMINA_BASE_COST - (STAMINA_BASE_COST * skills.getSkillRollPercent(Skill.Survival) * 0.01));
+		return (float) (STAMINA_BASE_COST - (STAMINA_BASE_COST * skills.getSkillEffect(Skill.Survival) * 0.01));
 	}
 
 	float atkSkillPercent = 0.5f;
@@ -166,7 +166,7 @@ public class PlayerStats extends Stats {
 	@JsonIgnore
 	public int getMaxFoodTicks() {
 		float lvl = 0.5f + ((float) skills.getLvl(Skill.Survival) * 0.5f);
-		return (int) (Math.sqrt(lvl) * 5);
+		return (int) (Math.sqrt(lvl) * 7.5);
 	}
 
 	public Item hand() {

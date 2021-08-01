@@ -219,7 +219,7 @@ public abstract class AbstractNpc extends Entity {
 
 		if (isMoving() && !outOfView) {
 			queueMovement(dir);
-			return false;
+			return true;
 		}
 		int originalX = this.x, originalY = this.y;
 
@@ -384,7 +384,8 @@ public abstract class AbstractNpc extends Entity {
 		Utils.tryTo(() -> {
 			Node closestNode = findPath(entity.x, entity.y);
 			if (closestNode != null)
-				move(getRelativeDirection(closestNode.x, closestNode.y, true));
+				if (!move(getRelativeDirection(closestNode.x, closestNode.y, true)))
+					randMove();
 			doAction(stats.walkCost);
 		});
 	}

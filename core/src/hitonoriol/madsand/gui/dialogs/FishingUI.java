@@ -131,7 +131,7 @@ public class FishingUI extends GameDialog {
 	}
 
 	private boolean spawnRoll() {
-		return Utils.percentRoll(MadSand.player().stats.skills.getSkillRollPercent(Skill.Fishing) + 10);
+		return Utils.percentRoll(MadSand.player().stats.skills.getSkillEffect(Skill.Fishing) + 10);
 	}
 
 	private void initSpawner() {
@@ -230,7 +230,7 @@ public class FishingUI extends GameDialog {
 		}
 
 		private boolean catchRoll() {
-			return Utils.percentRoll(MadSand.player().stats.skills.getSkillRollPercent(Skill.Fishing) + 5);
+			return Utils.percentRoll(MadSand.player().stats.skills.getSkillEffect(Skill.Fishing) + 5);
 		}
 
 		private void initAnimation() {

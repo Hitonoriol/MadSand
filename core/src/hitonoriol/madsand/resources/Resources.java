@@ -37,9 +37,6 @@ import hitonoriol.madsand.containers.Pair.PairKeyDeserializer;
 import hitonoriol.madsand.entities.TradeListContainer;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.quest.Quest;
-import hitonoriol.madsand.entities.skill.Skill;
-import hitonoriol.madsand.entities.skill.SkillContainer;
-import hitonoriol.madsand.entities.skill.SkillValue;
 import hitonoriol.madsand.map.ItemProducer;
 import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.map.object.MapObject;
@@ -69,7 +66,7 @@ public class Resources {
 	static String ITEM_FILE = "items.json";
 	public static String GLOBALS_FILE = "globals.json";
 	public static String BUILDRECIPE_FILE = "buildrecipes.json";
-	static String SKILL_FILE = "skills.json";
+	public static String SKILL_FILE = "skills.json";
 	public static final String SCRIPT_DIR = "scripts/";
 	public static final String ENCOUNTER_DIR = "encounter/";
 	public static final String ERR_FILE = "MadSandCritical.log";
@@ -129,7 +126,6 @@ public class Resources {
 		loadTradeLists();
 		loadTutorial();
 		loadActionAnimations();
-		loadSkillReqs();
 		Utils.out("Done loading resources.");
 	}
 
@@ -235,21 +231,11 @@ public class Resources {
 	}
 
 	private static void loadProductionStations() throws Exception {
-		ObjectProp.itemProducers = mapper.readValue(
-				readInternal(Resources.ITEMFACTORY_FILE),
-				getMapType(Integer.class, ItemProducer.class));
+		ObjectProp.itemProducers = loadMap(ITEMFACTORY_FILE, Integer.class, ItemProducer.class);
+		ObjectProp.buildRecipes = loadMap(BUILDRECIPE_FILE, Integer.class, String.class);
 
-		ObjectProp.buildRecipes = mapper.readValue(
-				readInternal(Resources.BUILDRECIPE_FILE),
-				getMapType(Integer.class, String.class));
 		for (Entry<Integer, String> entry : ObjectProp.buildRecipes.entrySet())
 			ItemProp.buildReq.put(entry.getKey(), Item.parseCraftRequirements(entry.getValue()));
-
-	}
-
-	public static void loadSkillReqs() throws Exception {
-		SkillContainer.reqList = mapper.readValue(readInternal(Resources.SKILL_FILE),
-				getMapType(Skill.class, SkillValue.class));
 	}
 
 	private static JavaType stringList = typeFactory.constructCollectionType(ArrayList.class, String.class);
@@ -314,6 +300,15 @@ public class Resources {
 
 	public static MapType getMapType(Class<?> key, Class<?> value) {
 		return Resources.typeFactory.constructMapType(HashMap.class, key, value);
+	}
+
+	public static <K, V> HashMap<K, V> loadMap(String file, Class<K> keyType, Class<V> valueType) {
+		try {
+			return mapper.readValue(readInternal(file), getMapType(keyType, valueType));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public static NinePatchDrawable loadNinePatch(String file) {

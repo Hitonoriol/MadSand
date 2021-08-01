@@ -15,7 +15,6 @@ import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.gui.OverlayMouseoverListener;
 import hitonoriol.madsand.input.Keyboard;
-import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.map.object.MapObject;
@@ -90,7 +89,7 @@ public class ActionButton extends Table {
 	}
 
 	public void refresh() {
-		if (Gui.isGameUnfocused() || Keyboard.inputIgnored()) {
+		if ((Gui.isGameUnfocused() && !isVisible()) || Keyboard.inputIgnored()) {
 			hideButton();
 			return;
 		}
@@ -126,10 +125,7 @@ public class ActionButton extends Table {
 				tileMsg = "Dig ";
 
 			activateButton(tileMsg + TileProp.getName(tile.id), () -> {
-				if (!holdsShovel)
-					Lua.execute(tileAction);
-				else
-					player.useItem();
+				player.useItem();
 				Gui.gameUnfocused = false;
 				Gui.overlay.showTooltip();
 				hideButton();

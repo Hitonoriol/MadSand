@@ -59,6 +59,7 @@ public class Launcher {
 
 	public static void startHidden() {
 		config.x = config.y = Integer.MAX_VALUE;
+		Globals.HEADLESS = true;
 	}
 
 }
