@@ -1,4 +1,4 @@
-package hitonoriol.madsand.gui.widgets;
+package hitonoriol.madsand.gui.widgets.overlay;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,6 +16,7 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.HotbarAssignable;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.gui.OverlayMouseoverListener;
+import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.util.Functional;
 
 public class Hotbar extends Table {

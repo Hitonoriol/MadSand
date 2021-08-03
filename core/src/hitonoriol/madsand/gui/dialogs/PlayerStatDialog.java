@@ -15,7 +15,7 @@ import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.entities.StatContainer;
-import hitonoriol.madsand.gui.widgets.StatLabels;
+import hitonoriol.madsand.gui.widgets.stats.StatLabels;
 import me.xdrop.jrand.JRand;
 
 public class PlayerStatDialog extends GameDialog {

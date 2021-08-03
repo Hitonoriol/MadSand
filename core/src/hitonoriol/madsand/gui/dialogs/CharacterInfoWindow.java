@@ -20,8 +20,8 @@ import hitonoriol.madsand.entities.Reputation;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.entities.skill.SkillContainer;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
-import hitonoriol.madsand.gui.widgets.StatLabels;
-import hitonoriol.madsand.gui.widgets.StatProgressBar;
+import hitonoriol.madsand.gui.widgets.stats.StatLabels;
+import hitonoriol.madsand.gui.widgets.stats.StatProgressBar;
 
 /*
  * Character info in-game menu 

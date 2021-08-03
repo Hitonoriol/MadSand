@@ -59,7 +59,7 @@ import hitonoriol.madsand.gui.dialogs.GrabBagDialog;
 import hitonoriol.madsand.gui.dialogs.ItemFactoryUI;
 import hitonoriol.madsand.gui.dialogs.TraderDialog;
 import hitonoriol.madsand.gui.dialogs.WaitDialog;
-import hitonoriol.madsand.gui.widgets.ResourceProgressBar;
+import hitonoriol.madsand.gui.widgets.overlay.ResourceProgressBar;
 import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.lua.Lua;
@@ -103,7 +103,7 @@ public class Player extends Entity {
 	@JsonIgnore
 	private List<Pair> visibleArea = new ArrayList<>();
 
-	private TimedAction scheduledAction;
+	private Runnable scheduledAction, afterMovement;
 
 	@JsonProperty("newlyCreated")
 	public boolean newlyCreated = true;
@@ -301,7 +301,7 @@ public class Player extends Entity {
 
 	public void commitAction() {
 		if (scheduledAction != null)
-			scheduledAction.act();
+			scheduledAction.run();
 		scheduledAction = null;
 	}
 
@@ -680,6 +680,10 @@ public class Player extends Entity {
 	protected void dropOverflowingItem(Item item) {
 		super.dropOverflowingItem(item);
 		MadSand.warn("You can't carry any more items.");
+	}
+
+	public boolean knowsItem(int id) {
+		return unlockedItems.contains(id);
 	}
 
 	@Override
@@ -1157,7 +1161,6 @@ public class Player extends Entity {
 		stats.actionPts = stats.actionPtsMax;
 		MadSand.world().timeTick(ticks);
 		MadSand.world().timeSubtick(getActionLength(ap + (ticks - 1) * getSpeed()));
-		Gui.refreshOverlay();
 
 		if (verbose)
 			MadSand.print("You rest a bit");
@@ -1241,7 +1244,7 @@ public class Player extends Entity {
 		new WaitDialog(maxTimeSkip).show();
 	}
 
-	public int doAction(double ap, TimedAction action) {
+	public int doAction(double ap, Runnable action) {
 		if (scheduledAction != null)
 			return -1;
 
@@ -1291,7 +1294,20 @@ public class Player extends Entity {
 		if (!hasQueuedMovement())
 			Keyboard.resumeInput();
 
+		if (afterMovement != null) {
+			afterMovement.run();
+			afterMovement = null;
+		}
 		super.stopMovement();
+	}
+
+	public void doAfterMovement(Runnable action) {
+		if (!isMoving()) {
+			action.run();
+			return;
+		}
+
+		afterMovement = action;
 	}
 
 	public void run(Path path) {
@@ -1412,9 +1428,5 @@ public class Player extends Entity {
 	@JsonGetter("stats")
 	public PlayerStats getStats() {
 		return stats;
-	}
-
-	private interface TimedAction {
-		void act();
 	}
 }

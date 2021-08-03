@@ -34,7 +34,7 @@ import hitonoriol.madsand.util.Utils;
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
 @JsonSubTypes({ @Type(CraftingStation.class), @Type(ItemFactory.class), @Type(ResourceObject.class),
-		@Type(ItemPipeline.class) })
+		@Type(ItemPipeline.class), @Type(Waypoint.class) })
 public class MapObject extends MapEntity {
 	public static final int NULL_OBJECT_ID = 0;
 	public static final int COLLISION_MASK_ID = 666;
@@ -90,7 +90,7 @@ public class MapObject extends MapEntity {
 		return map.add(coords, this);
 	}
 
-	public void interactIfPossible(Runnable interaction) {
+	private void interactIfPossible(Runnable interaction) {
 		if (MadSand.world().getCurLoc().editable)
 			interaction.run();
 		else
@@ -98,7 +98,7 @@ public class MapObject extends MapEntity {
 					+ "But suddenly, you feel that it's protected by some mysterious force");
 	}
 
-	public void interact(Player player, Runnable interaction) {
+	protected void interact(Player player, Runnable interaction) {
 		if (player.stats().isToolEquipped(Tool.Type.Hammer))
 			interactIfPossible(() -> player.startResourceGathering(this));
 
@@ -106,7 +106,7 @@ public class MapObject extends MapEntity {
 			Lua.execute(onInteract, this);
 
 		else
-			interaction.run();
+			interactIfPossible(() -> interaction.run());
 	}
 
 	public void interact(Player player) {

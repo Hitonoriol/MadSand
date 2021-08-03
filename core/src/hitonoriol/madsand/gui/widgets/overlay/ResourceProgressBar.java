@@ -1,4 +1,4 @@
-package hitonoriol.madsand.gui.widgets;
+package hitonoriol.madsand.gui.widgets.overlay;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -16,6 +16,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.entities.skill.SkillContainer;
+import hitonoriol.madsand.gui.widgets.TimedProgressBar;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.util.TimeUtils;
@@ -127,17 +128,13 @@ public class ResourceProgressBar extends TimedProgressBar {
 
 		MadSand.getCamera().project(coords);
 		coords.y -= YPADDING;
-		super.setPosition(centerRelative(coords.x, getWidth(), player.getSpriteWidth()), coords.y);
-		progressLabel.setPosition(centerRelative(coords.x, progressLabel.getWidth(), player.getSpriteWidth()),
+		super.setPosition(Gui.relativeCenterX(coords.x, getWidth(), player.getSpriteWidth()), coords.y);
+		progressLabel.setPosition(Gui.relativeCenterX(coords.x, progressLabel.getWidth(), player.getSpriteWidth()),
 				coords.y - LABEL_PADDING);
 		Gui.gameUnfocus();
 		preCalculateGathering();
 		setRange(0, Math.max(1, hitsLeft() - 1));
 		setValue(hitsLeft());
-	}
-
-	private float centerRelative(float x, float width, float objectWidth) {
-		return (x + (objectWidth * 0.5f)) - width * 0.5f;
 	}
 
 	private void setStyle() {

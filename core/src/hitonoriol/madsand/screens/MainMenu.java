@@ -14,9 +14,9 @@ public class MainMenu extends AbstractScreen<MainMenuStage> {
 	private static float menuOffset = 250;
 	private boolean freshStart = true;
 
-	private GameWorldRenderer gameWorld;
+	private WorldRenderer gameWorld;
 
-	public MainMenu(GameWorldRenderer gameWorld) {
+	public MainMenu(WorldRenderer gameWorld) {
 		super(new MainMenuStage());
 		this.gameWorld = gameWorld;
 		initMenuAnimation();

@@ -5,6 +5,7 @@ import hitonoriol.madsand.TimeDependent;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.map.CropGrowthStage;
 import hitonoriol.madsand.map.CropGrowthStageContainer;
+import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.util.Utils;
@@ -93,5 +94,10 @@ public class Crop extends MapObject implements TimeDependent {
 
 	public boolean isFullyGrown() {
 		return getHarvestTime() <= 0;
+	}
+	
+	@Override
+	public boolean isEmpty() {
+		return super.isEmpty() || this == Map.nullCrop;
 	}
 }

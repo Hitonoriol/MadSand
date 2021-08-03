@@ -33,7 +33,8 @@ import me.xdrop.jrand.JRand;
 public class Utils {
 	private static boolean printTimestamp = true;
 	static NumberFormat numberFormatter = NumberFormat.getInstance(Locale.US);
-	public static Random random = new Random();
+	public static final Random random = new Random();
+	public static final RandomDataGenerator dataGen = new RandomDataGenerator();
 	static {
 		numberFormatter.setMinimumFractionDigits(0);
 		numberFormatter.setRoundingMode(RoundingMode.HALF_UP);

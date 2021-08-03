@@ -228,7 +228,7 @@ public class Gui {
 	}
 
 	public static void refreshOverlay() {
-		overlay.refresh();
+		MadSand.player().doAfterMovement(() -> overlay.refresh());
 	}
 
 	public static float horizontalCenter(Actor actor) {
@@ -347,6 +347,10 @@ public class Gui {
 
 	public static ProgressBarStyle createProgressBarStyle(float width, float height, Color color) {
 		return createProgressBarStyle(width, height, color, false);
+	}
+
+	public static float relativeCenterX(float aX, float aWidth, float bWidth) {
+		return (aX + (bWidth * 0.5f)) - aWidth * 0.5f;
 	}
 
 }

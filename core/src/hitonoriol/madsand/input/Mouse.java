@@ -20,15 +20,16 @@ import hitonoriol.madsand.gui.stages.Overlay;
 import hitonoriol.madsand.gui.textgenerator.CellInfoGenerator;
 import hitonoriol.madsand.gui.textgenerator.NotificationGenerator;
 import hitonoriol.madsand.gui.textgenerator.StaticTextGenerator;
-import hitonoriol.madsand.gui.widgets.GameTooltip;
+import hitonoriol.madsand.gui.widgets.gametooltip.GameTooltip;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
+import hitonoriol.madsand.map.MapCell;
 import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.pathfinding.Path;
 import hitonoriol.madsand.resources.Resources;
-import hitonoriol.madsand.screens.GameWorldRenderer;
+import hitonoriol.madsand.screens.WorldRenderer;
 import hitonoriol.madsand.util.Functional;
 
 public class Mouse {
@@ -169,13 +170,13 @@ public class Mouse {
 
 	private static void highlightRangedTarget() {
 		Player player = MadSand.player();
-		GameWorldRenderer renderer = MadSand.getRenderer();
+		WorldRenderer renderer = MadSand.getRenderer();
 
 		if (!player.canPerformRangedAttack())
 			return;
 
 		int x = cellInfo.getX(), y = cellInfo.getY();
-		if (!cellInfo.hasNpc()) {
+		if (!cellInfo.getCell().hasNpc()) {
 			if (rangedPath != null)
 				renderer.removePath(rangedPath);
 		}
@@ -239,7 +240,7 @@ public class Mouse {
 	}
 
 	public static boolean pointingAtObject() {
-		return cellInfo.isCellOccupied();
+		return cellInfo.getCell().isOccupied();
 	}
 
 	private static final int CLICK_CUR_TILE = 0, CLICK_ADJ_TILE = 1;
@@ -258,10 +259,11 @@ public class Mouse {
 		int clickDst = getClickDistance();
 		boolean adjacentTileClicked = (clickDst == CLICK_ADJ_TILE);
 		boolean currentTileClicked = (clickDst == CLICK_CUR_TILE);
-		Loot loot = cellInfo.getLoot();
-		AbstractNpc npc = cellInfo.getNpc();
-		MapObject object = cellInfo.getObject();
-		MapEntity target = object != Map.nullObject ? cellInfo.getObject() : npc;
+		MapCell cell = cellInfo.getCell();
+		Loot loot = cell.getLoot();
+		AbstractNpc npc = cell.getNpc();
+		MapObject object = cell.getObject();
+		MapEntity target = object != Map.nullObject ? cell.getObject() : npc;
 		Player player = MadSand.player();
 
 		if ((player.isMoving()) || Gui.isGameUnfocused() || !pointingAtObject())

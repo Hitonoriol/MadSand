@@ -4,9 +4,9 @@ import hitonoriol.madsand.gui.stages.CraftStage;
 
 public class CraftScreen extends AbstractScreen<CraftStage> {
 
-	private GameWorldRenderer gameWorld;
+	private WorldRenderer gameWorld;
 
-	public CraftScreen(GameWorldRenderer gameWorld) {
+	public CraftScreen(WorldRenderer gameWorld) {
 		super(new CraftStage());
 		this.gameWorld = gameWorld;
 	}

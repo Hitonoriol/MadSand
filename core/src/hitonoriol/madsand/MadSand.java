@@ -23,7 +23,7 @@ import hitonoriol.madsand.screens.AbstractScreen;
 import hitonoriol.madsand.screens.CraftScreen;
 import hitonoriol.madsand.screens.DeathScreen;
 import hitonoriol.madsand.screens.GameScreen;
-import hitonoriol.madsand.screens.GameWorldRenderer;
+import hitonoriol.madsand.screens.WorldRenderer;
 import hitonoriol.madsand.screens.MainMenu;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
@@ -46,7 +46,7 @@ public class MadSand extends Game {
 	private World world;
 	Storage<AbstractScreen<?>> currentScreen = new Storage<>();
 	private static MadSand game;
-	private static GameWorldRenderer gameWorld;
+	private static WorldRenderer gameWorld;
 
 	public static GameScreen gameScreen;
 	public static CraftScreen craftScreen;
@@ -58,7 +58,7 @@ public class MadSand extends Game {
 	public void create() {
 		Utils.out("Starting initialization!");
 		game = this;
-		gameWorld = new GameWorldRenderer();
+		gameWorld = new WorldRenderer();
 		Gdx.graphics.setContinuousRendering(false);
 
 		Timer.instance().start();
@@ -151,7 +151,7 @@ public class MadSand extends Game {
 		return game.currentScreen.get().getStage();
 	}
 
-	public static GameWorldRenderer getRenderer() {
+	public static WorldRenderer getRenderer() {
 		return gameWorld;
 	}
 

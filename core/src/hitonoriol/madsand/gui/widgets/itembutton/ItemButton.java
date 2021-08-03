@@ -1,4 +1,4 @@
-package hitonoriol.madsand.gui.widgets;
+package hitonoriol.madsand.gui.widgets.itembutton;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;

@@ -6,29 +6,21 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.map.ItemProducer;
-import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
+import hitonoriol.madsand.map.MapCell;
 import hitonoriol.madsand.map.Tile;
-import hitonoriol.madsand.map.object.Crop;
-import hitonoriol.madsand.map.object.ItemFactory;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.properties.Globals;
-import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
 public class CellInfoGenerator extends TooltipTextGenerator {
 	private int x, y;
 
-	private Map loc;
 	private Player player;
-	private Tile tile;
-	private MapObject object;
-	private AbstractNpc npc;
-	private Loot loot;
-	private Crop crop;
-	private ItemProducer station;
+	private Map map;
+	private final MapCell cell = new MapCell();
 	private Node node;
 
 	public static String lineDelimiter = "**********";
@@ -57,44 +49,13 @@ public class CellInfoGenerator extends TooltipTextGenerator {
 		this.x = x;
 		this.y = y;
 		player = MadSand.player();
-		loc = MadSand.world().getCurLoc();
-		npc = loc.getNpc(x, y);
-		tile = loc.getTile(x, y);
-		object = loc.getObject(x, y);
-		loot = loc.getLoot(x, y);
-		crop = loc.getCrop(x, y);
-		node = loc.getPathfindingEngine().getNode(x, y);
-
-		station = null;
-		object.as(ItemFactory.class)
-				.ifPresent(itemFactory -> station = itemFactory.getItemProducer());
+		map = MadSand.world().getCurLoc();
+		map.getMapCell(cell.setCoords(x, y));
+		node = map.getPathfindingEngine().getNode(x, y);
 	}
 
-	public boolean isCellOccupied() {
-		return npc != Map.nullNpc ||
-				object != Map.nullObject ||
-				tile.hasFishingSpot() ||
-				player.at(x, y);
-	}
-
-	public AbstractNpc getNpc() {
-		return npc;
-	}
-
-	public boolean hasNpc() {
-		return !npc.equals(Map.nullNpc);
-	}
-
-	public boolean hasObject() {
-		return !object.equals(Map.nullObject);
-	}
-
-	public Loot getLoot() {
-		return loot;
-	}
-
-	public MapObject getObject() {
-		return object;
+	public MapCell getCell() {
+		return cell;
 	}
 
 	@Override
@@ -106,47 +67,48 @@ public class CellInfoGenerator extends TooltipTextGenerator {
 		if (player.at(x, y))
 			getPlayerInfo();
 
-		if (!tile.visible()) {
+		if (!cell.getTile().visible()) {
 			addLine("You can't see anything there");
 			return super.getText();
 		}
 
-		addLine("Tile: " + TileProp.getName(tile.id));
+		addLine("Tile: " + cell.getTile().name);
 
-		if (!loot.equals(Map.nullLoot))
-			addLine("On the ground: %s", loot.getInfo());
+		if (cell.hasLoot())
+			addLine("On the ground: %s", cell.getLoot().getInfo());
 
-		if (!object.equals(Map.nullObject))
+		if (cell.hasObject()) {
+			MapObject object = cell.getObject();
 			addLine("Object: " + object.name + " (" + Utils.round(object.getHpPercent()) + "%)");
+		}
 
-		if (station != null)
-			getItemProducerInfo(builder, station);
+		if (cell.hasItemFactory())
+			getItemProducerInfo(builder, cell.getItemFactoryProducer());
 
-		if (!crop.equals(Map.nullCrop))
+		if (cell.hasCrop())
 			getCropInfo();
 
-		if (!npc.equals(Map.nullNpc))
+		if (cell.hasNpc())
 			getNpcInfo();
 
-		if (player.canPerformRangedAttack() && npc != Map.nullNpc)
+		if (player.canPerformRangedAttack() && cell.hasNpc())
 			getRangedAttackInfo();
 
 		return super.getText();
 	}
 
 	private void getRangedAttackInfo() {
-		int dst = player.distanceTo(npc);
+		int dst = player.distanceTo(cell.getNpc());
 		addLine("Distance to target: " + dst + " meters")
 				.addLine("Chance to miss: " + Utils.round(player.stats.calcRangedAttackMissChance(dst)) + "%");
 	}
 
 	private void getNpcInfo() {
+		AbstractNpc npc = cell.getNpc();
 		addLine(npc.stats.name + " (Level " + npc.getLvl() + ")")
-				.addLine(
-						(npc.isNeutral()
-								? "Neutral"
-								: "Hostile"));
-
+				.addLine((npc.isNeutral()
+						? "Neutral"
+						: "Hostile"));
 		addLine(npc.getInfoString());
 	}
 
@@ -179,25 +141,29 @@ public class CellInfoGenerator extends TooltipTextGenerator {
 	}
 
 	private void getCropInfo() {
-		long time = (long) (crop.getHarvestTime() * MadSand.world().getRealtimeActionSeconds());
+		long time = (long) (cell.getCrop().getHarvestTime() * MadSand.world().getRealtimeActionSeconds());
 		addLine((time <= 0)
 				? ("* Ready to harvest!")
 				: ("[#58FFB1]* Will fully grow in " + Utils.timeString(time) + "[]"));
 	}
 
 	Pair coords = new Pair();
+
 	private void getDebugInfo() {
+		Tile tile = cell.getTile();
+		MapObject object = cell.getObject();
+		AbstractNpc npc = cell.getNpc();
 		addLine("[#C3C3C3]" + lineDelimiter)
 				.addLine("Light level: " + tile.getLightLevel() + " (sky: " + MadSand.world().getSkyLight() + ")")
-				.addLine(loc.getLightEngine().getEntityLight(coords.set(x, y)))
-				.addLine("Objects on map: " + loc.getObjectCount())
-				.addLine("NPCs on map: " + loc.getNpcCount());
+				.addLine(map.getLightEngine().getEntityLight(coords.set(x, y)))
+				.addLine("Objects on map: " + map.getObjectCount())
+				.addLine("NPCs on map: " + map.getNpcCount());
 
-		if (hasObject())
+		if (cell.hasObject())
 			addLine("Object HP: " + object.hp + " (" + object.harvestHp + ")")
 					.addLine("Luminosity: " + object.getLuminosity());
 
-		if (hasNpc())
+		if (cell.hasNpc())
 			addLine("Npc hp: " + npc.stats.hp)
 					.addLine("Speed: " + npc.getSpeed() + "(" + npc.stats.get(Stat.Dexterity) + ")")
 					.addLine("Lifetime: " + Utils.round(npc.getLifetime()));
@@ -211,6 +177,6 @@ public class CellInfoGenerator extends TooltipTextGenerator {
 	public String toString() {
 		return String.format("[%d, %d] Object: %s",
 				x, y,
-				object);
+				cell.getObject());
 	}
 }

@@ -1,4 +1,4 @@
-package hitonoriol.madsand.gui.widgets;
+package hitonoriol.madsand.gui.widgets.overlay;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;

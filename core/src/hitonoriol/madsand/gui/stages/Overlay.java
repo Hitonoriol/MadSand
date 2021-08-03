@@ -1,7 +1,6 @@
 package hitonoriol.madsand.gui.stages;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,19 +22,18 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
 import hitonoriol.madsand.entities.inventory.item.Item;
-import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.gui.dialogs.LevelupDialog;
-import hitonoriol.madsand.gui.widgets.ActionButton;
-import hitonoriol.madsand.gui.widgets.EquipmentSidebar;
-import hitonoriol.madsand.gui.widgets.GameContextMenu;
-import hitonoriol.madsand.gui.widgets.GameLog;
-import hitonoriol.madsand.gui.widgets.GameTooltip;
-import hitonoriol.madsand.gui.widgets.Hotbar;
-import hitonoriol.madsand.gui.widgets.OverlayBottomMenu;
-import hitonoriol.madsand.gui.widgets.QuestArrow;
-import hitonoriol.madsand.gui.widgets.StatProgressBar;
+import hitonoriol.madsand.gui.widgets.gametooltip.GameTooltip;
+import hitonoriol.madsand.gui.widgets.overlay.ActionButton;
+import hitonoriol.madsand.gui.widgets.overlay.EquipmentSidebar;
+import hitonoriol.madsand.gui.widgets.overlay.GameContextMenu;
+import hitonoriol.madsand.gui.widgets.overlay.GameLog;
+import hitonoriol.madsand.gui.widgets.overlay.Hotbar;
+import hitonoriol.madsand.gui.widgets.overlay.OverlayBottomMenu;
+import hitonoriol.madsand.gui.widgets.stats.StatProgressBar;
+import hitonoriol.madsand.gui.widgets.waypoint.WaypointArrow;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.properties.Globals;
@@ -67,7 +65,7 @@ public class Overlay extends Stage {
 	public StatProgressBar staminaBar;
 	public StatProgressBar expBar;
 
-	List<QuestArrow> questArrows = new ArrayList<>();
+	private List<WaypointArrow> waypointArrows = new ArrayList<>();
 
 	Label overlayStatLabel;
 	Label timeLabel;
@@ -214,35 +212,39 @@ public class Overlay extends Stage {
 		gameTooltip.show();
 	}
 
-	private void refreshQuestArrows() {
-		Player player = MadSand.player();
-		Iterator<QuestArrow> it = questArrows.iterator();
-		QuestArrow arrow;
-		boolean objectiveDone;
-		HashSet<Integer> hasArrow = new HashSet<>();
-		QuestWorker quests = player.getQuestWorker();
+	public WaypointArrow getWaypointArrow(int destX, int destY) {
+		return waypointArrows.stream()
+				.filter(arrow -> arrow.getDestination().equals(destX, destY))
+				.findFirst()
+				.orElse(null);
+	}
 
+	public void addWaypointArrow(WaypointArrow arrow) {
+		Utils.dbg("[Overlay] Added waypoint arrow {%s}", arrow);
+		waypointArrows.add(arrow);
+		addActor(arrow);
+		refreshWaypointArrows();
+	}
+
+	private void refreshWaypointArrows() {
+		Iterator<WaypointArrow> it = waypointArrows.iterator();
+		WaypointArrow arrow;
 		while (it.hasNext()) {
 			arrow = it.next();
-			objectiveDone = arrow.quest.isComplete();
-			if (!quests.isQuestInProgress(arrow.quest.id) || !objectiveDone) {
-				arrow.remove();
+			if (!arrow.hasParent()) {
 				it.remove();
-			} else if (objectiveDone) {
-				hasArrow.add(arrow.quest.id);
+				Utils.dbg("[Overlay] Removed waypoint arrow {%s}", arrow);
+			} else
 				arrow.update();
-			}
 		}
 
-		for (Quest quest : quests.questsInProgress) {
-			if (quest.isComplete() && !hasArrow.contains(quest.id)) {
-				quest.completionNotice();
-				arrow = new QuestArrow(quest);
-				questArrows.add(arrow);
-				super.addActor(arrow);
-				arrow.update();
-			}
-		}
+		QuestWorker quests = MadSand.player().getQuestWorker();
+		quests.questsInProgress.stream()
+				.filter(quest -> quest.isComplete() && !quest.hasQuestArrow())
+				.forEach(quest -> {
+					quest.completionNotice();
+					addWaypointArrow(quest.questArrow());
+				});
 	}
 
 	public void closeAllDialogs() {
@@ -271,7 +273,7 @@ public class Overlay extends Stage {
 		overlayStatLabel.setText(info);
 
 		hotbar.refreshVisibility();
-		refreshQuestArrows();
+		refreshWaypointArrows();
 	}
 
 	private String getTimeString() {

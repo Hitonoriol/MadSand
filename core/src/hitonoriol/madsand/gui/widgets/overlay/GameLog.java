@@ -1,4 +1,4 @@
-package hitonoriol.madsand.gui.widgets;
+package hitonoriol.madsand.gui.widgets.overlay;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.gui.OverlayMouseoverListener;
+import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.resources.Resources;
 

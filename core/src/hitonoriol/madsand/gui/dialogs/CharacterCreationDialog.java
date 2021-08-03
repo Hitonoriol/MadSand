@@ -6,7 +6,7 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.Stats;
-import hitonoriol.madsand.gui.widgets.StatLabels;
+import hitonoriol.madsand.gui.widgets.stats.StatLabels;
 import hitonoriol.madsand.lua.Lua;
 
 public class CharacterCreationDialog {

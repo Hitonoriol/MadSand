@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.entities.skill.SkillContainer;
-import hitonoriol.madsand.gui.widgets.ResourceProgressBar;
+import hitonoriol.madsand.gui.widgets.overlay.ResourceProgressBar;
 import hitonoriol.madsand.map.object.ResourceObject;
 import hitonoriol.madsand.util.Utils;
 

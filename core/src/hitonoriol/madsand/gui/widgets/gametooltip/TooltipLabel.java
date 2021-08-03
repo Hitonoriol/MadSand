@@ -1,4 +1,4 @@
-package hitonoriol.madsand.gui.widgets;
+package hitonoriol.madsand.gui.widgets.gametooltip;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -9,7 +9,7 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.gui.textgenerator.TooltipTextGenerator;
 
 public class TooltipLabel extends Label {
-	private TooltipTextGenerator generator;
+	private final TooltipTextGenerator generator;
 	private Cell<TooltipLabel> parentCell;
 	private boolean visible = true;
 

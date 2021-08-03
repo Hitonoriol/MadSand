@@ -9,9 +9,9 @@ import hitonoriol.madsand.input.Mouse;
 
 public class GameScreen extends AbstractScreen<Overlay> {
 
-	private GameWorldRenderer gameWorld;
+	private WorldRenderer gameWorld;
 
-	public GameScreen(GameWorldRenderer gameWorld) {
+	public GameScreen(WorldRenderer gameWorld) {
 		super(Gui.overlay); // TODO move it here
 		this.gameWorld = gameWorld;
 	}

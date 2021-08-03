@@ -6,9 +6,9 @@ import hitonoriol.madsand.util.Utils;
 
 public class DeathScreen extends AbstractScreen<DeathStage> {
 
-	private GameWorldRenderer gameWorld;
+	private WorldRenderer gameWorld;
 
-	public DeathScreen(GameWorldRenderer gameWorld) {
+	public DeathScreen(WorldRenderer gameWorld) {
 		super(new DeathStage());
 		this.gameWorld = gameWorld;
 	}

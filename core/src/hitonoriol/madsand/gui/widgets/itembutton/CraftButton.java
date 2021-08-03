@@ -1,4 +1,4 @@
-package hitonoriol.madsand.gui.widgets;
+package hitonoriol.madsand.gui.widgets.itembutton;
 
 import java.util.function.Consumer;
 
@@ -34,6 +34,9 @@ public class CraftButton extends ItemButton {
 	@Override
 	protected String createButtonText() {
 		String buttonString = buttonItem.name;
+
+		if (!MadSand.player().knowsItem(buttonItem.id))
+			buttonString += " (New!)";
 
 		if (buttonItem.craftQuantity > 1)
 			buttonString = buttonItem.craftQuantity + " " + buttonString;

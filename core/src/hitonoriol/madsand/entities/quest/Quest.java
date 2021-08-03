@@ -22,6 +22,7 @@ import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
+import hitonoriol.madsand.gui.widgets.waypoint.QuestArrow;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.NpcProp;
@@ -62,8 +63,9 @@ public class Quest {
 	Player player;
 	public HashMap<Integer, Integer> itemObjective; // {item id, quantity} pairs required to complete quest
 	public HashMap<Integer, Integer> killObjective; // {Npc id, number of kills} pairs required to complete quest
-	public HashMap<Integer, Integer> kills; //	{Npc id, kills} state of player's kill counter on quest start 
+	public HashMap<Integer, Integer> kills; //	{Npc id, kills} state of player's kill counter on quest start
 
+	private QuestArrow questArrow;
 	public static Comparator<Quest> startTimeComparator = (quest1, quest2) -> {
 		return Long.compare(quest1.startTime, quest2.startTime);
 	};
@@ -79,6 +81,17 @@ public class Quest {
 	public Quest setPlayer(Player player) {
 		this.player = player;
 		return this;
+	}
+
+	public boolean hasQuestArrow() {
+		return questArrow != null;
+	}
+
+	public QuestArrow questArrow() {
+		if (hasQuestArrow())
+			return questArrow;
+		else
+			return questArrow = new QuestArrow(this);
 	}
 
 	public boolean hasItemObjective() {

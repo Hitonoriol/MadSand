@@ -28,7 +28,7 @@ import hitonoriol.madsand.minigames.videopoker.VideoPokerUI;
 import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.resources.Resources;
-import hitonoriol.madsand.screens.GameWorldRenderer;
+import hitonoriol.madsand.screens.WorldRenderer;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
 
@@ -73,11 +73,11 @@ public class Keyboard {
 						MadSand.switchScreen(MadSand.mainMenu);
 				})
 				.bind(Keys.NUMPAD_5, () -> {
-					GameWorldRenderer renderer = MadSand.getRenderer();
+					WorldRenderer renderer = MadSand.getRenderer();
 					if (renderer.getCamZoom() != 1)
 						renderer.setZoom(1);
 					else
-						renderer.setZoom(GameWorldRenderer.DEFAULT_ZOOM);
+						renderer.setZoom(WorldRenderer.DEFAULT_ZOOM);
 				})
 				.bind(Keys.G, () -> GameSaver.save());
 

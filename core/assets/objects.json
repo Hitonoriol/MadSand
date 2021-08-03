@@ -1404,5 +1404,11 @@
 		"harvestHp" : 9,
 		"luminosity" : 6,
 		"name" : "Torch"
+	},
+	"187" : {
+		"@type" : "Waypoint",
+		"hp" : 1,
+		"harvestHp" : 19,
+		"name" : "GPS waypoint"
 	}
 }

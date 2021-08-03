@@ -291,11 +291,11 @@ public class World {
 	}
 
 	boolean createBasicLoc(Pair wc, int layer) {
-		return this.createLoc(wc, layer, new Map(DEFAULT_MAPSIZE, DEFAULT_MAPSIZE));
+		return createLoc(wc, layer, new Map(DEFAULT_MAPSIZE, DEFAULT_MAPSIZE));
 	}
 
 	boolean createBasicLoc(Pair wc, int mx, int my) {
-		return this.createLoc(wc, Location.LAYER_OVERWORLD, new Map(mx, my));
+		return createLoc(wc, Location.LAYER_OVERWORLD, new Map(mx, my));
 	}
 
 	boolean createBasicLoc(int wx, int wy) {
@@ -773,6 +773,7 @@ public class World {
 
 		TimeUtils.scheduleTask(() -> {
 			Gui.overlay.refreshActionButton();
+			Gui.refreshOverlay();
 
 			if (timeSkip)
 				endTimeSkip();

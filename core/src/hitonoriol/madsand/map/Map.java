@@ -245,6 +245,10 @@ public class Map {
 		return occupiedTile;
 	}
 
+	public MapCell getMapCell(MapCell cell) {
+		return cell.get(this);
+	}
+
 	public MapEntity getMapEntity(Pair coords) {
 		MapEntity mapEntity;
 		if ((mapEntity = getObject(coords)) != nullObject)

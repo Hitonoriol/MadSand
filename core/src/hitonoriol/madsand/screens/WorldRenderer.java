@@ -33,7 +33,7 @@ import hitonoriol.madsand.pathfinding.Path;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.resources.TextureMap;
 
-public class GameWorldRenderer {
+public class WorldRenderer {
 	public static final float DEFAULT_ZOOM = 1.5F;
 	private static final int OBJECT_LOOT = 7;
 	private static final int CAM_OFFSET_X = 0, CAM_OFFSET_Y = 37;
@@ -50,7 +50,7 @@ public class GameWorldRenderer {
 
 	private static TextureRegion mapCursor = Resources.getTexture("misc/map_cursor");
 
-	public GameWorldRenderer() {
+	public WorldRenderer() {
 		updateViewport();
 	}
 
@@ -153,7 +153,7 @@ public class GameWorldRenderer {
 
 	public void drawPath(Path path, Color color) {
 		batch.setColor(color);
-		path.forEach(cell -> batch.draw(GameWorldRenderer.mapCursor, cell.x * TILESIZE, cell.y * TILESIZE));
+		path.forEach(cell -> batch.draw(WorldRenderer.mapCursor, cell.x * TILESIZE, cell.y * TILESIZE));
 		batch.setColor(defColor);
 	}
 
@@ -164,7 +164,7 @@ public class GameWorldRenderer {
 	private void drawMapCursor() {
 		int x = Mouse.wx, y = Mouse.wy;
 		if (!Mouse.hasClickAction())
-			batch.draw(GameWorldRenderer.mapCursor, x * TILESIZE, y * TILESIZE);
+			batch.draw(WorldRenderer.mapCursor, x * TILESIZE, y * TILESIZE);
 		else
 			drawPath(Mouse.getPathToCursor());
 	}

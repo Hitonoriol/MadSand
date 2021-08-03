@@ -46,7 +46,7 @@ public class ResourceObject extends MapObject {
 					+ skill + " level required: " + lvl + Resources.LINEBREAK
 					+ "Your " + skill + ": " + curLvl);
 		else
-			super.interact(player, () -> interactIfPossible(() -> player.interact(this)));
+			super.interact(player, () -> player.interact(this));
 	}
 
 	private void rollResources(Player player, int hpDelta) {

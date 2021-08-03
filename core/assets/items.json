@@ -1920,5 +1920,13 @@
 		"craftQuantity" : 3,
 		"name" : "Torch",
 		"cost" : 5
+	},
+	"188" : {
+		"@type" : "Placeable",
+		"type" : "Object",
+		"altObject" : 187,
+		"recipe" : "181|72/1:9/1",
+		"name" : "GPS waypoint",
+		"cost" : 25
 	}
 }
