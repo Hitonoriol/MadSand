@@ -43,7 +43,6 @@ import hitonoriol.madsand.world.worldgen.WorldGen;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class World {
-	private static Map nullLoc = new Map(0, 0);
 	public static int DEFAULT_MAPSIZE = Map.MIN_MAPSIZE;
 	private static final float MAX_SIM_DISTANCE_COEF = 2.5f;
 	private static final float ACT_DELAY_STEP = 0.00125f;
@@ -182,7 +181,7 @@ public class World {
 		if (locExists(wc, layer)) {
 			return worldMap.getLocation(wc).getLayer(layer);
 		} else
-			return nullLoc;
+			return Map.nullMap;
 	}
 
 	Map getLoc(int x, int y, int layer) {

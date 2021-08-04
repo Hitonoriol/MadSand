@@ -47,6 +47,7 @@ import hitonoriol.madsand.world.worldgen.RollList;
 import hitonoriol.madsand.world.worldgen.WorldGenPreset;
 
 public class Map {
+	public static final Map nullMap = new Map(0, 0);
 	private int xsz, ysz;
 
 	public static int MIN_MAPSIZE = 100;
@@ -161,6 +162,7 @@ public class Map {
 		return mapObjects;
 	}
 	
+	@JsonIgnore
 	public Collection<MapObject> getObjects() {
 		return mapObjects.values();
 	}

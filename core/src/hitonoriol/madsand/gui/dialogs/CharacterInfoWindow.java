@@ -173,8 +173,7 @@ public class CharacterInfoWindow {
 					.setSkill(player.stats.skills.get(skill))
 					.setProgressSize(BAR_WIDTH, BAR_HEIGHT))
 					.size(BAR_WIDTH, BAR_HEIGHT)
-					.padBottom(LINE_PAD)
-					.getActor().update();
+					.padBottom(LINE_PAD);
 			skillTable.row();
 		}
 

@@ -1002,9 +1002,12 @@ public class Player extends Entity {
 
 	public void freeHands(EquipSlot slot, boolean silent) {
 		Item item = stats.equipment.getItem(slot);
+		if (!stats.equipment.unEquip(item))
+			return;
+
 		if (!silent && item.id != Item.NULL_ITEM)
 			MadSand.print("You put " + item.name + " back to your inventory");
-		stats.equipment.unEquip(slot);
+
 		inventory.getUI().refreshItem(item);
 	}
 

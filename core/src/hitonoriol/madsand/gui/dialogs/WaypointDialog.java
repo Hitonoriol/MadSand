@@ -16,9 +16,10 @@ import hitonoriol.madsand.map.object.Waypoint;
 
 public class WaypointDialog extends GameDialog {
 	private Table container = new Table(Gui.skin);
+
 	public WaypointDialog() {
 		centerTitle();
-		setTitle("Waypoints in this sector");
+		setTitle("Waypoints in Sector (" + MadSand.world().getCurWPos() + ")");
 		makeBordered();
 		container.align(Align.topLeft);
 		add(new AutoFocusScrollPane(container)).size(ENTRY_WIDTH * 3.1f, 350).row();
@@ -27,8 +28,10 @@ public class WaypointDialog extends GameDialog {
 				.map(object -> object.as(Waypoint.class).orElse(null))
 				.filter(waypoint -> waypoint != null)
 				.collect(Collectors.toList());
-		if (waypoints.isEmpty())
+		if (waypoints.isEmpty()) {
+			container.align(Align.center);
 			container.add("There are no GPS waypoints in this sector!");
+		}
 		else {
 			container.add(createWaypointEntry()).padBottom(ENTRY_PAD * 2).row();
 			waypoints.forEach(waypoint -> container.add(createWaypointEntry(waypoint)).align(Align.left).row());

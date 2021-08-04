@@ -23,14 +23,9 @@ import hitonoriol.madsand.util.TimeUtils;
 
 public class GameDialog extends Dialog {
 	public static final float BTN_HEIGHT = 35;
-
-	private static final float TITLE_YPADDING = 18;
-	private static final float TITLE_XPADDING = 3;
-	private static final float TEXT_YPADDING = 15;
-
-	public static final float WIDTH = 500;
-	public static final float HEIGHT = 250;
-	public static final float PADDING = 10;
+	private static final float TITLE_YPAD = 18, TITLE_XPAD = 3;
+	private static final float TEXT_YPAD = 15, BTN_TEXT_XPAD = 30;
+	public static final float WIDTH = 500, HEIGHT = 250, PADDING = 10;
 
 	private AutoFocusScrollPane textScroll;
 	private Table dialogContainer = new Table(Gui.skin);
@@ -44,7 +39,7 @@ public class GameDialog extends Dialog {
 		Table titleTbl = super.getTitleTable();
 		Label titleLbl = super.getTitleLabel();
 		titleTbl.getCell(titleLbl);
-		titleTbl.padTop(TITLE_YPADDING).padLeft(TITLE_XPADDING);
+		titleTbl.padTop(TITLE_YPAD).padLeft(TITLE_XPAD);
 		getButtonTable().defaults().size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT);
 		row();
 		textLbl = new Label("", Gui.skin);
@@ -55,7 +50,7 @@ public class GameDialog extends Dialog {
 		dialogContainer.align(Align.topLeft);
 		add(textScroll = new AutoFocusScrollPane(dialogContainer)).size(WIDTH, HEIGHT)
 				.pad(PADDING)
-				.padTop(TEXT_YPADDING).row();
+				.padTop(TEXT_YPAD).row();
 		this.stage = stage;
 	}
 
@@ -176,14 +171,14 @@ public class GameDialog extends Dialog {
 			proceedButton = button;
 
 		Cell<TextButton> cell = add(button)
-				.width(Math.max(Gui.BTN_WIDTH, Gui.getTextWidth(button.getText())))
+				.width(Math.max(Gui.BTN_WIDTH, Gui.getTextWidth(button.getText()) + BTN_TEXT_XPAD))
 				.height(BTN_HEIGHT)
 				.padBottom(PADDING / 2);
 		if (breakRow)
 			cell.row();
 		return cell;
 	}
-	
+
 	public Cell<TextButton> addButton(TextButton button) {
 		return addButton(button, true);
 	}

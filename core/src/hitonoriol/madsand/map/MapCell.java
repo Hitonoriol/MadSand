@@ -86,7 +86,7 @@ public class MapCell {
 		coords.set(x, y);
 		return this;
 	}
-	
+
 	public boolean coordsValid() {
 		return validCoords;
 	}
@@ -100,8 +100,12 @@ public class MapCell {
 		return this;
 	}
 
-	/* Populates MapCell with cell contents @(x, y) from currently loaded map */
+	/* Populates MapCell with cell contents from currently loaded map */
+	public static MapCell get(MapCell cell) {
+		return MadSand.world().getCurLoc().getMapCell(cell);
+	}
+
 	public static MapCell get(MapCell cell, int x, int y) {
-		return MadSand.world().getCurLoc().getMapCell(cell.setCoords(x, y));
+		return get(cell.setCoords(x, y));
 	}
 }

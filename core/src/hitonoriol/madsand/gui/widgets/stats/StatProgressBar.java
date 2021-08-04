@@ -61,6 +61,7 @@ public class StatProgressBar extends Group {
 		setValueUpdater(() -> (float) skill.exp);
 		setMaxValueUpdater(() -> (float) skill.requiredExp);
 		setProgressUpdater(() -> skill.getProgress());
+		update();
 		return this;
 	}
 
