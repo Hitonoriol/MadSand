@@ -81,7 +81,7 @@ public class QuestJournal extends GameDialog {
 		questScroll.setScrollingDisabled(true, false);
 
 		super.add(questScroll).minSize(TABLE_WIDTH, TABLE_HEIGHT).padTop(SCROLL_YPADDING).row();
-		super.add(closeButton).size(GameDialog.BTN_WIDTH, GameDialog.BTN_HEIGHT).padBottom(CLOSE_BUTTON_YPADDING).row();
+		super.add(closeButton).size(Gui.BTN_WIDTH, GameDialog.BTN_HEIGHT).padBottom(CLOSE_BUTTON_YPADDING).row();
 		Gui.setAction(closeButton, () -> remove());
 	}
 

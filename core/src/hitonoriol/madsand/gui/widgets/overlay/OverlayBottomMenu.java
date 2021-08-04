@@ -20,6 +20,7 @@ import hitonoriol.madsand.gui.dialogs.BuildDialog;
 import hitonoriol.madsand.gui.dialogs.CharacterInfoWindow;
 import hitonoriol.madsand.gui.dialogs.LandDialog;
 import hitonoriol.madsand.gui.dialogs.QuestJournal;
+import hitonoriol.madsand.gui.dialogs.WaypointDialog;
 import hitonoriol.madsand.gui.stages.Overlay;
 import hitonoriol.madsand.input.Keyboard;
 
@@ -45,6 +46,7 @@ public class OverlayBottomMenu extends Table {
 		addButton("Build", Keys.B, () -> new BuildDialog());
 		addButton("Bestiary", Keys.X, () -> new BestiaryDialog(MadSand.player()));
 		addButton("Land", Keys.L, () -> new LandDialog(MadSand.world().getLocation()));
+		addButton("Waypoints", Keys.O, () -> new WaypointDialog());
 
 		container.setBackground(new NinePatchDrawable(Gui.darkBackgroundSizeable));
 

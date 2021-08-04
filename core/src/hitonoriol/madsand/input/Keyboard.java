@@ -22,6 +22,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.HashMapFactory;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.gui.dialogs.InputDialog;
 import hitonoriol.madsand.minigames.blackjack.BlackJackUI;
 import hitonoriol.madsand.minigames.farkle.FarkleUI;
 import hitonoriol.madsand.minigames.videopoker.VideoPokerUI;
@@ -92,6 +93,9 @@ public class Keyboard {
 						world.updateLight();
 						Gui.refreshOverlay();
 					})
+					.bind(Keys.HOME,
+							() -> new InputDialog("Input test", "Type somethin:", text -> Gui.drawOkDialog(text))
+									.show())
 					.bind(key -> pollDebugKeys(key));
 		}
 	}

@@ -302,20 +302,20 @@ public class Gui {
 				.findFirst().orElse(-1);
 	}
 
-	private static GlyphLayout modifyGlyph(String text, int fontSize) {
+	private static GlyphLayout modifyGlyph(CharSequence text, int fontSize) {
 		glyphLayout.setText(getFont(fontSize), text);
 		return glyphLayout;
 	}
 
-	private static GlyphLayout modifyGlyph(String text) {
+	private static GlyphLayout modifyGlyph(CharSequence text) {
 		return modifyGlyph(text, FONT_S);
 	}
 
-	public static float getTextWidth(String text, int fontSize) {
+	public static float getTextWidth(CharSequence text, int fontSize) {
 		return modifyGlyph(text, fontSize).width;
 	}
 
-	public static float getTextWidth(String text) {
+	public static float getTextWidth(CharSequence text) {
 		return getTextWidth(text, FONT_S);
 	}
 

@@ -47,7 +47,7 @@ public class SkillValue {
 	}
 
 	public float getProgress() {
-		return (float) (((exp - lvlStartExp) / requiredExp) * 100);
+		return (float) (((exp - lvlStartExp) / (requiredExp - lvlStartExp)) * 100);
 	}
 
 	public void addExp(double amt) {

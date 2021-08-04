@@ -8,7 +8,7 @@ import hitonoriol.madsand.gui.widgets.stats.StatLabels;
 
 public class LevelupDialog extends PlayerStatDialog {
 	public LevelupDialog() {
-		super(Gui.overlay, new StatLabels(), "Level Up!", MadSand.player().stats.baseStats.maxStatSum - 1);
+		super(Gui.overlay, new StatLabels(), "Level Up!", MadSand.player().stats().baseStats.getMinSum());
 		super.nameField.setDisabled(true);
 		super.nameField.setText(MadSand.player().stats.name);
 		TextButton okButton = new TextButton("Done", Gui.skin);

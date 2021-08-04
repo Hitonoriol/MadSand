@@ -103,8 +103,12 @@ public class WaypointArrow extends Group {
 	}
 
 	public WaypointArrow randomizeColor() {
-		setColor(Utils.randomColor(Utils.dataGen));
+		arrow.setColor(Utils.randomColor(Utils.dataGen));
 		return this;
+	}
+	
+	protected Image getArrow() {
+		return arrow;
 	}
 
 	public void update() {

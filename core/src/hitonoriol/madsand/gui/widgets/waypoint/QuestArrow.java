@@ -11,7 +11,7 @@ public class QuestArrow extends WaypointArrow {
 	private Quest quest;
 
 	public QuestArrow(Quest quest) {
-		setColor(Color.BLACK);
+		getArrow().setColor(Color.BLACK);
 		this.quest = quest;
 		setDestinationName(quest.name);
 		update();

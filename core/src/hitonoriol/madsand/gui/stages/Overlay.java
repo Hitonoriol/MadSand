@@ -24,7 +24,6 @@ import hitonoriol.madsand.entities.equipment.EquipSlot;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.entities.skill.Skill;
-import hitonoriol.madsand.gui.dialogs.LevelupDialog;
 import hitonoriol.madsand.gui.widgets.gametooltip.GameTooltip;
 import hitonoriol.madsand.gui.widgets.overlay.ActionButton;
 import hitonoriol.madsand.gui.widgets.overlay.EquipmentSidebar;
@@ -170,10 +169,6 @@ public class Overlay extends Stage {
 			prevConsoleInput = tmp;
 			gameLog.inputField.setCursorPosition(gameLog.inputField.getText().length());
 		}
-	}
-
-	public void levelUpDialog() {
-		new LevelupDialog().show();
 	}
 
 	public TextField getConsoleField() {

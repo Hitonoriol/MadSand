@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.gui.dialogs.LevelupDialog;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
@@ -54,7 +55,7 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 
 			if (skill.equals(Skill.Level)) {
 				MadSand.player().stats.baseStats.increaseMaxStatSum();
-				Gui.overlay.levelUpDialog();
+				new LevelupDialog().show();
 			} else
 				Gui.drawOkDialog(skill + " up!", "Your " + skill + " skill is now level " + get(skill).lvl + "!");
 		}

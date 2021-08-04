@@ -78,6 +78,14 @@ public class StatContainer extends HashMap<Stat, Integer> {
 				sum += get(stat);
 		return sum;
 	}
+	
+	public int getMaxSum() {
+		return maxStatSum;
+	}
+	
+	public int getMinSum() {
+		return maxStatSum - 1;
+	}
 
 	@JsonIgnore
 	public int getFreePoints() {

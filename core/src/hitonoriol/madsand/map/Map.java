@@ -1,6 +1,7 @@
 package hitonoriol.madsand.map;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -156,8 +157,12 @@ public class Map {
 	}
 
 	@JsonIgnore
-	HashMap<Pair, MapObject> getObjects() {
+	HashMap<Pair, MapObject> getObjectMap() {
 		return mapObjects;
+	}
+	
+	public Collection<MapObject> getObjects() {
+		return mapObjects.values();
 	}
 
 	@JsonIgnore

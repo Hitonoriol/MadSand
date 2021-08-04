@@ -19,13 +19,13 @@ import hitonoriol.madsand.gui.widgets.stats.StatLabels;
 import me.xdrop.jrand.JRand;
 
 public class PlayerStatDialog extends GameDialog {
-	static int DEFAULT_STAT_SUM = 6;
-	int maxStatSum = MadSand.player().stats.baseStats.maxStatSum;
-	int minStatSum;
-	boolean restoreOnChange = false;
+	private static int DEFAULT_STAT_SUM = 6;
+	private int maxStatSum = MadSand.player().stats.baseStats.maxStatSum;
+	private int minStatSum;
+	protected boolean restoreOnChange = false;
 	protected StatLabels statLabels;
-	String titleString;
-	TextField nameField;
+	private String titleString;
+	protected TextField nameField;
 
 	public PlayerStatDialog(Stage stage, StatLabels statLabels, String title, int minStatSum) {
 		super(stage);
@@ -62,10 +62,9 @@ public class PlayerStatDialog extends GameDialog {
 		super.add(statLabels.freeStatPointsLbl).width(width).row();
 	}
 
-	float BUTTON_WIDTH = 15;
-	float ENTRY_HEIGHT = 15;
-	float BUTTON_PADDING = 4;
-	float LABEL_WIDTH = Gui.defLblWidth - ((BUTTON_WIDTH + BUTTON_PADDING) * 2);
+	private float BUTTON_WIDTH = 15, BUTTON_PADDING = 4;
+	private float ENTRY_HEIGHT = 15;
+	private float LABEL_WIDTH = Gui.defLblWidth - ((BUTTON_WIDTH + BUTTON_PADDING) * 2);
 
 	private void addStatEntry(StatLabels.StatLabel label) {
 		Stat stat = label.stat;

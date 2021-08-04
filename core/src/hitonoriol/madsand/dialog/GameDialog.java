@@ -2,7 +2,6 @@ package hitonoriol.madsand.dialog;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -23,7 +22,6 @@ import hitonoriol.madsand.screens.AbstractScreen;
 import hitonoriol.madsand.util.TimeUtils;
 
 public class GameDialog extends Dialog {
-	public static final float BTN_WIDTH = Gdx.graphics.getWidth() / 4;
 	public static final float BTN_HEIGHT = 35;
 
 	private static final float TITLE_YPADDING = 18;
@@ -47,7 +45,7 @@ public class GameDialog extends Dialog {
 		Label titleLbl = super.getTitleLabel();
 		titleTbl.getCell(titleLbl);
 		titleTbl.padTop(TITLE_YPADDING).padLeft(TITLE_XPADDING);
-
+		getButtonTable().defaults().size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT);
 		row();
 		textLbl = new Label("", Gui.skin);
 		setText(text);
@@ -173,13 +171,21 @@ public class GameDialog extends Dialog {
 		addButton(button);
 	}
 
-	public Cell<TextButton> addButton(TextButton button) {
+	public Cell<TextButton> addButton(TextButton button, boolean breakRow) {
 		if (proceedButton == null)
 			proceedButton = button;
 
-		Cell<TextButton> cell = add(button).width(BTN_WIDTH).height(BTN_HEIGHT).padBottom(PADDING / 2);
-		cell.row();
+		Cell<TextButton> cell = add(button)
+				.width(Math.max(Gui.BTN_WIDTH, Gui.getTextWidth(button.getText())))
+				.height(BTN_HEIGHT)
+				.padBottom(PADDING / 2);
+		if (breakRow)
+			cell.row();
 		return cell;
+	}
+	
+	public Cell<TextButton> addButton(TextButton button) {
+		return addButton(button, true);
 	}
 
 	public TextButton getProceedButton() {
@@ -193,7 +199,7 @@ public class GameDialog extends Dialog {
 		show(stage);
 	}
 
-	public TextButton createCloseButton() {
+	protected TextButton createCloseButton() {
 		TextButton closeButton = new TextButton("Close", Gui.skin);
 		Gui.setAction(closeButton, () -> remove());
 		return closeButton;
@@ -204,7 +210,7 @@ public class GameDialog extends Dialog {
 	}
 
 	public Cell<TextButton> addCloseButton() {
-		return addCloseButton(Gui.BTN_WIDTH, Gui.BTN_HEIGHT);
+		return addCloseButton(Gui.BTN_WIDTH, BTN_HEIGHT);
 	}
 
 	public void setPrefSize(float width, float height) {

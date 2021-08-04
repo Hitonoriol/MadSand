@@ -6,6 +6,8 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.gui.widgets.waypoint.WaypointArrow;
 
 public class Waypoint extends MapObject {
+	private Pair position;
+
 	public Waypoint(Waypoint protoObject) {
 		super(protoObject);
 	}
@@ -19,11 +21,29 @@ public class Waypoint extends MapObject {
 
 	public void toggleArrow() {
 		Pair position = getPosition();
-		WaypointArrow arrow = Gui.overlay.getWaypointArrow(position.x, position.y);
-		if (arrow != null)
+		WaypointArrow arrow = getArrow();
+		if (arrow != null) {
 			arrow.remove();
+			Gui.refreshOverlay();
+		}
 		else
 			Gui.overlay.addWaypointArrow(new WaypointArrow(position.x, position.y).randomizeColor());
+	}
+
+	public WaypointArrow getArrow() {
+		Pair position = getPosition();
+		return Gui.overlay.getWaypointArrow(position.x, position.y);
+	}
+
+	public boolean hasArrow() {
+		return getArrow() != null;
+	}
+
+	@Override
+	public Pair getPosition() {
+		if (position == null)
+			return position = super.getPosition();
+		return position;
 	}
 
 	@Override

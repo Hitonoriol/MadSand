@@ -1291,14 +1291,14 @@ public class Player extends Entity {
 
 	@Override
 	public void stopMovement() {
-		if (!hasQueuedMovement())
-			Keyboard.resumeInput();
-
-		if (afterMovement != null) {
-			afterMovement.run();
-			afterMovement = null;
-		}
 		super.stopMovement();
+		if (!hasQueuedMovement()) {
+			Keyboard.resumeInput();
+			if (afterMovement != null) {
+				afterMovement.run();
+				afterMovement = null;
+			}
+		}
 	}
 
 	public void doAfterMovement(Runnable action) {
