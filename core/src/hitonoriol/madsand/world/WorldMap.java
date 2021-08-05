@@ -2,19 +2,24 @@ package hitonoriol.madsand.world;
 
 import java.util.HashMap;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.util.Utils;
 
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class WorldMap {
+	@JsonIgnore
 	private Pair coords = new Pair();
 
 	int xsz, ysz;
 	public int curLayer = Location.LAYER_OVERWORLD;
 	public Pair curWorldPos = new Pair();
 
+	@JsonIgnore
 	private HashMap<Pair, Location> locations = new HashMap<>();
 
 	public WorldMap(int sz) {
@@ -23,6 +28,10 @@ public class WorldMap {
 	}
 
 	public WorldMap() {}
+
+	public boolean validCoords(Pair coords) {
+		return coords.x >= 1 && coords.y >= 1 && coords.x <= xsz && coords.y <= ysz;
+	}
 
 	public void addLocation(Pair coords, Location location) {
 		locations.put(coords, location);

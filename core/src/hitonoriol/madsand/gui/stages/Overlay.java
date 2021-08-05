@@ -52,7 +52,7 @@ public class Overlay extends Stage {
 
 	private Table topTable = new Table();
 	public GameTooltip gameTooltip;
-	public GameContextMenu gameContextMenu;
+	private GameContextMenu gameContextMenu;
 	public ActionButton actionButton;
 	public GameLog gameLog;
 	public OverlayBottomMenu bottomMenu;
@@ -186,9 +186,9 @@ public class Overlay extends Stage {
 	public void refreshActionButton() {
 		actionButton.refresh();
 	}
-
-	public void closeGameContextMenu() {
-		gameContextMenu.closeGameContextMenu();
+	
+	public GameContextMenu getContextMenu() {
+		return gameContextMenu;
 	}
 
 	public void hideActionBtn() {

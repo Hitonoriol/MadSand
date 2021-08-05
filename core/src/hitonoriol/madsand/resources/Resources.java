@@ -1,8 +1,10 @@
 package hitonoriol.madsand.resources;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -23,13 +25,15 @@ import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.type.MapType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
+import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.containers.AnimationContainer;
 import hitonoriol.madsand.containers.Pair;
@@ -100,8 +104,8 @@ public class Resources {
 	public static final String LINEBREAK = System.lineSeparator();
 	public static String COLOR_END = "[]";
 
-	public static ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-	public static TypeFactory typeFactory = mapper.getTypeFactory();
+	private final static ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+	private final static TypeFactory typeFactory = mapper.getTypeFactory();
 
 	public static void loadAll() {
 		try {
@@ -238,16 +242,6 @@ public class Resources {
 			ItemProp.buildReq.put(entry.getKey(), Item.parseCraftRequirements(entry.getValue()));
 	}
 
-	private static JavaType stringList = typeFactory.constructCollectionType(ArrayList.class, String.class);
-
-	public static ArrayList<String> loadStringList(String internalFile) {
-		try {
-			return mapper.readValue(readInternal(internalFile), stringList);
-		} catch (Exception e) {
-			return null;
-		}
-	}
-
 	public static TextureRegion getTile(int id) {
 		return tiles.get(id);
 	}
@@ -298,17 +292,88 @@ public class Resources {
 		return Gdx.files.internal(file).readString();
 	}
 
-	public static MapType getMapType(Class<?> key, Class<?> value) {
-		return Resources.typeFactory.constructMapType(HashMap.class, key, value);
+	public static void save(String file, Object object) {
+		try {
+			mapper.writeValue(new File(file), object);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-	public static <K, V> HashMap<K, V> loadMap(String file, Class<K> keyType, Class<V> valueType) {
+	public static <T> ArrayList<T> loadList(String internalFile, Class<T> type) {
 		try {
-			return mapper.readValue(readInternal(file), getMapType(keyType, valueType));
+			return mapper.readValue(readInternal(internalFile),
+					typeFactory.constructCollectionType(ArrayList.class, type));
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public static MapType getMapType(Class<?> key, Class<?> value) {
+		return typeFactory.constructMapType(HashMap.class, key, value);
+	}
+
+	public static ObjectWriter getMapWriter(Class<?> key, Class<?> value) {
+		return mapper.writerFor(getMapType(key, value));
+	}
+
+	public static ObjectReader getMapReader(Class<?> key, Class<?> value) {
+		return mapper.readerFor(getMapType(key, value));
+	}
+
+	public static ObjectReader getMapReader(Class<?> value) {
+		return getMapReader(Pair.class, value);
+	}
+
+	public static ObjectWriter getMapWriter(Class<?> value) {
+		return getMapWriter(Pair.class, value);
+	}
+
+	private static <K, V> HashMap<K, V> loadMap(String file, Class<K> keyType, Class<V> valueType, boolean internal) {
+		try {
+			return mapper.readValue(internal ? readInternal(file) : GameSaver.readFile(file),
+					getMapType(keyType, valueType));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public static <K, V> HashMap<K, V> loadMap(String internalFile, Class<K> keyType, Class<V> valueType) {
+		return loadMap(internalFile, keyType, valueType, true);
+	}
+
+	public static <K, V> HashMap<K, V> readMap(String file, Class<K> keyType, Class<V> valueType) {
+		return loadMap(file, keyType, valueType, false);
+	}
+
+	public static <V> HashMap<Pair, V> readMap(String file, Class<V> valueType) {
+		return readMap(file, Pair.class, valueType);
+	}
+
+	public static String saveMap(Map<?, ?> map, Class<?> keyType, Class<?> valType) {
+		try {
+			return getMapWriter(keyType, valType).writeValueAsString(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static String saveMap(Map<?, ?> map, Class<?> valType) {
+		return saveMap(map, Pair.class, valType);
+	}
+
+	public static <K, V> void saveMap(String file, Map<K, V> map, Class<K> keyType, Class<V> valType) {
+		try {
+			getMapWriter(keyType, valType).writeValue(new File(file), map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static ObjectMapper getMapper() {
+		return mapper;
 	}
 
 	public static NinePatchDrawable loadNinePatch(String file) {

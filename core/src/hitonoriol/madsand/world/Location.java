@@ -31,7 +31,7 @@ public class Location {
 	public Faction faction = Faction.None;
 	public Settlement settlement;
 
-	HashMap<Integer, Map> layers = new HashMap<>();
+	private java.util.Map<Integer, Map> layers = new HashMap<>();
 
 	public void putLayer(int layer, Map map) {
 		if (layers.containsKey(layer))
@@ -94,7 +94,7 @@ public class Location {
 	}
 
 	@JsonIgnore
-	public HashMap<Integer, Map> getLayers() {
+	public java.util.Map<Integer, Map> getLayers() {
 		return layers;
 	}
 

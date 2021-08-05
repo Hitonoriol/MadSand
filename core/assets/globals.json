@@ -24,7 +24,7 @@
 			end
 		",
 		"Teleportation" : "
-			world.player:teleport(world:getCurLoc():getRandomPoint());
+			player:teleport(world:getCurLoc():getRandomPoint());
 		"
 	},
 

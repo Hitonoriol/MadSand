@@ -21,6 +21,7 @@ import hitonoriol.madsand.gui.textgenerator.CellInfoGenerator;
 import hitonoriol.madsand.gui.textgenerator.NotificationGenerator;
 import hitonoriol.madsand.gui.textgenerator.StaticTextGenerator;
 import hitonoriol.madsand.gui.widgets.gametooltip.GameTooltip;
+import hitonoriol.madsand.gui.widgets.overlay.GameContextMenu;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapCell;
@@ -86,11 +87,7 @@ public class Mouse {
 					if (Gui.dialogActive)
 						return;
 
-					if (overlay.gameTooltip.isVisible()) {
-						overlay.gameContextMenu.openGameContextMenu();
-						Gui.gameUnfocused = true;
-					} else
-						overlay.gameContextMenu.closeGameContextMenu();
+					toggleContextMenu();
 				}
 			}
 
@@ -112,6 +109,16 @@ public class Mouse {
 				return true;
 			}
 		});
+	}
+	
+	private static void toggleContextMenu() {
+		GameContextMenu menu = Gui.overlay.getContextMenu();
+		if (GameTooltip.instance().isVisible()) {
+			menu.open();
+			cellInfo.getCell().populateContextMenu(menu);
+			Gui.gameUnfocused = true;
+		} else
+			menu.close();
 	}
 
 	private static void initTooltip() {

@@ -2,6 +2,9 @@ package hitonoriol.madsand.gui.dialogs;
 
 import java.util.function.Consumer;
 
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -20,16 +23,30 @@ public class InputDialog extends GameDialog {
 		setTitle(title);
 		if (prompt != null)
 			add(prompt).height(Gui.FONT_S).padBottom(PAD).row();
+		else
+			skipLine();
 		add(textField).size(250, Gui.BTN_HEIGHT).padBottom(PAD).row();
 		TextButton okBtn = new TextButton("Confirm", Gui.skin);
 		Gui.setAction(okBtn, () -> {
-			inputConsumer.accept(textField.getText());
+			String text = textField.getText().trim();
+			if (text.length() == 0)
+				return;
+			inputConsumer.accept(text);
 			remove();
 		});
 		Table btnTable = getButtonTable();
 		btnTable.add(okBtn).padRight(5);
 		btnTable.add(createCloseButton());
 		add(btnTable);
+
+		addListener(new InputListener() {
+			@Override
+			public boolean keyDown(InputEvent event, int keycode) {
+				if (keycode == Keys.ENTER)
+					okBtn.toggle();
+				return super.keyDown(event, keycode);
+			}
+		});
 	}
 
 	public InputDialog(String title, Consumer<String> inputConsumer) {
@@ -38,5 +55,10 @@ public class InputDialog extends GameDialog {
 
 	public InputDialog(Consumer<String> inputConsumer) {
 		this(DEF_TITLE, inputConsumer);
+	}
+
+	public InputDialog setInitialText(String text) {
+		textField.setText(text);
+		return this;
 	}
 }

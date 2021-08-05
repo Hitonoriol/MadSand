@@ -158,7 +158,7 @@ public class Map {
 	}
 
 	@JsonIgnore
-	HashMap<Pair, MapObject> getObjectMap() {
+	public HashMap<Pair, MapObject> getObjectMap() {
 		return mapObjects;
 	}
 	

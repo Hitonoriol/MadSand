@@ -13,6 +13,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.AnimationContainer;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Entity;
+import hitonoriol.madsand.gui.widgets.overlay.GameContextMenu;
 import hitonoriol.madsand.map.object.MapObject;
 
 @JsonTypeInfo(use = Id.CLASS, include = As.PROPERTY)
@@ -29,6 +30,8 @@ public abstract class MapEntity implements DynamicallyCastable<MapEntity> {
 	public abstract Pair getPosition();
 
 	public abstract boolean add(Map map, Pair coords);
+
+	protected void populateContextMenu(GameContextMenu menu) {}
 
 	public void playAnimation(AnimationContainer animation) {
 		Pair worldPos = getPosition().toScreen();

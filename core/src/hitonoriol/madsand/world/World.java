@@ -750,7 +750,7 @@ public class World {
 					actDelay += cumulativeDelay.getValue();
 					if (actBeforePlayer) {
 						maxDelay.setValue(Math.max(maxDelay.getValue(), actDelay));
-						Keyboard.stopInput();
+						Keyboard.ignoreInput();
 						stopLevel.increment();
 						player.setActDelay(maxDelay.getValue());
 					}

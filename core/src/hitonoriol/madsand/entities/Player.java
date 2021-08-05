@@ -773,7 +773,7 @@ public class Player extends Entity {
 
 	public void interact(AbstractNpc npc) {
 		npc.interact(this);
-		Gui.overlay.closeGameContextMenu();
+		Gui.overlay.getContextMenu().close();
 		Gui.overlay.hideActionBtn();
 	}
 
@@ -1119,7 +1119,8 @@ public class Player extends Entity {
 	}
 
 	public boolean canTravel() {
-		Map map = MadSand.world().getCurLoc();
+		World world = MadSand.world();
+		Map map = world.getCurLoc();
 		Direction direction = stats.look;
 		boolean canTravel;
 
@@ -1128,7 +1129,10 @@ public class Player extends Entity {
 		canTravel |= (x < 1 && direction == Direction.LEFT);
 		canTravel |= (y < 1 && direction == Direction.DOWN);
 
-		return canTravel && MadSand.world().curLayer() == Location.LAYER_OVERWORLD;
+		Pair newWorldPos = world.getCurWPos().copy().addDirection(direction);
+		canTravel &= world.getWorldMap().validCoords(newWorldPos);
+
+		return canTravel && world.curLayer() == Location.LAYER_OVERWORLD;
 	}
 
 	@Override
@@ -1328,7 +1332,7 @@ public class Player extends Entity {
 
 	@Override
 	public void move(Path path) {
-		Keyboard.stopInput();
+		Keyboard.ignoreInput();
 		super.move(path);
 	}
 

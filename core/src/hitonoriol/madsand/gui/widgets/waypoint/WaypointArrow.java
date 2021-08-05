@@ -50,8 +50,9 @@ public class WaypointArrow extends Group {
 		this(0, 0);
 	}
 
-	protected void setDestinationName(String name) {
+	public WaypointArrow setDestinationName(String name) {
 		this.name = name;
+		return this;
 	}
 
 	protected void update(int pX, int pY) {

@@ -1,6 +1,9 @@
 package hitonoriol.madsand.properties;
 
-import static hitonoriol.madsand.resources.Resources.*;
+import static hitonoriol.madsand.resources.Resources.GLOBALS_FILE;
+import static hitonoriol.madsand.resources.Resources.getMapper;
+import static hitonoriol.madsand.resources.Resources.loadList;
+import static hitonoriol.madsand.resources.Resources.readInternal;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,7 +12,6 @@ import hitonoriol.madsand.containers.rolltable.LootTable;
 import hitonoriol.madsand.entities.ability.Ability;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.quest.ProceduralQuest;
-import hitonoriol.madsand.resources.Resources;
 
 public class Globals {
 	private static final String DEV_VER_STR = "[Development Build]";
@@ -44,7 +46,7 @@ public class Globals {
 	public static boolean headless() {
 		return HEADLESS;
 	}
-	
+
 	public static boolean isDevBuild() {
 		return VERSION == DEV_VER_STR;
 	}
@@ -61,7 +63,7 @@ public class Globals {
 	}
 
 	public static void loadGlobals() throws Exception {
-		instance = Resources.mapper.readValue(Resources.readInternal(Resources.GLOBALS_FILE), Globals.class);
+		instance = getMapper().readValue(readInternal(GLOBALS_FILE), Globals.class);
 		instance.abilities.entrySet().stream().forEach(entry -> entry.getValue().id = entry.getKey());
 		initPillScripts();
 		instance.loadMisc();
@@ -74,7 +76,7 @@ public class Globals {
 	}
 
 	private void loadMisc() {
-		tips = loadStringList("tips.json");
+		tips = loadList("tips.json", String.class);
 	}
 
 	public static Globals values() {

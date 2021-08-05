@@ -20,7 +20,7 @@ public class CellInfoGenerator extends TooltipTextGenerator {
 
 	private Player player;
 	private Map map;
-	private final MapCell cell = Map.nullMap.getMapCell(new MapCell());
+	private final MapCell cell = new MapCell();
 	private Node node;
 
 	public static String lineDelimiter = "**********";

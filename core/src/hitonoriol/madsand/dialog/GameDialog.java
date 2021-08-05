@@ -4,6 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -125,7 +127,7 @@ public class GameDialog extends Dialog {
 	public Dialog show(Stage stage) {
 		Dialog ret = super.show(stage);
 		Gui.overlay.hideTooltip();
-		Gui.overlay.gameContextMenu.setVisible(false);
+		Gui.overlay.getContextMenu().close();
 		TimeUtils.scheduleTask(() -> Gui.gameUnfocus(), Gui.DELAY);
 		return ret;
 	}
@@ -258,6 +260,10 @@ public class GameDialog extends Dialog {
 		bordered = true;
 	}
 
+	protected void ignoreKeyboard() {
+		addListener(inputCanceller);
+	}
+
 	public static GameDialog generateDialogChain(String text, Stage stage) {
 		return new DialogChainGenerator(text).generate(stage);
 	}
@@ -277,4 +283,11 @@ public class GameDialog extends Dialog {
 		return getClass().getSimpleName().equals(obj.getClass().getSimpleName());
 	}
 
+	private final static InputListener inputCanceller = new InputListener() {
+		@Override
+		public boolean keyUp(InputEvent event, int keycode) {
+			event.cancel();
+			return true;
+		}
+	};
 }

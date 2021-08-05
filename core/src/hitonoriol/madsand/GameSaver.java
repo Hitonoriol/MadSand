@@ -1,8 +1,8 @@
 package hitonoriol.madsand;
 
+import static hitonoriol.madsand.resources.Resources.*;
 import static hitonoriol.madsand.resources.Resources.ERR_FILE;
 import static hitonoriol.madsand.resources.Resources.LINEBREAK;
-import static hitonoriol.madsand.resources.Resources.mapper;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -123,7 +123,7 @@ public class GameSaver {
 
 			player.stats.equipment.setStatBonus(false);
 			/*Resources.mapper.writeValue(new File(fl), player);*/
-			mapper.writeValue(worldFile, MadSand.world());
+			getMapper().writeValue(worldFile, MadSand.world());
 			player.stats.equipment.setStatBonus(true);
 
 			return true;
@@ -138,7 +138,7 @@ public class GameSaver {
 			Utils.out("Loading world info...");
 			String worldFile = getCurSaveDir() + MadSand.WORLDFILE;
 
-			World world = mapper.readValue(readFile(worldFile), World.class);
+			World world = getMapper().readValue(readFile(worldFile), World.class);
 			world.getPlayer().postLoadInit();
 			MadSand.instance().setWorld(world);
 			Utils.dbg("World: %X", world.hashCode());

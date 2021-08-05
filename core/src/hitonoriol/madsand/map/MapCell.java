@@ -3,6 +3,7 @@ package hitonoriol.madsand.map;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
+import hitonoriol.madsand.gui.widgets.overlay.GameContextMenu;
 import hitonoriol.madsand.map.object.Crop;
 import hitonoriol.madsand.map.object.ItemFactory;
 import hitonoriol.madsand.map.object.MapObject;
@@ -19,7 +20,10 @@ public class MapCell {
 		coords.set(x, y);
 	}
 
-	public MapCell() {}
+	/* Init with non-null values from empty map when using no-arg constructor */
+	public MapCell() {
+		Map.nullMap.getMapCell(this);
+	}
 
 	public boolean hasLoot() {
 		return loot != Map.nullLoot;
@@ -98,6 +102,14 @@ public class MapCell {
 		npc = map.getNpc(coords);
 		validCoords = map.validCoords(coords);
 		return this;
+	}
+
+	public void populateContextMenu(GameContextMenu menu) {
+		if (hasObject())
+			object.populateContextMenu(menu);
+
+		if (hasNpc())
+			npc.populateContextMenu(menu);
 	}
 
 	/* Populates MapCell with cell contents from currently loaded map */

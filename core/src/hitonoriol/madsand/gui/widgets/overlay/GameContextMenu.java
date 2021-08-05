@@ -1,6 +1,5 @@
 package hitonoriol.madsand.gui.widgets.overlay;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
@@ -13,17 +12,8 @@ import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.map.Map;
 
 public class GameContextMenu extends Table {
-	Skin skin;
-	float WIDTH = 155, HEIGHT = Gui.FONT_S * 3;
-
-	int clickX, clickY;
-
-	public TextButton[] contextMenuButtons;
-
-	public GameContextMenu() {
-		super();
-		skin = Gui.skin;
-	}
+	private final static float WIDTH = 155, HEIGHT = Gui.FONT_S * 3;
+	private Pair clickPos = new Pair();
 
 	private void refresh() {
 		super.clear();
@@ -33,25 +23,25 @@ public class GameContextMenu extends Table {
 
 		super.defaults().size(WIDTH, HEIGHT);
 
-		if (!map.getObject(clickX, clickY).equals(Map.nullObject))
+		if (!map.getObject(clickPos).isEmpty())
 			addButton("Interact", () -> {
-				player.lookAtMouse(clickX, clickY, true);
+				player.lookAtMouse(clickPos.x, clickPos.y, true);
 				player.interact();
 			});
 
-		if (!map.getNpc(clickX, clickY).equals(Map.nullNpc))
+		if (!map.getNpc(clickPos).isEmpty())
 			addButton("Attack", () -> {
-				player.lookAtMouse(clickX, clickY, true);
+				player.lookAtMouse(clickPos.x, clickPos.y, true);
 				if (player.canPerformRangedAttack())
-					player.rangedAttack(new Pair(clickX, clickY));
+					player.rangedAttack(clickPos);
 				else
 					player.meleeAttack();
 			});
 
-		if (clickX == player.x && clickY == player.y)
+		if (player.at(clickPos))
 			addButton("Rest fully", () -> player.restFully());
 		else
-			addButton("Turn", () -> MadSand.player().lookAtMouse(clickX, clickY));
+			addButton("Turn", () -> player.lookAtMouse(clickPos.x, clickPos.y));
 
 		if (!hand.equals(Item.nullItem))
 			addButton("Unequip " + hand.name, () -> player.freeHands());
@@ -59,30 +49,29 @@ public class GameContextMenu extends Table {
 		super.setVisible(false);
 	}
 
-	private void addButton(String text, Runnable action) {
-		TextButton button = new TextButton(text, skin);
+	public void addButton(String text, Runnable action) {
+		TextButton button = new TextButton(text, Gui.skin);
 		button.getLabel().setWrap(true);
 
 		super.add(button).row();
 
 		Gui.setAction(button, () -> {
 			action.run();
-			closeGameContextMenu();
+			close();
 		});
 	}
 
-	public void openGameContextMenu() {
-		clickX = Mouse.wx;
-		clickY = Mouse.wy;
+	public void open() {
+		clickPos.set(Mouse.wx, Mouse.wy);
 		refresh();
 		Gui.overlay.hideTooltip();
-		super.setVisible(true);
-		super.setPosition(Mouse.x + 50, Mouse.y - 30);
+		setVisible(true);
+		setPosition(Mouse.x + WIDTH / 3, Mouse.y - 30);
 	}
 
-	public void closeGameContextMenu() {
+	public void close() {
 		Gui.overlay.showTooltip();
-		super.setVisible(false);
+		setVisible(false);
 		Gui.gameUnfocused = false;
 	}
 }

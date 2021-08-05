@@ -3,6 +3,8 @@ package hitonoriol.madsand.map.object;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.gui.dialogs.InputDialog;
+import hitonoriol.madsand.gui.widgets.overlay.GameContextMenu;
 import hitonoriol.madsand.gui.widgets.waypoint.WaypointArrow;
 
 public class Waypoint extends MapObject {
@@ -25,9 +27,10 @@ public class Waypoint extends MapObject {
 		if (arrow != null) {
 			arrow.remove();
 			Gui.refreshOverlay();
-		}
-		else
-			Gui.overlay.addWaypointArrow(new WaypointArrow(position.x, position.y).randomizeColor());
+		} else
+			Gui.overlay.addWaypointArrow(new WaypointArrow(position.x, position.y)
+					.setDestinationName(getName())
+					.randomizeColor());
 	}
 
 	public WaypointArrow getArrow() {
@@ -37,6 +40,13 @@ public class Waypoint extends MapObject {
 
 	public boolean hasArrow() {
 		return getArrow() != null;
+	}
+
+	@Override
+	protected void populateContextMenu(GameContextMenu menu) {
+		menu.addButton("Rename", () -> new InputDialog("Rename Waypoint", newName -> name = newName)
+				.setInitialText(getName())
+				.show());
 	}
 
 	@Override

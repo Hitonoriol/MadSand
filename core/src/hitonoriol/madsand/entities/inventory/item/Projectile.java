@@ -72,7 +72,7 @@ public class Projectile extends LevelBoundItem {
 		to.toWorld();
 		Map map = MadSand.world().getCurLoc();
 		Utils.dbg("Projectile " + name + " will land on " + to.toString());
-		Keyboard.stopInput();
+		Keyboard.ignoreInput();
 
 		projectileImg.addAction(
 				Actions.sequence(

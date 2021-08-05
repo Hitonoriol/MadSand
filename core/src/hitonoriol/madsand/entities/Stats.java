@@ -90,7 +90,7 @@ public class Stats {
 			restore();
 
 		calcActionCosts();
-		check();
+		hp = Math.min(hp, mhp);
 	}
 
 	public void restore() {

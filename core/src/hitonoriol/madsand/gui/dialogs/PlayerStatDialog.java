@@ -29,6 +29,7 @@ public class PlayerStatDialog extends GameDialog {
 
 	public PlayerStatDialog(Stage stage, StatLabels statLabels, String title, int minStatSum) {
 		super(stage);
+		ignoreKeyboard();
 		this.statLabels = statLabels;
 		this.minStatSum = minStatSum;
 		titleString = title;

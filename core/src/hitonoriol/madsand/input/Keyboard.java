@@ -54,7 +54,9 @@ public class Keyboard {
 
 		/* Turning keys */
 		Stream.of(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT)
-				.forEach(dir -> keyBinds.bind(Keys.valueOf(WordUtils.capitalizeFully(dir.toString())),
+				.forEach(dir -> keyBinds.bind(
+						/* Convert case: Direction.UP -> Keys.Up */
+						Keys.valueOf(WordUtils.capitalizeFully(dir.toString())),
 						() -> player().meleeAttack(dir)));
 
 		/* Action keys */
@@ -112,7 +114,6 @@ public class Keyboard {
 
 	public static void initListener() {
 		Gui.overlay.addListener(new InputListener() {
-
 			@Override
 			public boolean keyUp(InputEvent event, int keycode) {
 				keyBinds.runBoundAction(keycode);
@@ -136,7 +137,7 @@ public class Keyboard {
 		return ignoreInput > 0 || Mouse.hasClickAction();
 	}
 
-	public static int stopInput() {
+	public static int ignoreInput() {
 		return ++ignoreInput;
 	}
 

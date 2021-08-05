@@ -40,7 +40,7 @@ public class LootTable extends RollTable<LootTable.LootEntry> {
 		
 		if (!lootTblString.contains("|")) {
 			try {
-				return Resources.mapper.readValue(lootTblString, LootTable.class);
+				return Resources.getMapper().readValue(lootTblString, LootTable.class);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;

@@ -101,7 +101,7 @@ public class MadSand extends Game {
 
 	public static void switchScreen(Screen screen) {
 		if (Gui.gameUnfocused)
-			Gui.overlay.gameContextMenu.setVisible(false);
+			Gui.overlay.getContextMenu().close();
 		game.setScreen(screen);
 	}
 
