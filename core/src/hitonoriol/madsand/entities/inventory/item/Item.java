@@ -272,10 +272,25 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 		return items;
 	}
 
-	public static String createReadableItemList(String itemListStr) {
+	public static String createReadableItemList(String itemListStr, boolean countItems) {
+		final String delim = ", ";
 		StringBuilder ret = new StringBuilder();
-		parseListString(itemListStr, (id, quantity) -> ret.append(quantity + " " + ItemProp.getItemName(id) + " "));
+		parseListString(itemListStr, (id, quantity) -> {
+			if (countItems)
+				ret.append(MadSand.player().inventory.countItems(id) + "/");
+			ret.append(quantity + " " + ItemProp.getItemName(id) + ", ");
+		});
+		ret.setLength(ret.length() - delim.length());
+		int lastComma = ret.lastIndexOf(delim);
+		if (lastComma != -1) {
+			ret.delete(lastComma, lastComma + delim.length());
+			ret.insert(lastComma, " and ");
+		}
 		return ret.toString();
+	}
+
+	public static String createReadableItemList(String itemListStr) {
+		return createReadableItemList(itemListStr, false);
 	}
 
 	public static ArrayList<Integer> parseCraftRequirements(String recipe) {

@@ -236,7 +236,9 @@ public class Gui {
 	}
 
 	public static Drawable getColorDrawable(Color color) {
-		return skin.newDrawable("background", color);
+		Drawable drawable = skin.newDrawable("background", color);
+		setMinSize(drawable, 10);
+		return drawable;
 	}
 
 	public static Drawable setMinSize(Drawable drawable, int width, int height) {

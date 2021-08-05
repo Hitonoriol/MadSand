@@ -23,8 +23,8 @@ import hitonoriol.madsand.screens.AbstractScreen;
 import hitonoriol.madsand.screens.CraftScreen;
 import hitonoriol.madsand.screens.DeathScreen;
 import hitonoriol.madsand.screens.GameScreen;
-import hitonoriol.madsand.screens.WorldRenderer;
 import hitonoriol.madsand.screens.MainMenu;
+import hitonoriol.madsand.screens.WorldRenderer;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
 
@@ -179,8 +179,14 @@ public class MadSand extends Game {
 		action.accept(world());
 	}
 
-	public static void warn(String msg) {
+	public static void warn(String msg, boolean duplicateAsDialog) {
 		Gui.overlay.gameLog.warn(msg);
+		if (duplicateAsDialog)
+			Gui.drawOkDialog("Warning", msg);
+	}
+
+	public static void warn(String msg) {
+		warn(msg, false);
 	}
 
 	public static void print(String arg) {

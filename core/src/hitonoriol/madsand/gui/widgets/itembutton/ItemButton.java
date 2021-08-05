@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -42,6 +43,7 @@ public abstract class ItemButton extends Group {
 		buttonTable.setFillParent(true);
 
 		highlight = new Image(ItemUI.emptyItem);
+		highlight.addAction(Actions.alpha(0.5f));
 		highlight.setVisible(false);
 		highlight.setSize(WIDTH, HEIGHT);
 
@@ -49,7 +51,6 @@ public abstract class ItemButton extends Group {
 		super.addActor(buttonTable);
 		super.addActor(highlight);
 		super.setSize(WIDTH, HEIGHT);
-
 	}
 
 	protected void setUpListeners() {

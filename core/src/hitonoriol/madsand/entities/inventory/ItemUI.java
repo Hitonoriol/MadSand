@@ -34,7 +34,7 @@ public class ItemUI extends Group {
 
 	protected Item item;
 	protected ItemTooltip tooltip;
-	
+
 	public final static Drawable emptyItem = new TextureRegionDrawable(Resources.getTexture("gui/placeholder"));
 
 	public ItemUI(Item item) {

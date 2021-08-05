@@ -3,11 +3,15 @@ package hitonoriol.madsand.gui.stages;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
@@ -19,31 +23,38 @@ import hitonoriol.madsand.gui.widgets.itembutton.CraftButton;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.resources.Resources;
+import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
 
 public class CraftStage extends Stage {
-	private static float CRAFT_ENTRY_PADDING = 40;
-	private static float BACK_BUTTON_HEIGHT = 50;
-	private static float BACK_BUTTON_WIDTH = 250;
+	private static float FADE_DELAY = 0.15f;
+	private static float ENTRY_XPAD = 50, ENTRY_YPAD = 5;
+	private static float BACK_BUTTON_HEIGHT = 50, BACK_BUTTON_WIDTH = 250;
 	private static float TITLE_PADDING = 30;
-
 	private static String titleString = "Crafting";
 	static final int ENTRIES_PER_ROW = 2;
 
-	Skin skin;
-	public Table containerTable;
-	public Table craftTable;
-	AutoFocusScrollPane scroll;
-	Label titleLabel;
+	private Table containerTable = new Table();
+	private Table craftTable = new Table();
+	private AutoFocusScrollPane scroll = new AutoFocusScrollPane(craftTable);
+	private Label titleLabel = new Label(titleString, Gui.skin);
+	private float scrollX, scrollY;
+	private int craftStationId;
 
 	public CraftStage() {
 		super(Gui.uiViewport);
-		craftTable = new Table();
-		containerTable = new Table();
-		skin = Gui.skin;
-		titleLabel = new Label(titleString, skin);
-		Gui.setFontSize(titleLabel, Gui.FONT_M);
 		titleLabel.setAlignment(Align.center);
+		Gui.setFontSize(titleLabel, Gui.FONT_M);
+
+		addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				scrollX = scroll.getScrollX();
+				scrollY = scroll.getScrollY();
+				Utils.dbg("Saving position %f %f", scrollX, scrollY);
+				super.clicked(event, x, y);
+			}
+		});
 	}
 
 	public void refreshCraftMenu() {
@@ -51,16 +62,15 @@ public class CraftStage extends Stage {
 	}
 
 	public void refreshCraftMenu(int craftStationId) {
+		this.craftStationId = craftStationId;
 		Player player = MadSand.player();
 		List<Integer> itemList;
 		String stationName = titleString;
 		Label unlockProgressLabel = null;
 
 		Utils.out("Refreshing craft menu id: " + craftStationId);
-		craftTable.remove();
-		craftTable = new Table();
-		containerTable.remove();
-		containerTable = new Table();
+		craftTable.clear();
+		containerTable.clear();
 
 		if (craftStationId == 0) {
 			itemList = player.getCraftRecipes();
@@ -77,30 +87,24 @@ public class CraftStage extends Stage {
 		Utils.out("Total unlocked recipes: " + craftSz + " out of " + Resources.craftableItemCount);
 
 		if (craftSz == 0)
-			craftTable.add(new Label("You don't know any craft recipes.", skin));
+			craftTable.add(new Label("You don't know any craft recipes.", Gui.skin));
 
-		int id;
-		Label recipeLabel;
-		CraftButton craftButton;
-		for (int i = 0; i < craftSz; ++i) {
-			id = itemList.get(i);
+		int i = 0;
+		for (int id : itemList) {
+			boolean lastInRow = (i + 1) % ENTRIES_PER_ROW == 0;
+			craftTable.add(createEntry(id))
+					.padRight(!lastInRow ? ENTRY_XPAD : 0)
+					.padBottom(ENTRY_YPAD);
 
-			craftButton = new CraftButton(ItemProp.getItem(id));
-			recipeLabel = new Label(" " + Item.createReadableItemList(ItemProp.getCraftRecipe(id)), skin);
-			recipeLabel.setAlignment(Align.left);
-
-			craftTable.add(craftButton).width(craftButton.getWidth());
-			craftTable.add(recipeLabel).align(Align.left);
-
-			if ((i + 1) % ENTRIES_PER_ROW == 0)
+			if (lastInRow)
 				craftTable.row();
-			else
-				craftTable.padRight(CRAFT_ENTRY_PADDING);
+			++i;
 		}
 		craftTable.row();
 
 		craftTable.align(Align.center);
-		scroll = new AutoFocusScrollPane(craftTable);
+		craftTable.pack();
+		scroll.addAction(Actions.alpha(0));
 		scroll.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 		containerTable.setBackground(Gui.darkBackgroundSizeable);
@@ -115,13 +119,41 @@ public class CraftStage extends Stage {
 						Gdx.graphics.getHeight() - (BACK_BUTTON_HEIGHT + titleLabel.getHeight() + TITLE_PADDING))
 				.row();
 
-		TextButton backBtn = new TextButton("Back", skin);
+		TextButton backBtn = new TextButton("Back", Gui.skin);
 		backBtn.align(Align.center);
 
 		containerTable.add(backBtn).size(BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT).align(Align.center).row();
 		super.addActor(containerTable);
+		TimeUtils.scheduleTask(() -> {
+			Utils.dbg("Restoring position %f %f", scrollX, scrollY);
+			scroll.setScrollY(scrollY);
+			scroll.setScrollX(scrollX);
+			scroll.updateVisualScroll();
+			scroll.addAction(Actions.fadeIn(FADE_DELAY));
+		});
 
 		Gui.setAction(backBtn,
 				craftStationId == 0 ? () -> MadSand.switchScreen(MadSand.gameScreen) : () -> MadSand.reset());
+	}
+
+	private final static Drawable entryBg = Gui.getColorDrawable(new Color(0, 0, 0, 0.2f));
+
+	private Table createEntry(int id) {
+		Table entry = new Table();
+		CraftButton craftButton = new CraftButton(ItemProp.getItem(id), () -> afterCrafting());
+		Label recipeLabel = new Label(Item.createReadableItemList(ItemProp.getCraftRecipe(id)), Gui.skin);
+		recipeLabel.setAlignment(Align.left);
+		recipeLabel.setWrap(true);
+		final float width = craftButton.getWidth();
+		entry.add(craftButton).width(width).padRight(10);
+		entry.add(recipeLabel).align(Align.left).width(width);
+		entry.setBackground(entryBg);
+		entry.pack();
+		return entry;
+	}
+
+	public void afterCrafting() {
+		scroll.addAction(Actions.sequence(Actions.fadeOut(FADE_DELAY),
+				Actions.run(() -> refreshCraftMenu(craftStationId))));
 	}
 }

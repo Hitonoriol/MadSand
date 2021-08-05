@@ -1,10 +1,13 @@
 package hitonoriol.madsand.gui.dialogs;
 
+import java.util.List;
+
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -24,6 +27,7 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.gui.widgets.TimedProgressBar;
@@ -33,9 +37,14 @@ import hitonoriol.madsand.util.Utils;
 import me.xdrop.jrand.JRand;
 
 public class FishingUI extends GameDialog {
-
 	static float WIDTH = 525, HEIGHT = 485;
 	static float BAR_WIDTH = WIDTH - 125, BAR_HEIGHT = 25;
+	private static String resPath = "gui/fishing/";
+	static Sprite fishR, fishL;
+	static TextureRegion fishTx = Resources.getTexture(resPath + "fish");
+	static TextureRegion bobberTx = Resources.getTexture(resPath + "bobber");
+	static NinePatchDrawable backgroundTx = Resources.loadNinePatch(resPath + "bg");
+	static ProgressBar.ProgressBarStyle barStyle = Gui.createProgressBarStyle(BAR_WIDTH, BAR_HEIGHT, Color.LIME, true);
 
 	int FISH_OFFSET_MAX = 200;
 	int FISH_OFFSET_MIN = 30;
@@ -106,14 +115,20 @@ public class FishingUI extends GameDialog {
 	}
 
 	private void catchFish() {
-		if (activeFish == null)
+		if (activeFish == null) {
+			MadSand.warn("You damaged the fishing line!");
+			animateLogText();
+			damageFishingRod();
 			return;
+		}
 
-		activeFish.remove();
 		Player player = MadSand.player();
-		player.addItem(spot.catchFish());
+		List<Item> caughtFish = spot.catchFish();
+		player.addItem(caughtFish);
+		applyFadeout(new Image(caughtFish.get(0).getTexture()));
+		animateLogText();
+		activeFish.remove();
 		player.stats.skills.increaseSkill(Skill.Fishing);
-		player.damageHeldEquipment();
 
 		if (!player.stats.skills.skillRoll(Skill.Fishing))
 			player.inventory.delItem(player.stats.offHand(), 1);
@@ -121,13 +136,38 @@ public class FishingUI extends GameDialog {
 		MadSand.player().stats.equipment.refreshUI();
 
 		if (!player.hasItem(baitId)) {
-			MadSand.warn("You're out of bait!");
+			MadSand.warn("You're out of bait!", true);
 			player.refreshEquipment();
 			remove();
 		}
 
-		if (!player.stats.isToolEquipped(Tool.Type.FishingRod))
+		damageFishingRod();
+	}
+
+	private void damageFishingRod() {
+		Player player = MadSand.player();
+		player.damageHeldEquipment();
+		if (!player.stats.isToolEquipped(Tool.Type.FishingRod)) {
+			MadSand.warn("Your fishing rod broke!", true);
 			remove();
+		}
+	}
+
+	private final static float FADEOUT_DUR = 2.25f;
+
+	private void animateLogText() {
+		Label textLbl = new Label(Gui.overlay.gameLog.getLastPrintedLine(), Gui.skin);
+		Gui.setFontSize(textLbl, Utils.rand(9, 17));
+		applyFadeout(textLbl);
+	}
+
+	private void applyFadeout(Actor actor) {
+		Actor origin = activeFish != null ? activeFish : bobber;
+		actor.setPosition(origin.getX() - actor.getWidth() * 0.5f, origin.getY());
+		gameContainer.addActor(actor);
+		actor.addAction(Actions.sequence(
+				Actions.parallel(Actions.sizeBy(-25, -25, FADEOUT_DUR), Actions.fadeOut(FADEOUT_DUR)),
+				Actions.removeActor()));
 	}
 
 	private boolean spawnRoll() {
@@ -140,7 +180,6 @@ public class FishingUI extends GameDialog {
 			public void run() {
 				if (fishCount < maxFish && spawnRoll())
 					spawnFish();
-
 			}
 		}, 0, SPAWNER_INTERVAL);
 	}
@@ -267,6 +306,7 @@ public class FishingUI extends GameDialog {
 			catchBar.setDelay(catchTime);
 			catchBar.start(() -> {
 				MadSand.warn("The fish got away!");
+				animateLogText();
 				remove();
 			});
 			return catchTime;
@@ -281,11 +321,4 @@ public class FishingUI extends GameDialog {
 			return super.remove();
 		}
 	}
-
-	private static String resPath = "misc/fishing/";
-	static Sprite fishR, fishL;
-	static TextureRegion fishTx = Resources.getTexture(resPath + "fish");
-	static TextureRegion bobberTx = Resources.getTexture(resPath + "bobber");
-	static NinePatchDrawable backgroundTx = Resources.loadNinePatch(resPath + "bg");
-	static ProgressBar.ProgressBarStyle barStyle = Gui.createProgressBarStyle(BAR_WIDTH, BAR_HEIGHT, Color.LIME, true);
 }

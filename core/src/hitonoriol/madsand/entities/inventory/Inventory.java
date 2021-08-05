@@ -135,6 +135,14 @@ public class Inventory {
 		return true;
 	}
 
+	/* In case of unique items (same id but different hashes) this will count all of them */
+	public int countItems(int id) {
+		return items.stream()
+				.filter(item -> item.equals(id))
+				.mapToInt(item -> item.quantity)
+				.sum();
+	}
+
 	public int getIndex(int id) {
 		int pos = 0;
 		for (Item item : items) {

@@ -1013,7 +1013,7 @@
 	"94" : {
 		"name" : "Fishing Rod",
 		"lvl" : 1,
-		"hp" : 50,
+		"hp" : 45,
 		"@type" : "Tool",
 		"type" : "FishingRod",
 		"recipe" : "8/5:69/5",

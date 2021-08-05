@@ -732,7 +732,7 @@ public class Player extends Entity {
 		if ((craftedItem = craftWorker.craftItem(quantity)) != Item.nullItem) {
 			increaseSkill(Skill.Crafting, quantity);
 
-			Gui.drawOkDialog("Crafted " + craftedItem.quantity + " " + craftedItem.name + " successfully!");
+			//Gui.drawOkDialog("Crafted " + craftedItem.quantity + " " + craftedItem.name + " successfully!");
 			MadSand.print("You craft " + craftedItem.quantity + " " + craftedItem.name);
 
 			int bonus = stats.luckRoll() ? Utils.rand(stats.skills.getItemReward(Skill.Crafting)) : 0;
