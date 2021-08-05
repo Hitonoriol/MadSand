@@ -89,7 +89,7 @@ public class ActionButton extends Table {
 	}
 
 	public void refresh() {
-		if ((Gui.isGameUnfocused() && !isVisible()) || Keyboard.inputIgnored()) {
+		if (Gui.dialogActive || (Gui.isGameUnfocused() && !isVisible()) || Keyboard.inputIgnored()) {
 			hideButton();
 			return;
 		}

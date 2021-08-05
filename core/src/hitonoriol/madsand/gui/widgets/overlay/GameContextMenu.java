@@ -70,7 +70,8 @@ public class GameContextMenu extends Table {
 	}
 
 	public void close() {
-		Gui.overlay.showTooltip();
+		if (!Gui.dialogActive)
+			Gui.overlay.showTooltip();
 		setVisible(false);
 		Gui.gameUnfocused = false;
 	}

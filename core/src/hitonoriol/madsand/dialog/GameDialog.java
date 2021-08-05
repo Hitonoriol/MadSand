@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
@@ -34,6 +33,7 @@ public class GameDialog extends Dialog {
 	protected Label textLbl;
 	protected TextButton proceedButton;
 	protected Stage stage;
+	private boolean hasNext = false;
 	private float cWidth = -1, cHeight = -1;
 
 	public GameDialog(String title, String text, Stage stage) {
@@ -116,10 +116,11 @@ public class GameDialog extends Dialog {
 	@Override
 	public boolean remove() {
 		boolean ret = super.remove();
-		TimeUtils.scheduleTask(() -> {
-			Gui.gameResumeFocus(this);
-			Gui.overlay.refreshActionButton();
-		}, Gui.DELAY);
+		if (!hasNext)
+			TimeUtils.scheduleTask(() -> {
+				Gui.gameResumeFocus(this);
+				Gui.overlay.refreshActionButton();
+			}, Gui.DELAY);
 		return ret;
 	}
 
@@ -132,12 +133,13 @@ public class GameDialog extends Dialog {
 		return ret;
 	}
 
-	public void chainReply(TextButton replyButton, final GameDialog nextDialog) {
-		replyButton.addListener(new ChangeListener() {
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				hide();
-				nextDialog.show(stage);
-			}
+	protected void chainReply(TextButton replyButton, final GameDialog nextDialog) {
+		if (!hasNext)
+			hasNext = true;
+
+		Gui.setAction(replyButton, () -> {
+			hide();
+			nextDialog.show(stage);
 		});
 	}
 
@@ -149,22 +151,13 @@ public class GameDialog extends Dialog {
 
 	public void addOkButton(String text) {
 		TextButton okBtn = new TextButton(text, Gui.skin);
-		okBtn.addListener(new ChangeListener() {
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				hide();
-			}
-		});
+		Gui.setAction(okBtn, () -> hide());
 		addButton(okBtn);
 	}
 
 	public void addLuaButton(String buttonText, String luaCode) {
 		TextButton button = new TextButton(buttonText, Gui.skin);
-		button.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				Lua.execute(luaCode);
-			}
-		});
+		Gui.setAction(button, () -> Lua.execute(luaCode));
 		addButton(button);
 	}
 
@@ -264,6 +257,10 @@ public class GameDialog extends Dialog {
 		addListener(inputCanceller);
 	}
 
+	protected boolean keyboardIgnored() {
+		return getListeners().contains(inputCanceller, true);
+	}
+
 	public static GameDialog generateDialogChain(String text, Stage stage) {
 		return new DialogChainGenerator(text).generate(stage);
 	}
@@ -286,6 +283,12 @@ public class GameDialog extends Dialog {
 	private final static InputListener inputCanceller = new InputListener() {
 		@Override
 		public boolean keyUp(InputEvent event, int keycode) {
+			event.cancel();
+			return true;
+		}
+
+		@Override
+		public boolean keyDown(InputEvent event, int keycode) {
 			event.cancel();
 			return true;
 		}

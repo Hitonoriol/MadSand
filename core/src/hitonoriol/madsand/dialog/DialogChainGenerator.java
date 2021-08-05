@@ -4,10 +4,8 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.lua.Lua;
@@ -69,26 +67,15 @@ public class DialogChainGenerator {
 				buttonTokens = buttonString.split(DIALOG_BTN_SCRIPT_DELIMITER); // [Button Text @ lua code]
 				scriptButton = new TextButton(buttonTokens[0], Gui.skin);
 				final String buttonScriptString = buttonTokens[1];
-
 				dialog.addButton(scriptButton);
-				scriptButton.addListener(new ChangeListener() {
-					@Override
-					public void changed(ChangeEvent event, Actor actor) {
-						dialog.hide();
-						Lua.execute(buttonScriptString);
-					}
+				Gui.setAction(scriptButton, () -> {
+					dialog.hide();
+					Lua.execute(buttonScriptString);
 				});
-
 			} else {
 				nextDialogButton.setText(buttonString);
 				dialog.addButton(nextDialogButton);
-				nextDialogButton.addListener(new ChangeListener() {
-					@Override
-					public void changed(ChangeEvent event, Actor actor) {
-						dialog.hide();
-					}
-				});
-
+				Gui.setAction(nextDialogButton, () -> dialog.hide());
 			}
 		}
 
