@@ -705,10 +705,8 @@ public abstract class Entity extends MapEntity {
 
 	@JsonIgnore
 	public float getSpeed() {
-		float speed = (float) stats.actionPtsMax;
-		if (speed < 1)
-			return 1;
-		return speed;
+		stats.calcSpeed();
+		return (float) stats.actionPtsMax;
 	}
 
 	@JsonIgnore
@@ -734,13 +732,17 @@ public abstract class Entity extends MapEntity {
 			return "at death's door";
 	}
 
+	public String getHealthState() {
+		return getHealthState(stats.getHealthPercent());
+	}
+
 	public String getName() {
 		return stats.name;
 	}
 
 	@JsonIgnore
 	public String getInfoString() {
-		int hpPercent = (int) (((float) stats.hp / (float) stats.mhp) * 100);
+		int hpPercent = stats.getHealthPercent();
 		String ret;
 		ret = String.format("Health: %s (%d%%)", getHealthState(hpPercent), hpPercent);
 		return ret;

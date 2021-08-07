@@ -37,11 +37,10 @@ public class Mouse {
 	public static int x = 0, y = 0; // Coords of mouse cursor on the screen
 	public static Pair prevCoords = new Pair();
 	public static int wx = 0, wy = 0; // Coords of the cell of map that mouse is currently pointing at
-	public static Set<Integer> heldButtons = new HashSet<>();
+	private static Set<Integer> heldButtons = new HashSet<>();
 
 	public static Vector3 mouseWorldCoords = new Vector3(0.0F, 0.0F, 0.0F);
 
-	public static GameTooltip tooltipContainer;
 	private static BiConsumer<Integer, Integer> clickAction = null;
 
 	private static CellInfoGenerator cellInfo = new CellInfoGenerator();
@@ -110,7 +109,7 @@ public class Mouse {
 			}
 		});
 	}
-	
+
 	private static void toggleContextMenu() {
 		GameContextMenu menu = Gui.overlay.getContextMenu();
 		if (GameTooltip.instance().isVisible()) {
@@ -143,7 +142,7 @@ public class Mouse {
 
 	public static void updCoords() {
 		updScreenCoords();
-		tooltipContainer.moveTo(x, y);
+		GameTooltip.instance().moveTo(x, y);
 
 		wx = (int) Math.floor(mouseWorldCoords.x / MadSand.TILESIZE);
 		wy = (int) Math.floor(mouseWorldCoords.y / MadSand.TILESIZE);
@@ -302,13 +301,28 @@ public class Mouse {
 		if (Keyboard.inputIgnored())
 			return;
 
-		if (heldButtons.contains(Buttons.MIDDLE))
+		if (isButtonPressed(Buttons.MIDDLE))
 			MadSand.player().lookAtMouse(wx, wy);
 
-		else if (heldButtons.contains(Buttons.LEFT)) {
+		else if (isButtonPressed(Buttons.LEFT)) {
 			MadSand.player().lookAtMouse(wx, wy);
 			MadSand.player().walk(MadSand.player().stats.look);
 		}
 	}
+	
+	public static int screenX() {
+		return x;
+	}
+	
+	public static int screenY() {
+		return y;
+	}
 
+	public static boolean isButtonPressed(int button) {
+		return heldButtons.contains(button);
+	}
+
+	public static boolean isAnyButtonPressed() {
+		return !heldButtons.isEmpty();
+	}
 }

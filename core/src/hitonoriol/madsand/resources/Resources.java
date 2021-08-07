@@ -110,6 +110,7 @@ public class Resources {
 	public static void loadAll() {
 		try {
 			init();
+			Utils.printMemoryInfo();
 		} catch (Exception e) {
 			Utils.die("Exception on init: " + ExceptionUtils.getStackTrace(e));
 		}
@@ -130,6 +131,7 @@ public class Resources {
 		loadTradeLists();
 		loadTutorial();
 		loadActionAnimations();
+		System.gc();
 		Utils.out("Done loading resources.");
 	}
 
@@ -440,7 +442,7 @@ public class Resources {
 	private static SimpleDateFormat screenshotDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
 
 	public static void takeScreenshot() {
-		Gui.gameUnfocus();
+		Gui.unfocusGame();
 		TimeUtils.scheduleTask(() -> {
 			byte[] pixels = ScreenUtils.getFrameBufferPixels(0, 0, Gdx.graphics.getBackBufferWidth(),
 					Gdx.graphics.getBackBufferHeight(), true);
@@ -454,7 +456,7 @@ public class Resources {
 			BufferUtils.copy(pixels, 0, pixmap.getPixels(), pixels.length);
 			PixmapIO.writePNG(Gdx.files.local(Utils.now(screenshotDateFormat) + ".png"), pixmap);
 			pixmap.dispose();
-			Gui.gameResumeFocus();
+			Gui.resumeGameFocus();
 		}, Gui.DELAY);
 	}
 }

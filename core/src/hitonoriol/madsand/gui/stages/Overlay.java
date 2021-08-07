@@ -1,5 +1,8 @@
 package hitonoriol.madsand.gui.stages;
 
+import static hitonoriol.madsand.MadSand.world;
+import static hitonoriol.madsand.MadSand.player;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,7 +13,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
@@ -30,10 +32,10 @@ import hitonoriol.madsand.gui.widgets.overlay.EquipmentSidebar;
 import hitonoriol.madsand.gui.widgets.overlay.GameContextMenu;
 import hitonoriol.madsand.gui.widgets.overlay.GameLog;
 import hitonoriol.madsand.gui.widgets.overlay.Hotbar;
+import hitonoriol.madsand.gui.widgets.overlay.InfoPanel;
 import hitonoriol.madsand.gui.widgets.overlay.OverlayBottomMenu;
 import hitonoriol.madsand.gui.widgets.stats.StatProgressBar;
 import hitonoriol.madsand.gui.widgets.waypoint.WaypointArrow;
-import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.util.Functional;
@@ -45,19 +47,18 @@ import hitonoriol.madsand.world.World;
  */
 
 public class Overlay extends Stage {
-	Skin skin;
 	static float SIDEBAR_XPADDING = 5;
 
-	Table overlayTable = new Table();
-
+	private Table overlayTable = new Table();
 	private Table topTable = new Table();
-	public GameTooltip gameTooltip;
-	private GameContextMenu gameContextMenu;
-	public ActionButton actionButton;
-	public GameLog gameLog;
-	public OverlayBottomMenu bottomMenu;
-	public Hotbar hotbar;
-	public EquipmentSidebar equipmentSidebar;
+	public GameTooltip gameTooltip = GameTooltip.instance();
+	private GameContextMenu gameContextMenu = new GameContextMenu();
+	public ActionButton actionButton = new ActionButton();
+	private GameLog gameLog = new GameLog();
+	private InfoPanel infoPanel = new InfoPanel();
+	public OverlayBottomMenu bottomMenu = new OverlayBottomMenu(this);
+	public Hotbar hotbar = new Hotbar();
+	public EquipmentSidebar equipmentSidebar = new EquipmentSidebar();
 
 	public StatProgressBar hpBar;
 	public StatProgressBar foodBar;
@@ -72,38 +73,59 @@ public class Overlay extends Stage {
 
 	public Overlay() {
 		super(Gui.uiViewport);
-		skin = Gui.skin;
-
-		actionButton = new ActionButton();
-		gameTooltip = GameTooltip.instance();
-		gameContextMenu = new GameContextMenu();
-		gameLog = new GameLog();
-		bottomMenu = new OverlayBottomMenu(this);
-		equipmentSidebar = new EquipmentSidebar();
-		hotbar = new Hotbar();
-
-		initOverlayTable();
-		updateWidgetPositions();
-
-		Mouse.tooltipContainer = gameTooltip;
-
-		super.addActor(equipmentSidebar);
-		super.addActor(bottomMenu);
-		super.addActor(hotbar);
-		super.addActor(gameTooltip);
-		super.addActor(gameContextMenu);
-		super.addActor(actionButton);
 	}
 
 	public void setPlayer(Player player) {
+		if (!layoutSetUp())
+			initLayout();
+
 		expBar.setSkill(player.stats.skills.get(Skill.Level));
 	}
 
+	private void initLayout() {
+		initOverlayTable();
+		initInfoPanel();
+		updateWidgetPositions();
+
+		addActor(equipmentSidebar);
+		addActor(bottomMenu);
+		addActor(hotbar);
+		addActor(gameTooltip);
+		addActor(gameContextMenu);
+		addActor(actionButton);
+	}
+
+	private boolean layoutSetUp() {
+		return !overlayTable.getCells().isEmpty();
+	}
+
 	public void updateWidgetPositions() {
+		if (!layoutSetUp())
+			return;
+
 		equipmentSidebar.setPosition(this.getWidth() - SIDEBAR_XPADDING,
 				equipmentSidebar.getHeight() + (this.getHeight() - equipmentSidebar.getHeight()) * 0.5f,
 				Align.topRight);
 		overlayTable.getCell(topTable).width(this.getWidth());
+	}
+
+	private void initInfoPanel() {
+		infoPanel.addHeader("Status");
+		infoPanel.addEntry(() -> "Health: " + player().getHealthState());
+		infoPanel.addEntry(() -> player().stats().isSatiated() ? "Satiated" : "Hungry");
+		infoPanel.addEntry(() -> player().isTargeted() ? "Under attack" : "No hostiles nearby");
+		infoPanel.addEntry(() -> String.format("Encumbrance: %.1f%%", player().stats().getEncumbrancePercent() * 100f));
+
+		Globals.debug(() -> {
+			infoPanel.addHeader("Debug");
+			infoPanel.addEntry(() -> Utils.memoryUsageString()).update(5);
+			infoPanel.addEntry(() -> String.format("FPS: %2d (%-6.4f)",
+					Gdx.graphics.getFramesPerSecond(), Gdx.graphics.getDeltaTime())).update(1);
+			infoPanel.addEntry(() -> "Objects on map: " + world().getCurLoc().getObjectCount());
+			infoPanel.addEntry(() -> "NPCs on map: " + world().getCurLoc().getNpcCount());
+			infoPanel.addEntry(() -> "Item textures: " + Item.dynamicTextureCacheSize());
+		});
+		infoPanel.toggleEnabled();
 	}
 
 	float ENTRY_PAD = 5;
@@ -118,8 +140,8 @@ public class Overlay extends Stage {
 		staminaBar = StatProgressBar.createStaminaBar();
 		foodBar = new StatProgressBar("Food").setStyle(Color.ORANGE);
 
-		timeLabel = new Label(" ", skin);
-		overlayStatLabel = new Label(" ", skin);
+		timeLabel = new Label(" ", Gui.skin);
+		overlayStatLabel = new Label(" ", Gui.skin);
 		overlayStatLabel.setAlignment(Align.center);
 
 		topTable.add(expBar).padLeft(ENTRY_PAD).padRight(ENTRY_PAD);
@@ -131,10 +153,16 @@ public class Overlay extends Stage {
 
 		overlayTable.align(Align.topLeft);
 		overlayTable.add(topTable).width(Gdx.graphics.getWidth()).row();
-		overlayTable.add(gameLog).height(GameLog.HEIGHT).padTop(ENTRY_PAD).padLeft(ENTRY_PAD).align(Align.topLeft);
+
+		overlayTable.defaults()
+				.padTop(ENTRY_PAD)
+				.padLeft(ENTRY_PAD)
+				.align(Align.topLeft);
+		overlayTable.add(gameLog).padBottom(ENTRY_PAD).row();
+		overlayTable.add(infoPanel).padTop(-getGameLog().getConsoleField().getHeight() + 3).row();
 
 		overlayTable.setFillParent(true);
-		super.addActor(overlayTable);
+		addActor(overlayTable);
 	}
 
 	String prevConsoleInput;
@@ -142,51 +170,43 @@ public class Overlay extends Stage {
 	public void pollGameConsole() {
 		if (!Globals.debugMode)
 			return;
+		TextField console = gameLog.getConsoleField();
 
-		if (getKeyboardFocus() != gameLog.inputField)
+		if (getKeyboardFocus() != console)
 			return;
 
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER)) {
-			String cmd = gameLog.inputField.getText().trim();
-
+			String cmd = console.getText().trim();
 			try {
 				Lua.execute(cmd);
 			} catch (Exception e) {
 				MadSand.print("Couldn't execute user input");
 				e.printStackTrace();
 			} finally {
-				prevConsoleInput = gameLog.inputField.getText();
-				gameLog.inputField.setText("");
-				gameLog.inputField.setVisible(!gameLog.inputField.isVisible());
-				unfocus(gameLog.inputField);
-				Gui.gameResumeFocus();
+				prevConsoleInput = console.getText();
+				console.setText("");
+				console.setVisible(false);
+				unfocus(console);
+				Gui.resumeGameFocus();
 			}
 		}
 
 		if (Gdx.input.isKeyJustPressed(Keys.UP)) {
-			String tmp = gameLog.inputField.getText();
-			gameLog.inputField.setText(prevConsoleInput);
+			String tmp = console.getText();
+			console.setText(prevConsoleInput);
 			prevConsoleInput = tmp;
-			gameLog.inputField.setCursorPosition(gameLog.inputField.getText().length());
+			console.setCursorPosition(console.getText().length());
 		}
 	}
 
-	public TextField getConsoleField() {
-		return gameLog.inputField;
-	}
-
 	public boolean isConsoleFocused() {
-		return super.getKeyboardFocus() == gameLog.inputField;
-	}
-
-	public Label[] getLogLabels() {
-		return gameLog.logLabels;
+		return super.getKeyboardFocus() == gameLog.getConsoleField();
 	}
 
 	public void refreshActionButton() {
 		actionButton.refresh();
 	}
-	
+
 	public GameContextMenu getContextMenu() {
 		return gameContextMenu;
 	}
@@ -269,6 +289,7 @@ public class Overlay extends Stage {
 
 		hotbar.refreshVisibility();
 		refreshWaypointArrows();
+		infoPanel.refresh();
 	}
 
 	private String getTimeString() {
@@ -294,4 +315,11 @@ public class Overlay extends Stage {
 
 	}
 
+	public GameLog getGameLog() {
+		return gameLog;
+	}
+
+	public InfoPanel getInfoPanel() {
+		return infoPanel;
+	}
 }

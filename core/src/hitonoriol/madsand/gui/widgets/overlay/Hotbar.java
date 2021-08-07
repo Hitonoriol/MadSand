@@ -56,7 +56,7 @@ public class Hotbar extends Table {
 		if (getEntry(hotAssignable).isPresent())
 			return;
 
-		Entry entry = new Entry(hotAssignable);
+		Entry entry = new Entry(hotAssignable, this);
 		hotEntries.add(entry);
 		container.add(entry.button);
 	}
@@ -99,10 +99,10 @@ public class Hotbar extends Table {
 		HotbarAssignable item;
 		TextButton button;
 
-		public Entry(HotbarAssignable item) {
+		public Entry(HotbarAssignable item, Hotbar hotbar) {
 			this.item = item;
 			button = new TextButton(item.getHotbarString(), Gui.skin);
-			button.addListener(OverlayMouseoverListener.instance());
+			button.addListener(new OverlayMouseoverListener());
 			Gui.setFontSize(button.getLabel(), Gui.FONT_XXS);
 			Gui.setAction(button, () -> item.hotbarAction());
 		}

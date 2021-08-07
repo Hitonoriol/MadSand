@@ -401,6 +401,10 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 		return this instanceof AbstractEquipment;
 	}
 
+	public static int dynamicTextureCacheSize() {
+		return dynamicTxPool.size();
+	}
+	
 	public static final Comparator<Item> quantityComparator = (item1, item2) -> {
 		return Integer.compare(item1.quantity, item2.quantity);
 	};

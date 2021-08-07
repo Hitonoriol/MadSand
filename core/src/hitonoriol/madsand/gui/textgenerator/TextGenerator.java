@@ -3,7 +3,7 @@ package hitonoriol.madsand.gui.textgenerator;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
-public abstract class TooltipTextGenerator {
+public abstract class TextGenerator {
 	private String text = "foo";
 	protected final StringBuilder builder = new StringBuilder();
 	private boolean enabled = true;
@@ -20,19 +20,28 @@ public abstract class TooltipTextGenerator {
 	public void setText(String text) {
 		clearBuilder();
 		builder.append(text);
+		this.text = text;
 	}
 
-	public TooltipTextGenerator addLine(String line) {
+	public TextGenerator addLine(String line) {
 		builder.append(line).append(Resources.LINEBREAK);
 		return this;
 	}
 
-	public TooltipTextGenerator addLine(String line, Object... args) {
+	public TextGenerator addLine(String line, Object... args) {
 		return addLine(String.format(line, args));
 	}
 
 	protected void clearBuilder() {
 		Utils.clearBuilder(builder);
+	}
+	
+	protected void clear() {
+		setText("");
+	}
+	
+	public boolean textEmpty() {
+		return text.isEmpty() && builder.length() == 0;
 	}
 
 	public boolean isEnabled() {
@@ -41,5 +50,7 @@ public abstract class TooltipTextGenerator {
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+		if (!enabled)
+			clear();
 	}
 }

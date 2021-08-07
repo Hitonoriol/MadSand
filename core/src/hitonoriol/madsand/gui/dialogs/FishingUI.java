@@ -156,7 +156,7 @@ public class FishingUI extends GameDialog {
 	private final static float FADEOUT_DUR = 2.25f;
 
 	private void animateLogText() {
-		Label textLbl = new Label(Gui.overlay.gameLog.getLastPrintedLine(), Gui.skin);
+		Label textLbl = new Label(Gui.overlay.getGameLog().getLastPrintedLine(), Gui.skin);
 		Gui.setFontSize(textLbl, Utils.rand(9, 17));
 		applyFadeout(textLbl);
 	}

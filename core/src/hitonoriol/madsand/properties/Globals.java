@@ -50,6 +50,11 @@ public class Globals {
 	public static boolean isDevBuild() {
 		return VERSION == DEV_VER_STR;
 	}
+	
+	public static void debug(Runnable action) {
+		if (isDevBuild())
+			action.run();
+	}
 
 	private static String getVersion() {
 		String version = Globals.class.getPackage().getImplementationVersion();

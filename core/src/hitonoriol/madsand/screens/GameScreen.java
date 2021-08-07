@@ -12,7 +12,7 @@ public class GameScreen extends AbstractScreen<Overlay> {
 	private WorldRenderer gameWorld;
 
 	public GameScreen(WorldRenderer gameWorld) {
-		super(Gui.overlay); // TODO move it here
+		super(Gui.overlay = new Overlay());
 		this.gameWorld = gameWorld;
 	}
 

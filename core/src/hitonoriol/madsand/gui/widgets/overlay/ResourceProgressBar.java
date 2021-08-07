@@ -48,7 +48,7 @@ public class ResourceProgressBar extends TimedProgressBar {
 			Utils.dbg("Done gathering resources from %s\n", object);
 			remove();
 			progressLabel.remove();
-			Gui.gameResumeFocus();
+			Gui.resumeGameFocus();
 			Gui.refreshOverlay();
 			Mouse.refreshTooltip();
 			wakeTask.cancel();
@@ -112,7 +112,7 @@ public class ResourceProgressBar extends TimedProgressBar {
 	private void gatherResources() {
 		MadSand.player().gatherResources(object, () -> damageQueue.poll());
 		if (!damageQueue.isEmpty())
-			progressLabel.setText(Gui.overlay.gameLog.getLastPrintedLine());
+			progressLabel.setText(Gui.overlay.getGameLog().getLastPrintedLine());
 	}
 
 	private final static float WAKE_TIME = 0.019f; // Request rendering once per WAKE_TIME
@@ -131,7 +131,7 @@ public class ResourceProgressBar extends TimedProgressBar {
 		super.setPosition(Gui.relativeCenterX(coords.x, getWidth(), player.getSpriteWidth()), coords.y);
 		progressLabel.setPosition(Gui.relativeCenterX(coords.x, progressLabel.getWidth(), player.getSpriteWidth()),
 				coords.y - LABEL_PADDING);
-		Gui.gameUnfocus();
+		Gui.unfocusGame();
 		preCalculateGathering();
 		setRange(0, Math.max(1, hitsLeft() - 1));
 		setValue(hitsLeft());

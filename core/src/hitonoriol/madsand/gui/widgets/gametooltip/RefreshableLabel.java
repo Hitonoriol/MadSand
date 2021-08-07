@@ -4,16 +4,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Timer;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.gui.textgenerator.TooltipTextGenerator;
+import hitonoriol.madsand.gui.textgenerator.TextGenerator;
+import hitonoriol.madsand.util.TimeUtils;
 
-public class TooltipLabel extends Label {
-	private final TooltipTextGenerator generator;
-	private Cell<TooltipLabel> parentCell;
+public class RefreshableLabel extends Label {
+	private final TextGenerator generator;
+	private Cell<RefreshableLabel> parentCell;
 	private boolean visible = true;
+	private Timer.Task updateTask;
 
-	public TooltipLabel(TooltipTextGenerator generator) {
+	public RefreshableLabel(TextGenerator generator) {
 		super("", Gui.skin);
 		this.generator = generator;
 		setWrap(true);
@@ -35,7 +38,11 @@ public class TooltipLabel extends Label {
 		setText(generator.getText());
 	}
 
-	private Cell<TooltipLabel> getParentCell() {
+	public void refresh() {
+		refresh(0, 0);
+	}
+
+	private Cell<RefreshableLabel> getParentCell() {
 		if (parentCell == null)
 			parentCell = ((Table) getParent()).getCell(this);
 
@@ -52,7 +59,23 @@ public class TooltipLabel extends Label {
 		visible = true;
 	}
 
-	public TooltipTextGenerator getGenerator() {
+	public TextGenerator getGenerator() {
 		return generator;
+	}
+
+	public RefreshableLabel update(float periodSeconds) {
+		TimeUtils.scheduleRepeatingTask(updateTask = TimeUtils.createTask(() -> refresh()), periodSeconds);
+		return this;
+	}
+	
+	public boolean isAutoUpdated() {
+		return updateTask != null;
+	}
+
+	@Override
+	public boolean remove() {
+		if (isAutoUpdated())
+			updateTask.cancel();
+		return super.remove();
 	}
 }

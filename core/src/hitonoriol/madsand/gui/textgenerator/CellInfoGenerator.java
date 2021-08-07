@@ -15,7 +15,7 @@ import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
-public class CellInfoGenerator extends TooltipTextGenerator {
+public class CellInfoGenerator extends TextGenerator {
 	private int x, y;
 
 	private Player player;
@@ -67,7 +67,7 @@ public class CellInfoGenerator extends TooltipTextGenerator {
 		if (player.at(x, y))
 			getPlayerInfo();
 
-		if (!cell.getTile().visible()) {
+		if (!cell.coordsValid() || !cell.getTile().visible()) {
 			addLine("You can't see anything there");
 			return super.getText();
 		}
@@ -153,11 +153,12 @@ public class CellInfoGenerator extends TooltipTextGenerator {
 		Tile tile = cell.getTile();
 		MapObject object = cell.getObject();
 		AbstractNpc npc = cell.getNpc();
-		addLine("[#C3C3C3]" + lineDelimiter)
-				.addLine("Light level: " + tile.getLightLevel() + " (sky: " + MadSand.world().getSkyLight() + ")")
-				.addLine(map.getLightEngine().getEntityLight(coords.set(x, y)))
-				.addLine("Objects on map: " + map.getObjectCount())
-				.addLine("NPCs on map: " + map.getNpcCount());
+		addLine("[#C3C3C3]" + lineDelimiter);
+
+		addLine("Light level: " + tile.getLightLevel() + " (sky: " + MadSand.world().getSkyLight() + ")");
+		String emitterInfo = map.getLightEngine().getEntityLight(coords.set(x, y));
+		if (!emitterInfo.isEmpty())
+			addLine(emitterInfo);
 
 		if (cell.hasObject())
 			addLine("Object HP: " + object.hp + " (" + object.harvestHp + ")")

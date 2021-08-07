@@ -51,7 +51,9 @@ public class WorldMapSaver {
 				stream.write(ByteUtils.encode2(layerNum));
 				stream.write(ByteUtils.encode8(size));
 				stream.write(layer);
+				System.gc();
 			}
+			System.gc();
 			return stream.toByteArray();
 		} catch (Exception e) {
 			e.printStackTrace();

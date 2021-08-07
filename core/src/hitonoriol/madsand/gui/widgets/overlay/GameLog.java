@@ -1,67 +1,38 @@
 package hitonoriol.madsand.gui.widgets.overlay;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.gui.OverlayMouseoverListener;
-import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.input.Mouse;
-import hitonoriol.madsand.resources.Resources;
 
-public class GameLog extends Table {
-	final float WIDTH = 335;
-	public final static float HEIGHT = 240;
-
-	private static final int LOG_LENGTH = 20;
-
+public class GameLog extends ScrollablePanel {
 	private static final String WARNING_COLOR = "[#ff9185]";
 	public static final String NOTICE_ALT_COLOR = "[#58FFB1]";
 	public static String NOTICE_COLOR = "[#16E1EA]";
+	private static final int LOG_LENGTH = 20;
+	
 
 	boolean noticeColor = true; // flag to use alternating notice colors
-
-	Skin skin;
-	public TextField inputField;
-	public Label[] logLabels;
-	public Table logTable = new Table();
-	public AutoFocusScrollPane scroll;
+	private TextField inputField = new TextField("", Gui.skin);
+	private Label[] logLabels = new Label[LOG_LENGTH];
 
 	public GameLog() {
-		super();
-		skin = Gui.skin;
+		getContentTable().pad(3);
+		for (int i = 0; i < LOG_LENGTH; ++i) {
+			logLabels[i] = new Label(" ", Gui.skin);
+			logLabels[i].setWrap(true);
+			addContents(logLabels[i]).width(WIDTH).row();
+		}
 
-		inputField = new TextField("", skin);
 		inputField.setWidth(WIDTH);
 		inputField.setMessageText("");
 		inputField.setFocusTraversal(true);
-
-		// Setting up game log
-		logTable.align(Align.topLeft);
-		int tpm = 0;
-		logLabels = new Label[LOG_LENGTH];
-		int cxxc = 0;
-		while (cxxc < LOG_LENGTH) {
-			logLabels[cxxc] = new Label(" ", skin);
-			cxxc++;
-		}
-		while (tpm < LOG_LENGTH) {
-			logLabels[tpm].setWrap(true);
-			logTable.add(logLabels[tpm]).width(WIDTH).pad(3);
-			logTable.row();
-			tpm++;
-		}
-		logTable.setBackground(Resources.loadNinePatch("misc/darkness75"));
 		inputField.debug();
 		inputField.setVisible(false);
 
-		scroll = new AutoFocusScrollPane(logTable);
-		super.add(scroll).row();
-		super.add(inputField).width(WIDTH).align(Align.left).pad(3).height(30);
-		super.addListener(new OverlayMouseoverListener());
+		super.add(inputField).width(WIDTH).align(Align.left).padTop(3).height(30);
 	}
 
 	public void clear() {
@@ -119,4 +90,11 @@ public class GameLog extends Table {
 		return printedLine;
 	}
 
+	public Label[] getLabels() {
+		return logLabels;
+	}
+
+	public TextField getConsoleField() {
+		return inputField;
+	}
 }

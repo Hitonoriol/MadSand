@@ -181,7 +181,11 @@ public class Pair {
 	public Pair clear() {
 		return set(nullPair);
 	}
-	
+
+	public boolean inRectangle(int x, int y, int width, int height) {
+		return x < this.x && y < this.y && x + width > this.x && y + height > this.y;
+	}
+
 	public boolean isEmpty() {
 		return equals(nullPair);
 	}

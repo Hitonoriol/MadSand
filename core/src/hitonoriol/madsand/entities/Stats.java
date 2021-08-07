@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
+import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.util.Utils;
 
@@ -89,19 +90,19 @@ public class Stats {
 		if (hp == 0)
 			restore();
 
-		calcActionCosts();
+		calcSpeed();
 		hp = Math.min(hp, mhp);
 	}
 
 	public void restore() {
 		hp = mhp;
 	}
-	
+
 	public boolean healthFull() {
 		return hp == mhp;
 	}
 
-	public void calcActionCosts() {
+	public void calcSpeed() {
 		int dexterity = get(Stat.Dexterity);
 		if (dexterity < 2)
 			actionPtsMax = 1;
@@ -109,6 +110,7 @@ public class Stats {
 			actionPtsMax = (Utils.log(Math.pow(dexterity + 0.1, 1.7), 5)
 					/ (3 + ((2 * Math.sqrt(dexterity)) / dexterity)))
 					* 9.9;
+		actionPtsMax -= actionPtsMax * getEncumbranceCoef();
 		actionPts = actionPtsMax;
 	}
 
@@ -190,6 +192,22 @@ public class Stats {
 		return atk;
 	}
 
+	/* Impact of 100% encumbrance on Entity's speed */
+	private final static float ENCUMBRANCE_IMPACT = 0.35f;
+
+	public float getEncumbranceCoef() {
+		return getEncumbrancePercent() * ENCUMBRANCE_IMPACT;
+	}
+
+	public float getEncumbrancePercent() {
+		Inventory inv = owner.inventory;
+		float maxWeight = inv.getMaxWeight();
+		if (maxWeight == 0)
+			return 0;
+
+		return inv.getTotalWeight() / maxWeight;
+	}
+
 	private int calcAttack() {
 		return calcAttack(0);
 	}
@@ -197,6 +215,11 @@ public class Stats {
 	@JsonIgnore
 	public int getDefense() {
 		return get(Stat.Defense);
+	}
+
+	@JsonIgnore
+	public int getHealthPercent() {
+		return (int) (((float) hp / (float) mhp) * PERCENT);
 	}
 
 	public float calcMaxInventoryWeight() {

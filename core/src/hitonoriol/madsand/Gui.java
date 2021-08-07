@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -152,7 +153,6 @@ public class Gui {
 
 	static void init() {
 		initSkin();
-		overlay = new Overlay();
 		createTransitionScreens();
 	}
 
@@ -181,12 +181,12 @@ public class Gui {
 		return drawOkDialog(OkDialog.DEFAULT_TITLE, msg);
 	}
 
-	public static void gameUnfocus() {
+	public static void unfocusGame() {
 		dialogActive = gameUnfocused = true;
 		overlay.hideTooltip();
 	}
 
-	public static void gameResumeFocus(GameDialog dialog) {
+	public static void resumeGameFocus(GameDialog dialog) {
 		boolean noDialogsLeft = false;
 		Stage stage = MadSand.getStage();
 
@@ -219,8 +219,8 @@ public class Gui {
 		return hasDialogs(stage, null);
 	}
 
-	public static void gameResumeFocus() {
-		gameResumeFocus(null);
+	public static void resumeGameFocus() {
+		resumeGameFocus(null);
 	}
 
 	public static boolean isGameUnfocused() {
@@ -329,8 +329,17 @@ public class Gui {
 		return modifyGlyph(text, fontSize).height;
 	}
 
-	public static void skipLine(Table table) {
-		table.add(new Label("", skin)).row();
+	public static Cell<Label> skipLine(Table table) {
+		Cell<Label> cell = table.add(new Label("", skin));
+		cell.row();
+		return cell;
+	}
+
+	public static void removeActor(Table table, Actor actor) {
+		Cell<?> cell = table.getCell(actor);
+		actor.remove();
+		table.getCells().removeValue(cell, true);
+		table.invalidate();
 	}
 
 	public static ProgressBarStyle createProgressBarStyle(float width, float height, Color color, boolean transparent) {

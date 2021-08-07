@@ -118,7 +118,7 @@ public class GameDialog extends Dialog {
 		boolean ret = super.remove();
 		if (!hasNext)
 			TimeUtils.scheduleTask(() -> {
-				Gui.gameResumeFocus(this);
+				Gui.resumeGameFocus(this);
 				Gui.overlay.refreshActionButton();
 			}, Gui.DELAY);
 		return ret;
@@ -129,7 +129,7 @@ public class GameDialog extends Dialog {
 		Dialog ret = super.show(stage);
 		Gui.overlay.hideTooltip();
 		Gui.overlay.getContextMenu().close();
-		TimeUtils.scheduleTask(() -> Gui.gameUnfocus(), Gui.DELAY);
+		TimeUtils.scheduleTask(() -> Gui.unfocusGame(), Gui.DELAY);
 		return ret;
 	}
 

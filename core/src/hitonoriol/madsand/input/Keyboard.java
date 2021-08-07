@@ -160,8 +160,8 @@ public class Keyboard {
 			return;
 
 		if (key == Keys.GRAVE) {
-			Gui.gameUnfocus();
-			TextField console = Gui.overlay.getConsoleField();
+			Gui.unfocusGame();
+			TextField console = Gui.overlay.getGameLog().getConsoleField();
 			console.setVisible(!console.isVisible());
 			Gui.overlay.setKeyboardFocus(console);
 		}

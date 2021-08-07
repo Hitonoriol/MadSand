@@ -37,4 +37,8 @@ public class TextureMap<T> {
 		else
 			return getAndCache(id);
 	}
+	
+	public int size() {
+		return textureCache.size();
+	}
 }

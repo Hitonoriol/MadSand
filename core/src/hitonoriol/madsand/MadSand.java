@@ -32,10 +32,8 @@ public class MadSand extends Game {
 	public static final int TILESIZE = 33;
 
 	public static final String SAVE_EXT = ".msf";
-
 	public static final String SAVEDIR = "MadSand_Saves/";
 	public static final String MAPDIR = SAVEDIR + "worlds/";
-	public static final String PLAYERFILE = "/Player" + SAVE_EXT;
 	public static final String LOGFILE = "/log" + SAVE_EXT;
 	public static final String NPCSFILE = "NPCs";
 	public static final String WORLDFILE = "/World" + SAVE_EXT;
@@ -44,9 +42,9 @@ public class MadSand extends Game {
 	private static boolean worldUntouched = true;
 
 	private World world;
-	Storage<AbstractScreen<?>> currentScreen = new Storage<>();
+	private Storage<AbstractScreen<?>> currentScreen = new Storage<>();
 	private static MadSand game;
-	private static WorldRenderer gameWorld;
+	private static WorldRenderer worldRenderer;
 
 	public static GameScreen gameScreen;
 	public static CraftScreen craftScreen;
@@ -58,13 +56,14 @@ public class MadSand extends Game {
 	public void create() {
 		Utils.out("Starting initialization!");
 		game = this;
-		gameWorld = new WorldRenderer();
+		worldRenderer = new WorldRenderer();
 		Gdx.graphics.setContinuousRendering(false);
 
 		Timer.instance().start();
 		Resources.loadAll();
 		Gui.init();
 		GameTextSubstitutor.init();
+		initScreens();
 		Keyboard.initListener();
 		Mouse.initListener();
 
@@ -72,24 +71,24 @@ public class MadSand extends Game {
 		initNewGame();
 		if (!Globals.headless())
 			game.world.generate();
-		initScreens();
 		Keyboard.initDefaultKeyBinds();
+		switchScreen(mainMenu);
 		Utils.out("End of initialization!");
+		Utils.printMemoryInfo();
 	}
 
 	private static void initScreens() {
-		gameScreen = new GameScreen(gameWorld);
-		craftScreen = new CraftScreen(gameWorld);
-		deathScreen = new DeathScreen(gameWorld);
-		mainMenu = new MainMenu(gameWorld);
-		switchScreen(mainMenu);
+		gameScreen = new GameScreen(worldRenderer);
+		craftScreen = new CraftScreen(worldRenderer);
+		deathScreen = new DeathScreen(worldRenderer);
+		mainMenu = new MainMenu(worldRenderer);
 	}
 
 	public static void initNewGame() {
 		game.createWorld();
 		MadSand.player().updCoords();
 		Lua.init();
-		Gui.overlay.gameLog.clear();
+		Gui.overlay.getGameLog().clear();
 	}
 
 	private void createWorld() {
@@ -103,6 +102,7 @@ public class MadSand extends Game {
 		if (Gui.gameUnfocused)
 			Gui.overlay.getContextMenu().close();
 		game.setScreen(screen);
+		System.gc();
 	}
 
 	public static void switchScreen(AbstractScreen<?> screen) {
@@ -128,7 +128,7 @@ public class MadSand extends Game {
 
 	@Override
 	public void resize(int width, int height) {
-		gameWorld.updateViewport();
+		worldRenderer.updateViewport();
 		Gui.overlay.getViewport().update(width, height, true);
 		Gui.overlay.updateWidgetPositions();
 		player().setFov();
@@ -144,7 +144,7 @@ public class MadSand extends Game {
 	}
 
 	public static OrthographicCamera getCamera() {
-		return gameWorld.getCamera();
+		return worldRenderer.getCamera();
 	}
 
 	public static Stage getStage() {
@@ -152,7 +152,7 @@ public class MadSand extends Game {
 	}
 
 	public static WorldRenderer getRenderer() {
-		return gameWorld;
+		return worldRenderer;
 	}
 
 	public World getWorld() {
@@ -180,7 +180,7 @@ public class MadSand extends Game {
 	}
 
 	public static void warn(String msg, boolean duplicateAsDialog) {
-		Gui.overlay.gameLog.warn(msg);
+		Gui.overlay.getGameLog().warn(msg);
 		if (duplicateAsDialog)
 			Gui.drawOkDialog("Warning", msg);
 	}
@@ -190,7 +190,7 @@ public class MadSand extends Game {
 	}
 
 	public static void print(String arg) {
-		Gui.overlay.gameLog.print(arg);
+		Gui.overlay.getGameLog().print(arg);
 	}
 
 	public static void print(String arg, Object... args) {
@@ -198,11 +198,11 @@ public class MadSand extends Game {
 	}
 
 	public static void print(String msg, String color) {
-		Gui.overlay.gameLog.print(msg, color);
+		Gui.overlay.getGameLog().print(msg, color);
 	}
 
 	public static void notice(String msg) {
-		Gui.overlay.gameLog.notify(msg);
+		Gui.overlay.getGameLog().notify(msg);
 	}
 
 	public static void notice(String msg, Object... args) {
@@ -216,6 +216,7 @@ public class MadSand extends Game {
 
 		Gui.overlay.setPlayer(player());
 		game.world.enter();
+		System.gc();
 	}
 
 	public static boolean isWorldUntouched() {

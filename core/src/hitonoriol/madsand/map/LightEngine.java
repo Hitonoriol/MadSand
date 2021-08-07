@@ -65,7 +65,7 @@ public class LightEngine {
 				int light = getEntityLight(entity, tilePos);
 				if (entity != player && entityLightExists(entity, tilePos)) {
 					if (light > 0)
-						light *= -1;					
+						light *= -1;
 				}
 				lightLevel.add(light);
 			});
@@ -129,15 +129,6 @@ public class LightEngine {
 		return entityLightMap.getOrDefault(lightId(entity, tilePos), 0);
 	}
 
-	public String getEntityLight(Pair tilePos) {
-		StringBuilder sb = new StringBuilder();
-		emitters.forEach(entity -> {
-			if (entityLightExists(entity, tilePos))
-				Utils.newLine(sb.append(entity.getName() + "=" + getEntityLight(entity, tilePos)));
-		});
-		return sb.toString();
-	}
-
 	private boolean entityLightExists(MapEntity entity, Pair tilePos) {
 		return entityLightMap.containsKey(lightId(entity, tilePos));
 	}
@@ -175,5 +166,18 @@ public class LightEngine {
 				lightConsumer.accept(tilePos, light);
 			});
 		});
+	}
+
+	private StringBuilder debugSb = new StringBuilder();
+
+	public String getEntityLight(Pair tilePos) {
+		Utils.clearBuilder(debugSb);
+		emitters.forEach(entity -> {
+			if (entityLightExists(entity, tilePos))
+				Utils.newLine(debugSb.append(entity.getName() + "=" + getEntityLight(entity, tilePos)));
+		});
+		if (debugSb.length() > 0)
+			debugSb.setLength(debugSb.length() - 1);
+		return debugSb.toString();
 	}
 }

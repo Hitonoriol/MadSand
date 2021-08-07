@@ -35,7 +35,7 @@ public class OverlayBottomMenu extends Table {
 	Table container = new Table();
 
 	public OverlayBottomMenu(Overlay overlay) {
-		super();
+		addListener(new OverlayMouseoverListener());
 
 		this.overlay = overlay;
 
@@ -68,7 +68,6 @@ public class OverlayBottomMenu extends Table {
 
 	private void addButton(String text, int key, Runnable action) {
 		TextButton button = new TextButton(text + " [" + Keys.toString(key) + "]", Gui.skin);
-		button.addListener(OverlayMouseoverListener.instance());
 		container.add(button).size(WIDTH, HEIGHT).pad(BUTTON_PADDING);
 		Gui.setAction(button, action);
 		Keyboard.getKeyBindManager().bind(key, true, () -> action.run());

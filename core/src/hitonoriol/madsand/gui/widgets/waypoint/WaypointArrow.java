@@ -16,7 +16,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.gui.textgenerator.StaticTextGenerator;
-import hitonoriol.madsand.gui.widgets.gametooltip.TooltipLabel;
+import hitonoriol.madsand.gui.widgets.gametooltip.RefreshableLabel;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
@@ -31,7 +31,7 @@ public class WaypointArrow extends Group {
 	private String name = "Waypoint";
 	private Pair destination = new Pair();
 	private Vector2 screenCoords = new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-	private TooltipLabel descriptionLabel = new TooltipLabel(new StaticTextGenerator((x, y) -> {
+	private RefreshableLabel descriptionLabel = new RefreshableLabel(new StaticTextGenerator((x, y) -> {
 		return String.format("%s (%.1f m)", name, toDestination(x, y));
 	}));
 

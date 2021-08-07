@@ -34,13 +34,13 @@ public class ActionButton extends Table {
 	public ActionButton() {
 		interactButton = new TextButton("", Gui.skin);
 		interactButton.getLabel().setWrap(true);
-		interactButton.addListener(OverlayMouseoverListener.instance());
 		super.setVisible(false);
 		super.setPosition(Gui.horizontalCenter(this), ACTION_TBL_YPOS);
 		super.defaults().size(WIDTH, HEIGHT);
 
 		Gui.setClickAction(interactButton, Buttons.LEFT, createClickHandler(Buttons.LEFT));
 		Gui.setClickAction(interactButton, Buttons.RIGHT, createClickHandler(Buttons.RIGHT));
+		interactButton.addListener(new OverlayMouseoverListener());
 	}
 
 	public void hideButton() {
@@ -55,7 +55,7 @@ public class ActionButton extends Table {
 			else
 				rAction.run();
 			hideButton();
-			Gui.gameResumeFocus();
+			Gui.resumeGameFocus();
 			TimeUtils.scheduleTask(() -> Gdx.graphics.requestRendering(), 0.125f);
 		};
 	}

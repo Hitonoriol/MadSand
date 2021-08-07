@@ -68,6 +68,10 @@ public class Inventory {
 	public float getTotalWeight() {
 		return curWeight;
 	}
+	
+	public float getMaxWeight() {
+		return maxWeight;
+	}
 
 	public void refreshContents() {
 		for (int i = 0; i < items.size(); ++i) {

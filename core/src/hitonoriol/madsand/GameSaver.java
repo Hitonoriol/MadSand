@@ -42,6 +42,8 @@ public class GameSaver {
 	}
 
 	public static boolean load(String filename) {
+		Utils.dbg("Loading world [%s]...", filename);
+		Utils.printMemoryInfo();
 		MadSand.WORLDNAME = filename;
 		File f = new File(MadSand.MAPDIR + filename);
 
@@ -51,7 +53,7 @@ public class GameSaver {
 			return false;
 		}
 
-		Gui.overlay.gameLog.clear();
+		Gui.overlay.getGameLog().clear();
 		MadSand.world().close();
 		createDirs();
 
@@ -65,6 +67,9 @@ public class GameSaver {
 			MadSand.world().updateLight();
 			loadLog();
 			MadSand.print("Loaded Game!");
+			Utils.dbg("Loaded [%s] successfully!", filename);
+			System.gc();
+			Utils.printMemoryInfo();
 			return true;
 		} else {
 			loadErrMsg();
@@ -100,7 +105,7 @@ public class GameSaver {
 			saver.loadLocationInfo(wx, wy);
 			saver.bytesToLocation(data, wx, wy);
 			MadSand.world().setWorldMap(saver.getWorldMap());
-
+			System.gc();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -141,8 +146,7 @@ public class GameSaver {
 			World world = getMapper().readValue(readFile(worldFile), World.class);
 			world.getPlayer().postLoadInit();
 			MadSand.instance().setWorld(world);
-			Utils.dbg("World: %X", world.hashCode());
-
+			System.gc();
 			Utils.out("Done loading world info.");
 			return true;
 		} catch (Exception e) {
@@ -247,7 +251,7 @@ public class GameSaver {
 		try {
 			FileWriter fw = new FileWriter(getCurSaveDir() + MadSand.LOGFILE);
 
-			for (Label logLabel : Gui.overlay.getLogLabels())
+			for (Label logLabel : Gui.overlay.getGameLog().getLabels())
 				fw.write(logLabel.getText().toString() + LINEBREAK);
 
 			fw.close();
@@ -265,7 +269,7 @@ public class GameSaver {
 					new FileReader(getCurSaveDir() + MadSand.LOGFILE));
 			String line;
 			int i = 0;
-			Label[] labels = Gui.overlay.getLogLabels();
+			Label[] labels = Gui.overlay.getGameLog().getLabels();
 
 			while ((line = br.readLine()) != null)
 				labels[i++].setText(line);

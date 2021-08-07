@@ -19,7 +19,6 @@ public class MainMenu extends AbstractScreen<MainMenuStage> {
 	public MainMenu(WorldRenderer gameWorld) {
 		super(new MainMenuStage());
 		this.gameWorld = gameWorld;
-		initMenuAnimation();
 	}
 
 	@Override

@@ -3,6 +3,8 @@ package hitonoriol.madsand.util;
 import static hitonoriol.madsand.resources.Resources.ERR_FILE;
 import static hitonoriol.madsand.resources.Resources.LINEBREAK;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryUsage;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -328,5 +330,26 @@ public class Utils {
 
 	public static boolean bool(int val) {
 		return (val == 1);
+	}
+
+	private static double toMB(double bytes) {
+		return bytes / 0x100000;
+	}
+
+	private static double toMB(MemoryUsage usage) {
+		return toMB(usage.getUsed());
+	}
+
+	public static String memoryUsageString() {
+		Runtime runtime = Runtime.getRuntime();
+		double nonHeapMem = toMB(ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage());
+		double totalMem = toMB(runtime.totalMemory()), freeMem = toMB(runtime.freeMemory());
+		double memInUse = totalMem - freeMem;
+		return String.format("Memory: %.2fMB (%.2fMB used)",
+				totalMem + nonHeapMem, memInUse);
+	}
+
+	public static void printMemoryInfo() {
+		out(memoryUsageString());
 	}
 }

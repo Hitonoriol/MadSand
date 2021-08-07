@@ -63,10 +63,11 @@ public class FarmAnimal extends AbstractNpc implements TimeDependent {
 	public String getInfoString() {
 		StringBuilder sb = new StringBuilder();
 		CellInfoGenerator.getItemProducerInfo(sb, animalProduct);
-		Utils.newLine(sb);
 
-		if (isStarving())
-			Utils.newLine(sb.append("* Starving"));
+		if (isStarving()) {
+			Utils.newLine(sb);
+			sb.append("* Starving");
+		}
 
 		return sb.append(super.getInfoString()).toString();
 	}
