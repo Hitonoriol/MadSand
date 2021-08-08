@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import hitonoriol.madsand.Enumerable;
 import hitonoriol.madsand.containers.rolltable.LootTable;
 import hitonoriol.madsand.entities.Faction;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
@@ -11,8 +12,8 @@ import hitonoriol.madsand.entities.npc.Npc;
 import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.util.Utils;
 
-public class NpcContainer {
-	public int id = -1;
+public class NpcContainer implements Enumerable {
+	private int id = -1;
 	public String name;
 
 	public int lvl = 0;
@@ -34,6 +35,16 @@ public class NpcContainer {
 	public Class<? extends AbstractNpc> type = Npc.class;
 
 	private static NpcClassLoader npcLoader = new NpcClassLoader();
+
+	@Override
+	public int id() {
+		return id;
+	}
+
+	@Override
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public AbstractNpc spawn() {
 		try {

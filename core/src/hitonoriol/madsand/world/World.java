@@ -538,15 +538,7 @@ public class World {
 	}
 
 	public int getTileId(int x, int y) {
-		return getCurLoc().getTile(x, y).id;
-	}
-
-	int getObjID(int x, int y) {
-		return getCurLoc().getObject(x, y).id;
-	}
-
-	public int getObjID(int x, int y, Direction dir) {
-		return getCurLoc().getObject(x, y, dir).id;
+		return getCurLoc().getTile(x, y).id();
 	}
 
 	public void putMapTile(int x, int y, int id) {
@@ -586,7 +578,7 @@ public class World {
 		if (!getCurLoc().validCoords(x, y))
 			return getDefaultTile();
 		else {
-			int tile = getCurLoc().getTile(x, y).id;
+			int tile = getCurLoc().getTile(x, y).id();
 			if (tile >= 0)
 				return tile;
 			else

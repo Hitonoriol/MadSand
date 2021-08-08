@@ -128,7 +128,7 @@ public class TradeInventoryUI extends GameDialog {
 			tradeInventory = traderSell;
 
 		for (Item item : inventory.items) {
-			if (item.id != tradeInventory.currency && item.cost > 0) {
+			if (item.id() != tradeInventory.currency && item.cost > 0) {
 				table.add(new TradeInventoryButton(tradeInventory, item, tradeAction, refresher)).align(align).row();
 				table.add().row();
 			}

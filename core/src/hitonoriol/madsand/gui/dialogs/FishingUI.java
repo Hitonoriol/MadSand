@@ -73,7 +73,7 @@ public class FishingUI extends GameDialog {
 	public FishingUI(FishingSpot spot) {
 		this(Gui.overlay);
 		this.spot = spot;
-		baitId = MadSand.player().stats.offHand().id;
+		baitId = MadSand.player().stats.offHand().id();
 		maxFish += MadSand.player().stats.skills.getLvl(Skill.Fishing);
 		super.setTitle("Fishing").centerTitle();
 		catchBar.setTriggerMode(false);

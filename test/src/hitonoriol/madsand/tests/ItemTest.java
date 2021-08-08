@@ -26,10 +26,10 @@ public class ItemTest {
 		String partialName = name.toLowerCase().substring(0, (int) (name.length() * 0.9));
 		Item item = Item.create(partialName);
 		assumeFalse("Got an item with the same name, but different id",
-				expectedItem.id != item.id && expectedItem.name.equals(item.name));
+				expectedItem.id() != item.id() && expectedItem.name.equals(item.name));
 
 		Utils.out("Trying to find \"%s\", result: \"%s\"", partialName, item.name);
-		assumeTrue(item.id == expectedItem.id, "Failed to fuzzy match item names");
+		assumeTrue(item.id() == expectedItem.id(), "Failed to fuzzy match item names");
 	}
 
 	@RepeatedTest(10)

@@ -1,8 +1,6 @@
 package hitonoriol.madsand.gui.stages;
 
-import static hitonoriol.madsand.MadSand.world;
-import static hitonoriol.madsand.MadSand.player;
-
+import static hitonoriol.madsand.MadSand.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -37,6 +35,7 @@ import hitonoriol.madsand.gui.widgets.overlay.OverlayBottomMenu;
 import hitonoriol.madsand.gui.widgets.stats.StatProgressBar;
 import hitonoriol.madsand.gui.widgets.waypoint.WaypointArrow;
 import hitonoriol.madsand.lua.Lua;
+import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.util.Functional;
 import hitonoriol.madsand.util.Utils;
@@ -57,7 +56,7 @@ public class Overlay extends Stage {
 	private GameLog gameLog = new GameLog();
 	private InfoPanel infoPanel = new InfoPanel();
 	public OverlayBottomMenu bottomMenu = new OverlayBottomMenu(this);
-	public Hotbar hotbar = new Hotbar();
+	private Hotbar hotbar = new Hotbar();
 	public EquipmentSidebar equipmentSidebar = new EquipmentSidebar();
 
 	public StatProgressBar hpBar;
@@ -121,6 +120,10 @@ public class Overlay extends Stage {
 			infoPanel.addEntry(() -> Utils.memoryUsageString()).update(5);
 			infoPanel.addEntry(() -> String.format("FPS: %2d (%-6.4f)",
 					Gdx.graphics.getFramesPerSecond(), Gdx.graphics.getDeltaTime())).update(1);
+			infoPanel.addEntry(() -> {
+				Map map = world().getCurLoc();
+				return String.format("Map size: %dx%d", map.getWidth(), map.getHeight());
+			});
 			infoPanel.addEntry(() -> "Objects on map: " + world().getCurLoc().getObjectCount());
 			infoPanel.addEntry(() -> "NPCs on map: " + world().getCurLoc().getNpcCount());
 			infoPanel.addEntry(() -> "Item textures: " + Item.dynamicTextureCacheSize());
@@ -160,7 +163,8 @@ public class Overlay extends Stage {
 				.align(Align.topLeft);
 		overlayTable.add(gameLog).padBottom(ENTRY_PAD).row();
 		overlayTable.add(infoPanel).padTop(-getGameLog().getConsoleField().getHeight() + 3).row();
-
+		gameLog.toFront();
+		
 		overlayTable.setFillParent(true);
 		addActor(overlayTable);
 	}
@@ -313,6 +317,10 @@ public class Overlay extends Stage {
 				? " @ Random Encounter"
 				: " @ Sector (" + MadSand.world().getCurWPos() + ")");
 
+	}
+	
+	public Hotbar getHotbar() {
+		return hotbar;
 	}
 
 	public GameLog getGameLog() {

@@ -7,7 +7,7 @@ import hitonoriol.madsand.properties.Globals;
 public class TradeInventory {
 	Inventory seller;
 	Inventory buyer;
-	int currency; //Currency item id
+	int currency;
 
 	public TradeInventory(Inventory seller, Inventory buyer, int currency) {
 		this.buyer = buyer;
@@ -24,7 +24,7 @@ public class TradeInventory {
 	}
 
 	public boolean sell(Item item, int quantity) { //Sell from Seller to Buyer
-		int cost = item.getTotalPrice();
+		int cost = item.getPrice() * quantity;
 		Item buyerMoney = buyer.getItem(currency);
 
 		if (buyerMoney.quantity < cost)
@@ -47,4 +47,12 @@ public class TradeInventory {
 		return buyer;
 	}
 
+	static int maxAffordableQuantity(Inventory buyer, Item item) {
+		int buyerMoney = buyer.getItem(Globals.values().currencyId).quantity;
+		return Math.min(item.quantity, buyerMoney / item.getPrice());
+	}
+
+	static String getBuyerString(TradeAction tradeAction) {
+		return tradeAction == TradeAction.Buy ? "You" : "Trader";
+	}
 }

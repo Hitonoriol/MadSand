@@ -50,7 +50,7 @@ public class QuestWorker {
 	private ProceduralQuest findQuest(List<? extends Quest> list, long val,
 			BiPredicate<ProceduralQuest, Long> criterion) {
 		for (Quest quest : list)
-			if (quest.id < 0 && criterion.test((ProceduralQuest) quest, val))
+			if (quest.id() < 0 && criterion.test((ProceduralQuest) quest, val))
 				return (ProceduralQuest) quest;
 		return null;
 	}
@@ -70,7 +70,7 @@ public class QuestWorker {
 		if (id >= 0)
 			return QuestList.quests.get(id);
 
-		return findQuest(id, (ProceduralQuest squest, Long sid) -> squest.id == sid.longValue());
+		return findQuest(id, (ProceduralQuest squest, Long sid) -> squest.id() == sid.longValue());
 	}
 
 	public int getPreviousQuest(int id) {
@@ -122,7 +122,7 @@ public class QuestWorker {
 			proceduralQuests.add(quest);
 		} else {
 			quest = findProceduralQuest(npcUID);
-			if (isQuestCompleted(quest.id)) {
+			if (isQuestCompleted(quest.id())) {
 				if (quest.timeSinceCreated() < ProceduralQuest.QUEST_TIMEOUT)
 					return quest;
 				else {
@@ -148,7 +148,7 @@ public class QuestWorker {
 							.show();
 			quest = ProceduralQuest.timeoutQuest;
 		} else
-			processQuest(quest.id);
+			processQuest(quest.id());
 
 		return quest;
 	}
@@ -162,9 +162,9 @@ public class QuestWorker {
 	}
 
 	private void startQuest(Quest quest, long npcUID) {
-		Utils.dbg("Trying to start quest " + quest.id);
+		Utils.dbg("Trying to start quest " + quest.id());
 
-		if (isQuestCompleted(quest.id))
+		if (isQuestCompleted(quest.id()))
 			return;
 
 		if (player.inventory.putItem(quest.giveItems))

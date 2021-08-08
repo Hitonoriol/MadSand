@@ -22,7 +22,6 @@ import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.gui.widgets.itembutton.CraftButton;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.ObjectProp;
-import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
 
@@ -84,7 +83,7 @@ public class CraftStage extends Stage {
 		titleLabel.setText(stationName);
 
 		int craftSz = itemList.size();
-		Utils.out("Total unlocked recipes: " + craftSz + " out of " + Resources.craftableItemCount);
+		Utils.out("Total unlocked recipes: " + craftSz + " out of " + ItemProp.craftReq.size());
 
 		if (craftSz == 0)
 			craftTable.add(new Label("You don't know any craft recipes.", Gui.skin));

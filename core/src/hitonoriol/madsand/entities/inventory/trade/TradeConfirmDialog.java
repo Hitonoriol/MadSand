@@ -5,6 +5,7 @@ import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.dialogs.SliderDialog;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.resources.Resources;
+import hitonoriol.madsand.util.Utils;
 
 public class TradeConfirmDialog extends SliderDialog {
 	private static String chooseTextA = "Choose what amount of ";
@@ -24,9 +25,9 @@ public class TradeConfirmDialog extends SliderDialog {
 	private Item item;
 	private TradeUIRefresher refresher;
 
-	public TradeConfirmDialog(TradeInventory trade, Item item, TradeAction tradeAction, TradeUIRefresher refresher) {
-		super(item.quantity);
-		this.tradeInventory = trade;
+	public TradeConfirmDialog(TradeInventory seller, Item item, TradeAction tradeAction, TradeUIRefresher refresher) {
+		super(TradeInventory.maxAffordableQuantity(seller.buyer, item));
+		this.tradeInventory = seller;
 		this.tradeAction = tradeAction;
 		this.item = item;
 		this.itemPrice = item.getPrice();
@@ -48,7 +49,7 @@ public class TradeConfirmDialog extends SliderDialog {
 	private static String tradeError = " can't afford this quantity of ";
 
 	private String getTradeErrorText() {
-		return (tradeAction.equals(TradeAction.Buy) ? "You" : "Trader") + tradeError + item.name;
+		return TradeInventory.getBuyerString(tradeAction) + tradeError + item.name;
 	}
 
 	private void setSliderListener() {
@@ -62,6 +63,9 @@ public class TradeConfirmDialog extends SliderDialog {
 				return;
 			}
 
+			Utils.out("%s sold %d %s for %d coins",
+					TradeInventory.getBuyerString(tradeAction), quantity, item.name,
+					item.getPrice() * quantity);
 			refresher.refreshUI();
 			remove();
 		});

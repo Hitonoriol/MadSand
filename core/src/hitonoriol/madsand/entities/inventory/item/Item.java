@@ -10,6 +10,8 @@ import java.util.function.Consumer;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -22,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import hitonoriol.madsand.DynamicallyCastable;
+import hitonoriol.madsand.Enumerable;
 import hitonoriol.madsand.HotbarAssignable;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Player;
@@ -39,20 +42,12 @@ import me.xdrop.fuzzywuzzy.FuzzySearch;
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
 @JsonSubTypes({ @Type(Armor.class), @Type(Consumable.class), @Type(CropSeeds.class), @Type(FishingBait.class),
 		@Type(GrabBag.class), @Type(Placeable.class), @Type(Projectile.class), @Type(Tool.class), @Type(Weapon.class),
-		@Type(Scroll.class), @Type(Pill.class) })
-public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
-	public int id;
-	public int quantity;
-	public String name;
-	@JsonProperty
-	public float weight = DEFAULT_WEIGHT;
-	public int cost;
-	@JsonIgnore
-	private boolean textureFxModified = true;
-
-	public String recipe;
-	public int craftQuantity = 1;
-	public String useAction;
+		@Type(ScriptedConsumable.class) })
+public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumerable {
+	private final static char NON_UNLOCKABLE_CHAR = 'X';
+	public final static String ITEM_DELIM = "/", BLOCK_DELIM = ":";
+	public final static String EMPTY_ITEM = "n";
+	public final static String CRAFTSTATION_DELIM = "|";
 
 	public final static Item nullItem = new Item();
 	public static final int NULL_ITEM = 0;
@@ -61,10 +56,20 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 	private static Map<Item, Texture> dynamicTxPool = new HashMap<>();
 	private static Map<Item, TextureProcessor> effectQueue = new HashMap<>();
 
-	public final static String ITEM_DELIM = "/";
-	public final static String BLOCK_DELIM = ":";
-	public final static String EMPTY_ITEM = "n";
-	public final static String CRAFTSTATION_DELIM = "|";
+	protected int id;
+	public int quantity;
+	public String name;
+	@JsonProperty
+	public float weight = DEFAULT_WEIGHT;
+	public int cost;
+	@JsonIgnore
+	private boolean textureFxModified = true;
+	public String useAction;
+
+	/* If false, recipe can only be learned by using the corresponding recipe ScriptedConsumable */
+	private boolean unlockableRecipe = true;
+	public String recipe;
+	public int craftQuantity = 1;
 
 	public Item(Item protoItem) {
 		id = protoItem.id;
@@ -85,6 +90,16 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 		return new Item(this);
 	}
 
+	@Override
+	public int id() {
+		return id;
+	}
+	
+	@Override
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public Item setQuantity(int quantity) {
 		this.quantity = quantity;
 		return this;
@@ -113,6 +128,11 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 	@JsonIgnore
 	public int getPrice() {
 		return cost;
+	}
+
+	@JsonIgnore
+	public boolean isRecipeUnlockable() {
+		return unlockableRecipe;
 	}
 
 	@JsonIgnore
@@ -168,6 +188,32 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 		this.useAction = properties.useAction;
 	}
 
+	/* Generate craft requirement lists for this item if it has a recipe
+	 * Recipes have a format of item list string (id/quantity:id/quantity:...) with additional modifiers
+	 * 		for craft station recipes (station_id|id/quantity:...) & non-unlockable items (Xid/quantity:...)
+	 */
+	public void initRecipe() {
+		if (recipe == null)
+			return;
+
+		/* If only craftable at a crafting station */
+		if (recipe.contains(CRAFTSTATION_DELIM)) {
+			String[] craftStationRecipe = recipe.split("\\" + Item.CRAFTSTATION_DELIM);
+			recipe = craftStationRecipe[1];
+			ItemProp.addCraftStationRecipe(Utils.val(craftStationRecipe[0]), id);
+		}
+		/* If craftable by hand */
+		else {
+			/* Non-unlockable recipes begin with X character, e.g. X1/3:2/5:... */
+			unlockableRecipe = recipe.charAt(0) != NON_UNLOCKABLE_CHAR;
+			if (!unlockableRecipe)
+				recipe = recipe.substring(1);
+
+			ItemProp.craftReq.put(id, parseCraftRequirements(recipe));
+		}
+
+	}
+
 	@JsonIgnore
 	public boolean isCurrency() {
 		return id == Globals.values().currencyId;
@@ -209,36 +255,6 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 		quantity = 0;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Item))
-			return false;
-		if (obj == this)
-			return true;
-
-		return equals(((Item) obj).id);
-	}
-
-	public boolean equals(int id) {
-		return id == this.id;
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder(14407, 7177).append(id).toHashCode();
-	}
-
-	@Override
-	public String toString() {
-		return String.format("[%X] {%s} [id: %d] %d %s (%.2f kg)",
-				hashCode(),
-				getClass().getSimpleName(),
-				id,
-				quantity,
-				name,
-				getTotalWeight());
-	}
-
 	@JsonIgnore
 	@Override
 	public String getHotbarString() {
@@ -248,56 +264,6 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 	@Override
 	public void hotbarAction() {
 		use(MadSand.player());
-	}
-
-	// list string format: id1/quantity1:id2/quantity2:...
-	public static void parseListString(String listString, BiConsumer<Integer, Integer> listItemConsumer) {
-		if (listString.equals(EMPTY_ITEM))
-			return;
-
-		if (!listString.contains(BLOCK_DELIM))
-			listString += BLOCK_DELIM;
-
-		String listItems[] = listString.split(BLOCK_DELIM);
-		String itemAttrs[];
-		for (String itemStr : listItems) {
-			itemAttrs = itemStr.split(ITEM_DELIM);
-			listItemConsumer.accept(Utils.val(itemAttrs[0]), Utils.val(itemAttrs[1]));
-		}
-	}
-
-	public static ArrayList<Item> parseItemString(String itemListStr) {
-		ArrayList<Item> items = new ArrayList<>();
-		parseListString(itemListStr, (id, quantity) -> items.add(Item.create(id, quantity)));
-		return items;
-	}
-
-	public static String createReadableItemList(String itemListStr, boolean countItems) {
-		final String delim = ", ";
-		StringBuilder ret = new StringBuilder();
-		parseListString(itemListStr, (id, quantity) -> {
-			if (countItems)
-				ret.append(MadSand.player().inventory.countItems(id) + "/");
-			ret.append(quantity + " " + ItemProp.getItemName(id) + ", ");
-		});
-		ret.setLength(ret.length() - delim.length());
-		int lastComma = ret.lastIndexOf(delim);
-		if (lastComma != -1) {
-			ret.delete(lastComma, lastComma + delim.length());
-			ret.insert(lastComma, " and ");
-		}
-		return ret.toString();
-	}
-
-	public static String createReadableItemList(String itemListStr) {
-		return createReadableItemList(itemListStr, false);
-	}
-
-	public static ArrayList<Integer> parseCraftRequirements(String recipe) {
-		ArrayList<Integer> requirements = new ArrayList<>();
-		parseListString(recipe, (id, quantity) -> requirements.add(id));
-		return requirements;
-
 	}
 
 	public EquipSlot getEquipSlot() {
@@ -349,8 +315,107 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 		return dynamicTx;
 	}
 
+	@JsonIgnore
+	public Drawable getDrawable() {
+		if (isProto())
+			return new TextureRegionDrawable(Resources.getItem(id));
+
+		return new TextureRegionDrawable(getTexture());
+	}
+
 	protected Item rollProperties() {
 		return this;
+	}
+
+	protected boolean isProto() {
+		return ItemProp.getItem(id) == this;
+	}
+
+	public boolean isEquipment() {
+		return this instanceof AbstractEquipment;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Item))
+			return false;
+		if (obj == this)
+			return true;
+
+		return equals(((Item) obj).id);
+	}
+
+	public boolean equals(int id) {
+		return id == this.id;
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(14407, 7177).append(id).toHashCode();
+	}
+
+	@Override
+	public String toString() {
+		return String.format("[%X] {%s} [id: %d] %d %s (%.2f kg)",
+				hashCode(),
+				getClass().getSimpleName(),
+				id,
+				quantity,
+				name,
+				getTotalWeight());
+	}
+
+	// list string format: id1/quantity1:id2/quantity2:...
+	public static void parseListString(String listString, BiConsumer<Integer, Integer> listItemConsumer) {
+		if (listString.equals(EMPTY_ITEM))
+			return;
+
+		if (!listString.contains(BLOCK_DELIM))
+			listString += BLOCK_DELIM;
+
+		String listItems[] = listString.split(BLOCK_DELIM);
+		String itemAttrs[];
+		for (String itemStr : listItems) {
+			itemAttrs = itemStr.split(ITEM_DELIM);
+			listItemConsumer.accept(Utils.val(itemAttrs[0]), Utils.val(itemAttrs[1]));
+		}
+	}
+
+	public static ArrayList<Item> parseItemString(String itemListStr) {
+		ArrayList<Item> items = new ArrayList<>();
+		parseListString(itemListStr, (id, quantity) -> items.add(Item.create(id, quantity)));
+		return items;
+	}
+
+	public static String createReadableItemList(String itemListStr, boolean countItems) {
+		final String delim = ", ";
+		StringBuilder ret = new StringBuilder();
+		parseListString(itemListStr, (id, quantity) -> {
+			if (countItems)
+				ret.append(MadSand.player().inventory.countItems(id) + "/");
+			ret.append(quantity + " " + ItemProp.getItemName(id) + ", ");
+		});
+
+		if (ret.length() > 0) {
+			ret.setLength(ret.length() - delim.length());
+			int lastComma = ret.lastIndexOf(delim);
+			if (lastComma != -1) {
+				ret.delete(lastComma, lastComma + delim.length());
+				ret.insert(lastComma, " and ");
+			}
+		}
+
+		return ret.toString();
+	}
+
+	public static String createReadableItemList(String itemListStr) {
+		return createReadableItemList(itemListStr, false);
+	}
+
+	public static ArrayList<Integer> parseCraftRequirements(String recipe) {
+		ArrayList<Integer> requirements = new ArrayList<>();
+		parseListString(recipe, (id, quantity) -> requirements.add(id));
+		return requirements;
 	}
 
 	public static int getAltObject(int id) {
@@ -397,14 +462,10 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable {
 		return create(Utils.randElement(ItemProp.items.keySet(), 1));
 	}
 
-	public boolean isEquipment() {
-		return this instanceof AbstractEquipment;
-	}
-
 	public static int dynamicTextureCacheSize() {
 		return dynamicTxPool.size();
 	}
-	
+
 	public static final Comparator<Item> quantityComparator = (item1, item2) -> {
 		return Integer.compare(item1.quantity, item2.quantity);
 	};

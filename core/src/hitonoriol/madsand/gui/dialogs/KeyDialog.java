@@ -6,12 +6,10 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.dialog.GameDialog;
-import hitonoriol.madsand.util.Functional;
 
 public class KeyDialog extends GameDialog {
 
@@ -30,27 +28,28 @@ public class KeyDialog extends GameDialog {
 		super.skipLine();
 		keyLabel.setAlignment(Align.center);
 		super.add(Gui.setFontSize(keyLabel, Gui.FONT_XL)).size(200).row();
-		super.add(new Label("[ESC] to unbind", Gui.skin)).row();
 
-		super.addButton(Functional.with(new TextButton("Apply", Gui.skin),
-				button -> Gui.setAction(button, () -> applySelectedKey(keyConsumer))))
-						.size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT);
-		super.addCloseButton();
+		addButton("Apply", () -> applySelectedKey(keyConsumer));
+		addButton("Unbind", () -> sendKey(Keys.ESCAPE));
+		addCloseButton();
 
 		if (initKey > 0)
 			keyLabel.setText(Keys.toString(initKey));
 
-		super.addListener(new InputListener() {
+		addListener(new InputListener() {
 
 			@Override
 			public boolean keyDown(InputEvent event, int keycode) {
-				key = keycode;
-				String keyText = keycode == Keys.ESCAPE ? "Remove binding" : Keys.toString(keycode);
-				keyLabel.setText(keyText);
-				return super.keyUp(event, keycode);
+				sendKey(keycode);
+				return true;
 			}
-
 		});
+	}
+
+	private void sendKey(int keycode) {
+		key = keycode;
+		String keyText = keycode == Keys.ESCAPE ? "Remove binding" : Keys.toString(keycode);
+		keyLabel.setText(keyText);
 	}
 
 	public KeyDialog setRemoveBindingAction(Runnable action) {

@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
+import hitonoriol.madsand.Enumerable;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
@@ -35,11 +36,11 @@ import hitonoriol.madsand.util.Utils;
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
 @JsonSubTypes({ @Type(CraftingStation.class), @Type(ItemFactory.class), @Type(ResourceObject.class),
 		@Type(ItemPipeline.class), @Type(Waypoint.class) })
-public class MapObject extends MapEntity {
+public class MapObject extends MapEntity implements Enumerable {
 	public static final int NULL_OBJECT_ID = 0;
 	public static final int COLLISION_MASK_ID = 666;
 
-	public int id;
+	protected int id;
 	public String name;
 
 	public int hp = 1, maxHp = 1;
@@ -83,6 +84,16 @@ public class MapObject extends MapEntity {
 
 		maskHeight = protoObject.maskHeight;
 		maskWidth = protoObject.maskWidth;
+	}
+
+	@Override
+	public int id() {
+		return id;
+	}
+
+	@Override
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	@Override

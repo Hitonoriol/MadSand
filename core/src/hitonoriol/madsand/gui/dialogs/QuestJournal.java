@@ -124,7 +124,7 @@ public class QuestJournal extends GameDialog {
 			if (quest.isComplete)
 				questObjective.setText("[LIME]" + questObjective.getText());
 
-			questTable.add(getStatusLabel(quest.id)).size(STATUS_LABEL_WIDTH, ENTRY_HEIGHT).align(Align.topLeft)
+			questTable.add(getStatusLabel(quest.id())).size(STATUS_LABEL_WIDTH, ENTRY_HEIGHT).align(Align.topLeft)
 					.padBottom(PAD_BOTTOM);
 			questTable.add(questName).width(NAME_LABEL_WIDTH).align(Align.topLeft).padBottom(PAD_BOTTOM);
 			questTable.add(questObjective).width(OBJECTIVE_LABEL_WIDTH).padBottom(PAD_BOTTOM).align(Align.topLeft);

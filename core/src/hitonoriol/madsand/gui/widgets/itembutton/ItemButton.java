@@ -14,7 +14,6 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.entities.inventory.ItemUI;
 import hitonoriol.madsand.entities.inventory.item.Item;
-import hitonoriol.madsand.resources.Resources;
 
 public abstract class ItemButton extends Group {
 	private final float WIDTH = 390;
@@ -34,7 +33,7 @@ public abstract class ItemButton extends Group {
 		String buttonText = createButtonText();
 		itemLabel = new Label(buttonText, Gui.skin);
 		itemLabel.setWrap(true);
-		itemImage = new Image(Resources.getItem(item.id));
+		itemImage = new Image(item.getDrawable());
 		itemImage.setSize(IMAGE_SIZE, IMAGE_SIZE);
 
 		buttonTable = new Table();

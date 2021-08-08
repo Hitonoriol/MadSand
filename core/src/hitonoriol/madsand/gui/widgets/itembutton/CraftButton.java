@@ -50,10 +50,10 @@ public class CraftButton extends ItemButton {
 		String buttonString = buttonItem.name;
 
 		Player player = MadSand.player();
-		if (!player.knowsItem(buttonItem.id))
+		if (!player.knowsItem(buttonItem.id()))
 			buttonString += " (New!)";
 		else
-			buttonString += Resources.LINEBREAK + "(You have " + player.inventory.countItems(buttonItem.id) + ")";
+			buttonString += Resources.LINEBREAK + "(You have " + player.inventory.countItems(buttonItem.id()) + ")";
 
 		if (buttonItem.craftQuantity > 1)
 			buttonString = buttonItem.craftQuantity + " " + buttonString;

@@ -21,7 +21,7 @@ public class MapTest {
 	@Test
 	void addRemoveObject() {
 		MapObject expectedObject = MapObject.create(pickObjectId());
-		Pair objectPos = map.randPlaceObject(expectedObject.id).copy();
+		Pair objectPos = map.randPlaceObject(expectedObject.id()).copy();
 		assertEquals(expectedObject, map.getObject(objectPos), "Object should be present on map");
 
 		map.delObject(objectPos);
@@ -31,11 +31,11 @@ public class MapTest {
 	@Test
 	void addRemoveTile() {
 		Tile expectedTile = new Tile(pickTileId());
-		Pair tilePos = map.randPlaceTile(expectedTile.id).copy();
+		Pair tilePos = map.randPlaceTile(expectedTile.id()).copy();
 		assertEquals(expectedTile, map.getTile(tilePos), "Tile should be present on map");
 
 		map.delTile(tilePos);
-		assertEquals(map.defTile, map.getTile(tilePos).id, "Tile should be replaced by default map tile");
+		assertEquals(map.defTile, map.getTile(tilePos).id(), "Tile should be replaced by default map tile");
 	}
 
 	@Test

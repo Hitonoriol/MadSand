@@ -2,7 +2,6 @@ package hitonoriol.madsand.entities.inventory;
 
 import java.util.List;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -12,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
@@ -38,12 +36,11 @@ public class ItemUI extends Group {
 	public final static Drawable emptyItem = new TextureRegionDrawable(Resources.getTexture("gui/placeholder"));
 
 	public ItemUI(Item item) {
-		super();
 		this.item = item;
 		topLabel = new Label("", Gui.skin);
 		highlight = new Image(ItemUI.emptyItem);
 		toolHpLabel = new Label("", Gui.skin);
-		itemBtn = new ImageButton(new SpriteDrawable(new Sprite(item.getTexture())));
+		itemBtn = new ImageButton(item.getDrawable());
 		itemQuantityLabel = new Label(item.quantity + "", Gui.skin);
 		tooltip = new ItemTooltip(item);
 
@@ -53,22 +50,26 @@ public class ItemUI extends Group {
 		topLabel.setAlignment(Align.center);
 		topLabel.setPosition(SIZE, SIZE - TOP_LABEL_YPADDING, Align.topRight);
 
-		super.addActor(itemBtn);
-		super.addActor(toolHpLabel);
-		super.addActor(topLabel);
-		super.addActor(highlight);
-		super.setSize(SIZE, SIZE);
-
+		addActor(itemBtn);
+		addActor(toolHpLabel);
+		addActor(topLabel);
+		addActor(highlight);
+		setSize(SIZE, SIZE);
 		highlight.setVisible(false);
 
 		if (!item.equals(Item.nullItem)) {
-			super.addListener(tooltip);
-			super.addActor(itemQuantityLabel);
+			addListener(tooltip);
+			addActor(itemQuantityLabel);
+		}
+
+		if (item.quantity == 0) {
+			toolHpLabel.setVisible(false);
+			itemQuantityLabel.setVisible(false);
 		}
 
 		refresh();
 
-		super.addListener(new InputListener() {
+		addListener(new InputListener() {
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
 				highlight.setVisible(true);
 			}

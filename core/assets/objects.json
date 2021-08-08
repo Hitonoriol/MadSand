@@ -44,9 +44,7 @@
 	"5" : {
 		"@type" : "MapObject",
 		"hp" : 15,
-		"onInteract" : "luajava.newInstance(
-							package('minigames.blackjack.BlackJackUI'),
-							world:getCurLoc():getObject(player:lookingAt())):show()",
+		"onInteract" : "new('minigames.blackjack.BlackJackUI', world:getCurLoc():getObject(player:lookingAt())):show()",
 		"name" : "Video Blackjack machine"
 	},
 	"6" : {
@@ -1296,9 +1294,7 @@
 	"172" : {
 		"@type" : "MapObject",
 		"hp" : 15,
-		"onInteract" : "luajava.newInstance(
-							package('minigames.videopoker.VideoPokerUI'),
-							world:getCurLoc():getObject(player:lookingAt())):show()",
+		"onInteract" : "new('minigames.videopoker.VideoPokerUI', world:getCurLoc():getObject(player:lookingAt())):show()",
 		"name" : "Video Poker machine"
 	},
 	"173" : {
@@ -1393,9 +1389,7 @@
 	"183" : {
 		"@type" : "MapObject",
 		"hp" : 15,
-		"onInteract" : "luajava.newInstance(
-							package('minigames.farkle.FarkleUI'),
-							world:getCurLoc():getObject(player:lookingAt())):show()",
+		"onInteract" : "new('minigames.farkle.FarkleUI', world:getCurLoc():getObject(player:lookingAt())):show()",
 		"name" : "Farkle machine"
 	},
 	"186" : {

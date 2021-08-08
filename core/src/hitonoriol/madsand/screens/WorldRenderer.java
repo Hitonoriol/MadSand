@@ -63,7 +63,7 @@ public class WorldRenderer {
 
 		TextureRegion texture = object.getTexture();
 		float w = texture.getRegionWidth(), h = texture.getRegionHeight();
-		if ((object.id != MapObject.NULL_OBJECT_ID) && (object.id != MapObject.COLLISION_MASK_ID))
+		if ((object.id() != MapObject.NULL_OBJECT_ID) && (object.id() != MapObject.COLLISION_MASK_ID))
 			batch.draw(texture, x, y, w / 2f, h / 2f, w, h, 1f, 1f,
 					object.getDirection().getRotation());
 	}

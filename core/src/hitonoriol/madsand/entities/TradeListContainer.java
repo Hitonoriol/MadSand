@@ -82,7 +82,7 @@ public class TradeListContainer extends HashMap<TradeCategory, ArrayList<TradeIt
 	}
 	
 	public int rollId(TradeCategory category, int tier) {
-		return roll(category, tier < 0 ? NpcProp.tradeLists.rollTier() : tier).get(0).id;
+		return roll(category, tier < 0 ? NpcProp.tradeLists.rollTier() : tier).get(0).id();
 	}
 
 	public int rollId(TradeCategory category) {

@@ -4,7 +4,7 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.entities.Player;
 
 public abstract class LevelBoundItem extends Item {
-	public int lvl;
+	public int lvl = 1;
 
 	public LevelBoundItem(LevelBoundItem protoItem) {
 		super(protoItem);

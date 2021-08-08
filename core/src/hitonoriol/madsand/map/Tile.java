@@ -7,14 +7,15 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import hitonoriol.madsand.Enumerable;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.resources.Resources;
 
-public class Tile {
+public class Tile implements Enumerable {
 	@JsonIgnore
-	public int id;
+	private int id;
 
 	public int damage;
 	public String onInteract;
@@ -48,6 +49,16 @@ public class Tile {
 		this.onInteract = Resources.emptyField;
 	}
 
+	@Override
+	public int id() {
+		return id;
+	}
+
+	@Override
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public int rollDrop(Tool.Type heldItem) {
 		return MapObject.rollTileResource(id, heldItem);
 	}
@@ -67,7 +78,7 @@ public class Tile {
 	public void setLightLevel(int lightLevel) {
 		this.lightLevel = lightLevel;
 	}
-	
+
 	public void addLight(int lightLevel) {
 		this.lightLevel += lightLevel;
 	}

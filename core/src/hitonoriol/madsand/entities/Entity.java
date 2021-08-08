@@ -272,7 +272,7 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public boolean hasItem(Item item) {
-		return hasItem(item.id);
+		return hasItem(item.id());
 	}
 
 	public boolean pickUpLoot(Loot loot, Item item, int quantity) {

@@ -7,7 +7,7 @@ import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.object.MapObject;
 
 public class ObjectProp {
-	public static HashMap<Integer, MapObject> objects = new HashMap<>();
+	public static java.util.Map<Integer, MapObject> objects;
 	public static HashMap<Integer, ItemProducer> itemProducers = new HashMap<>();
 	public static HashMap<Integer, String> buildRecipes = new HashMap<>();
 

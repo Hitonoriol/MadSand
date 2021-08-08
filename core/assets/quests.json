@@ -150,7 +150,7 @@
 	"reqMsg" : "Kill {KILL_OBJECTIVE} in the dungeon.",
 	"reqKills" : "14/10",
 	"execOnStart" : "
-			local scroll = luajava.newInstance(package('entities.inventory.item.Scroll')):load('Dungeon Entrance Search');
+			local scroll = static('entities.inventory.item.ScriptedConsumable'):create('scrolls', 'Dungeon Entrance Search');
 			player:addItem(scroll);
 	",
 	"rewardItems" : "21/200",

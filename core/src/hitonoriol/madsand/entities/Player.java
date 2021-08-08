@@ -5,17 +5,18 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -34,6 +35,7 @@ import hitonoriol.madsand.entities.ability.ActiveAbility;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
 import hitonoriol.madsand.entities.inventory.CraftWorker;
 import hitonoriol.madsand.entities.inventory.Inventory;
+import hitonoriol.madsand.entities.inventory.ItemUI;
 import hitonoriol.madsand.entities.inventory.item.Consumable;
 import hitonoriol.madsand.entities.inventory.item.CropSeeds;
 import hitonoriol.madsand.entities.inventory.item.FishingBait;
@@ -248,14 +250,14 @@ public class Player extends Entity {
 		if (abilityKeyBinds.getOrDefault(key, -1) != abilityId)
 			abilityKeyBinds.put(key, abilityId);
 
-		Gui.overlay.hotbar.addEntry(MadSand.player().getAbility(abilityId).as(ActiveAbility.class).get());
+		Gui.overlay.getHotbar().addEntry(MadSand.player().getAbility(abilityId).as(ActiveAbility.class).get());
 		Keyboard.getKeyBindManager().bind(key, () -> MadSand.player().getAbility(abilityId).apply());
 	}
 
 	public void unbindAbility(int key) {
 		abilityKeyBinds.remove(key);
 		Keyboard.getKeyBindManager().unbind(key);
-		Gui.overlay.hotbar.refresh();
+		Gui.overlay.getHotbar().refresh();
 	}
 
 	public void refreshEquipment() {
@@ -374,9 +376,9 @@ public class Player extends Entity {
 	public void checkHands(int id) {
 		int itemIdx = inventory.getIndex(id);
 		if (itemIdx == -1) {
-			if (stats.hand().id == id)
+			if (stats.hand().id() == id)
 				stats.equipment.unEquip(EquipSlot.MainHand);
-			else if (stats.offHand().id == id)
+			else if (stats.offHand().id() == id)
 				stats.equipment.unEquip(EquipSlot.Offhand);
 			return;
 		} else {
@@ -590,15 +592,17 @@ public class Player extends Entity {
 		damageHeldEquipment(Map.nullObject);
 	}
 
-	private void unlockRecipe(List<Integer> recipeList, int recipe) {
+	private boolean unlockRecipe(List<Integer> recipeList, int recipe) {
 		if (recipeList.contains(recipe))
-			return;
+			return false;
 
 		if (recipeList == craftRecipes)
 			MadSand.notice("You figure out how to craft " + ItemProp.getItemName(recipe) + "!");
 		else if (recipeList == buildRecipes)
 			MadSand.notice("You now know how to build " + ObjectProp.getName(recipe) + "!");
 		recipeList.add(recipe);
+
+		return true;
 	}
 
 	private boolean unlockRandomRecipe(HashMap<Integer, ArrayList<Integer>> reqMap, List<Integer> recipes) {
@@ -646,29 +650,42 @@ public class Player extends Entity {
 
 	public void unlockCraftRecipe(int recipe) {
 		unlockRecipe(craftRecipes, recipe);
+		showItemUnlockNotification(List.of(recipe));
 	}
 
 	public void unlockBuildRecipe(int recipe) {
 		unlockRecipe(buildRecipes, recipe);
 	}
 
-	private void refreshRecipes(HashMap<Integer, ArrayList<Integer>> reqMap, List<Integer> recipes) {
-		HashSet<Integer> reqs, all;
+	private void refreshRecipes(HashMap<Integer, ArrayList<Integer>> reqMap, List<Integer> recipeList) {
+		List<Integer> newlyUnlockedItems = new ArrayList<>();
+		reqMap.forEach((itemId, craftReqs) -> {
+			if (!ItemProp.getItem(itemId).isRecipeUnlockable())
+				return;
 
-		for (Entry<Integer, ArrayList<Integer>> entry : reqMap.entrySet()) {
-			reqs = new HashSet<Integer>(entry.getValue());
-			all = new HashSet<Integer>(unlockedItems);
-			int id = entry.getKey();
+			Set<Integer> itemCraftReqs = new HashSet<>(craftReqs);
+			if (itemCraftReqs.contains(-1))
+				return;
 
-			if (reqs.contains(-1))
-				continue;
+			Set<Integer> curUnlockedItems = new HashSet<>(unlockedItems);
+			curUnlockedItems.retainAll(itemCraftReqs);
 
-			all.retainAll(reqs);
+			if (curUnlockedItems.equals(itemCraftReqs) && unlockRecipe(recipeList, itemId))
+				newlyUnlockedItems.add(itemId);
+		});
 
-			if (all.equals(reqs))
-				unlockRecipe(recipes, id);
+		if (newlyUnlockedItems.isEmpty())
+			return;
 
-		}
+		if (recipeList == craftRecipes)
+			showItemUnlockNotification(newlyUnlockedItems);
+	}
+
+	private void showItemUnlockNotification(List<Integer> unlockedItems) {
+		Table newItems = ItemUI.createItemList(unlockedItems.stream()
+				.map(id -> ItemProp.getItem(id)).collect(Collectors.toList()));
+		Gui.drawOkDialog("You now know how to craft following items:")
+				.addContents(newItems);
 	}
 
 	public void refreshAvailableRecipes() {
@@ -700,7 +717,7 @@ public class Player extends Entity {
 		}
 
 		stats().equipment.refreshUI();
-		if (unlockedItems.add(item.id))
+		if (unlockedItems.add(item.id()))
 			refreshAvailableRecipes();
 
 		return true;
@@ -718,7 +735,7 @@ public class Player extends Entity {
 	public void delItem(Item item, int quantity) {
 		super.delItem(item, quantity);
 		if (stats.equipment.itemEquipped(item)) {
-			checkHands(item.id);
+			checkHands(item.id());
 			stats.equipment.refreshUI();
 		}
 	}
@@ -738,7 +755,7 @@ public class Player extends Entity {
 			int bonus = stats.luckRoll() ? Utils.rand(stats.skills.getItemReward(Skill.Crafting)) : 0;
 			if (bonus > 0) {
 				MadSand.notice("You manage to craft " + bonus + " extra " + craftedItem.name);
-				addItem(Item.create(craftedItem.id, bonus));
+				addItem(Item.create(craftedItem.id(), bonus));
 			}
 			return true;
 		}
@@ -922,7 +939,7 @@ public class Player extends Entity {
 			}
 
 			item.use(this);
-			checkHands(item.id);
+			checkHands(item.id());
 		});
 	}
 
@@ -952,7 +969,7 @@ public class Player extends Entity {
 
 	public void useItem(CropSeeds item) {
 		Pair coords = new Pair(x, y);
-		if (MadSand.world().getCurLoc().putCrop(coords.x, coords.y, item.id)) {
+		if (MadSand.world().getCurLoc().putCrop(coords.x, coords.y, item.id())) {
 			increaseSkill(Skill.Farming);
 			MadSand.print("You plant " + item.name);
 			inventory.delItem(item, 1);
@@ -1005,7 +1022,7 @@ public class Player extends Entity {
 		if (!stats.equipment.unEquip(item))
 			return;
 
-		if (!silent && item.id != Item.NULL_ITEM)
+		if (!silent && item.id() != Item.NULL_ITEM)
 			MadSand.print("You put " + item.name + " back to your inventory");
 
 		inventory.getUI().refreshItem(item);

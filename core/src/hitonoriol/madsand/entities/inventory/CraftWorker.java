@@ -48,7 +48,7 @@ public class CraftWorker {
 		for (int i = 0; i < quantity; ++i)
 			entity.inventory.delItem(itemToCraft.recipe);
 
-		Item craftedItem = Item.create(itemToCraft.id, quantity * itemToCraft.craftQuantity);
+		Item craftedItem = Item.create(itemToCraft.id(), quantity * itemToCraft.craftQuantity);
 		entity.addItem(craftedItem);
 		return craftedItem;
 	}

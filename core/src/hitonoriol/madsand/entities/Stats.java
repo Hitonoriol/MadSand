@@ -24,7 +24,7 @@ public class Stats {
 	final static int STAMINA_DMG = 1;
 	final static int FOOD_HEAL = 1;
 
-	public StatContainer baseStats;
+	public BaseStats baseStats;
 
 	public double walkCost = 4.5; // action points consumed by walking
 	public double meleeAttackCost = 5;
@@ -52,7 +52,7 @@ public class Stats {
 	protected Entity owner;
 
 	public Stats(Entity owner) {
-		baseStats = new StatContainer();
+		baseStats = new BaseStats();
 		setOwner(owner);
 	}
 

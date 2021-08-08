@@ -64,8 +64,8 @@
 		"upgradeProductionMultiplier" : 0.1,
 		"upgradeRequirementMultiplier" : 0.07,
 		"maxProductStorage" : 10,
-		"productionRate" : 0.025,
-		"consumptionRate": 0.026
+		"productionRate" : 0.006,
+		"consumptionRate": 0.0075
 	},
 	"-38" : {
 		"producedMaterial" : 126,
@@ -75,8 +75,8 @@
 		"upgradeProductionMultiplier" : 0.1,
 		"upgradeRequirementMultiplier" : 0.07,
 		"maxProductStorage" : 10,
-		"productionRate" : 0.025,
-		"consumptionRate": 0.03
+		"productionRate" : 0.005,
+		"consumptionRate": 0.0075
 	},
 	"-39" : {
 		"producedMaterial" : 127,
@@ -86,7 +86,7 @@
 		"upgradeProductionMultiplier" : 0.1,
 		"upgradeRequirementMultiplier" : 0.07,
 		"maxProductStorage" : 10,
-		"productionRate" : 0.025,
-		"consumptionRate": 0.03
+		"productionRate" : 0.004,
+		"consumptionRate": 0.008
 	}
 }

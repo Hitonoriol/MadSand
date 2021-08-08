@@ -13,7 +13,7 @@ import me.xdrop.jrand.generators.basics.NaturalGenerator;
 public class FarmAnimal extends AbstractNpc implements TimeDependent {
 	private ItemProducer animalProduct;
 	private long lastFed = MadSand.world().currentActionTick();
-	private static final long STARVE_TIME = MadSand.world().timeToActionTicks(600);
+	private static final long STARVE_TIME = MadSand.world().timeToActionTicks(1800);
 	private static NaturalGenerator initialFoodGen = JRand.natural().range(0, 30);
 
 	public FarmAnimal(NpcContainer protoNpc) {
@@ -35,7 +35,7 @@ public class FarmAnimal extends AbstractNpc implements TimeDependent {
 
 	@Override
 	protected void despawnProcess() {
-		if (isStarving())
+		if (isStarving() && !stats.luckRoll())
 			damage(1);
 	}
 

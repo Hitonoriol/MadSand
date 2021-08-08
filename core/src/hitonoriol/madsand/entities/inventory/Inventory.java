@@ -125,7 +125,7 @@ public class Inventory {
 
 	public boolean containsAll(List<Item> items) {
 		for (Item item : items) {
-			Item invItem = getItem(item.id);
+			Item invItem = getItem(item.id());
 			if (invItem == Item.nullItem || invItem.quantity < item.quantity)
 				return false;
 		}
@@ -134,7 +134,7 @@ public class Inventory {
 
 	public boolean containsNone(List<Item> items) {
 		for (Item item : items)
-			if (hasItem(item.id))
+			if (hasItem(item.id()))
 				return false;
 		return true;
 	}
@@ -150,7 +150,7 @@ public class Inventory {
 	public int getIndex(int id) {
 		int pos = 0;
 		for (Item item : items) {
-			if (item.id == id)
+			if (item.id() == id)
 				return pos;
 			++pos;
 		}

@@ -104,14 +104,14 @@ public class ActionButton extends Table {
 		AbstractNpc npc = loc.getNpc(inFront);
 		Item item = player.stats.hand();
 
-		int tileItem = MapObject.rollTileResource(tile.id, player.stats.getEquippedToolType());
-		String tileAction = TileProp.getOnInteract(tile.id);
-		String objAction = ObjectProp.getOnInteract(objectInFront.id);
+		int tileItem = MapObject.rollTileResource(tile.id(), player.stats.getEquippedToolType());
+		String tileAction = TileProp.getOnInteract(tile.id());
+		String objAction = ObjectProp.getOnInteract(objectInFront.id());
 		boolean holdsShovel = player.stats.isToolEquipped(Tool.Type.Shovel);
 
 		initButton();
 
-		if (object.isEmpty() && item.is(CropSeeds.class) && tile.id == ItemProp.getCropSoil(item.id))
+		if (object.isEmpty() && item.is(CropSeeds.class) && tile.id() == ItemProp.getCropSoil(item.id()))
 			activateButton("Plant " + item.name, () -> MadSand.player().useItem());
 
 		else if (player.canTravel())
@@ -124,7 +124,7 @@ public class ActionButton extends Table {
 			if (tileItem != -1 && holdsShovel)
 				tileMsg = "Dig ";
 
-			activateButton(tileMsg + TileProp.getName(tile.id), () -> {
+			activateButton(tileMsg + TileProp.getName(tile.id()), () -> {
 				player.useItem();
 				Gui.gameUnfocused = false;
 				Gui.overlay.showTooltip();

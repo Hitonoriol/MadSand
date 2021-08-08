@@ -23,7 +23,7 @@ public class QuestArrow extends WaypointArrow {
 
 	@Override
 	public void update() {
-		if (!MadSand.player().getQuestWorker().isQuestInProgress(quest.id) || !quest.isComplete()) {
+		if (!MadSand.player().getQuestWorker().isQuestInProgress(quest.id()) || !quest.isComplete()) {
 			remove();
 			return;
 		}

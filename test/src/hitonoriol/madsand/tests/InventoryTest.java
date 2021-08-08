@@ -33,7 +33,7 @@ public class InventoryTest {
 	Inventory inventory = player.inventory;
 	Inventory npcInv = npc.inventory;
 	Map map = MadSand.world().getCurLoc();
-	int currency = Globals.getCurrency().id;
+	int currency = Globals.getCurrency().id();
 
 	@BeforeEach
 	void setUp() {
@@ -57,7 +57,7 @@ public class InventoryTest {
 		Item itemToRemove = pickRandom(inventory);
 		int remQuantity = Utils.rand(1, itemToRemove.quantity);
 		float expectedDelta = itemToRemove.weight * (float) remQuantity;
-		inventory.delItem(itemToRemove.id, remQuantity);
+		inventory.delItem(itemToRemove.id(), remQuantity);
 		/* if previous assert succeeded, expectedWeight still holds correct inventory weight */
 		assertEquals(expectedWeight.getValue() - expectedDelta, inventory.getTotalWeight(),
 				"Total weight should decrease by the weight of the item stack");
@@ -142,7 +142,7 @@ public class InventoryTest {
 		assertTrue(craftWorker.canBeCrafted(), "CraftWorker: " + itemToCraft + " can't be crafted");
 
 		craftWorker.craftItem(1);
-		assertTrue(player.hasItem(itemToCraft.id), "Failed to add crafted item to inventory");
+		assertTrue(player.hasItem(itemToCraft.id()), "Failed to add crafted item to inventory");
 		assertTrue(inventory.containsNone(craftRecipe), "Failed to remove ingredients from inventory");
 	}
 

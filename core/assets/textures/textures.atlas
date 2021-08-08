@@ -178,7 +178,7 @@ inv/25
   index: -1
 inv/100
   rotate: false
-  xy: 935, 88
+  xy: 1020, 173
   size: 80, 77
   orig: 80, 77
   offset: 0, 0
@@ -851,6 +851,13 @@ inv/187
 inv/188
   rotate: false
   xy: 850, 0
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+inv/189
+  rotate: false
+  xy: 935, 85
   size: 80, 80
   orig: 80, 80
   offset: 0, 0

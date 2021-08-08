@@ -2,6 +2,7 @@ package hitonoriol.madsand.properties;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import hitonoriol.madsand.entities.inventory.item.CropSeeds;
 import hitonoriol.madsand.entities.inventory.item.Item;
@@ -10,7 +11,7 @@ import hitonoriol.madsand.map.CropGrowthStageContainer;
 import hitonoriol.madsand.resources.Resources;
 
 public class ItemProp {
-	public static HashMap<Integer, ? extends Item> items = new HashMap<>();
+	public static Map<Integer, Item> items;
 	public static HashMap<Integer, ArrayList<Integer>> craftStationRecipes = new HashMap<>();
 	public static HashMap<Integer, ArrayList<Integer>> craftReq = new HashMap<>();
 	public static HashMap<Integer, ArrayList<Integer>> buildReq = new HashMap<>();

@@ -9,6 +9,7 @@ import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.npc.Trader;
 import hitonoriol.madsand.entities.quest.ProceduralQuest;
+import hitonoriol.madsand.gui.widgets.AutoSizeTooltip;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.resources.Resources;
@@ -25,6 +26,9 @@ public class TraderDialog extends GameDialog {
 		TextButton tradeButton = new TextButton("What do you have for sale?", Gui.skin);
 		TextButton helpButton = new TextButton("Do you need any help?", Gui.skin);
 		TextButton closeButton = new TextButton("Bye", Gui.skin);
+
+		helpButton.addListener(
+				new AutoSizeTooltip("Completing tasks for this trader will increase their currency supply"));
 
 		super.addButton(tradeButton);
 

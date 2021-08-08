@@ -84,14 +84,14 @@ public class AbilityDialog extends GameDialog {
 							Player player = MadSand.player();
 							int currentKey = player.getAbilityKey(ability.id);
 
-							addButton(abstrAbility,
+							addAbilityButton(abstrAbility,
 									() -> {
 										ability.apply();
 										TimeUtils.scheduleTask(() -> remove(), 0.1f);
 									}).padRight(5).padLeft(5);
 
 							String bindString = ability.getBindKeyString();
-							addButton(bindString,
+							addAbilityButton(bindString,
 									() -> new KeyDialog(key -> {
 										player.bindAbility(key, ability.id);
 										refresh();
@@ -109,17 +109,17 @@ public class AbilityDialog extends GameDialog {
 						});
 
 		abstrAbility.as(PassiveAbility.class)
-				.ifPresent(ability -> Functional.with(addButton(abstrAbility, () -> {}), cell -> {
+				.ifPresent(ability -> Functional.with(addAbilityButton(abstrAbility, () -> {}), cell -> {
 					cell.getActor().setDisabled(true);
 					cell.row();
 				}));
 	}
 
-	private Cell<TextButton> addButton(Ability ability, Runnable action) {
-		return addButton(ability.toString(), action);
+	private Cell<TextButton> addAbilityButton(Ability ability, Runnable action) {
+		return addAbilityButton(ability.toString(), action);
 	}
 
-	private Cell<TextButton> addButton(String text, Runnable action) {
+	private Cell<TextButton> addAbilityButton(String text, Runnable action) {
 		Cell<TextButton> cell = container.add(new TextButton(text, Gui.skin))
 				.size(300, BTN_HEIGHT);
 		Gui.setAction(cell.getActor(), action);

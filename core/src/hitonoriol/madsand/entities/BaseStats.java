@@ -6,18 +6,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.util.Utils;
 
-public class StatContainer extends HashMap<Stat, Integer> {
-	static final int STAT_RAND_MAX = 8;
-	static final int STAT_RAND_MIN = 3;
-	static int STAT_MIN_SUM = 20; //for roll() method
+public class BaseStats extends HashMap<Stat, Integer> {
+	private static final int RAND_MAX = 8, RAND_MIN = 1;
+	private final static int ROLLABLE_STATS = Stat.rollableStats.size();
+	private static final int DEF_MAX_SUM = 15;
 
-	public int maxStatSum = 20;
+	public int maxStatSum = DEF_MAX_SUM;
 
-	public StatContainer() {
+	public BaseStats() {
 		super();
 	}
 
-	public StatContainer(StatContainer stats) {
+	public BaseStats(BaseStats stats) {
 		set(stats);
 	}
 
@@ -29,22 +29,22 @@ public class StatContainer extends HashMap<Stat, Integer> {
 		super.put(stat, value);
 	}
 
-	public void set(StatContainer stats) {
+	public void set(BaseStats stats) {
 		for (Stat stat : Stat.values())
 			set(stat, stats.get(stat));
 	}
 
 	// Copy specified stat from stat container
-	public void set(Stat stat, StatContainer stats) {
+	public void set(Stat stat, BaseStats stats) {
 		set(stat, stats.get(stat));
 	}
 
-	public void add(StatContainer statBonus) {
+	public void add(BaseStats statBonus) {
 		for (Stat stat : Stat.values())
 			increase(stat, statBonus.get(stat));
 	}
 
-	public void sub(StatContainer statBonus) {
+	public void sub(BaseStats statBonus) {
 		for (Stat stat : Stat.values())
 			increase(stat, -statBonus.get(stat));
 	}
@@ -78,11 +78,11 @@ public class StatContainer extends HashMap<Stat, Integer> {
 				sum += get(stat);
 		return sum;
 	}
-	
+
 	public int getMaxSum() {
 		return maxStatSum;
 	}
-	
+
 	public int getMinSum() {
 		return maxStatSum - 1;
 	}
@@ -93,14 +93,14 @@ public class StatContainer extends HashMap<Stat, Integer> {
 	}
 
 	public void roll(int lvl) {
-		final int maxStatVal = STAT_RAND_MAX + lvl;
-		final int rollableStats = Stat.rollableStats.size();
+		final int maxStatVal = RAND_MAX + lvl;
+		maxStatSum += lvl * ROLLABLE_STATS;
 
 		int sum = 0;
-		while (sum < STAT_MIN_SUM || sum > maxStatSum + lvl * rollableStats) {
+		while (sum != maxStatSum) {
 			for (Stat stat : Stat.values())
 				if (!stat.excludeFromSum())
-					set(stat, Utils.rand(STAT_RAND_MIN, maxStatVal));
+					set(stat, Utils.rand(RAND_MIN, maxStatVal));
 			sum = getSum();
 		}
 	}

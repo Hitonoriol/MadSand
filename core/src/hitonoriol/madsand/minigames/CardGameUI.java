@@ -18,7 +18,7 @@ import hitonoriol.madsand.properties.ItemProp;
 
 public class CardGameUI extends GameDialog {
 
-	protected final int currency = Globals.getCurrency().id;
+	protected final int currency = Globals.getCurrency().id();
 	protected final String currencyName = ItemProp.getItemName(currency);
 
 	protected Label betLabel = new Label("", Gui.skin);
@@ -67,7 +67,7 @@ public class CardGameUI extends GameDialog {
 		gameMachine.ifPresent(machine -> {
 			machine.as(MapObject.class).ifPresent(object -> {
 				object.takeFullDamage();
-				if (object.id == MapObject.NULL_OBJECT_ID) {
+				if (object.id() == MapObject.NULL_OBJECT_ID) {
 					remove();
 					Gui.drawOkDialog("Oops",
 							"As you were about to press one of the machine's buttons it exploded into pieces!");

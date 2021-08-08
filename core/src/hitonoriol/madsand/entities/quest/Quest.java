@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
+import hitonoriol.madsand.Enumerable;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
@@ -31,10 +32,10 @@ import hitonoriol.madsand.util.Utils;
 
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
 @JsonSubTypes({ @Type(ProceduralQuest.class) })
-public class Quest {
+public class Quest implements Enumerable {
 	public static String OBJECTIVE_COLOR = "[#58FFB1D8]", REWARD_COLOR = "[#16E1EAD8]", EXP_COLOR = "[#DAA520D1]";
 
-	public int id;
+	private int id;
 	public String name;
 	public int exp;
 	public int previousQuest = -1; // Quest id of quest after completion of which this quest becomes available
@@ -76,6 +77,16 @@ public class Quest {
 
 	public Quest() {
 		this(0);
+	}
+
+	@Override
+	public int id() {
+		return id;
+	}
+
+	@Override
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public Quest setPlayer(Player player) {

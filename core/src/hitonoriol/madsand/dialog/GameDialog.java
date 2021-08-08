@@ -178,6 +178,12 @@ public class GameDialog extends Dialog {
 		return addButton(button, true);
 	}
 
+	public Cell<TextButton> addButton(String text, Runnable action) {
+		Cell<TextButton> cell = addButton(new TextButton(text, Gui.skin));
+		Gui.setAction(cell.getActor(), action);
+		return cell;
+	}
+
 	public TextButton getProceedButton() {
 		return proceedButton;
 	}

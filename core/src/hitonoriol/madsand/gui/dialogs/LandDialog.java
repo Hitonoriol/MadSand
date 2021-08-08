@@ -87,7 +87,7 @@ public class LandDialog extends GameDialog {
 
 		boolean reqs = true;
 		for (Item item : reqItems)
-			reqs &= player.inventory.hasItem(item.id, item.quantity);
+			reqs &= player.inventory.hasItem(item.id(), item.quantity);
 
 		TextButton createBtn = new TextButton("Establish", Gui.skin);
 		if (reqs)

@@ -15,6 +15,7 @@ import org.apache.commons.lang3.mutable.MutableBoolean;
 import com.badlogic.gdx.math.Vector2;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.TimeDependent;
 import hitonoriol.madsand.containers.Line;
@@ -29,6 +30,8 @@ import hitonoriol.madsand.entities.npc.Npc;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.enums.TradeCategory;
+import hitonoriol.madsand.gui.widgets.waypoint.StaticWaypointArrow;
+import hitonoriol.madsand.gui.widgets.waypoint.WaypointArrow;
 import hitonoriol.madsand.map.object.Crop;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.map.object.ResourceObject;
@@ -161,7 +164,7 @@ public class Map {
 	public HashMap<Pair, MapObject> getObjectMap() {
 		return mapObjects;
 	}
-	
+
 	@JsonIgnore
 	public Collection<MapObject> getObjects() {
 		return mapObjects.values();
@@ -526,10 +529,10 @@ public class Map {
 		if (!validCoords(coords.set(x, y)))
 			return false;
 
-		int prevTile = getTile(x, y).id;
+		int prevTile = getTile(x, y).id();
 		if (force)
 			forceDelTile(coords);
-		else if (prevTile != defTile && prevTile != nullTile.id)
+		else if (prevTile != defTile && prevTile != nullTile.id())
 			return false;
 
 		return addTile(new Pair(coords), new Tile(id));
@@ -633,7 +636,7 @@ public class Map {
 	}
 
 	public boolean addObject(int x, int y, int id, boolean force) {
-		if (!validCoords(coords.set(x, y)) || id == nullObject.id)
+		if (!validCoords(coords.set(x, y)) || id == nullObject.id())
 			return false;
 
 		if (!force && mapObjects.containsKey(coords))
@@ -672,7 +675,7 @@ public class Map {
 		if (ret == null)
 			return nullObject;
 
-		if (ret.id == nullObject.id) {
+		if (ret.idEquals(nullObject)) {
 			delObject(coords);
 
 			if (ret.isDestroyed())
@@ -829,7 +832,7 @@ public class Map {
 			return false;
 		if (objectExists(x, y))
 			return false;
-		if (getTile(x, y).id != ItemProp.getCropSoil(crop.getSeedsId()))
+		if (getTile(x, y).id() != ItemProp.getCropSoil(crop.getSeedsId()))
 			return false;
 
 		return add(coords, crop);
@@ -1115,7 +1118,7 @@ public class Map {
 		Iterator<Entry<Pair, Tile>> it = mapTiles.entrySet().iterator();
 		Entry<Pair, Tile> tileEntry;
 		while (it.hasNext())
-			if ((tileEntry = it.next()).getValue().id != defTile)
+			if ((tileEntry = it.next()).getValue().id() != defTile)
 				entryList.add(tileEntry);
 		Collections.shuffle(entryList);
 		Tile tile;
@@ -1142,6 +1145,19 @@ public class Map {
 
 	public float getOccupiedObjectSpace() {
 		return ((float) getObjectCount() / (float) getMaxObjects()) * 100f;
+	}
+
+	public WaypointArrow addWaypoint(int x, int y) {
+		WaypointArrow arrow = null;
+		if (validCoords(x, y)) {
+			arrow = new StaticWaypointArrow(x, y);
+			Gui.overlay.addWaypointArrow(arrow);
+		}
+		return arrow;
+	}
+
+	public WaypointArrow addWaypoint(Pair coords) {
+		return addWaypoint(coords.x, coords.y);
 	}
 
 	/*

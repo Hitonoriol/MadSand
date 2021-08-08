@@ -1,12 +1,12 @@
 package hitonoriol.madsand.properties;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import hitonoriol.madsand.entities.TradeListContainer;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 
 public class NpcProp {
-	public static HashMap<Integer, NpcContainer> npcs = new HashMap<>();
+	public static Map<Integer, NpcContainer> npcs;
 	public static TradeListContainer tradeLists = new TradeListContainer();
 
 	public static AbstractNpc spawnNpc(int id, int x, int y) {

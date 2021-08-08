@@ -6,10 +6,6 @@ root_package = "hitonoriol.madsand";
 
 stats = player.stats;
 
-stamina_tutorial = "LowStamina";
-travel_tutorial = "Travel";
-dungeon_tutorial = "DungeonKey";
-
 this = function(value)
 	return value;
 end
@@ -37,10 +33,21 @@ verify_structure = function(x, y, w, h)
 	return true;
 end
 
+change_stamina = function(ability)
+	player:changeStamina(-ability:getStaminaCost());
+end
+
+-- Append root package name to the beginning of the provided full class name
 package = function(name)
 	return root_package .. "." .. name;
 end
 
-change_stamina = function(ability)
-	player:changeStamina(-ability:getStaminaCost());
+-- Get access to all public static methods from class <name>
+static = function(name)
+	return luajava.bindClass(package(name))
+end
+
+-- Create a new instance of class <name>, calling its constructor with the provided varargs
+new = function(name, ...)
+	return luajava.newInstance(package(name), ...)
 end

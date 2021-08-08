@@ -3,7 +3,7 @@ package hitonoriol.madsand.entities.inventory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.entities.Stat;
-import hitonoriol.madsand.entities.StatContainer;
+import hitonoriol.madsand.entities.BaseStats;
 import hitonoriol.madsand.entities.inventory.item.CombatEquipment;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
@@ -13,7 +13,7 @@ public class EquipStats {
 
 	public int rollMax, rollMin;
 
-	public StatContainer stats = new StatContainer();
+	public BaseStats stats = new BaseStats();
 	public Stat mainStat;
 
 	private static float multiplier = 1.7f;

@@ -14,7 +14,6 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.HotbarAssignable;
-import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.gui.OverlayMouseoverListener;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.util.Functional;
@@ -28,8 +27,6 @@ public class Hotbar extends Table {
 	Table container = new Table();
 
 	public Hotbar() {
-		super();
-
 		AutoFocusScrollPane scroll = new AutoFocusScrollPane(container);
 		scroll.setScrollingDisabled(false, true);
 		super.add(scroll).size(Gdx.graphics.getWidth(), HEIGHT + Gui.FONT_XXS);
@@ -45,10 +42,10 @@ public class Hotbar extends Table {
 
 	public void refreshVisibility() {
 		boolean visible = super.isVisible();
-		boolean noAbilities = MadSand.player().getAbilities().isEmpty();
-		if (visible && noAbilities)
+		boolean noEntries = hotEntries.isEmpty();
+		if (visible && noEntries)
 			super.setVisible(false);
-		else if (!visible && !noAbilities)
+		else if (!visible && !noEntries)
 			super.setVisible(true);
 	}
 
@@ -59,6 +56,7 @@ public class Hotbar extends Table {
 		Entry entry = new Entry(hotAssignable, this);
 		hotEntries.add(entry);
 		container.add(entry.button);
+		refresh();
 	}
 
 	public void removeEntry(HotbarAssignable hotAssignable) {
@@ -102,9 +100,9 @@ public class Hotbar extends Table {
 		public Entry(HotbarAssignable item, Hotbar hotbar) {
 			this.item = item;
 			button = new TextButton(item.getHotbarString(), Gui.skin);
-			button.addListener(new OverlayMouseoverListener());
 			Gui.setFontSize(button.getLabel(), Gui.FONT_XXS);
 			Gui.setAction(button, () -> item.hotbarAction());
+			button.addListener(new OverlayMouseoverListener());
 		}
 
 		public void refresh() {

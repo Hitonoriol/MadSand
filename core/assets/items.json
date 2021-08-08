@@ -102,7 +102,6 @@
 		"@type" : "Weapon",
 		"type" : "MeleeWeapon",
 		"weight" : 0.8,
-		"lvl" : 1,
 		"equipStats" : {
 			"stats":{
 			"Strength" : 1
@@ -179,7 +178,7 @@
 	},
 	"18" : {
 		"name" : "Chainmail",
-		"recipe" : "23/37:8/3",
+		"recipe" : "X72/20:69/5",
 		"cost" : 40,
 		"@type" : "Armor",
 		"type" : "ChestArmor",
@@ -343,7 +342,7 @@
 	},
 	"38" : {
 		"name" : "Sign",
-		"recipe" : "1/15:8/5",
+		"recipe" : "X1/3:8/1",
 		"altObject" : 18,
 		"cost" : 8,
 		"@type" : "Placeable",
@@ -632,7 +631,7 @@
 	},
 	"60" : {
 		"name" : "Healing potion",
-		"recipe" : "45/3:58/1",
+		"recipe" : "X45/3:58/1",
 		"healAmount" : 25,
 		"staminaAmount" : 5,
 		"cost" : 25,
@@ -744,7 +743,7 @@
 	},
 	"74" : {
 		"name" : "Spear",
-		"recipe" : "72/5:8/5",
+		"recipe" : "X72/5:8/5",
 		"cost" : 57,
 		"@type" : "Weapon",
 		"type" : "MeleeWeapon",
@@ -757,8 +756,10 @@
 		}
 	},
 	"75": {
-		"@type" : "Scroll",
-		"cost": 50,
+		"@type" : "ScriptedConsumable",
+		"nameTemplate": "Scroll of %s",
+		"scriptMapName": "scrolls",
+		"cost": 85,
 		"weight": 0.01
 	},
 	"76" : {
@@ -793,7 +794,7 @@
 	},
 	"78" : {
 		"name" : "Golden Boots",
-		"recipe" : "73/10",
+		"recipe" : "X73/10",
 		"cost" : 135,
 		"@type" : "Armor",
 		"type" : "FootArmor",
@@ -1823,7 +1824,7 @@
 	"176" : {
 		"name" : "Boomerang",
 		"lvl" : 1,
-		"recipe" : "1/5:70/2",
+		"recipe" : "X1/5:70/2",
 		"craftQuantity" : 5,
 		"@type" : "Projectile",
 		"thrownByHand" : true,
@@ -1850,8 +1851,10 @@
 		"weight" : 0
 	},
 	"179": {
-		"@type" : "Pill",
-		"cost": 1000,
+		"@type" : "ScriptedConsumable",
+		"nameTemplate": "Pill of %s",
+		"scriptMapName": "pills",
+		"cost": 450,
 		"weight": 0.01
 	},
 	"180" : {
@@ -1928,5 +1931,12 @@
 		"recipe" : "181|72/1:9/1",
 		"name" : "GPS waypoint",
 		"cost" : 25
+	},
+	"189": {
+		"@type" : "ScriptedConsumable",
+		"nameTemplate": "%s recipe",
+		"scriptMapName": "craft_recipes",
+		"cost": 95,
+		"weight": 0.01
 	}
 }

@@ -112,12 +112,12 @@ public class WorldMapSaver {
 				for (int x = 0; x < xsz; ++x) {
 					// Save tile
 					Tile tile = map.getTile(x, y);
-					stream.write(ByteUtils.encode2(tile.id));
+					stream.write(ByteUtils.encode2(tile.id()));
 					stream.write(ByteUtils.encode2(tile.visited ? 1 : 0));
 
 					// Save object
 					MapObject obj = map.getObject(x, y);
-					stream.write(ByteUtils.encode2(obj.id));
+					stream.write(ByteUtils.encode2(obj.id()));
 					stream.write(ByteUtils.encode2(obj.hp));
 					stream.write(ByteUtils.encode2(obj.maxHp));
 				}
@@ -129,7 +129,7 @@ public class WorldMapSaver {
 			// Save modified MapObject names
 			HashMap<Pair, String> modifiedObjNames = new HashMap<>();
 			map.getObjects().stream()
-					.filter(obj -> !obj.getName().equals(ObjectProp.getName(obj.id)))
+					.filter(obj -> !obj.getName().equals(ObjectProp.getName(obj.id())))
 					.forEach(obj -> modifiedObjNames.put(obj.getPosition(), obj.getName()));
 			writeStringBlock(stream, saveMap(modifiedObjNames, String.class));
 			return stream.toByteArray();

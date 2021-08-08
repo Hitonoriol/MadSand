@@ -52,7 +52,7 @@ public class QuestTest {
 			 * because of possible unique reward items -- equals() won't work for them
 			 * (because they're... well... unique.)
 			 */
-			assertTrue(rewardItems.stream().allMatch(item -> player.inventory.hasItem(item.id, item.quantity)),
+			assertTrue(rewardItems.stream().allMatch(item -> player.inventory.hasItem(item.id(), item.quantity)),
 					"Player should receive all reward items on quest completion");
 			assertEquals(expectedLvl, skills.getLvl());
 			assertEquals(expectedExp, skills.getExp());

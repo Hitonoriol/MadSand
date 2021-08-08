@@ -36,6 +36,12 @@ public class AutoSizeTooltip extends Tooltip<Table> {
 		manager.resetTime = 0;
 		manager.subsequentTime = 0;
 	}
+	
+	public AutoSizeTooltip(String text) {
+		this();
+		setMaxWidth(250);
+		setText(text);
+	}
 
 	public AutoSizeTooltip(Supplier<String> updater) {
 		this();

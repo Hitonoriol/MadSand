@@ -1,6 +1,7 @@
 package hitonoriol.madsand.gui.dialogs;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -17,6 +18,7 @@ public class OkDialog extends GameDialog {
 	public final static String DEFAULT_TITLE = "Info";
 	private static float LBL_MAX_WIDTH = 350, LBL_MIN_WIDTH = Gui.getTextWidth(DEFAULT_TITLE, Gui.FONT_M);
 	private Cell<AutoFocusScrollPane> textCell;
+	private Cell<?> optionalCell;
 	private boolean fillScreen = false;
 
 	public OkDialog(String title, String text, Stage stage) {
@@ -34,6 +36,8 @@ public class OkDialog extends GameDialog {
 				.maxHeight(LBL_MAX_WIDTH)
 				.pad(25)
 				.row();
+		optionalCell = add();
+		optionalCell.row();
 		setFillScreen(false);
 
 		TextButton okButton = new TextButton("Ok", Gui.skin);
@@ -70,5 +74,11 @@ public class OkDialog extends GameDialog {
 	public OkDialog setMaxWidth(float maxWidth) {
 		LBL_MAX_WIDTH = maxWidth;
 		return this;
+	}
+	
+	public Cell<?> addContents(Actor actor) {
+		optionalCell.setActor(actor);
+		pack();
+		return optionalCell;
 	}
 }

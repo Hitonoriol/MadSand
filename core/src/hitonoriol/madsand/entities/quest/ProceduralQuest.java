@@ -156,8 +156,8 @@ public class ProceduralQuest extends Quest {
 		List<Integer> reqs = new ArrayList<>();
 
 		for (Item item : items)
-			if (!reqs.contains(item.id))
-				reqs.add(item.id);
+			if (!reqs.contains(item.id()))
+				reqs.add(item.id());
 
 		randomItemQuest(reqs);
 	}

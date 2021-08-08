@@ -43,7 +43,7 @@ public abstract class AbstractNpc extends Entity {
 	public static final float HOSTILE_SPEEDUP = 1.35f;
 	private final static int meleeAttackDst = 2; // Must be < than this
 	private final static int MAX_LIFETIME = 20;
-	private final static FloatGenerator lifetimeGen = JRand.flt().range(0.35f, 15);
+	private final static FloatGenerator lifetimeGen = JRand.flt().range(0.65f, 7.5f);
 
 	public int id;
 	public long uid;
@@ -72,7 +72,7 @@ public abstract class AbstractNpc extends Entity {
 	int pathIdx = 0;
 
 	public AbstractNpc(NpcContainer protoNpc) {
-		id = protoNpc.id;
+		id = protoNpc.id();
 		uid = MadSand.world().npcCounter().getAndIncrement();
 		stats.spawnTime = MadSand.world().currentTick();
 		stats.spawnRealTime = MadSand.world().currentActionTick();
@@ -127,20 +127,20 @@ public abstract class AbstractNpc extends Entity {
 		pauseFlag = false;
 	}
 
-	private int MAX_LVL_GAP = 3;
+	private int MAX_LVL_GAP = 4;
 
-	private float DEX_PER_LVL = 0.125f;
-	private float HP_PER_LVL = 3.5f;
-	private float STR_PER_LVL = 0.25f;
-	private float ACC_PER_LVL = 0.4f;
+	private float DEX_PER_LVL = 0.225f;
+	private float HP_PER_LVL = 4.25f;
+	private float STR_PER_LVL = 1.55f;
+	private float ACC_PER_LVL = 1.4f;
 	private float EXP_PER_LVL = 3.4f;
 
 	// Action cost penalties
-	private float MELEE_SPD_PER_LVL = 0.1f, RANGED_SPD_PER_LVL = 0.5f;
-	private float MOVE_SPD_PER_LVL = 0.15f;
+	private float MELEE_SPD_PER_LVL = 0.05f, RANGED_SPD_PER_LVL = 0.5f;
+	private float MOVE_SPD_PER_LVL = 0.075f;
 
 	private String NAMED_NPC_STR = " the ";
-	private int CAN_GIVE_QUESTS_CHANCE = 30;
+	private int CAN_GIVE_QUESTS_CHANCE = 15;
 
 	void loadProperties(NpcContainer properties) {
 		int maxLvl = MadSand.player().getLvl() + MAX_LVL_GAP;
@@ -180,7 +180,7 @@ public abstract class AbstractNpc extends Entity {
 
 		if (properties.projectiles != null)
 			properties.projectiles.stream()
-					.forEach(id -> inventory.putItem(id, (int) (Utils.rand(10, 17) * Math.sqrt(this.lvl))));
+					.forEach(id -> inventory.putItem(id, (int) (Utils.rand(10, 30) * Math.sqrt(this.lvl))));
 
 		friendly = properties.friendly;
 		spawnOnce = properties.spawnOnce;
@@ -344,7 +344,7 @@ public abstract class AbstractNpc extends Entity {
 	}
 
 	protected void addLifetime() {
-		addLifetime(Math.sqrt(lvl + 1) * (0.25f + Utils.random.nextFloat()));
+		addLifetime(Math.sqrt((float) lvl * 0.1f + 0.15f) * 0.1f);
 	}
 
 	public boolean canBeDespawned() {
@@ -353,8 +353,16 @@ public abstract class AbstractNpc extends Entity {
 
 	protected void despawnProcess() {}
 
+	/* The farther player gets, the faster NPCs lifetime decreases */
+	private float liveDistanceCoef() {
+		float maxDst = MadSand.player().getEffectiveFov();
+		float dst = distanceTo(MadSand.player());
+
+		return Math.max(0.0125f, (dst / maxDst) * 0.33f);
+	}
+
 	protected void live(float time) {
-		lifetime -= time;
+		lifetime -= time * liveDistanceCoef();
 	}
 
 	void randMove() {
@@ -442,6 +450,11 @@ public abstract class AbstractNpc extends Entity {
 
 	@Override
 	public final void act(float time) {
+		if (stats.dead) {
+			skipAction();
+			return;
+		}
+
 		boolean badRep = MadSand.player().getReputation().isHostile(stats.faction);
 		tickCharge += (timePassed = time);
 		live(time);

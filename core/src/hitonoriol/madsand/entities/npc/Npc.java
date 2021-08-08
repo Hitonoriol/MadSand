@@ -22,7 +22,7 @@ public class Npc extends AbstractNpc {
 	@Override
 	protected void despawnProcess() {
 		if (!stats().luckRoll())
-			damage(1);
+			damage(0.025f);
 		Utils.dbg("Despawning {%s}", this);
 	}
 

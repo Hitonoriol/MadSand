@@ -28,8 +28,10 @@ import hitonoriol.madsand.minigames.farkle.FarkleUI;
 import hitonoriol.madsand.minigames.videopoker.VideoPokerUI;
 import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.properties.Globals;
+import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.screens.WorldRenderer;
+import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
 
@@ -179,6 +181,15 @@ public class Keyboard {
 			MadSand.getRenderer().changeZoom(-0.1f);
 
 		if (isKeyPressed(Keys.CONTROL_LEFT)) {
+			/* Unlock everything */
+			if (key == Keys.U) {
+				ItemProp.craftReq.keySet()
+						.forEach(recipe -> player().unlockCraftRecipe(recipe));
+				ItemProp.buildReq.keySet()
+						.forEach(recipe -> player().unlockBuildRecipe(recipe));
+				TimeUtils.scheduleTask(() -> Gui.overlay.closeAllDialogs(), 2f);
+			}
+
 			if (key == Keys.DOWN)
 				MadSand.world().descend();
 

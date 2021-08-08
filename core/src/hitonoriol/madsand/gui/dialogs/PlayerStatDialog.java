@@ -14,7 +14,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.Stat;
-import hitonoriol.madsand.entities.StatContainer;
+import hitonoriol.madsand.entities.BaseStats;
 import hitonoriol.madsand.gui.widgets.stats.StatLabels;
 import me.xdrop.jrand.JRand;
 
@@ -91,7 +91,7 @@ public class PlayerStatDialog extends GameDialog {
 		ChangeListener listener = new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				PlayerStats stats = statLabels.getStats();
-				StatContainer baseStats = stats.baseStats;
+				BaseStats baseStats = stats.baseStats;
 				int statSum = stats.getSum();
 
 				if (inc) {

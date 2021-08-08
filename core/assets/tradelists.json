@@ -62,6 +62,10 @@
 
 "Pills": [
 	{ "tier": 0, "minRolls": 1, "maxRolls": 3, "items": [179] }
+],
+
+"Recipes": [
+	{ "tier": 0, "minRolls": 1, "maxRolls": 3, "items": [189] }
 ]
 
 }

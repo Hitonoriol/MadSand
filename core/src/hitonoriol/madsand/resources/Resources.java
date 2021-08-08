@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.function.Consumer;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -33,6 +33,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.type.MapType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
+import hitonoriol.madsand.Enumerable;
 import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.containers.AnimationContainer;
@@ -89,14 +90,6 @@ public class Resources {
 	public static TextureRegion[] attackAnimStrip, objectHitAnimStrip;
 	public static TextureRegion[] healAnimStrip, detectAnimStrip;
 
-	public static int craftableItemCount;
-	public static int itemCount;
-	public static int mapObjectCount;
-	public static int npcCount;
-	public static int tileCount;
-	public static int biomeCount;
-	public static int questCount;
-
 	public static final String emptyField = "-1";
 	public static final int emptyId = -1;
 	public static String Space = " ", Colon = ":";
@@ -121,16 +114,17 @@ public class Resources {
 		Gdx.graphics.setCursor(Gdx.graphics.newCursor(loadPixmap("textures/cursor.png"), 0, 0));
 		initObjectMapper();
 		Globals.loadGlobals();
-		loadItems();
 		loadMapTiles();
 		loadMapObjects();
-		loadProductionStations();
+		loadItems();
+		loadItemProducers();
 		loadWorldGen();
 		loadQuests();
 		loadNpcs();
 		loadTradeLists();
 		loadTutorial();
 		loadActionAnimations();
+		Globals.values().loadMisc();
 		System.gc();
 		Utils.out("Done loading resources.");
 	}
@@ -152,96 +146,66 @@ public class Resources {
 		mapper.registerModule(simpleModule);
 	}
 
-	private static void loadTradeLists() throws Exception {
-		NpcProp.tradeLists = Resources.mapper.readValue(readInternal(Resources.TRADELIST_FILE),
-				TradeListContainer.class);
+	private static void loadTradeLists() {
+		NpcProp.tradeLists = load(TRADELIST_FILE, TradeListContainer.class);
 	}
 
-	private static void loadTutorial() throws Exception {
-		MapType tutorialMap = Resources.typeFactory.constructMapType(HashMap.class, String.class, String.class);
-		Tutorial.strings = Resources.mapper.readValue(readInternal(Resources.TUTORIAL_FILE), tutorialMap);
+	private static void loadTutorial() {
+		Tutorial.strings = loadMap(TUTORIAL_FILE, String.class, String.class);
 	}
 
-	private static void loadQuests() throws Exception {
-		MapType questMap = Resources.typeFactory.constructMapType(HashMap.class, Integer.class, Quest.class);
-		QuestList.quests = Resources.mapper.readValue(readInternal(Resources.QUEST_FILE), questMap);
-
-		for (Entry<Integer, Quest> entry : QuestList.quests.entrySet())
-			entry.getValue().id = entry.getKey();
-
+	private static void loadQuests() {
+		QuestList.quests = loadMap(QUEST_FILE, Integer.class, Quest.class);
 		Utils.out(QuestList.quests.size() + " quests");
-
 	}
 
-	private static void loadNpcs() throws Exception {
-		MapType npcMap = Resources.typeFactory.constructMapType(HashMap.class, Integer.class, NpcContainer.class);
-		NpcProp.npcs = Resources.mapper.readValue(readInternal(Resources.NPC_FILE), npcMap);
-		npcCount = NpcProp.npcs.size();
-		Utils.out(npcCount + " NPCs");
-		//npcs = new TextureMap<>(loadAtlas("npc"));
-		NpcProp.npcs.forEach((id, npc) -> npc.id = id);
+	private static void loadNpcs() {
+		NpcProp.npcs = loadEnumerableMap(NPC_FILE, NpcContainer.class);
+		Utils.out(NpcProp.npcs.size() + " NPCs");
 	}
 
-	private static void loadMapTiles() throws Exception {
-		MapType tileMap = Resources.typeFactory.constructMapType(HashMap.class, Integer.class, Tile.class);
-		TileProp.tiles = Resources.mapper.readValue(readInternal(Resources.TILE_FILE), tileMap);
-
-		tileCount = TileProp.tiles.size();
-		//tiles = new TextureMap<>(loadAtlas("terrain"));
-		Utils.out(tileCount + " tiles");
-		TileProp.tiles.forEach((id, tile) -> tile.id = id);
+	private static void loadMapTiles() {
+		TileProp.tiles = loadEnumerableMap(TILE_FILE, Tile.class);
+		Utils.out(TileProp.tiles.size() + " tiles");
 	}
 
-	private static void loadMapObjects() throws Exception {
-		MapType objectMap = Resources.typeFactory.constructMapType(HashMap.class, Integer.class, MapObject.class);
-		ObjectProp.objects = Resources.mapper.readValue(readInternal(Resources.OBJECT_FILE), objectMap);
-
-		mapObjectCount = ObjectProp.objects.size();
-		//objects = new TextureMap<>(loadAtlas("obj"));
-		Utils.out(mapObjectCount + " map objects");
-		ObjectProp.objects.forEach((id, object) -> object.id = id);
+	private static void loadMapObjects() {
+		ObjectProp.objects = loadEnumerableMap(OBJECT_FILE, MapObject.class);
+		Utils.out(ObjectProp.objects.size() + " map objects");
 	}
 
-	private static void loadItems() throws Exception {
-		MapType itemMap = Resources.typeFactory.constructMapType(HashMap.class, Integer.class, Item.class);
-		ItemProp.items = Resources.mapper.readValue(readInternal(Resources.ITEM_FILE), itemMap);
-		itemCount = ItemProp.items.size();
-		//items = new TextureMap<>(loadAtlas("inv"));
+	private static void loadItems() {
+		ItemProp.items = loadEnumerableMap(ITEM_FILE, Item.class, item -> item.initRecipe());
+		Utils.out("%d items (%d craftable)", ItemProp.items.size(), ItemProp.craftReq.size());
+	}
 
-		ItemProp.items.forEach((id, item) -> {
-			item.id = id;
-			// Load item's craft recipe if it has one
-			if (item.recipe != null) {
-				if (item.recipe.contains(Item.CRAFTSTATION_DELIM)) {
-					String[] craftStationRecipe = item.recipe.split("\\" + Item.CRAFTSTATION_DELIM);
-					item.recipe = craftStationRecipe[1];
-					ItemProp.addCraftStationRecipe(Utils.val(craftStationRecipe[0]), item.id);
-				} else
-					ItemProp.craftReq.put(id, Item.parseCraftRequirements(item.recipe));
-				++craftableItemCount;
-			}
+	private static void loadWorldGen() {
+		WorldGenProp.biomes = loadMap(WORLDGEN_FILE, Integer.class, WorldGenPreset.class);
+		WorldGenProp.encounters = loadList(ENCOUNTER_FILE, String.class);
+		Utils.out(WorldGenProp.biomes.size() + " biomes");
+	}
+
+	private static <T extends Enumerable> Map<Integer, T> loadEnumerableMap(
+			String internalFile,
+			Class<T> type,
+			Consumer<T> initAction) {
+		Map<Integer, T> map = loadMap(internalFile, Integer.class, type);
+		map.forEach((id, value) -> {
+			value.setId(id);
+			if (initAction != null)
+				initAction.accept(value);
 		});
-		Utils.out(craftableItemCount + " craftable items");
+		return map;
 	}
 
-	private static void loadWorldGen() throws Exception {
-		MapType worldGenMap = Resources.typeFactory.constructMapType(HashMap.class, Integer.class,
-				WorldGenPreset.class);
-		WorldGenProp.biomes = Resources.mapper.readValue(readInternal(Resources.WORLDGEN_FILE), worldGenMap);
-		biomeCount = WorldGenProp.biomes.size();
-
-		WorldGenProp.encounters = Resources.mapper.readValue(readInternal(Resources.ENCOUNTER_FILE),
-				typeFactory.constructParametricType(ArrayList.class, String.class));
-
-		Utils.out(biomeCount + " biomes");
+	private static <T extends Enumerable> Map<Integer, T> loadEnumerableMap(String internalFile, Class<T> type) {
+		return loadEnumerableMap(internalFile, type, null);
 	}
 
-	private static void loadProductionStations() throws Exception {
+	private static void loadItemProducers() {
 		ObjectProp.itemProducers = loadMap(ITEMFACTORY_FILE, Integer.class, ItemProducer.class);
 		ObjectProp.buildRecipes = loadMap(BUILDRECIPE_FILE, Integer.class, String.class);
-
-		for (Entry<Integer, String> entry : ObjectProp.buildRecipes.entrySet())
-			ItemProp.buildReq.put(entry.getKey(), Item.parseCraftRequirements(entry.getValue()));
+		ObjectProp.buildRecipes.forEach((id, recipe) -> ItemProp.buildReq.put(id, Item.parseCraftRequirements(recipe)));
 	}
 
 	public static TextureRegion getTile(int id) {
@@ -292,6 +256,15 @@ public class Resources {
 
 	public static String readInternal(String file) {
 		return Gdx.files.internal(file).readString();
+	}
+
+	public static <T> T load(String internalFile, Class<T> type) {
+		try {
+			return mapper.readerFor(type).readValue(readInternal(internalFile));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public static void save(String file, Object object) {
@@ -361,7 +334,7 @@ public class Resources {
 			return null;
 		}
 	}
-	
+
 	public static String saveMap(Map<?, ?> map, Class<?> valType) {
 		return saveMap(map, Pair.class, valType);
 	}
