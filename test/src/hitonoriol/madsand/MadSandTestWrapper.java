@@ -38,8 +38,8 @@ public class MadSandTestWrapper extends MadSand {
 		Utils.disableTimestampOutput();
 		Player player = player();
 		player.stats.randomize(10);
-		player.reinit();
 		enterWorld();
+		player.finishCreation();
 		Utils.out();
 		launcher.registerTestExecutionListeners(listener, new TestListener());
 

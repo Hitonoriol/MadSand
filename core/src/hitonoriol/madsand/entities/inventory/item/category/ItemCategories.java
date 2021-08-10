@@ -3,9 +3,11 @@ package hitonoriol.madsand.entities.inventory.item.category;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Function;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.util.Utils;
@@ -16,11 +18,71 @@ import hitonoriol.madsand.util.Utils;
  */
 
 public class ItemCategories extends HashMap<ItemCategory, ArrayList<ItemCategoryList>> {
+	public static final int MAX_TIER = 10, MAX_ITEMS = 350;
 
-	public static int MAX_TIER = 10;
+	public ItemCategories() {}
 
-	public ItemCategories() {
-		super();
+	public List<Item> roll(ItemCategory category, int tier) {
+		Utils.dbg("Rolling tradeList " + category + " tier: " + tier);
+		List<Item> items = new ArrayList<>();
+		final int rolledTier = tier;
+		boolean all = category.equals(ItemCategory.All);
+		ItemCategoryList list;
+
+		if (category.isFlag())
+			category = ItemCategory.random();
+
+		list = getTradeItemList(category, tier);
+
+		for (int i = tier; i >= 0; i--) {
+			if (!all)
+				getTradeItemList(category, tier).roll(items);
+			else {
+				for (int j = 0; j < list.rollTimes(); ++j) {
+					list = getTradeItemList(category, tier);
+					tier = rerollTier(tier);
+					category = ItemCategory.random();
+					addItem(items, list.rollItem());
+				}
+			}
+			tier = rerollTier(tier);
+		}
+		Pair range = new Pair();
+		capItemQuantity(items, item -> {
+			range.x = (int) ((tierDistribution(MAX_TIER - rolledTier) / 100d) * MAX_ITEMS) / 10;
+			range.y = Utils.rand(MAX_ITEMS / 20, MAX_ITEMS);
+			/*Utils.dbg("Rerolling quantity [%s]", range);*/
+			return range;
+		});
+		return items;
+	}
+
+	public List<Item> roll(ItemCategory category) {
+		return roll(category, rollTier());
+	}
+
+	public static List<Item> capItemQuantity(List<Item> items, Function<Item, Pair> rangeSupplier) {
+		items.stream()
+				.filter(item -> {
+					int max = rangeSupplier.apply(item).y;
+					boolean overflow = item.quantity > max;
+					if (overflow)
+						item.quantity = max;
+					return overflow;
+				})
+				.forEach(item -> {
+					Pair range = rangeSupplier.apply(item);
+					item.setQuantity(Utils.rand(Math.min(1, range.x), range.y));
+				});
+		return items;
+	}
+
+	static void addItem(List<Item> items, Item item) {
+		int idx = items.indexOf(item);
+		if (idx != -1)
+			items.get(idx).quantity += item.quantity;
+		else
+			items.add(item);
 	}
 
 	@JsonIgnore
@@ -54,45 +116,16 @@ public class ItemCategories extends HashMap<ItemCategory, ArrayList<ItemCategory
 		super.put(category, valList);
 	}
 
-	public List<Item> roll(ItemCategory category, int tier) {
-		List<Item> items = new ArrayList<>();
-		boolean all = category.equals(ItemCategory.All);
-		ItemCategoryList list;
-
-		if (category.isFlag())
-			category = ItemCategory.random();
-
-		list = getTradeItemList(category, tier);
-
-		for (int i = tier; i >= 0; i--) {
-			Utils.dbg("Rolling tradeList " + category + " tier: " + tier);
-
-			if (!all)
-				getTradeItemList(category, tier).roll(items);
-			else {
-				for (int j = 0; j < list.rollTimes(); ++j) {
-					list = getTradeItemList(category, tier);
-					tier = rerollTier(tier);
-					category = ItemCategory.random();
-					items.add(list.rollItem());
-				}
-			}
-			tier = rerollTier(tier);
-		}
-
-		return items;
-	}
-
-	public List<Item> roll(ItemCategory category) {
-		return roll(category, rollTier());
-	}
-
 	public int rollId(ItemCategory category, int tier) {
 		return roll(category, tier < 0 ? NpcProp.tradeLists.rollTier() : tier).get(0).id();
 	}
 
 	public int rollId(ItemCategory category) {
 		return rollId(category, 0);
+	}
+
+	public static int rollItemQuantity(int tier) {
+		return Utils.rand(1, (int) tierDistribution(tier));
 	}
 
 	/* Tier 0 has 100% probability, the higher the tier the lower this value gets */

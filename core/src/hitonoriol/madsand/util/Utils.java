@@ -86,6 +86,10 @@ public class Utils {
 		return format.format(Calendar.getInstance().getTime());
 	}
 
+	public static double toSeconds(long millis) {
+		return millis / 1000d;
+	}
+
 	public static void out(String arg) {
 		if (Globals.silentMode)
 			return;

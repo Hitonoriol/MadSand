@@ -172,11 +172,6 @@ public abstract class Entity extends MapEntity {
 		stats.name = name;
 	}
 
-	public void reinit() {
-		initInventory();
-		inventory.setMaxWeight(stats.calcMaxInventoryWeight());
-	}
-
 	public boolean memberOf(Faction faction) {
 		return stats.faction == faction;
 	}

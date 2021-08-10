@@ -70,9 +70,10 @@ public class DungeonGen extends DungeonGenerator {
 						++mobCount;
 					}
 
-					if (Utils.percentRoll(curDungeonFloor.lootCorridorProbability))
+					if (Utils.percentRoll(curDungeonFloor.lootCorridorProbability)) {
 						map.putLoot(x, y, loot.rollItems());
-
+						luckLootRoll(x, y);
+					}
 				}
 
 				if (grid.get(x, y) == DUNGEON_WALL_LEVEL) { // walls
@@ -89,8 +90,10 @@ public class DungeonGen extends DungeonGenerator {
 						++mobCount;
 					}
 
-					if (Utils.percentRoll(curDungeonFloor.lootProbability))
+					if (Utils.percentRoll(curDungeonFloor.lootProbability)) {
 						map.putLoot(x, y, loot.rollItems());
+						luckLootRoll(x, y);
+					}
 
 					if (map.spawnPoint.equals(Pair.nullPair)) {
 						map.spawnPoint = new Pair(x, y);
@@ -116,6 +119,11 @@ public class DungeonGen extends DungeonGenerator {
 			placeExit(dungeon);
 
 		rooms.clear();
+	}
+
+	private void luckLootRoll(int x, int y) {
+		if (MadSand.player().stats().luckRoll())
+			map.putLoot(x, y);
 	}
 
 	private void placeExit(DungeonPreset dungeon) {

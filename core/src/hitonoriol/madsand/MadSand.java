@@ -40,6 +40,7 @@ public class MadSand extends Game {
 	public static String WORLDNAME = "";
 
 	private static boolean worldUntouched = true;
+	private long startTime = System.currentTimeMillis();
 
 	private World world;
 	private Storage<AbstractScreen<?>> currentScreen = new Storage<>();
@@ -50,8 +51,6 @@ public class MadSand extends Game {
 	public static CraftScreen craftScreen;
 	public static DeathScreen deathScreen;
 	public static MainMenu mainMenu;
-
-	private long startTime = Utils.now();
 
 	public void create() {
 		Utils.out("Starting initialization!");
@@ -73,7 +72,7 @@ public class MadSand extends Game {
 			game.world.generate();
 		Keyboard.initDefaultKeyBinds();
 		switchScreen(mainMenu);
-		Utils.out("End of initialization!");
+		Utils.out("End of initialization (%.3f sec spent)", Utils.toSeconds(System.currentTimeMillis() - startTime));
 		Utils.printMemoryInfo();
 	}
 
@@ -140,7 +139,7 @@ public class MadSand extends Game {
 	@Override
 	public void dispose() {
 		Prefs.savePrefs();
-		Utils.out("Bye! Session lasted for [%s]", Utils.timeString(Utils.now() - startTime));
+		Utils.out("Bye! Session lasted for [%s]", Utils.timeString((long) (Utils.now() - Utils.toSeconds(startTime))));
 	}
 
 	public static OrthographicCamera getCamera() {

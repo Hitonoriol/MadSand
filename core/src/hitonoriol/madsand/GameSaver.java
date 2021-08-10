@@ -123,9 +123,6 @@ public class GameSaver {
 			File worldFile = new File(getCurSaveDir() + MadSand.WORLDFILE);
 			Player player = MadSand.player();
 
-			if (player.newlyCreated)
-				player.newlyCreated = false;
-
 			player.stats.equipment.setStatBonus(false);
 			/*Resources.mapper.writeValue(new File(fl), player);*/
 			getMapper().writeValue(worldFile, MadSand.world());

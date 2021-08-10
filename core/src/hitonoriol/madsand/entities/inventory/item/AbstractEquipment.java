@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.entities.BaseStats;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.gfx.ConditionalEffects;
 import hitonoriol.madsand.gfx.Effects;
 import hitonoriol.madsand.util.Functional;
@@ -33,10 +35,11 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 		hp = protoItem.hp;
 		maxHp = hp;
 
+		BaseStats stats = MadSand.player().stats().baseStats;
 		if (protoItem.isProto()) {
 			uid = MadSand.world().itemCounter().incrementAndGet();
-			cursed = Utils.percentRoll(7.5);
-			identified = Utils.percentRoll(15);
+			cursed = Utils.percentRoll(5.5) || stats.rollInverse(Stat.Luck, 17.5);
+			identified = Utils.percentRoll(12.5) || stats.roll(Stat.Luck);
 		} else {
 			uid = protoItem.uid;
 			cursed = protoItem.cursed;

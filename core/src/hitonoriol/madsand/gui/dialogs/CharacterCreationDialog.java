@@ -4,10 +4,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.Stats;
 import hitonoriol.madsand.gui.widgets.stats.StatLabels;
-import hitonoriol.madsand.lua.Lua;
 
 public class CharacterCreationDialog extends PlayerStatDialog {
 	Stats stats;
@@ -40,13 +38,10 @@ public class CharacterCreationDialog extends PlayerStatDialog {
 				return;
 
 			String name = nameField.getText().trim();
-			if (!name.equals("")) {
-				MadSand.player().setName(name);
-				MadSand.player().reinit();
+			if (!name.isEmpty()) {
 				remove();
-				Gui.refreshOverlay();
-				GameTextSubstitutor.add(GameTextSubstitutor.PLAYER_NAME, name);
-				Lua.executeScript(Lua.onCreationScript);
+				MadSand.player().setName(name);
+				MadSand.world().finishPlayerCreation();
 			}
 		});
 		Gui.setAction(statRollBtn, () -> rollStats());

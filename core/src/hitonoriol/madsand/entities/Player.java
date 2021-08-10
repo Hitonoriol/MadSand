@@ -1,6 +1,7 @@
 package hitonoriol.madsand.entities;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -30,6 +31,7 @@ import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
 import hitonoriol.madsand.dialog.GameDialog;
+import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.ability.Ability;
 import hitonoriol.madsand.entities.ability.ActiveAbility;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
@@ -108,8 +110,8 @@ public class Player extends Entity {
 
 	private Runnable scheduledAction, afterMovement;
 
-	@JsonProperty("newlyCreated")
-	public boolean newlyCreated = true;
+	@JsonProperty
+	private boolean newlyCreated = true;
 
 	static {
 		loadPlayerAnimation();
@@ -142,6 +144,14 @@ public class Player extends Entity {
 		inventory.refreshContents();
 		refreshAvailableRecipes();
 		setFov();
+	}
+	
+	public void finishCreation() {
+		newlyCreated = false;
+	}
+	
+	public boolean uninitialized() {
+		return newlyCreated;
 	}
 
 	private static final int ANIM_WIDTH = 35, ANIM_HEIGHT = 74;
@@ -268,6 +278,7 @@ public class Player extends Entity {
 	@JsonIgnore
 	public void setName(String name) {
 		super.setName(name);
+		GameTextSubstitutor.add(GameTextSubstitutor.PLAYER_NAME, name);
 	}
 
 	public void unTarget() {
@@ -546,11 +557,10 @@ public class Player extends Entity {
 	}
 
 	void increaseStamina(int to) {
-		if (stats.stamina + to < stats.maxstamina) {
+		if (stats.stamina + to < stats.maxstamina)
 			stats.stamina += to;
-		} else {
+		else
 			stats.stamina = stats.maxstamina;
-		}
 	}
 
 	public void changeStamina(float by) {
@@ -652,7 +662,7 @@ public class Player extends Entity {
 
 	public void unlockCraftRecipe(int recipe) {
 		unlockRecipe(craftRecipes, recipe);
-		showItemUnlockNotification(List.of(recipe));
+		showItemUnlockNotification(Arrays.asList(recipe));
 	}
 
 	public void unlockBuildRecipe(int recipe) {

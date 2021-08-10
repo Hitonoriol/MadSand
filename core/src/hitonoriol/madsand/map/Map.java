@@ -26,6 +26,7 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Tool;
+import hitonoriol.madsand.entities.inventory.item.category.ItemCategories;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.entities.npc.Npc;
@@ -817,7 +818,13 @@ public class Map {
 	}
 
 	public void putLoot(int x, int y, ItemCategory category, int maxItems) {
-		List<Item> items = NpcProp.tradeLists.roll(category);
+		Pair range = new Pair();
+		List<Item> items = ItemCategories.capItemQuantity(NpcProp.tradeLists.roll(category), item -> {
+			range.x = Utils.rand(1, player().stats().get(Stat.Luck));
+			range.y = Utils.rand(item.quantity / 2,
+					(int) (item.quantity * (1 + player().stats().baseStats.getOverallProgress())));
+			return range;
+		});
 		putLoot(x, y, items.subList(0, Math.min(items.size(), maxItems)));
 	}
 

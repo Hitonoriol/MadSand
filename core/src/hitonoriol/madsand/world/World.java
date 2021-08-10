@@ -98,8 +98,7 @@ public class World {
 		GameTextSubstitutor.add(GameTextSubstitutor.PLAYER_NAME, player.stats.name);
 		getCurLoc().refreshPathfindingGraph();
 		initRealtimeRefresher();
-
-		if (!player.newlyCreated)
+		if (!player.uninitialized())
 			calcOfflineTime();
 	}
 
@@ -831,6 +830,15 @@ public class World {
 
 	public void logout() {
 		setLogoutTimeStamp(Utils.now());
+	}
+
+	public void finishPlayerCreation() {
+		if (!player.uninitialized())
+			return;
+
+		player.finishCreation();
+		Gui.refreshOverlay();
+		Lua.executeScript(Lua.onCreationScript);
 	}
 
 	@JsonIgnore

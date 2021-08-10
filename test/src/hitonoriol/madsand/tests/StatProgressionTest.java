@@ -11,7 +11,7 @@ import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.util.Utils;
 
 public class StatProgressionTest {
-	private BaseStats stats = MadSand.player().stats().baseStats;
+	private BaseStats stats = MadSand.player().stats().baseStats.prepareLivingCreature();
 
 	private void forEachStat(Consumer<Stat> action) {
 		Stat.rollableStats.stream().forEach(action);
@@ -23,10 +23,9 @@ public class StatProgressionTest {
 		table.add("Value");
 		forEachStat(stat -> table.add(stat.toString()));
 		table.row().addRule();
-		forEachStat(stat -> stats.set(stat, 1));
 		for (int lvl = 1; lvl <= BaseStats.MAX_LVL; ++lvl) {
 			final int newVal = lvl + 1;
-			table.add(lvl);
+			table.add(stats.get(Stat.Luck));
 			forEachStat(stat -> {
 				table.add(String.format("%.2f", stats.getEffectiveness(stat)));
 				stats.set(stat, newVal);

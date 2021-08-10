@@ -7,19 +7,26 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import hitonoriol.madsand.util.Utils;
 
 public class BaseStats extends HashMap<Stat, Integer> {
-	public static final int MAX_LVL = 35;
-	private static final int RAND_MAX = 8, RAND_MIN = 1;
 	private final static int ROLLABLE_STATS = Stat.rollableStats.size();
+	public static final int MAX_LVL = 35, MAX_SUM = MAX_LVL * ROLLABLE_STATS;
+	private static final int RAND_MAX = 8, RAND_MIN = 1;
 	private static final int DEF_MAX_SUM = 15;
 
 	public int maxStatSum = DEF_MAX_SUM;
 
-	public BaseStats() {
-		super();
-	}
+	public BaseStats() {}
 
 	public BaseStats(BaseStats stats) {
 		set(stats);
+	}
+
+	public double getOverallProgress() {
+		return (double) getSum() / (double) MAX_SUM;
+	}
+
+	public BaseStats prepareLivingCreature() {
+		Stat.rollableStats.forEach(stat -> set(stat, 1));
+		return this;
 	}
 
 	public int get(Stat stat) {
@@ -93,6 +100,7 @@ public class BaseStats extends HashMap<Stat, Integer> {
 		return maxStatSum - getSum();
 	}
 
+	/* Stat effectiveness rating in %: [0; 100] */
 	private static double getEffectiveness(Stat stat, double lvl) {
 		switch (stat) {
 		case Luck:
@@ -112,6 +120,49 @@ public class BaseStats extends HashMap<Stat, Integer> {
 
 	public double getEffectiveness(Stat stat) {
 		return getEffectiveness(stat, Math.min(MAX_LVL, get(stat)));
+	}
+
+	public double maxEffectiveness(Stat stat) {
+		return getEffectiveness(stat, MAX_LVL);
+	}
+
+	private double toMax(Stat stat) {
+		return getEffectiveness(stat) / maxEffectiveness(stat);
+	}
+
+	private double toMaxInverse(Stat stat) {
+		double max = maxEffectiveness(stat);
+		return (max - getEffectiveness(stat)) / max;
+	}
+
+	/* Equivalent to (roll() && roll() && ...) */
+	public boolean rollAnd(Stat stat, int times) {
+		if (times < 2)
+			return roll(stat);
+
+		double combinedProb = Math.pow(getEffectiveness(stat) / 100, times) * 100;
+		Utils.dbg("Rolling %s[%d] &&%d times = %.5f%%", stat, get(stat), times, combinedProb);
+		return Utils.percentRoll(combinedProb);
+	}
+
+	/* Equivalent to (roll() || roll() || ...) */
+	public boolean rollOr(Stat stat, int times) {
+		if (times < 2)
+			return roll(stat);
+
+		for (int i = 0; i < times; ++i)
+			if (roll(stat))
+				return true;
+		return false;
+	}
+
+	/* !roll() equivalent, but with max probability capped at <probCap>% */
+	public boolean rollInverse(Stat stat, double probCap) {
+		return Utils.percentRoll(toMaxInverse(stat) * probCap);
+	}
+
+	public boolean roll(Stat stat, double probCap) {
+		return Utils.percentRoll(toMax(stat) * probCap);
 	}
 
 	public boolean roll(Stat stat) {

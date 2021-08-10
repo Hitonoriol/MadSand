@@ -52,7 +52,7 @@ public class Stats {
 	protected Entity owner;
 
 	public Stats(Entity owner) {
-		baseStats = new BaseStats();
+		baseStats = new BaseStats().prepareLivingCreature();
 		setOwner(owner);
 	}
 
@@ -71,6 +71,10 @@ public class Stats {
 
 	public void set(Stat stat, int value) {
 		baseStats.set(stat, value);
+	}
+
+	public boolean roll(Stat stat, int times) {
+		return baseStats.rollAnd(stat, times);
 	}
 
 	public boolean roll(Stat stat) {
@@ -96,6 +100,7 @@ public class Stats {
 
 		calcSpeed();
 		hp = Math.min(hp, mhp);
+		owner.inventory.setMaxWeight(calcMaxInventoryWeight());
 	}
 
 	public void restore() {

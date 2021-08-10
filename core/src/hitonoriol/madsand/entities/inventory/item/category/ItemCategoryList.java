@@ -15,9 +15,7 @@ import hitonoriol.madsand.util.Utils;
  */
 
 public class ItemCategoryList {
-
-	public static int DEFAULT_MIN_ROLLS = 3;
-	public static int DEFAULT_MAX_ROLLS = 10;
+	public static int DEFAULT_MIN_ROLLS = 3, DEFAULT_MAX_ROLLS = 10;
 
 	public int tier = 0;
 	public int minRolls, maxRolls;
@@ -45,12 +43,7 @@ public class ItemCategoryList {
 	}
 
 	private void rollItemQuantity(Item item) {
-
-		if (item.isEquipment())
-			item.quantity = 1;
-		else
-			item.quantity = Utils.rand(BASE_ITEM_QUANTITY) + tier * TIER_FACTOR;
-
+		item.setQuantity(ItemCategories.rollItemQuantity(tier));
 	}
 
 	public Item rollItem() {
@@ -71,7 +64,7 @@ public class ItemCategoryList {
 		int rolls = rollTimes();
 
 		for (int i = 0; i < rolls; ++i)
-			items.add(rollItem());
+			ItemCategories.addItem(items, rollItem());
 
 		return items;
 	}
