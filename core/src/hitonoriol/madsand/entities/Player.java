@@ -45,6 +45,7 @@ import hitonoriol.madsand.entities.inventory.item.Placeable;
 import hitonoriol.madsand.entities.inventory.item.Projectile;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.inventory.item.Weapon;
+import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 import hitonoriol.madsand.entities.inventory.trade.TradeInventoryUI;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.entities.npc.FarmAnimal;
@@ -55,7 +56,6 @@ import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.enums.Direction;
-import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.gui.dialogs.FishingUI;
 import hitonoriol.madsand.gui.dialogs.GrabBagDialog;
 import hitonoriol.madsand.gui.dialogs.ItemFactoryUI;
@@ -90,6 +90,7 @@ public class Player extends Entity {
 	public PlayerStats stats; // Reference to the same Stats object as super.stats
 	private float runSpeedCoef = 3.5f;
 	private final static float DEF_LUMINOSITY = 1.5f;
+	private final static float MIN_ANIM_SPEED = 2f;
 
 	private int targetedByNpcs = 0;
 	private Set<Integer> unlockedItems = new HashSet<>(); // set of items player obtained at least once
@@ -308,7 +309,8 @@ public class Player extends Entity {
 	}
 
 	public void addExp(double amount) {
-		stats.skills.increaseSkill(Skill.Level, amount);
+		double coef = 1d + stats().baseStats.getEffectiveness(Stat.Intelligence) * 0.02;
+		stats().skills.increaseSkill(Skill.Level, amount * coef);
 		Gui.refreshOverlay();
 	}
 
@@ -1153,6 +1155,11 @@ public class Player extends Entity {
 	}
 
 	@Override
+	protected float getMovementSpeed() {
+		return Math.max(MIN_ANIM_SPEED, super.getMovementSpeed());
+	}
+
+	@Override
 	public boolean move(Direction dir) {
 		if (!super.move(dir))
 			return false;
@@ -1397,7 +1404,7 @@ public class Player extends Entity {
 
 		// Not-so-random material of tier #<settlementsEstablished>
 		Item requiredResource = Item.create(
-				NpcProp.tradeLists.getTradeItemList(TradeCategory.Materials, settlementsEstablished)
+				NpcProp.tradeLists.getTradeItemList(ItemCategory.Materials, settlementsEstablished)
 						.getRandomId(new Random(settlementsEstablished)));
 		requiredResource.quantity = SETTLEMENT_RES_COST * (settlementsEstablished + 1);
 		items.add(requiredResource);

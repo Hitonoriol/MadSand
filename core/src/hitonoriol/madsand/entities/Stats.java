@@ -73,14 +73,18 @@ public class Stats {
 		baseStats.set(stat, value);
 	}
 
-	public void roll(int lvl) {
-		baseStats.roll(lvl);
+	public boolean roll(Stat stat) {
+		return baseStats.roll(stat);
+	}
+
+	public void randomize(int lvl) {
+		baseStats.randomize(lvl);
 		calcStats();
 		restore();
 	}
 
-	public void roll() {
-		roll(0);
+	public void randomize() {
+		randomize(0);
 	}
 
 	public void calcStats() {
@@ -131,15 +135,15 @@ public class Stats {
 	}
 
 	public boolean luckRoll() {
-		return Utils.percentRoll(Utils.log(Math.pow(get(Stat.Luck), 1.75), 8) + 9.75);
+		return roll(Stat.Luck);
 	}
 
 	public boolean critRoll() {
-		return Utils.percentRoll(Math.log(Math.pow(get(Stat.Accuracy) + 0.1, 7)));
+		return roll(Stat.Accuracy) && roll(Stat.Accuracy);
 	}
 
 	public double calcAttackMissChance() {
-		return (1 / Math.log(get(Stat.Accuracy) + 1) * 45.0);
+		return (100 - baseStats.getEffectiveness(Stat.Accuracy)) * 0.55;
 	}
 
 	public double calcRangedAttackMissChance(int distance) {

@@ -16,6 +16,6 @@
 	},
 	"Level" : {
 		"requiredExp" : 85,
-		"lvUpMultiplier" : 0.065
+		"lvUpMultiplier" : 0.06
 	}
 }

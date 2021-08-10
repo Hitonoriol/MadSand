@@ -20,7 +20,7 @@ public class CharacterCreationDialog extends PlayerStatDialog {
 	}
 
 	void rollStats() {
-		stats.roll();
+		stats.randomize();
 		statLabels.refreshStatLabels();
 		Gui.refreshOverlay();
 	}

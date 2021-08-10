@@ -1,4 +1,4 @@
-package hitonoriol.madsand.enums;
+package hitonoriol.madsand.entities.inventory.item.category;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,7 +6,7 @@ import java.util.List;
 
 import hitonoriol.madsand.util.Utils;
 
-public enum TradeCategory {
+public enum ItemCategory {
 	All, // Flag: Include items from all categories
 	Random, // Flag: Roll a random category
 	Trash, // Useless items
@@ -24,7 +24,7 @@ public enum TradeCategory {
 	Pills,
 	Recipes;
 
-	public static List<TradeCategory> rollableCategories = new ArrayList<>(Arrays.asList(values()));
+	public static List<ItemCategory> rollableCategories = new ArrayList<>(Arrays.asList(values()));
 	static {
 		rollableCategories.remove(All);
 		rollableCategories.remove(Random);
@@ -32,11 +32,11 @@ public enum TradeCategory {
 	}
 
 	public boolean isFlag() {
-		return this.equals(TradeCategory.Random) ||
-				this.equals(TradeCategory.All);
+		return this == ItemCategory.Random ||
+				this == ItemCategory.All;
 	}
 
-	public static TradeCategory roll() {
+	public static ItemCategory random() {
 		return Utils.randElement(rollableCategories);
 	}
 

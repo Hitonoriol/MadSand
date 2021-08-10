@@ -463,9 +463,14 @@ public abstract class Entity extends MapEntity {
 		return ret;
 	}
 
-	public void calcMovementSpeed() {
+	/* Movement animation speed (pixels per sec) */
+	protected float getMovementSpeed() {
 		float speed = getSpeed();
-		movementSpeed = speed / 17f + (float) Math.pow(Math.sqrt(speed), 1.225f) * 0.985f;
+		return speed / 17f + (float) Math.pow(Math.sqrt(speed), 1.225f) * 0.985f;
+	}
+
+	public void calcMovementSpeed() {
+		movementSpeed = getMovementSpeed();
 	}
 
 	public void speedUp(float by) {

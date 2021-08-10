@@ -2,12 +2,12 @@ package hitonoriol.madsand.properties;
 
 import java.util.Map;
 
-import hitonoriol.madsand.entities.TradeListContainer;
+import hitonoriol.madsand.entities.inventory.item.category.ItemCategories;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 
 public class NpcProp {
 	public static Map<Integer, NpcContainer> npcs;
-	public static TradeListContainer tradeLists = new TradeListContainer();
+	public static ItemCategories tradeLists = new ItemCategories();
 
 	public static AbstractNpc spawnNpc(int id, int x, int y) {
 		AbstractNpc npc = spawnNpc(id);

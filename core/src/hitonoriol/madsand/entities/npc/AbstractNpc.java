@@ -146,7 +146,7 @@ public abstract class AbstractNpc extends Entity {
 		int maxLvl = MadSand.player().getLvl() + MAX_LVL_GAP;
 		int lvl = Utils.rand(properties.lvl, maxLvl);
 
-		stats.roll(lvl);
+		stats.randomize(lvl);
 		this.lvl = lvl;
 		lvl -= properties.lvl; // Stats start increasing if lvl is > than npc's default level
 		stats.set(Stat.Dexterity, (int) (properties.dexterity + lvl * DEX_PER_LVL));

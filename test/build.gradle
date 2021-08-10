@@ -28,4 +28,6 @@ dependencies {
     implementation('org.junit.jupiter:junit-jupiter')
     implementation('org.junit.jupiter:junit-jupiter-engine')
     implementation('org.junit.platform:junit-platform-runner')
+    
+    compile 'de.vandermeer:asciitable:0.3.2'
 }

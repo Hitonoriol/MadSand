@@ -6,6 +6,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.entities.inventory.EquipStats;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
 public abstract class CombatEquipment extends AbstractEquipment {
@@ -52,6 +53,6 @@ public abstract class CombatEquipment extends AbstractEquipment {
 
 	@Override
 	protected String getMiscInfo() {
-		return equipStats.getString();
+		return identified() ? equipStats.getString() : ("[RED]Unidentified[]" + Resources.LINEBREAK);
 	}
 }

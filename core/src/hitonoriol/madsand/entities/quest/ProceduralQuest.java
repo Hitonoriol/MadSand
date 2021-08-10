@@ -12,7 +12,7 @@ import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.Faction;
 import hitonoriol.madsand.entities.inventory.item.Item;
-import hitonoriol.madsand.enums.TradeCategory;
+import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.NpcContainer;
 import hitonoriol.madsand.properties.NpcProp;
@@ -152,7 +152,7 @@ public class ProceduralQuest extends Quest {
 	}
 
 	private void randomResourceQuest() {
-		List<Item> items = NpcProp.tradeLists.roll(TradeCategory.Materials, 0);
+		List<Item> items = NpcProp.tradeLists.roll(ItemCategory.Materials, 0);
 		List<Integer> reqs = new ArrayList<>();
 
 		for (Item item : items)

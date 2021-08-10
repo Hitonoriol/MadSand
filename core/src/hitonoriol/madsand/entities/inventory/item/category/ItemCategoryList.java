@@ -1,6 +1,7 @@
-package hitonoriol.madsand.entities;
+package hitonoriol.madsand.entities.inventory.item.category;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import hitonoriol.madsand.entities.inventory.item.Item;
@@ -13,7 +14,7 @@ import hitonoriol.madsand.util.Utils;
  * ( and their <TradeCategory> -- in TradeListContainer ) 
  */
 
-public class TradeItemList {
+public class ItemCategoryList {
 
 	public static int DEFAULT_MIN_ROLLS = 3;
 	public static int DEFAULT_MAX_ROLLS = 10;
@@ -26,12 +27,12 @@ public class TradeItemList {
 	public static int BASE_ITEM_QUANTITY = 50;
 	public static int TIER_FACTOR = 5;
 
-	public TradeItemList(int tier) {
+	public ItemCategoryList(int tier) {
 		items = new ArrayList<>();
 		this.tier = tier;
 	}
 
-	public TradeItemList() {
+	public ItemCategoryList() {
 		this(0);
 	}
 
@@ -61,7 +62,7 @@ public class TradeItemList {
 
 	private static int TIER_MULTIPLIER = 3;
 
-	public ArrayList<Item> roll(ArrayList<Item> items) {
+	public List<Item> roll(List<Item> items) {
 		if (maxRolls < 1) {
 			minRolls = DEFAULT_MIN_ROLLS;
 			maxRolls = DEFAULT_MAX_ROLLS;
@@ -79,7 +80,7 @@ public class TradeItemList {
 		return Utils.rand(minRolls + tier * (TIER_MULTIPLIER / 2), maxRolls + tier * TIER_MULTIPLIER);
 	}
 
-	public TradeItemList add(int... itemList) {
+	public ItemCategoryList add(int... itemList) {
 
 		for (int item : itemList)
 			items.add(item);

@@ -93,12 +93,13 @@ public class PlayerStatDialog extends GameDialog {
 				PlayerStats stats = statLabels.getStats();
 				BaseStats baseStats = stats.baseStats;
 				int statSum = stats.getSum();
-
+				int curValue = baseStats.get(stat);
+				
 				if (inc) {
-					if (statSum < maxStatSum)
+					if (statSum < maxStatSum && curValue < BaseStats.MAX_LVL)
 						baseStats.increase(stat);
 				} else {
-					if (statSum > minStatSum && baseStats.get(stat) > 1)
+					if (statSum > minStatSum && curValue > 1)
 						baseStats.decrease(stat);
 				}
 				statLabels.refreshStatLabels();

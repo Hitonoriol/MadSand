@@ -4,7 +4,7 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.GameDialog;
-import hitonoriol.madsand.enums.TradeCategory;
+import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.util.Utils;
 
@@ -57,15 +57,15 @@ public class LuaUtils {
 		return Utils.oneOf(stringList);
 	}
 
-	public static TradeCategory lootCategory(String name) {
-		return TradeCategory.valueOf(name);
+	public static ItemCategory lootCategory(String name) {
+		return ItemCategory.valueOf(name);
 	}
 
-	public static int rollLoot(TradeCategory category, int tier) {
+	public static int rollLoot(ItemCategory category, int tier) {
 		return NpcProp.tradeLists.rollId(category, tier);
 	}
 
-	public static int rollLoot(TradeCategory category) {
+	public static int rollLoot(ItemCategory category) {
 		return rollLoot(category, -1);
 	}
 

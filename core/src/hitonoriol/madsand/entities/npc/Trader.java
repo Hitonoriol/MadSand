@@ -1,11 +1,11 @@
 package hitonoriol.madsand.entities.npc;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
-import hitonoriol.madsand.enums.TradeCategory;
+import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.NpcContainer;
 import hitonoriol.madsand.properties.NpcProp;
@@ -13,7 +13,7 @@ import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
 
 public class Trader extends AbstractNpc {
-	public TradeCategory tradeCategory;
+	public ItemCategory tradeCategory;
 
 	public Trader(NpcContainer protoNpc) {
 		super(protoNpc);
@@ -21,7 +21,7 @@ public class Trader extends AbstractNpc {
 
 		inventory.setMaxWeight(Integer.MAX_VALUE);
 		lvl = NpcProp.tradeLists.rollTier();
-		ArrayList<Item> items = NpcProp.tradeLists.roll(tradeCategory, lvl);
+		List<Item> items = NpcProp.tradeLists.roll(tradeCategory, lvl);
 
 		int markup;
 		for (Item item : items) {

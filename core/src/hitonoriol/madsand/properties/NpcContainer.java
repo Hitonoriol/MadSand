@@ -7,9 +7,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import hitonoriol.madsand.Enumerable;
 import hitonoriol.madsand.containers.rolltable.LootTable;
 import hitonoriol.madsand.entities.Faction;
+import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.entities.npc.Npc;
-import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.util.Utils;
 
 public class NpcContainer implements Enumerable {
@@ -25,7 +25,7 @@ public class NpcContainer implements Enumerable {
 	public ArrayList<Integer> projectiles;
 
 	public Faction faction = Faction.None;
-	public TradeCategory tradeCategory;
+	public ItemCategory tradeCategory;
 	public AbstractNpc.State defaultState;
 	public ArrayList<Integer> questList;
 

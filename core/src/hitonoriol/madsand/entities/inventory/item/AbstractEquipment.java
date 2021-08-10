@@ -16,7 +16,7 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 	public int hp = -1;
 	public int maxHp = hp;
 	public long uid = 0;
-	private boolean cursed = false;
+	private boolean cursed, identified;
 
 	public static ConditionalEffects<AbstractEquipment> textureFx = ConditionalEffects.create(fx -> fx
 			.addEffect(equipment -> Utils.percentRoll(fx.random(), 40),
@@ -36,20 +36,29 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 		if (protoItem.isProto()) {
 			uid = MadSand.world().itemCounter().incrementAndGet();
 			cursed = Utils.percentRoll(7.5);
+			identified = Utils.percentRoll(15);
 		} else {
 			uid = protoItem.uid;
 			cursed = protoItem.cursed;
+			identified = protoItem.identified;
 		}
 	}
 
-	public AbstractEquipment() {
-		super();
-	}
+	public AbstractEquipment() {}
 
 	@Override
 	public Item setQuantity(int quantity) {
 		this.quantity = 1;
 		return this;
+	}
+
+	public void identify() {
+		if (!identified)
+			identified = true;
+	}
+
+	public boolean identified() {
+		return identified;
 	}
 
 	@Override
@@ -105,6 +114,12 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 			return false;
 
 		return uid == ((AbstractEquipment) obj).uid;
+	}
+
+	@Override
+	public String getFullName() {
+		return (identified && cursed ? "[RED]Cursed[] " : "")
+				+ super.getFullName();
 	}
 
 	public static boolean isCursed(Item item) {

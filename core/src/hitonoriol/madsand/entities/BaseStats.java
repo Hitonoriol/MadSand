@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import hitonoriol.madsand.util.Utils;
 
 public class BaseStats extends HashMap<Stat, Integer> {
+	public static final int MAX_LVL = 35;
 	private static final int RAND_MAX = 8, RAND_MIN = 1;
 	private final static int ROLLABLE_STATS = Stat.rollableStats.size();
 	private static final int DEF_MAX_SUM = 15;
@@ -92,7 +93,32 @@ public class BaseStats extends HashMap<Stat, Integer> {
 		return maxStatSum - getSum();
 	}
 
-	public void roll(int lvl) {
+	private static double getEffectiveness(Stat stat, double lvl) {
+		switch (stat) {
+		case Luck:
+			return 0.034459925419825316 * Math.pow(lvl, 2)
+					+ 1.2751306598545928 * lvl
+					+ 0.6652992420539262;
+
+		case Accuracy:
+			return 0.057563520795230305 * Math.pow(lvl, 2)
+					+ 0.11036796858541652 * lvl
+					+ 25.60873585146606;
+
+		default:
+			return (lvl / MAX_LVL) * 100;
+		}
+	}
+
+	public double getEffectiveness(Stat stat) {
+		return getEffectiveness(stat, Math.min(MAX_LVL, get(stat)));
+	}
+
+	public boolean roll(Stat stat) {
+		return Utils.percentRoll(getEffectiveness(stat));
+	}
+
+	public void randomize(int lvl) {
 		final int maxStatVal = RAND_MAX + lvl;
 		maxStatSum += lvl * ROLLABLE_STATS;
 
@@ -105,7 +131,7 @@ public class BaseStats extends HashMap<Stat, Integer> {
 		}
 	}
 
-	public void roll() {
-		roll(0);
+	public void randomize() {
+		randomize(0);
 	}
 }

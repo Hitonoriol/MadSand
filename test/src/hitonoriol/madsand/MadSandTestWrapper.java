@@ -37,16 +37,19 @@ public class MadSandTestWrapper extends MadSand {
 		super.create();
 		Utils.disableTimestampOutput();
 		Player player = player();
-		player.stats.roll(10);
+		player.stats.randomize(10);
 		player.reinit();
 		enterWorld();
 		Utils.out();
 		launcher.registerTestExecutionListeners(listener, new TestListener());
 
-		if (testName == null)
+		if (testName == null) {
+			Utils.out("Running all tests");
 			runAll();
-		else
+		} else {
+			Utils.out("Running test %s", testName);
 			run(testName);
+		}
 		Gdx.app.exit();
 	}
 

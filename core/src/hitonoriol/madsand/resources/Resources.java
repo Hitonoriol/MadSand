@@ -39,8 +39,8 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.containers.AnimationContainer;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.containers.Pair.PairKeyDeserializer;
-import hitonoriol.madsand.entities.TradeListContainer;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.entities.inventory.item.category.ItemCategories;
 import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.map.ItemProducer;
 import hitonoriol.madsand.map.Tile;
@@ -147,7 +147,7 @@ public class Resources {
 	}
 
 	private static void loadTradeLists() {
-		NpcProp.tradeLists = load(TRADELIST_FILE, TradeListContainer.class);
+		NpcProp.tradeLists = load(TRADELIST_FILE, ItemCategories.class);
 	}
 
 	private static void loadTutorial() {

@@ -1,5 +1,6 @@
 package hitonoriol.madsand.map;
 
+import static hitonoriol.madsand.MadSand.player;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,14 +23,14 @@ import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.entities.TradeListContainer;
+import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Tool;
+import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.entities.npc.Npc;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.enums.Direction;
-import hitonoriol.madsand.enums.TradeCategory;
 import hitonoriol.madsand.gui.widgets.waypoint.StaticWaypointArrow;
 import hitonoriol.madsand.gui.widgets.waypoint.WaypointArrow;
 import hitonoriol.madsand.map.object.Crop;
@@ -268,7 +269,7 @@ public class Map {
 	}
 
 	public Pair getRandomPoint(int distanceFromPlayer, int maxDistanceFromPlayer) {
-		Player player = MadSand.player();
+		Player player = player();
 		int x, y;
 		int distance;
 
@@ -815,11 +816,17 @@ public class Map {
 			putLoot(x, y, item);
 	}
 
-	public void putLoot(int x, int y, TradeCategory category, int maxRolls) {
-		TradeListContainer trade = NpcProp.tradeLists;
-		ArrayList<Item> items = trade.roll(category, trade.rollTier());
-		for (int i = 0; i < maxRolls && i < items.size(); ++i)
-			putLoot(x, y, items.get(i));
+	public void putLoot(int x, int y, ItemCategory category, int maxItems) {
+		List<Item> items = NpcProp.tradeLists.roll(category);
+		putLoot(x, y, items.subList(0, Math.min(items.size(), maxItems)));
+	}
+
+	public void putLoot(int x, int y, ItemCategory category) {
+		putLoot(x, y, category, Utils.rand(1, player().stats().get(Stat.Luck)));
+	}
+
+	public void putLoot(int x, int y) {
+		putLoot(x, y, ItemCategory.random());
 	}
 
 	public boolean putCrop(int x, int y, int id) { // item id
