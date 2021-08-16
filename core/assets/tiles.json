@@ -85,7 +85,12 @@
 		"onInteract" : "-1",
 		"altItems" : null,
 		"name" : "Wooden floor",
-		"foreground" : false
+		"foreground" : false,
+		"placeable" : {
+			"recipe" : "1/1",
+			"cost" : 4,
+			"weight" : 1.0
+		}
 	},
 
 	"10" : {
@@ -109,7 +114,11 @@
 		"onInteract" : "-1",
 		"altItems" : null,
 		"name" : "Stone floor",
-		"foreground" : false
+		"foreground" : false,
+		"placeable" : {
+			"cost" : 5,
+			"weight" : 1
+		}
 	},
 
 	"13" : {
@@ -117,7 +126,11 @@
 		"onInteract" : "-1",
 		"altItems" : null,
 		"name" : "Stone floor",
-		"foreground" : false
+		"foreground" : false,
+		"placeable" : {
+			"cost" : 5,
+			"weight" : 1
+		}
 	},
 
 	"14" : {
@@ -125,7 +138,11 @@
 		"onInteract" : "-1",
 		"altItems" : null,
 		"name" : "Stone floor",
-		"foreground" : false
+		"foreground" : false,
+		"placeable" : {
+			"cost" : 5,
+			"weight" : 1
+		}
 	},
 
 	"15" : {
@@ -165,7 +182,12 @@
 		"onInteract" : "-1",
 		"altItems" : null,
 		"name" : "Gray brick floor",
-		"foreground" : false
+		"foreground" : false,
+		"placeable" : {
+			"recipe" : "5/1",
+			"cost" : 3,
+			"weight" : 1.0
+		}
 	},
 
 	"20" : {
@@ -419,7 +441,13 @@
 	},
 	
 	"51" : {
-		"name" : "Gravel path"
+		"name" : "Gravel path",
+		"placeable" : {
+			"recipe" : "2/1:9/1",
+			"craftQuantity" : 10,
+			"cost" : 0,
+			"weight" : 0.1
+		}
 	}
 	
 }

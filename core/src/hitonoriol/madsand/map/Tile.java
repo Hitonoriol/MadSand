@@ -7,13 +7,13 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import hitonoriol.madsand.Enumerable;
+import hitonoriol.madsand.entities.inventory.item.PlaceableItem;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.resources.Resources;
 
-public class Tile implements Enumerable {
+public class Tile implements Placeable {
 	@JsonIgnore
 	private int id;
 
@@ -85,6 +85,19 @@ public class Tile implements Enumerable {
 
 	public int getLightLevel() {
 		return lightLevel;
+	}
+
+	@Override
+	public void createPlaceable(PlaceableItem item) {
+		createPlaceable(item, () -> {
+			item.name = this.name;
+			item.setType(PlaceableItem.Type.Tile);
+		});
+	}
+
+	@Override
+	public void createPlaceableTexture(String name) {
+		Resources.getAtlas().addRegion(name, Resources.getTile(id));
 	}
 
 	@Override

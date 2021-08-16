@@ -41,7 +41,8 @@ import me.xdrop.fuzzywuzzy.FuzzySearch;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
 @JsonSubTypes({ @Type(Armor.class), @Type(Consumable.class), @Type(CropSeeds.class), @Type(FishingBait.class),
-		@Type(GrabBag.class), @Type(Placeable.class), @Type(Projectile.class), @Type(Tool.class), @Type(Weapon.class),
+		@Type(GrabBag.class), @Type(PlaceableItem.class), @Type(Projectile.class), @Type(Tool.class),
+		@Type(Weapon.class),
 		@Type(ScriptedConsumable.class) })
 public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumerable {
 	private final static char NON_UNLOCKABLE_CHAR = 'X';
@@ -55,6 +56,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 
 	private static Map<Item, Texture> dynamicTxPool = new HashMap<>();
 	private static Map<Item, TextureProcessor> effectQueue = new HashMap<>();
+	private static int lastId = 0;
 
 	protected int id;
 	public int quantity;
@@ -94,12 +96,17 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 	public int id() {
 		return id;
 	}
-	
+
 	@Override
 	public void setId(int id) {
 		this.id = id;
+		lastId = Math.max(id, lastId);
 	}
 	
+	public static int getLastId() {
+		return lastId;
+	}
+
 	public Item setQuantity(int quantity) {
 		this.quantity = quantity;
 		return this;

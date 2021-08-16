@@ -3,7 +3,7 @@ package hitonoriol.madsand.entities.inventory.item;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.properties.CropContainer;
 
-public class CropSeeds extends Placeable {
+public class CropSeeds extends PlaceableItem {
 	public CropContainer cropContainer;
 	
 	public CropSeeds(CropSeeds protoItem) {

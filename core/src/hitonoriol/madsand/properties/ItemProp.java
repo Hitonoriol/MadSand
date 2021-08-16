@@ -6,7 +6,7 @@ import java.util.Map;
 
 import hitonoriol.madsand.entities.inventory.item.CropSeeds;
 import hitonoriol.madsand.entities.inventory.item.Item;
-import hitonoriol.madsand.entities.inventory.item.Placeable;
+import hitonoriol.madsand.entities.inventory.item.PlaceableItem;
 import hitonoriol.madsand.map.CropGrowthStageContainer;
 import hitonoriol.madsand.resources.Resources;
 
@@ -54,7 +54,7 @@ public class ItemProp {
 	}
 
 	public static int getAltObject(int id) {
-		return ((Placeable)items.get(id)).getAltObject();
+		return ((PlaceableItem)items.get(id)).getAltObject();
 	}
 
 	public static String getOnUseAction(int id) {

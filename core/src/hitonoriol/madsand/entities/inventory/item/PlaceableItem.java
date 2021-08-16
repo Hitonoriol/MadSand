@@ -3,28 +3,26 @@ package hitonoriol.madsand.entities.inventory.item;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.properties.ObjectProp;
-import hitonoriol.madsand.util.Utils;
 
-public class Placeable extends Item {
+public class PlaceableItem extends Item {
 	private Type type;
 	private int altObject; // id of tile/object to be placed when this item is used
 	private boolean directional = false;
 
-	public Placeable(Placeable protoItem) {
+	public PlaceableItem(PlaceableItem protoItem) {
 		super(protoItem);
 		altObject = protoItem.altObject;
 		type = protoItem.type;
 		directional = protoItem.directional;
 	}
 
-	public Placeable() {
+	public PlaceableItem() {
 		super();
 	}
 
 	@Override
-	public Placeable copy() {
-		return new Placeable(this);
+	public PlaceableItem copy() {
+		return new PlaceableItem(this);
 	}
 
 	@Override
@@ -38,10 +36,8 @@ public class Placeable extends Item {
 	}
 
 	@JsonSetter("altObject")
-	public void setAltObject(String value) {
-		altObject = Utils.val(value);
-		if (type == Type.Object)
-			ObjectProp.getObject(altObject).setDropOnDestruction(id);
+	public void setAltObject(int value) {
+		altObject = value;
 	}
 
 	public boolean isDirectional() {
@@ -50,6 +46,10 @@ public class Placeable extends Item {
 
 	public Type getType() {
 		return type;
+	}
+
+	public void setType(Type type) {
+		this.type = type;
 	}
 
 	public int getAltObject() {

@@ -2,6 +2,7 @@ package hitonoriol.madsand.properties;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import hitonoriol.madsand.Enumerable;
@@ -51,6 +52,7 @@ public class NpcContainer implements Enumerable {
 			return type.getDeclaredConstructor(this.getClass()).newInstance(this);
 		} catch (Exception e) {
 			e.printStackTrace();
+			Gdx.app.exit();
 			return null;
 		}
 	}

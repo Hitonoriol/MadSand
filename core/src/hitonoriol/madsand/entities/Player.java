@@ -43,7 +43,7 @@ import hitonoriol.madsand.entities.inventory.item.CropSeeds;
 import hitonoriol.madsand.entities.inventory.item.FishingBait;
 import hitonoriol.madsand.entities.inventory.item.GrabBag;
 import hitonoriol.madsand.entities.inventory.item.Item;
-import hitonoriol.madsand.entities.inventory.item.Placeable;
+import hitonoriol.madsand.entities.inventory.item.PlaceableItem;
 import hitonoriol.madsand.entities.inventory.item.Projectile;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.inventory.item.Weapon;
@@ -145,11 +145,11 @@ public class Player extends Entity {
 		refreshAvailableRecipes();
 		setFov();
 	}
-	
+
 	public void finishCreation() {
 		newlyCreated = false;
 	}
-	
+
 	public boolean uninitialized() {
 		return newlyCreated;
 	}
@@ -319,10 +319,12 @@ public class Player extends Entity {
 		scheduledAction = null;
 	}
 
-	public void addExp(double amount) {
+	public double addExp(double amount) {
 		double coef = 1d + stats().baseStats.getEffectiveness(Stat.Intelligence) * 0.02;
-		stats().skills.increaseSkill(Skill.Level, amount * coef);
+		double actualExp = amount * coef;
+		stats().skills.increaseSkill(Skill.Level, actualExp);
 		Gui.refreshOverlay();
+		return actualExp;
 	}
 
 	@Override
@@ -437,10 +439,11 @@ public class Player extends Entity {
 			damageHeldEquipment();
 		}
 
-		if (npc.stats.dead) {
+		if (npc.isDead()) {
 			Mouse.refreshTooltip();
-			MadSand.notice("You kill " + npc.stats.name + "! [+" + npc.rewardExp + " exp]");
-			addExp(npc.rewardExp);
+			MadSand.notice("You kill %s! [+%d exp]",
+					npc.getName(),
+					(int) addExp(npc.rewardExp * Math.sqrt(getLvl() * 0.05)));
 			reputation.change(npc.stats.faction, Reputation.KILL_PENALTY);
 
 			if (addToKillCount(npc.id)) // If killed for the first time
@@ -967,9 +970,9 @@ public class Player extends Entity {
 			MadSand.warn("You opened " + item.name + ", but it was empty");
 	}
 
-	public void useItem(Placeable item) {
+	public void useItem(PlaceableItem item) {
 		Map map = MadSand.world().getCurLoc();
-		if (item.getType() == Placeable.Type.Object) {
+		if (item.getType() == PlaceableItem.Type.Object) {
 			MapObject object = map.addObject(x, y, stats.look, item.getAltObject());
 			if (item.isDirectional())
 				object.setDirection(stats.look);

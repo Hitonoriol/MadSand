@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
@@ -16,6 +15,7 @@ import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.entities.quest.QuestWorker;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.map.Map;
 
@@ -36,16 +36,6 @@ public class QuestJournal extends GameDialog {
 	static float OBJECTIVE_LABEL_WIDTH = 200;
 	static float NPC_INFO_LABEL_WIDTH = 200;
 
-	Skin skin = Gui.skin;
-	static String titleString = "Quest Journal";
-	static String statusString = "Status";
-	static String nameString = "Quest";
-	static String reqString = "Objectives";
-	static String closeText = "Close";
-	static String inProgressString = "[ORANGE]In Progress[]";
-	static String completedString = "[LIME]Complete[]";
-	static String emptyJournalString = "Your journal is empty";
-
 	QuestWorker quests;
 
 	AutoFocusScrollPane questScroll;
@@ -60,17 +50,12 @@ public class QuestJournal extends GameDialog {
 		super.getTitleTable().padTop(TITLE_YPADDING).align(Align.center);
 		super.getTitleLabel().setAlignment(Align.center);
 
-		statusLabel = new Label(statusString, skin);
-		nameLabel = new Label(nameString, skin);
-		reqLabel = new Label(reqString, skin);
-		npcLocationLabel = new Label("Turn in to", skin);
-		emptyJournalLabel = new Label(emptyJournalString, skin);
-		closeButton = new TextButton(closeText, skin);
-
-		Gui.setFontSize(statusLabel, Gui.FONT_M);
-		Gui.setFontSize(nameLabel, Gui.FONT_M);
-		Gui.setFontSize(reqLabel, Gui.FONT_M);
-		Gui.setFontSize(npcLocationLabel, Gui.FONT_M);
+		statusLabel = createTitle("Status");
+		nameLabel = createTitle("Quest");
+		reqLabel = createTitle("Objectives");
+		npcLocationLabel = createTitle("Turn in to");
+		emptyJournalLabel = createTitle("Your journal is empty");
+		closeButton = new TextButton("Close", Gui.skin);
 
 		questTable = new Table();
 		questTable.setBackground(Gui.darkBackgroundSizeable);
@@ -81,14 +66,19 @@ public class QuestJournal extends GameDialog {
 		questScroll.setScrollingDisabled(true, false);
 
 		super.add(questScroll).minSize(TABLE_WIDTH, TABLE_HEIGHT).padTop(SCROLL_YPADDING).row();
-		super.add(closeButton).size(Gui.BTN_WIDTH, GameDialog.BTN_HEIGHT).padBottom(CLOSE_BUTTON_YPADDING).row();
+		super.add(closeButton).size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT).padBottom(CLOSE_BUTTON_YPADDING).row();
 		Gui.setAction(closeButton, () -> remove());
+		pack();
+	}
+
+	private Label createTitle(String text) {
+		return Widgets.label(text, Gui.FONT_M);
 	}
 
 	public void refresh() {
 		questTable.clear();
 		questTable.align(Align.topLeft);
-		questTable.setSkin(skin);
+		questTable.setSkin(Gui.skin);
 		questTable.add(statusLabel).size(STATUS_LABEL_WIDTH, ENTRY_HEIGHT).padBottom(HEADER_YPADDING);
 		questTable.add(nameLabel).size(NAME_LABEL_WIDTH, ENTRY_HEIGHT).padBottom(HEADER_YPADDING);
 		questTable.add(reqLabel).size(OBJECTIVE_LABEL_WIDTH, ENTRY_HEIGHT).padBottom(HEADER_YPADDING);
@@ -107,12 +97,12 @@ public class QuestJournal extends GameDialog {
 		AbstractNpc npc;
 		for (Quest quest : allQuests) {
 			quest.setPlayer(MadSand.player());
-			questName = new Label(quest.name, skin);
+			questName = new Label(quest.name, Gui.skin);
 			questName.setWrap(true);
 			questName.setAlignment(Align.topLeft);
-			questObjective = new Label(quest.getObjectiveString(), skin);
+			questObjective = new Label(quest.getObjectiveString(), Gui.skin);
 			questObjective.setWrap(true);
-			npcInfo = new Label("", skin);
+			npcInfo = new Label("", Gui.skin);
 			npcInfo.setWrap(true);
 
 			npc = quest.getNpc();
@@ -135,7 +125,9 @@ public class QuestJournal extends GameDialog {
 	}
 
 	private Label createProgressLabel(boolean inProgress) {
-		Label label = inProgress ? new Label(inProgressString, skin) : new Label(completedString, skin);
+		Label label = inProgress
+				? new Label("[ORANGE]In Progress[]", Gui.skin)
+				: new Label("[LIME]Complete[]", Gui.skin);
 		label.setAlignment(Align.topLeft);
 		return label;
 	}

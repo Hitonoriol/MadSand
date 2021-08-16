@@ -20,9 +20,9 @@ import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.HashMapFactory;
-import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.gui.dialogs.InputDialog;
+import hitonoriol.madsand.gui.dialogs.SelectDialog;
 import hitonoriol.madsand.minigames.blackjack.BlackJackUI;
 import hitonoriol.madsand.minigames.farkle.FarkleUI;
 import hitonoriol.madsand.minigames.videopoker.VideoPokerUI;
@@ -32,7 +32,6 @@ import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.screens.WorldRenderer;
 import hitonoriol.madsand.util.TimeUtils;
-import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
 
 public class Keyboard {
@@ -88,9 +87,14 @@ public class Keyboard {
 
 		/* Debug keys */
 		if (Globals.debugMode) {
-			GameDialog minigames[] = { new BlackJackUI(), new VideoPokerUI(), new FarkleUI() };
 			keyBinds.bind(Keys.Z, () -> Globals.debugMode = !Globals.debugMode)
-					.bind(Keys.BACKSPACE, () -> Utils.randElement(minigames).show())
+					.bind(Keys.BACKSPACE, () -> {
+						new SelectDialog("Minigame test")
+								.addOption("BlackJack", () -> new BlackJackUI().show())
+								.addOption("Videopoker", () -> new VideoPokerUI().show())
+								.addOption("Farkle", () -> new FarkleUI().show())
+								.show();
+					})
 					.bind(Keys.F5, () -> {
 						World world = world();
 						world.skipToNextHour();

@@ -12,6 +12,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.mutable.MutableLong;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Timer;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
@@ -573,16 +574,11 @@ public class World {
 		getCurLoc().purge();
 	}
 
-	public int getTileOrDefault(int x, int y) {
-		if (!getCurLoc().validCoords(x, y))
-			return getDefaultTile();
-		else {
-			int tile = getCurLoc().getTile(x, y).id();
-			if (tile >= 0)
-				return tile;
-			else
-				return getDefaultTile();
-		}
+	public TextureRegion getTileOrDefault(int x, int y) {
+		Map map = getCurLoc();
+		return Resources.getTile(map.validCoords(x, y)
+				? map.getTile(x, y).id()
+				: getDefaultTile());
 	}
 
 	private static int H_DAY = 24;

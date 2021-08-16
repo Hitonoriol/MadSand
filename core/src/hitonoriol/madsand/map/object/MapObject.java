@@ -16,17 +16,18 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
-import hitonoriol.madsand.Enumerable;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.PlayerStats;
+import hitonoriol.madsand.entities.inventory.item.PlaceableItem;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
+import hitonoriol.madsand.map.Placeable;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.resources.Resources;
@@ -36,7 +37,7 @@ import hitonoriol.madsand.util.Utils;
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
 @JsonSubTypes({ @Type(CraftingStation.class), @Type(ItemFactory.class), @Type(ResourceObject.class),
 		@Type(ItemPipeline.class), @Type(Waypoint.class) })
-public class MapObject extends MapEntity implements Enumerable {
+public class MapObject extends MapEntity implements Placeable {
 	public static final int NULL_OBJECT_ID = 0;
 	public static final int COLLISION_MASK_ID = 666;
 
@@ -301,6 +302,20 @@ public class MapObject extends MapEntity implements Enumerable {
 
 	public static MapObject create(int id) {
 		return ObjectProp.getObject(id).copy();
+	}
+
+	@Override
+	public void createPlaceable(PlaceableItem item) {
+		createPlaceable(item, () -> {
+			item.name = getName();
+			item.setType(PlaceableItem.Type.Object);
+			setDropOnDestruction(item.id());
+		});
+	}
+
+	@Override
+	public void createPlaceableTexture(String name) {
+		Resources.getAtlas().addRegion(name, getTexture());
 	}
 
 	@Override

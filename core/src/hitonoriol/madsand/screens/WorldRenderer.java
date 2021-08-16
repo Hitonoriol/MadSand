@@ -189,7 +189,7 @@ public class WorldRenderer {
 			if (!map.validCoords(x, y) && MadSand.world().isUnderGround()) // Don't render default tile while underground
 				return;
 
-			batch.draw(Resources.getTile(MadSand.world().getTileOrDefault(x, y)), x * TILESIZE, y * TILESIZE);
+			batch.draw(MadSand.world().getTileOrDefault(x, y), x * TILESIZE, y * TILESIZE);
 		});
 
 		player.forEachInFov((x, y) -> { // Render objects, loot, NPCs and player

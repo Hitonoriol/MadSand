@@ -2,9 +2,11 @@ package hitonoriol.madsand.resources;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Queue;
 import java.util.function.Consumer;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -23,6 +25,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -97,6 +100,7 @@ public class Resources {
 	public static final String LINEBREAK = System.lineSeparator();
 	public static String COLOR_END = "[]";
 
+	private final static Queue<Runnable> initQueue = new ArrayDeque<>();
 	private final static ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 	private final static TypeFactory typeFactory = mapper.getTypeFactory();
 
@@ -127,6 +131,14 @@ public class Resources {
 		Globals.values().loadMisc();
 		System.gc();
 		Utils.out("Done loading resources.");
+	}
+
+	public static void deferInit(Runnable initTask) {
+		initQueue.add(initTask);
+	}
+
+	private static void finalizeInit() {
+		initQueue.forEach(action -> action.run());
 	}
 
 	private static void loadActionAnimations() {
@@ -176,6 +188,7 @@ public class Resources {
 
 	private static void loadItems() {
 		ItemProp.items = loadEnumerableMap(ITEM_FILE, Item.class, item -> item.initRecipe());
+		finalizeInit();
 		Utils.out("%d items (%d craftable)", ItemProp.items.size(), ItemProp.craftReq.size());
 	}
 
@@ -258,13 +271,26 @@ public class Resources {
 		return Gdx.files.internal(file).readString();
 	}
 
-	public static <T> T load(String internalFile, Class<T> type) {
+	public static <T> T loadString(String jsonStr, Class<T> type) {
 		try {
-			return mapper.readerFor(type).readValue(readInternal(internalFile));
+			return mapper.readerFor(type).readValue(jsonStr);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public static <T> T load(TreeNode node, Class<T> type) {
+		try {
+			return mapper.treeToValue(node, type);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static <T> T load(String internalFile, Class<T> type) {
+		return loadString(readInternal(internalFile), type);
 	}
 
 	public static void save(String file, Object object) {

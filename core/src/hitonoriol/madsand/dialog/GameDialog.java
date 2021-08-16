@@ -23,7 +23,6 @@ import hitonoriol.madsand.screens.AbstractScreen;
 import hitonoriol.madsand.util.TimeUtils;
 
 public class GameDialog extends Dialog {
-	public static final float BTN_HEIGHT = 35;
 	private static final float TITLE_YPAD = 18, TITLE_XPAD = 3;
 	private static final float TEXT_YPAD = 15, BTN_TEXT_XPAD = 30;
 	public static final float WIDTH = 500, HEIGHT = 250, PADDING = 10;
@@ -167,7 +166,7 @@ public class GameDialog extends Dialog {
 
 		Cell<TextButton> cell = add(button)
 				.width(Math.max(Gui.BTN_WIDTH, Gui.getTextWidth(button.getText()) + BTN_TEXT_XPAD))
-				.height(BTN_HEIGHT)
+				.height(Gui.BTN_HEIGHT)
 				.padBottom(PADDING / 2);
 		if (breakRow)
 			cell.row();
@@ -206,7 +205,7 @@ public class GameDialog extends Dialog {
 	}
 
 	public Cell<TextButton> addCloseButton() {
-		return addCloseButton(Gui.BTN_WIDTH, BTN_HEIGHT);
+		return addCloseButton(Gui.BTN_WIDTH, Gui.BTN_HEIGHT);
 	}
 
 	public void setPrefSize(float width, float height) {

@@ -227,13 +227,9 @@ public class Map {
 
 	@JsonIgnore
 	public int getHostileNpcCount() {
-		int count = 0;
-
-		for (Entry<Pair, AbstractNpc> entry : mapNpcs.entrySet())
-			if (!entry.getValue().friendly)
-				++count;
-
-		return count;
+		return mapNpcs.values().stream()
+				.filter(npc -> !npc.isNeutral())
+				.mapToInt(npc -> 1).sum();
 	}
 
 	public Pair rayCast(Pair from, Pair to) {
