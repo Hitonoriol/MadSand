@@ -77,7 +77,6 @@ import hitonoriol.madsand.map.object.ResourceObject;
 import hitonoriol.madsand.pathfinding.Path;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
-import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.resources.Resources;
@@ -620,7 +619,7 @@ public class Player extends Entity {
 		return true;
 	}
 
-	private boolean unlockRandomRecipe(HashMap<Integer, ArrayList<Integer>> reqMap, List<Integer> recipes) {
+	private boolean unlockRandomRecipe(java.util.Map<Integer, List<Integer>> reqMap, List<Integer> recipes) {
 		Set<Integer> availableRecipes;
 
 		if (recipes == craftRecipes)
@@ -672,7 +671,7 @@ public class Player extends Entity {
 		unlockRecipe(buildRecipes, recipe);
 	}
 
-	private void refreshRecipes(HashMap<Integer, ArrayList<Integer>> reqMap, List<Integer> recipeList) {
+	private void refreshRecipes(java.util.Map<Integer, List<Integer>> reqMap, List<Integer> recipeList) {
 		List<Integer> newlyUnlockedItems = new ArrayList<>();
 		reqMap.forEach((itemId, craftReqs) -> {
 			if (!ItemProp.getItem(itemId).isRecipeUnlockable())
@@ -1417,7 +1416,7 @@ public class Player extends Entity {
 
 		// Not-so-random material of tier #<settlementsEstablished>
 		Item requiredResource = Item.create(
-				NpcProp.tradeLists.getTradeItemList(ItemCategory.Materials, settlementsEstablished)
+				ItemProp.itemCategories.getItemList(ItemCategory.Materials, settlementsEstablished)
 						.getRandomId(new Random(settlementsEstablished)));
 		requiredResource.quantity = SETTLEMENT_RES_COST * (settlementsEstablished + 1);
 		items.add(requiredResource);

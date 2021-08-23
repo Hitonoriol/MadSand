@@ -73,10 +73,9 @@ public class ItemCategoryList {
 		return Utils.rand(minRolls + tier * (TIER_MULTIPLIER / 2), maxRolls + tier * TIER_MULTIPLIER);
 	}
 
-	public ItemCategoryList add(int... itemList) {
-
-		for (int item : itemList)
-			items.add(item);
+	public ItemCategoryList add(int... items) {
+		for (int item : items)
+			this.items.add(item);
 
 		return this;
 	}

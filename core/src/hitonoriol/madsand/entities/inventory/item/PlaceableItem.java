@@ -3,6 +3,7 @@ package hitonoriol.madsand.entities.inventory.item;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 
 public class PlaceableItem extends Item {
 	private Type type;
@@ -54,6 +55,11 @@ public class PlaceableItem extends Item {
 
 	public int getAltObject() {
 		return altObject;
+	}
+	
+	@Override
+	public void initCategory() {
+		setCategory(ItemCategory.Building);
 	}
 
 	public static enum Type {

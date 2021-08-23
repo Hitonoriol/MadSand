@@ -43,7 +43,6 @@ import hitonoriol.madsand.containers.AnimationContainer;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.containers.Pair.PairKeyDeserializer;
 import hitonoriol.madsand.entities.inventory.item.Item;
-import hitonoriol.madsand.entities.inventory.item.category.ItemCategories;
 import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.map.ItemProducer;
 import hitonoriol.madsand.map.Tile;
@@ -66,7 +65,6 @@ public class Resources {
 	static String WORLDGEN_FILE = "worldgen.json";
 	static String ENCOUNTER_FILE = "encounters.json";
 	static String TUTORIAL_FILE = "tutorial.json";
-	static String TRADELIST_FILE = "tradelists.json";
 	static String TILE_FILE = "tiles.json";
 	static String OBJECT_FILE = "objects.json";
 	static String ITEMFACTORY_FILE = "itemfactories.json";
@@ -125,7 +123,6 @@ public class Resources {
 		loadWorldGen();
 		loadQuests();
 		loadNpcs();
-		loadTradeLists();
 		loadTutorial();
 		loadActionAnimations();
 		Globals.values().loadMisc();
@@ -158,10 +155,6 @@ public class Resources {
 		mapper.registerModule(simpleModule);
 	}
 
-	private static void loadTradeLists() {
-		NpcProp.tradeLists = load(TRADELIST_FILE, ItemCategories.class);
-	}
-
 	private static void loadTutorial() {
 		Tutorial.strings = loadMap(TUTORIAL_FILE, String.class, String.class);
 	}
@@ -189,6 +182,9 @@ public class Resources {
 	private static void loadItems() {
 		ItemProp.items = loadEnumerableMap(ITEM_FILE, Item.class, item -> item.initRecipe());
 		finalizeInit();
+		ItemProp.items.forEach((id, item) -> {
+			item.initCategory();
+		});
 		Utils.out("%d items (%d craftable)", ItemProp.items.size(), ItemProp.craftReq.size());
 	}
 

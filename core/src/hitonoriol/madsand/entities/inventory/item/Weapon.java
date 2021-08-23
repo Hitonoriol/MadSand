@@ -2,6 +2,7 @@ package hitonoriol.madsand.entities.inventory.item;
 
 import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
+import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 
 public class Weapon extends CombatEquipment {
 
@@ -44,6 +45,11 @@ public class Weapon extends CombatEquipment {
 		return null;
 	}
 
+	@Override
+	protected ItemCategory combatCategory() {
+		return ItemCategory.Weapons;
+	}
+	
 	public static enum Type {
 		MeleeWeapon, OffhandWeapon, RangedWeapon
 	}

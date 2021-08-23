@@ -5,7 +5,8 @@
 		"@type" : "PlaceableItem",
 		"type" : "Object",
 		"altObject" : 9,
-		"cost" : 5		
+		"cost" : 5,
+		"category" : {"Materials":0}
 	},
 	"2" : {
 		"@type" : "Item",
@@ -13,7 +14,8 @@
 		"craftQuantity" : 4,
 		"recipe" : "25/1",
 		"cost" : 3,
-		"weight" : 0.6
+		"weight" : 0.6,
+		"category" : {"Materials":0}
 	},
 	"3" : {
 		"@type" : "Tool",
@@ -34,13 +36,15 @@
 		"healAmount" : 5,
 		"cost" : 15,
 		"@type" : "Consumable",
-		"weight" : 0.7
+		"weight" : 0.7,
+		"category" : {"Food":2}
 	},
 	"5" : {
 		"@type" : "Item",
 		"name" : "Clay",
 		"cost" : 3,
-		"weight" : 0.3
+		"weight" : 0.3,
+		"category" : {"Materials":0}
 	},
 	"6" : {
 		"name" : "Stone shovel",
@@ -59,7 +63,8 @@
 		"healAmount" : 1,
 		"cost" : 7,
 		"@type" : "Consumable",
-		"weight" : 0.05
+		"weight" : 0.05,
+		"category" : {"Food":1}
 	},
 	"8" : {
 		"@type" : "Item",
@@ -67,13 +72,15 @@
 		"recipe" : "1/1",
 		"craftQuantity" : 3,
 		"cost" : 4,
-		"weight" : 0.2
+		"weight" : 0.2,
+		"category" : {"Materials":0}
 	},
 	"9" : {
 		"@type" : "Item",
 		"name" : "Flint",
 		"cost" : 5,
-		"weight" : 0.1
+		"weight" : 0.1,
+		"category" : {"Materials":0}
 	},
 	"10" : {
 		"name" : "Hewn rock",
@@ -82,7 +89,8 @@
 		"cost" : 7,
 		"@type" : "PlaceableItem",
 		"type" : "Object",
-		"weight" : 1.5
+		"weight" : 1.5,
+		"category" : {"Building":0}
 	},
 	"11" : {
 		"name" : "Stone pickaxe",
@@ -111,7 +119,7 @@
 	"13" : {
 		"name" : "Iron sword",
 		"recipe" : "155|23/15:8/10",
-		"cost" : 29,
+		"cost" : 50,
 		"@type" : "Weapon",
 		"type" : "MeleeWeapon",
 		"weight" : 1.0,
@@ -123,11 +131,11 @@
 	"14" : {
 		"name" : "Iron helmet",
 		"recipe" : "155|23/25",
-		"cost" : 32,
+		"cost" : 50,
 		"@type" : "Armor",
 		"type" : "HeadArmor",
 		"weight" : 1.1,
-		"lvl" : 3,
+		"lvl" : 2,
 		"equipStats" : {
 			"stats":{
 			"Defense" : 4
@@ -137,7 +145,7 @@
 	"15" : {
 		"name" : "Iron shield",
 		"recipe" : "155|23/25",
-		"cost" : 35,
+		"cost" : 50,
 		"@type" : "Armor",
 		"type" : "Shield",
 		"weight" : 1.1,
@@ -165,7 +173,7 @@
 	"17" : {
 		"name" : "Iron platemail",
 		"recipe" : "155|23/30",
-		"cost" : 49,
+		"cost" : 51,
 		"@type" : "Armor",
 		"type" : "ChestArmor",
 		"weight" : 1.4,
@@ -179,7 +187,7 @@
 	"18" : {
 		"name" : "Chainmail",
 		"recipe" : "X72/20:69/5",
-		"cost" : 40,
+		"cost" : 75,
 		"@type" : "Armor",
 		"type" : "ChestArmor",
 		"weight" : 1.3,
@@ -227,19 +235,22 @@
 	"22" : {
 		"@type" : "Item",
 		"name" : "Leather",
-		"cost" : 5
+		"cost" : 5,
+		"category" : {"Materials":1}
 	},
 	"23" : {
 		"@type" : "Item",
 		"name" : "Iron ore",
 		"cost" : 16,
-		"weight" : 0.7
+		"weight" : 0.7,
+		"category" : {"Materials":2}
 	},
 	"24" : {
 		"@type" : "Item",
 		"name" : "Gold ore",
 		"cost" : 30,
-		"weight" : 0.7
+		"weight" : 0.7,
+		"category" : {"Materials":2}
 	},
 	"25" : {
 		"name" : "Stone",
@@ -247,31 +258,36 @@
 		"cost" : 1,
 		"@type" : "PlaceableItem",
 		"type" : "Object",
-		"weight" : 1.0
+		"weight" : 1.0,
+		"category" : {"Building":0}
 	},
 	"28" : {
 		"@type" : "Item",
 		"name" : "Ruby",
 		"cost" : 30,
-		"weight" : 0.1
+		"weight" : 0.1,
+		"category" : {"Materials":4}
 	},
 	"29" : {
 		"@type" : "Item",
 		"name" : "Sapphire",
 		"cost" : 45,
-		"weight" : 0.1
+		"weight" : 0.1,
+		"category" : {"Materials":4}
 	},
 	"30" : {
 		"@type" : "Item",
 		"name" : "Diamond",
 		"cost" : 75,
-		"weight" : 0.1
+		"weight" : 0.1,
+		"category" : {"Materials":4}
 	},
 	"31" : {
 		"@type" : "Item",
 		"name" : "Emerald",
 		"cost" : 60,
-		"weight" : 0.1
+		"weight" : 0.1,
+		"category" : {"Materials":4}
 	},
 	"39" : {
 		"name" : "Cucumber",
@@ -280,7 +296,8 @@
 		"healAmount" : 2,
 		"cost" : 9,
 		"@type" : "Consumable",
-		"weight" : 0.15
+		"weight" : 0.15,
+		"category" : {"Food":1}
 	},
 	"40" : {
 		"name" : "Cucumber seeds",
@@ -330,7 +347,8 @@
 		"healAmount" : 2,
 		"cost" : 3,
 		"@type" : "Consumable",
-		"weight" : 0.05
+		"weight" : 0.05,
+		"category" : {"Food":1}
 	},
 	"45" : {
 		"name" : "Amanita",
@@ -347,7 +365,8 @@
 		"healAmount" : 3,
 		"cost" : 11,
 		"@type" : "Consumable",
-		"weight" : 0.1
+		"weight" : 0.1,
+		"category" : {"Food":1}
 	},
 	"47" : {
 		"name" : "Carrot",
@@ -356,7 +375,8 @@
 		"healAmount" : 3,
 		"cost" : 11,
 		"@type" : "Consumable",
-		"weight" : 0.1
+		"weight" : 0.1,
+		"category" : {"Food":1}
 	},
 	"48" : {
 		"name" : "Tomatoes",
@@ -365,7 +385,8 @@
 		"healAmount" : 3,
 		"cost" : 11,
 		"@type" : "Consumable",
-		"weight" : 0.1
+		"weight" : 0.1,
+		"category" : {"Food":1}
 	},
 	"49" : {
 		"name" : "Pepper",
@@ -374,7 +395,8 @@
 		"healAmount" : 3,
 		"cost" : 11,
 		"@type" : "Consumable",
-		"weight" : 0.1
+		"weight" : 0.1,
+		"category" : {"Food":1}
 	},
 	"50" : {
 		"name" : "Corn",
@@ -383,7 +405,8 @@
 		"healAmount" : 5,
 		"cost" : 12,
 		"@type" : "Consumable",
-		"weight" : 0.1
+		"weight" : 0.1,
+		"category" : {"Food":1}
 	},
 	"51" : {
 		"name" : "Potato seeds",
@@ -504,7 +527,8 @@
 		"@type" : "Item",
 		"name" : "Coal",
 		"cost" : 4,
-		"weight" : 0.7
+		"weight" : 0.7,
+		"category" : {"Materials":1}
 	},
 	"57" : {
 		"name" : "Cooked meat",
@@ -514,7 +538,8 @@
 		"staminaAmount" : 7.5,
 		"cost" : 11,
 		"@type" : "Consumable",
-		"weight" : 0.4
+		"weight" : 0.4,
+		"category" : {"Food":2}
 	},
 	"58" : {
 		"name" : "Pint of beer",
@@ -524,7 +549,8 @@
 		"healAmount" : 0,
 		"cost" : 12,
 		"@type" : "Consumable",
-		"weight" : 0.5
+		"weight" : 0.5,
+		"category" : {"Food":2}
 	},
 	"59" : {
 		"name" : "Cooked poultry",
@@ -533,7 +559,8 @@
 		"healAmount" : 5,
 		"cost" : 15,
 		"@type" : "Consumable",
-		"weight" : 0.3
+		"weight" : 0.3,
+		"category" : {"Food":2}
 	},
 	"60" : {
 		"name" : "Healing potion",
@@ -542,7 +569,8 @@
 		"staminaAmount" : 5,
 		"cost" : 25,
 		"@type" : "Consumable",
-		"weight" : 0.2
+		"weight" : 0.2,
+		"category" : {"Potions":0}
 	},
 	"61" : {
 		"name" : "Buckler",
@@ -554,7 +582,7 @@
 	},
 	"62" : {
 		"name" : "Royal shield",
-		"lvl": 1,
+		"lvl": 2,
 		"cost" : 110,
 		"@type" : "Armor",
 		"type" : "Shield",
@@ -606,7 +634,8 @@
 		"craftQuantity" : 3,
 		"recipe" : "8/2",
 		"cost" : 6,
-		"weight" : 0.01
+		"weight" : 0.01,
+		"category" : {"Materials":1}
 	},
 	"69" : {
 		"@type" : "Item",
@@ -614,7 +643,8 @@
 		"craftQuantity" : 2,
 		"recipe" : "68/1",
 		"cost" : 6,
-		"weight" : 0.01
+		"weight" : 0.01,
+		"category" : {"Materials":1}
 	},
 	"70" : {
 		"@type" : "Item",
@@ -622,14 +652,16 @@
 		"recipe" : "2/1",
 		"craftQuantity": 2,
 		"cost" : 6,
-		"weight" : 0.5
+		"weight" : 0.5,
+		"category" : {"Materials":2}
 	},
 	"71" : {
 		"@type" : "Item",
 		"name" : "Sharp stick",
 		"recipe" : "2/1:8/1",
 		"cost" : 7,
-		"weight" : 0.1
+		"weight" : 0.1,
+		"category" : {"Materials":2}
 	},
 	"72" : {
 		"@type" : "Item",
@@ -637,7 +669,8 @@
 		"recipe" : "67|23/1:56/1",
 		"craftQuantity" : 2,
 		"cost" : 30,
-		"weight" : 0.7
+		"weight" : 0.7,
+		"category" : {"Materials":3}
 	},
 	"73" : {
 		"@type" : "Item",
@@ -645,7 +678,8 @@
 		"recipe" : "67|24/1:56/1",
 		"craftQuantity" : 2,
 		"cost" : 45,
-		"weight" : 0.7
+		"weight" : 0.7,
+		"category" : {"Materials":3}
 	},
 	"74" : {
 		"name" : "Spear",
@@ -666,12 +700,13 @@
 		"nameTemplate": "Scroll of %s",
 		"scriptMapName": "scrolls",
 		"cost": 85,
-		"weight": 0.01
+		"weight": 0.01,
+		"category" : {"Scrolls":0}
 	},
 	"76" : {
 		"name" : "Leather Boots",
 		"recipe" : "22/10",
-		"cost" : 50,
+		"cost" : 49,
 		"@type" : "Armor",
 		"type" : "FootArmor",
 		"weight" : 1,
@@ -716,7 +751,7 @@
 	"79" : {
 		"name" : "Leather Pants",
 		"recipe" : "22/10",
-		"cost" : 50,
+		"cost" : 47,
 		"@type" : "Armor",
 		"type" : "LegArmor",
 		"weight" : 0.7,
@@ -730,7 +765,7 @@
 	"80" : {
 		"name" : "Adventurer's Pants",
 		"recipe" : "75|68/10:69/3",
-		"cost" : 55,
+		"cost" : 48,
 		"@type" : "Armor",
 		"type" : "LegArmor",
 		"weight" : 0.5,
@@ -744,7 +779,7 @@
 	"81" : {
 		"name" : "Reinforced Iron Helmet",
 		"recipe" : "155|14/1:72/10",
-		"cost" : 150,
+		"cost" : 145,
 		"@type" : "Armor",
 		"type" : "HeadArmor",
 		"weight" : 2.25,
@@ -758,7 +793,7 @@
 	"82" : {
 		"name" : "Adventurer's Hat",
 		"recipe" : "75|68/10:69/3",
-		"cost" : 55,
+		"cost" : 49,
 		"@type" : "Armor",
 		"type" : "HeadArmor",
 		"weight" : 2.25,
@@ -786,7 +821,7 @@
 	"84" : {
 		"name" : "Light Iron Armor",
 		"recipe" : "155|72/10",
-		"cost" : 100,
+		"cost" : 99,
 		"@type" : "Armor",
 		"type" : "ChestArmor",
 		"weight" : 1.75,
@@ -826,7 +861,7 @@
 	},
 	"87" : {
 		"name" : "Dagger",
-		"cost" : 79,
+		"cost" : 100,
 		"@type" : "Weapon",
 		"type" : "OffhandWeapon",
 		"weight" : 0.9,
@@ -840,7 +875,7 @@
 	"88" : {
 		"name" : "Steel Dagger",
 		"recipe" : "155|72/15",
-		"cost" : 111,
+		"cost" : 131,
 		"@type" : "Weapon",
 		"type" : "OffhandWeapon",
 		"weight" : 1.1,
@@ -867,7 +902,7 @@
 	},
 	"90" : {
 		"name" : "Rapier",
-		"cost" : 150,
+		"cost" : 149,
 		"@type" : "Weapon",
 		"type" : "MeleeWeapon",
 		"weight" : 1.7,
@@ -924,7 +959,7 @@
 		"@type" : "Tool",
 		"type" : "FishingRod",
 		"recipe" : "8/5:69/5",
-		"cost" : 20,
+		"cost" : 30,
 		"weight" : 0.7
 	},
 	"95" : {
@@ -937,7 +972,8 @@
 		"@type" : "Item",
 		"name" : "Raw Meat",
 		"cost" : 4,
-		"weight" : 0.3
+		"weight" : 0.3,
+		"category" : {"Food":0}
 	},
 	"97" : {
 		"name" : "Apple",
@@ -946,7 +982,8 @@
 		"healAmount" : 1,
 		"cost" : 5,
 		"@type" : "Consumable",
-		"weight" : 0.09
+		"weight" : 0.09,
+		"category" : {"Food":1}
 	},
 	"98" : {
 		"name" : "Cheese",
@@ -955,7 +992,8 @@
 		"healAmount" : 5,
 		"cost" : 30,
 		"@type" : "Consumable",
-		"weight" : 0.6
+		"weight" : 0.6,
+		"category" : {"Food":2}
 	},
 	"99" : {
 		"name" : "Grapes",
@@ -1089,7 +1127,7 @@
 		"name" : "Watermelon seeds",
 		"recipe" : "91|68/5",
 		"altObject" : 115,
-		"cost" : 30,
+		"cost" : 60,
 		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
@@ -1112,7 +1150,7 @@
 		"name" : "Melon seeds",
 		"recipe" : "91|68/5",
 		"altObject" : 119,
-		"cost" : 30,
+		"cost" : 60,
 		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
@@ -1135,7 +1173,7 @@
 		"name" : "Pineapple seeds",
 		"recipe" : "91|68/5",
 		"altObject" : 123,
-		"cost" : 35,
+		"cost" : 60,
 		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
@@ -1158,7 +1196,7 @@
 		"name" : "Pea seeds",
 		"recipe" : "91|68/5",
 		"altObject" : 127,
-		"cost" : 20,
+		"cost" : 30,
 		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
@@ -1204,7 +1242,7 @@
 		"name" : "Cocoa seeds",
 		"recipe" : "91|68/5",
 		"altObject" : 135,
-		"cost" : 40,
+		"cost" : 90,
 		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
@@ -1227,7 +1265,7 @@
 		"name" : "Eggplant seeds",
 		"recipe" : "91|68/5",
 		"altObject" : 139,
-		"cost" : 30,
+		"cost" : 60,
 		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
@@ -1250,7 +1288,7 @@
 		"name" : "Grape seeds",
 		"recipe" : "91|68/5",
 		"altObject" : 143,
-		"cost" : 35,
+		"cost" : 60,
 		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
@@ -1273,7 +1311,7 @@
 		"name" : "Radish seeds",
 		"recipe" : "91|68/5",
 		"altObject" : 147,
-		"cost" : 25,
+		"cost" : 30,
 		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
@@ -1296,7 +1334,7 @@
 		"name" : "Strawberry seeds",
 		"recipe" : "91|68/5",
 		"altObject" : 151,
-		"cost" : 50,
+		"cost" : 90,
 		"@type" : "CropSeeds",
 		"weight" : 0.05,
 		"cropContainer": {
@@ -1367,7 +1405,8 @@
 		"name" : "Travelling kit",
 		"recipe" : "75|22/5",
 		"cost" : 250,
-		"weight" : 1
+		"weight" : 1,
+		"category" : {"Tools":0}
 	},
 	"131" : {
 		"name" : "Plant fiber boots",
@@ -1463,7 +1502,8 @@
 		"@type" : "Item",
 		"name" : "Raw poultry",
 		"cost" : 4,
-		"weight" : 0.1
+		"weight" : 0.1,
+		"category" : {"Food":0}
 	},
 	
 	"142" : {
@@ -1518,13 +1558,15 @@
 		"@type" : "Item",
 		"name" : "Fish bones",
 		"cost" : 1,
-		"weight" : 0.1
+		"weight" : 0.1,
+		"category" : {"Trash":0}
 	},
 	"151" : {
 		"@type" : "Item",
 		"name" : "Old boot",
 		"cost" : 1,
-		"weight" : 0.19
+		"weight" : 0.19,
+		"category" : {"Trash":0}
 	},
 	
 	"152" : {
@@ -1730,12 +1772,12 @@
 	"176" : {
 		"name" : "Boomerang",
 		"lvl" : 1,
-		"recipe" : "X1/5:70/2",
+		"recipe" : "X1/5:70/3",
 		"craftQuantity" : 5,
 		"@type" : "Projectile",
 		"thrownByHand" : true,
 		"dmg" : 1,
-		"cost" : 13,
+		"cost" : 18,
 		"weight" : 0.35
 	},
 	"177" : {
@@ -1744,7 +1786,7 @@
 		"@type" : "Projectile",
 		"thrownByHand" : true,
 		"dmg" : 1,
-		"cost" : 13,
+		"cost" : 15,
 		"weight" : 0.15
 	},
 	"178" : {
@@ -1761,7 +1803,8 @@
 		"nameTemplate": "Pill of %s",
 		"scriptMapName": "pills",
 		"cost": 450,
-		"weight": 0.01
+		"weight": 0.01,
+		"category" : {"Pills":0}
 	},
 	"184" : {
 		"@type" : "Item",
@@ -1782,6 +1825,7 @@
 		"nameTemplate": "%s recipe",
 		"scriptMapName": "craft_recipes",
 		"cost": 95,
-		"weight": 0.01
+		"weight": 0.01,
+		"category" : {"Recipes":0}
 	}
 }

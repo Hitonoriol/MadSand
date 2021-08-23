@@ -17,11 +17,13 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import hitonoriol.madsand.DynamicallyCastable;
 import hitonoriol.madsand.Enumerable;
@@ -29,6 +31,7 @@ import hitonoriol.madsand.HotbarAssignable;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
+import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 import hitonoriol.madsand.gfx.TextureProcessor;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.properties.Globals;
@@ -102,7 +105,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 		this.id = id;
 		lastId = Math.max(id, lastId);
 	}
-	
+
 	public static int getLastId() {
 		return lastId;
 	}
@@ -220,6 +223,16 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 		}
 
 	}
+
+	protected final void setCategory(ItemCategory category, int tier) {
+		ItemProp.itemCategories.addItem(id, category, tier);
+	}
+
+	protected final void setCategory(ItemCategory category) {
+		setCategory(category, cost / 30);
+	}
+
+	public void initCategory() {}
 
 	@JsonIgnore
 	public boolean isCurrency() {
@@ -340,6 +353,20 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 
 	public boolean isEquipment() {
 		return this instanceof AbstractEquipment;
+	}
+
+	/*
+	 * ItemCategories are stored as Map<Category, Tier> entries
+	 * (to make it possible to include 1 item in multiple categories)
+	 * "category" : { "CategoryName" : <tier>, ... }
+	 */
+	@JsonSetter("category")
+	private void setCategory(ObjectNode categoryNodeList) {
+		Resources.deferInit(() -> categoryNodeList.fieldNames()
+				.forEachRemaining(categoryName -> ItemProp.itemCategories
+						.addItem(id,
+								ItemCategory.valueOf(categoryName),
+								categoryNodeList.get(categoryName).intValue())));
 	}
 
 	@Override

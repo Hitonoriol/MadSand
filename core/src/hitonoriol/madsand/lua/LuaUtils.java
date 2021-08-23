@@ -5,7 +5,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
-import hitonoriol.madsand.properties.NpcProp;
+import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.util.Utils;
 
 public class LuaUtils {
@@ -62,7 +62,7 @@ public class LuaUtils {
 	}
 
 	public static int rollLoot(ItemCategory category, int tier) {
-		return NpcProp.tradeLists.rollId(category, tier);
+		return ItemProp.itemCategories.rollId(category, tier);
 	}
 
 	public static int rollLoot(ItemCategory category) {

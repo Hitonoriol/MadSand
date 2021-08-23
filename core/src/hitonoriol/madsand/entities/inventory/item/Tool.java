@@ -2,6 +2,7 @@ package hitonoriol.madsand.entities.inventory.item;
 
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
+import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.util.Utils;
 
@@ -81,5 +82,10 @@ public class Tool extends AbstractEquipment {
 	@Override
 	public EquipSlot getEquipSlot() {
 		return EquipSlot.MainHand;
+	}
+	
+	@Override
+	public void initCategory() {
+		setCategory(ItemCategory.Tools);
 	}
 }

@@ -16,7 +16,7 @@ import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.object.ResourceObject;
 import hitonoriol.madsand.properties.Globals;
-import hitonoriol.madsand.properties.NpcProp;
+import hitonoriol.madsand.properties.ItemProp;
 
 public class Settlement {
 	private static float WAREHOUSE_DEF_WEIGHT = 50;
@@ -125,9 +125,9 @@ public class Settlement {
 				if (objectCoords == Pair.nullPair)
 					continue;
 			} else if (type == WorkerType.Sweeper)
-				producedItem = NpcProp.tradeLists.rollId(ItemCategory.Trash);
+				producedItem = ItemProp.itemCategories.rollId(ItemCategory.Trash);
 			else if (type == WorkerType.Hunter)
-				producedItem = NpcProp.tradeLists.rollId(ItemCategory.Food);
+				producedItem = ItemProp.itemCategories.rollId(ItemCategory.Food);
 
 			if (workers.gatherResources().itemCharge > 1f)
 				itemAdded = warehouse.putItem(producedItem, workers.getResourceQuantity()).equals(Item.nullItem);

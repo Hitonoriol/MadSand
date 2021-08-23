@@ -39,8 +39,10 @@ public class RollTable<T> {
 				continue;
 			else {
 				item = entry.getValue().rollItem();
-				if (item != null)
+				if (item != null) {
 					itemList.add(item);
+					roll = Utils.randPercent();
+				}
 
 				if (exclusiveRoll)
 					break;

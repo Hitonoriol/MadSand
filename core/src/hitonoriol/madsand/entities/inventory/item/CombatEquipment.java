@@ -6,6 +6,8 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.entities.inventory.EquipStats;
+import hitonoriol.madsand.entities.inventory.item.category.ItemCategories;
+import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
@@ -16,6 +18,9 @@ public abstract class CombatEquipment extends AbstractEquipment {
 
 	public CombatEquipment(CombatEquipment protoItem) {
 		super(protoItem);
+
+		if (protoItem.isProto() && MadSand.player().stats().luckRoll())
+			lvl += ItemCategories.clampTier(ItemCategories.rollTier());
 	}
 
 	public CombatEquipment() {}
@@ -54,5 +59,14 @@ public abstract class CombatEquipment extends AbstractEquipment {
 	@Override
 	protected String getMiscInfo() {
 		return identified() ? equipStats.getString() : ("[RED]Unidentified[]" + Resources.LINEBREAK);
+	}
+
+	protected ItemCategory combatCategory() {
+		return null;
+	}
+
+	@Override
+	public void initCategory() {
+		setCategory(combatCategory(), Math.max(cost / 50, lvl - 1));
 	}
 }

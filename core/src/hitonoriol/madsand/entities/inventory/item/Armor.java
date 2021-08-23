@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
+import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 
 public class Armor extends CombatEquipment {
 
@@ -49,6 +50,11 @@ public class Armor extends CombatEquipment {
 			return EquipSlot.Offhand;
 		}
 		return null;
+	}
+	
+	@Override
+	protected ItemCategory combatCategory() {
+		return ItemCategory.Armor;
 	}
 
 	public static enum Type {

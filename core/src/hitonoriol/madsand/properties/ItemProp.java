@@ -2,22 +2,25 @@ package hitonoriol.madsand.properties;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import hitonoriol.madsand.entities.inventory.item.CropSeeds;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.PlaceableItem;
+import hitonoriol.madsand.entities.inventory.item.category.ItemCategories;
 import hitonoriol.madsand.map.CropGrowthStageContainer;
 import hitonoriol.madsand.resources.Resources;
 
 public class ItemProp {
 	public static Map<Integer, Item> items;
-	public static HashMap<Integer, ArrayList<Integer>> craftStationRecipes = new HashMap<>();
-	public static HashMap<Integer, ArrayList<Integer>> craftReq = new HashMap<>();
-	public static HashMap<Integer, ArrayList<Integer>> buildReq = new HashMap<>();
+	public static Map<Integer, List<Integer>> craftStationRecipes = new HashMap<>();
+	public static Map<Integer, List<Integer>> craftReq = new HashMap<>();
+	public static Map<Integer, List<Integer>> buildReq = new HashMap<>();
+	public static ItemCategories itemCategories = new ItemCategories();
 
 	public static void addCraftStationRecipe(int id, int item) {
-		ArrayList<Integer> items;
+		List<Integer> items;
 		if (!craftStationRecipes.containsKey(id))
 			items = new ArrayList<>();
 		else

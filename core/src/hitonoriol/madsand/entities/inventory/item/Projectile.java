@@ -12,6 +12,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
+import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
@@ -99,5 +100,10 @@ public class Projectile extends LevelBoundItem {
 	@Override
 	public String getMiscInfo() {
 		return "Projectile damage: [GREEN]" + dmg + Resources.COLOR_END + Resources.LINEBREAK;
+	}
+	
+	@Override
+	public void initCategory() {
+		setCategory(ItemCategory.Projectiles, cost / 15);
 	}
 }

@@ -815,7 +815,7 @@ public class Map {
 
 	public void putLoot(int x, int y, ItemCategory category, int maxItems) {
 		Pair range = new Pair();
-		List<Item> items = ItemCategories.capItemQuantity(NpcProp.tradeLists.roll(category), item -> {
+		List<Item> items = ItemCategories.capItemQuantity(ItemProp.itemCategories.roll(category), item -> {
 			range.x = Utils.rand(1, player().stats().get(Stat.Luck));
 			range.y = Utils.rand(item.quantity / 2,
 					(int) (item.quantity * (1 + player().stats().baseStats.getOverallProgress())));

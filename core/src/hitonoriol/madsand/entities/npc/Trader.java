@@ -7,8 +7,8 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 import hitonoriol.madsand.properties.Globals;
+import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.NpcContainer;
-import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
 
@@ -20,8 +20,8 @@ public class Trader extends AbstractNpc {
 		tradeCategory = protoNpc.tradeCategory;
 
 		inventory.setMaxWeight(Integer.MAX_VALUE);
-		lvl = NpcProp.tradeLists.rollTier();
-		List<Item> items = NpcProp.tradeLists.roll(tradeCategory, lvl);
+		lvl = ItemProp.itemCategories.rollTier();
+		List<Item> items = ItemProp.itemCategories.roll(tradeCategory, lvl);
 
 		int markup;
 		for (Item item : items) {

@@ -1,6 +1,7 @@
 package hitonoriol.madsand.entities.inventory.item;
 
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 import hitonoriol.madsand.properties.CropContainer;
 
 public class CropSeeds extends PlaceableItem {
@@ -23,5 +24,10 @@ public class CropSeeds extends PlaceableItem {
 	@Override
 	public void use(Player player) {
 		player.useItem(this);
+	}
+	
+	@Override
+	public void initCategory() {
+		setCategory(ItemCategory.Farming);
 	}
 }
