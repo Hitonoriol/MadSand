@@ -47,6 +47,7 @@ import hitonoriol.madsand.entities.inventory.item.PlaceableItem;
 import hitonoriol.madsand.entities.inventory.item.Projectile;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.inventory.item.Weapon;
+import hitonoriol.madsand.entities.inventory.item.category.ItemCategories;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 import hitonoriol.madsand.entities.inventory.trade.TradeInventoryUI;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
@@ -1416,7 +1417,7 @@ public class Player extends Entity {
 
 		// Not-so-random material of tier #<settlementsEstablished>
 		Item requiredResource = Item.create(
-				ItemProp.itemCategories.getItemList(ItemCategory.Materials, settlementsEstablished)
+				ItemCategories.get().getItemList(ItemCategory.Materials, settlementsEstablished)
 						.getRandomId(new Random(settlementsEstablished)));
 		requiredResource.quantity = SETTLEMENT_RES_COST * (settlementsEstablished + 1);
 		items.add(requiredResource);

@@ -19,7 +19,9 @@ public class ItemCategories {
 	public static final int MAX_TIER = 10, MAX_ITEMS = 350;
 	private Map<ItemCategory, List<ItemCategoryList>> categories = new HashMap<>();
 
-	public ItemCategories() {}
+	private static final ItemCategories instance = new ItemCategories();
+
+	private ItemCategories() {}
 
 	public void addItem(int id, ItemCategory category, int tier) {
 		Utils.dbg("ItemCategory [id=%d] ==> %s T%d", id, category, tier);
@@ -163,5 +165,9 @@ public class ItemCategories {
 
 	public static int clampTier(int tier) {
 		return Math.max(0, Math.min(tier, MAX_TIER));
+	}
+
+	public static ItemCategories get() {
+		return instance;
 	}
 }

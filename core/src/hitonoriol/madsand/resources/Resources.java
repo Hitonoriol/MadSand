@@ -28,6 +28,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -267,6 +268,15 @@ public class Resources {
 		return Gdx.files.internal(file).readString();
 	}
 
+	public static <T> T update(T obj, JsonNode json) {
+		try {
+			return mapper.readerForUpdating(obj).readValue(json);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	public static <T> T loadString(String jsonStr, Class<T> type) {
 		try {
 			return mapper.readerFor(type).readValue(jsonStr);
@@ -411,13 +421,13 @@ public class Resources {
 		return loadAnimationStrip(file, ANIM_FRAME_SIZE);
 	}
 
-	private static Pixmap extractPixmap(TextureRegion textureRegion) {
+	public static Pixmap extractPixmap(TextureRegion textureRegion, int newWidth, int newHeight) {
 		TextureData textureData = textureRegion.getTexture().getTextureData();
 		if (!textureData.isPrepared())
 			textureData.prepare();
 		Pixmap pixmap = new Pixmap(
-				textureRegion.getRegionWidth(),
-				textureRegion.getRegionHeight(),
+				newWidth,
+				newHeight,
 				textureData.getFormat());
 		pixmap.drawPixmap(
 				textureData.consumePixmap(),
@@ -428,6 +438,10 @@ public class Resources {
 				textureRegion.getRegionWidth(),
 				textureRegion.getRegionHeight());
 		return pixmap;
+	}
+
+	public static Pixmap extractPixmap(TextureRegion textureRegion) {
+		return extractPixmap(textureRegion, textureRegion.getRegionWidth(), textureRegion.getRegionHeight());
 	}
 
 	public static Texture createTexture(TextureRegion region) {

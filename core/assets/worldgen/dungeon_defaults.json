@@ -1,0 +1,63 @@
+{
+	"tolerance" : 10,
+	"maxRoomSize" : 15,
+	"minRoomSize" : 3,
+	"wallObject" : 13,
+	"wallTile" : 7,
+	"roomTile" : 12,
+	"corridorTile" : 5,
+	"staircaseDownObject": 113,
+	"staircaseUpObject": 114,
+	"exitFloor" : 3,
+	"exitObject" : 112,
+	"dungeonContents" : [ {
+		"fromFloor" : 1,
+		"contents" : {
+			"maxSize" : 60,
+			"minSize" : 45,
+			"doorObject" : 11,
+			"specialRoomTiles" : [9, 18, 19, 29, 30, 32, 38],
+			"specialRoomWalls" : [104, 105, 26, 108, 109, 110, 111],
+			"specialMobs" : [8, 36, 24, 25],
+			"specialMobsMax" : 10,
+			"mobs" : [ 14, 15, 52, 53 ],
+			"maxMobs" : 50,
+			"loot" : "	(95|2/10:59/3:60/1:21/100)
+					(20|82/1:83/1:80/1:16/1:105/1:76/1:86/1:85/1:12/1)
+					(15|23/10:24/5)
+					(3|13/1:17/1:18/1:77/1:89/1:74/1)
+					(0.5|128/1:129/1)
+					(0.1|100/1)
+			",
+			"mobProbability" : 4,
+			"mobCorridorProbability" : 1,
+			"lootProbability" : 2,
+			"lootCorridorProbability" : 1
+			}
+		}, {
+		"fromFloor" : 2,
+		"contents" : {
+			"maxSize" : 90,
+			"minSize" : 70,
+			"doorObject" : 11,
+			"specialRoomTiles" : [40, 35],
+			"specialRoomWalls" : [108, 109],
+			"specialMobs" : [1, 8],
+			"specialMobsMax" : 5,
+			"mobs" : [ 14, 15, 16, 17, 18, 54, 55 ],
+			"maxMobs" : 50,
+			"loot" : "	(95|2/10:59/3:60/1:21/100)
+					(20|82/1:83/1:80/1:16/1:105/1:76/1:86/1:85/1:12/1)
+					(15|23/10:24/5)
+					(3|13/1:17/1:18/1:77/1:89/1:74/1)
+					(0.5|128/1:129/1)
+					(0.1|100/1)
+			",
+			"mobProbability" : 4,
+			"mobCorridorProbability" : 1,
+			"lootProbability" : 2,
+			"lootCorridorProbability" : 1
+			}
+		}
+	]
+}

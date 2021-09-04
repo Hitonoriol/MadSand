@@ -11,12 +11,12 @@ import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Tool;
+import hitonoriol.madsand.entities.inventory.item.category.ItemCategories;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.object.ResourceObject;
 import hitonoriol.madsand.properties.Globals;
-import hitonoriol.madsand.properties.ItemProp;
 
 public class Settlement {
 	private static float WAREHOUSE_DEF_WEIGHT = 50;
@@ -108,6 +108,7 @@ public class Settlement {
 	public void timeTick() {
 		//Map map = location.getOverworld(); //TODO: Settlements in turn-based time + damage objects when gathering resources
 		objectCoords = Pair.nullPair;
+		ItemCategories items = ItemCategories.get();
 		Skill workerSkill;
 		WorkerContainer workers;
 		boolean itemAdded;
@@ -125,9 +126,9 @@ public class Settlement {
 				if (objectCoords == Pair.nullPair)
 					continue;
 			} else if (type == WorkerType.Sweeper)
-				producedItem = ItemProp.itemCategories.rollId(ItemCategory.Trash);
+				producedItem = items.rollId(ItemCategory.Trash);
 			else if (type == WorkerType.Hunter)
-				producedItem = ItemProp.itemCategories.rollId(ItemCategory.Food);
+				producedItem = items.rollId(ItemCategory.Food);
 
 			if (workers.gatherResources().itemCharge > 1f)
 				itemAdded = warehouse.putItem(producedItem, workers.getResourceQuantity()).equals(Item.nullItem);

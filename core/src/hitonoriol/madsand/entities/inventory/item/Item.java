@@ -31,6 +31,7 @@ import hitonoriol.madsand.HotbarAssignable;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
+import hitonoriol.madsand.entities.inventory.item.category.ItemCategories;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 import hitonoriol.madsand.gfx.TextureProcessor;
 import hitonoriol.madsand.lua.Lua;
@@ -225,7 +226,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 	}
 
 	protected final void setCategory(ItemCategory category, int tier) {
-		ItemProp.itemCategories.addItem(id, category, tier);
+		ItemCategories.get().addItem(id, category, tier);
 	}
 
 	protected final void setCategory(ItemCategory category) {
@@ -363,7 +364,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 	@JsonSetter("category")
 	private void setCategory(ObjectNode categoryNodeList) {
 		Resources.deferInit(() -> categoryNodeList.fieldNames()
-				.forEachRemaining(categoryName -> ItemProp.itemCategories
+				.forEachRemaining(categoryName -> ItemCategories.get()
 						.addItem(id,
 								ItemCategory.valueOf(categoryName),
 								categoryNodeList.get(categoryName).intValue())));

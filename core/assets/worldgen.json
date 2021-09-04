@@ -40,82 +40,8 @@
 			"hostileSpawnChance": 75,
 			"friendlySpawnChance": 60
 		},
-		"lake" : {
-			"lakeModifier" : 1.0,
-			"lakeRadius" : 4,
-			"intervals" : [{"from" : 0.075, "to" : 0.27, "tile" : 8}, {"from" : 0.285, "to" : 0.3125, "tile" : 4}]
-		},
-		"cave" : {
-			"caveTile" : 5,
-			"caveObject" : 13,
-			"caveOre" : [ 22, 23, 182 ],
-			"maxVeinSize" : 12,
-			"maxVeinCount" : 100
-		},
+
 		"dungeonProbability" : 100,
-		"dungeon" : {
-			"tolerance" : 10,
-			"maxRoomSize" : 15,
-			"minRoomSize" : 3,
-			"wallObject" : 13,
-			"wallTile" : 7,
-			"roomTile" : 12,
-			"corridorTile" : 5,
-			"staircaseDownObject": 113,
-			"staircaseUpObject": 114,
-			"exitFloor" : 3,
-			"exitObject" : 112,
-			"dungeonContents" : [ {
-				"fromFloor" : 1,
-				"contents" : {
-					"maxSize" : 60,
-					"minSize" : 45,
-					"doorObject" : 11,
-					"specialRoomTiles" : [9, 18, 19, 29, 30, 32, 38],
-					"specialRoomWalls" : [104, 105, 26, 108, 109, 110, 111],
-					"specialMobs" : [8, 36, 24, 25],
-					"specialMobsMax" : 10,
-					"mobs" : [ 14, 15, 52, 53 ],
-					"maxMobs" : 50,
-					"loot" : "	(95|2/10:59/3:60/1:21/100)
-							(20|82/1:83/1:80/1:16/1:105/1:76/1:86/1:85/1:12/1)
-							(15|23/10:24/5)
-							(3|13/1:17/1:18/1:77/1:89/1:74/1)
-							(0.5|128/1:129/1)
-							(0.1|100/1)
-					",
-					"mobProbability" : 4,
-					"mobCorridorProbability" : 1,
-					"lootProbability" : 2,
-					"lootCorridorProbability" : 1
-					}
-				}, {
-				"fromFloor" : 2,
-				"contents" : {
-					"maxSize" : 90,
-					"minSize" : 70,
-					"doorObject" : 11,
-					"specialRoomTiles" : [40, 35],
-					"specialRoomWalls" : [108, 109],
-					"specialMobs" : [1, 8],
-					"specialMobsMax" : 5,
-					"mobs" : [ 14, 15, 16, 17, 18, 54, 55 ],
-					"maxMobs" : 50,
-					"loot" : "	(95|2/10:59/3:60/1:21/100)
-							(20|82/1:83/1:80/1:16/1:105/1:76/1:86/1:85/1:12/1)
-							(15|23/10:24/5)
-							(3|13/1:17/1:18/1:77/1:89/1:74/1)
-							(0.5|128/1:129/1)
-							(0.1|100/1)
-					",
-					"mobProbability" : 4,
-					"mobCorridorProbability" : 1,
-					"lootProbability" : 2,
-					"lootCorridorProbability" : 1
-					}
-				}
-			]
-		},
 		"postGenScript" : "if val_utils:percentRoll(5) then world:getCurLoc():randPlaceLoot(179) end"
 	},
 
@@ -145,19 +71,12 @@
 			"hostileSpawnChance": 90,
 			"friendlySpawnChance": 50
 		},
+
 		"lake" : {
 			"intervals" : []
 		},
-		"cave" : {
-			"caveTile" : 5,
-			"caveObject" : 13,
-			"caveOre" : [ 22, 23 ],
-			"maxVeinSize" : 10,
-			"maxVeinCount" : 100
-		},
-		"dungeonProbability" : 0,
-		"dungeon" : {
-		}
+
+		"dungeonProbability" : 15
 	},
 
 	"2" : {
@@ -181,21 +100,14 @@
 			"hostileSpawnChance": 80,
 			"friendlySpawnChance": 60
 		},
+
 		"lake" : {
 			"lakeModifier" : 1.0,
 			"lakeRadius" : 4,
 			"intervals" : [{"from" : 0.1, "to" : 0.27, "tile" : 4}]
 		},
-		"cave" : {
-			"caveTile" : 5,
-			"caveObject" : 13,
-			"caveOre" : [ 22, 23 ],
-			"maxVeinSize" : 10,
-			"maxVeinCount" : 100
-		},
-		"dungeonProbability" : 0,
-		"dungeon" : {
-		}
+
+		"dungeonProbability" : 15
 	},
 
 	"3" : {
@@ -221,20 +133,13 @@
 			"hostileSpawnChance": 75,
 			"friendlySpawnChance": 50
 		},
+
 		"lake" : {
 			"lakeModifier" : 1.0,
 			"lakeRadius" : 5,
 			"intervals" : [{"from" : 0.1, "to" : 0.27, "tile" : 22}]
 		},
-		"cave" : {
-			"caveTile" : 5,
-			"caveObject" : 13,
-			"caveOre" : [ 22, 23 ],
-			"maxVeinSize" : 15,
-			"maxVeinCount" : 200
-		},
-		"dungeonProbability" : 0,
-		"dungeon" : {
-		}
+
+		"dungeonProbability" : 40
 	}
 }

@@ -1,0 +1,5 @@
+{
+	"lakeModifier" : 1.0,
+	"lakeRadius" : 4,
+	"intervals" : [{"from" : 0.075, "to" : 0.27, "tile" : 8}, {"from" : 0.285, "to" : 0.3125, "tile" : 4}]
+}

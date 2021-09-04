@@ -8,7 +8,6 @@ import java.util.Map;
 import hitonoriol.madsand.entities.inventory.item.CropSeeds;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.PlaceableItem;
-import hitonoriol.madsand.entities.inventory.item.category.ItemCategories;
 import hitonoriol.madsand.map.CropGrowthStageContainer;
 import hitonoriol.madsand.resources.Resources;
 
@@ -17,7 +16,6 @@ public class ItemProp {
 	public static Map<Integer, List<Integer>> craftStationRecipes = new HashMap<>();
 	public static Map<Integer, List<Integer>> craftReq = new HashMap<>();
 	public static Map<Integer, List<Integer>> buildReq = new HashMap<>();
-	public static ItemCategories itemCategories = new ItemCategories();
 
 	public static void addCraftStationRecipe(int id, int item) {
 		List<Integer> items;
