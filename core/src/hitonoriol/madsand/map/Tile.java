@@ -5,10 +5,14 @@ import java.util.HashMap;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import hitonoriol.madsand.entities.inventory.ItemUI;
 import hitonoriol.madsand.entities.inventory.item.PlaceableItem;
 import hitonoriol.madsand.entities.inventory.item.Tool;
+import hitonoriol.madsand.gfx.TextureProcessor;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.resources.Resources;
@@ -96,8 +100,9 @@ public class Tile implements Placeable {
 	}
 
 	@Override
-	public void createPlaceableTexture(String name) {
-		Resources.getAtlas().addRegion(name, Resources.getTile(id));
+	public TextureRegion createPlaceableTexture() {
+		return new TextureRegion(new Texture(
+				TextureProcessor.extractPixmap(Resources.getTile(id), ItemUI.SIZE)));
 	}
 
 	@Override

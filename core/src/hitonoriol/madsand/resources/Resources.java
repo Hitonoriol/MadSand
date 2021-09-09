@@ -16,7 +16,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -419,33 +418,6 @@ public class Resources {
 
 	private static TextureRegion[] loadAnimationStrip(String file) {
 		return loadAnimationStrip(file, ANIM_FRAME_SIZE);
-	}
-
-	public static Pixmap extractPixmap(TextureRegion textureRegion, int newWidth, int newHeight) {
-		TextureData textureData = textureRegion.getTexture().getTextureData();
-		if (!textureData.isPrepared())
-			textureData.prepare();
-		Pixmap pixmap = new Pixmap(
-				newWidth,
-				newHeight,
-				textureData.getFormat());
-		pixmap.drawPixmap(
-				textureData.consumePixmap(),
-				0,
-				0,
-				textureRegion.getRegionX(),
-				textureRegion.getRegionY(),
-				textureRegion.getRegionWidth(),
-				textureRegion.getRegionHeight());
-		return pixmap;
-	}
-
-	public static Pixmap extractPixmap(TextureRegion textureRegion) {
-		return extractPixmap(textureRegion, textureRegion.getRegionWidth(), textureRegion.getRegionHeight());
-	}
-
-	public static Texture createTexture(TextureRegion region) {
-		return new Texture(extractPixmap(region));
 	}
 
 	private static SimpleDateFormat screenshotDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");

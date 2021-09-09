@@ -673,9 +673,10 @@ public class Player extends Entity {
 	}
 
 	private void refreshRecipes(java.util.Map<Integer, List<Integer>> reqMap, List<Integer> recipeList) {
+		boolean itemRecipe = recipeList == craftRecipes;
 		List<Integer> newlyUnlockedItems = new ArrayList<>();
 		reqMap.forEach((itemId, craftReqs) -> {
-			if (!ItemProp.getItem(itemId).isRecipeUnlockable())
+			if (itemRecipe && !ItemProp.getItem(itemId).isRecipeUnlockable())
 				return;
 
 			Set<Integer> itemCraftReqs = new HashSet<>(craftReqs);
@@ -692,7 +693,7 @@ public class Player extends Entity {
 		if (newlyUnlockedItems.isEmpty())
 			return;
 
-		if (recipeList == craftRecipes)
+		if (itemRecipe)
 			showItemUnlockNotification(newlyUnlockedItems);
 	}
 

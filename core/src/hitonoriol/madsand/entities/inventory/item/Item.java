@@ -331,7 +331,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 	}
 
 	protected Texture createDynamicTexture() {
-		Texture dynamicTx = Resources.createTexture(Resources.getItem(id));
+		Texture dynamicTx = TextureProcessor.createTexture(Resources.getItem(id));
 		dynamicTxPool.put(this, dynamicTx);
 		return dynamicTx;
 	}

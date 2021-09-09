@@ -1,5 +1,6 @@
 package hitonoriol.madsand.map;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -26,12 +27,12 @@ public interface Placeable extends Enumerable {
 			item.setAltObject(id());
 			item.setId(Item.getLastId() + 1);
 			items.put(item.id(), item);
-			createPlaceableTexture("inv/" + item.id());
+			Resources.getAtlas().addRegion("inv/" + item.id(), createPlaceableTexture());
 			initTask.run();
 			item.initRecipe();
 			Utils.dbg("Created dynamic Placeable: {%s}", item);
 		});
 	}
 
-	void createPlaceableTexture(String name);
+	TextureRegion createPlaceableTexture();
 }

@@ -7,12 +7,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.TextureData;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.PixmapTextureData;
 
 import hitonoriol.madsand.gfx.Effects.TextureEffect;
 
 public class TextureProcessor {
-
 	private Texture texture;
 	private Pixmap pixmap;
 	private ArrayList<TextureEffect> effects;
@@ -85,6 +85,15 @@ public class TextureProcessor {
 		return pixmap;
 	}
 
+	public static TextureData getTextureData(Texture texture) {
+		TextureData data = texture.getTextureData();
+
+		if (!data.isPrepared())
+			data.prepare();
+
+		return data;
+	}
+
 	public static void loadPixmap(Texture texture, Pixmap pixmap) {
 		texture.load(new PixmapTextureData(pixmap, null, false, false));
 	}
@@ -95,12 +104,34 @@ public class TextureProcessor {
 		return copy;
 	}
 
-	public static TextureData getTextureData(Texture texture) {
-		TextureData data = texture.getTextureData();
+	public static Texture createTexture(TextureRegion region) {
+		return new Texture(extractPixmap(region));
+	}
 
-		if (!data.isPrepared())
-			data.prepare();
+	public static Pixmap extractPixmap(TextureRegion textureRegion) {
+		return extractPixmap(textureRegion, textureRegion.getRegionWidth(), textureRegion.getRegionHeight());
+	}
 
-		return data;
+	/* Resize the longest side of region to maxSideSize, keeping the aspect ratio */
+	public static Pixmap extractPixmap(TextureRegion textureRegion, int maxSideSize) {
+		int width = textureRegion.getRegionWidth(), height = textureRegion.getRegionHeight();
+		float ratio = (float) maxSideSize / Math.max(width, height);
+		return extractPixmap(textureRegion, (int) (width * ratio), (int) (height * ratio));
+	}
+
+	public static Pixmap extractPixmap(TextureRegion textureRegion, int newWidth, int newHeight) {
+		TextureData textureData = getTextureData(textureRegion.getTexture());
+		Pixmap srcMap = textureData.consumePixmap();
+		Pixmap resizedMap = new Pixmap(
+				newWidth,
+				newHeight,
+				textureData.getFormat());
+		resizedMap.drawPixmap(
+				srcMap,
+				textureRegion.getRegionX(), textureRegion.getRegionY(),
+				textureRegion.getRegionWidth(), textureRegion.getRegionHeight(),
+				0, 0,
+				resizedMap.getWidth(), resizedMap.getHeight());
+		return resizedMap;
 	}
 }

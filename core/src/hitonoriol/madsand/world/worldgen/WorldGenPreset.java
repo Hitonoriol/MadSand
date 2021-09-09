@@ -18,7 +18,7 @@ public class WorldGenPreset {
 	public OverworldPreset overworld = new OverworldPreset();
 
 	// Lake generator params & lake tiles
-	public LakePreset lake = Resources.load(DEF_PATH + "lake_daults.json", LakePreset.class);
+	public LakePreset lake = Resources.load(DEF_PATH + "lake_defaults.json", LakePreset.class);
 
 	// default cave tile & object
 	public CavePreset cave = Resources.load(DEF_PATH + "cave_defaults.json", CavePreset.class);

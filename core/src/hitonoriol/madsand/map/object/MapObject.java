@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
@@ -20,10 +21,12 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.PlayerStats;
+import hitonoriol.madsand.entities.inventory.ItemUI;
 import hitonoriol.madsand.entities.inventory.item.PlaceableItem;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.gfx.TextureProcessor;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
@@ -314,8 +317,9 @@ public class MapObject extends MapEntity implements Placeable {
 	}
 
 	@Override
-	public void createPlaceableTexture(String name) {
-		Resources.getAtlas().addRegion(name, getTexture());
+	public TextureRegion createPlaceableTexture() {
+		return new TextureRegion(new Texture(
+				TextureProcessor.extractPixmap(getTexture(), ItemUI.SIZE)));
 	}
 
 	@Override
