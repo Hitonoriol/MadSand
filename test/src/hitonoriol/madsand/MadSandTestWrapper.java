@@ -37,6 +37,7 @@ public class MadSandTestWrapper extends MadSand {
 		super.create();
 		Utils.disableTimestampOutput();
 		Player player = player();
+		player.setName("Tester");
 		player.stats.randomize(10);
 		enterWorld();
 		player.finishCreation();

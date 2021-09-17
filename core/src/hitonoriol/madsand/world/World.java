@@ -22,7 +22,6 @@ import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
-import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
@@ -96,7 +95,6 @@ public class World {
 	}
 
 	public void enter() {
-		GameTextSubstitutor.add(GameTextSubstitutor.PLAYER_NAME, player.stats.name);
 		getCurLoc().refreshPathfindingGraph();
 		initRealtimeRefresher();
 		if (!player.uninitialized())

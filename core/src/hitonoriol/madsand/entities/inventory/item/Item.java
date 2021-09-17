@@ -29,6 +29,7 @@ import hitonoriol.madsand.DynamicallyCastable;
 import hitonoriol.madsand.Enumerable;
 import hitonoriol.madsand.HotbarAssignable;
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.dialog.TextSubstitutor;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategories;
@@ -39,7 +40,6 @@ import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
-import me.xdrop.fuzzywuzzy.FuzzySearch;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -105,6 +105,11 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 	public void setId(int id) {
 		this.id = id;
 		lastId = Math.max(id, lastId);
+	}
+
+	@Override
+	public String name() {
+		return name;
 	}
 
 	public static int getLastId() {
@@ -207,6 +212,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 		if (recipe == null)
 			return;
 
+		recipe = TextSubstitutor.replace(recipe);
 		/* If only craftable at a crafting station */
 		if (recipe.contains(CRAFTSTATION_DELIM)) {
 			String[] craftStationRecipe = recipe.split("\\" + Item.CRAFTSTATION_DELIM);
@@ -408,6 +414,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 		if (!listString.contains(BLOCK_DELIM))
 			listString += BLOCK_DELIM;
 
+		listString = TextSubstitutor.replace(listString);
 		String listItems[] = listString.split(BLOCK_DELIM);
 		String itemAttrs[];
 		for (String itemStr : listItems) {
@@ -481,12 +488,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 	}
 
 	public static Item create(String partialName, int quantity) {
-		return create(
-				FuzzySearch.extractOne(partialName,
-						ItemProp.items.values(), item -> item.name == null ? "" : item.name,
-						(str1, str2) -> FuzzySearch.tokenSortRatio(str1, str2))
-						.getReferent(),
-				quantity);
+		return create(Enumerable.find(ItemProp.items, partialName), quantity);
 	}
 
 	public static Item create(String partialName) {

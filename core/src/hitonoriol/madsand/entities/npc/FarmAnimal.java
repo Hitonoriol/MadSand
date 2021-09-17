@@ -6,7 +6,7 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.gui.textgenerator.CellInfoGenerator;
 import hitonoriol.madsand.map.ItemProducer;
 import hitonoriol.madsand.properties.NpcContainer;
-import hitonoriol.madsand.util.Utils;
+import hitonoriol.madsand.util.Strings;
 import me.xdrop.jrand.JRand;
 import me.xdrop.jrand.generators.basics.NaturalGenerator;
 
@@ -65,7 +65,7 @@ public class FarmAnimal extends AbstractNpc implements TimeDependent {
 		CellInfoGenerator.getItemProducerInfo(sb, animalProduct);
 
 		if (isStarving()) {
-			Utils.newLine(sb);
+			Strings.newLine(sb);
 			sb.append("* Starving");
 		}
 

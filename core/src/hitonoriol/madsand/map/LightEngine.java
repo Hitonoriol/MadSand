@@ -17,7 +17,7 @@ import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.containers.Tuple;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.map.object.MapObject;
-import hitonoriol.madsand.util.Utils;
+import hitonoriol.madsand.util.Strings;
 
 public class LightEngine {
 	private Map map;
@@ -171,10 +171,10 @@ public class LightEngine {
 	private StringBuilder debugSb = new StringBuilder();
 
 	public String getEntityLight(Pair tilePos) {
-		Utils.clearBuilder(debugSb);
+		Strings.clearBuilder(debugSb);
 		emitters.forEach(entity -> {
 			if (entityLightExists(entity, tilePos))
-				Utils.newLine(debugSb.append(entity.getName() + "=" + getEntityLight(entity, tilePos)));
+				Strings.newLine(debugSb.append(entity.getName() + "=" + getEntityLight(entity, tilePos)));
 		});
 		if (debugSb.length() > 0)
 			debugSb.setLength(debugSb.length() - 1);

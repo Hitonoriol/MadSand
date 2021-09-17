@@ -14,6 +14,8 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.mutable.MutableInt;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -31,7 +33,6 @@ import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
 import hitonoriol.madsand.dialog.GameDialog;
-import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.ability.Ability;
 import hitonoriol.madsand.entities.ability.ActiveAbility;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
@@ -105,6 +106,7 @@ public class Player extends Entity {
 	private List<Ability> abilities = new ArrayList<>();
 	private LinkedHashMap<Integer, Integer> abilityKeyBinds = new LinkedHashMap<>();
 	private int settlementsEstablished = 0;
+	private MutableInt dungeonsCompleted = new MutableInt();
 	@JsonIgnore
 	private List<Pair> visibleArea = new ArrayList<>();
 
@@ -273,12 +275,6 @@ public class Player extends Entity {
 
 	public void refreshEquipment() {
 		Gui.overlay.equipmentSidebar.refresh();
-	}
-
-	@JsonIgnore
-	public void setName(String name) {
-		super.setName(name);
-		GameTextSubstitutor.add(GameTextSubstitutor.PLAYER_NAME, name);
 	}
 
 	public void unTarget() {
@@ -1473,5 +1469,9 @@ public class Player extends Entity {
 	@JsonGetter("stats")
 	public PlayerStats getStats() {
 		return stats;
+	}
+	
+	public MutableInt dungeonsCompleted() {
+		return dungeonsCompleted;
 	}
 }

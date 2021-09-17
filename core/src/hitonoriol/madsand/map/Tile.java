@@ -62,6 +62,11 @@ public class Tile implements Placeable {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
+	@Override
+	public String name() {
+		return name;
+	}
 
 	public int rollDrop(Tool.Type heldItem) {
 		return MapObject.rollTileResource(id, heldItem);

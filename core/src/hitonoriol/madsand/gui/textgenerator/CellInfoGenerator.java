@@ -13,6 +13,7 @@ import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.resources.Resources;
+import hitonoriol.madsand.util.Strings;
 import hitonoriol.madsand.util.Utils;
 
 public class CellInfoGenerator extends TextGenerator {
@@ -132,7 +133,7 @@ public class CellInfoGenerator extends TextGenerator {
 		} else
 			builder.append("Idle");
 
-		Utils.newLine(builder);
+		Strings.newLine(builder);
 
 		if (!producer.hasRawMaterial())
 			builder.append("* Add more " + rawMaterialName + " to start " + productName + " production");

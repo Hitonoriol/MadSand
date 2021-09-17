@@ -51,6 +51,10 @@ public class Lua {
 		globals = JsePlatform.standardGlobals();
 	}
 
+	public static void bind(String luaName, Class<?> clazz) {
+		execute("luajava.bindClass(\"" + clazz.getName() + "\")");
+	}
+
 	public static void register(String luaName, LuaValue object) {
 		globals.set(luaName, object);
 	}

@@ -180,9 +180,10 @@ public class Resources {
 	}
 
 	private static void loadItems() {
-		ItemProp.items = loadEnumerableMap(ITEM_FILE, Item.class, item -> item.initRecipe());
+		ItemProp.items = loadEnumerableMap(ITEM_FILE, Item.class);
 		finalizeInit();
 		ItemProp.items.forEach((id, item) -> {
+			item.initRecipe();
 			item.initCategory();
 		});
 		Utils.out("%d items (%d craftable)", ItemProp.items.size(), ItemProp.craftReq.size());

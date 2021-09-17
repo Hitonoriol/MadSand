@@ -99,6 +99,11 @@ public class MapObject extends MapEntity implements Placeable {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
+	@Override
+	public String name() {
+		return getName();
+	}
 
 	@Override
 	public boolean add(Map map, Pair coords) {

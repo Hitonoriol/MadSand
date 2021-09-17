@@ -6,6 +6,7 @@ import com.github.czyzby.noise4j.map.Grid;
 import com.github.czyzby.noise4j.map.generator.noise.NoiseGenerator;
 import com.github.czyzby.noise4j.map.generator.util.Generators;
 
+import hitonoriol.madsand.Enumerable;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Faction;
@@ -28,6 +29,8 @@ public class WorldGen {
 	private int width, height;
 	private float scaleBy;
 	private boolean friendlyOnly, skipLandPropGen;
+
+	private static int dungeonTile = Enumerable.findId(TileProp.tiles, "Dungeon Trapdoor");
 
 	public WorldGen(WorldMap worldMap) {
 		setWorldMap(worldMap);
@@ -83,6 +86,7 @@ public class WorldGen {
 		this.curMap = curLocation.getLayer(curLayer);
 
 		Utils.out("Generating " + curMapCoords + ": " + curLayer);
+		Utils.dbg("Dungeon tile: " + dungeonTile);
 
 		if (width < 1 || height < 1)
 			curMap.rollSize();
@@ -108,7 +112,7 @@ public class WorldGen {
 			genLakes();
 			genBiomeObjects();
 			genBiomeStructures();
-			rollDungeon();
+			rollDungeonEntrance();
 			initialMobSpawn();
 			rollLandProperties();
 		} else {
@@ -124,6 +128,10 @@ public class WorldGen {
 			Lua.execute(curBiome.postGenScript);
 
 		reset();
+	}
+
+	private Map currentMap() {
+		return worldMap.getLocation(curMapCoords).getLayer(curLayer);
 	}
 
 	private void rollLandProperties() {
@@ -190,8 +198,7 @@ public class WorldGen {
 
 	private void genLakes() {
 		Utils.out("Generating lakes!");
-		Map curLoc = worldMap.getLocation(curMapCoords).getLayer(curLayer);
-		int w = curLoc.getWidth(), h = curLoc.getHeight();
+		int w = curMap.getWidth(), h = curMap.getHeight();
 		LakePreset lakes = curBiome.getBiomeLake();
 
 		if (lakes.intervals.isEmpty())
@@ -206,7 +213,7 @@ public class WorldGen {
 		noiseGenerator.generate(grid);
 
 		for (LakePreset.Interval lake : lakes.intervals)
-			genLake(curLoc, grid, lake);
+			genLake(curMap, grid, lake);
 
 		Utils.out("Done generating lakes!");
 	}
@@ -234,7 +241,7 @@ public class WorldGen {
 		int maxOreFieldSize = cave.maxVeinSize;
 		int count = cave.maxVeinCount;
 		int cdef = cave.caveTile;
-		Map loc = worldMap.getLocation(curMapCoords).getLayer(curLayer);
+		Map loc = currentMap();
 		loc.purge();
 		loc.fillTile(cdef);
 		loc.defObject = cave.caveObject;
@@ -267,8 +274,13 @@ public class WorldGen {
 		Utils.out("Done generating underworld!");
 	}
 
-	private void rollDungeon() {
-		worldMap.getLocation(curMapCoords).hasDungeon = Utils.percentRoll(curBiome.dungeonProbability);
+	private void rollDungeonEntrance() {
+		if (worldMap.getLocation(curMapCoords).hasDungeon = Utils.percentRoll(curBiome.dungeonProbability)) {
+			Pair coords = currentMap().randPlaceTile(dungeonTile);
+			Utils.dbg("Created dungeon entrance @ (%s)", coords);
+		} else
+			Utils.dbg("No dungeon entrance generated in this location");
+
 	}
 
 	private void genDungeon() {

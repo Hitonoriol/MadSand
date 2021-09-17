@@ -7,8 +7,7 @@
 			"defaultTile" : 0,
 			"tiles" : [
 				{ "rollCount" : 350, "idList" : [ 1, 2 ] },
-				{ "rollCount" : 100, "idList" : [ 3 ] },
-				{ "scalable" : false, "rollCount" : 1, "idList" : [ 45 ] }
+				{ "rollCount" : 100, "idList" : [ 3 ] }
 			],
 			
 			"objects" : [

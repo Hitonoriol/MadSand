@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
-import hitonoriol.madsand.dialog.GameTextSubstitutor;
+import hitonoriol.madsand.dialog.TextSubstitutor;
 import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.Faction;
 import hitonoriol.madsand.entities.Player;
@@ -153,7 +153,7 @@ public abstract class AbstractNpc extends Entity {
 		stats.calcStats();
 		stats.restore();
 
-		stats.name = GameTextSubstitutor.replace(properties.name);
+		stats.name = TextSubstitutor.replace(properties.name);
 		stats.hp = (int) (properties.hp + lvl * HP_PER_LVL);
 		stats.mhp = stats.hp;
 		stats.set(Stat.Strength, (int) (properties.strength + lvl * STR_PER_LVL));

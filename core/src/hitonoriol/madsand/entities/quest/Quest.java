@@ -19,7 +19,7 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
-import hitonoriol.madsand.dialog.GameTextSubstitutor;
+import hitonoriol.madsand.dialog.TextSubstitutor;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
@@ -87,6 +87,11 @@ public class Quest implements Enumerable {
 	@Override
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	@Override
+	public String name() {
+		return name;
 	}
 
 	public Quest setPlayer(Player player) {
@@ -254,9 +259,9 @@ public class Quest implements Enumerable {
 	protected void createEndMsg() {
 		endMsg += Resources.LINEBREAK + Resources.LINEBREAK;
 		endMsg += "Rewards:" + Resources.LINEBREAK;
-		endMsg += Utils.subsName(GameTextSubstitutor.QUEST_EXP_REWARD);
+		endMsg += Utils.subsName(TextSubstitutor.QUEST_EXP_REWARD);
 		if (!rewardItems.equals(Item.EMPTY_ITEM))
-			endMsg += ", " + Utils.subsName(GameTextSubstitutor.QUEST_ITEM_REWARD) + ".";
+			endMsg += ", " + Utils.subsName(TextSubstitutor.QUEST_ITEM_REWARD) + ".";
 	}
 
 	public void start(Player player, long npcUID) {
@@ -280,11 +285,11 @@ public class Quest implements Enumerable {
 		HashMap<Integer, Integer> reward = new HashMap<>();
 		createObjectiveMap(this.rewardItems, reward);
 
-		GameTextSubstitutor.add(GameTextSubstitutor.QUEST_ITEM_OBJECTIVE, getObjectiveList(itemObjective, itemNames));
-		GameTextSubstitutor.add(GameTextSubstitutor.QUEST_KILL_OBJECTIVE, getObjectiveList(killObjective, npcNames));
-		GameTextSubstitutor.add(GameTextSubstitutor.QUEST_ITEM_REWARD,
+		TextSubstitutor.add(TextSubstitutor.QUEST_ITEM_OBJECTIVE, getObjectiveList(itemObjective, itemNames));
+		TextSubstitutor.add(TextSubstitutor.QUEST_KILL_OBJECTIVE, getObjectiveList(killObjective, npcNames));
+		TextSubstitutor.add(TextSubstitutor.QUEST_ITEM_REWARD,
 				getObjectiveList(reward, itemNames, REWARD_COLOR));
-		GameTextSubstitutor.add(GameTextSubstitutor.QUEST_EXP_REWARD, expRewardString);
+		TextSubstitutor.add(TextSubstitutor.QUEST_EXP_REWARD, expRewardString);
 	}
 
 	private void showQuestDialog(String dialogText) {

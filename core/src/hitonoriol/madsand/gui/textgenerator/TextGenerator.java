@@ -1,7 +1,7 @@
 package hitonoriol.madsand.gui.textgenerator;
 
 import hitonoriol.madsand.resources.Resources;
-import hitonoriol.madsand.util.Utils;
+import hitonoriol.madsand.util.Strings;
 
 public abstract class TextGenerator {
 	private String text = "foo";
@@ -11,7 +11,7 @@ public abstract class TextGenerator {
 	public abstract void update(int x, int y);
 
 	public String getText() {
-		if (Utils.builderEquals(builder, text))
+		if (Strings.builderEquals(builder, text))
 			return text;
 
 		return text = builder.toString();
@@ -33,7 +33,7 @@ public abstract class TextGenerator {
 	}
 
 	protected void clearBuilder() {
-		Utils.clearBuilder(builder);
+		Strings.clearBuilder(builder);
 	}
 	
 	protected void clear() {

@@ -1,7 +1,6 @@
 package hitonoriol.madsand.util;
 
 import static hitonoriol.madsand.resources.Resources.ERR_FILE;
-import static hitonoriol.madsand.resources.Resources.LINEBREAK;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryUsage;
@@ -27,7 +26,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.dialog.GameTextSubstitutor;
+import hitonoriol.madsand.dialog.TextSubstitutor;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.util.Functional.SafeRunnable;
 import me.xdrop.jrand.JRand;
@@ -289,7 +288,7 @@ public class Utils {
 	}
 
 	public static String subsName(String varName) {
-		return GameTextSubstitutor.DELIM_L + varName + GameTextSubstitutor.DELIM_R;
+		return TextSubstitutor.L + varName + TextSubstitutor.R;
 	}
 
 	public static <T> String getPackageName(Class<T> clazz) {
@@ -313,19 +312,6 @@ public class Utils {
 		if (value < 1)
 			return 0;
 		return Math.log(value) / Math.log(base);
-	}
-
-	public static boolean builderEquals(StringBuilder builder, String contents) {
-		return builder.length() == contents.length() && builder.indexOf(contents) == 0;
-	}
-
-	public static StringBuilder clearBuilder(StringBuilder sb) {
-		sb.setLength(0);
-		return sb;
-	}
-
-	public static StringBuilder newLine(StringBuilder sb) {
-		return sb.append(LINEBREAK);
 	}
 
 	public static int val(boolean bool) {

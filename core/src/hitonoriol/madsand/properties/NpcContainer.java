@@ -46,6 +46,11 @@ public class NpcContainer implements Enumerable {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
+	@Override
+	public String name() {
+		return name;
+	}
 
 	public AbstractNpc spawn() {
 		try {

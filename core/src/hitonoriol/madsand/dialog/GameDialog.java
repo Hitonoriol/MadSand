@@ -100,7 +100,7 @@ public class GameDialog extends Dialog {
 	}
 
 	public void setText(String text) {
-		textLbl.setText(GameTextSubstitutor.replace(text));
+		textLbl.setText(TextSubstitutor.replace(text));
 	}
 
 	public GameDialog setTitle(String text) {

@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
-import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.Faction;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategories;
@@ -110,7 +109,7 @@ public class ProceduralQuest extends Quest {
 	}
 
 	protected void createEndMsg() {
-		super.endMsg = "Thank you, " + Utils.subsName(GameTextSubstitutor.PLAYER_NAME) + "!";
+		super.endMsg = "Thank you, " + MadSand.player().getName() + "!";
 		super.createEndMsg();
 	}
 

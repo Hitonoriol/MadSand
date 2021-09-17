@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Timer;
 
 import hitonoriol.madsand.containers.Storage;
-import hitonoriol.madsand.dialog.GameTextSubstitutor;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.input.Mouse;
@@ -61,7 +60,6 @@ public class MadSand extends Game {
 		Timer.instance().start();
 		Resources.loadAll();
 		Gui.init();
-		GameTextSubstitutor.init();
 		initScreens();
 		Keyboard.initListener();
 		Mouse.initListener();
