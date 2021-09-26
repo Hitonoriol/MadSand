@@ -8,7 +8,6 @@
 	"corridorTile" : 5,
 	"staircaseDownObject": 113,
 	"staircaseUpObject": 114,
-	"exitFloor" : 3,
 	"exitObject" : 112,
 	"dungeonContents" : [ {
 		"fromFloor" : 1,

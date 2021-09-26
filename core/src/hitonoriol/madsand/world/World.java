@@ -521,6 +521,17 @@ public class World {
 		return ascend(worldMap.curLayer - 1);
 	}
 
+	public void returnToSurface() {
+		if (worldMap.getLayerType() == Location.Layer.Dungeon) {
+			if (player.completeDungeon()) {
+				MadSand.notice("Total dungeons completed: %d", player.dungeonsCompleted());
+				MadSand.notice("Congratulations! You completed this dungeon for the first time!");
+			}
+		}
+
+		ascend(Location.LAYER_OVERWORLD);
+	}
+
 	private void cleanUpPreviousLocations() {
 		if (worldMap.curLayer != Location.LAYER_OVERWORLD)
 			return;

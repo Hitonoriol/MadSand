@@ -57,11 +57,16 @@ public class WorldMap {
 	}
 
 	@JsonIgnore
+	/* This is entirely cosmetic, real layer number is <curLayer> */
 	public int getCurLocationLayer() { // Returns layer with layer type's offset (currently only for Caves)
 		if (curLayer > Location.LAYER_BASE_CAVE)
 			return curLayer - Location.LAYER_BASE_CAVE;
 
 		return curLayer;
+	}
+
+	public Location.Layer getLayerType() {
+		return Location.Layer.byNumber(curLayer);
 	}
 
 	public int wx() {

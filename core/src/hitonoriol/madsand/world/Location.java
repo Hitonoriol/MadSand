@@ -18,12 +18,11 @@ import hitonoriol.madsand.world.Settlement.Status;
  */
 
 public class Location {
-	public static final int LAYER_OVERWORLD = 0;
-	public static final int LAYER_BASE_DUNGEON = 1;
-	public static final int LAYER_MAX_DUNGEON = 50;
-	public static final int LAYER_BASE_CAVE = 50; // Cave base value ( layer <n> of cave is BASE + <n> )
-	public static final int LAYER_MAX_CAVE = 100;
 	public static final int LAYER_MAX = 65535; // Layer number is saved as u16-bit int
+
+	public static final int LAYER_OVERWORLD = Layer.Overworld.base();
+	public static final int LAYER_BASE_DUNGEON = Layer.Dungeon.base(), LAYER_MAX_DUNGEON = Layer.Dungeon.max();
+	public static final int LAYER_BASE_CAVE = Layer.Cave.base(), LAYER_MAX_CAVE = Layer.Cave.max();
 
 	public String name = "Wilderness";
 	public int biome = -1;
@@ -149,5 +148,42 @@ public class Location {
 	public String toString() {
 		return String.format("Location {%s} Settlement: %b",
 				name, isSettlement());
+	}
+
+	public static enum Layer {
+		Overworld(0), Dungeon(0, 30), Cave(30, LAYER_MAX);
+
+		private final static Layer values[] = values();
+
+		/* <base> is exclusive, end is inclusive */
+		private int base, max;
+
+		Layer(int base, int max) {
+			this.base = base;
+			this.max = max;
+		}
+
+		Layer(int base) {
+			this(base, base);
+		}
+
+		public int base() {
+			return base;
+		}
+
+		public int max() {
+			return max;
+		}
+		
+		public int count() {
+			return max - base;
+		}
+
+		public static Layer byNumber(int layer) {
+			for (Layer type : values)
+				if (layer > type.base && layer <= type.max)
+					return type;
+			return null;
+		}
 	}
 }

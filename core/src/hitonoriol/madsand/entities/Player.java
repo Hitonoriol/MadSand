@@ -14,8 +14,6 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.mutable.MutableInt;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -106,7 +104,7 @@ public class Player extends Entity {
 	private List<Ability> abilities = new ArrayList<>();
 	private LinkedHashMap<Integer, Integer> abilityKeyBinds = new LinkedHashMap<>();
 	private int settlementsEstablished = 0;
-	private MutableInt dungeonsCompleted = new MutableInt();
+	private Set<Pair> completedDungeons = new HashSet<>();
 	@JsonIgnore
 	private List<Pair> visibleArea = new ArrayList<>();
 
@@ -1429,6 +1427,10 @@ public class Player extends Entity {
 			MadSand.print("You see: " + entity.getName());
 	}
 
+	public boolean completeDungeon() {
+		return completedDungeons.add(MadSand.world().getCurWPos().copy());
+	}
+
 	@JsonIgnore
 	public TextureRegion getSprite() {
 		if (!isMoving())
@@ -1470,8 +1472,8 @@ public class Player extends Entity {
 	public PlayerStats getStats() {
 		return stats;
 	}
-	
-	public MutableInt dungeonsCompleted() {
-		return dungeonsCompleted;
+
+	public int dungeonsCompleted() {
+		return completedDungeons.size();
 	}
 }

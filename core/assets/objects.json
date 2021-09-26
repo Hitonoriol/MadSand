@@ -862,7 +862,7 @@
 		"@type" : "MapObject",
 		"hp" : 30,
 		"onInteract" : "
-			world:ascend(0);
+			world:returnToSurface();
 		",
 		"name" : "Ladder to the surface"
 	},

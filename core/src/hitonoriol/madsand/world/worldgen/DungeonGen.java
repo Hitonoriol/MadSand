@@ -97,7 +97,7 @@ public class DungeonGen extends DungeonGenerator {
 
 					if (map.spawnPoint.equals(Pair.nullPair)) {
 						map.spawnPoint = new Pair(x, y);
-						if (depth > Location.LAYER_BASE_DUNGEON)
+						if (depth > Location.LAYER_BASE_DUNGEON + 1)
 							map.addObject(x, y, dungeon.staircaseUpObject);
 					}
 				}
@@ -111,12 +111,14 @@ public class DungeonGen extends DungeonGenerator {
 			y++;
 		}
 
-		placeObjectInRoom(dungeon.staircaseDownObject);
 		placeSpecialMobs(curDungeonFloor);
 		placeDoors(curDungeonFloor.doorObject, doors);
 
-		if (depth >= dungeon.exitFloor)
+		if (depth >= Math.min(DungeonPreset.EXIT_FLOOR_BASE + MadSand.player().dungeonsCompleted(),
+				DungeonPreset.EXIT_FLOOR_MAX))
 			placeExit(dungeon);
+		else
+			placeObjectInRoom(dungeon.staircaseDownObject);
 
 		rooms.clear();
 	}
