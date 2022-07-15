@@ -43,7 +43,7 @@
 		"onInteract" : "-1",
 		"altItems" : null,
 		"name" : "Saltwater",
-		"fishingSpot" : {"lvl" : 2, "fish" : "(100|167/1:168/1)(20|160/1:161/1)(10|162/1:166/1)"},
+		"fishingSpot" : {"lvl" : 2, "fish" : "(100|167/1:168/1)(20|160/1:161/1:195/1)(10|162/1:166/1)"},
 		"foreground" : true
 	},
 
