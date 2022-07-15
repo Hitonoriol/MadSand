@@ -178,7 +178,7 @@ inv/25
   index: -1
 inv/100
   rotate: false
-  xy: 765, 173
+  xy: 1020, 343
   size: 80, 77
   orig: 80, 77
   offset: 0, 0
@@ -816,6 +816,69 @@ inv/189
 inv/19
   rotate: false
   xy: 340, 1020
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+inv/190
+  rotate: false
+  xy: 765, 170
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+inv/191
+  rotate: false
+  xy: 850, 255
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+inv/192
+  rotate: false
+  xy: 935, 340
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+inv/193
+  rotate: false
+  xy: 1020, 425
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+inv/194
+  rotate: false
+  xy: 1105, 510
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+inv/195
+  rotate: false
+  xy: 680, 0
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+inv/196
+  rotate: false
+  xy: 765, 85
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+inv/197
+  rotate: false
+  xy: 850, 170
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+inv/198
+  rotate: false
+  xy: 935, 255
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
