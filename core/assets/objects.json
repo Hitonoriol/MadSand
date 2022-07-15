@@ -679,16 +679,6 @@
 		"harvestHp" : 15,
 		"name" : "Sign"
 	},
-	"80" : {
-		"@type" : "MapObject",
-		"hp" : 9,
-		"name" : "Mountain"
-	},
-	"81" : {
-		"@type" : "MapObject",
-		"hp" : 9,
-		"name" : "Mountain"
-	},
 	"82" : {
 		"@type" : "MapObject",
 		"hp" : 1,
@@ -700,26 +690,6 @@
 		"centered" : true,
 		"name" : "Mine entrance"
 	},
-	"83" : {
-		"@type" : "MapObject",
-		"hp" : 50,
-		"name" : "Straw house"
-	},
-	"84" : {
-		"@type" : "MapObject",
-		"hp" : 50,
-		"name" : "Sandstone house"
-	},
-	"85" : {
-		"@type" : "MapObject",
-		"hp" : 50,
-		"name" : "House"
-	},
-	"86" : {
-		"@type" : "MapObject",
-		"hp" : 50,
-		"name" : "House"
-	},
 	"87" : {
 		"@type" : "MapObject",
 		"hp" : 50,
@@ -729,11 +699,6 @@
 		"@type" : "MapObject",
 		"hp" : 10,
 		"name" : "Tombstone"
-	},
-	"89" : {
-		"@type" : "MapObject",
-		"hp" : 50,
-		"name" : "House"
 	},
 	"90" : {
 		"hp" : 15,
