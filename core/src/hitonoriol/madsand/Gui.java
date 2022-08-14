@@ -266,13 +266,14 @@ public class Gui {
 		return setClickAction(actor, Buttons.LEFT, action);
 	}
 
-	public static void setAction(Actor actor, Runnable action) {
+	public static Actor setAction(Actor actor, Runnable action) {
 		actor.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				action.run();
 			}
 		});
+		return actor;
 	}
 
 	public static BitmapFont getFont(int size) {

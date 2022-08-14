@@ -13,6 +13,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 
 public class InventoryUI extends GameDialog {
@@ -63,12 +64,16 @@ public class InventoryUI extends GameDialog {
 
 		invContainer.add(header).pad(10).fillY().align(Align.center).row();
 		invContainer.add(invScroll).size(WIDTH, HEIGHT).row();
-		invContainer.add(craftMenuButton).size(BUTTON_WIDTH, BUTTON_HEIGHT).align(Align.center).pad(BUTTON_PADDING)
+		invContainer.add(craftMenuButton)
+				.size(BUTTON_WIDTH, BUTTON_HEIGHT)
+				.align(Align.center)
+				.pad(BUTTON_PADDING)
 				.row();
-
-		super.add(invContainer)
-				.width(WIDTH + OFFSET)
-				.height(HEIGHT + header.getHeight() + BUTTON_HEIGHT + BUTTON_PADDING * 3);
+		invContainer.add(Gui.setAction(Widgets.button("Close [E]"), () -> hide()))
+				.size(BUTTON_WIDTH, BUTTON_HEIGHT).row();
+		invContainer.setFillParent(true);
+		
+		super.add(invContainer);
 		super.setBackground(Gui.transparency);
 
 		items = 0;
