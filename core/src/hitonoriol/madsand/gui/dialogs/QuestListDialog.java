@@ -27,7 +27,6 @@ public class QuestListDialog extends GameDialog {
 	Table scrollTable;
 	AutoFocusScrollPane scroll;
 	Table container;
-	TextButton closeButton;
 
 	QuestWorker quests;
 	ArrayList<Integer> questList;
@@ -47,17 +46,9 @@ public class QuestListDialog extends GameDialog {
 		scroll = new AutoFocusScrollPane(scrollTable);
 		container.add(scroll).size(BUTTON_WIDTH, SCROLL_HEIGHT).row();
 		super.add(container);
-		closeButton = new TextButton("Close", Gui.skin);
 
 		refresh();
-		container.add(closeButton).size(BUTTON_WIDTH / 2, BUTTON_HEIGHT).row();
-
-		closeButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				remove();
-			}
-		});
+		container.add(createCloseButton()).size(BUTTON_WIDTH / 2, BUTTON_HEIGHT).row();
 	}
 
 	private void refresh() {

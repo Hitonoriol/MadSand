@@ -6,7 +6,6 @@ import java.util.stream.Stream;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
@@ -40,7 +39,6 @@ public class QuestJournal extends GameDialog {
 
 	AutoFocusScrollPane questScroll;
 	Table questTable;
-	TextButton closeButton;
 	Label statusLabel, nameLabel, reqLabel, npcLocationLabel;
 	Label emptyJournalLabel;
 
@@ -55,7 +53,6 @@ public class QuestJournal extends GameDialog {
 		reqLabel = createTitle("Objectives");
 		npcLocationLabel = createTitle("Turn in to");
 		emptyJournalLabel = createTitle("Your journal is empty");
-		closeButton = new TextButton("Close", Gui.skin);
 
 		questTable = new Table();
 		questTable.setBackground(Gui.darkBackgroundSizeable);
@@ -66,8 +63,7 @@ public class QuestJournal extends GameDialog {
 		questScroll.setScrollingDisabled(true, false);
 
 		super.add(questScroll).minSize(TABLE_WIDTH, TABLE_HEIGHT).padTop(SCROLL_YPADDING).row();
-		super.add(closeButton).size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT).padBottom(CLOSE_BUTTON_YPADDING).row();
-		Gui.setAction(closeButton, () -> remove());
+		super.add(createCloseButton()).size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT).padBottom(CLOSE_BUTTON_YPADDING).row();
 		pack();
 	}
 

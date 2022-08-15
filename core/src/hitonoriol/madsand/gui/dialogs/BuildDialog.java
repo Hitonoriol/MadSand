@@ -10,8 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
@@ -31,8 +29,6 @@ public class BuildDialog extends GameDialog {
 
 	float WIDTH = 300;
 	float HEIGHT = 400;
-
-	TextButton exitButton = new TextButton("Close", Gui.skin);
 
 	Table buildTable = new Table();
 	Label emptyLabel = new Label("You don't know how to build anything", Gui.skin);
@@ -66,14 +62,7 @@ public class BuildDialog extends GameDialog {
 
 		buildScroll = new AutoFocusScrollPane(buildTable);
 		super.add(buildScroll).size(WIDTH, HEIGHT).row();
-		super.add(exitButton).size(100, 50);
-
-		exitButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				remove();
-			}
-		});
+		super.add(createCloseButton()).size(100, 50);
 	}
 
 }

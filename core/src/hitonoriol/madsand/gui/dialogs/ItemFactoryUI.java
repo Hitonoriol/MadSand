@@ -42,7 +42,6 @@ public class ItemFactoryUI extends GameDialog {
 	private ItemProducer producer;
 	private Player player;
 
-	private TextButton closeButton;
 	private TextButton upgradeButton;
 	private TextButton addConsumableButton, takeProductButton;
 	private Slider consumableSlider, productSlider;
@@ -63,8 +62,6 @@ public class ItemFactoryUI extends GameDialog {
 			producerName = ObjectProp.getName(id);
 		else
 			producerName = NpcProp.npcs.get(-id).name;
-
-		closeButton = new TextButton("Close", Gui.skin);
 
 		upgradeButton = new TextButton("", Gui.skin);
 		addConsumableButton = new TextButton("", Gui.skin);
@@ -124,7 +121,10 @@ public class ItemFactoryUI extends GameDialog {
 		} else
 			add().padBottom(PAD_VERTICAL * 2).row();
 
-		add(closeButton).colspan(2).size(BUTTON_WIDTH, BUTTON_HEIGHT).padTop(PAD_VERTICAL / 2)
+		add(createCloseButton())
+				.colspan(2)
+				.size(BUTTON_WIDTH, BUTTON_HEIGHT)
+				.padTop(PAD_VERTICAL / 2)
 				.align(Align.center);
 		setSize(WIDTH, HEIGHT);
 		pack();
@@ -183,7 +183,6 @@ public class ItemFactoryUI extends GameDialog {
 			player.addItem(producer.getProduct((int) productSlider.getValue()));
 			refresh();
 		});
-		Gui.setAction(closeButton, () -> remove());
 	}
 
 	private void initSliderListeners() {

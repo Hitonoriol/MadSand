@@ -16,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -52,7 +51,6 @@ public class FishingUI extends GameDialog {
 
 	Group gameContainer = new Group();
 	Image bobber;
-	TextButton closeButton = new TextButton("Close", Gui.skin);
 	TimedProgressBar catchBar = new TimedProgressBar();
 
 	float minSpawnTime = 1f;

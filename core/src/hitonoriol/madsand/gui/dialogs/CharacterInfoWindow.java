@@ -1,13 +1,10 @@
 package hitonoriol.madsand.gui.dialogs;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
@@ -27,7 +24,7 @@ import hitonoriol.madsand.gui.widgets.stats.StatProgressBar;
  * Character info in-game menu 
  */
 
-public class CharacterInfoWindow {
+public class CharacterInfoWindow extends GameDialog {
 	private final static float headerLeftPadding = -45f;
 	private final static float headerBottomPadding = 5f;
 
@@ -37,13 +34,11 @@ public class CharacterInfoWindow {
 	static ProgressBarStyle skillStyle = Gui.createProgressBarStyle(BAR_WIDTH, BAR_HEIGHT, Color.LIME);
 	static ProgressBarStyle repStyle = Gui.createProgressBarStyle(BAR_WIDTH, BAR_HEIGHT, Color.ORANGE);
 
-	GameDialog dialog;
 	StatLabels statLabels;
 	Skin skin = Gui.skin;
 
 	public CharacterInfoWindow() {
 		statLabels = new StatLabels();
-		dialog = new GameDialog(Gui.overlay);
 		createDialog();
 	}
 
@@ -61,16 +56,16 @@ public class CharacterInfoWindow {
 		Gui.setFontSize(nameLbl, Gui.FONT_M);
 
 		// Dialog Title (Player's name & Level progressbar)
-		dialog.add(nameLbl).row();
-		dialog.setBackground(Gui.darkBackground);
-		dialog.add().row();
+		add(nameLbl).row();
+		setBackground(Gui.darkBackground);
+		add().row();
 		statLabels.refreshStatLabels();
-		dialog.add(StatProgressBar.createLevelBar()
+		add(StatProgressBar.createLevelBar()
 				.setStatText("LVL " + stats.skills.getLvl())
 				.setSkill(player.stats.skills.get(Skill.Level))
 				.setProgressSize(BAR_WIDTH * 1.75f, BAR_HEIGHT))
 				.row();
-		dialog.add().width(Gui.defLblWidth).row();
+		add().width(Gui.defLblWidth).row();
 
 		// Stat list
 		addTitle(scrollTable, "Stats:");
@@ -88,21 +83,8 @@ public class CharacterInfoWindow {
 		addTitle(scrollTable, "Reputation:");
 		scrollTable.add(createRepTable()).row();
 
-		TextButton ok = new TextButton("Close", skin);
-
-		dialog.add(dialogScroll).width(GameDialog.WIDTH).height(400).row();
-		dialog.add(ok).padTop(35).padBottom(LINE_PAD).row();
-
-		ok.addListener(new ChangeListener() {
-			public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-				dialog.hide();
-			}
-
-		});
-	}
-
-	public GameDialog getDialog() {
-		return dialog;
+		add(dialogScroll).width(GameDialog.WIDTH).height(400).row();
+		add(createCloseButton()).padTop(35).padBottom(LINE_PAD).row();
 	}
 
 	private Table createMiscInfoTable() {
@@ -178,13 +160,5 @@ public class CharacterInfoWindow {
 		}
 
 		return skillTable;
-	}
-
-	public void show() {
-		dialog.show(Gui.overlay);
-	}
-
-	public void remove() {
-		dialog.remove();
 	}
 }
