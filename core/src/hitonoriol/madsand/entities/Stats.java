@@ -163,42 +163,8 @@ public class Stats {
 		return Utils.percentRoll(calcAttackMissChance());
 	}
 
-	float defPercent = 0.333f;
-	float minAttackPercent = 0.3f;
-	float critPercent = 0.45f;
-
 	public int getBaseAttack() {
 		return get(Stat.Strength);
-	}
-
-	float rangedAtkCoef = 0.45f;
-
-	public int calcBaseRangedAttack(int distance) {
-		if (rangedAttackMissed(distance))
-			return 0;
-
-		return (int) Math.max(getBaseAttack() * minAttackPercent * rangedAtkCoef, calcAttack() * rangedAtkCoef);
-	}
-
-	public int calcMeleeAttack(int defense) {
-		if (meleeAttackMissed())
-			return 0;
-
-		return calcAttack(defense);
-	}
-
-	private int calcAttack(int defense) {
-		int atk = (int) (getBaseAttack() - (defense * defPercent));
-
-		if (atk <= 0)
-			atk = 1;
-
-		if (critRoll())
-			atk += atk * critPercent;
-		else
-			atk = Utils.rand((int) (atk * minAttackPercent), atk);
-
-		return atk;
 	}
 
 	/* Impact of 100% encumbrance on Entity's speed */
@@ -215,10 +181,6 @@ public class Stats {
 			return 0;
 
 		return inv.getTotalWeight() / maxWeight;
-	}
-
-	private int calcAttack() {
-		return calcAttack(0);
 	}
 
 	@JsonIgnore

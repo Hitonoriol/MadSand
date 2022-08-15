@@ -19,6 +19,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.entities.Damage;
+import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.inventory.ItemUI;
@@ -99,7 +101,7 @@ public class MapObject extends MapEntity implements Placeable {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	@Override
 	public String name() {
 		return getName();
@@ -195,6 +197,26 @@ public class MapObject extends MapEntity implements Placeable {
 
 		playDamageAnimation();
 		takeHarvestDamage(amt + 1);
+	}
+
+	@Override
+	public void acceptDamage(Damage damage) {
+		super.acceptDamage(damage);
+
+		Entity dealer = damage.getDealer();
+		if (dealer != MadSand.player()) {
+		if (!damage.missed())
+			MadSand.print(dealer.getName() + " hits " + name + " dealing " + damage.getValueString() + " damage");
+		}
+		else {
+			if (damage.missed())
+				MadSand.print("You hit " + name + " but deal no damage");
+			else
+				MadSand.print("You deal " + damage.getValueString() + " damage to " + name);
+		}
+
+		if (isDestroyed())
+			MadSand.print(name + " shatters into pieces!");
 	}
 
 	/* Used when precalculating hits during the resource gathering */

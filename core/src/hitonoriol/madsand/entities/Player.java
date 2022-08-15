@@ -65,7 +65,6 @@ import hitonoriol.madsand.gui.dialogs.TraderDialog;
 import hitonoriol.madsand.gui.dialogs.WaitDialog;
 import hitonoriol.madsand.gui.widgets.overlay.ResourceProgressBar;
 import hitonoriol.madsand.input.Keyboard;
-import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.map.FishingSpot;
 import hitonoriol.madsand.map.Loot;
@@ -414,51 +413,6 @@ public class Player extends Entity {
 		return unEquipped;
 	}
 
-	protected void attack(MapObject object, int dmg) {
-		if (dmg == 0)
-			MadSand.print("You hit " + object.name + " but deal no damage");
-		else
-			MadSand.print("You deal " + dmg + " damage to " + object.name);
-		super.attack(object, dmg);
-	}
-
-	private void attack(AbstractNpc npc, int dmg) {
-		Map map = MadSand.world().getCurLoc();
-
-		npc.provoke();
-		if (dmg == 0)
-			MadSand.print("You miss " + npc.stats.name);
-		else {
-			MadSand.print("You deal " + dmg + " damage to " + npc.stats.name);
-			damageHeldEquipment();
-		}
-
-		if (npc.isDead()) {
-			Mouse.refreshTooltip();
-			MadSand.notice("You kill %s! [+%d exp]",
-					npc.getName(),
-					(int) addExp(npc.rewardExp * Math.sqrt(getLvl() * 0.05)));
-			reputation.change(npc.stats.faction, Reputation.KILL_PENALTY);
-
-			if (addToKillCount(npc.id)) // If killed for the first time
-				MadSand.print("You now know more about " + npc.stats.name + "s");
-
-			if (!map.editable && map.getHostileNpcCount() == 0 && MadSand.world().isUnderGround()) {
-				MadSand.print("The curse of the dungeon has been lifted!" + Resources.LINEBREAK
-						+ "You can now break objects on this floor of the dungeon.");
-				map.editable = true;
-			}
-		}
-	}
-
-	@Override
-	protected void attack(MapEntity target, int dmg) {
-		super.attack(target, dmg);
-
-		if (target instanceof AbstractNpc)
-			attack((AbstractNpc) target, dmg);
-	}
-
 	/* Melee Attack method for Ability scripts */
 	private void performAttack(Pair coords, int dmg) {
 		Map map = MadSand.world().getCurLoc();
@@ -468,7 +422,7 @@ public class Player extends Entity {
 		if (map.isFreeTile(coords))
 			return;
 
-		attack(map.getMapEntity(coords), dmg);
+		attack(map.getMapEntity(coords), new Damage(dmg));
 	}
 
 	public void attack(Pair coords, int dmg) {
@@ -508,10 +462,10 @@ public class Player extends Entity {
 		if (npc == Map.nullNpc)
 			return;
 
-		int atk = stats.calcMeleeAttack(npc.getDefense());
-		attack((MapEntity) npc, atk);
+		Damage damage = new Damage(this).melee(npc.getDefense());
+		attack((MapEntity) npc, damage);
 
-		if (atk > 0)
+		if (!damage.missed())
 			stats.skills.increaseSkill(Skill.Melee);
 	}
 
@@ -1383,9 +1337,21 @@ public class Player extends Entity {
 			meleeAttack();
 	}
 
+	@Override
 	public void damage(int to) {
 		super.damage(to);
 		Gui.refreshOverlay();
+	}
+
+	@Override
+	public void acceptDamage(Damage damage) {
+		Entity dealer = damage.getDealer();
+		if (damage.missed()) {
+			MadSand.print(dealer.getName() + " misses!");
+			increaseSkill(Skill.Evasion);
+		} else
+			MadSand.warn(dealer.getName() + " deals " + damage.getValueString() + " damage to you");
+		super.acceptDamage(damage);
 	}
 
 	public void lootMsg() {

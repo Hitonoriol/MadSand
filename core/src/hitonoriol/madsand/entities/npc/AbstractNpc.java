@@ -16,13 +16,15 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.TextSubstitutor;
+import hitonoriol.madsand.entities.Damage;
 import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.Faction;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.entities.Reputation;
 import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.entities.inventory.item.Projectile;
-import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.pathfinding.Node;
@@ -259,25 +261,6 @@ public abstract class AbstractNpc extends Entity {
 		return new HashCodeBuilder(18899, 63839).append(uid).toHashCode();
 	}
 
-	protected void attack(Player target, int dmg) {
-		if (dmg == 0) {
-			MadSand.print(stats.name + " misses!");
-			target.increaseSkill(Skill.Evasion);
-		} else
-			MadSand.warn(stats.name + " deals " + dmg + " damage to you");
-	}
-
-	@Override
-	protected void attack(MapEntity target, int dmg) {
-		super.attack(target, dmg);
-
-		if (target instanceof Player)
-			attack((Player) target, dmg);
-
-		else if (dmg > 0)
-			MadSand.print(stats.name + " hits " + target.getName() + " dealing " + dmg + " damage");
-	}
-
 	@Override
 	public void meleeAttack(Direction dir) {
 		Pair coords = new Pair(x, y).addDirection(dir);
@@ -287,8 +270,45 @@ public abstract class AbstractNpc extends Entity {
 		if (!(player.x == coords.x && player.y == coords.y))
 			return;
 		else {
-			int atk = stats.calcMeleeAttack(player.getDefense());
-			attack((MapEntity) player, atk);
+			Damage damage = new Damage(this).melee(player.getDefense());
+			attack((MapEntity) player, damage);
+		}
+	}
+
+	@Override
+	public void acceptDamage(Damage damage) {
+		Player player = MadSand.player();
+		Entity dealer = damage.getDealer(); // TODO: Aggro at any Entity, not just player
+		boolean attackedByPlayer = damage.dealtBy(player);
+
+		provoke();
+		if (attackedByPlayer) {
+			if (damage.missed())
+				MadSand.print("You miss " + getName());
+			else {
+				MadSand.print("You deal " + damage.getValueString() + " damage to " + getName());
+				player.damageHeldEquipment();
+			}
+		}
+
+		super.acceptDamage(damage);
+
+		if (isDead()) {
+			Mouse.refreshTooltip();
+			MadSand.notice("You kill %s! [+%d exp]",
+					getName(),
+					(int) player.addExp(rewardExp * Math.sqrt(getLvl() * 0.05)));
+			player.getReputation().change(stats().faction, Reputation.KILL_PENALTY);
+
+			if (player.addToKillCount(id)) // If killed for the first time
+				MadSand.print("You now know more about " + getName());
+
+			Map map = MadSand.world().getCurLoc();
+			if (!map.editable && map.getHostileNpcCount() == 0 && MadSand.world().isUnderGround()) {
+				MadSand.print("The curse of the dungeon has been lifted!" + Resources.LINEBREAK
+						+ "You can now break objects on this floor of the dungeon.");
+				map.editable = true;
+			}
 		}
 	}
 

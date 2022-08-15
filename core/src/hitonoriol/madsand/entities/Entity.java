@@ -180,16 +180,8 @@ public abstract class Entity extends MapEntity {
 		return inventory.hasItem(Globals.values().currencyId, cost);
 	}
 
-	protected void attack(MapObject object, int dmg) {
-		if (object.isDestroyed())
-			MadSand.print(object.name + " shatters into pieces!");
-	}
-
-	protected void attack(MapEntity target, int dmg) {
-		target.damage(dmg);
-
-		if (target instanceof MapObject)
-			attack((MapObject) target, dmg);
+	protected void attack(MapEntity target, Damage damage) {
+		target.acceptDamage(damage);
 	}
 
 	public abstract void meleeAttack(Direction dir);
@@ -201,12 +193,10 @@ public abstract class Entity extends MapEntity {
 		if (obstacleCoords.isEmpty())
 			obstacleCoords.set(targetPos);
 
-		int baseDmg = stats.calcBaseRangedAttack(distanceTo(obstacleCoords));
-		int impactDmg = baseDmg != 0 ? baseDmg + projectile.calcDamage() : 0;
-
+		Damage damage = new Damage(this).ranged(projectile, distanceTo(obstacleCoords));
 		projectile.launchProjectile(thisCoords.toScreen().copy(),
 				obstacleCoords.toScreen().copy(),
-				target -> attack(target, impactDmg));
+				target -> attack(target, damage));
 		MadSand.getRenderer().queuePath(Path.create(thisCoords.toWorld(), obstacleCoords.toWorld()), 0.675f, Color.RED);
 	}
 
@@ -336,6 +326,7 @@ public abstract class Entity extends MapEntity {
 		damage((int) (stats().mhp * percent));
 	}
 
+	@Override
 	public void damage(int dmg) {
 		if (dmg <= 0)
 			return;
@@ -343,6 +334,12 @@ public abstract class Entity extends MapEntity {
 		playDamageAnimation();
 		stats.hp -= dmg;
 		stats.check();
+	}
+
+	@Override
+	public void acceptDamage(Damage damage) {
+		// TODO: Handle resists / weaknesses, etc
+		super.acceptDamage(damage);
 	}
 
 	public void heal(int amt) {

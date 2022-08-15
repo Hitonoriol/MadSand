@@ -12,6 +12,7 @@ import hitonoriol.madsand.DynamicallyCastable;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.AnimationContainer;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.entities.Damage;
 import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.gui.widgets.overlay.GameContextMenu;
 import hitonoriol.madsand.map.object.MapObject;
@@ -22,7 +23,11 @@ public abstract class MapEntity implements DynamicallyCastable<MapEntity> {
 	@JsonProperty
 	private float luminosity = 0;
 
-	public abstract void damage(int amt);
+	public abstract void damage(int damage);
+
+	public void acceptDamage(Damage damage) {
+		damage(damage.getValue());
+	}
 
 	public abstract String getName();
 
