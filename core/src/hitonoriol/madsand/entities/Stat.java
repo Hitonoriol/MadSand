@@ -15,10 +15,13 @@ public enum Stat {
 			if (it.next().excludeFromSum())
 				it.remove();
 		}
-
 	}
 
 	public boolean excludeFromSum() {
 		return (this == Defense);
+	}
+	
+	public static int totalRollableStats() {
+		return rollableStats.size();
 	}
 }

@@ -81,14 +81,14 @@ public class Stats {
 		return baseStats.roll(stat);
 	}
 
-	public void randomize(int lvl) {
-		baseStats.randomize(lvl);
+	public void randomize(int lvl, int minStatVal) {
+		baseStats.randomize(lvl, minStatVal);
 		calcStats();
 		restore();
 	}
 
-	public void randomize() {
-		randomize(0);
+	public void randomize(int lvl) {
+		randomize(lvl, 1);
 	}
 
 	public void calcStats() {

@@ -8,8 +8,9 @@ import hitonoriol.madsand.entities.Stats;
 import hitonoriol.madsand.gui.widgets.stats.StatLabels;
 
 public class CharacterCreationDialog extends PlayerStatDialog {
-	Stats stats;
-	static String titleString = "Character Creation";
+	private Stats stats;
+	private static String titleString = "Character Creation";
+	private static final int MIN_STAT_VALUE = 2; 
 
 	public CharacterCreationDialog() {
 		super(Gui.overlay, new StatLabels(), titleString);
@@ -18,7 +19,7 @@ public class CharacterCreationDialog extends PlayerStatDialog {
 	}
 
 	void rollStats() {
-		stats.randomize();
+		stats.randomize(0, MIN_STAT_VALUE);
 		statLabels.refreshStatLabels();
 		Gui.refreshOverlay();
 	}

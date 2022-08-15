@@ -169,7 +169,7 @@ public class BaseStats extends HashMap<Stat, Integer> {
 		return Utils.percentRoll(getEffectiveness(stat));
 	}
 
-	public void randomize(int lvl) {
+	public void randomize(int lvl, int minStatVal) {
 		final int maxStatVal = RAND_MAX + lvl;
 		maxStatSum += lvl * ROLLABLE_STATS;
 
@@ -177,12 +177,16 @@ public class BaseStats extends HashMap<Stat, Integer> {
 		while (sum != maxStatSum) {
 			for (Stat stat : Stat.values())
 				if (!stat.excludeFromSum())
-					set(stat, Utils.rand(RAND_MIN, maxStatVal));
+					set(stat, Utils.rand(minStatVal, maxStatVal));
 			sum = getSum();
 		}
 	}
 
+	public void randomize(int lvl) {
+		randomize(lvl, RAND_MIN);
+	}
+
 	public void randomize() {
-		randomize(0);
+		randomize(0, RAND_MIN);
 	}
 }

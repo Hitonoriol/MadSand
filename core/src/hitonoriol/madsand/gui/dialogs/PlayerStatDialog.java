@@ -19,7 +19,7 @@ import hitonoriol.madsand.gui.widgets.stats.StatLabels;
 import me.xdrop.jrand.JRand;
 
 public class PlayerStatDialog extends GameDialog {
-	private static int DEFAULT_STAT_SUM = 6;
+	private static int DEFAULT_STAT_SUM = Stat.totalRollableStats();
 	private int maxStatSum = MadSand.player().stats.baseStats.maxStatSum;
 	private int minStatSum;
 	protected boolean restoreOnChange = false;
