@@ -1074,7 +1074,7 @@ public class Player extends Entity {
 				.appendText(
 						"Your wounds are almost completely healed, but all your possessions have disappeared from your backpack...")
 				.newLine(2)
-				.appendText("Perhaps they're still at the place where you lost your consciousness...");
+				.appendText("Perhaps they're still at the place where you passed out...");
 		stats.spawnTime = MadSand.world().currentTick();
 
 		if (stats.hasRespawnPoint) {
