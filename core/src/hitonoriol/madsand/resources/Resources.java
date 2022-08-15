@@ -160,7 +160,7 @@ public class Resources {
 	}
 
 	private static void loadQuests() {
-		QuestList.quests = loadMap(QUEST_FILE, Integer.class, Quest.class);
+		QuestList.quests = loadEnumerableMap(QUEST_FILE, Quest.class);
 		Utils.out(QuestList.quests.size() + " quests");
 	}
 
