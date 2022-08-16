@@ -895,7 +895,7 @@ public class Map {
 
 	public AbstractNpc getNpc(long uid) {
 		for (Entry<Pair, AbstractNpc> entry : mapNpcs.entrySet())
-			if (entry.getValue().uid == uid)
+			if (entry.getValue().uid() == uid)
 				return entry.getValue();
 		return nullNpc;
 	}

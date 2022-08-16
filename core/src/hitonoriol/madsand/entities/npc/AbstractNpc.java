@@ -4,9 +4,11 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -15,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.containers.Storage;
 import hitonoriol.madsand.dialog.TextSubstitutor;
 import hitonoriol.madsand.entities.Damage;
 import hitonoriol.madsand.entities.Entity;
@@ -26,7 +29,6 @@ import hitonoriol.madsand.entities.inventory.item.Projectile;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.map.Map;
-import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.pathfinding.Path;
 import hitonoriol.madsand.properties.NpcContainer;
@@ -41,14 +43,13 @@ import me.xdrop.jrand.generators.basics.FloatGenerator;
 public abstract class AbstractNpc extends Entity {
 	public static int NULL_NPC = 0;
 	static double IDLE_MOVE_CHANCE = 15;
-	static float MAX_FOV_COEF = 1.5f;
+	static float MAX_FOLLOW_FACTOR = 1.65f;
 	public static final float HOSTILE_SPEEDUP = 1.35f;
 	private final static int meleeAttackDst = 2; // Must be < than this
 	private final static int MAX_LIFETIME = 20;
 	private final static FloatGenerator lifetimeGen = JRand.flt().range(0.65f, 7.5f);
 
 	public int id;
-	public long uid;
 	public int lvl = 1;
 	public int rewardExp;
 	@JsonProperty
@@ -64,7 +65,7 @@ public abstract class AbstractNpc extends Entity {
 	private float timePassed; // time passed since last action
 	public float tickCharge = 0;
 
-	public boolean enemySpotted = false;
+	private Entity enemy;
 	public State state = State.Idle;
 
 	@JsonIgnore
@@ -75,7 +76,7 @@ public abstract class AbstractNpc extends Entity {
 
 	public AbstractNpc(NpcContainer protoNpc) {
 		id = protoNpc.id();
-		uid = MadSand.world().npcCounter().getAndIncrement();
+		setUid(MadSand.world().entityCounter().getAndIncrement());
 		stats.spawnTime = MadSand.world().currentTick();
 		stats.spawnRealTime = MadSand.world().currentActionTick();
 		loadProperties(protoNpc);
@@ -204,9 +205,18 @@ public abstract class AbstractNpc extends Entity {
 		return friendly || state != State.Hostile;
 	}
 
-	public void provoke() {
-		if (!provoked)
-			provoked = true;
+	public void provoke(Entity enemy) {
+		if (this.enemy == enemy)
+			return;
+
+		provoked = true;
+
+		/* Have a chance based on intelligence to lose sight of the current enemy
+		 *  and target attacker when provoked -- higher intelligence = smaller chance to get distracted */
+		if (!stats().roll(Stat.Intelligence)) {
+			loseSightOfEnemy();
+			targetEnemy(enemy);
+		}
 	}
 
 	public abstract void interact(Player player);
@@ -258,30 +268,26 @@ public abstract class AbstractNpc extends Entity {
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(18899, 63839).append(uid).toHashCode();
+		return new HashCodeBuilder(18899, 63839).append(uid()).toHashCode();
 	}
 
 	@Override
 	public void meleeAttack(Direction dir) {
 		Pair coords = new Pair(x, y).addDirection(dir);
 		Player player = MadSand.player();
-		if (player.stats.dead)
-			return;
-		if (!(player.x == coords.x && player.y == coords.y))
-			return;
-		else {
-			Damage damage = new Damage(this).melee(player.getDefense());
-			attack((MapEntity) player, damage);
-		}
+		Entity target = player.at(coords) ? player : MadSand.world().getCurLoc().getNpc(coords);
+		Damage damage = new Damage(this).melee(target.getDefense());
+		
+		if (!target.isEmpty())
+			attack(target, damage);
 	}
 
 	@Override
 	public void acceptDamage(Damage damage) {
 		Player player = MadSand.player();
-		Entity dealer = damage.getDealer(); // TODO: Aggro at any Entity, not just player
 		boolean attackedByPlayer = damage.dealtBy(player);
 
-		provoke();
+		provoke(damage.getDealer());
 		if (attackedByPlayer) {
 			if (damage.missed())
 				MadSand.print("You miss " + getName());
@@ -315,8 +321,8 @@ public abstract class AbstractNpc extends Entity {
 	public void die() {
 		super.die();
 
-		if (enemySpotted)
-			loseSightOf(MadSand.player());
+		if (enemySpotted())
+			loseSightOfEnemy();
 
 		MadSand.world().delNpc(this);
 	}
@@ -389,20 +395,35 @@ public abstract class AbstractNpc extends Entity {
 		move(Direction.random());
 	}
 
-	void detectEnemy(Entity enemy) {
-		enemySpotted = true;
+	public boolean enemySpotted() {
+		return enemy != null;
+	}
 
-		if (enemy instanceof Player)
-			((Player) enemy).target();
-
+	void targetEnemy(Entity enemy) {
+		Utils.out("[Aggro] %s is targeting %s", getName(), enemy);
+		this.enemy = enemy;
+		enemy.target();
 		playAnimation(Resources.createAnimation(Resources.detectAnimStrip));
 	}
 
-	void loseSightOf(Entity enemy) {
-		enemySpotted = false;
+	void loseSightOfEnemy() {
+		if (enemy == null)
+			return;
 
-		if (enemy instanceof Player)
-			((Player) enemy).unTarget();
+		Utils.out("[Aggro] %s lost sight of %s", getName(), enemy);
+
+		enemy.unTarget();
+		this.enemy = null;
+	}
+
+	@JsonSetter
+	private void setEnemy(long uid) {
+		enemy = MadSand.world().getCurLoc().getNpc(uid);
+	}
+
+	@JsonGetter
+	private long getEnemy() {
+		return enemy.uid();
 	}
 
 	private void getCloserTo(Entity entity) {
@@ -515,9 +536,6 @@ public abstract class AbstractNpc extends Entity {
 		else
 			prevTickCharge = tickCharge;
 
-		Player player = MadSand.player();
-		double dist = distanceTo(player);
-
 		switch (state) {
 		case Still:
 			skipAction();
@@ -534,21 +552,23 @@ public abstract class AbstractNpc extends Entity {
 			break;
 
 		case Hostile:
-			if (!enemySpotted && canSee(player))
-				detectEnemy(player);
-
-			if (enemySpotted && dist > getFov() * MAX_FOV_COEF)
-				loseSightOf(player);
-
-			if (!enemySpotted) {
-				skipAction();
-				return;
+			if (!enemySpotted()) {
+				Entity enemy = findTarget();
+				if (!enemy.isEmpty())
+					targetEnemy(enemy);
+				else {
+					skipAction();
+					return;
+				}
 			}
 
+			if (enemySpotted() && distanceTo(enemy) > getFov() * MAX_FOLLOW_FACTOR)
+				loseSightOfEnemy();
+
 			if (canPerformRangedAttack())
-				actRangedAttack(player);
+				actRangedAttack(enemy);
 			else
-				actMeleeAttack(player);
+				actMeleeAttack(enemy);
 			break;
 
 		default:
@@ -557,12 +577,35 @@ public abstract class AbstractNpc extends Entity {
 		act();
 	}
 
+	private Entity findTarget() {
+		Map map = MadSand.world().getCurLoc();
+		Storage<Entity> potentialTarget = new Storage<>(canSee(MadSand.player()) ? MadSand.player() : Map.nullNpc);
+
+		/* Have a chance based on intelligence to skip looking for other victims if player is already in FOV */
+		if (!potentialTarget.get().isEmpty() && stats().roll(Stat.Intelligence))
+			return potentialTarget.get();
+
+		forEachInFov((x, y) -> {
+			AbstractNpc npc = map.getNpc(x, y);
+			if (npc.isEmpty() || !canSee(npc))
+				return;
+
+			if (npc.stats().faction == stats().faction)
+				return;
+
+			if (distanceTo(npc) < distanceTo(potentialTarget.get()))
+				potentialTarget.set(npc);
+		});
+
+		return potentialTarget.get();
+	}
+
 	public String interactButtonString() {
 		return "Interact with ";
 	}
 
 	private String spottedMsg() {
-		if (enemySpotted)
+		if (enemySpotted() && enemy == MadSand.player())
 			return "Looks like " + stats.name + " spotted you";
 		else
 			return stats.name + " doesn't see you";

@@ -145,12 +145,12 @@ public class Settlement {
 				.pickNpcs(npc -> npc.stats.faction.isHuman())
 				.filter(npc -> {
 					if (leaderUid == -1) {
-						leaderUid = npc.uid;
+						leaderUid = npc.uid();
 						return false;
 					}
 					return true;
 				})
-				.forEach(npc -> addWorker(WorkerType.roll(), npc.uid));
+				.forEach(npc -> addWorker(WorkerType.roll(), npc.uid()));
 	}
 
 	public WorkerType recruitWorker(long uid) {

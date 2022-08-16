@@ -224,7 +224,7 @@ public class QuestWorker {
 	}
 
 	public void processQuest(int id) {
-		processQuest(id, MadSand.world().getCurLoc().getNpc(player.lookingAt()).uid);
+		processQuest(id, MadSand.world().getCurLoc().getNpc(player.lookingAt()).uid());
 	}
 
 	public boolean processQuests(ArrayList<Integer> mobQuestList, AbstractNpc npc) {
@@ -233,7 +233,7 @@ public class QuestWorker {
 		if (availableQuests.size() == 0)
 			return false;
 		else if (availableQuests.size() == 1)
-			processQuest(availableQuests.get(0), npc.uid);
+			processQuest(availableQuests.get(0), npc.uid());
 		else
 			new QuestListDialog(this, availableQuests, npc.stats.name).show();
 

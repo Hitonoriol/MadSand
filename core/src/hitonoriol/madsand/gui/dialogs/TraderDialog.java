@@ -35,7 +35,7 @@ public class TraderDialog extends GameDialog {
 		if (!MadSand.world().inEncounter() && MadSand.world().curLayer() == Location.LAYER_OVERWORLD) {
 			super.addButton(helpButton);
 			Gui.setAction(helpButton, () -> {
-				ProceduralQuest quest = player.getQuestWorker().startProceduralQuest(npc.uid);
+				ProceduralQuest quest = player.getQuestWorker().startProceduralQuest(npc.uid());
 				if (quest != ProceduralQuest.timeoutQuest)
 					addQuestReward(quest);
 				remove();
@@ -54,7 +54,7 @@ public class TraderDialog extends GameDialog {
 		quest.endMsg += Resources.LINEBREAK +
 				DialogChainGenerator.LBRACKET + "Trader gets +" + curQuantity + " " + currencyName + "s"
 				+ DialogChainGenerator.RBRACKET;
-		quest.execOnCompletion = "world:getCurLoc():getNpc(" + npc.uid + "):addItem(" + currency + ", " + curQuantity
+		quest.execOnCompletion = "world:getCurLoc():getNpc(" + npc.uid() + "):addItem(" + currency + ", " + curQuantity
 				+ ");";
 	}
 }

@@ -92,7 +92,6 @@ public class Player extends Entity {
 	private final static float DEF_LUMINOSITY = 1.5f;
 	private final static float MIN_ANIM_SPEED = 2f;
 
-	private int targetedByNpcs = 0;
 	private Set<Integer> unlockedItems = new HashSet<>(); // set of items player obtained at least once
 	private List<Integer> craftRecipes = new ArrayList<>(); // list of items which recipes are available to the player
 	private List<Integer> buildRecipes = new ArrayList<>();
@@ -274,19 +273,6 @@ public class Player extends Entity {
 		Gui.overlay.equipmentSidebar.refresh();
 	}
 
-	public void unTarget() {
-		--targetedByNpcs;
-	}
-
-	public void target() {
-		++targetedByNpcs;
-	}
-
-	@JsonIgnore
-	public boolean isTargeted() {
-		return targetedByNpcs > 0;
-	}
-
 	public void joinFaction(Faction faction) {
 		if (stats.faction != Faction.None)
 			return;
@@ -352,6 +338,7 @@ public class Player extends Entity {
 		}
 	}
 
+	@Override
 	public void forEachInFov(BiConsumer<Integer, Integer> action) {
 		for (Pair coords : visibleArea)
 			action.accept(x + coords.x, y + coords.y);
@@ -459,11 +446,11 @@ public class Player extends Entity {
 		Map map = MadSand.world().getCurLoc();
 		AbstractNpc npc = map.getNpc(coords.set(x, y).addDirection(dir));
 
-		if (npc == Map.nullNpc)
+		if (npc.isEmpty())
 			return;
 
 		Damage damage = new Damage(this).melee(npc.getDefense());
-		attack((MapEntity) npc, damage);
+		attack(npc, damage);
 
 		if (!damage.missed())
 			stats.skills.increaseSkill(Skill.Melee);
@@ -771,7 +758,7 @@ public class Player extends Entity {
 		}
 		String dialogTitle = npc.stats.name;
 		if (location.isSettlement()) {
-			WorkerType occupation = location.settlement.getOccupation(npc.uid);
+			WorkerType occupation = location.settlement.getOccupation(npc.uid());
 			dialogTitle += ((occupation != null) ? " (" + occupation.name() + ")" : "");
 		}
 		GameDialog npcDialog = new DialogChainGenerator(Utils.randElement(Globals.values().idleNpcText))
@@ -784,7 +771,7 @@ public class Player extends Entity {
 			npcDialog.addButton(questButton);
 			Gui.setAction(questButton, () -> {
 				npcDialog.remove();
-				quests.startProceduralQuest(npc.uid);
+				quests.startProceduralQuest(npc.uid());
 			});
 		}
 
@@ -792,12 +779,12 @@ public class Player extends Entity {
 			int hireCost = location.settlement.getHireCost();
 			TextButton recruitButton = new TextButton("Will you work for me? " + Quest.OBJECTIVE_COLOR + "[[" + hireCost
 					+ " " + ItemProp.getItemName(currency) + "s]" + Resources.COLOR_END, Gui.skin);
-			if (!location.settlement.isOccupied(npc.uid))
+			if (!location.settlement.isOccupied(npc.uid()))
 				npcDialog.addButton(recruitButton);
 
 			Gui.setAction(recruitButton, () -> {
 				npcDialog.remove();
-				WorkerType worker = location.settlement.recruitWorker(npc.uid);
+				WorkerType worker = location.settlement.recruitWorker(npc.uid());
 				if (!canAfford(hireCost)) {
 					Gui.drawOkDialog("You don't have enough money to recruit this worker!");
 					return;

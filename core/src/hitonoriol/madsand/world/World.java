@@ -79,7 +79,7 @@ public class World {
 
 	private boolean inEncounter = false;
 
-	private MutableLong npcCounter = new MutableLong(0);
+	private MutableLong entityCounter = new MutableLong(0);
 	private MutableLong itemCounter = new MutableLong(0);
 
 	private long logoutTimeStamp;
@@ -892,8 +892,8 @@ public class World {
 		return worldGen;
 	}
 
-	public MutableLong npcCounter() {
-		return npcCounter;
+	public MutableLong entityCounter() {
+		return entityCounter;
 	}
 
 	public MutableLong itemCounter() {

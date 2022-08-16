@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Queue;
+import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
 import org.apache.commons.lang3.mutable.MutableBoolean;
@@ -17,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.containers.Circle;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.containers.PairFloat;
@@ -38,6 +40,7 @@ import hitonoriol.madsand.util.Utils;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public abstract class Entity extends MapEntity {
+	private long uid;
 	@JsonIgnore
 	private Sprite[] sprites; // Same order as in Direction.baseValues
 
@@ -64,6 +67,7 @@ public abstract class Entity extends MapEntity {
 
 	protected boolean moving = false, hasMoved = false;
 	protected boolean running = false;
+	private int targetedByEnemies = 0;
 
 	public Entity(String name) {
 		stats = isPlayer() ? new PlayerStats() : new Stats();
@@ -76,6 +80,10 @@ public abstract class Entity extends MapEntity {
 		this("");
 	}
 
+	protected void setUid(long uid) {
+		this.uid = uid;
+	}
+	
 	public abstract void postLoadInit();
 
 	public Stats stats() {
@@ -179,7 +187,28 @@ public abstract class Entity extends MapEntity {
 	public boolean canAfford(int cost) {
 		return inventory.hasItem(Globals.values().currencyId, cost);
 	}
-
+	
+	public long uid() {
+		return uid;
+	}
+	
+	public void unTarget() {
+		--targetedByEnemies;
+	}
+	
+	@JsonIgnore
+	public boolean isTargeted() {
+		return targetedByEnemies > 0;
+	}
+	
+	public void target() {
+		++targetedByEnemies;
+	}
+	
+	public void forEachInFov(BiConsumer<Integer, Integer> action) {
+		Circle.forEachPoint(x, y, fov, action);
+	}
+	
 	protected void attack(MapEntity target, Damage damage) {
 		target.acceptDamage(damage);
 	}
@@ -746,8 +775,9 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public String toString() {
-		return String.format("{%s} %s (%d, %d) Lvl. %d [HP: %d/%d]",
+		return String.format("{%s uid: %d} %s (%d, %d) Lvl. %d [HP: %d/%d]",
 				getClass().getSimpleName(),
+				uid,
 				getName(),
 				x, y,
 				getLvl(),
