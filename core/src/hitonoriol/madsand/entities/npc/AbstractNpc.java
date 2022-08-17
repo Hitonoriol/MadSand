@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
+import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.containers.Storage;
@@ -27,12 +28,14 @@ import hitonoriol.madsand.entities.Reputation;
 import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.entities.inventory.item.Projectile;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.pathfinding.Path;
 import hitonoriol.madsand.properties.NpcContainer;
 import hitonoriol.madsand.resources.Resources;
+import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
 import me.xdrop.jrand.JRand;
 import me.xdrop.jrand.generators.basics.FloatGenerator;
@@ -67,6 +70,9 @@ public abstract class AbstractNpc extends Entity {
 
 	private Entity enemy;
 	public State state = State.Idle;
+
+	@JsonIgnore
+	private Runnable onActionFinish;
 
 	@JsonIgnore
 	Path path = new Path();
@@ -231,6 +237,7 @@ public abstract class AbstractNpc extends Entity {
 
 		if (isMoving() && !outOfView) {
 			queueMovement(dir);
+			addActDuration(getMovementAnimationDuration());
 			return true;
 		}
 		int originalX = this.x, originalY = this.y;
@@ -250,7 +257,8 @@ public abstract class AbstractNpc extends Entity {
 		if (outOfView) {
 			stopMovement();
 			updCoords();
-		}
+		} else
+			addActDuration(getMovementAnimationDuration());
 
 		return true;
 	}
@@ -277,7 +285,7 @@ public abstract class AbstractNpc extends Entity {
 		Player player = MadSand.player();
 		Entity target = player.at(coords) ? player : MadSand.world().getCurLoc().getNpc(coords);
 		Damage damage = new Damage(this).melee(target.getDefense());
-		
+
 		if (!target.isEmpty())
 			attack(target, damage);
 	}
@@ -418,7 +426,7 @@ public abstract class AbstractNpc extends Entity {
 
 	@JsonSetter
 	private void setEnemy(long uid) {
-		enemy = MadSand.world().getCurLoc().getNpc(uid);
+		GameSaver.postLoadAction(() -> enemy = MadSand.world().getCurLoc().getNpc(uid));
 	}
 
 	@JsonGetter
@@ -440,6 +448,9 @@ public abstract class AbstractNpc extends Entity {
 	}
 
 	private void actMeleeAttack(Entity enemy) {
+		if (!enemySpotted())
+			return;
+
 		if (distanceTo(enemy) >= meleeAttackDst)
 			getCloserTo(enemy);
 		else {
@@ -598,6 +609,28 @@ public abstract class AbstractNpc extends Entity {
 		});
 
 		return potentialTarget.get();
+	}
+
+	@Override
+	public void prepareToAct() {
+		super.prepareToAct();
+		if (MadSand.player().canSee(this) && !isNeutral() && getSpeed() > MadSand.player().getSpeed()) {
+			// speedUp(AbstractNpc.HOSTILE_SPEEDUP); // Not needed anymore (?)
+			Keyboard.ignoreInput();
+			setOnActionFinish(() -> TimeUtils.scheduleTask(() -> Keyboard.resumeInput(), getActDuration()));
+		}
+	}
+
+	@Override
+	public void finishActing() {
+		if (onActionFinish != null) {
+			onActionFinish.run();
+			onActionFinish = null;
+		}
+	}
+
+	private void setOnActionFinish(Runnable action) {
+		onActionFinish = action;
 	}
 
 	public String interactButtonString() {

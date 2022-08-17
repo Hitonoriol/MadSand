@@ -54,7 +54,7 @@ public class Projectile extends LevelBoundItem {
 		return (int) Math.max(1, dmg * dmgRangeGen.gen());
 	}
 
-	static final float BASE_PROJECTILE_SPEED = 0.35f;
+	public static final float ANIMATION_DURATION = 0.35f;
 
 	public void launchProjectile(Pair from, Pair to, Consumer<MapEntity> impactAction) {
 		final int imgSize = (int) (MadSand.TILESIZE * MadSand.getRenderer().getCamZoom());
@@ -77,14 +77,12 @@ public class Projectile extends LevelBoundItem {
 
 		projectileImg.addAction(
 				Actions.sequence(
-						Actions.moveTo(screenCoords.x, screenCoords.y, BASE_PROJECTILE_SPEED),
+						Actions.moveTo(screenCoords.x, screenCoords.y, ANIMATION_DURATION),
 						Actions.run(() -> {
 							MapEntity target = map.getMapEntity(to);
 
 							if (target != Map.nullNpc) {
 								impactAction.accept(target);
-								target.as(Entity.class)
-										.ifPresent(entity -> entity.addActDelay(BASE_PROJECTILE_SPEED));
 							} else
 								map.putLoot(to.x, to.y, id, 1);
 							Keyboard.resumeInput();

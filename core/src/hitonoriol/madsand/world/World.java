@@ -1,14 +1,9 @@
 package hitonoriol.madsand.world;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.function.Consumer;
 
-import org.apache.commons.lang3.mutable.MutableFloat;
-import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.mutable.MutableLong;
 
 import com.badlogic.gdx.Gdx;
@@ -22,11 +17,9 @@ import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
-import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.enums.Direction;
-import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.map.LightEngine;
@@ -39,13 +32,13 @@ import hitonoriol.madsand.properties.WorldGenProp;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
+import hitonoriol.madsand.world.time.EntityTimeProcessor;
 import hitonoriol.madsand.world.worldgen.WorldGen;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class World {
 	public static int DEFAULT_MAPSIZE = Map.MIN_MAPSIZE;
 	private static final float MAX_SIM_DISTANCE_COEF = 2.5f;
-	private static final float ACT_DELAY_STEP = 0.00125f;
 	public static final int DEFAULT_WORLDSIZE = 10;
 	public static final int TILE_CAVE_EXIT = 25; //TODO move this to cave preset
 	private final static int MAX_PREVIOUS_LOCATIONS = 3; // Max amount of maps allowed to be in WorldMap at the same time
@@ -61,11 +54,12 @@ public class World {
 	@JsonIgnore
 	private WorldMapSaver worldMapSaver = new WorldMapSaver();
 
+	@JsonIgnore
+	private EntityTimeProcessor entityEvents = new EntityTimeProcessor(this);
+
 	private Player player;
 	private WorldMap worldMap; // container of "Locations": maps grouped by world coords
 
-	@JsonIgnore
-	private Timer actDelayTimer;
 	@JsonIgnore
 	private Timer realTimeRefresher;
 	private boolean timeSkip = false;
@@ -117,7 +111,6 @@ public class World {
 
 		realTimeRefresher = new Timer();
 		realtimeSchedule(() -> actionTick());
-		actDelayTimer = new Timer();
 	}
 
 	public void realtimeSchedule(Runnable task, long ticks) {
@@ -706,73 +699,15 @@ public class World {
 		MadSand.warn("[Tip] " + Utils.randElement(Globals.values().tips));
 	}
 
-	private void forEachEntity(Consumer<Entity> action) {
-		Map loc = getCurLoc();
-		List<Entity> queue = new ArrayList<Entity>();
-		Graph graph = loc.getPathfindingGraph();
-
-		graph.reIndex();
-		queue.addAll(loc.getNpcs().values());
-		queue.add(player);
-		queue.forEach(entity -> entity.prepareToAct());
-		Collections.sort(queue, Entity.speedComparator);
-		queue.forEach(entity -> action.accept(entity));
-		graph.reIndex();
-	}
-
 	/* Main time processor for all living creatures
-	 * time - % of max AP player spent on their latest action
+	 *   `time` - % of max AP player spent on their latest action
 	 */
 	public void timeSubtick(float time) {
-		float maxSimDst = getMaxSimDistance();
-		MutableFloat cumulativeDelay = new MutableFloat(0);
-		MutableFloat maxDelay = new MutableFloat(0);
-		MutableInt stopLevel = new MutableInt(0);
-
-		forEachEntity(entity -> {
-			if (timeSkip && entity.distanceTo(player) > maxSimDst)
-				return;
-
-			if (player.canSee(entity)) {
-				boolean hostile = entity != player && !((AbstractNpc) entity).isNeutral();
-				boolean actBeforePlayer = hostile && entity.getSpeed() >= player.getSpeed();
-
-				if (actBeforePlayer)
-					entity.speedUp(AbstractNpc.HOSTILE_SPEEDUP);
-
-				float actDelay = entity.getAnimationDuration() + entity.getActDelay();
-
-				if (entity != player) {
-					actDelay += cumulativeDelay.getValue();
-					if (actBeforePlayer) {
-						maxDelay.setValue(Math.max(maxDelay.getValue(), actDelay));
-						Keyboard.ignoreInput();
-						stopLevel.increment();
-						player.setActDelay(maxDelay.getValue());
-					}
-
-					cumulativeDelay.add(ACT_DELAY_STEP);
-				}
-
-				if (entity == player && !player.hasActDelay())
-					actDelay = 0;
-
-				TimeUtils.scheduleTask(actDelayTimer, () -> {
-					entity.act(time);
-					if (entity == player && player.hasActDelay())
-						Keyboard.resumeInput(stopLevel.getValue());
-				}, actDelay);
-			} else
-				entity.act(time);
-		});
-
-		TimeUtils.scheduleTask(() -> {
-			Gui.overlay.refreshActionButton();
-			Gui.refreshOverlay();
-
-			if (timeSkip)
-				endTimeSkip();
-		}, maxDelay.getValue() + 0.01f);
+		Map loc = getCurLoc();
+		Graph graph = loc.getPathfindingGraph();
+		graph.reIndex();
+		entityEvents.processEntityActions(time);
+		graph.reIndex();
 	}
 
 	public void updateLight() {

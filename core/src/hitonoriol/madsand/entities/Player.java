@@ -1273,7 +1273,6 @@ public class Player extends Entity {
 	public void stopMovement() {
 		super.stopMovement();
 		if (!hasQueuedMovement()) {
-			Keyboard.resumeInput();
 			if (afterMovement != null) {
 				afterMovement.run();
 				afterMovement = null;

@@ -48,8 +48,8 @@ public abstract class Entity extends MapEntity {
 
 	public int x, y; // Grid coords
 	public PairFloat globalPos = new PairFloat(), movingPos = new PairFloat(); // Screen space coords
-	public float movementSpeed;
-	private float actDelay = 0;
+	public float movementSpeed; // Visual movement speed in pixels per frame
+	private float actDuration = 0; // Real time needed for this entity to finish all its actions
 
 	private int fov = 15;
 
@@ -83,7 +83,7 @@ public abstract class Entity extends MapEntity {
 	protected void setUid(long uid) {
 		this.uid = uid;
 	}
-	
+
 	public abstract void postLoadInit();
 
 	public Stats stats() {
@@ -126,36 +126,32 @@ public abstract class Entity extends MapEntity {
 		return sprites[stats.look.baseOrdinal()];
 	}
 
-	public float getAnimationDuration() {
+	/* Time required for the entity to move one tile in any direction */
+	public float getMovementAnimationDuration() {
 		return ((float) MadSand.TILESIZE / movementSpeed) * Gdx.graphics.getDeltaTime();
 	}
 
-	/* Act delay -- delay Entity's action execution during World.timeSubtick()
-	 * (including movement animations)
-	 */
-	public void addActDelay(float actDelay) {
-		Utils.dbg("%s: adding actDelay: +%f", getName(), actDelay);
-		this.actDelay += actDelay;
+	public void addActDuration(float actDelay) {
+		this.actDuration += actDelay;
 	}
 
-	public void setActDelay(float actDelay) {
-		this.actDelay = actDelay;
+	public void setActDuration(float actDelay) {
+		this.actDuration = actDelay;
 	}
 
-	public float getActDelay() {
-		if (actDelay > 0)
-			Utils.dbg("%s: actDelay = %f", getName(), actDelay);
-
-		return actDelay;
+	public float getActDuration() {
+		return actDuration;
 	}
 
 	public void prepareToAct() {
-		actDelay = 0;
+		actDuration = 0;
 		hasMoved = false;
 	}
 
-	public boolean hasActDelay() {
-		return actDelay > 0;
+	public void finishActing() {}
+
+	public boolean hasActDuration() {
+		return actDuration > 0;
 	}
 
 	public void initStatActions() {
@@ -187,28 +183,28 @@ public abstract class Entity extends MapEntity {
 	public boolean canAfford(int cost) {
 		return inventory.hasItem(Globals.values().currencyId, cost);
 	}
-	
+
 	public long uid() {
 		return uid;
 	}
-	
+
 	public void unTarget() {
 		--targetedByEnemies;
 	}
-	
+
 	@JsonIgnore
 	public boolean isTargeted() {
 		return targetedByEnemies > 0;
 	}
-	
+
 	public void target() {
 		++targetedByEnemies;
 	}
-	
+
 	public void forEachInFov(BiConsumer<Integer, Integer> action) {
 		Circle.forEachPoint(x, y, fov, action);
 	}
-	
+
 	protected void attack(MapEntity target, Damage damage) {
 		target.acceptDamage(damage);
 	}
@@ -222,6 +218,7 @@ public abstract class Entity extends MapEntity {
 		if (obstacleCoords.isEmpty())
 			obstacleCoords.set(targetPos);
 
+		addActDuration(Projectile.ANIMATION_DURATION);
 		Damage damage = new Damage(this).ranged(projectile, distanceTo(obstacleCoords));
 		projectile.launchProjectile(thisCoords.toScreen().copy(),
 				obstacleCoords.toScreen().copy(),
@@ -725,7 +722,7 @@ public abstract class Entity extends MapEntity {
 
 	@Override
 	public void playDamageAnimation() {
-		addActDelay(Resources.ACTION_ANIM_DURATION);
+		addActDuration(Resources.ACTION_ANIM_DURATION);
 		super.playAnimation(Resources.createAnimation(Resources.attackAnimStrip));
 	}
 
