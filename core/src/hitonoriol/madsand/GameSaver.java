@@ -13,6 +13,8 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
@@ -25,6 +27,8 @@ import hitonoriol.madsand.world.WorldMapSaver;
 public class GameSaver {
 	public static String SECTOR_DELIM = "!";
 	public final static long saveFormatVersion = 9;
+
+	private final static List<Runnable> loaderTasks = new ArrayList<>();
 
 	public static void save() {
 		World world = MadSand.world();
@@ -105,6 +109,7 @@ public class GameSaver {
 			saver.loadLocationInfo(wx, wy);
 			saver.bytesToLocation(data, wx, wy);
 			MadSand.world().setWorldMap(saver.getWorldMap());
+			finalizeLoading();
 			System.gc();
 			return true;
 		} catch (Exception e) {
@@ -284,6 +289,15 @@ public class GameSaver {
 		new File(MadSand.SAVEDIR).mkdirs();
 		new File(MadSand.MAPDIR).mkdirs();
 		new File(getCurSaveDir()).mkdirs();
+	}
+
+	public static void postLoadAction(Runnable action) {
+		loaderTasks.add(action);
+	}
+
+	private static void finalizeLoading() {
+		Utils.dbg("Running post-loading tasks (%s)...", loaderTasks.size());
+		loaderTasks.forEach(task -> task.run());
 	}
 
 }
