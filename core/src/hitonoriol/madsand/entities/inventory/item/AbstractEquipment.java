@@ -37,7 +37,7 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 
 		BaseStats stats = MadSand.player().stats().baseStats;
 		if (protoItem.isProto()) {
-			uid = MadSand.world().itemCounter().incrementAndGet();
+			uid = MadSand.world().nextItemUID();
 			cursed = Utils.percentRoll(5.5) || stats.rollInverse(Stat.Luck, 17.5);
 			identified = Utils.percentRoll(12.5) || stats.roll(Stat.Luck);
 		} else {

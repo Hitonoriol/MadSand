@@ -17,6 +17,7 @@ import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.enums.Direction;
@@ -73,7 +74,7 @@ public class World {
 
 	private boolean inEncounter = false;
 
-	private MutableLong entityCounter = new MutableLong(0);
+	private MutableLong entityCounter = new MutableLong(Entity.PLAYER_UID);
 	private MutableLong itemCounter = new MutableLong(0);
 
 	private long logoutTimeStamp;
@@ -827,11 +828,11 @@ public class World {
 		return worldGen;
 	}
 
-	public MutableLong entityCounter() {
-		return entityCounter;
+	public long nextEntityUID() {
+		return entityCounter.incrementAndGet();
 	}
 
-	public MutableLong itemCounter() {
-		return itemCounter;
+	public long nextItemUID() {
+		return itemCounter.incrementAndGet();
 	}
 }
