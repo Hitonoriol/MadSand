@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import hitonoriol.madsand.entities.inventory.Inventory;
+import hitonoriol.madsand.entities.npc.Npc;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.util.Utils;
 
@@ -50,6 +51,11 @@ public class Stats {
 
 	@JsonIgnore
 	protected Entity owner;
+	
+	private final static Stats maxStats = new Stats(new Npc());
+	static {
+		Stat.rollableStats.forEach(stat -> maxStats.baseStats.set(stat, BaseStats.MAX_LVL));
+	}
 
 	public Stats(Entity owner) {
 		baseStats = new BaseStats().prepareLivingCreature();
@@ -111,7 +117,7 @@ public class Stats {
 		return hp == mhp;
 	}
 
-	public void calcSpeed() {
+	public double calcSpeed() {
 		int dexterity = get(Stat.Dexterity);
 		if (dexterity < 2)
 			actionPtsMax = 1;
@@ -120,7 +126,7 @@ public class Stats {
 					/ (3 + ((2 * Math.sqrt(dexterity)) / dexterity)))
 					* 9.9;
 		actionPtsMax -= actionPtsMax * getEncumbranceCoef();
-		actionPts = actionPtsMax;
+		return (actionPts = actionPtsMax);
 	}
 
 	@JsonIgnore
@@ -195,5 +201,9 @@ public class Stats {
 
 	public float calcMaxInventoryWeight() {
 		return BASE_MAX_WEIGHT + (get(Stat.Strength) + get(Stat.Dexterity)) * WEIGHT_MULTIPLIER;
+	}
+	
+	public static Stats max() {
+		return maxStats;
 	}
 }

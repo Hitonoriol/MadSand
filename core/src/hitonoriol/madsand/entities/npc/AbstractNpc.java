@@ -26,8 +26,10 @@ import hitonoriol.madsand.entities.Faction;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Reputation;
 import hitonoriol.madsand.entities.Stat;
+import hitonoriol.madsand.entities.Stats;
 import hitonoriol.madsand.entities.inventory.item.Projectile;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.gui.animation.Animations;
 import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.map.Map;
@@ -51,6 +53,9 @@ public abstract class AbstractNpc extends Entity {
 	private final static int meleeAttackDst = 2; // Must be < than this
 	private final static int MAX_LIFETIME = 20;
 	private final static FloatGenerator lifetimeGen = JRand.flt().range(0.65f, 7.5f);
+
+	private static final float ACT_DURATION_DRIFT = 0.012575f;
+	private static FloatGenerator randomActionDelay = JRand.flt().range(Float.MIN_NORMAL, ACT_DURATION_DRIFT);
 
 	public int id;
 	public int lvl = 1;
@@ -82,7 +87,7 @@ public abstract class AbstractNpc extends Entity {
 
 	public AbstractNpc(NpcContainer protoNpc) {
 		id = protoNpc.id();
-		setUid(MadSand.world().entityCounter().getAndIncrement());
+		setUid(MadSand.world().nextEntityUID());
 		stats.spawnTime = MadSand.world().currentTick();
 		stats.spawnRealTime = MadSand.world().currentActionTick();
 		loadProperties(protoNpc);
@@ -104,7 +109,7 @@ public abstract class AbstractNpc extends Entity {
 		loadSprite();
 		initStatActions();
 	}
-
+	
 	@Override
 	public boolean add(Map map, Pair coords) {
 		return map.add(coords, this);
@@ -406,12 +411,16 @@ public abstract class AbstractNpc extends Entity {
 	public boolean enemySpotted() {
 		return enemy != null;
 	}
+	
+	protected boolean enemyIsSlower() {
+		return enemySpotted() && enemy.getSpeed() < getSpeed();
+	}
 
 	void targetEnemy(Entity enemy) {
 		Utils.out("[Aggro] %s is targeting %s", getName(), enemy);
 		this.enemy = enemy;
 		enemy.target();
-		playAnimation(Resources.createAnimation(Resources.detectAnimStrip));
+		playAnimation(Animations.detect);
 	}
 
 	void loseSightOfEnemy() {
@@ -426,12 +435,19 @@ public abstract class AbstractNpc extends Entity {
 
 	@JsonSetter
 	private void setEnemy(long uid) {
-		GameSaver.postLoadAction(() -> enemy = MadSand.world().getCurLoc().getNpc(uid));
+		if (uid == Entity.NULL_UID)
+			enemy = null;
+		else
+			GameSaver.postLoadAction(() -> enemy = MadSand.world().getCurLoc().getNpc(uid));
 	}
 
 	@JsonGetter
 	private long getEnemy() {
-		return enemy.uid();
+		return enemy != null ? enemy.uid() : Entity.NULL_UID;
+	}
+
+	public boolean isTargeting(Entity entity) {
+		return enemy == entity;
 	}
 
 	private void getCloserTo(Entity entity) {
@@ -532,6 +548,11 @@ public abstract class AbstractNpc extends Entity {
 
 		prevTickCharge = -1;
 		act();
+
+		if (enemyIsSlower())
+			enemy.addActDelay(getActDuration());
+		
+		TimeUtils.scheduleTask(() -> finishActing(), getActDuration());
 	}
 
 	float prevTickCharge;
@@ -614,15 +635,23 @@ public abstract class AbstractNpc extends Entity {
 	@Override
 	public void prepareToAct() {
 		super.prepareToAct();
+		float delay = (float) (randomActionDelay.gen() * (Stats.max().calcSpeed() - stats().calcSpeed()));
+		addActDelay(delay);
+		
 		if (MadSand.player().canSee(this) && !isNeutral() && getSpeed() > MadSand.player().getSpeed()) {
 			// speedUp(AbstractNpc.HOSTILE_SPEEDUP); // Not needed anymore (?)
 			Keyboard.ignoreInput();
-			setOnActionFinish(() -> TimeUtils.scheduleTask(() -> Keyboard.resumeInput(), getActDuration()));
+			setOnActionFinish(() -> Keyboard.resumeInput());
 		}
 	}
-
+	
 	@Override
-	public void finishActing() {
+	public void prepareToAnimateAction() {
+		if (enemyIsSlower())
+			setActDelay(0);
+	}
+
+	private void finishActing() {
 		if (onActionFinish != null) {
 			onActionFinish.run();
 			onActionFinish = null;
