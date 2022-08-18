@@ -27,6 +27,8 @@ import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Projectile;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.gui.animation.Animations;
+import hitonoriol.madsand.gui.animation.EntityAnimation;
 import hitonoriol.madsand.gui.dialogs.LootDialog;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
@@ -35,11 +37,13 @@ import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.pathfinding.Path;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.TileProp;
-import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public abstract class Entity extends MapEntity {
+	public static final long PLAYER_UID = 0, NULL_UID = -1;
+	protected static final int DEFAULT_FOV = 15;
+
 	private long uid;
 	@JsonIgnore
 	private Sprite[] sprites; // Same order as in Direction.baseValues
@@ -49,9 +53,11 @@ public abstract class Entity extends MapEntity {
 	public int x, y; // Grid coords
 	public PairFloat globalPos = new PairFloat(), movingPos = new PairFloat(); // Screen space coords
 	public float movementSpeed; // Visual movement speed in pixels per frame
-	private float actDuration = 0; // Real time needed for this entity to finish all its actions
 
-	private int fov = 15;
+	private float actDuration = 0; // Real time needed for this entity to finish all its actions
+	private float actDelay = 0; // Real time seconds by which this entities action start will be delayed
+
+	private int fov = DEFAULT_FOV;
 
 	protected Pair coords = new Pair();
 
@@ -102,6 +108,11 @@ public abstract class Entity extends MapEntity {
 	public int getFov() {
 		return fov;
 	}
+	
+	@Override
+	public void playAnimation(TextureRegion[] animation) {
+		MadSand.getRenderer().queueAnimation(new EntityAnimation(this, animation));
+	}
 
 	void setSprites(Sprite[] sprites) {
 		this.sprites = sprites;
@@ -131,27 +142,35 @@ public abstract class Entity extends MapEntity {
 		return ((float) MadSand.TILESIZE / movementSpeed) * Gdx.graphics.getDeltaTime();
 	}
 
-	public void addActDuration(float actDelay) {
-		this.actDuration += actDelay;
-	}
-
-	public void setActDuration(float actDelay) {
-		this.actDuration = actDelay;
+	public void addActDuration(float actDuration) {
+		this.actDuration += actDuration;
 	}
 
 	public float getActDuration() {
 		return actDuration;
 	}
 
+	public void addActDelay(float actDelay) {
+		this.actDelay += actDelay;
+	}
+
+	public void setActDelay(float actDelay) {
+		this.actDelay = actDelay;
+	}
+
+	public float getActDelay() {
+		return actDelay;
+	}
+
+	public void prepareToAnimateAction() {}
+
 	public void prepareToAct() {
-		actDuration = 0;
+		actDuration = actDelay = 0;
 		hasMoved = false;
 	}
 
-	public void finishActing() {}
-
-	public boolean hasActDuration() {
-		return actDuration > 0;
+	public boolean hasActDelay() {
+		return actDelay > 0;
 	}
 
 	public void initStatActions() {
@@ -375,7 +394,7 @@ public abstract class Entity extends MapEntity {
 		}
 
 		if (stats.hp < stats.mhp)
-			playAnimation(Resources.createAnimation(Resources.healAnimStrip));
+			playAnimation(Animations.heal);
 
 		stats.hp += amt;
 		stats.check();
@@ -523,7 +542,15 @@ public abstract class Entity extends MapEntity {
 		if (!isMoving())
 			return globalPos;
 
-		return movingPos.set(globalPos).add(movementOffsetX(), movementOffsetY());
+		return movingPos.set(worldX(), worldY());
+	}
+	
+	public float worldX() {
+		return globalPos.x + movementOffsetX();
+	}
+	
+	public float worldY() {
+		return globalPos.y + movementOffsetY();
 	}
 
 	public boolean hasMoved() {
@@ -670,6 +697,10 @@ public abstract class Entity extends MapEntity {
 		return distanceTo(entity.x, entity.y);
 	}
 
+	public boolean isInsideFov(Entity entity) {
+		return distanceTo(entity) <= fov;
+	}
+
 	public Pair getPosition() {
 		return new Pair(x, y);
 	}
@@ -722,8 +753,8 @@ public abstract class Entity extends MapEntity {
 
 	@Override
 	public void playDamageAnimation() {
-		addActDuration(Resources.ACTION_ANIM_DURATION);
-		super.playAnimation(Resources.createAnimation(Resources.attackAnimStrip));
+		addActDuration(Animations.ACTION_ANIM_DURATION);
+		playAnimation(Animations.attack);
 	}
 
 	@JsonIgnore

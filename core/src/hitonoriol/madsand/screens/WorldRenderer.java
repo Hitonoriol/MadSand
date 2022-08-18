@@ -2,7 +2,10 @@ package hitonoriol.madsand.screens;
 
 import static hitonoriol.madsand.MadSand.TILESIZE;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.IntUnaryOperator;
 import java.util.stream.IntStream;
@@ -19,11 +22,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.containers.AnimationContainer;
 import hitonoriol.madsand.containers.PairFloat;
 import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
+import hitonoriol.madsand.gui.animation.WorldAnimation;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
@@ -45,7 +48,7 @@ public class WorldRenderer {
 	private SpriteBatch batch = new SpriteBatch();
 	private OrthographicCamera camera = new OrthographicCamera();
 	private LightMap light = new LightMap();
-	private ConcurrentHashMap<PairFloat, AnimationContainer> animations = new ConcurrentHashMap<>();
+	private List<WorldAnimation> animations = new ArrayList<>();
 	private ConcurrentHashMap<Path, PathDescriptor> paths = new ConcurrentHashMap<>();
 
 	private static TextureRegion mapCursor = Resources.getTexture("misc/map_cursor");
@@ -68,8 +71,8 @@ public class WorldRenderer {
 					object.getDirection().getRotation());
 	}
 
-	public void queueAnimation(AnimationContainer animation, float x, float y) {
-		animations.put(new PairFloat(x, y), animation);
+	public void queueAnimation(WorldAnimation animation) {
+		animations.add(animation);
 	}
 
 	public void queuePath(Path path, float duration, Color color) {
@@ -112,12 +115,15 @@ public class WorldRenderer {
 		if (animations.isEmpty())
 			return;
 
-		animations.forEach((coords, animation) -> {
-			batch.draw(animation.getCurrentKeyFrame(), coords.x, coords.y);
+		Iterator<WorldAnimation> it = animations.iterator();
+		WorldAnimation animation;
+		while (it.hasNext()) {
+			animation = it.next();
+			batch.draw(animation.getCurrentKeyFrame(), animation.x(), animation.y());
 
 			if (animation.isAnimationFinished())
-				animations.remove(coords);
-		});
+				it.remove();
+		}
 	}
 
 	private static final float LOOT_SIZE = TILESIZE * 0.85f;

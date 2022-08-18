@@ -1,14 +1,18 @@
-package hitonoriol.madsand.containers;
+package hitonoriol.madsand.gui.animation;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class AnimationContainer extends Animation<TextureRegion> {
-	public float elapsedTime = 0;
+public class SimpleAnimation extends Animation<TextureRegion> {
+	private float elapsedTime = 0;
 
-	public AnimationContainer(float frameDuration, TextureRegion[] strip) {
+	public SimpleAnimation(float frameDuration, TextureRegion[] strip) {
 		super(frameDuration, strip);
+	}
+	
+	public SimpleAnimation(TextureRegion[] strip) {
+		this(Animations.ACTION_ANIM_DURATION, strip);
 	}
 
 	public boolean isAnimationFinished() {
@@ -22,5 +26,9 @@ public class AnimationContainer extends Animation<TextureRegion> {
 
 	public TextureRegion getCurrentKeyFrame() {
 		return getCurrentKeyFrame(false);
+	}
+	
+	public float getElapsedTime() {
+		return elapsedTime;
 	}
 }

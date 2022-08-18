@@ -29,6 +29,7 @@ import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.gfx.TextureProcessor;
+import hitonoriol.madsand.gui.animation.Animations;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
@@ -270,7 +271,7 @@ public class MapObject extends MapEntity implements Placeable {
 
 	@Override
 	public void playDamageAnimation() {
-		super.playAnimation(Resources.createAnimation(Resources.objectHitAnimStrip));
+		super.playAnimation(Animations.objectHit);
 	}
 
 	@JsonIgnore

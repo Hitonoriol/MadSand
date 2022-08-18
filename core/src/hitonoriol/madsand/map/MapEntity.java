@@ -1,5 +1,6 @@
 package hitonoriol.madsand.map;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -10,10 +11,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import hitonoriol.madsand.DynamicallyCastable;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.containers.AnimationContainer;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Damage;
 import hitonoriol.madsand.entities.Entity;
+import hitonoriol.madsand.gui.animation.WorldAnimation;
 import hitonoriol.madsand.gui.widgets.overlay.GameContextMenu;
 import hitonoriol.madsand.map.object.MapObject;
 
@@ -38,9 +39,9 @@ public abstract class MapEntity implements DynamicallyCastable<MapEntity> {
 
 	protected void populateContextMenu(GameContextMenu menu) {}
 
-	public void playAnimation(AnimationContainer animation) {
+	public void playAnimation(TextureRegion[] animation) {
 		Pair worldPos = getPosition().toScreen();
-		MadSand.getRenderer().queueAnimation(animation, worldPos.x, worldPos.y);
+		MadSand.getRenderer().queueAnimation(new WorldAnimation(animation).setCoords(worldPos.x, worldPos.y));
 	}
 
 	public abstract void playDamageAnimation();

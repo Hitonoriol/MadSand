@@ -26,7 +26,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.containers.AnimationContainer;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
@@ -58,6 +57,7 @@ import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.gui.animation.SimpleAnimation;
 import hitonoriol.madsand.gui.dialogs.FishingUI;
 import hitonoriol.madsand.gui.dialogs.GrabBagDialog;
 import hitonoriol.madsand.gui.dialogs.ItemFactoryUI;
@@ -155,16 +155,16 @@ public class Player extends Entity {
 	private static final int ANIM_WIDTH = 35, ANIM_HEIGHT = 74;
 	private static final float animDuration = 0.2f;
 	private static Sprite[] standingSprites;
-	private static AnimationContainer[] walkAnim;
+	private static SimpleAnimation[] walkAnim;
 
 	private static void loadPlayerAnimation() {
-		walkAnim = new AnimationContainer[Direction.BASE_DIRECTIONS];
+		walkAnim = new SimpleAnimation[Direction.BASE_DIRECTIONS];
 		standingSprites = new Sprite[Direction.BASE_DIRECTIONS];
 		TextureRegion[][] animSheet = Resources.getTexture("player/anim").split(ANIM_WIDTH, ANIM_HEIGHT);
 
 		Direction.forEachBase(direction -> {
 			int dirIdx = direction.baseOrdinal();
-			walkAnim[dirIdx] = new AnimationContainer(animDuration, animSheet[dirIdx]);
+			walkAnim[dirIdx] = new SimpleAnimation(animDuration, animSheet[dirIdx]);
 			standingSprites[dirIdx] = new Sprite(animSheet[dirIdx][0]);
 		});
 	}

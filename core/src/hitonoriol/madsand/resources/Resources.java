@@ -39,7 +39,6 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import hitonoriol.madsand.Enumerable;
 import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.containers.AnimationContainer;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.containers.Pair.PairKeyDeserializer;
 import hitonoriol.madsand.entities.inventory.item.Item;
@@ -78,18 +77,12 @@ public class Resources {
 	public static final String ERR_FILE = "MadSandCritical.log";
 	public static final String OUT_FILE = "MadSandOutput.log";
 
-	static final int ANIM_FRAME_SIZE = 32;
-	public static final float ACTION_ANIM_DURATION = 0.15f;
-
 	private static final TextureAtlas textures = loadAtlas("textures");
 	private static TextureMap<String> textureMap = new TextureMap<>(textures);
 	private static TextureMap<Integer> tiles = new TextureMap<>(textures, "terrain");
 	private static TextureMap<Integer> objects = new TextureMap<>(textures, "obj");
 	private static TextureMap<Integer> items = new TextureMap<>(textures, "inv");
 	private static TextureMap<Integer> npcs = new TextureMap<>(textures, "npc");
-
-	public static TextureRegion[] attackAnimStrip, objectHitAnimStrip;
-	public static TextureRegion[] healAnimStrip, detectAnimStrip;
 
 	public static final String emptyField = "-1";
 	public static final int emptyId = -1;
@@ -124,7 +117,6 @@ public class Resources {
 		loadQuests();
 		loadNpcs();
 		loadTutorial();
-		loadActionAnimations();
 		Globals.values().loadMisc();
 		System.gc();
 		Utils.out("Done loading resources.");
@@ -136,13 +128,6 @@ public class Resources {
 
 	private static void finalizeInit() {
 		initQueue.forEach(action -> action.run());
-	}
-
-	private static void loadActionAnimations() {
-		attackAnimStrip = loadAnimationStrip("anim/hit");
-		objectHitAnimStrip = loadAnimationStrip("anim/obj_hit");
-		healAnimStrip = loadAnimationStrip("anim/heal");
-		detectAnimStrip = loadAnimationStrip("anim/detect");
 	}
 
 	private static void initObjectMapper() {
@@ -393,32 +378,6 @@ public class Resources {
 
 	public static Pixmap loadPixmap(String file) {
 		return new Pixmap(Gdx.files.internal(file));
-	}
-
-	public static AnimationContainer createAnimation(TextureRegion[] strip, float duration) { // Create animation from loaded strip
-		return new AnimationContainer(duration, strip);
-	}
-
-	public static AnimationContainer createAnimation(TextureRegion[] strip) {
-		return createAnimation(strip, ACTION_ANIM_DURATION);
-	}
-
-	public static TextureRegion[] getAnimationStrip(TextureRegion[][] region, int row, int frames) { // convert [][] strip to []
-		TextureRegion[] strip = new TextureRegion[frames];
-
-		for (int i = 0; i < frames; ++i)
-			strip[i] = region[row][i];
-
-		return strip;
-	}
-
-	private static TextureRegion[] loadAnimationStrip(String file, int frameSize) { // load 1xN animation strip from file
-		TextureRegion[][] animStrip = getTexture(file).split(frameSize, frameSize);
-		return getAnimationStrip(animStrip, 0, animStrip[0].length);
-	}
-
-	private static TextureRegion[] loadAnimationStrip(String file) {
-		return loadAnimationStrip(file, ANIM_FRAME_SIZE);
 	}
 
 	private static SimpleDateFormat screenshotDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
