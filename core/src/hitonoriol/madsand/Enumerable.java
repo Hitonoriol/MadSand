@@ -18,8 +18,9 @@ public interface Enumerable {
 
 	static <T extends Enumerable> T find(Map<Integer, T> items, String partialName) {
 		return FuzzySearch.extractOne(partialName,
-				items.values(), item -> item.name() == null ? "" : item.name(),
-				(str1, str2) -> FuzzySearch.tokenSortRatio(str1, str2))
+				items.values(),
+				item -> item.name() == null ? "" : item.name(),
+				(str1, str2) -> FuzzySearch.weightedRatio(str1, str2))
 				.getReferent();
 	}
 
