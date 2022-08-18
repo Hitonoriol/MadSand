@@ -77,6 +77,8 @@ public class Projectile extends LevelBoundItem {
 
 		projectileImg.addAction(
 				Actions.sequence(
+						Actions.run(() -> map.getMapEntity(to).as(Entity.class)
+								.ifPresent(entity -> entity.addActDelay(ANIMATION_DURATION))),
 						Actions.moveTo(screenCoords.x, screenCoords.y, ANIMATION_DURATION),
 						Actions.run(() -> {
 							MapEntity target = map.getMapEntity(to);
@@ -99,7 +101,7 @@ public class Projectile extends LevelBoundItem {
 	public String getMiscInfo() {
 		return "Projectile damage: [GREEN]" + dmg + Resources.COLOR_END + Resources.LINEBREAK;
 	}
-	
+
 	@Override
 	public void initCategory() {
 		setCategory(ItemCategory.Projectiles, cost / 15);
