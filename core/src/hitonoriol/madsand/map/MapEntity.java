@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
-import hitonoriol.madsand.DynamicallyCastable;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Damage;
@@ -17,6 +16,7 @@ import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.gui.animation.WorldAnimation;
 import hitonoriol.madsand.gui.widgets.overlay.GameContextMenu;
 import hitonoriol.madsand.map.object.MapObject;
+import hitonoriol.madsand.util.cast.DynamicallyCastable;
 
 @JsonTypeInfo(use = Id.CLASS, include = As.PROPERTY)
 @JsonSubTypes({ @Type(Entity.class), @Type(MapObject.class) })

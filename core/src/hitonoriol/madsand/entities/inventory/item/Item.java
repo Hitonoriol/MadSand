@@ -25,7 +25,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import hitonoriol.madsand.DynamicallyCastable;
 import hitonoriol.madsand.Enumerable;
 import hitonoriol.madsand.HotbarAssignable;
 import hitonoriol.madsand.MadSand;
@@ -40,6 +39,7 @@ import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
+import hitonoriol.madsand.util.cast.DynamicallyCastable;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)

@@ -6,13 +6,13 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
-import hitonoriol.madsand.DynamicallyCastable;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.lua.LuaLambda;
 import hitonoriol.madsand.lua.LuaLambda.LuaConsumer;
 import hitonoriol.madsand.lua.LuaUtils;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.util.Utils;
+import hitonoriol.madsand.util.cast.DynamicallyCastable;
 
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
 @JsonSubTypes({ @Type(ActiveAbility.class), @Type(PassiveAbility.class) })
