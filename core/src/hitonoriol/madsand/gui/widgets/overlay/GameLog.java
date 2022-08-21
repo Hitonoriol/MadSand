@@ -1,22 +1,34 @@
 package hitonoriol.madsand.gui.widgets.overlay;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.input.Mouse;
+import hitonoriol.madsand.lua.Lua;
 
 public class GameLog extends ScrollablePanel {
 	private static final String WARNING_COLOR = "[#ff9185]";
 	public static final String NOTICE_ALT_COLOR = "[#58FFB1]";
 	public static String NOTICE_COLOR = "[#16E1EA]";
 	private static final int LOG_LENGTH = 20;
-	
 
 	boolean noticeColor = true; // flag to use alternating notice colors
-	private TextField inputField = new TextField("", Gui.skin);
 	private Label[] logLabels = new Label[LOG_LENGTH];
+
+	private static final int CMD_BUF_CAP = 10;
+	private int switchingIdx = -1;
+	private List<String> prevConsoleInputs = new ArrayList<>();
+	private TextField console = new TextField("", Gui.skin);
 
 	public GameLog() {
 		getContentTable().pad(3);
@@ -26,13 +38,99 @@ public class GameLog extends ScrollablePanel {
 			addContents(logLabels[i]).width(WIDTH).row();
 		}
 
-		inputField.setWidth(WIDTH);
-		inputField.setMessageText("");
-		inputField.setFocusTraversal(true);
-		inputField.debug();
-		inputField.setVisible(false);
+		console.setWidth(WIDTH);
+		console.setMessageText("");
+		console.setFocusTraversal(true);
+		console.debug();
+		console.setVisible(false);
+		super.add(console).width(WIDTH).align(Align.left).padTop(3).height(30);
+		initConsoleListener();
+	}
 
-		super.add(inputField).width(WIDTH).align(Align.left).padTop(3).height(30);
+	private void switchConsoleInput(boolean previous) {
+		if (prevConsoleInputs.isEmpty())
+			return;
+
+		String tmp = console.getText();
+		if (!switchingInputs())
+			startSwitching(tmp);
+
+		switchingIdx = Math.floorMod(switchingIdx + (previous ? -1 : 1), prevConsoleInputs.size());
+		console.setText(prevConsoleInputs.get(switchingIdx));
+		console.setCursorPosition(console.getText().length());
+	}
+
+	private void initConsoleListener() {
+		console.addListener(new InputListener() {
+			@Override
+			public boolean keyDown(InputEvent event, int keycode) {
+				event.cancel();
+				return true;
+			}
+
+			@Override
+			public boolean keyUp(InputEvent event, int keycode) {
+				if (keycode == Keys.GRAVE) {
+					toggleConsole();
+					return true;
+				}
+
+				else if (keycode == Keys.ENTER) {
+					String cmd = console.getText().trim();
+					try {
+						Lua.execute(cmd);
+					} catch (Exception e) {
+						MadSand.print("Couldn't execute user input");
+						e.printStackTrace();
+					} finally {
+						saveInput();
+						console.setText("");
+						toggleConsole();
+						if (prevConsoleInputs.size() > CMD_BUF_CAP)
+							prevConsoleInputs.remove(0);
+					}
+					return true;
+				}
+
+				else if (keycode == Keys.UP || keycode == Keys.DOWN) {
+					switchConsoleInput(keycode == Keys.UP);
+					return true;
+				}
+
+				event.cancel();
+				return true;
+			}
+		});
+	}
+
+	private void startSwitching(String currentInput) {
+		switchingIdx = prevConsoleInputs.size();
+		prevConsoleInputs.add(currentInput);
+	}
+	
+	private boolean switchingInputs() {
+		return switchingIdx >= 0;
+	}
+
+	private void saveInput() {
+		if (switchingInputs())
+			prevConsoleInputs.set(prevConsoleInputs.size() - 1, console.getText());
+		else
+			prevConsoleInputs.add(console.getText());
+	}
+
+	public void toggleConsole() {
+		Stage stage = MadSand.getStage();
+		if (stage.getKeyboardFocus() != console) {
+			Gui.unfocusGame();
+			console.setVisible(true);
+			stage.setKeyboardFocus(console);
+		} else {
+			Gui.resumeGameFocus();
+			console.setVisible(false);
+			stage.unfocus(console);
+			switchingIdx = -1;
+		}
 	}
 
 	public void clear() {
@@ -95,6 +193,6 @@ public class GameLog extends ScrollablePanel {
 	}
 
 	public TextField getConsoleField() {
-		return inputField;
+		return console;
 	}
 }

@@ -15,13 +15,17 @@ public class GameContextMenu extends Table {
 	private final static float WIDTH = 155, HEIGHT = Gui.FONT_S * 3;
 	private Pair clickPos = new Pair();
 
+	public GameContextMenu() {
+		setVisible(false);
+	}
+
 	private void refresh() {
 		super.clear();
 		Map map = MadSand.world().getCurLoc();
 		Player player = MadSand.player();
 		Item hand = player.stats.hand();
 
-		super.defaults().size(WIDTH, HEIGHT);
+		defaults().size(WIDTH, HEIGHT);
 
 		if (!map.getObject(clickPos).isEmpty())
 			addButton("Interact", () -> {
@@ -46,7 +50,7 @@ public class GameContextMenu extends Table {
 		if (!hand.equals(Item.nullItem))
 			addButton("Unequip " + hand.name, () -> player.freeHands());
 
-		super.setVisible(false);
+		setVisible(false);
 	}
 
 	public void addButton(String text, Runnable action) {
@@ -62,17 +66,21 @@ public class GameContextMenu extends Table {
 	}
 
 	public void open() {
+		if (isVisible())
+			return;
+
+		Gui.unfocusGame();
 		clickPos.set(Mouse.wx, Mouse.wy);
 		refresh();
-		Gui.overlay.hideTooltip();
 		setVisible(true);
 		setPosition(Mouse.x + WIDTH / 3, Mouse.y - 30);
 	}
 
 	public void close() {
-		if (!Gui.dialogActive)
-			Gui.overlay.showTooltip();
+		if (!isVisible())
+			return;
+
+		Gui.resumeGameFocus();
 		setVisible(false);
-		Gui.gameUnfocused = false;
 	}
 }

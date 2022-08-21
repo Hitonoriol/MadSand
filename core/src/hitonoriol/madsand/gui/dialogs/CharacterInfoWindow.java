@@ -44,7 +44,7 @@ public class CharacterInfoWindow extends GameDialog {
 
 	public void createDialog() {
 		Table scrollTable = new Table();
-		scrollTable.defaults().width(Gui.defLblWidth);
+		scrollTable.defaults().width(Gui.DEF_LABEL_WIDTH);
 		AutoFocusScrollPane dialogScroll = new AutoFocusScrollPane(scrollTable);
 		Player player = MadSand.player();
 		PlayerStats stats = player.stats;
@@ -65,7 +65,7 @@ public class CharacterInfoWindow extends GameDialog {
 				.setSkill(player.stats.skills.get(Skill.Level))
 				.setProgressSize(BAR_WIDTH * 1.75f, BAR_HEIGHT))
 				.row();
-		add().width(Gui.defLblWidth).row();
+		add().width(Gui.DEF_LABEL_WIDTH).row();
 
 		// Stat list
 		addTitle(scrollTable, "Stats:");
@@ -102,7 +102,7 @@ public class CharacterInfoWindow extends GameDialog {
 		label.setStyle(Gui.getLabelStyle(Gui.FONT_M));
 		table.add(new Label("", Gui.skin)).row();
 		table.add(label)
-				.width(Gui.defLblWidth)
+				.width(Gui.DEF_LABEL_WIDTH)
 				.padLeft(headerLeftPadding)
 				.padBottom(headerBottomPadding).row();
 	}

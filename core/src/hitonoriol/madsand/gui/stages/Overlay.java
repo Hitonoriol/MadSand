@@ -1,18 +1,18 @@
 package hitonoriol.madsand.gui.stages;
 
-import static hitonoriol.madsand.MadSand.*;
+import static hitonoriol.madsand.MadSand.player;
+import static hitonoriol.madsand.MadSand.world;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
@@ -34,7 +34,6 @@ import hitonoriol.madsand.gui.widgets.overlay.InfoPanel;
 import hitonoriol.madsand.gui.widgets.overlay.OverlayBottomMenu;
 import hitonoriol.madsand.gui.widgets.stats.StatProgressBar;
 import hitonoriol.madsand.gui.widgets.waypoint.WaypointArrow;
-import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.util.Functional;
@@ -54,7 +53,7 @@ public class Overlay extends Stage {
 	private GameContextMenu gameContextMenu = new GameContextMenu();
 	public ActionButton actionButton = new ActionButton();
 	private GameLog gameLog = new GameLog();
-	private InfoPanel infoPanel = new InfoPanel();
+	private InfoPanel infoPanel = new InfoPanel("Info");
 	public OverlayBottomMenu bottomMenu = new OverlayBottomMenu(this);
 	private Hotbar hotbar = new Hotbar();
 	public EquipmentSidebar equipmentSidebar = new EquipmentSidebar();
@@ -71,7 +70,7 @@ public class Overlay extends Stage {
 	static final int OVSTAT_COUNT = 6;
 
 	public Overlay() {
-		super(Gui.uiViewport);
+		super(Gui.viewport());
 	}
 
 	public void setPlayer(Player player) {
@@ -164,47 +163,13 @@ public class Overlay extends Stage {
 		overlayTable.add(gameLog).padBottom(ENTRY_PAD).row();
 		overlayTable.add(infoPanel).padTop(-getGameLog().getConsoleField().getHeight() + 3).row();
 		gameLog.toFront();
-		
+
 		overlayTable.setFillParent(true);
 		addActor(overlayTable);
 	}
 
-	String prevConsoleInput;
-
-	public void pollGameConsole() {
-		if (!Globals.debugMode)
-			return;
-		TextField console = gameLog.getConsoleField();
-
-		if (getKeyboardFocus() != console)
-			return;
-
-		if (Gdx.input.isKeyJustPressed(Keys.ENTER)) {
-			String cmd = console.getText().trim();
-			try {
-				Lua.execute(cmd);
-			} catch (Exception e) {
-				MadSand.print("Couldn't execute user input");
-				e.printStackTrace();
-			} finally {
-				prevConsoleInput = console.getText();
-				console.setText("");
-				console.setVisible(false);
-				unfocus(console);
-				Gui.resumeGameFocus();
-			}
-		}
-
-		if (Gdx.input.isKeyJustPressed(Keys.UP)) {
-			String tmp = console.getText();
-			console.setText(prevConsoleInput);
-			prevConsoleInput = tmp;
-			console.setCursorPosition(console.getText().length());
-		}
-	}
-
-	public boolean isConsoleFocused() {
-		return super.getKeyboardFocus() == gameLog.getConsoleField();
+	public void toggleGameConsole() {
+		gameLog.toggleConsole();
 	}
 
 	public void refreshActionButton() {
@@ -318,7 +283,7 @@ public class Overlay extends Stage {
 				: " @ Sector (" + MadSand.world().getCurWPos() + ")");
 
 	}
-	
+
 	public Hotbar getHotbar() {
 		return hotbar;
 	}

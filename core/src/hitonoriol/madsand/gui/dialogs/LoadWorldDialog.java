@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 
@@ -18,7 +19,7 @@ public class LoadWorldDialog extends GameDialog {
 	float PAD_TITLE = 15;
 	float PAD_BTN = 5;
 
-	float BTN_WIDTH = Gui.defLblWidth;
+	float BTN_WIDTH = Gui.DEF_LABEL_WIDTH;
 	float BTN_HEIGHT = 40;
 
 	Skin skin = Gui.skin;
@@ -27,12 +28,11 @@ public class LoadWorldDialog extends GameDialog {
 	Table scrollTable;
 
 	public LoadWorldDialog() {
-		super(MadSand.mainMenu);
 		createDialog();
 	}
 
 	void createDialog() {
-		float width = Gui.defLblWidth;
+		float width = Gui.DEF_LABEL_WIDTH;
 
 		scrollTable = new Table();
 		scroll = new AutoFocusScrollPane(scrollTable);
@@ -50,7 +50,7 @@ public class LoadWorldDialog extends GameDialog {
 	}
 
 	private void refreshSaveList() {
-		String[] worldDirs = new File(MadSand.MAPDIR).list((current, name) -> new File(current, name).isDirectory());
+		String[] worldDirs = new File(GameSaver.MAPDIR).list((current, name) -> new File(current, name).isDirectory());
 		scrollTable.clear();
 
 		TextButton loadButton, delButton;
@@ -62,9 +62,8 @@ public class LoadWorldDialog extends GameDialog {
 			scrollTable.add(delButton).size(BTN_HEIGHT).padRight(PAD_BTN).row();
 
 			Gui.setAction(loadButton, () -> {
-				MadSand.WORLDNAME = worldName;
 				if (GameSaver.load(worldName)) {
-					MadSand.switchScreen(MadSand.gameScreen);
+					MadSand.switchScreen(Screens.Game);
 					MadSand.enterWorld();
 				}
 
@@ -75,7 +74,7 @@ public class LoadWorldDialog extends GameDialog {
 			Gui.setAction(delButton, () -> {
 				new ConfirmDialog("Are you sure you want to delete " + worldName + "?",
 						() -> {
-							if (!GameSaver.deleteDirectory(new File(MadSand.MAPDIR + worldName)))
+							if (!GameSaver.deleteDirectory(new File(GameSaver.MAPDIR + worldName)))
 								Gui.drawOkDialog("Couldn't delete this save slot.");
 
 							refreshSaveList();

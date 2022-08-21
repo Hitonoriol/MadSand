@@ -12,7 +12,7 @@ public class LevelupDialog extends PlayerStatDialog {
 		super.nameField.setDisabled(true);
 		super.nameField.setText(MadSand.player().stats.name);
 		TextButton okButton = new TextButton("Done", Gui.skin);
-		super.add(okButton).width(Gui.defLblWidth).row();
+		super.add(okButton).width(Gui.DEF_LABEL_WIDTH).row();
 
 		Gui.setAction(okButton, () -> {
 			if (!hasUnassignedPoints())

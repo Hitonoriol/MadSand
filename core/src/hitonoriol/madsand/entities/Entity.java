@@ -37,6 +37,7 @@ import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.pathfinding.Path;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.TileProp;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
@@ -67,9 +68,9 @@ public abstract class Entity extends MapEntity {
 	protected Queue<Direction> movementQueue = new ArrayDeque<>();
 
 	@JsonIgnore
-	public float stepy = MadSand.TILESIZE;
+	public float stepy = Resources.TILESIZE;
 	@JsonIgnore
-	public float stepx = MadSand.TILESIZE;
+	public float stepx = Resources.TILESIZE;
 
 	protected boolean moving = false, hasMoved = false;
 	protected boolean running = false;
@@ -139,7 +140,7 @@ public abstract class Entity extends MapEntity {
 
 	/* Time required for the entity to move one tile in any direction */
 	public float getMovementAnimationDuration() {
-		return ((float) MadSand.TILESIZE / movementSpeed) * Gdx.graphics.getDeltaTime();
+		return ((float) Resources.TILESIZE / movementSpeed) * Gdx.graphics.getDeltaTime();
 	}
 
 	public void addActDuration(float actDuration) {
@@ -469,8 +470,8 @@ public abstract class Entity extends MapEntity {
 			x = 0;
 		if (y < 0)
 			y = 0;
-		globalPos.x = (x * MadSand.TILESIZE);
-		globalPos.y = (y * MadSand.TILESIZE);
+		globalPos.x = (x * Resources.TILESIZE);
+		globalPos.y = (y * Resources.TILESIZE);
 	}
 
 	public void teleport(int x, int y) {
@@ -581,7 +582,7 @@ public abstract class Entity extends MapEntity {
 
 	public void stopMovement() {
 		moving = false;
-		stepx = stepy = MadSand.TILESIZE;
+		stepx = stepy = Resources.TILESIZE;
 		if (!hasQueuedMovement())
 			stopRunning();
 
@@ -609,19 +610,19 @@ public abstract class Entity extends MapEntity {
 
 			if (dir == Direction.UP) {
 				++y;
-				globalPos.y += MadSand.TILESIZE;
+				globalPos.y += Resources.TILESIZE;
 			}
 			if (dir == Direction.DOWN) {
 				--y;
-				globalPos.y -= MadSand.TILESIZE;
+				globalPos.y -= Resources.TILESIZE;
 			}
 			if (dir == Direction.LEFT) {
 				--x;
-				globalPos.x -= MadSand.TILESIZE;
+				globalPos.x -= Resources.TILESIZE;
 			}
 			if (dir == Direction.RIGHT) {
 				++x;
-				globalPos.x += MadSand.TILESIZE;
+				globalPos.x += Resources.TILESIZE;
 			}
 			setMoving(true);
 			return true;

@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
@@ -41,7 +42,7 @@ public class CraftStage extends Stage {
 	private int craftStationId;
 
 	public CraftStage() {
-		super(Gui.uiViewport);
+		super(Gui.viewport());
 		titleLabel.setAlignment(Align.center);
 		Gui.setFontSize(titleLabel, Gui.FONT_M);
 
@@ -132,7 +133,7 @@ public class CraftStage extends Stage {
 		});
 
 		Gui.setAction(backBtn,
-				craftStationId == 0 ? () -> MadSand.switchScreen(MadSand.gameScreen) : () -> MadSand.reset());
+				craftStationId == 0 ? () -> MadSand.switchScreen(Screens.Game) : () -> MadSand.reset());
 	}
 
 	private final static Drawable entryBg = Gui.getColorDrawable(new Color(0, 0, 0, 0.2f));

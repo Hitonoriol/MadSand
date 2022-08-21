@@ -83,7 +83,7 @@ public class Mouse {
 				}
 
 				else if (event.getButton() == Buttons.RIGHT) {
-					if (Gui.dialogActive)
+					if (Gui.isDialogActive())
 						return;
 
 					toggleContextMenu();
@@ -98,10 +98,7 @@ public class Mouse {
 			}
 
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				ignoreClick = Gui.isGameUnfocused() || Gui.dialogActive;
-				ignoreClick |= !Mouse.isInteractionPossible();
-
-				if (ignoreClick)
+				if (ignoreClick = Gui.isGameUnfocused() || !Mouse.isInteractionPossible())
 					heldButtons.add(button);
 
 				super.touchDown(event, x, y, pointer, button);
@@ -115,7 +112,6 @@ public class Mouse {
 		if (GameTooltip.instance().isVisible()) {
 			menu.open();
 			cellInfo.getCell().populateContextMenu(menu);
-			Gui.gameUnfocused = true;
 		} else
 			menu.close();
 	}
@@ -144,10 +140,10 @@ public class Mouse {
 		updScreenCoords();
 		GameTooltip.instance().moveTo(x, y);
 
-		wx = (int) Math.floor(mouseWorldCoords.x / MadSand.TILESIZE);
-		wy = (int) Math.floor(mouseWorldCoords.y / MadSand.TILESIZE);
+		wx = (int) Math.floor(mouseWorldCoords.x / Resources.TILESIZE);
+		wy = (int) Math.floor(mouseWorldCoords.y / Resources.TILESIZE);
 
-		if (Gui.gameUnfocused)
+		if (Gui.isGameUnfocused())
 			return;
 
 		if (prevCoords.equals(wx, wy))

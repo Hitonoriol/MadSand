@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -35,22 +34,23 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import hitonoriol.madsand.dialog.GameDialog;
+import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.gui.dialogs.OkDialog;
+import hitonoriol.madsand.gui.stages.CraftStage;
 import hitonoriol.madsand.gui.stages.Overlay;
 import hitonoriol.madsand.resources.Resources;
-import hitonoriol.madsand.screens.TravelScreen;
+import hitonoriol.madsand.util.BooleanTally;
 import hitonoriol.madsand.util.TimeUtils;
+import hitonoriol.madsand.util.Utils;
 
 public class Gui {
-	public static final float DEFWIDTH = 250f;
-	public static final float defLblWidth = Gdx.graphics.getWidth() / 4;
-	public static int BTN_WIDTH = 150, BTN_HEIGHT = 30;
+	public static final float DEF_LABEL_WIDTH = Gdx.graphics.getWidth() / 4;
+	public static final int BTN_WIDTH = 150, BTN_HEIGHT = 30;
 	public final static int FONT_XXS = 12, FONT_XS = 14, FONT_S = 16, FONT_M = 20, FONT_L = 24, FONT_XL = 28;
 	public final static float DELAY = 0.05f;
 
-	public static boolean gameUnfocused = false;
-	public static boolean dialogActive = false;
+	private static BooleanTally gameFocus = new BooleanTally();
+	private static BooleanTally gameDialogs = new BooleanTally();
 
 	public static NinePatchDrawable transparency;
 
@@ -58,17 +58,16 @@ public class Gui {
 	public static NinePatchDrawable darkBackgroundSizeable;
 	public static NinePatchDrawable dialogBackground;
 
-	public static Skin skin;
+	public static final Skin skin = new Skin();
 
-	public static ScreenViewport uiViewport = new ScreenViewport();
 	public static Overlay overlay;
+	private static ScreenViewport viewport = new ScreenViewport();
 	private static GlyphLayout glyphLayout = new GlyphLayout();
 
 	static Color mouseOverColor = new Color(0xa5a5a5ff);
 	private static Map<Integer, LabelStyle> labelStyles = new HashMap<>();
 
 	private static void initSkin() {
-		skin = new Skin();
 		skin.add("default", getFont(FONT_S));
 		loadNinePatches();
 
@@ -153,18 +152,15 @@ public class Gui {
 
 	static void init() {
 		initSkin();
-		createTransitionScreens();
 	}
 
-	public static Screen travelScreen;
-
-	private static void createTransitionScreens() {
-		travelScreen = new TravelScreen();
+	public static ScreenViewport viewport() {
+		return viewport;
 	}
 
 	public static void openCraftMenu(int id) {
-		MadSand.craftScreen.getStage().refreshCraftMenu(id);
-		MadSand.switchScreen(MadSand.craftScreen);
+		Screens.Crafting.stage(CraftStage.class).ifPresent(craft -> craft.refreshCraftMenu(id));
+		MadSand.switchScreen(Screens.Crafting);
 	}
 
 	private static OkDialog drawOkDialog(String title, String msg, Stage stage) {
@@ -181,50 +177,41 @@ public class Gui {
 		return drawOkDialog(OkDialog.DEFAULT_TITLE, msg);
 	}
 
+	public static void openDialog() {
+		Utils.dbg("[Opening a dialog]");
+		overlay.hideTooltip();
+		overlay.getContextMenu().close();
+		gameDialogs.action();
+	}
+
+	public static void closeDialog() {
+		if (gameDialogs.reverseAction())
+			overlay.showTooltip();
+		Utils.dbg("[Closing a dialog (all dialogs closed = %b)]", gameDialogs.isNeutral());
+	}
+
+	public static boolean isDialogActive() {
+		return !gameDialogs.isNeutral();
+	}
+
 	public static void unfocusGame() {
-		dialogActive = gameUnfocused = true;
+		Utils.dbg("[Unfocus]");
+		gameFocus.action();
 		overlay.hideTooltip();
 	}
 
-	public static void resumeGameFocus(GameDialog dialog) {
-		boolean noDialogsLeft = false;
-		Stage stage = MadSand.getStage();
-
-		if (stage != overlay)
-			return;
-
-		if (dialog == null)
-			noDialogsLeft = !hasDialogs(stage);
-		else
-			noDialogsLeft = dialog.isOnlyDialog();
-
-		if (noDialogsLeft) {
-			forceResumeFocus();
-			overlay.showTooltip();
-		}
-	}
-
-	public static void forceResumeFocus() {
-		dialogActive = gameUnfocused = false;
-	}
-
-	public static boolean hasDialogs(Stage stage, GameDialog dialog) { // If stage has dialogs except <dialog>
-		for (Actor actor : stage.getActors())
-			if (actor != dialog && actor instanceof GameDialog)
-				return true;
-		return false;
-	}
-
-	public static boolean hasDialogs(Stage stage) { // If stage has any GameDialog
-		return hasDialogs(stage, null);
-	}
-
 	public static void resumeGameFocus() {
-		resumeGameFocus(null);
+		if (gameFocus.reverseAction() && !isDialogActive())
+			overlay.showTooltip();
+		Utils.dbg("[Resume focus (focused = %b)]", gameFocus.isNeutral());
+	}
+
+	public static void resetGameFocus() {
+		gameFocus.reset();
 	}
 
 	public static boolean isGameUnfocused() {
-		return gameUnfocused || dialogActive;
+		return !gameFocus.isNeutral() || isDialogActive();
 	}
 
 	public static void refreshOverlay() {

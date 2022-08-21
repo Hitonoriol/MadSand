@@ -26,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
@@ -324,7 +325,7 @@ public class Player extends Entity {
 	}
 
 	public void setFov() {
-		setFov((int) (Gdx.graphics.getWidth() / MadSand.TILESIZE / 1.65));
+		setFov((int) (Gdx.graphics.getWidth() / Resources.TILESIZE / 1.65));
 	}
 
 	public void setVisibleArea(int radius) {
@@ -520,7 +521,7 @@ public class Player extends Entity {
 		super.die();
 		stats.equipment.unEquipAll();
 		refreshEquipment();
-		MadSand.switchScreen(MadSand.deathScreen);
+		MadSand.switchScreen(Screens.Death);
 		MadSand.warn("You died");
 	}
 
@@ -741,8 +742,6 @@ public class Player extends Entity {
 
 	public void interact(AbstractNpc npc) {
 		npc.interact(this);
-		Gui.overlay.getContextMenu().close();
-		Gui.overlay.hideActionBtn();
 	}
 
 	public void tradeWith(Entity npc) {

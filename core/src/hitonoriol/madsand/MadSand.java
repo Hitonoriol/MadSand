@@ -1,5 +1,6 @@
 package hitonoriol.madsand;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import com.badlogic.gdx.Game;
@@ -23,62 +24,46 @@ import hitonoriol.madsand.screens.CraftScreen;
 import hitonoriol.madsand.screens.DeathScreen;
 import hitonoriol.madsand.screens.GameScreen;
 import hitonoriol.madsand.screens.MainMenu;
+import hitonoriol.madsand.screens.TravelScreen;
 import hitonoriol.madsand.screens.WorldRenderer;
 import hitonoriol.madsand.util.Utils;
+import hitonoriol.madsand.util.cast.Cast;
 import hitonoriol.madsand.world.World;
 
 public class MadSand extends Game {
-	public static final int TILESIZE = 33;
-
-	public static final String SAVE_EXT = ".msf";
-	public static final String SAVEDIR = "MadSand_Saves/";
-	public static final String MAPDIR = SAVEDIR + "worlds/";
-	public static final String LOGFILE = "/log" + SAVE_EXT;
-	public static final String NPCSFILE = "NPCs";
-	public static final String WORLDFILE = "/World" + SAVE_EXT;
-	public static String WORLDNAME = "";
-
-	private static boolean worldUntouched = true;
-	private long startTime = System.currentTimeMillis();
+	private static MadSand game;
 
 	private World world;
+	private WorldRenderer worldRenderer;
 	private Storage<AbstractScreen<?>> currentScreen = new Storage<>();
-	private static MadSand game;
-	private static WorldRenderer worldRenderer;
 
-	public static GameScreen gameScreen;
-	public static CraftScreen craftScreen;
-	public static DeathScreen deathScreen;
-	public static MainMenu mainMenu;
+	private boolean worldUntouched = true;
+	private long startTime = System.currentTimeMillis();
 
 	public void create() {
 		Utils.out("Starting initialization!");
 		game = this;
-		worldRenderer = new WorldRenderer();
 		Gdx.graphics.setContinuousRendering(false);
-
 		Timer.instance().start();
 		Resources.loadAll();
 		Gui.init();
 		initScreens();
 		Keyboard.initListener();
 		Mouse.initListener();
-
-		GameSaver.createDirs();
 		initNewGame();
-		if (!Globals.headless())
-			game.world.generate();
 		Keyboard.initDefaultKeyBinds();
-		switchScreen(mainMenu);
+		switchScreen(Screens.MainMenu);
 		Utils.out("End of initialization (%.3f sec spent)", Utils.toSeconds(System.currentTimeMillis() - startTime));
 		Utils.printMemoryInfo();
 	}
 
-	private static void initScreens() {
-		gameScreen = new GameScreen(worldRenderer);
-		craftScreen = new CraftScreen(worldRenderer);
-		deathScreen = new DeathScreen(worldRenderer);
-		mainMenu = new MainMenu(worldRenderer);
+	private void initScreens() {
+		worldRenderer = new WorldRenderer();
+		Screens.MainMenu.set(new MainMenu(worldRenderer));
+		Screens.Game.set(new GameScreen(worldRenderer));
+		Screens.Crafting.set(new CraftScreen(worldRenderer));
+		Screens.Death.set(new DeathScreen(worldRenderer));
+		Screens.Travel.set(new TravelScreen());
 	}
 
 	public static void initNewGame() {
@@ -86,6 +71,8 @@ public class MadSand extends Game {
 		MadSand.player().updCoords();
 		Lua.init();
 		Gui.overlay.getGameLog().clear();
+		if (!Globals.headless() && isWorldUntouched())
+			game.world.generate();
 	}
 
 	private void createWorld() {
@@ -96,8 +83,7 @@ public class MadSand extends Game {
 	}
 
 	public static void switchScreen(Screen screen) {
-		if (Gui.gameUnfocused)
-			Gui.overlay.getContextMenu().close();
+		Gui.overlay.getContextMenu().close();
 		game.setScreen(screen);
 		System.gc();
 	}
@@ -107,9 +93,13 @@ public class MadSand extends Game {
 		switchScreen((Screen) screen);
 	}
 
+	public static void switchScreen(Screens screen) {
+		switchScreen(screen.screen());
+	}
+
 	public static void reset() {
-		Gui.forceResumeFocus();
-		switchScreen(gameScreen);
+		Gui.resetGameFocus();
+		switchScreen(Screens.Game);
 	}
 
 	@Override
@@ -141,7 +131,7 @@ public class MadSand extends Game {
 	}
 
 	public static OrthographicCamera getCamera() {
-		return worldRenderer.getCamera();
+		return game.worldRenderer.getCamera();
 	}
 
 	public static Stage getStage() {
@@ -149,7 +139,7 @@ public class MadSand extends Game {
 	}
 
 	public static WorldRenderer getRenderer() {
-		return worldRenderer;
+		return game.worldRenderer;
 	}
 
 	public World getWorld() {
@@ -208,8 +198,8 @@ public class MadSand extends Game {
 
 	// New world is generated on game launch, so this thing ensures that new world won't be generated twice when you press "New Game" button
 	public static void enterWorld() {
-		if (MadSand.isWorldUntouched())
-			MadSand.worldUntouched = false;
+		if (isWorldUntouched())
+			game.worldUntouched = false;
 
 		Gui.overlay.setPlayer(player());
 		game.world.enter();
@@ -217,14 +207,36 @@ public class MadSand extends Game {
 	}
 
 	public static boolean isWorldUntouched() {
-		return worldUntouched;
+		return game.worldUntouched;
 	}
 
-	public static void setWorldName(String arg) {
-		WORLDNAME = arg;
-	}
-
-	public static MadSand instance() {
+	public static MadSand game() {
 		return game;
+	}
+
+	public enum Screens {
+		MainMenu, Game, Crafting, Death, Travel;
+
+		private AbstractScreen<?> screen;
+
+		private void set(AbstractScreen<?> screen) {
+			this.screen = screen;
+		}
+
+		public AbstractScreen<?> screen() {
+			return screen;
+		}
+
+		public <T extends AbstractScreen<?>> Optional<T> screen(Class<T> screenClass) {
+			return Cast.to(screen(), screenClass);
+		}
+
+		public Stage stage() {
+			return screen.getStage();
+		}
+
+		public <T extends Stage> Optional<T> stage(Class<T> stageClass) {
+			return Cast.to(stage(), stageClass);
+		}
 	}
 }

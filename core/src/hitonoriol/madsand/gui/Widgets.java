@@ -14,9 +14,17 @@ public class Widgets {
 	public static TextButton button(String text) {
 		return new TextButton(text, Gui.skin);
 	}
+	
+	public static TextButton button() {
+		return button("");
+	}
 
 	public static Label label(String text) {
 		return new Label(text, Gui.skin);
+	}
+	
+	public static Label label() {
+		return label("");
 	}
 
 	public static Label label(String text, int fontSize) {

@@ -14,7 +14,7 @@ public class DeathStage extends Stage {
 	TextButton respawnButton;
 
 	public DeathStage() {
-		super(Gui.uiViewport);
+		super(Gui.viewport());
 		Table container = new Table();
 		final float SIZE_COEF = 1.85f;
 
@@ -26,7 +26,7 @@ public class DeathStage extends Stage {
 		Gui.setFontSize(deathMsgLabel, 19);
 		titleLabel.setAlignment(Align.center);
 
-		container.add(titleLabel).align(Align.center).width(Gui.defLblWidth).padBottom(30f).row();
+		container.add(titleLabel).align(Align.center).width(Gui.DEF_LABEL_WIDTH).padBottom(30f).row();
 		container.add(deathMsgLabel).padBottom(75).row();
 		container.add(respawnButton).size(Gui.BTN_WIDTH * SIZE_COEF, Gui.BTN_HEIGHT * SIZE_COEF).row();
 		container.setFillParent(true);

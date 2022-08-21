@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.gui.OverlayMouseoverListener;
+import hitonoriol.madsand.gui.MouseoverListener;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.resources.Resources;
 
@@ -23,7 +23,7 @@ public class ScrollablePanel extends Table {
 		contentTable.setBackground(Gui.setMinSize(Resources.loadNinePatch("misc/darkness75"), 0));
 		contentTable.defaults().align(Align.left).padBottom(ENTRY_PAD).width(WIDTH);
 		add(scroll).size(WIDTH, HEIGHT).row();
-		addListener(new OverlayMouseoverListener());
+		MouseoverListener.setUp(scroll);
 	}
 
 	public Cell<Label> addHeader(String text) {

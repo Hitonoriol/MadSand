@@ -29,8 +29,7 @@ public class GameScreen extends AbstractScreen<Overlay> {
 		gameWorld.render(delta);
 		Mouse.mouseWorldCoords.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 		gameWorld.getCamera().unproject(Mouse.mouseWorldCoords);
-		stage.pollGameConsole();
-		if (!stage.isConsoleFocused() && !Gui.isGameUnfocused()) {
+		if (!Gui.isGameUnfocused()) {
 			Mouse.updCoords();
 			Mouse.pollMouseMovement();
 			Keyboard.pollGameKeys();

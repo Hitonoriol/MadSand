@@ -8,7 +8,8 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.gui.OverlayMouseoverListener;
+import hitonoriol.madsand.MadSand.Screens;
+import hitonoriol.madsand.gui.MouseoverListener;
 import hitonoriol.madsand.gui.widgets.TimedProgressBar;
 
 public class TravelStage extends Stage {
@@ -26,10 +27,11 @@ public class TravelStage extends Stage {
 	static String travelString = "You are travelling to the next sector...";
 
 	public TravelStage() {
+		super(Gui.viewport());
 		travelLabel = new Label(travelString, Gui.skin);
 		travelProgressBar = new TimedProgressBar(travelDelay);
 		travelContainer = new Table();
-		travelContainer.addListener(new OverlayMouseoverListener());
+		MouseoverListener.setUp(travelContainer);
 
 		travelProgressBar.setSize(WIDTH, ENTRY_HEIGHT);
 
@@ -46,6 +48,6 @@ public class TravelStage extends Stage {
 	}
 
 	public void travel() {
-		travelProgressBar.start(() -> MadSand.switchScreen(MadSand.gameScreen));
+		travelProgressBar.start(() -> MadSand.switchScreen(Screens.Game));
 	}
 }

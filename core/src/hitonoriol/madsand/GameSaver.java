@@ -1,8 +1,8 @@
 package hitonoriol.madsand;
 
-import static hitonoriol.madsand.resources.Resources.*;
 import static hitonoriol.madsand.resources.Resources.ERR_FILE;
 import static hitonoriol.madsand.resources.Resources.LINEBREAK;
+import static hitonoriol.madsand.resources.Resources.getMapper;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
+import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.util.Utils;
@@ -28,6 +29,13 @@ public class GameSaver {
 	public static String SECTOR_DELIM = "!";
 	public final static long saveFormatVersion = 9;
 
+	public static final String SAVE_EXT = ".msf";
+	public static final String SAVEDIR = "MadSand_Saves/";
+	public static final String MAPDIR = SAVEDIR + "worlds/";
+	public static final String LOGFILE = "/log" + SAVE_EXT;
+	public static final String NPCSFILE = "NPCs";
+	public static final String WORLDFILE = "/World" + SAVE_EXT;
+
 	private final static List<Runnable> loaderTasks = new ArrayList<>();
 
 	public static void save() {
@@ -36,7 +44,7 @@ public class GameSaver {
 			Gui.drawOkDialog("You can't save during an encounter!");
 			return;
 		}
-		GameSaver.createDirs();
+		createDirs();
 		world.logout();
 		saveLog();
 		if (saveLocation() && saveWorld())
@@ -48,11 +56,10 @@ public class GameSaver {
 	public static boolean load(String filename) {
 		Utils.dbg("Loading world [%s]...", filename);
 		Utils.printMemoryInfo();
-		MadSand.WORLDNAME = filename;
-		File f = new File(MadSand.MAPDIR + filename);
+		File f = new File(GameSaver.MAPDIR + filename);
 
 		if (!f.exists() || !f.isDirectory()) {
-			MadSand.switchScreen(MadSand.mainMenu);
+			MadSand.switchScreen(Screens.MainMenu);
 			Gui.drawOkDialog("Couldn't load this world");
 			return false;
 		}
@@ -125,7 +132,7 @@ public class GameSaver {
 
 	private static boolean saveWorld() {
 		try {
-			File worldFile = new File(getCurSaveDir() + MadSand.WORLDFILE);
+			File worldFile = new File(getCurSaveDir() + GameSaver.WORLDFILE);
 			Player player = MadSand.player();
 
 			player.stats.equipment.setStatBonus(false);
@@ -143,11 +150,11 @@ public class GameSaver {
 	private static boolean loadWorld() {
 		try {
 			Utils.out("Loading world info...");
-			String worldFile = getCurSaveDir() + MadSand.WORLDFILE;
+			String worldFile = getCurSaveDir() + GameSaver.WORLDFILE;
 
 			World world = getMapper().readValue(readFile(worldFile), World.class);
 			world.getPlayer().postLoadInit();
-			MadSand.instance().setWorld(world);
+			MadSand.game().setWorld(world);
 			System.gc();
 			Utils.out("Done loading world info.");
 			return true;
@@ -204,7 +211,7 @@ public class GameSaver {
 
 	public static String getTimeDependentFile(int wx, int wy, int layer) {
 		return getCurSaveDir() + "timedependent" + getSectorString(wx, wy, layer)
-				+ MadSand.SAVE_EXT;
+				+ GameSaver.SAVE_EXT;
 	}
 
 	static String getSectorString(int wx, int wy, int layer) {
@@ -216,11 +223,11 @@ public class GameSaver {
 	}
 
 	public static String getCurSaveDir() {
-		return MadSand.MAPDIR + MadSand.WORLDNAME + "/";
+		return GameSaver.MAPDIR + MadSand.world().getName() + "/";
 	}
 
 	static String getWorldXYPath(String file, int wx, int wy) {
-		return getCurSaveDir() + file + getSectorString(wx, wy) + MadSand.SAVE_EXT;
+		return getCurSaveDir() + file + getSectorString(wx, wy) + GameSaver.SAVE_EXT;
 	}
 
 	public static File getLocationFile(int wx, int wy) {
@@ -232,12 +239,12 @@ public class GameSaver {
 	}
 
 	public static String getNpcFile(int wx, int wy, int layer) {
-		return getCurSaveDir() + MadSand.NPCSFILE + getSectorString(wx, wy, layer)
-				+ MadSand.SAVE_EXT;
+		return getCurSaveDir() + GameSaver.NPCSFILE + getSectorString(wx, wy, layer)
+				+ GameSaver.SAVE_EXT;
 	}
 
 	public static void loadErrMsg() {
-		MadSand.switchScreen(MadSand.mainMenu);
+		MadSand.switchScreen(Screens.MainMenu);
 		Gui.drawOkDialog(
 				"Couldn't to load this world. \n"
 						+ "Maybe it was saved in older/newer version of the game or some files are corrupted.\n"
@@ -251,7 +258,7 @@ public class GameSaver {
 
 	private static boolean saveLog() {
 		try {
-			FileWriter fw = new FileWriter(getCurSaveDir() + MadSand.LOGFILE);
+			FileWriter fw = new FileWriter(getCurSaveDir() + GameSaver.LOGFILE);
 
 			for (Label logLabel : Gui.overlay.getGameLog().getLabels())
 				fw.write(logLabel.getText().toString() + LINEBREAK);
@@ -268,7 +275,7 @@ public class GameSaver {
 	private static boolean loadLog() {
 		try {
 			BufferedReader br = new BufferedReader(
-					new FileReader(getCurSaveDir() + MadSand.LOGFILE));
+					new FileReader(getCurSaveDir() + GameSaver.LOGFILE));
 			String line;
 			int i = 0;
 			Label[] labels = Gui.overlay.getGameLog().getLabels();
@@ -286,8 +293,8 @@ public class GameSaver {
 	}
 
 	public static void createDirs() {
-		new File(MadSand.SAVEDIR).mkdirs();
-		new File(MadSand.MAPDIR).mkdirs();
+		new File(GameSaver.SAVEDIR).mkdirs();
+		new File(GameSaver.MAPDIR).mkdirs();
 		new File(getCurSaveDir()).mkdirs();
 	}
 
@@ -299,5 +306,4 @@ public class GameSaver {
 		Utils.dbg("Running post-loading tasks (%s)...", loaderTasks.size());
 		loaderTasks.forEach(task -> task.run());
 	}
-
 }

@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
-import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.widgets.AutoCheckBox;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
@@ -31,7 +31,7 @@ public class SettingsDialog extends GameDialog {
 	static float HEIGHT = 350;
 
 	public SettingsDialog() {
-		super(MadSand.mainMenu);
+		super(Screens.MainMenu.stage());
 		createDialog();
 	}
 

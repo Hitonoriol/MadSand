@@ -15,7 +15,7 @@ public class ConfirmDialog extends GameDialog {
 	private float WIDTH = 400;
 	private float HEIGHT = 175;
 
-	private float BTN_WIDTH = Gui.defLblWidth / 2;
+	private float BTN_WIDTH = Gui.DEF_LABEL_WIDTH / 2;
 	private float BTN_HEIGHT = 40;
 
 	private Table buttonTable = new Table();

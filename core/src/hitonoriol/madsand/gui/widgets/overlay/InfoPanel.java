@@ -3,49 +3,77 @@ package hitonoriol.madsand.gui.widgets.overlay;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.gui.MouseoverListener;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.textgenerator.StaticTextGenerator;
 import hitonoriol.madsand.gui.textgenerator.TextGenerator;
 import hitonoriol.madsand.gui.widgets.gametooltip.LabelProcessor;
 import hitonoriol.madsand.gui.widgets.gametooltip.RefreshableLabel;
 
 public class InfoPanel extends ScrollablePanel {
+	private final static float ENTRY_PAD = 15;
+
 	private LabelProcessor processor = new LabelProcessor();
-	private Table title = new Table();
-	private Label expandLbl = new Label("", Gui.skin);
+	private Label title = Widgets.label("", Gui.FONT_M);
+	private Label subTitle = Widgets.label();
 
+	public InfoPanel(String title) {
+		this();
+		setTitle(title);
+	}
+	
 	public InfoPanel() {
-		Label titleLbl = Gui.setFontSize(new Label("Info", Gui.skin), Gui.FONT_M);
-		titleLbl.setAlignment(Align.center);
-		title.add(titleLbl).row();
-		title.background(getContentTable().getBackground());
-		add(title).width(WIDTH).fill().align(Align.center).padBottom(1).row();
-		expandLbl.setAlignment(Align.center);
-		title.add(expandLbl).fill().align(Align.center).row();
+		add(createToggleButton())
+				.width(WIDTH)
+				.align(Align.center)
+				.padBottom(1).row();
 		addBody();
-		updateExpandLbl();
+		updateSubTitle();
+	}
 
-		Gui.setClickAction(this, () -> {
-			toggleEnabled();
-		});
+	public void setTitle(String title) {
+		this.title.setText(title);
+	}
+	
+	public void setSubTitle(String subTitle) {
+		this.subTitle.setText(subTitle);
+	}
+	
+	private TextButton createToggleButton() {
+		TextButton button = Widgets.button();
+		title.setAlignment(Align.center);
+		button.clearChildren();
+		button.add(title).expand().fill().row();
+		subTitle.setAlignment(Align.center);
+		button.add(subTitle).expand().fill().align(Align.center).row();
+
+		TextButtonStyle style = new TextButtonStyle(button.getStyle());
+		style.up = style.over = style.down = style.checked = getContentTable().getBackground();
+		button.setStyle(style);
+
+		MouseoverListener.setUp(button);
+		Gui.setAction(button, () -> toggleEnabled());
+		return button;
 	}
 
 	private void addBody() {
-		add(getScroll()).minHeight(1).maxHeight(HEIGHT).padTop(-1).row();
+		add(getScroll()).maxSize(WIDTH, HEIGHT).minHeight(1).padTop(-1).row();
 		setSize(WIDTH, HEIGHT);
 		pack();
 	}
 
-	private void updateExpandLbl() {
-		expandLbl.setText("Click to " + (processor.isEnabled() ? "hide" : "expand"));
+	private void updateSubTitle() {
+		subTitle.setText("Click to " + (processor.isEnabled() ? "hide" : "expand"));
 	}
 
 	public RefreshableLabel addEntry(TextGenerator generator) {
-		RefreshableLabel label;
-		addContents(label = processor.addTextGenerator(generator)).row();
+		RefreshableLabel label = processor.addTextGenerator(generator);
+		addContents(label).padLeft(ENTRY_PAD).row();
 		return label;
 	}
 
@@ -60,12 +88,11 @@ public class InfoPanel extends ScrollablePanel {
 	public void toggleEnabled() {
 		boolean enabled = !processor.isEnabled();
 		processor.setEnabled(enabled);
-		updateExpandLbl();
+		updateSubTitle();
 		processor.refresh();
 
 		if (!enabled) {
 			Gui.removeActor(this, getScroll());
-			Gui.resumeGameFocus();
 		} else
 			addBody();
 	}

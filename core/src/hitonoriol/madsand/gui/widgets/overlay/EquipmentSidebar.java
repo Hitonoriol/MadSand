@@ -13,7 +13,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
 import hitonoriol.madsand.entities.inventory.ItemUI;
 import hitonoriol.madsand.entities.inventory.item.Item;
-import hitonoriol.madsand.gui.OverlayMouseoverListener;
+import hitonoriol.madsand.gui.MouseoverListener;
 import hitonoriol.madsand.resources.Resources;
 
 public class EquipmentSidebar extends Table {
@@ -31,7 +31,7 @@ public class EquipmentSidebar extends Table {
 
 	public EquipmentSidebar() {
 		super();
-		super.addListener(new OverlayMouseoverListener());
+		MouseoverListener.setUp(this);
 		super.setBackground(tableBorder);
 
 		super.setOrigin(Align.bottomRight);

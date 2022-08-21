@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.HotbarAssignable;
-import hitonoriol.madsand.gui.OverlayMouseoverListener;
+import hitonoriol.madsand.gui.MouseoverListener;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.util.Functional;
 
@@ -102,7 +102,7 @@ public class Hotbar extends Table {
 			button = new TextButton(item.getHotbarString(), Gui.skin);
 			Gui.setFontSize(button.getLabel(), Gui.FONT_XXS);
 			Gui.setAction(button, () -> item.hotbarAction());
-			button.addListener(new OverlayMouseoverListener());
+			MouseoverListener.setUp(button);
 		}
 
 		public void refresh() {

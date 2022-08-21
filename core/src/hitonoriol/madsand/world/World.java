@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.Player;
@@ -47,6 +48,8 @@ public class World {
 
 	private Pair coords = new Pair();
 
+	private String name;
+	
 	@JsonIgnore
 	private ArrayDeque<Pair> previousLocations = new ArrayDeque<>(); // Maps that are currently loaded in WorldMap
 
@@ -380,7 +383,7 @@ public class World {
 			worldMap.remove();
 		}
 
-		MadSand.switchScreen(Gui.travelScreen);
+		MadSand.switchScreen(Screens.Travel);
 
 		if (player.stats.rollEncounter() && !inEncounter) {
 			switchToEncounter();
@@ -601,7 +604,7 @@ public class World {
 	}
 
 	public static int worldCoord(int q) {
-		return q * MadSand.TILESIZE;
+		return q * Resources.TILESIZE;
 	}
 
 	private static int TIME_MIDNIGHT = 24;
@@ -782,6 +785,14 @@ public class World {
 		Lua.executeScript(Lua.onCreationScript);
 	}
 
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	@JsonIgnore
 	public boolean isUnderGround() {
 		return worldMap.curLayer != Location.LAYER_OVERWORLD;

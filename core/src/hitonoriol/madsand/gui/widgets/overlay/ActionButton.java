@@ -2,6 +2,8 @@ package hitonoriol.madsand.gui.widgets.overlay;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
@@ -13,7 +15,7 @@ import hitonoriol.madsand.entities.inventory.item.CropSeeds;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
-import hitonoriol.madsand.gui.OverlayMouseoverListener;
+import hitonoriol.madsand.gui.MouseoverListener;
 import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.Tile;
@@ -33,14 +35,17 @@ public class ActionButton extends Table {
 
 	public ActionButton() {
 		interactButton = new TextButton("", Gui.skin);
-		interactButton.getLabel().setWrap(true);
+		Label label = interactButton.getLabel();
+		label.setWrap(true);
+		Gui.setFontSize(label, Gui.FONT_XS);
 		super.setVisible(false);
 		super.setPosition(Gui.horizontalCenter(this), ACTION_TBL_YPOS);
 		super.defaults().size(WIDTH, HEIGHT);
 
 		Gui.setClickAction(interactButton, Buttons.LEFT, createClickHandler(Buttons.LEFT));
 		Gui.setClickAction(interactButton, Buttons.RIGHT, createClickHandler(Buttons.RIGHT));
-		interactButton.addListener(new OverlayMouseoverListener());
+		interactButton.addAction(Actions.alpha(0.85f));
+		MouseoverListener.setUp(interactButton);
 	}
 
 	public void hideButton() {
@@ -55,7 +60,6 @@ public class ActionButton extends Table {
 			else
 				rAction.run();
 			hideButton();
-			Gui.resumeGameFocus();
 			TimeUtils.scheduleTask(() -> Gdx.graphics.requestRendering(), 0.125f);
 		};
 	}
@@ -89,7 +93,7 @@ public class ActionButton extends Table {
 	}
 
 	public void refresh() {
-		if (Gui.dialogActive || (Gui.isGameUnfocused() && !isVisible()) || Keyboard.inputIgnored()) {
+		if ((Gui.isGameUnfocused() && !isVisible()) || Keyboard.inputIgnored()) {
 			hideButton();
 			return;
 		}
@@ -126,9 +130,6 @@ public class ActionButton extends Table {
 
 			activateButton(tileMsg + TileProp.getName(tile.id()), () -> {
 				player.useItem();
-				Gui.gameUnfocused = false;
-				Gui.overlay.showTooltip();
-				hideButton();
 			});
 
 		} else if (!npc.equals(Map.nullNpc) && npc.isNeutral())

@@ -24,7 +24,7 @@ public class KeyBindManager {
 	}
 
 	public void pollKeys() {
-		if (pollingBindings.isEmpty())
+		if (pollingBindings.isEmpty() || Gui.isGameUnfocused())
 			return;
 
 		pollingBindings.forEach((key, bind) -> {

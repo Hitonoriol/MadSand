@@ -25,7 +25,7 @@ public class CharacterCreationDialog extends PlayerStatDialog {
 	}
 
 	void createCharDialog() {
-		float width = Gui.defLblWidth;
+		float width = Gui.DEF_LABEL_WIDTH;
 		rollStats();
 		restoreOnChange = true;
 

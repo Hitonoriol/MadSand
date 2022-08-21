@@ -60,22 +60,24 @@ import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.worldgen.WorldGenPreset;
 
 public class Resources {
-	static String QUEST_FILE = "quests.json";
-	static String WORLDGEN_FILE = "worldgen.json";
-	static String ENCOUNTER_FILE = "encounters.json";
-	static String TUTORIAL_FILE = "tutorial.json";
-	static String TILE_FILE = "tiles.json";
-	static String OBJECT_FILE = "objects.json";
-	static String ITEMFACTORY_FILE = "itemfactories.json";
-	static String NPC_FILE = "npcs.json";
-	static String ITEM_FILE = "items.json";
-	public static String GLOBALS_FILE = "globals.json";
-	public static String BUILDRECIPE_FILE = "buildrecipes.json";
-	public static String SKILL_FILE = "skills.json";
+	private static final String QUEST_FILE = "quests.json";
+	private static final String WORLDGEN_FILE = "worldgen.json";
+	private static final String ENCOUNTER_FILE = "encounters.json";
+	private static final String TUTORIAL_FILE = "tutorial.json";
+	private static final String TILE_FILE = "tiles.json";
+	private static final String OBJECT_FILE = "objects.json";
+	private static final String ITEMFACTORY_FILE = "itemfactories.json";
+	private static final String NPC_FILE = "npcs.json";
+	private static final String ITEM_FILE = "items.json";
+	public static final String GLOBALS_FILE = "globals.json";
+	public static final String BUILDRECIPE_FILE = "buildrecipes.json";
+	public static final String SKILL_FILE = "skills.json";
 	public static final String SCRIPT_DIR = "scripts/";
 	public static final String ENCOUNTER_DIR = "encounter/";
 	public static final String ERR_FILE = "MadSandCritical.log";
 	public static final String OUT_FILE = "MadSandOutput.log";
+	
+	public static final int TILESIZE = 33;
 
 	private static final TextureAtlas textures = loadAtlas("textures");
 	private static TextureMap<String> textureMap = new TextureMap<>(textures);

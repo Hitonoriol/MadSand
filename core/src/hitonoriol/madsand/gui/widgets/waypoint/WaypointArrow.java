@@ -60,10 +60,10 @@ public class WaypointArrow extends Group {
 		if (dst <= MIN_DISTANCE) {
 			arrow.setVisible(false);
 			descriptionLabel.setText(name);
-			Vector3 screen = new Vector3(destination.x * MadSand.TILESIZE, destination.y * MadSand.TILESIZE, 0);
+			Vector3 screen = new Vector3(destination.x * Resources.TILESIZE, destination.y * Resources.TILESIZE, 0);
 			MadSand.getRenderer().getCamera().project(screen);
 			descriptionLabel.setX(0);
-			addAction(Actions.moveTo(screen.x - getTextOffset(name), screen.y - MadSand.TILESIZE / 2, ANIM_TIME));
+			addAction(Actions.moveTo(screen.x - getTextOffset(name), screen.y - Resources.TILESIZE / 2, ANIM_TIME));
 			return;
 		} else if (!arrow.isVisible())
 			arrow.setVisible(true);

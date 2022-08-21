@@ -8,8 +8,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.KeyDeserializer;
 
-import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
 public class Pair {
@@ -171,11 +171,11 @@ public class Pair {
 	}
 
 	public Pair toScreen() {
-		return multiply(MadSand.TILESIZE);
+		return multiply(Resources.TILESIZE);
 	}
 
 	public Pair toWorld() {
-		return divide(MadSand.TILESIZE);
+		return divide(Resources.TILESIZE);
 	}
 
 	public Pair clear() {

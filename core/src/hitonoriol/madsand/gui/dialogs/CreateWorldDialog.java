@@ -9,8 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
 
+import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.util.Utils;
 
@@ -24,7 +26,7 @@ public class CreateWorldDialog extends GameDialog {
 	Label nameLabel;
 
 	public CreateWorldDialog() {
-		super(MadSand.mainMenu);
+		super(Screens.MainMenu.screen());
 		createDialog();
 	}
 
@@ -48,8 +50,8 @@ public class CreateWorldDialog extends GameDialog {
 		Gui.setAction(createWorldBtn, () -> {
 			Gdx.graphics.setContinuousRendering(false);
 			if (!worldNameField.getText().trim().equals("")) {
-				MadSand.WORLDNAME = worldNameField.getText();
-				File index = new File("MadSand_Saves/" + MadSand.WORLDNAME);
+				String worldName = worldNameField.getText();
+				File index = new File(GameSaver.SAVEDIR  + worldName);
 				String[] entries = index.list();
 
 				if (entries != null) {
@@ -62,12 +64,13 @@ public class CreateWorldDialog extends GameDialog {
 					index.delete();
 				}
 
-				MadSand.switchScreen(MadSand.gameScreen);
+				MadSand.switchScreen(Screens.Game);
 				if (!MadSand.isWorldUntouched()) {
 					MadSand.initNewGame();
 					MadSand.world().generate();
 				}
 
+				MadSand.world().setName(worldName);
 				MadSand.enterWorld();
 				MadSand.player().updCoords();
 				remove();

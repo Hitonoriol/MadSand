@@ -1,7 +1,5 @@
 package hitonoriol.madsand.screens;
 
-import static hitonoriol.madsand.MadSand.TILESIZE;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -51,15 +49,15 @@ public class WorldRenderer {
 	private List<WorldAnimation> animations = new ArrayList<>();
 	private ConcurrentHashMap<Path, PathDescriptor> paths = new ConcurrentHashMap<>();
 
-	private static TextureRegion mapCursor = Resources.getTexture("misc/map_cursor");
+	private TextureRegion mapCursor = Resources.getTexture("misc/map_cursor");
 
 	public WorldRenderer() {
 		updateViewport();
 	}
 
 	private void renderObject(MapObject object, float x, float y) {
-		x *= TILESIZE;
-		y *= TILESIZE;
+		x *= Resources.TILESIZE;
+		y *= Resources.TILESIZE;
 
 		if (object.centered)
 			x -= object.getRenderOffset();
@@ -126,14 +124,14 @@ public class WorldRenderer {
 		}
 	}
 
-	private static final float LOOT_SIZE = TILESIZE * 0.85f;
-	private static final float LOOT_OFFSET = (TILESIZE - LOOT_SIZE) * 0.5f;
+	private static final float LOOT_SIZE = Resources.TILESIZE * 0.85f;
+	private static final float LOOT_OFFSET = (Resources.TILESIZE - LOOT_SIZE) * 0.5f;
 
 	private void drawLoot(float x, float y) {
 		Loot loot = MadSand.world().getCurLoc().getLoot((int) x, (int) y);
 
-		x = x * TILESIZE + LOOT_OFFSET;
-		y = y * TILESIZE + LOOT_OFFSET;
+		x = x * Resources.TILESIZE + LOOT_OFFSET;
+		y = y * Resources.TILESIZE + LOOT_OFFSET;
 
 		if (loot.getItemCount() == 1)
 			batch.draw(loot.get(0).getTexture(),
@@ -159,7 +157,7 @@ public class WorldRenderer {
 
 	public void drawPath(Path path, Color color) {
 		batch.setColor(color);
-		path.forEach(cell -> batch.draw(WorldRenderer.mapCursor, cell.x * TILESIZE, cell.y * TILESIZE));
+		path.forEach(cell -> batch.draw(mapCursor, cell.x * Resources.TILESIZE, cell.y * Resources.TILESIZE));
 		batch.setColor(defColor);
 	}
 
@@ -170,13 +168,13 @@ public class WorldRenderer {
 	private void drawMapCursor() {
 		int x = Mouse.wx, y = Mouse.wy;
 		if (!Mouse.hasClickAction())
-			batch.draw(WorldRenderer.mapCursor, x * TILESIZE, y * TILESIZE);
+			batch.draw(mapCursor, x * Resources.TILESIZE, y * Resources.TILESIZE);
 		else
 			drawPath(Mouse.getPathToCursor());
 	}
 
 	private void darkenTile(int x, int y, int dstFromLight) {
-		batch.draw(light.get(dstFromLight), x * TILESIZE, y * TILESIZE);
+		batch.draw(light.get(dstFromLight), x * Resources.TILESIZE, y * Resources.TILESIZE);
 	}
 
 	private void drawGame() {
@@ -195,7 +193,7 @@ public class WorldRenderer {
 			if (!map.validCoords(x, y) && MadSand.world().isUnderGround()) // Don't render default tile while underground
 				return;
 
-			batch.draw(MadSand.world().getTileOrDefault(x, y), x * TILESIZE, y * TILESIZE);
+			batch.draw(MadSand.world().getTileOrDefault(x, y), x * Resources.TILESIZE, y * Resources.TILESIZE);
 		});
 
 		player.forEachInFov((x, y) -> { // Render objects, loot, NPCs and player
@@ -295,7 +293,7 @@ public class WorldRenderer {
 	}
 
 	public void setWorldCamPosition(int x, int y) {
-		updateCamPosition(x * TILESIZE, y * TILESIZE);
+		updateCamPosition(x * Resources.TILESIZE, y * Resources.TILESIZE);
 	}
 
 	public void updateCamPosition() {
@@ -336,7 +334,7 @@ public class WorldRenderer {
 		private void createLightLevels() {
 			Color color = new Color(Color.BLACK);
 			for (int lvl = 1; lvl <= LIGHT_LEVELS; ++lvl) {
-				Pixmap light = new Pixmap(TILESIZE, TILESIZE, Format.RGBA8888);
+				Pixmap light = new Pixmap(Resources.TILESIZE, Resources.TILESIZE, Format.RGBA8888);
 				color.a = Math.min(LIGHT_START + ALPHA_STEP * (lvl - 1), 1f);
 				light.setColor(color);
 				light.fill();

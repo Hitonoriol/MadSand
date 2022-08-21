@@ -68,14 +68,10 @@ public class DialogChainGenerator {
 				scriptButton = new TextButton(buttonTokens[0], Gui.skin);
 				final String buttonScriptString = buttonTokens[1];
 				dialog.addButton(scriptButton);
-				Gui.setAction(scriptButton, () -> {
-					dialog.hide();
-					Lua.execute(buttonScriptString);
-				});
+				Gui.setAction(scriptButton, () -> Lua.execute(buttonScriptString));
 			} else {
 				nextDialogButton.setText(buttonString);
 				dialog.addButton(nextDialogButton);
-				Gui.setAction(nextDialogButton, () -> dialog.hide());
 			}
 		}
 
@@ -128,16 +124,16 @@ public class DialogChainGenerator {
 	public GameDialog generate(Stage stage) { // generates a chain of dialogs
 		StringTokenizer dialogTokens = new StringTokenizer(dialogChainString, DIALOG_TEXT_DELIMITER);
 
-		GameDialog dialog; // Current dialog
-		GameDialog newDialog; // Next dialog in chain
-		TextButton nextButton;
-		TextButton newNextButton;
+		GameDialog dialog = null; // Current dialog
+		GameDialog newDialog = null; // Next dialog in chain
+		TextButton nextButton = null;
+		TextButton newNextButton = null;
 
 		String dialogText; // Current dialog body text
 
 		dialog = new GameDialog("", stage);
 		nextButton = generateDialog(dialogTokens.nextToken(), dialog);
-		GameDialog ret = dialog;
+		GameDialog firstInChain = dialog;
 
 		while (dialogTokens.hasMoreTokens()) {
 			dialogText = dialogTokens.nextToken();
@@ -151,7 +147,8 @@ public class DialogChainGenerator {
 			dialog = newDialog;
 		}
 
-		//dialog.addOkButton(DEFAULT_BTN_TEXT);
-		return ret;
+		GameDialog lastInChain = dialog;
+		Gui.setAction(nextButton, () -> lastInChain.hide());
+		return firstInChain;
 	}
 }

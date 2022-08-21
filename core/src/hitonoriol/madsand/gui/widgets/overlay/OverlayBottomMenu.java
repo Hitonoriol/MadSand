@@ -13,7 +13,7 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Storage;
 import hitonoriol.madsand.dialog.GameDialog;
-import hitonoriol.madsand.gui.OverlayMouseoverListener;
+import hitonoriol.madsand.gui.MouseoverListener;
 import hitonoriol.madsand.gui.dialogs.AbilityDialog;
 import hitonoriol.madsand.gui.dialogs.BestiaryDialog;
 import hitonoriol.madsand.gui.dialogs.BuildDialog;
@@ -35,10 +35,9 @@ public class OverlayBottomMenu extends Table {
 	Table container = new Table();
 
 	public OverlayBottomMenu(Overlay overlay) {
-		addListener(new OverlayMouseoverListener());
-
 		this.overlay = overlay;
-
+		
+		MouseoverListener.setUp(this);
 		addButton("Character", Keys.Q, () -> new CharacterInfoWindow());
 		addButton("Inventory", Keys.E, () -> MadSand.player().inventory.getUI());
 		addButton("Abilities", Keys.R, () -> new AbilityDialog(MadSand.player().getAbilities()));
@@ -61,7 +60,7 @@ public class OverlayBottomMenu extends Table {
 		addButton(text, key, () -> {
 			if (Gui.overlay.getActors().contains(dialog.get(), true))
 				dialog.get().remove();
-			else if (!Gui.dialogActive)
+			else if (!Gui.isDialogActive())
 				dialog.set(dialogCreator.get()).show();
 		});
 	}

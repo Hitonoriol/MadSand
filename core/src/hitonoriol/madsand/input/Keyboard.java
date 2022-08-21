@@ -14,11 +14,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.containers.HashMapFactory;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.gui.dialogs.InputDialog;
@@ -71,10 +71,10 @@ public class Keyboard {
 		/* Function keys */
 		keyBinds
 				.bind(Keys.ESCAPE, true, () -> {
-					if (Gui.hasDialogs(Gui.overlay))
+					if (Gui.isDialogActive())
 						Gui.overlay.closeAllDialogs();
 					else
-						MadSand.switchScreen(MadSand.mainMenu);
+						MadSand.switchScreen(Screens.MainMenu);
 				})
 				.bind(Keys.NUMPAD_5, () -> {
 					WorldRenderer renderer = MadSand.getRenderer();
@@ -165,12 +165,8 @@ public class Keyboard {
 		if (!Globals.debugMode)
 			return;
 
-		if (key == Keys.GRAVE) {
-			Gui.unfocusGame();
-			TextField console = Gui.overlay.getGameLog().getConsoleField();
-			console.setVisible(!console.isVisible());
-			Gui.overlay.setKeyboardFocus(console);
-		}
+		if (key == Keys.GRAVE)
+			Gui.overlay.toggleGameConsole();
 
 		if (key == Keys.Y)
 			Mouse.setClickAction((x, y) -> {

@@ -1,11 +1,12 @@
 package hitonoriol.madsand.dialog;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -21,6 +22,7 @@ import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.screens.AbstractScreen;
 import hitonoriol.madsand.util.TimeUtils;
+import hitonoriol.madsand.util.Utils;
 
 public class GameDialog extends Dialog {
 	private static final float TITLE_YPAD = 18, TITLE_XPAD = 3;
@@ -33,7 +35,6 @@ public class GameDialog extends Dialog {
 	protected TextButton proceedButton;
 	protected Stage stage;
 	private boolean hasNext = false;
-	private float cWidth = -1, cHeight = -1;
 
 	public GameDialog(String title, String text, Stage stage) {
 		super(title, Gui.skin);
@@ -115,21 +116,24 @@ public class GameDialog extends Dialog {
 	@Override
 	public boolean remove() {
 		boolean ret = super.remove();
-		if (!hasNext)
-			TimeUtils.scheduleTask(() -> {
-				Gui.resumeGameFocus(this);
-				Gui.overlay.refreshActionButton();
-			}, Gui.DELAY);
+		TimeUtils.scheduleTask(() -> {
+			Utils.dbg("Closing `%s`", textLbl.getText());
+			Gui.closeDialog();
+			Gui.overlay.refreshActionButton();
+		}, Gui.DELAY);
 		return ret;
 	}
 
 	@Override
+	public void hide() {
+		hide(fadeOut(0.2f, Interpolation.fade));
+	}
+	
+	@Override
 	public Dialog show(Stage stage) {
-		Dialog ret = super.show(stage);
-		Gui.overlay.hideTooltip();
-		Gui.overlay.getContextMenu().close();
-		TimeUtils.scheduleTask(() -> Gui.unfocusGame(), Gui.DELAY);
-		return ret;
+		Gui.openDialog();
+		super.show(stage);
+		return this;
 	}
 
 	protected void chainReply(TextButton replyButton, final GameDialog nextDialog) {
@@ -208,35 +212,6 @@ public class GameDialog extends Dialog {
 		return addCloseButton(Gui.BTN_WIDTH, Gui.BTN_HEIGHT);
 	}
 
-	public void setPrefSize(float width, float height) {
-		setPrefHeight(height);
-		setPrefWidth(width);
-	}
-
-	public void setPrefHeight(float height) {
-		cHeight = height;
-	}
-
-	public void setPrefWidth(float width) {
-		cWidth = width;
-	}
-
-	@Override
-	public float getPrefWidth() {
-		if (cWidth <= 0)
-			return super.getPrefWidth();
-		else
-			return cWidth;
-	}
-
-	@Override
-	public float getPrefHeight() {
-		if (cHeight <= 0)
-			return super.getPrefHeight();
-		else
-			return cHeight;
-	}
-
 	@Override
 	public <T extends Actor> Cell<T> add(T actor) {
 		if (bordered)
@@ -258,20 +233,8 @@ public class GameDialog extends Dialog {
 		bordered = true;
 	}
 
-	protected void ignoreKeyboard() {
-		addListener(inputCanceller);
-	}
-
-	protected boolean keyboardIgnored() {
-		return getListeners().contains(inputCanceller, true);
-	}
-
 	public static GameDialog generateDialogChain(String text, Stage stage) {
 		return new DialogChainGenerator(text).generate(stage);
-	}
-
-	public boolean isOnlyDialog() { // If this dialog is the only one in stage
-		return !Gui.hasDialogs(stage, this);
 	}
 
 	@Override
@@ -284,18 +247,4 @@ public class GameDialog extends Dialog {
 
 		return getClass().getSimpleName().equals(obj.getClass().getSimpleName());
 	}
-
-	private final static InputListener inputCanceller = new InputListener() {
-		@Override
-		public boolean keyUp(InputEvent event, int keycode) {
-			event.cancel();
-			return true;
-		}
-
-		@Override
-		public boolean keyDown(InputEvent event, int keycode) {
-			event.cancel();
-			return true;
-		}
-	};
 }

@@ -42,11 +42,13 @@ public class ItemFactoryUI extends GameDialog {
 	private ItemProducer producer;
 	private Player player;
 
-	private TextButton upgradeButton;
-	private TextButton addConsumableButton, takeProductButton;
-	private Slider consumableSlider, productSlider;
-	private Label productStorageLabel, consumableStorageLabel;
-	private Label produceLabel, consumeLabel;
+	private TextButton upgradeButton = new TextButton("", Gui.skin);
+	private TextButton addConsumableButton = new TextButton("", Gui.skin),
+			takeProductButton = new TextButton("", Gui.skin);
+	private Slider consumableSlider = new Slider(0, 1, 1, false, Gui.skin),
+			productSlider = new Slider(0, 1, 1, false, Gui.skin);
+	private Label productStorageLabel = new Label("", Gui.skin), consumableStorageLabel = new Label("", Gui.skin);
+	private Label produceLabel = new Label("", Gui.skin), consumeLabel = new Label("", Gui.skin);
 
 	Timer.Task refreshTask = TimeUtils.createTask(() -> refresh());
 
@@ -63,19 +65,8 @@ public class ItemFactoryUI extends GameDialog {
 		else
 			producerName = NpcProp.npcs.get(-id).name;
 
-		upgradeButton = new TextButton("", Gui.skin);
-		addConsumableButton = new TextButton("", Gui.skin);
-		takeProductButton = new TextButton("", Gui.skin);
-
-		consumableSlider = new Slider(0, 1, 1, false, Gui.skin);
-		productSlider = new Slider(0, 1, 1, false, Gui.skin);
 		consumableSlider.setSize(ENTRY_WIDTH, ENTRY_HEIGHT);
 		productSlider.setSize(ENTRY_WIDTH, ENTRY_HEIGHT);
-
-		productStorageLabel = new Label("", Gui.skin);
-		consumableStorageLabel = new Label("", Gui.skin);
-		produceLabel = new Label("", Gui.skin);
-		consumeLabel = new Label("", Gui.skin);
 
 		refresh();
 		initSliderListeners();

@@ -19,6 +19,7 @@ import hitonoriol.madsand.entities.skill.SkillContainer;
 import hitonoriol.madsand.gui.widgets.TimedProgressBar;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.map.object.MapObject;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
 
@@ -124,7 +125,7 @@ public class ResourceProgressBar extends TimedProgressBar {
 		Timer.instance().scheduleTask(wakeTask, WAKE_TIME, WAKE_TIME);
 
 		Player player = MadSand.player();
-		Vector3 coords = new Vector3(player.x * MadSand.TILESIZE, player.y * MadSand.TILESIZE, 0);
+		Vector3 coords = new Vector3(player.x * Resources.TILESIZE, player.y * Resources.TILESIZE, 0);
 
 		MadSand.getCamera().project(coords);
 		coords.y -= YPADDING;

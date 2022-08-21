@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.gui.dialogs.CreateWorldDialog;
 import hitonoriol.madsand.gui.dialogs.LoadWorldDialog;
 import hitonoriol.madsand.gui.dialogs.SettingsDialog;
@@ -41,7 +42,7 @@ public class MainMenuStage extends Stage {
 	Label versionLabel;
 
 	public MainMenuStage() {
-		super(Gui.uiViewport);
+		super(Gui.viewport());
 		skin = Gui.skin;
 
 		newGameButton = new TextButton("New game", skin);
@@ -97,11 +98,11 @@ public class MainMenuStage extends Stage {
 
 	private void initButtonListeners() {
 		Gui.setAction(newGameButton, () -> new CreateWorldDialog().show());
-		Gui.setAction(resumeButton, () -> MadSand.switchScreen(MadSand.gameScreen));
+		Gui.setAction(resumeButton, () -> MadSand.switchScreen(Screens.Game));
 
 		Gui.setAction(saveGameButton, () -> {
 			GameSaver.save();
-			MadSand.switchScreen(MadSand.gameScreen);
+			MadSand.switchScreen(Screens.Game);
 		});
 
 		Gui.setAction(loadGameButton, () -> new LoadWorldDialog().show());
@@ -112,7 +113,7 @@ public class MainMenuStage extends Stage {
 			@Override
 			public boolean keyUp(InputEvent event, int keycode) {
 				if (!MadSand.isWorldUntouched() && keycode == Keys.ESCAPE)
-					MadSand.switchScreen(MadSand.gameScreen);
+					MadSand.switchScreen(Screens.Game);
 
 				return true;
 			}

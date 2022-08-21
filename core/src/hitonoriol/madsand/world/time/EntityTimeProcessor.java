@@ -30,17 +30,13 @@ public class EntityTimeProcessor {
 		while (entities.hasNext()) {
 			Entity entity = entities.next();
 			Entity nextEntity = entities.peek();
-			
-			if (entity.isPlayer()) {
-				Utils.dbg("Player: actDelay = %f", entity.getActDelay());
-			}
 
 			/* Don't simulate entities outside of the simulation radius during time skip */
 			if (world.timeSkipInProgress() && entity.distanceTo(player) > maxSimDst)
 				return;
 			
 			entity.prepareToAnimateAction();
-			/* Schedule actions for potentially visible entities / entities out of view act immideately */
+			/* Schedule actions for potentially visible entities / entities out of view act immediately */
 			if (player.isInsideFov(entity) && entity.hasActDelay())
 				TimeUtils.scheduleTask(() -> entity.act(worldTime), entity.getActDelay());
 			else
