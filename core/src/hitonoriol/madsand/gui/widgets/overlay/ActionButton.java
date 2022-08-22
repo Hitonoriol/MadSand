@@ -22,6 +22,7 @@ import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.ObjectProp;
+import hitonoriol.madsand.properties.Prefs;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.TimeUtils;
@@ -93,6 +94,9 @@ public class ActionButton extends Table {
 	}
 
 	public void refresh() {
+		if (!Prefs.actionButtonEnabled())
+			return;
+
 		if ((Gui.isGameUnfocused() && !isVisible()) || Keyboard.inputIgnored()) {
 			hideButton();
 			return;

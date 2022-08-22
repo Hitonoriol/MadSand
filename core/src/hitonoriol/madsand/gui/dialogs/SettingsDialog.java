@@ -15,6 +15,7 @@ import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.widgets.AutoCheckBox;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.properties.Prefs;
+import hitonoriol.madsand.util.TimeUtils;
 
 public class SettingsDialog extends GameDialog {
 
@@ -54,6 +55,8 @@ public class SettingsDialog extends GameDialog {
 
 		addTitle("Gameplay");
 		addSetting("Skip tutorials", new AutoCheckBox(prefs.skipTutorials, checked -> prefs.skipTutorials = checked));
+		addSetting("Enable in-game action suggestion button",
+				new AutoCheckBox(prefs.enableActionBtn, checked -> prefs.enableActionBtn = checked));
 		addSetting("Realtime mechanics", new AutoCheckBox(prefs.enableRealtimeMechanics,
 				checked -> prefs.enableRealtimeMechanics = checked));
 
@@ -96,6 +99,7 @@ public class SettingsDialog extends GameDialog {
 		prefs.screenHeight = curMode.height;
 		prefs.apply();
 		Prefs.savePrefs();
+		TimeUtils.scheduleTask(() -> centerOnStage(true), 0.2f);
 	}
 
 	private void nextDisplayMode() {
