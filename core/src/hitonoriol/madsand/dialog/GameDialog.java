@@ -1,6 +1,7 @@
 package hitonoriol.madsand.dialog;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -8,6 +9,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -124,16 +126,37 @@ public class GameDialog extends Dialog {
 		return ret;
 	}
 
+	private final static float HIDE_SCALE = 0.05f, HIDE_DURATION = 0.25f;
+
 	@Override
 	public void hide() {
-		hide(fadeOut(0.2f, Interpolation.fade));
+		setOrigin(Align.center);
+		if (!hasNext)
+			hide(Actions.parallel(fadeOut(HIDE_DURATION, Interpolation.fade),
+					Actions.scaleTo(HIDE_SCALE, HIDE_SCALE, HIDE_DURATION, Interpolation.smoother)));
+		else
+			hide(fadeOut(HIDE_DURATION, Interpolation.fade));
 	}
-	
+
 	@Override
 	public Dialog show(Stage stage) {
 		Gui.openDialog();
-		super.show(stage);
+		setScale(1);
+		show(stage, sequence(Actions.alpha(0),
+				Actions.fadeIn(0.35f, Interpolation.fade),
+				Actions.run(() -> Gui.overlay.hideActionBtn())));
+		centerOnStage();
 		return this;
+	}
+
+	public void centerOnStage(boolean animated) {
+		addAction(Actions.moveTo(Math.round((stage.getWidth() - getWidth()) / 2),
+				Math.round((stage.getHeight() - getHeight()) / 2),
+				animated ? 0.125f : 0f));
+	}
+
+	public void centerOnStage() {
+		centerOnStage(false);
 	}
 
 	protected void chainReply(TextButton replyButton, final GameDialog nextDialog) {
