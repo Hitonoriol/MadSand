@@ -33,6 +33,7 @@ public class Prefs {
 	/* Gameplay */
 	public boolean enableRealtimeMechanics = true;
 	public boolean skipTutorials = false;
+	public boolean enableActionBtn = true;
 
 	@JsonIgnore
 	public DisplayMode[] getDisplayModes() {
@@ -45,15 +46,16 @@ public class Prefs {
 
 	@JsonIgnore
 	public int getCurDisplayModeIdx() {
-		if (!fullscreen)
-			return displayModes.length - 1;
-
 		int modeIdx = 0;
-		for (DisplayMode mode : displayModes) {
+		for (DisplayMode mode : getDisplayModes()) {
 			if (screenWidth == mode.width && screenHeight == mode.height)
 				break;
 			++modeIdx;
 		}
+		
+		if (modeIdx == getDisplayModes().length)
+			return modeIdx - 1;
+		
 		return modeIdx;
 	}
 
@@ -71,6 +73,10 @@ public class Prefs {
 
 	public static Prefs values() {
 		return values;
+	}
+	
+	public static boolean actionButtonEnabled() {
+		return values.enableActionBtn;
 	}
 
 	public static void loadPrefs() {
