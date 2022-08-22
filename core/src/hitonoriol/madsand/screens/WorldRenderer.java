@@ -33,6 +33,7 @@ import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.pathfinding.Path;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.resources.TextureMap;
+import hitonoriol.madsand.util.CameraShaker;
 
 public class WorldRenderer {
 	public static final float DEFAULT_ZOOM = 1.5F;
@@ -45,6 +46,9 @@ public class WorldRenderer {
 
 	private SpriteBatch batch = new SpriteBatch();
 	private OrthographicCamera camera = new OrthographicCamera();
+	private CameraShaker shaker = new CameraShaker(camera);
+	private float frameDelta = 0;
+	
 	private LightMap light = new LightMap();
 	private List<WorldAnimation> animations = new ArrayList<>();
 	private ConcurrentHashMap<Path, PathDescriptor> paths = new ConcurrentHashMap<>();
@@ -102,7 +106,7 @@ public class WorldRenderer {
 			if (pInfo.noTimeLimit())
 				return;
 
-			float time = pInfo.render(Gdx.graphics.getDeltaTime());
+			float time = pInfo.render(frameDelta);
 
 			if (time <= 0)
 				paths.remove(path);
@@ -240,6 +244,7 @@ public class WorldRenderer {
 	}
 
 	public void render(float delta) {
+		frameDelta = delta;
 		batch.begin();
 		drawGame();
 		batch.end();
@@ -288,6 +293,7 @@ public class WorldRenderer {
 
 	public void updateCamPosition(float x, float y) {
 		camera.position.set(x + CAM_OFFSET_X, y + CAM_OFFSET_Y, 0.0F);
+		shaker.tick(frameDelta);
 		batch.setProjectionMatrix(camera.combined);
 		camera.update();
 	}
@@ -304,6 +310,10 @@ public class WorldRenderer {
 		camera.viewportWidth = Gdx.graphics.getWidth() / zoom;
 		camera.viewportHeight = Gdx.graphics.getHeight() / zoom;
 		camera.update();
+	}
+	
+	public void shakeCamera(float intensity, float duration) {
+		shaker.shake(intensity, duration);
 	}
 
 	private static class LightMap extends TextureMap<Integer> {
