@@ -20,6 +20,7 @@ import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.containers.HashMapFactory;
+import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.gui.dialogs.InputDialog;
 import hitonoriol.madsand.gui.dialogs.SelectDialog;
@@ -190,7 +191,15 @@ public class Keyboard {
 				TimeUtils.scheduleTask(() -> Gui.overlay.closeAllDialogs(), 2f);
 			}
 
-			if (key == Keys.DOWN)
+			else if (key == Keys.I) {
+				AbstractNpc npc = Mouse.pointingAt().getCell().getNpc();
+				if (npc.isEmpty())
+					return;
+
+				Gui.drawOkDialog("NPC Info", String.format("%s\n%s\n%s", npc, npc.stats().baseStats, npc.inventory));
+			}
+
+			else if (key == Keys.DOWN)
 				MadSand.world().descend();
 
 			else if (key == Keys.UP)
