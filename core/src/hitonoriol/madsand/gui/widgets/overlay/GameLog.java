@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -13,17 +14,19 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.gui.GuiColors;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.lua.Lua;
 
 public class GameLog extends ScrollablePanel {
-	private static final String WARNING_COLOR = "[#ff9185]";
-	public static final String NOTICE_ALT_COLOR = "[#58FFB1]";
-	public static String NOTICE_COLOR = "[#16E1EA]";
-	private static final int LOG_LENGTH = 20;
+	private static final int LOG_LENGTH = 30;
 
-	boolean noticeColor = true; // flag to use alternating notice colors
+	private Color noticeColor = GuiColors.NOTICE;
+	private boolean prevMsgIsNotice = false;
 	private Label[] logLabels = new Label[LOG_LENGTH];
+	private int lineRepeat = 1;
+	private int lineNum;
+	private String printedLine = "";
 
 	private static final int CMD_BUF_CAP = 10;
 	private int switchingIdx = -1;
@@ -107,7 +110,7 @@ public class GameLog extends ScrollablePanel {
 		switchingIdx = prevConsoleInputs.size();
 		prevConsoleInputs.add(currentInput);
 	}
-	
+
 	private boolean switchingInputs() {
 		return switchingIdx >= 0;
 	}
@@ -138,10 +141,6 @@ public class GameLog extends ScrollablePanel {
 			label.setText("");
 	}
 
-	private int lineRepeat = 1;
-	private int lineNum;
-	private String printedLine = "";
-
 	public void print(String arg) {
 		if (!printedLine.equals(arg)) {
 			lineRepeat = 1;
@@ -167,17 +166,20 @@ public class GameLog extends ScrollablePanel {
 		addNotification();
 	}
 
-	public void notify(String msg) {
-		if (printedLine.contains(NOTICE_COLOR) || printedLine.contains(NOTICE_ALT_COLOR))
-			noticeColor = !noticeColor;
-		else
-			noticeColor = true;
+	public void print(String msg, Color color) {
+		print(msg, GuiColors.getTag(color));
+	}
 
-		print("* " + msg, noticeColor ? NOTICE_COLOR : NOTICE_ALT_COLOR);
+	public void notify(String msg) {
+		if (prevMsgIsNotice)
+			noticeColor = noticeColor == GuiColors.NOTICE ? GuiColors.NOTICE_ALT : GuiColors.NOTICE;
+		else
+			noticeColor = GuiColors.NOTICE;
+		print("* " + msg, noticeColor);
 	}
 
 	public void warn(String msg) {
-		print(msg, WARNING_COLOR);
+		print(msg, GuiColors.WARNING);
 	}
 
 	private void addNotification() {

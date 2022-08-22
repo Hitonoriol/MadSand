@@ -35,6 +35,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import hitonoriol.madsand.MadSand.Screens;
+import hitonoriol.madsand.gui.GuiColors;
 import hitonoriol.madsand.gui.dialogs.OkDialog;
 import hitonoriol.madsand.gui.stages.CraftStage;
 import hitonoriol.madsand.gui.stages.Overlay;
@@ -64,7 +65,6 @@ public class Gui {
 	private static ScreenViewport viewport = new ScreenViewport();
 	private static GlyphLayout glyphLayout = new GlyphLayout();
 
-	static Color mouseOverColor = new Color(0xa5a5a5ff);
 	private static Map<Integer, LabelStyle> labelStyles = new HashMap<>();
 
 	private static void initSkin() {
@@ -90,7 +90,7 @@ public class Gui {
 		TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
 		textButtonStyle.up = skin.newDrawable("background", Color.GRAY);
 		textButtonStyle.down = skin.newDrawable("background", Color.DARK_GRAY);
-		textButtonStyle.over = skin.newDrawable("background", mouseOverColor);
+		textButtonStyle.over = skin.newDrawable("background", GuiColors.MOUSEOVER);
 		textButtonStyle.font = skin.getFont("default");
 		textButtonStyle.disabled = skin.newDrawable("background", new Color(0x3f3f3fdc));
 		skin.add("default", textButtonStyle);
@@ -134,9 +134,10 @@ public class Gui {
 
 		CheckBox.CheckBoxStyle boxStyle = new CheckBoxStyle();
 		boxStyle.checkboxOn = setMinSize(getColorDrawable(Color.DARK_GRAY), BTN_HEIGHT);
+		boxStyle.checkboxOnOver = setMinSize(getColorDrawable(GuiColors.LIGHT_DARK_GRAY), BTN_HEIGHT);
 		boxStyle.checkboxOff = setMinSize(getColorDrawable(Color.GRAY), BTN_HEIGHT);
+		boxStyle.checkboxOver = setMinSize(getColorDrawable(GuiColors.MOUSEOVER), BTN_HEIGHT);
 		boxStyle.font = textButtonStyle.font;
-		boxStyle.checkboxOver = setMinSize(getColorDrawable(mouseOverColor), BTN_HEIGHT);
 		skin.add("default", boxStyle);
 	}
 
