@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.mutable.MutableBoolean;
 
@@ -68,7 +69,7 @@ public class Inventory {
 	public float getTotalWeight() {
 		return curWeight;
 	}
-	
+
 	public float getMaxWeight() {
 		return maxWeight;
 	}
@@ -321,5 +322,13 @@ public class Inventory {
 				itemsExist.setFalse();
 		});
 		return itemsExist.booleanValue();
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Inventory: {%s}",
+				items.stream()
+						.map(item -> item.toString())
+						.collect(Collectors.joining(", ")));
 	}
 }

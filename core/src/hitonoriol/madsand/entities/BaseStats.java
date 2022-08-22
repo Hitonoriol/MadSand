@@ -1,6 +1,8 @@
 package hitonoriol.madsand.entities;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -188,5 +190,13 @@ public class BaseStats extends HashMap<Stat, Integer> {
 
 	public void randomize() {
 		randomize(0, RAND_MIN);
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Base stats: {%s}",
+				Arrays.stream(Stat.values())
+						.map(stat -> stat.name() + ": " + get(stat))
+						.collect(Collectors.joining(", ")));
 	}
 }
