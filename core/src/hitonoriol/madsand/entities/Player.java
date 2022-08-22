@@ -1334,8 +1334,19 @@ public class Player extends Entity {
 		if (damage.missed()) {
 			MadSand.print(dealer.getName() + " misses!");
 			increaseSkill(Skill.Evasion);
-		} else
+		} else {
 			MadSand.warn(dealer.getName() + " deals " + damage.getValueString() + " damage to you");
+			/* Shake camera with intensity based on:
+			 * 		1. Ratio of `damage` to `max hp` (damage component)
+			 * 		2. % of hp left after this hit (hp component)
+			 * Shake duration: [0.4; 1] sec, depending on (1) */
+			double damageComponent = 10d * ((double) damage.getValue() / (double) stats().mhp);
+			double hpComponent = Math
+					.sqrt(1 / Math.max(0.01, ((double) stats().hp - (double) damage.getValue()) / stats().mhp));
+			double shakeIntensity = damageComponent + hpComponent;
+			double shakeDuration = Math.max(0.4, -0.002 * Math.pow(damageComponent, 2) + 0.08 * damageComponent + 0.4);
+			MadSand.getRenderer().shakeCamera((float) Math.min(shakeIntensity, 30), (float) shakeDuration);
+		}
 		super.acceptDamage(damage);
 	}
 

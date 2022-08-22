@@ -16,7 +16,10 @@ public class CameraShaker {
 	}
 
 	public void shake(float intensity, float duration) {
-		this.intensity = intensity;
+		if (time == 0)
+			this.intensity = intensity;
+		else
+			this.intensity += intensity * 0.5f;
 		time = duration;
 		currentTime = 0;
 		Utils.dbg("Starting camera shake: intesity = %f, duration = %f", intensity, duration);
