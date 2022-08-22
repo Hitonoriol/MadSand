@@ -89,8 +89,8 @@ public class Resources {
 	public static final String emptyField = "-1";
 	public static final int emptyId = -1;
 	public static String Space = " ", Colon = ":";
-	public static final String Tab = "      ";
-	public static final String LINEBREAK = System.lineSeparator();
+	public static final String Tab = "    ";
+	public static final String LINEBREAK = Character.toString('\n');
 	public static String COLOR_END = "[]";
 
 	private final static Queue<Runnable> initQueue = new ArrayDeque<>();

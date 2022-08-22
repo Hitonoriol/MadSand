@@ -27,9 +27,11 @@ public class TextSubstitutor {
 
 	public static final String QUEST_ITEM_REWARD = "ITEM_REWARD", QUEST_EXP_REWARD = "EXP_REWARD";
 	public static final String QUEST_ITEM_OBJECTIVE = "ITEM_OBJECTIVE", QUEST_KILL_OBJECTIVE = "KILL_OBJECTIVE";
-	public static final String LINEBREAK = "br";
+	public static final String LINEBREAK = "br", TAB = "TAB";
 	private static Pattern luaPattern = Pattern.compile("\\$\\((.*)\\)"); // $(lua_expression)
 	private static Pattern idPattern = Pattern.compile("\\@\\((item|object|tile)\\:(.*?)\\)"); // @(<item/object/tile>:partial_name_str)
+
+	public static final String INDENT_FLAG = "--indent";
 
 	private Map<String, String> values = new HashMap<>();
 	private Map<String, Supplier<String>> dynamicMap = new HashMap<>();
@@ -38,6 +40,8 @@ public class TextSubstitutor {
 	private static TextSubstitutor instance = new TextSubstitutor();
 	static {
 		add(LINEBREAK, Resources.LINEBREAK);
+		add(TAB, Resources.Tab);
+		add("PAR", Resources.LINEBREAK + Resources.Tab);
 		add("PLAYER", () -> MadSand.player().getName());
 		add(RAND_NAME, () -> JRand.firstname().gen());
 		add(RAND_NAME_M, () -> JRand.firstname().gender(Gender.MALE).gen());
@@ -59,7 +63,23 @@ public class TextSubstitutor {
 		StringBuilder sb = new StringBuilder(str);
 		replaceDynamic(sb);
 		parsePatterns(sb);
+		applyFlags(sb);
 		return instance.substitutor.replace(sb);
+	}
+
+	private static boolean flagExists(StringBuilder sb, String flag) {
+		int idx = sb.indexOf(flag);
+		if (idx == -1)
+			return false;
+		sb.delete(idx, idx + flag.length());
+		return true;
+	}
+
+	private static void applyFlags(StringBuilder sb) {
+		if (flagExists(sb, INDENT_FLAG)) {
+			for (int idx = sb.indexOf(Resources.LINEBREAK); idx != -1; idx = sb.indexOf(Resources.LINEBREAK, idx + 1))
+				sb.insert(idx + 1, Resources.Tab);
+		}
 	}
 
 	private static void replaceDynamic(StringBuilder sb) {
