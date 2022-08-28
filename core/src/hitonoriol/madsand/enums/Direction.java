@@ -37,7 +37,23 @@ public enum Direction {
 			return null;
 		}
 	}
+	
+	public boolean isLeft() {
+		return this == LEFT || this == UP_LEFT || this == DOWN_LEFT;
+	}
+	
+	public boolean isRight() {
+		return this == RIGHT || this == UP_RIGHT || this == DOWN_RIGHT;
+	}
 
+	public boolean isDown() {
+		return this == DOWN || this == DOWN_LEFT || this == DOWN_RIGHT;
+	}
+	
+	public boolean isUp() {
+		return this == UP || this == UP_LEFT || this == UP_RIGHT;
+	}
+	
 	public boolean isVertical() {
 		return this == UP || this == DOWN;
 	}
