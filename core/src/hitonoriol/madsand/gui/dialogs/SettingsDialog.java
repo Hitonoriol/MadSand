@@ -1,6 +1,7 @@
 package hitonoriol.madsand.gui.dialogs;
 
 import com.badlogic.gdx.Graphics.DisplayMode;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
@@ -51,6 +52,7 @@ public class SettingsDialog extends GameDialog {
 
 		addTitle("Video");
 		addSetting("Resolution", resolutionBtn, () -> nextDisplayMode());
+		Gui.setClickAction(resolutionBtn, Buttons.RIGHT, () -> previousDisplayMode());
 		addSetting("Fullscreen", new AutoCheckBox(prefs.fullscreen, checked -> prefs.fullscreen = checked));
 
 		addTitle("Gameplay");
@@ -102,17 +104,22 @@ public class SettingsDialog extends GameDialog {
 		TimeUtils.scheduleTask(() -> centerOnStage(true), 0.2f);
 	}
 
-	private void nextDisplayMode() {
-		++curDisplayMode;
-		if (curDisplayMode >= displayModes.length)
-			curDisplayMode = 0;
-
+	private void switchDisplayMode(boolean next) {
+		curDisplayMode = Math.floorMod(curDisplayMode + (next ? 1 : -1), displayModes.length);
 		DisplayMode mode = displayModes[curDisplayMode];
 
 		if (mode.width < Prefs.MIN_SCREEN_WIDTH)
-			nextDisplayMode();
+			switchDisplayMode(next);
 
 		refreshResolutionBtn();
+	}
+
+	private void nextDisplayMode() {
+		switchDisplayMode(true);
+	}
+
+	private void previousDisplayMode() {
+		switchDisplayMode(false);
 	}
 
 	private void refreshResolutionBtn() {
