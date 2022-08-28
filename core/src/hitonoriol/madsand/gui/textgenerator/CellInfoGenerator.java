@@ -135,9 +135,10 @@ public class CellInfoGenerator extends TextGenerator {
 
 		Strings.newLine(builder);
 
-		if (!producer.hasRawMaterial())
+		if (!producer.hasRawMaterial()) {
 			builder.append("* Add more " + rawMaterialName + " to start " + productName + " production");
-		else if (!producer.hasFreeStorage())
+			Strings.newLine(builder);
+		} else if (!producer.hasFreeStorage())
 			builder.append(productName + " storage is full!");
 	}
 
