@@ -49,7 +49,7 @@ public class Overlay extends Stage {
 
 	private Table overlayTable = new Table();
 	private Table topTable = new Table();
-	public GameTooltip gameTooltip = GameTooltip.instance();
+	public GameTooltip gameTooltip = new GameTooltip();
 	private GameContextMenu gameContextMenu = new GameContextMenu();
 	public ActionButton actionButton = new ActionButton();
 	private GameLog gameLog = new GameLog();
@@ -194,6 +194,10 @@ public class Overlay extends Stage {
 
 	public void showTooltip() {
 		gameTooltip.show();
+	}
+	
+	public GameTooltip getTooltip() {
+		return gameTooltip;
 	}
 
 	public WaypointArrow getWaypointArrow(int destX, int destY) {

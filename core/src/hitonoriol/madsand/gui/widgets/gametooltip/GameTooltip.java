@@ -14,11 +14,8 @@ public class GameTooltip extends Table {
 
 	private LabelProcessor processor = new LabelProcessor();
 
-	private static GameTooltip instance = new GameTooltip();
-
-	private GameTooltip() {
+	public GameTooltip() {
 		super();
-		super.setVisible(true);
 		super.align(Align.topLeft);
 		super.setOriginY(Align.topLeft);
 		super.setHeight(TOOLTIP_HEIGHT);
@@ -50,14 +47,16 @@ public class GameTooltip extends Table {
 	}
 
 	public void show() {
+		if (isVisible())
+			return;
+
 		setVisible(true);
 	}
 
 	public void hide() {
-		setVisible(false);
-	}
+		if (!isVisible())
+			return;
 
-	public static GameTooltip instance() {
-		return instance;
+		setVisible(false);
 	}
 }

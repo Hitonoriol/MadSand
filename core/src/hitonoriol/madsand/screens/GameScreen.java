@@ -21,16 +21,15 @@ public class GameScreen extends AbstractScreen<Overlay> {
 		super.show();
 		Gdx.graphics.setContinuousRendering(false);
 		gameWorld.setCamFollowPlayer(true);
-		stage.gameTooltip.setVisible(true);
+		if (!Gui.isGameUnfocused())
+			stage.showTooltip();
 	}
 
 	@Override
 	public void render(float delta) {
 		gameWorld.render(delta);
-		Mouse.mouseWorldCoords.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-		gameWorld.getCamera().unproject(Mouse.mouseWorldCoords);
+		Mouse.update();
 		if (!Gui.isGameUnfocused()) {
-			Mouse.updCoords();
 			Mouse.pollMouseMovement();
 			Keyboard.pollGameKeys();
 		}

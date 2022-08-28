@@ -6,6 +6,7 @@ import java.util.function.BiConsumer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -20,7 +21,6 @@ import hitonoriol.madsand.gui.stages.Overlay;
 import hitonoriol.madsand.gui.textgenerator.CellInfoGenerator;
 import hitonoriol.madsand.gui.textgenerator.NotificationGenerator;
 import hitonoriol.madsand.gui.textgenerator.StaticTextGenerator;
-import hitonoriol.madsand.gui.widgets.gametooltip.GameTooltip;
 import hitonoriol.madsand.gui.widgets.overlay.GameContextMenu;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
@@ -39,7 +39,7 @@ public class Mouse {
 	public static int wx = 0, wy = 0; // Coords of the cell of map that mouse is currently pointing at
 	private static Set<Integer> heldButtons = new HashSet<>();
 
-	public static Vector3 mouseWorldCoords = new Vector3(0.0F, 0.0F, 0.0F);
+	private static Vector3 worldCoords = new Vector3(0.0F, 0.0F, 0.0F);
 
 	private static BiConsumer<Integer, Integer> clickAction = null;
 
@@ -104,12 +104,20 @@ public class Mouse {
 				super.touchDown(event, x, y, pointer, button);
 				return true;
 			}
+			
+			@Override
+			public boolean scrolled(InputEvent event, float x, float y, float amountX, float amountY) {
+				if (Keyboard.isKeyPressed(Keys.CONTROL_LEFT)) {
+					MadSand.getRenderer().changeZoom(0.05f * Math.signum(-amountY));
+				}
+				return super.scrolled(event, x, y, amountX, amountY);
+			}
 		});
 	}
 
 	private static void toggleContextMenu() {
 		GameContextMenu menu = Gui.overlay.getContextMenu();
-		if (GameTooltip.instance().isVisible()) {
+		if (Gui.overlay.getTooltip().isVisible()) {
 			menu.open();
 			cellInfo.getCell().populateContextMenu(menu);
 		} else
@@ -119,7 +127,7 @@ public class Mouse {
 	private static void initTooltip() {
 		notifications.setEnabled(false);
 		clickActionText.setEnabled(false);
-		Functional.with(GameTooltip.instance(), tooltip -> {
+		Functional.with(Gui.overlay.getTooltip(), tooltip -> {
 			tooltip.addTextGenerator(new StaticTextGenerator((x, y) -> String.format("Looking at (%d, %d)", x, y)))
 					.addTextGenerator(clickActionText)
 					.addTextGenerator(notifications)
@@ -136,12 +144,14 @@ public class Mouse {
 		y = Gdx.graphics.getHeight() - Gdx.input.getY();
 	}
 
-	public static void updCoords() {
+	public static void update() {
 		updScreenCoords();
-		GameTooltip.instance().moveTo(x, y);
+		Gui.overlay.getTooltip().moveTo(x, y);
 
-		wx = (int) Math.floor(mouseWorldCoords.x / Resources.TILESIZE);
-		wy = (int) Math.floor(mouseWorldCoords.y / Resources.TILESIZE);
+		worldCoords.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+		MadSand.getRenderer().getCamera().unproject(worldCoords);
+		wx = (int) Math.floor(worldCoords.x / Resources.TILESIZE);
+		wy = (int) Math.floor(worldCoords.y / Resources.TILESIZE);
 
 		if (Gui.isGameUnfocused())
 			return;
@@ -157,7 +167,7 @@ public class Mouse {
 	}
 
 	public static void refreshTooltip() {
-		GameTooltip.instance().refresh(wx, wy);
+		Gui.overlay.getTooltip().refresh(wx, wy);
 		highlightRangedTarget();
 	}
 
@@ -217,6 +227,7 @@ public class Mouse {
 		clickActionText.setEnabled(true);
 		refreshPathToCursor();
 		refreshTooltip();
+		MadSand.getRenderer().enableFloatingCamera(true);
 	}
 
 	public static void setClickAction(BiConsumer<Integer, Integer> coordConsumer) {
@@ -227,6 +238,7 @@ public class Mouse {
 	public static void cancelClickAction() {
 		clickAction = null;
 		clickActionText.setEnabled(false);
+		MadSand.getRenderer().enableFloatingCamera(false);
 		refreshTooltip();
 	}
 
@@ -312,6 +324,14 @@ public class Mouse {
 	
 	public static int screenY() {
 		return y;
+	}
+	
+	public static float worldX() {
+		return worldCoords.x;
+	}
+	
+	public static float worldY() {
+		return worldCoords.y;
 	}
 
 	public static boolean isButtonPressed(int button) {
