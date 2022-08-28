@@ -140,7 +140,6 @@ public class Stats {
 
 		if (hp <= 0) {
 			hp = 0;
-			dead = true;
 			owner.die();
 		}
 	}

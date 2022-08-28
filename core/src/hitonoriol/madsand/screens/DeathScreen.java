@@ -1,5 +1,7 @@
 package hitonoriol.madsand.screens;
 
+import com.badlogic.gdx.Gdx;
+
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.gui.stages.DeathStage;
 import hitonoriol.madsand.util.Utils;
@@ -16,6 +18,7 @@ public class DeathScreen extends AbstractScreen<DeathStage> {
 	@Override
 	public void show() {
 		super.show();
+		Gdx.graphics.setContinuousRendering(true);
 		stage.setDeathMessage("You survived " + Utils.timeString(MadSand.player().getSurvivedTime()));
 	}
 

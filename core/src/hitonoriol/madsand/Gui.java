@@ -196,7 +196,6 @@ public class Gui {
 	}
 
 	public static void unfocusGame() {
-		Utils.dbg("[Unfocus]");
 		gameFocus.action();
 		overlay.hideTooltip();
 	}
@@ -204,7 +203,6 @@ public class Gui {
 	public static void resumeGameFocus() {
 		if (gameFocus.reverseAction() && !isDialogActive())
 			overlay.showTooltip();
-		Utils.dbg("[Resume focus (focused = %b)]", gameFocus.isNeutral());
 	}
 
 	public static void resetGameFocus() {

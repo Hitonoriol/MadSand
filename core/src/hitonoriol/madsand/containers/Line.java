@@ -85,7 +85,7 @@ public class Line implements Iterable<Pair> {
 		forEachPoint(a.x, a.y, b.x, b.y, pointConsumer);
 	}
 
-	public static double calcDistance(int x0, int y0, int x1, int y1) {
+	public static double calcDistance(float x0, float y0, float x1, float y1) {
 		return Math.sqrt((x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0));
 	}
 }
