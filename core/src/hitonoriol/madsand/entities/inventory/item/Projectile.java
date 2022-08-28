@@ -10,13 +10,13 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
-import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.resources.Resources;
+import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
 import me.xdrop.jrand.JRand;
 import me.xdrop.jrand.generators.basics.FloatGenerator;
@@ -73,21 +73,22 @@ public class Projectile extends LevelBoundItem {
 		to.toWorld();
 		Map map = MadSand.world().getCurLoc();
 		Utils.dbg("Projectile " + name + " will land on " + to.toString());
-		Keyboard.ignoreInput();
 
+		if (MadSand.player().at(to)) {
+			Keyboard.ignoreInput();
+			TimeUtils.scheduleTask(() -> Keyboard.resumeInput(), ANIMATION_DURATION);
+		}
+		
 		projectileImg.addAction(
 				Actions.sequence(
-						Actions.run(() -> map.getMapEntity(to).as(Entity.class)
-								.ifPresent(entity -> entity.addActDelay(ANIMATION_DURATION))),
 						Actions.moveTo(screenCoords.x, screenCoords.y, ANIMATION_DURATION),
 						Actions.run(() -> {
-							MapEntity target = map.getMapEntity(to);
+							MapEntity target = map.getAnyMapEntity(to);
 
-							if (target != Map.nullNpc) {
+							if (!target.isEmpty()) {
 								impactAction.accept(target);
 							} else
 								map.putLoot(to.x, to.y, id, 1);
-							Keyboard.resumeInput();
 						}),
 						Actions.run(() -> projectileImg.remove())));
 	}
