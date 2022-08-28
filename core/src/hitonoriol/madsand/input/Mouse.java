@@ -293,7 +293,7 @@ public class Mouse {
 		else if (adjacentTileClicked) {
 			player.lookAtMouse(wx, wy, true);
 
-			if (npc.state == AbstractNpc.State.Hostile)
+			if (!npc.isNeutral())
 				player.meleeAttack();
 			else
 				player.interact();
