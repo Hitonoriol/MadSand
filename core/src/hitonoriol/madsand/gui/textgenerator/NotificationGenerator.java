@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Timer;
 
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.util.TimeUtils;
+import hitonoriol.madsand.util.Utils;
 
 public class NotificationGenerator extends StaticTextGenerator {
 	private static float NOTIFICATION_DELAY = 1.85f;
@@ -18,24 +19,33 @@ public class NotificationGenerator extends StaticTextGenerator {
 	}
 
 	public void notify(String text) {
-		Runnable notifyTask = () -> performNotification(text);
+		Runnable notifyTask = () -> performNotification(text, pendingNotifications.size() + (isEnabled() ? 1 : 0));
 		if (!isEnabled())
 			notifyTask.run();
 		else
 			pendingNotifications.add(notifyTask);
 	}
 
-	private void performNotification(String text) {
+	private float notificationQuantityFactor(int notifsInQueue) {
+		++notifsInQueue;
+		if (notifsInQueue <= 1)
+			return 1;
+			
+		return 1f / ((float) Math.sqrt(notifsInQueue));
+	}
+
+	private void performNotification(String text, int notifsInQueue) {
 		setText(text);
 		setEnabled(true);
 		Mouse.refreshTooltip();
+		Utils.dbg("Notif duration factor: %f", notificationQuantityFactor(notifsInQueue));
 		TimeUtils.scheduleTask(timer, () -> {
 			if (hasPendingNotifications())
 				showNextNotification();
 			else
 				setEnabled(false);
 			Mouse.refreshTooltip();
-		}, NOTIFICATION_DELAY);
+		}, NOTIFICATION_DELAY * notificationQuantityFactor(notifsInQueue));
 	}
 
 	private boolean hasPendingNotifications() {
