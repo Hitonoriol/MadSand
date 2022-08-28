@@ -29,11 +29,10 @@ public class EntityTimeProcessor {
 		PeekingIterator<Entity> entities = new PeekingIterator<>(prepareEntities().iterator());
 		while (entities.hasNext()) {
 			Entity entity = entities.next();
-			Entity nextEntity = entities.peek();
 
 			/* Don't simulate entities outside of the simulation radius during time skip */
 			if (world.timeSkipInProgress() && entity.distanceTo(player) > maxSimDst)
-				return;
+				continue;
 			
 			entity.prepareToAnimateAction();
 			/* Schedule actions for potentially visible entities / entities out of view act immediately */
