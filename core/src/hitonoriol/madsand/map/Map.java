@@ -257,6 +257,13 @@ public class Map {
 		return cell.get(this);
 	}
 
+	public MapEntity getAnyMapEntity(Pair coords) {
+		MapEntity entity = getMapEntity(coords);
+		if (entity.isEmpty() && MadSand.player().at(coords))
+			return MadSand.player();
+		return entity;
+	}
+
 	public MapEntity getMapEntity(Pair coords) {
 		MapEntity mapEntity;
 		if ((mapEntity = getObject(coords)) != nullObject)
@@ -946,6 +953,7 @@ public class Map {
 		if (!(xold == x && yold == y))
 			removeNpc(xold, yold);
 
+		npc.setGridCoords(x, y);
 		return true;
 	}
 
