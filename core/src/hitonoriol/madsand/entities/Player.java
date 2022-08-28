@@ -87,7 +87,7 @@ import hitonoriol.madsand.world.Location;
 import hitonoriol.madsand.world.WorkerType;
 import hitonoriol.madsand.world.World;
 
-public class Player extends Entity {	
+public class Player extends Entity {
 	@JsonIgnore
 	public PlayerStats stats; // Reference to the same Stats object as super.stats
 	private float runSpeedCoef = 3.5f;
@@ -458,6 +458,9 @@ public class Player extends Entity {
 	}
 
 	private void performMeleeAttack(Direction dir) {
+		if (isDead())
+			return;
+
 		turn(dir);
 		Map map = MadSand.world().getCurLoc();
 		AbstractNpc npc = map.getNpc(coords.set(x, y).addDirection(dir));
@@ -547,10 +550,12 @@ public class Player extends Entity {
 		super.die();
 		if (isMoving()) {
 			getMovementQueue().forEach(movement -> movement.apply(screenPosition));
+			getMovementQueue().clear();
 			finishMeleeAttack();
 		}
 		stats.equipment.unEquipAll();
 		refreshEquipment();
+		Keyboard.resetState();
 		MadSand.switchScreen(Screens.Death);
 		MadSand.warn("You died");
 		Utils.out("Player died at: %d, %d", x, y);

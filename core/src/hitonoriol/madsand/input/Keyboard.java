@@ -139,6 +139,10 @@ public class Keyboard {
 	public static boolean isKeyPressed(int key) {
 		return heldKeys.contains(key);
 	}
+	
+	public static void resetState() {
+		heldKeys.clear();
+	}
 
 	public static boolean inputIgnored() {
 		return ignoreInput > 0 || Mouse.hasClickAction();
