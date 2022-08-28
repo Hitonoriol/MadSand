@@ -1,15 +1,18 @@
 package hitonoriol.madsand.entities;
 
+import static hitonoriol.madsand.resources.Resources.TILESIZE;
+import static hitonoriol.madsand.screens.WorldRenderer.TARGET_FRAME_DELTA;
+
 import java.util.ArrayDeque;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Queue;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import org.apache.commons.lang3.mutable.MutableBoolean;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -25,6 +28,8 @@ import hitonoriol.madsand.containers.PairFloat;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Projectile;
+import hitonoriol.madsand.entities.movement.MeleeAttackMovement;
+import hitonoriol.madsand.entities.movement.Movement;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.gui.animation.Animations;
@@ -52,7 +57,7 @@ public abstract class Entity extends MapEntity {
 	public static final Comparator<Entity> speedComparator = (e1, e2) -> Double.compare(e2.getSpeed(), e1.getSpeed());
 
 	public int x, y; // Grid coords
-	public PairFloat globalPos = new PairFloat(), movingPos = new PairFloat(); // Screen space coords
+	public PairFloat screenPosition = new PairFloat(); // Screen space coords
 	public float movementSpeed; // Visual movement speed in pixels per frame
 
 	private float actDuration = 0; // Real time needed for this entity to finish all its actions
@@ -65,14 +70,9 @@ public abstract class Entity extends MapEntity {
 	public Inventory inventory;
 	public Stats stats;
 
-	protected Queue<Direction> movementQueue = new ArrayDeque<>();
+	private Queue<Movement> movementQueue = new ArrayDeque<>();
 
-	@JsonIgnore
-	public float stepy = Resources.TILESIZE;
-	@JsonIgnore
-	public float stepx = Resources.TILESIZE;
-
-	protected boolean moving = false, hasMoved = false;
+	protected boolean hasMoved = false;
 	protected boolean running = false;
 	private int targetedByEnemies = 0;
 
@@ -109,7 +109,7 @@ public abstract class Entity extends MapEntity {
 	public int getFov() {
 		return fov;
 	}
-	
+
 	@Override
 	public void playAnimation(TextureRegion[] animation) {
 		MadSand.getRenderer().queueAnimation(new EntityAnimation(this, animation));
@@ -140,10 +140,15 @@ public abstract class Entity extends MapEntity {
 
 	/* Time required for the entity to move one tile in any direction */
 	public float getMovementAnimationDuration() {
-		return ((float) Resources.TILESIZE / movementSpeed) * Gdx.graphics.getDeltaTime();
+		return ((float) TILESIZE / getMovementSpeed()) * TARGET_FRAME_DELTA;
 	}
 
-	public void addActDuration(float actDuration) {
+	public float getMeleeAttackAnimationDuration() {
+		return 2f * (((float) TILESIZE / (getMovementSpeed() * MeleeAttackMovement.SPEED_FACTOR))
+				* TARGET_FRAME_DELTA);
+	}
+
+	protected void addActDuration(float actDuration) {
 		this.actDuration += actDuration;
 	}
 
@@ -153,6 +158,10 @@ public abstract class Entity extends MapEntity {
 
 	public void addActDelay(float actDelay) {
 		this.actDelay += actDelay;
+	}
+
+	public void waitFor(Entity entity) {
+		setActDelay(Math.max(actDelay, entity.getActDuration()));
 	}
 
 	public void setActDelay(float actDelay) {
@@ -229,9 +238,13 @@ public abstract class Entity extends MapEntity {
 		target.acceptDamage(damage);
 	}
 
+	protected void meleeAttackAnimation(Direction dir, Runnable attackAction) {
+		move(Movement.meleeAttack(this, attackAction));
+	}
+
 	public abstract void meleeAttack(Direction dir);
 
-	protected void rangedAttack(Pair targetPos, Projectile projectile) {
+	protected Pair rangedAttack(Pair targetPos, Projectile projectile) {
 		Map map = MadSand.world().getCurLoc();
 		Pair thisCoords = new Pair(x, y);
 		Pair obstacleCoords = map.rayCast(thisCoords, targetPos);
@@ -240,10 +253,11 @@ public abstract class Entity extends MapEntity {
 
 		addActDuration(Projectile.ANIMATION_DURATION);
 		Damage damage = new Damage(this).ranged(projectile, distanceTo(obstacleCoords));
-		projectile.launchProjectile(thisCoords.toScreen().copy(),
-				obstacleCoords.toScreen().copy(),
+		projectile.launchProjectile(thisCoords.copy().toScreen(),
+				obstacleCoords.copy().toScreen(),
 				target -> attack(target, damage));
-		MadSand.getRenderer().queuePath(Path.create(thisCoords.toWorld(), obstacleCoords.toWorld()), 0.675f, Color.RED);
+		MadSand.getRenderer().queuePath(Path.create(thisCoords, obstacleCoords), 0.675f, Color.RED);
+		return obstacleCoords;
 	}
 
 	protected void dropOverflowingItem(Item item) {
@@ -335,8 +349,7 @@ public abstract class Entity extends MapEntity {
 		new LootDialog(loot).show();
 	}
 
-	public boolean colliding(Direction direction) {
-		Pair coords = new Pair(x, y).addDirection(direction);
+	protected static boolean isObstacle(Pair coords) {
 		int nx = coords.x, ny = coords.y;
 		Map loc = MadSand.world().getCurLoc();
 
@@ -347,6 +360,10 @@ public abstract class Entity extends MapEntity {
 			return true;
 
 		return !(obj.isCollisionMask() || obj.nocollide || obj.equals(Map.nullObject));
+	}
+	
+	public boolean colliding(Direction direction) {
+		return isObstacle(new Pair(x, y).addDirection(direction));
 	}
 
 	@JsonIgnore
@@ -470,8 +487,8 @@ public abstract class Entity extends MapEntity {
 			x = 0;
 		if (y < 0)
 			y = 0;
-		globalPos.x = (x * Resources.TILESIZE);
-		globalPos.y = (y * Resources.TILESIZE);
+		screenPosition.x = (x * Resources.TILESIZE);
+		screenPosition.y = (y * Resources.TILESIZE);
 	}
 
 	public void teleport(int x, int y) {
@@ -507,8 +524,12 @@ public abstract class Entity extends MapEntity {
 		return speed / 17f + (float) Math.pow(Math.sqrt(speed), 1.225f) * 0.985f;
 	}
 
-	public void calcMovementSpeed() {
-		movementSpeed = getMovementSpeed();
+	public float calcMovementSpeed() {
+		return movementSpeed = getMovementSpeed();
+	}
+
+	public float calcMeleeMovementSpeed() {
+		return getMovementSpeed() * MeleeAttackMovement.SPEED_FACTOR;
 	}
 
 	public void speedUp(float by) {
@@ -524,34 +545,17 @@ public abstract class Entity extends MapEntity {
 		running = false;
 	}
 
-	public float movementOffsetX() {
-		if (!isMoving() || !stats.look.isHorizontal())
-			return 0;
-
-		return stats.look == Direction.LEFT ? stepx : -stepx;
-	}
-
-	public float movementOffsetY() {
-		if (!isMoving() || !stats.look.isVertical())
-			return 0;
-
-		return stats.look == Direction.DOWN ? stepy : -stepy;
-	}
-
 	@JsonIgnore
-	public PairFloat getWorldPos() {
-		if (!isMoving())
-			return globalPos;
+	public PairFloat getScreenPosition() {
+		return screenPosition;
+	}
 
-		return movingPos.set(worldX(), worldY());
-	}
-	
 	public float worldX() {
-		return globalPos.x + movementOffsetX();
+		return screenPosition.x;
 	}
-	
+
 	public float worldY() {
-		return globalPos.y + movementOffsetY();
+		return screenPosition.y;
 	}
 
 	public boolean hasMoved() {
@@ -559,82 +563,86 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public boolean isMoving() {
-		return moving;
+		return !movementQueue.isEmpty();
 	}
-
-	public void setMoving(boolean val) {
-		if (moving = val)
-			hasMoved = true;
+	
+	public boolean hasQueuedMovement() {
+		return movementQueue.size() > 1;
 	}
 
 	public void queueMovement(Direction dir) {
-		movementQueue.add(dir);
+		movementQueue.add(Movement.walk(this));
 	}
 
-	public boolean hasQueuedMovement() {
-		return !movementQueue.isEmpty();
+	public void queueMovement(Movement movement) {
+		movementQueue.add(movement);
 	}
 
-	protected void pollMovementQueue() {
-		if (hasQueuedMovement())
-			move(movementQueue.poll());
+	protected void ifMoving(Consumer<Movement> action) {
+		if (isMoving())
+			action.accept(currentMovement());
+	}
+
+	protected Movement currentMovement() {
+		return movementQueue.peek();
+	}
+
+	protected void nextMovement() {
+		movementQueue.poll();
+		ifMoving(movement -> {
+			if (movement.isInvalid(this))
+				nextMovement();
+		});
 	}
 
 	public void stopMovement() {
-		moving = false;
-		stepx = stepy = Resources.TILESIZE;
-		if (!hasQueuedMovement())
+		ifMoving(movement -> {
+			if (movement.applyChanges())
+				updCoords();
+			nextMovement();
+		});
+		if (!isMoving()) {
 			stopRunning();
-
-		pollMovementQueue();
+			updCoords();
+		}
 	}
 
 	public void animateMovement() {
-		stepx -= movementSpeed;
-		stepy -= movementSpeed;
-
-		if (stepx <= 0 && stepy <= 0)
-			stopMovement();
+		ifMoving(movement -> {
+			if (!movement.update(screenPosition))
+				stopMovement();
+		});
 	}
 
-	public boolean move(Direction dir) {
+	public final boolean move(Movement movement) {
+		Direction dir = movement.direction();
 		if (isDead())
 			return false;
 
-		if (dir.isDiagonal())
+		if (dir.isDiagonal() && !movement.isDiagonalAllowed())
 			return false;
 
-		if (!colliding(dir)) {
-			if (isOnMapBound(dir))
-				return false;
-
-			if (dir == Direction.UP) {
-				++y;
-				globalPos.y += Resources.TILESIZE;
-			}
-			if (dir == Direction.DOWN) {
-				--y;
-				globalPos.y -= Resources.TILESIZE;
-			}
-			if (dir == Direction.LEFT) {
-				--x;
-				globalPos.x -= Resources.TILESIZE;
-			}
-			if (dir == Direction.RIGHT) {
-				++x;
-				globalPos.x += Resources.TILESIZE;
-			}
-			setMoving(true);
+		if (isMoving()) {
+			queueMovement(movement);
 			return true;
 		}
-		return false;
+
+		if (!movement.ignoringObstacles())
+			if (colliding(dir))
+				return false;
+
+		if (isOnMapBound(dir))
+			return false;
+
+		Pair coords = new Pair(x, y).addDirection(dir);
+		if (movement.applyChanges())
+			setPosition(coords);
+		queueMovement(movement);
+		return true;
 	}
 
 	public void move(Path path) {
 		path.forEachDirection(direction -> queueMovement(direction));
-
-		if (!isMoving())
-			pollMovementQueue();
 	}
 
 	public boolean isDead() {
@@ -650,7 +658,7 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public void turn(Direction dir) {
-		if (moving)
+		if (isMoving())
 			return;
 
 		stats.look = dir;
@@ -660,7 +668,7 @@ public abstract class Entity extends MapEntity {
 		if (dir.isDiagonal())
 			return false;
 
-		if (moving)
+		if (isMoving())
 			return false;
 
 		stats.look = dir;
@@ -672,11 +680,11 @@ public abstract class Entity extends MapEntity {
 		return true;
 	}
 
-	boolean walk(Direction dir) {
+	public boolean walk(Direction dir) {
 		if (!canWalk(dir))
 			return false;
 
-		move(stats.look);
+		move(new Movement(stats.look, movementSpeed));
 		return true;
 	}
 
@@ -704,6 +712,11 @@ public abstract class Entity extends MapEntity {
 
 	public Pair getPosition() {
 		return new Pair(x, y);
+	}
+
+	public void setPosition(Pair position) {
+		x = position.x;
+		y = position.y;
 	}
 
 	public boolean rayCast(Entity entity, Predicate<MapEntity> obstaclePredicate) {
@@ -754,7 +767,6 @@ public abstract class Entity extends MapEntity {
 
 	@Override
 	public void playDamageAnimation() {
-		addActDuration(Animations.ACTION_ANIM_DURATION);
 		playAnimation(Animations.attack);
 	}
 

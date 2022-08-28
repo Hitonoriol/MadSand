@@ -34,7 +34,7 @@ public class MainMenu extends AbstractScreen<MainMenuStage> {
 	}
 
 	private void initMenuAnimation() {
-		PairFloat playerPos = MadSand.player().globalPos;
+		PairFloat playerPos = MadSand.player().screenPosition;
 		gameWorld.setCamPosition(xmid = playerPos.x, ymid = playerPos.y);
 		gameWorld.updateCamPosition();
 	}

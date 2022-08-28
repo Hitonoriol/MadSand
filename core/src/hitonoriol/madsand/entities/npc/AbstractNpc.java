@@ -28,12 +28,13 @@ import hitonoriol.madsand.entities.Reputation;
 import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.entities.Stats;
 import hitonoriol.madsand.entities.inventory.item.Projectile;
+import hitonoriol.madsand.entities.movement.Movement;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.gui.animation.Animations;
 import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.map.Map;
-import hitonoriol.madsand.pathfinding.Node;
+import hitonoriol.madsand.pathfinding.NodePair;
 import hitonoriol.madsand.pathfinding.Path;
 import hitonoriol.madsand.properties.NpcContainer;
 import hitonoriol.madsand.resources.Resources;
@@ -50,7 +51,7 @@ public abstract class AbstractNpc extends Entity {
 	static double IDLE_MOVE_CHANCE = 15;
 	static float MAX_FOLLOW_FACTOR = 1.65f;
 	public static final float HOSTILE_SPEEDUP = 1.35f;
-	private final static int meleeAttackDst = 2; // Must be < than this
+	private final static int MELEE_DISTANCE = 2; // Must be < than this
 	private final static int MAX_LIFETIME = 20;
 	private final static FloatGenerator lifetimeGen = JRand.flt().range(0.65f, 7.5f);
 
@@ -72,6 +73,7 @@ public abstract class AbstractNpc extends Entity {
 
 	private float timePassed; // time passed since last action
 	public float tickCharge = 0;
+	private Pair futurePosition = new Pair();
 
 	private Entity enemy;
 	public State state = State.Idle;
@@ -109,28 +111,53 @@ public abstract class AbstractNpc extends Entity {
 		loadSprite();
 		initStatActions();
 	}
-	
+
 	@Override
 	public boolean add(Map map, Pair coords) {
 		return map.add(coords, this);
 	}
 
-	public Node findPath(int x, int y) {
+	protected final NodePair findPath(int x, int y) {
 		Map map = MadSand.world().getCurLoc();
-
-		if (!prevDestination.equals(x, y)) {
+		NodePair nextPair = new NodePair();
+		Utils.dbg("Pathfinding to %d, %d...", x, y);
+		if (!prevDestination.equals(x, y) || pathIdx + 1 >= path.getCount()) {
+			Utils.dbg("Recalculating path...");
 			path.clear();
 			pathIdx = 0;
 			prevDestination.set(x, y);
-			if (!map.getPathfindingEngine().searchPath(this.x, this.y, x, y, path))
-				return null;
-		} else if (pathIdx + 1 >= path.getCount())
-			return null;
+			if (!map.getPathfindingEngine().searchPath(futurePosition.x, futurePosition.y, x, y, path)) {
+				Utils.dbg("Fail: Unable to build a path");
+				return nextPair;
+			}
+		}
 
-		if (path.nodes.size == 0)
-			return null;
+		if (path.nodes.size == 0) {
+			Utils.dbg("Fail: Calculated path is empty");
+			return nextPair;
+		}
 
-		return path.get(++pathIdx);
+		nextPair.set(path.get(pathIdx), path.get(pathIdx + 1));
+		Utils.dbg("Success! Returning the next node pair in path: (%d, %d) -> (%d, %d) [%s]",
+				nextPair.l.x, nextPair.l.y, nextPair.r.x, nextPair.r.y, nextPair.relativeDirection().name());
+		++pathIdx;
+		return nextPair;
+	}
+
+	private void walkTo(int x, int y) {
+		if (!canAct(stats.walkCost))
+			return;
+
+		Utils.tryTo(() -> {
+			NodePair nextNodePair = findPath(x, y);
+			if (!nextNodePair.isEmpty()) {
+				if (!walk(nextNodePair.relativeDirection())) {
+					Utils.dbg("Oopsie, can't move in calculated direction, moving randomly");
+					randMove();
+				}
+			}
+			doAction(stats.walkCost);
+		});
 	}
 
 	public void pause() {
@@ -233,37 +260,69 @@ public abstract class AbstractNpc extends Entity {
 	public abstract void interact(Player player);
 
 	@Override
-	public boolean move(Direction dir) {
-		super.turn(dir);
-		Entity player = MadSand.player();
-		boolean outOfView = distanceTo(player) > player.getFov();
-		if (!outOfView)
-			outOfView |= !player.canSee(this) || MadSand.world().timeSkipInProgress();
+	public void queueMovement(Movement movement) {
+		if (!MadSand.player().isInsideFov(this))
+			movement.apply(screenPosition);
+		else {
+			addActDuration(movement.getDuration());
+			super.queueMovement(movement);
+			if (!isNeutral())
+				Utils.dbg("%s is queueing movement (%s): %f",
+						getName(),
+						movement.getClass().getSimpleName(),
+						getMovementAnimationDuration());
+		}
+	}
 
-		if (isMoving() && !outOfView) {
-			queueMovement(dir);
-			addActDuration(getMovementAnimationDuration());
+	protected int futureDistanceTo(Entity entity) {
+		return entity.distanceTo(futurePosition);
+	}
+
+	protected Direction futureRelativeDirection(Entity entity) {
+		return Pair.getRelativeDirection(futurePosition.x, futurePosition.y, entity.x, entity.y, false);
+	}
+
+	protected boolean planToWalk(Direction direction) {
+		Pair tmpPosition = futurePosition.copy().addDirection(direction);
+		if (!isObstacle(tmpPosition) && !MadSand.player().at(tmpPosition)) {
+			futurePosition.set(tmpPosition);
 			return true;
 		}
-		int originalX = this.x, originalY = this.y;
+		return false;
+	}
 
-		coords.set(x, y).addDirection(dir);
-		if (coords.x == player.x && coords.y == player.y)
+	protected void undoPlannedMove(Direction direction) {
+		futurePosition.addDirection(direction);
+	}
+
+	private Movement createWalkMovement(Direction direction) {
+		return Movement.walk(this, direction)
+				.applyChanges(false)
+				.onMovementFinish(movement -> {
+					Pair newPosition = getPosition().addDirection(movement.direction());
+					MadSand.world().getCurLoc().moveNpc(this, newPosition.x, newPosition.y);
+					updCoords();
+					if (!hasQueuedMovement() && !futurePosition.equals(x, y))
+						Utils.dbg("%s expected to be at (%s), but ended up at (%d, %d)",
+								getName(), futurePosition, x, y);
+				});
+	}
+
+	@Override
+	public boolean colliding(Direction direction) {
+		return super.colliding(direction) || MadSand.player().at(coords.set(x, y).addDirection(direction));
+	}
+
+	@Override
+	public boolean walk(Direction dir) {
+		super.turn(dir);
+		if (!planToWalk(dir))
 			return false;
 
-		if (!super.move(dir))
+		if (!super.move(createWalkMovement(dir))) {
+			undoPlannedMove(dir);
 			return false;
-
-		int newX = this.x, newY = this.y;
-		setGridCoords(originalX, originalY);
-		MadSand.world().getCurLoc().moveNpc(this, newX, newY);
-		setGridCoords(newX, newY);
-
-		if (outOfView) {
-			stopMovement();
-			updCoords();
-		} else
-			addActDuration(getMovementAnimationDuration());
+		}
 
 		return true;
 	}
@@ -286,13 +345,14 @@ public abstract class AbstractNpc extends Entity {
 
 	@Override
 	public void meleeAttack(Direction dir) {
-		Pair coords = new Pair(x, y).addDirection(dir);
-		Player player = MadSand.player();
-		Entity target = player.at(coords) ? player : MadSand.world().getCurLoc().getNpc(coords);
-		Damage damage = new Damage(this).melee(target.getDefense());
-
-		if (!target.isEmpty())
-			attack(target, damage);
+		meleeAttackAnimation(dir, () -> {
+			Pair coords = futurePosition.copy().addDirection(dir);
+			Player player = MadSand.player();
+			Entity target = player.at(coords) ? player : MadSand.world().getCurLoc().getNpc(coords);
+			Damage damage = new Damage(this).melee(target.getDefense());
+			if (!target.isEmpty())
+				attack(target, damage);
+		});
 	}
 
 	@Override
@@ -359,6 +419,11 @@ public abstract class AbstractNpc extends Entity {
 		return super.doAction(ap);
 	}
 
+	@Override
+	protected void addActDuration(float actDuration) {
+		super.addActDuration(actDuration);
+	}
+
 	private double daysToTicks(double days) {
 		return MadSand.world().ticksPerHour() * Utils.H_DAY * days;
 	}
@@ -405,13 +470,13 @@ public abstract class AbstractNpc extends Entity {
 	}
 
 	void randMove() {
-		move(Direction.random());
+		walk(Direction.random());
 	}
 
 	public boolean enemySpotted() {
 		return enemy != null;
 	}
-	
+
 	protected boolean enemyIsSlower() {
 		return enemySpotted() && enemy.getSpeed() < getSpeed();
 	}
@@ -451,30 +516,22 @@ public abstract class AbstractNpc extends Entity {
 	}
 
 	private void getCloserTo(Entity entity) {
-		if (!canAct(stats.walkCost))
-			return;
-
-		Utils.tryTo(() -> {
-			Node closestNode = findPath(entity.x, entity.y);
-			if (closestNode != null)
-				if (!move(getRelativeDirection(closestNode.x, closestNode.y, true)))
-					randMove();
-			doAction(stats.walkCost);
-		});
+		walkTo(entity.x, entity.y);
 	}
 
 	private void actMeleeAttack(Entity enemy) {
 		if (!enemySpotted())
 			return;
 
-		if (distanceTo(enemy) >= meleeAttackDst)
+		if (futureDistanceTo(enemy) >= MELEE_DISTANCE)
 			getCloserTo(enemy);
 		else {
 			if (!canAct(stats.meleeAttackCost))
 				return;
 
-			turn(getRelativeDirection(enemy.x, enemy.y, false));
-			meleeAttack(stats.look);
+			Direction enemyDirection = futureRelativeDirection(enemy);
+			turn(enemyDirection);
+			meleeAttack(enemyDirection);
 			doAction(stats.meleeAttackCost);
 		}
 	}
@@ -498,7 +555,7 @@ public abstract class AbstractNpc extends Entity {
 	private int MAX_DST = 7, OPTIMAL_DST = 3;
 
 	private void actRangedAttack(Entity enemy) {
-		int dst = distanceTo(enemy);
+		int dst = futureDistanceTo(enemy);
 		Projectile projectile = inventory.getItem(Projectile.class).get();
 		if (dst > MAX_DST)
 			getCloserTo(enemy);
@@ -508,12 +565,11 @@ public abstract class AbstractNpc extends Entity {
 				getCloserTo(enemy);
 		}
 
-		else if (dst <= OPTIMAL_DST && dst >= meleeAttackDst)
+		else if (dst <= OPTIMAL_DST && dst >= MELEE_DISTANCE)
 			performRangedAttack(enemy, projectile);
 
 		else
 			actMeleeAttack(enemy);
-
 	}
 
 	@Override
@@ -549,9 +605,16 @@ public abstract class AbstractNpc extends Entity {
 		prevTickCharge = -1;
 		act();
 
-		if (enemyIsSlower())
-			enemy.addActDelay(getActDuration());
-		
+		if (!isNeutral() && enemySpotted())
+			Utils.dbg("%s (aggroed at %s) will act for %f secs / wait for %f secs",
+					getName(), enemy.getName(), getActDuration(), getActDelay());
+
+		if (enemyIsSlower()) {
+			Utils.dbg("%s's enemy (%s) is slower, so their action will be delayed by %f seconds", getName(),
+					enemy.getName(), getActDuration());
+			enemy.waitFor(this);
+		}
+
 		TimeUtils.scheduleTask(() -> finishActing(), getActDuration());
 	}
 
@@ -589,13 +652,20 @@ public abstract class AbstractNpc extends Entity {
 				if (!enemy.isEmpty())
 					targetEnemy(enemy);
 				else {
-					skipAction();
-					return;
+					if (Utils.percentRoll(IDLE_MOVE_CHANCE)) {
+						randMove();
+						break;
+					} else {
+						skipAction();
+						return;
+					}
 				}
 			}
 
-			if (enemySpotted() && distanceTo(enemy) > getFov() * MAX_FOLLOW_FACTOR)
+			if (enemySpotted() && futureDistanceTo(enemy) > getFov() * MAX_FOLLOW_FACTOR) {
 				loseSightOfEnemy();
+				break;
+			}
 
 			if (canPerformRangedAttack())
 				actRangedAttack(enemy);
@@ -635,16 +705,17 @@ public abstract class AbstractNpc extends Entity {
 	@Override
 	public void prepareToAct() {
 		super.prepareToAct();
+		futurePosition.set(x, y);
 		float delay = (float) (randomActionDelay.gen() * (Stats.max().calcSpeed() - stats().calcSpeed()));
 		addActDelay(delay);
-		
+
 		if (MadSand.player().canSee(this) && !isNeutral() && getSpeed() > MadSand.player().getSpeed()) {
 			// speedUp(AbstractNpc.HOSTILE_SPEEDUP); // Not needed anymore (?)
 			Keyboard.ignoreInput();
 			setOnActionFinish(() -> Keyboard.resumeInput());
 		}
 	}
-	
+
 	@Override
 	public void prepareToAnimateAction() {
 		if (enemyIsSlower())

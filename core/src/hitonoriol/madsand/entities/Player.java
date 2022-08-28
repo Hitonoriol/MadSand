@@ -49,6 +49,7 @@ import hitonoriol.madsand.entities.inventory.item.Weapon;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategories;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 import hitonoriol.madsand.entities.inventory.trade.TradeInventoryUI;
+import hitonoriol.madsand.entities.movement.Movement;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.entities.npc.FarmAnimal;
 import hitonoriol.madsand.entities.npc.Npc;
@@ -109,6 +110,7 @@ public class Player extends Entity {
 
 	private Runnable scheduledAction, afterMovement;
 
+	private boolean animateSprite = true;
 	@JsonProperty
 	private boolean newlyCreated = true;
 
@@ -442,19 +444,38 @@ public class Player extends Entity {
 		doAction(stats.rangedAttackCost, () -> performRangedAttack(target));
 	}
 
+	private void finishMeleeAttack() {
+		animateSprite = true;
+		MadSand.getRenderer().setCamFollowPlayer(true);
+	}
+
+	@Override
+	protected void meleeAttackAnimation(Direction dir, Runnable attackAction) {
+		MadSand.getRenderer().setCamFollowPlayer(false);
+		animateSprite = false;
+		move(Movement.meleeAttack(this, attackAction)
+				.onAttackFinish(() -> finishMeleeAttack()));
+	}
+
 	private void performMeleeAttack(Direction dir) {
 		turn(dir);
 		Map map = MadSand.world().getCurLoc();
 		AbstractNpc npc = map.getNpc(coords.set(x, y).addDirection(dir));
+		if (!npc.isEmpty()) {
+			Utils.dbg("Delaying %s for: %f", npc.getName(), getMeleeAttackAnimationDuration());
+			npc.addActDelay(getMeleeAttackAnimationDuration());
+		}
 
-		if (npc.isEmpty())
-			return;
+		meleeAttackAnimation(dir, () -> {
+			if (npc.isEmpty())
+				return;
 
-		Damage damage = new Damage(this).melee(npc.getDefense());
-		attack(npc, damage);
+			Damage damage = new Damage(this).melee(npc.getDefense());
+			attack(npc, damage);
 
-		if (!damage.missed())
-			stats.skills.increaseSkill(Skill.Melee);
+			if (!damage.missed())
+				stats.skills.increaseSkill(Skill.Melee);
+		});
 	}
 
 	@Override
@@ -462,7 +483,9 @@ public class Player extends Entity {
 		if (isMoving())
 			return;
 
-		if (MadSand.world().getCurLoc().npcExists(coords.set(x, y).addDirection(dir)))
+		AbstractNpc npc = MadSand.world().getCurLoc().getNpc(coords.set(x, y).addDirection(dir));
+
+		if (!npc.isEmpty() && !npc.isMoving())
 			doAction(stats.meleeAttackCost, () -> performMeleeAttack(dir));
 		else
 			turn(dir);
@@ -518,7 +541,13 @@ public class Player extends Entity {
 
 	@Override
 	protected void die() {
+		if (isDead())
+			return;
+		
 		super.die();
+		if (isMoving())
+			currentMovement().apply(screenPosition);
+		finishMeleeAttack();
 		stats.equipment.unEquipAll();
 		refreshEquipment();
 		MadSand.switchScreen(Screens.Death);
@@ -1108,17 +1137,6 @@ public class Player extends Entity {
 	}
 
 	@Override
-	public boolean move(Direction dir) {
-		if (!super.move(dir))
-			return false;
-
-		if ((MadSand.world().curLayer() == Location.LAYER_OVERWORLD) && canTravel())
-			MadSand.print("Press [GRAY]N[WHITE] to travel to the next sector.");
-
-		return true;
-	}
-
-	@Override
 	public void teleport(int x, int y) {
 		super.teleport(x, y);
 		Gdx.graphics.requestRendering();
@@ -1256,6 +1274,9 @@ public class Player extends Entity {
 		if (!super.walk(dir))
 			return;
 
+		if ((MadSand.world().curLayer() == Location.LAYER_OVERWORLD) && canTravel())
+			MadSand.print("Press [GRAY]N[WHITE] to travel to the next sector.");
+
 		MadSand.world().updateLight();
 		objectInFront();
 		lootMsg();
@@ -1271,7 +1292,7 @@ public class Player extends Entity {
 	@Override
 	public void stopMovement() {
 		super.stopMovement();
-		if (!hasQueuedMovement()) {
+		if (!isMoving()) {
 			if (afterMovement != null) {
 				afterMovement.run();
 				afterMovement = null;
@@ -1291,14 +1312,6 @@ public class Player extends Entity {
 	public void run(Path path) {
 		speedUp(runSpeedCoef);
 		super.move(path);
-	}
-
-	@Override
-	protected void pollMovementQueue() {
-		if (!hasQueuedMovement())
-			return;
-
-		walk(movementQueue.poll());
 	}
 
 	@Override
@@ -1395,7 +1408,7 @@ public class Player extends Entity {
 
 	@JsonIgnore
 	public TextureRegion getSprite() {
-		if (!isMoving())
+		if (!isMoving() || !animateSprite)
 			return super.getSprite();
 
 		return walkAnim[stats.look.baseOrdinal()].getCurrentKeyFrame(true);
