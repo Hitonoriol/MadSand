@@ -17,10 +17,12 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.gui.GuiColors;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.lua.Lua;
+import hitonoriol.madsand.world.World;
 
 public class GameLog extends ScrollablePanel {
-	private static final int LOG_LENGTH = 30;
-
+	private final static int LOG_LENGTH = 30;
+	private final static float ENTRY_PAD = 3f;
+	
 	private Color noticeColor = GuiColors.NOTICE;
 	private final static String NOTICE_TAG = GuiColors.getTag(GuiColors.NOTICE),
 			NOTICE_ALT_TAG = GuiColors.getTag(GuiColors.NOTICE_ALT);
@@ -39,7 +41,7 @@ public class GameLog extends ScrollablePanel {
 		for (int i = 0; i < LOG_LENGTH; ++i) {
 			logLabels[i] = new Label(" ", Gui.skin);
 			logLabels[i].setWrap(true);
-			addContents(logLabels[i]).width(WIDTH).row();
+			addContents(logLabels[i]).width(WIDTH).padTop(ENTRY_PAD).padBottom(ENTRY_PAD).row();
 		}
 
 		console.setWidth(WIDTH);
@@ -142,7 +144,20 @@ public class GameLog extends ScrollablePanel {
 			label.setText("");
 	}
 
+	private String getWorldTimeString() {
+		World world = MadSand.world();
+		return String.format("[LIGHT_GRAY][%02d:%02d][] ", world.getWorldTimeHour(), world.getWorldTimeMinute()); 
+	}
+	
+	private void setLogText(int idx, String text, boolean specialMsg) {
+		logLabels[idx].setText((specialMsg ? "" : getWorldTimeString()) + text);
+	}
+	
 	public void print(String arg) {
+		print(arg, false);
+	}
+	
+	public void print(String arg, boolean specialMsg) {
 		if (!printedLine.equals(arg)) {
 			lineRepeat = 1;
 			printedLine = arg;
@@ -151,17 +166,17 @@ public class GameLog extends ScrollablePanel {
 				if (i != 0)
 					logLabels[i].setText(logLabels[i - 1].getText());
 				else {
-					logLabels[i].setText(arg);
+					setLogText(i, arg, specialMsg);
 					lineNum = i;
 				}
 				i--;
 			}
 		} else
-			logLabels[lineNum].setText(printedLine + " x" + (++lineRepeat));
+			setLogText(lineNum, printedLine + " x" + (++lineRepeat), specialMsg);
 	}
 
 	public void print(String msg, String color) {
-		print(color + msg + "[]");
+		print(color + msg + "[]", true);
 		addNotification();
 	}
 
