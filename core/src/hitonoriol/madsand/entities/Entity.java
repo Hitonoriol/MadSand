@@ -586,6 +586,10 @@ public abstract class Entity extends MapEntity {
 	protected Movement currentMovement() {
 		return movementQueue.peek();
 	}
+	
+	protected Queue<Movement> getMovementQueue() {
+		return movementQueue;
+	}
 
 	protected void nextMovement() {
 		movementQueue.poll();

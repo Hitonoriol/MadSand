@@ -87,7 +87,7 @@ import hitonoriol.madsand.world.Location;
 import hitonoriol.madsand.world.WorkerType;
 import hitonoriol.madsand.world.World;
 
-public class Player extends Entity {
+public class Player extends Entity {	
 	@JsonIgnore
 	public PlayerStats stats; // Reference to the same Stats object as super.stats
 	private float runSpeedCoef = 3.5f;
@@ -445,14 +445,14 @@ public class Player extends Entity {
 	}
 
 	private void finishMeleeAttack() {
-		animateSprite = true;
+		animateSprite(true);
 		MadSand.getRenderer().setCamFollowPlayer(true);
 	}
 
 	@Override
 	protected void meleeAttackAnimation(Direction dir, Runnable attackAction) {
 		MadSand.getRenderer().setCamFollowPlayer(false);
-		animateSprite = false;
+		animateSprite(false);
 		move(Movement.meleeAttack(this, attackAction)
 				.onAttackFinish(() -> finishMeleeAttack()));
 	}
@@ -543,15 +543,17 @@ public class Player extends Entity {
 	protected void die() {
 		if (isDead())
 			return;
-		
+
 		super.die();
-		if (isMoving())
-			currentMovement().apply(screenPosition);
-		finishMeleeAttack();
+		if (isMoving()) {
+			getMovementQueue().forEach(movement -> movement.apply(screenPosition));
+			finishMeleeAttack();
+		}
 		stats.equipment.unEquipAll();
 		refreshEquipment();
 		MadSand.switchScreen(Screens.Death);
 		MadSand.warn("You died");
+		Utils.out("Player died at: %d, %d", x, y);
 	}
 
 	void damageHeldEquipment(MapEntity damagedEntity) {
@@ -1051,11 +1053,11 @@ public class Player extends Entity {
 				teleport(stats.respawnX, stats.respawnY);
 			else
 				world.switchLocation(stats.respawnWX, stats.respawnWY, Location.LAYER_OVERWORLD);
-
 		} else
 			teleport(map.getRandomPoint());
 		Gui.refreshOverlay();
 		updCoords();
+		Utils.out("Respawned at [sector (%d, %d) @ cell (%d, %d)]", wx, wy, x, y);
 	}
 
 	public Direction lookAtMouse(int x, int y, boolean diagonal) {
@@ -1242,7 +1244,7 @@ public class Player extends Entity {
 	}
 
 	public int doAction(double ap, Runnable action) {
-		if (scheduledAction != null)
+		if (scheduledAction != null || isDead())
 			return -1;
 
 		int ticks = super.doAction(ap);
@@ -1406,9 +1408,17 @@ public class Player extends Entity {
 		return completedDungeons.add(MadSand.world().getCurWPos().copy());
 	}
 
+	private void animateSprite(boolean animate) {
+		animateSprite = animate;
+	}
+
+	private boolean isSpriteAnimated() {
+		return animateSprite;
+	}
+
 	@JsonIgnore
 	public TextureRegion getSprite() {
-		if (!isMoving() || !animateSprite)
+		if (!isMoving() || !isSpriteAnimated())
 			return super.getSprite();
 
 		return walkAnim[stats.look.baseOrdinal()].getCurrentKeyFrame(true);
