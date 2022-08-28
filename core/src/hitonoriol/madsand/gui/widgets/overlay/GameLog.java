@@ -22,7 +22,8 @@ public class GameLog extends ScrollablePanel {
 	private static final int LOG_LENGTH = 30;
 
 	private Color noticeColor = GuiColors.NOTICE;
-	private boolean prevMsgIsNotice = false;
+	private final static String NOTICE_TAG = GuiColors.getTag(GuiColors.NOTICE),
+			NOTICE_ALT_TAG = GuiColors.getTag(GuiColors.NOTICE_ALT);
 	private Label[] logLabels = new Label[LOG_LENGTH];
 	private int lineRepeat = 1;
 	private int lineNum;
@@ -147,14 +148,12 @@ public class GameLog extends ScrollablePanel {
 			printedLine = arg;
 			int i = logLabels.length - 1;
 			while (i >= 0) {
-
 				if (i != 0)
 					logLabels[i].setText(logLabels[i - 1].getText());
 				else {
 					logLabels[i].setText(arg);
 					lineNum = i;
 				}
-
 				i--;
 			}
 		} else
@@ -171,7 +170,7 @@ public class GameLog extends ScrollablePanel {
 	}
 
 	public void notify(String msg) {
-		if (prevMsgIsNotice)
+		if (printedLine.contains(NOTICE_TAG) || msg.contains(NOTICE_ALT_TAG))
 			noticeColor = noticeColor == GuiColors.NOTICE ? GuiColors.NOTICE_ALT : GuiColors.NOTICE;
 		else
 			noticeColor = GuiColors.NOTICE;
