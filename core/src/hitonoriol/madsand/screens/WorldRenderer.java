@@ -17,9 +17,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector3;
 
 import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.PairFloat;
 import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.Player;
@@ -36,7 +38,8 @@ import hitonoriol.madsand.resources.TextureMap;
 import hitonoriol.madsand.util.CameraShaker;
 
 public class WorldRenderer {
-	public static final float DEFAULT_ZOOM = 1.5F;
+	public static final float TARGET_FRAME_DELTA = 1f / 60f;
+	public static final float MIN_ZOOM = 0.5f, MAX_ZOOM = 4.0f, DEFAULT_ZOOM = 1.5F;
 	private static final int OBJECT_LOOT = 7;
 	private static final int CAM_OFFSET_X = 0, CAM_OFFSET_Y = 37;
 
@@ -47,8 +50,11 @@ public class WorldRenderer {
 	private SpriteBatch batch = new SpriteBatch();
 	private OrthographicCamera camera = new OrthographicCamera();
 	private CameraShaker shaker = new CameraShaker(camera);
+	private static final float cameraRadius = 300;
+	private static final float offsetFactor = 0.3f;
+	private boolean enableFloatingCamera = false;
 	private float frameDelta = 0;
-	
+
 	private LightMap light = new LightMap();
 	private List<WorldAnimation> animations = new ArrayList<>();
 	private ConcurrentHashMap<Path, PathDescriptor> paths = new ConcurrentHashMap<>();
@@ -147,14 +153,25 @@ public class WorldRenderer {
 	}
 
 	private void drawEntity(Entity entity) {
-		PairFloat drawPos = entity.getWorldPos();
+		PairFloat drawPos = entity.getScreenPosition();
 		if (entity.isMoving())
 			entity.animateMovement();
 
 		batch.draw(entity.getSprite(), drawPos.x, drawPos.y);
 
-		if (followPlayer && entity instanceof Player)
-			setCamPosition(drawPos.x, drawPos.y);
+		if (followPlayer && entity instanceof Player) {
+			if (enableFloatingCamera && !Gui.isDialogActive()) {
+				Vector3 offset = new Vector3(offsetFactor * (Mouse.worldX() - drawPos.x),
+						offsetFactor * (Mouse.worldY() - drawPos.y), 0);
+				camera.position.set(offset.x + drawPos.x, offset.y + drawPos.y, 0);
+				if (Line.calcDistance(camera.position.x, camera.position.y, drawPos.x, drawPos.y) > cameraRadius) {
+					offset.nor();
+					camera.position.set(offset.x * cameraRadius + drawPos.x, offset.y * cameraRadius + drawPos.y, 0);
+				}
+				setCamPosition(camera.position.x, camera.position.y);
+			} else
+				setCamPosition(drawPos.x, drawPos.y);
+		}
 	}
 
 	private static Color defColor = new Color(1, 1, 1, 1);
@@ -278,6 +295,10 @@ public class WorldRenderer {
 
 	public void changeZoom(float by) {
 		zoom += by;
+		if (zoom < MIN_ZOOM)
+			zoom = MIN_ZOOM;
+		if (zoom > MAX_ZOOM)
+			zoom = MAX_ZOOM;
 		updateViewport();
 	}
 
@@ -311,9 +332,17 @@ public class WorldRenderer {
 		camera.viewportHeight = Gdx.graphics.getHeight() / zoom;
 		camera.update();
 	}
-	
+
 	public void shakeCamera(float intensity, float duration) {
 		shaker.shake(intensity, duration);
+	}
+	
+	public void enableFloatingCamera(boolean enable) {
+		enableFloatingCamera = enable;
+	}
+	
+	public boolean isFloatingCameraEnbled() {
+		return enableFloatingCamera;
 	}
 
 	private static class LightMap extends TextureMap<Integer> {
