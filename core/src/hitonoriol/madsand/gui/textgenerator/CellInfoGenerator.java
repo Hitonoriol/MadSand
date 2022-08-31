@@ -167,7 +167,8 @@ public class CellInfoGenerator extends TextGenerator {
 					.addLine("Luminosity: " + object.getLuminosity());
 
 		if (cell.hasNpc())
-			addLine("Npc hp: " + npc.stats.hp)
+			addLine("UID: " + npc.uid())
+					.addLine("HP: " + npc.stats.hp)
 					.addLine("Speed: " + npc.getSpeed() + "(" + npc.stats.get(Stat.Dexterity) + ")")
 					.addLine("Lifetime: " + Utils.round(npc.getLifetime()));
 

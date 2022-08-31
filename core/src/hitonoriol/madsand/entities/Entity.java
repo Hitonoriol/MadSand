@@ -239,7 +239,7 @@ public abstract class Entity extends MapEntity {
 	}
 
 	protected void meleeAttackAnimation(Direction dir, Runnable attackAction) {
-		move(Movement.meleeAttack(this, attackAction));
+		move(Movement.meleeAttack(this, dir, attackAction));
 	}
 
 	public abstract void meleeAttack(Direction dir);
@@ -665,6 +665,10 @@ public abstract class Entity extends MapEntity {
 		if (isMoving())
 			return;
 
+		look(dir);
+	}
+	
+	protected void look(Direction dir) {
 		stats.look = dir;
 	}
 
@@ -827,6 +831,10 @@ public abstract class Entity extends MapEntity {
 				x, y,
 				getLvl(),
 				stats.hp, stats.mhp);
+	}
+	
+	protected final String debugName() {
+		return String.format("%s (%d)", getName(), uid());
 	}
 
 	@Override

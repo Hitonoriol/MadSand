@@ -40,15 +40,15 @@ public class Movement {
 	public void apply(PairFloat position) {
 		while (update(position));
 	}
-	
+
 	public float getDuration() {
 		return (distance / speed) * TARGET_FRAME_DELTA;
 	}
-	
+
 	public boolean isFinished() {
 		return distance <= 0;
 	}
-	
+
 	public boolean isInvalid(Entity movingEntity) {
 		return !ignoringObstacles() && movingEntity.colliding(direction());
 	}
@@ -129,8 +129,12 @@ public class Movement {
 		return walk(entity, entity.stats().look);
 	}
 
-	public static MeleeAttackMovement meleeAttack(Entity entity, Runnable attackAction) {
-		return new MeleeAttackMovement(entity.stats().look, entity.calcMeleeMovementSpeed())
+	public static MeleeAttackMovement meleeAttack(Entity entity, Direction direction, Runnable attackAction) {
+		return new MeleeAttackMovement(direction, entity.calcMeleeMovementSpeed())
 				.onAttack(attackAction);
+	}
+	
+	public static MeleeAttackMovement meleeAttack(Entity entity, Runnable attackAction) {
+		return meleeAttack(entity, entity.stats().look, attackAction);
 	}
 }

@@ -453,7 +453,7 @@ public class Player extends Entity {
 	protected void meleeAttackAnimation(Direction dir, Runnable attackAction) {
 		MadSand.getRenderer().setCamFollowPlayer(false);
 		animateSprite(false);
-		move(Movement.meleeAttack(this, attackAction)
+		move(Movement.meleeAttack(this, dir, attackAction)
 				.onAttackFinish(() -> finishMeleeAttack()));
 	}
 

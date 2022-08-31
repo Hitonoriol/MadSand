@@ -50,7 +50,6 @@ public abstract class AbstractNpc extends Entity {
 	public static int NULL_NPC = 0;
 	static double IDLE_MOVE_CHANCE = 15;
 	static float MAX_FOLLOW_FACTOR = 1.65f;
-	public static final float HOSTILE_SPEEDUP = 1.35f;
 	private final static int MELEE_DISTANCE = 2; // Must be < than this
 	private final static int MAX_LIFETIME = 20;
 	private final static FloatGenerator lifetimeGen = JRand.flt().range(0.65f, 7.5f);
@@ -72,7 +71,8 @@ public abstract class AbstractNpc extends Entity {
 	public boolean canGiveQuests = false;
 
 	private float timePassed; // time passed since last action
-	public float tickCharge = 0;
+	private float tickCharge = 0;
+	private float prevTickCharge;
 	private Pair futurePosition = new Pair();
 
 	private Entity enemy;
@@ -82,10 +82,10 @@ public abstract class AbstractNpc extends Entity {
 	private Runnable onActionFinish;
 
 	@JsonIgnore
-	Path path = new Path();
+	private Path path = new Path();
 	@JsonIgnore
-	Pair prevDestination = new Pair();
-	int pathIdx = 0;
+	private Pair prevDestination = new Pair();
+	private int pathIdx = 0;
 
 	public AbstractNpc(NpcContainer protoNpc) {
 		id = protoNpc.id();
@@ -268,7 +268,7 @@ public abstract class AbstractNpc extends Entity {
 			super.queueMovement(movement);
 			if (!isNeutral())
 				Utils.dbg("%s is queueing movement (%s): %f",
-						getName(),
+						debugName(),
 						movement.getClass().getSimpleName(),
 						getMovementAnimationDuration());
 		}
@@ -302,9 +302,9 @@ public abstract class AbstractNpc extends Entity {
 					Pair newPosition = getPosition().addDirection(movement.direction());
 					MadSand.world().getCurLoc().moveNpc(this, newPosition.x, newPosition.y);
 					updCoords();
-					if (!hasQueuedMovement() && !futurePosition.equals(x, y))
-						Utils.dbg("%s expected to be at (%s), but ended up at (%d, %d)",
-								getName(), futurePosition, x, y);
+					if (!hasQueuedMovement() && !futurePosition.equals(newPosition))
+						Utils.dbg("%s expected to be at (%s), but ended up at (%s)",
+								debugName(), futurePosition, newPosition);
 				});
 	}
 
@@ -346,7 +346,7 @@ public abstract class AbstractNpc extends Entity {
 	@Override
 	public void meleeAttack(Direction dir) {
 		meleeAttackAnimation(dir, () -> {
-			Pair coords = futurePosition.copy().addDirection(dir);
+			Pair coords = getPosition().copy().addDirection(dir);
 			Player player = MadSand.player();
 			Entity target = player.at(coords) ? player : MadSand.world().getCurLoc().getNpc(coords);
 			Damage damage = new Damage(this).melee(target.getDefense());
@@ -372,7 +372,7 @@ public abstract class AbstractNpc extends Entity {
 
 		super.acceptDamage(damage);
 
-		if (isDead()) {
+		if (attackedByPlayer && isDead()) {
 			Mouse.refreshTooltip();
 			MadSand.notice("You kill %s! [+%d exp]",
 					getName(),
@@ -443,7 +443,7 @@ public abstract class AbstractNpc extends Entity {
 		if (lifetime > daysToTicks(MAX_LIFETIME))
 			return;
 
-		Utils.dbg("Adding %f days (%f ticks) of lifetime for %s", days, daysToTicks(days), getName());
+		Utils.dbg("Adding %f days (%f ticks) of lifetime for %s", days, daysToTicks(days), debugName());
 		lifetime += daysToTicks(days);
 	}
 
@@ -482,7 +482,7 @@ public abstract class AbstractNpc extends Entity {
 	}
 
 	void targetEnemy(Entity enemy) {
-		Utils.out("[Aggro] %s is targeting %s", getName(), enemy);
+		Utils.out("[Aggro] %s is targeting %s", debugName(), enemy);
 		this.enemy = enemy;
 		enemy.target();
 		playAnimation(Animations.detect);
@@ -492,7 +492,7 @@ public abstract class AbstractNpc extends Entity {
 		if (enemy == null)
 			return;
 
-		Utils.out("[Aggro] %s lost sight of %s", getName(), enemy);
+		Utils.out("[Aggro] %s lost sight of %s", debugName(), enemy);
 
 		enemy.unTarget();
 		this.enemy = null;
@@ -530,7 +530,7 @@ public abstract class AbstractNpc extends Entity {
 				return;
 
 			Direction enemyDirection = futureRelativeDirection(enemy);
-			turn(enemyDirection);
+			look(enemyDirection);
 			meleeAttack(enemyDirection);
 			doAction(stats.meleeAttackCost);
 		}
@@ -572,22 +572,8 @@ public abstract class AbstractNpc extends Entity {
 			actMeleeAttack(enemy);
 	}
 
-	@Override
-	public final void act(float time) {
-		if (stats.dead) {
-			skipAction();
-			return;
-		}
-
+	private void stateLogic() {
 		boolean badRep = MadSand.player().getReputation().isHostile(stats.faction);
-		tickCharge += (timePassed = time);
-		live(time);
-
-		if (pauseFlag) {
-			unPause();
-			return;
-		}
-
 		if (stats.faction == Faction.None)
 			badRep = false;
 
@@ -601,24 +587,39 @@ public abstract class AbstractNpc extends Entity {
 			if (!badRep && state == State.Hostile && !provoked)
 				state = State.Idle;
 		}
+	}
+
+	@Override
+	public final void act(float time) {
+		if (stats.dead) {
+			skipAction();
+			return;
+		}
+
+		tickCharge += (timePassed = time);
+		live(time);
+
+		if (pauseFlag) {
+			unPause();
+			return;
+		}
 
 		prevTickCharge = -1;
+		stateLogic();
 		act();
 
 		if (!isNeutral() && enemySpotted())
 			Utils.dbg("%s (aggroed at %s) will act for %f secs / wait for %f secs",
-					getName(), enemy.getName(), getActDuration(), getActDelay());
+					debugName(), enemy.getName(), getActDuration(), getActDelay());
 
 		if (enemyIsSlower()) {
-			Utils.dbg("%s's enemy (%s) is slower, so their action will be delayed by %f seconds", getName(),
-					enemy.getName(), getActDuration());
+			Utils.dbg("%s's enemy (%s) is slower, so their action will be delayed by %f seconds",
+					debugName(), enemy.getName(), getActDuration());
 			enemy.waitFor(this);
 		}
 
 		TimeUtils.scheduleTask(() -> finishActing(), getActDuration());
 	}
-
-	float prevTickCharge;
 
 	private void act() {
 		if (!canAct()) {
@@ -709,8 +710,8 @@ public abstract class AbstractNpc extends Entity {
 		float delay = (float) (randomActionDelay.gen() * (Stats.max().calcSpeed() - stats().calcSpeed()));
 		addActDelay(delay);
 
-		if (MadSand.player().canSee(this) && !isNeutral() && getSpeed() > MadSand.player().getSpeed()) {
-			// speedUp(AbstractNpc.HOSTILE_SPEEDUP); // Not needed anymore (?)
+		Player player = MadSand.player();
+		if (player.canSee(this) && !isNeutral() && isTargeting(player) && getSpeed() > player.getSpeed()) {
 			Keyboard.ignoreInput();
 			setOnActionFinish(() -> Keyboard.resumeInput());
 		}
