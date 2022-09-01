@@ -315,6 +315,11 @@ public class MapObject extends MapEntity implements Placeable {
 				.map(resource -> resource.skill)
 				.orElse(Skill.None);
 	}
+	
+	@Override
+	public TextureRegion getSprite() {
+		return Resources.getObject(id);
+	}
 
 	@JsonIgnore
 	public float getRenderOffset() {
