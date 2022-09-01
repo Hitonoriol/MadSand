@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
@@ -24,6 +23,7 @@ import hitonoriol.madsand.entities.equipment.EquipSlot;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.entities.skill.Skill;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.widgets.gametooltip.GameTooltip;
 import hitonoriol.madsand.gui.widgets.overlay.ActionButton;
 import hitonoriol.madsand.gui.widgets.overlay.EquipmentSidebar;

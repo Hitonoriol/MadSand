@@ -2,7 +2,7 @@ package hitonoriol.madsand.util;
 
 import com.badlogic.gdx.utils.Timer;
 
-import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.gui.Gui;
 
 public class TimeUtils {
 	public static Timer.Task createTask(Runnable task) {

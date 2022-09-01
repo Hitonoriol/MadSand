@@ -38,11 +38,11 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import hitonoriol.madsand.Enumerable;
 import hitonoriol.madsand.GameSaver;
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.containers.Pair.PairKeyDeserializer;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.quest.Quest;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.map.ItemProducer;
 import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.map.object.MapObject;

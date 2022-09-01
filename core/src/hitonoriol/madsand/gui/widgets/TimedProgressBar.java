@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.gui.Gui;
 
 public class TimedProgressBar extends ProgressBar {
 

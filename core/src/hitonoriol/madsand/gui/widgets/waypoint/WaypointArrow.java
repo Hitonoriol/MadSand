@@ -11,10 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.textgenerator.StaticTextGenerator;
 import hitonoriol.madsand.gui.widgets.gametooltip.RefreshableLabel;
 import hitonoriol.madsand.resources.Resources;

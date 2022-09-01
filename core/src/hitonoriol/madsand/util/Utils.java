@@ -25,8 +25,8 @@ import org.apache.commons.math3.random.RandomDataGenerator;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.dialog.TextSubstitutor;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.util.Functional.SafeRunnable;
 import me.xdrop.jrand.JRand;

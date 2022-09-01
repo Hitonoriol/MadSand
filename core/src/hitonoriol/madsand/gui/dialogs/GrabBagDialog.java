@@ -5,10 +5,10 @@ import java.util.List;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Align;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.inventory.ItemUI;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.gui.Gui;
 
 public class GrabBagDialog extends GameDialog {
 

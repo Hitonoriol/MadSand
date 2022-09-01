@@ -15,7 +15,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import hitonoriol.madsand.Enumerable;
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
@@ -23,6 +22,7 @@ import hitonoriol.madsand.dialog.TextSubstitutor;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.widgets.waypoint.QuestArrow;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.properties.ItemProp;

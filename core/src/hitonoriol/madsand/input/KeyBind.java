@@ -1,6 +1,6 @@
 package hitonoriol.madsand.input;
 
-import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.gui.Gui;
 
 public class KeyBind {
 	Runnable action;

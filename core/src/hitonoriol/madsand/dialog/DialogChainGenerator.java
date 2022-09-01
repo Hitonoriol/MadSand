@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
-import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.util.Utils;
 

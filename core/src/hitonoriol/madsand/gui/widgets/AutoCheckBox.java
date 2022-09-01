@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
-import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.gui.Gui;
 
 public class AutoCheckBox extends CheckBox {
 

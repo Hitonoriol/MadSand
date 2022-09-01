@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.Align;
 
-import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.MouseoverListener;
 import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.textgenerator.StaticTextGenerator;

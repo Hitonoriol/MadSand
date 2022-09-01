@@ -6,12 +6,12 @@ import java.util.Map.Entry;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.CombatEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.gui.Gui;
 
 public class Equipment {
 	private HashMap<EquipSlot, Item> equipped = new HashMap<>();

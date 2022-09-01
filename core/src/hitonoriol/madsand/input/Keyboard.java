@@ -16,12 +16,12 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 
 import hitonoriol.madsand.GameSaver;
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.containers.HashMapFactory;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.dialogs.InputDialog;
 import hitonoriol.madsand.gui.dialogs.SelectDialog;
 import hitonoriol.madsand.minigames.blackjack.BlackJackUI;

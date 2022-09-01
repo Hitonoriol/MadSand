@@ -2,8 +2,8 @@ package hitonoriol.madsand.properties;
 
 import java.util.HashMap;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.dialog.GameDialog;
+import hitonoriol.madsand.gui.Gui;
 
 public class Tutorial {
 	public static final String GAME_START = "GameStart";

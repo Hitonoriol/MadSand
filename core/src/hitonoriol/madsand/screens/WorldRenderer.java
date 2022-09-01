@@ -19,13 +19,13 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.PairFloat;
 import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.animation.WorldAnimation;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.map.Loot;

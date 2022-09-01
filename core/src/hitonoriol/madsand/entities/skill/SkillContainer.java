@@ -2,8 +2,8 @@ package hitonoriol.madsand.entities.skill;
 
 import java.util.HashMap;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.dialogs.LevelupDialog;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;

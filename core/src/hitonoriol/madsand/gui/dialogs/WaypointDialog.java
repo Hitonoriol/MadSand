@@ -1,6 +1,7 @@
 package hitonoriol.madsand.gui.dialogs;
 
-import static hitonoriol.madsand.Gui.*;
+import static hitonoriol.madsand.gui.Gui.*;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,9 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.map.object.Waypoint;
 

@@ -6,10 +6,10 @@ import java.util.List;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.Stat;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.util.Utils;
 
 public class StatLabels {

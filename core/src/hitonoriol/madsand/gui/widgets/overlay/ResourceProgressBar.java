@@ -11,11 +11,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.entities.skill.SkillContainer;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.widgets.TimedProgressBar;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.map.object.MapObject;

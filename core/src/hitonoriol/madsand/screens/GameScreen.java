@@ -2,7 +2,7 @@ package hitonoriol.madsand.screens;
 
 import com.badlogic.gdx.Gdx;
 
-import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.stages.Overlay;
 import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.input.Mouse;

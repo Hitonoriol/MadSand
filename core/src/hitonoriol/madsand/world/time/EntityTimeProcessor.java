@@ -6,10 +6,10 @@ import java.util.List;
 
 import org.apache.commons.collections4.iterators.PeekingIterator;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;

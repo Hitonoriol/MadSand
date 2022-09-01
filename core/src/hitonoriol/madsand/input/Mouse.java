@@ -11,12 +11,12 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.stages.Overlay;
 import hitonoriol.madsand.gui.textgenerator.CellInfoGenerator;
 import hitonoriol.madsand.gui.textgenerator.NotificationGenerator;

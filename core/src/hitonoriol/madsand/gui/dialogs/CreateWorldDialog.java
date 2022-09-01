@@ -10,10 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.GameSaver;
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.dialog.GameDialog;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.util.Utils;
 
 public class CreateWorldDialog extends GameDialog {

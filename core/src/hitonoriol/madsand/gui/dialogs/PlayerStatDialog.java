@@ -9,12 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.entities.BaseStats;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.widgets.stats.StatLabels;
 import me.xdrop.jrand.JRand;
 

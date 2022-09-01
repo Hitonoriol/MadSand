@@ -6,9 +6,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.MadSand.Screens;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.MouseoverListener;
 import hitonoriol.madsand.gui.widgets.TimedProgressBar;
 

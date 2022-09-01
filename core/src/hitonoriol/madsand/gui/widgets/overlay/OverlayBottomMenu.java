@@ -9,10 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Storage;
 import hitonoriol.madsand.dialog.GameDialog;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.MouseoverListener;
 import hitonoriol.madsand.gui.dialogs.AbilityDialog;
 import hitonoriol.madsand.gui.dialogs.BestiaryDialog;

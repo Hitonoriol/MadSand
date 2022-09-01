@@ -1,11 +1,11 @@
 package hitonoriol.madsand.lua;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategories;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.util.Utils;
 
 public class LuaUtils {

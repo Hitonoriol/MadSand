@@ -2,8 +2,8 @@ package hitonoriol.madsand.gui.dialogs;
 
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.widgets.stats.StatLabels;
 
 public class LevelupDialog extends PlayerStatDialog {

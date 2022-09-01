@@ -6,8 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Timer;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.minigames.Card;
 import hitonoriol.madsand.minigames.CardGameUI;

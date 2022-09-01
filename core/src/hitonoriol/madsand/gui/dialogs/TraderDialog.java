@@ -2,13 +2,13 @@ package hitonoriol.madsand.gui.dialogs;
 
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.npc.Trader;
 import hitonoriol.madsand.entities.quest.ProceduralQuest;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.widgets.AutoSizeTooltip;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.ItemProp;

@@ -1,7 +1,7 @@
 package hitonoriol.madsand.entities.inventory.trade;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.dialogs.SliderDialog;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.resources.Resources;

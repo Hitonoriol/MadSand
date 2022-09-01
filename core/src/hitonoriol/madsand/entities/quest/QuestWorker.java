@@ -8,13 +8,13 @@ import java.util.function.BiPredicate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Reputation;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.dialogs.QuestListDialog;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.properties.QuestList;

@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Timer;
 
 import hitonoriol.madsand.containers.Storage;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.lua.Lua;

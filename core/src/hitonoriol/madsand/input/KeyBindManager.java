@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.util.Utils;
 
 public class KeyBindManager {

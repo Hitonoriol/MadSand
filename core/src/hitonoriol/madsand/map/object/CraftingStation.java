@@ -1,7 +1,7 @@
 package hitonoriol.madsand.map.object;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.gui.Gui;
 
 public class CraftingStation extends BuiltObject {
 	public CraftingStation(CraftingStation protoObject) {

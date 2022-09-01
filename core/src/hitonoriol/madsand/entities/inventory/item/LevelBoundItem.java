@@ -1,7 +1,7 @@
 package hitonoriol.madsand.entities.inventory.item;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.gui.Gui;
 
 public abstract class LevelBoundItem extends Item {
 	public int lvl = 1;

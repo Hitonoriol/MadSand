@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Tooltip;
 import com.badlogic.gdx.scenes.scene2d.ui.TooltipManager;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
-import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.gui.Gui;
 
 public class AutoSizeTooltip extends Tooltip<Table> {
 	private float WIDTH = 200f, HEIGHT = 50f, PAD = 7.5f;

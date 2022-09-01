@@ -16,7 +16,6 @@ import org.apache.commons.lang3.mutable.MutableBoolean;
 import com.badlogic.gdx.math.Vector2;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.TimeDependent;
 import hitonoriol.madsand.containers.Line;
@@ -32,6 +31,7 @@ import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.entities.npc.Npc;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.widgets.waypoint.StaticWaypointArrow;
 import hitonoriol.madsand.gui.widgets.waypoint.WaypointArrow;
 import hitonoriol.madsand.map.object.Crop;

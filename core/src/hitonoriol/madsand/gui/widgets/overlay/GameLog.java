@@ -12,8 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiColors;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.lua.Lua;

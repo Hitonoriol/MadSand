@@ -1,4 +1,4 @@
-package hitonoriol.madsand;
+package hitonoriol.madsand.gui;
 
 import static hitonoriol.madsand.MadSand.getRenderer;
 
@@ -36,8 +36,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.MadSand.Screens;
-import hitonoriol.madsand.gui.GuiColors;
 import hitonoriol.madsand.gui.dialogs.OkDialog;
 import hitonoriol.madsand.gui.stages.CraftStage;
 import hitonoriol.madsand.gui.stages.Overlay;
@@ -153,7 +153,7 @@ public class Gui {
 		darkBackgroundSizeable.setMinWidth(0);
 	}
 
-	static void init() {
+	public static void init() {
 		initSkin();
 	}
 

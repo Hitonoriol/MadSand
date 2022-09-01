@@ -1,8 +1,8 @@
 package hitonoriol.madsand.map.object;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.dialogs.InputDialog;
 import hitonoriol.madsand.gui.widgets.overlay.GameContextMenu;
 import hitonoriol.madsand.gui.widgets.waypoint.WaypointArrow;

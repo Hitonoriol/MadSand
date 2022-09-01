@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 
-import hitonoriol.madsand.Gui;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.textgenerator.TextGenerator;
 import hitonoriol.madsand.util.TimeUtils;
 

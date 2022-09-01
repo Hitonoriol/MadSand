@@ -17,8 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 
-import hitonoriol.madsand.Gui;
 import hitonoriol.madsand.containers.PairFloat;
+import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.resources.Resources;
