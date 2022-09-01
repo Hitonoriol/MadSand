@@ -141,6 +141,10 @@ public class MadSand extends Game {
 	public static WorldRenderer getRenderer() {
 		return game.worldRenderer;
 	}
+	
+	public static float toScreen(float value) {
+		return value * game.worldRenderer.getCamZoom();
+	}
 
 	public World getWorld() {
 		return world;

@@ -1,5 +1,7 @@
 package hitonoriol.madsand;
 
+import static hitonoriol.madsand.MadSand.getRenderer;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -347,8 +349,15 @@ public class Gui {
 		return createProgressBarStyle(width, height, color, false);
 	}
 
-	public static float relativeCenterX(float aX, float aWidth, float bWidth) {
-		return (aX + (bWidth * 0.5f)) - aWidth * 0.5f;
+	/*
+	 * Horizontally center object `B` relatively to object `A` (that may be a world object, so camera's zoom may be applied)
+	 * Resulting value is the `x` coordinate to be set for object `B`
+	 */
+	public static float relativeCenterX(float aX, float aWidth, float bWidth, boolean projectedFromWorld) {
+		return (aX + aWidth * 0.5f * (projectedFromWorld ? getRenderer().getCamZoom() : 1f)) - bWidth * 0.5f;
 	}
-
+	
+	public static float relativeCenterX(float aX, float aWidth, float bWidth) {
+		return relativeCenterX(aX, aWidth, bWidth, true);
+	}
 }
