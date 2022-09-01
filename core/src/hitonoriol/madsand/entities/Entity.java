@@ -1,6 +1,5 @@
 package hitonoriol.madsand.entities;
 
-import static hitonoriol.madsand.MadSand.getStage;
 import static hitonoriol.madsand.resources.Resources.TILESIZE;
 import static hitonoriol.madsand.screens.WorldRenderer.TARGET_FRAME_DELTA;
 
@@ -36,7 +35,6 @@ import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.gui.animation.Animations;
 import hitonoriol.madsand.gui.animation.EntityAnimation;
 import hitonoriol.madsand.gui.dialogs.LootDialog;
-import hitonoriol.madsand.gui.widgets.overlay.AnimatedWorldText;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
@@ -415,7 +413,7 @@ public abstract class Entity extends MapEntity {
 
 		if (stats.hp < stats.mhp) {
 			playAnimation(Animations.heal);
-			getStage().addActor(new AnimatedWorldText(this, "[LIME]" + amt + "[]"));
+			playTextAnimation("[LIME]" + amt + "[]");
 		}
 
 		stats.hp += amt;

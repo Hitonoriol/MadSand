@@ -1,5 +1,6 @@
 package hitonoriol.madsand.map;
 
+import static hitonoriol.madsand.MadSand.getRenderer;
 import static hitonoriol.madsand.MadSand.getStage;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -11,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
-import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.containers.PairFloat;
 import hitonoriol.madsand.entities.Damage;
@@ -32,7 +32,7 @@ public abstract class MapEntity implements DynamicallyCastable<MapEntity> {
 
 	public void acceptDamage(Damage damage) {
 		damage(damage.getValue());
-		getStage().addActor(new AnimatedWorldText(this, damage.getValueString()));
+		playTextAnimation(damage.getValueString());
 	}
 
 	public abstract String getName();
@@ -52,7 +52,11 @@ public abstract class MapEntity implements DynamicallyCastable<MapEntity> {
 
 	public void playAnimation(TextureRegion[] animation) {
 		Pair worldPos = getPosition().toScreen();
-		MadSand.getRenderer().queueAnimation(new WorldAnimation(animation).setCoords(worldPos.x, worldPos.y));
+		getRenderer().queueAnimation(new WorldAnimation(animation).setCoords(worldPos.x, worldPos.y));
+	}
+	
+	public void playTextAnimation(String text) {
+		getStage().addActor(new AnimatedWorldText(this, text));
 	}
 
 	protected abstract void playDamageAnimation();
