@@ -1,5 +1,6 @@
 package hitonoriol.madsand.entities;
 
+import static hitonoriol.madsand.MadSand.getStage;
 import static hitonoriol.madsand.resources.Resources.TILESIZE;
 import static hitonoriol.madsand.screens.WorldRenderer.TARGET_FRAME_DELTA;
 
@@ -35,6 +36,7 @@ import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.gui.animation.Animations;
 import hitonoriol.madsand.gui.animation.EntityAnimation;
 import hitonoriol.madsand.gui.dialogs.LootDialog;
+import hitonoriol.madsand.gui.widgets.overlay.AnimatedWorldText;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
@@ -133,7 +135,7 @@ public abstract class Entity extends MapEntity {
 		setSprites(s, s, s, s);
 	}
 
-	@JsonIgnore
+	@Override
 	public TextureRegion getSprite() {
 		return sprites[stats.look.baseOrdinal()];
 	}
@@ -361,7 +363,7 @@ public abstract class Entity extends MapEntity {
 
 		return !(obj.isCollisionMask() || obj.nocollide || obj.equals(Map.nullObject));
 	}
-	
+
 	public boolean colliding(Direction direction) {
 		return isObstacle(new Pair(x, y).addDirection(direction));
 	}
@@ -411,8 +413,10 @@ public abstract class Entity extends MapEntity {
 			return;
 		}
 
-		if (stats.hp < stats.mhp)
+		if (stats.hp < stats.mhp) {
 			playAnimation(Animations.heal);
+			getStage().addActor(new AnimatedWorldText(this, "[LIME]" + amt + "[]"));
+		}
 
 		stats.hp += amt;
 		stats.check();
@@ -550,6 +554,11 @@ public abstract class Entity extends MapEntity {
 		return screenPosition;
 	}
 
+	@Override
+	public PairFloat getVisualPosition() {
+		return screenPosition;
+	}
+
 	public float worldX() {
 		return screenPosition.x;
 	}
@@ -565,7 +574,7 @@ public abstract class Entity extends MapEntity {
 	public boolean isMoving() {
 		return !movementQueue.isEmpty();
 	}
-	
+
 	public boolean hasQueuedMovement() {
 		return movementQueue.size() > 1;
 	}
@@ -586,7 +595,7 @@ public abstract class Entity extends MapEntity {
 	protected Movement currentMovement() {
 		return movementQueue.peek();
 	}
-	
+
 	protected Queue<Movement> getMovementQueue() {
 		return movementQueue;
 	}
@@ -667,7 +676,7 @@ public abstract class Entity extends MapEntity {
 
 		look(dir);
 	}
-	
+
 	protected void look(Direction dir) {
 		stats.look = dir;
 	}
@@ -785,11 +794,6 @@ public abstract class Entity extends MapEntity {
 	}
 
 	@JsonIgnore
-	public float getSpriteWidth() {
-		return getSprite().getRegionWidth();
-	}
-
-	@JsonIgnore
 	public String getHealthState(int percent) {
 		if (percent > 75)
 			return "full";
@@ -832,7 +836,7 @@ public abstract class Entity extends MapEntity {
 				getLvl(),
 				stats.hp, stats.mhp);
 	}
-	
+
 	protected final String debugName() {
 		return String.format("%s (%d)", getName(), uid());
 	}
