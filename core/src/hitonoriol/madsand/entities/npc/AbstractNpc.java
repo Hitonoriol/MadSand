@@ -376,7 +376,7 @@ public abstract class AbstractNpc extends Entity {
 			Mouse.refreshTooltip();
 			MadSand.notice("You kill %s! [+%d exp]",
 					getName(),
-					(int) player.addExp(rewardExp * Math.sqrt(getLvl() * 0.05)));
+					(int) player.addExp(rewardExp * (1f + Math.sqrt(getLvl() * 0.05))));
 			player.getReputation().change(stats().faction, Reputation.KILL_PENALTY);
 
 			if (player.addToKillCount(id)) // If killed for the first time
