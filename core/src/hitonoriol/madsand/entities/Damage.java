@@ -67,8 +67,10 @@ public class Damage {
 	}
 
 	public String getValueString() {
+		if (missed())
+			return "Miss";
 		if (!critical)
-			return Utils.str(value);
+			return "[WARNING]" + value + "[]";
 		else
 			return "[RED]" + value + "[] [SALMON](critical)[]";
 	}
