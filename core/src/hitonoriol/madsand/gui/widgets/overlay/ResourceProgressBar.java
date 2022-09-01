@@ -126,11 +126,12 @@ public class ResourceProgressBar extends TimedProgressBar {
 
 		Player player = MadSand.player();
 		Vector3 coords = new Vector3(player.x * Resources.TILESIZE, player.y * Resources.TILESIZE, 0);
+		final float playerWidth = player.getSprite().getRegionWidth();
 
 		MadSand.getCamera().project(coords);
 		coords.y -= YPADDING;
-		super.setPosition(Gui.relativeCenterX(coords.x, getWidth(), player.getSpriteWidth()), coords.y);
-		progressLabel.setPosition(Gui.relativeCenterX(coords.x, progressLabel.getWidth(), player.getSpriteWidth()),
+		super.setPosition(Gui.relativeCenterX(coords.x, playerWidth, getWidth()), coords.y);
+		progressLabel.setPosition(Gui.relativeCenterX(coords.x, playerWidth, progressLabel.getWidth()),
 				coords.y - LABEL_PADDING);
 		Gui.unfocusGame();
 		preCalculateGathering();
