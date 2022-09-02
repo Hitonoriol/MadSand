@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
@@ -22,69 +21,42 @@ import hitonoriol.madsand.gui.dialogs.SettingsDialog;
 import hitonoriol.madsand.properties.Globals;
 
 public class MainMenuStage extends Stage {
+	private static final float BUTTON_WIDTH = 260, BUTTON_HEIGHT = 60;
+	private static float TITLE_PADBOTTOM = 50;
 
-	Skin skin;
+	private Table menuTable = new Table();
+	private Table resumeTable = new Table();
 
-	final float PAD = 4;
-	final float BUTTON_WIDTH = 260;
-	private static float TITLE_XPOS = 0, TITLE_YPOS = 0;
-	static float TITLE_PADBOTTOM = 50;
-
-	Table menuTable;
-	Table resumeTable;
-
-	Label titleLabel;
-	TextButton newGameButton;
-	public TextButton resumeButton;
-	public TextButton saveGameButton;
-	TextButton settingsButton;
-	TextButton loadGameButton;
-	TextButton exitButton;
-	Label versionLabel;
+	private Label titleLabel = new Label("MadSand", Gui.skin);
+	private TextButton newGameButton = new TextButton("New game", Gui.skin);
+	private TextButton resumeButton = new TextButton("Resume game", Gui.skin);
+	private TextButton saveGameButton = new TextButton("Save game", Gui.skin);
+	private TextButton settingsButton = new TextButton("Settings", Gui.skin);
+	private TextButton loadGameButton = new TextButton("Load game", Gui.skin);
+	private TextButton exitButton = new TextButton("Exit", Gui.skin);
+	private Label versionLabel = new Label(getVersion(), Gui.skin);
 
 	public MainMenuStage() {
 		super(Gui.viewport());
-		skin = Gui.skin;
-
-		newGameButton = new TextButton("New game", skin);
-		resumeButton = new TextButton("Resume game", skin);
-		saveGameButton = new TextButton("Save game", skin);
-		settingsButton = new TextButton("Settings", skin);
-		exitButton = new TextButton("Exit", skin);
-		loadGameButton = new TextButton("Load game", skin);
-
-		resumeTable = new Table();
-		resumeTable.add(resumeButton).width(BUTTON_WIDTH / 2);
-		resumeTable.add(saveGameButton).width(BUTTON_WIDTH / 2);
+		resumeTable.defaults().size(BUTTON_WIDTH / 2, BUTTON_HEIGHT);
+		resumeTable.add(resumeButton);
+		resumeTable.add(saveGameButton);
 		resumeTable.setVisible(false);
 
-		titleLabel = new Label("MadSand", skin);
-
-		if (TITLE_XPOS == 0) {
-			TITLE_XPOS = Gdx.graphics.getWidth() / 2 - titleLabel.getWidth() / 2.0F;
-			TITLE_YPOS = Gdx.graphics.getHeight() / 2 + 175;
-		}
-
-		titleLabel.setPosition(TITLE_XPOS, TITLE_YPOS);
 		Gui.setFontSize(titleLabel, Gui.FONT_XL);
-
-		versionLabel = new Label(getVersion(), skin);
+		titleLabel.setAlignment(Align.center);
 		versionLabel.setAlignment(Align.center);
 
-		menuTable = new Table();
 		menuTable.setFillParent(true);
 		menuTable.setBackground(GuiSkin.darkBackground);
-		menuTable.defaults().size(BUTTON_WIDTH, Gdx.graphics.getHeight() / 12f);
+		menuTable.defaults().size(BUTTON_WIDTH, BUTTON_HEIGHT);
 		menuTable.add(titleLabel).padBottom(TITLE_PADBOTTOM).row();
-
 		menuTable.add(resumeTable).row();
-
 		menuTable.add(newGameButton).row();
 		menuTable.add(loadGameButton).row();
 		menuTable.add(settingsButton).row();
 		menuTable.add(exitButton).row();
 		menuTable.add(versionLabel).padTop(20);
-
 		super.addActor(menuTable);
 		initButtonListeners();
 	}
