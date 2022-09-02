@@ -52,10 +52,10 @@ public class Prefs {
 				break;
 			++modeIdx;
 		}
-		
+
 		if (modeIdx == getDisplayModes().length)
 			return modeIdx - 1;
-		
+
 		return modeIdx;
 	}
 
@@ -74,7 +74,7 @@ public class Prefs {
 	public static Prefs values() {
 		return values;
 	}
-	
+
 	public static boolean actionButtonEnabled() {
 		return values.enableActionBtn;
 	}
@@ -97,6 +97,30 @@ public class Prefs {
 			mapper.writeValue(new File(PREFS_FILE), values);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	public static class DisplayModeDescriptor {
+		public DisplayMode mode;
+
+		public DisplayModeDescriptor(DisplayMode mode) {
+			this.mode = mode;
+		}
+
+		@Override
+		public String toString() {
+			return mode.width + "x" + mode.height + "@" + mode.refreshRate;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (obj == this)
+				return true;
+			
+			if (obj == null || !(obj instanceof DisplayModeDescriptor))
+				return true;
+			
+			return mode.equals(((DisplayModeDescriptor) obj).mode);
 		}
 	}
 }

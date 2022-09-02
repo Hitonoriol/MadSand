@@ -1,11 +1,13 @@
 package hitonoriol.madsand.gui.dialogs;
 
+import java.util.Arrays;
+
 import com.badlogic.gdx.Graphics.DisplayMode;
-import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
@@ -15,17 +17,18 @@ import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.widgets.AutoCheckBox;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
+import hitonoriol.madsand.gui.widgets.AutoFocusSelectBox;
 import hitonoriol.madsand.properties.Prefs;
+import hitonoriol.madsand.properties.Prefs.DisplayModeDescriptor;
 import hitonoriol.madsand.util.TimeUtils;
 
 public class SettingsDialog extends GameDialog {
 
 	Prefs prefs = Prefs.values();
 
-	DisplayMode displayModes[] = prefs.getDisplayModes();
 	int curDisplayMode = prefs.getCurDisplayModeIdx();
 
-	TextButton resolutionBtn = new TextButton("", Gui.skin);
+	SelectBox<DisplayModeDescriptor> resolutionSelector = new AutoFocusSelectBox<>();
 	TextButton applyBtn = new TextButton("Apply", Gui.skin);
 
 	Table buttonTbl = new Table(Gui.skin);
@@ -51,8 +54,8 @@ public class SettingsDialog extends GameDialog {
 		super.skipLine();
 
 		addTitle("Video");
-		addSetting("Resolution", resolutionBtn, () -> nextDisplayMode());
-		Gui.setClickAction(resolutionBtn, Buttons.RIGHT, () -> previousDisplayMode());
+		prepareResolutionList();
+		addSetting("Resolution", resolutionSelector).width(Gui.BTN_WIDTH);
 		addSetting("Fullscreen", new AutoCheckBox(prefs.fullscreen, checked -> prefs.fullscreen = checked));
 
 		addTitle("Gameplay");
@@ -62,12 +65,21 @@ public class SettingsDialog extends GameDialog {
 		addSetting("Realtime mechanics", new AutoCheckBox(prefs.enableRealtimeMechanics,
 				checked -> prefs.enableRealtimeMechanics = checked));
 
-		refreshResolutionBtn();
-
 		super.add(applyBtn).size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT).row();
 		super.addCloseButton();
 
 		Gui.setAction(applyBtn, () -> applySettings());
+	}
+
+	private void prepareResolutionList() {
+		resolutionSelector.setAlignment(Align.center);
+		resolutionSelector.setMaxListCount(10);
+		resolutionSelector.getList().setAlignment(Align.center);
+		resolutionSelector.setItems(Arrays.stream(prefs.getDisplayModes())
+				.filter(mode -> mode.width >= Prefs.MIN_SCREEN_WIDTH)
+				.map(mode -> new DisplayModeDescriptor(mode))
+				.toArray(DisplayModeDescriptor[]::new));
+		resolutionSelector.setSelected(new DisplayModeDescriptor(prefs.getCurDisplayMode()));
 	}
 
 	private void addTitle(String text) {
@@ -76,6 +88,7 @@ public class SettingsDialog extends GameDialog {
 				.row();
 	}
 
+	@SuppressWarnings("unused")
 	private void addSetting(String name, Button button, Runnable action) {
 		addSetting(name, button).width(Gui.BTN_WIDTH);
 		Gui.setClickAction(button, action);
@@ -96,34 +109,11 @@ public class SettingsDialog extends GameDialog {
 	}
 
 	private void applySettings() {
-		DisplayMode curMode = displayModes[curDisplayMode];
+		DisplayMode curMode = resolutionSelector.getSelected().mode;
 		prefs.screenWidth = curMode.width;
 		prefs.screenHeight = curMode.height;
 		prefs.apply();
 		Prefs.savePrefs();
 		TimeUtils.scheduleTask(() -> centerOnStage(true), 0.2f);
-	}
-
-	private void switchDisplayMode(boolean next) {
-		curDisplayMode = Math.floorMod(curDisplayMode + (next ? 1 : -1), displayModes.length);
-		DisplayMode mode = displayModes[curDisplayMode];
-
-		if (mode.width < Prefs.MIN_SCREEN_WIDTH)
-			switchDisplayMode(next);
-
-		refreshResolutionBtn();
-	}
-
-	private void nextDisplayMode() {
-		switchDisplayMode(true);
-	}
-
-	private void previousDisplayMode() {
-		switchDisplayMode(false);
-	}
-
-	private void refreshResolutionBtn() {
-		DisplayMode curMode = displayModes[curDisplayMode];
-		resolutionBtn.setText(curMode.width + "x" + curMode.height + "@" + curMode.refreshRate);
 	}
 }
