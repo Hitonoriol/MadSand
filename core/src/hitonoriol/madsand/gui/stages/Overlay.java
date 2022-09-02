@@ -24,6 +24,7 @@ import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.widgets.gametooltip.GameTooltip;
 import hitonoriol.madsand.gui.widgets.overlay.ActionButton;
 import hitonoriol.madsand.gui.widgets.overlay.EquipmentSidebar;
@@ -134,7 +135,7 @@ public class Overlay extends Stage {
 
 	private void initOverlayTable() {
 		topTable.setSize(Gdx.graphics.getWidth(), StatProgressBar.HEIGHT);
-		topTable.setBackground(Gui.darkBackgroundSizeable);
+		topTable.setBackground(GuiSkin.darkBackgroundSizeable);
 		topTable.align(Align.left);
 
 		expBar = StatProgressBar.createLevelBar();

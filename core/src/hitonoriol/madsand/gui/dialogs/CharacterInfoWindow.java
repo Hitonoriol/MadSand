@@ -16,6 +16,7 @@ import hitonoriol.madsand.entities.Reputation;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.entities.skill.SkillContainer;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.gui.widgets.stats.StatLabels;
 import hitonoriol.madsand.gui.widgets.stats.StatProgressBar;
@@ -31,8 +32,8 @@ public class CharacterInfoWindow extends GameDialog {
 	final static float LINE_PAD = 5;
 	final static float BAR_WIDTH = 150;
 	final static float BAR_HEIGHT = 19;
-	static ProgressBarStyle skillStyle = Gui.createProgressBarStyle(BAR_WIDTH, BAR_HEIGHT, Color.LIME);
-	static ProgressBarStyle repStyle = Gui.createProgressBarStyle(BAR_WIDTH, BAR_HEIGHT, Color.ORANGE);
+	static ProgressBarStyle skillStyle = GuiSkin.createProgressBarStyle(BAR_WIDTH, BAR_HEIGHT, Color.LIME);
+	static ProgressBarStyle repStyle = GuiSkin.createProgressBarStyle(BAR_WIDTH, BAR_HEIGHT, Color.ORANGE);
 
 	StatLabels statLabels;
 	Skin skin = Gui.skin;
@@ -44,7 +45,7 @@ public class CharacterInfoWindow extends GameDialog {
 
 	public void createDialog() {
 		Table scrollTable = new Table();
-		scrollTable.defaults().width(Gui.DEF_LABEL_WIDTH);
+		scrollTable.defaults().width(Gui.DEFAULT_WIDTH);
 		AutoFocusScrollPane dialogScroll = new AutoFocusScrollPane(scrollTable);
 		Player player = MadSand.player();
 		PlayerStats stats = player.stats;
@@ -57,7 +58,7 @@ public class CharacterInfoWindow extends GameDialog {
 
 		// Dialog Title (Player's name & Level progressbar)
 		add(nameLbl).row();
-		setBackground(Gui.darkBackground);
+		setBackground(GuiSkin.darkBackground);
 		add().row();
 		statLabels.refreshStatLabels();
 		add(StatProgressBar.createLevelBar()
@@ -65,7 +66,7 @@ public class CharacterInfoWindow extends GameDialog {
 				.setSkill(player.stats.skills.get(Skill.Level))
 				.setProgressSize(BAR_WIDTH * 1.75f, BAR_HEIGHT))
 				.row();
-		add().width(Gui.DEF_LABEL_WIDTH).row();
+		add().width(Gui.DEFAULT_WIDTH).row();
 
 		// Stat list
 		addTitle(scrollTable, "Stats:");
@@ -99,10 +100,10 @@ public class CharacterInfoWindow extends GameDialog {
 
 	private void addTitle(Table table, String text) {
 		Label label = new Label(text, Gui.skin);
-		label.setStyle(Gui.getLabelStyle(Gui.FONT_M));
+		label.setStyle(GuiSkin.getLabelStyle(Gui.FONT_M));
 		table.add(new Label("", Gui.skin)).row();
 		table.add(label)
-				.width(Gui.DEF_LABEL_WIDTH)
+				.width(Gui.DEFAULT_WIDTH)
 				.padLeft(headerLeftPadding)
 				.padBottom(headerBottomPadding).row();
 	}

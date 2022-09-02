@@ -15,6 +15,7 @@ import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.dialogs.CreateWorldDialog;
 import hitonoriol.madsand.gui.dialogs.LoadWorldDialog;
 import hitonoriol.madsand.gui.dialogs.SettingsDialog;
@@ -72,19 +73,19 @@ public class MainMenuStage extends Stage {
 
 		menuTable = new Table();
 		menuTable.setFillParent(true);
-		menuTable.setBackground(Gui.darkBackground);
+		menuTable.setBackground(GuiSkin.darkBackground);
+		menuTable.defaults().size(BUTTON_WIDTH, Gdx.graphics.getHeight() / 12f);
 		menuTable.add(titleLabel).padBottom(TITLE_PADBOTTOM).row();
 
-		menuTable.add(resumeTable).width(BUTTON_WIDTH).row();
+		menuTable.add(resumeTable).row();
 
-		menuTable.add(newGameButton).width(BUTTON_WIDTH).row();
-		menuTable.add(loadGameButton).width(BUTTON_WIDTH).row();
-		menuTable.add(settingsButton).width(BUTTON_WIDTH).row();
-		menuTable.add(exitButton).width(BUTTON_WIDTH).row();
-		menuTable.add(versionLabel).padTop(20).width(BUTTON_WIDTH);
+		menuTable.add(newGameButton).row();
+		menuTable.add(loadGameButton).row();
+		menuTable.add(settingsButton).row();
+		menuTable.add(exitButton).row();
+		menuTable.add(versionLabel).padTop(20);
 
 		super.addActor(menuTable);
-
 		initButtonListeners();
 	}
 

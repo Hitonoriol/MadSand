@@ -9,6 +9,7 @@ public class GuiColors extends Color {
 	public static final Color WARNING = new Color(0xff9185ff);
 	public static final Color NOTICE = new Color(0x16e1eaff);
 	public static final Color NOTICE_ALT = new Color(0x58ffb1ff);
+	public static final Color BUTTON_DISABLED = new Color(0x3f3f3fdc);
 
 	static {
 		Colors.put("WARNING", WARNING);

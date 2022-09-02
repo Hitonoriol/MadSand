@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Container;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.minigames.CardGameUI;
 import hitonoriol.madsand.util.TimeUtils;
@@ -60,9 +61,9 @@ public class FarkleUI extends CardGameUI {
 
 		clearScoreTable();
 		scoreTable.align(Align.topLeft);
-		scoreTable.setBackground(Gui.darkBackgroundSizeable);
-		binTable.setBackground(Gui.darkBackgroundSizeable);
-		handTable.setBackground(Gui.darkBackgroundSizeable);
+		scoreTable.setBackground(GuiSkin.darkBackgroundSizeable);
+		binTable.setBackground(GuiSkin.darkBackgroundSizeable);
+		handTable.setBackground(GuiSkin.darkBackgroundSizeable);
 		add(betLabel).row();
 		addButton(betButton).row();
 		addButton(shuffleButton).row();
@@ -224,7 +225,7 @@ public class FarkleUI extends CardGameUI {
 
 	private static Table createCombinationsTable() {
 		Table table = new Table(Gui.skin), combTable = new Table(Gui.skin);
-		table.setBackground(Gui.darkBackgroundSizeable);
+		table.setBackground(GuiSkin.darkBackgroundSizeable);
 		table.align(Align.topLeft);
 		table.add("Combinations:").row();
 		combTable.defaults().align(Align.left);

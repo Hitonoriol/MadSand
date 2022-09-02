@@ -13,6 +13,7 @@ import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 
@@ -51,7 +52,7 @@ public class InventoryUI extends GameDialog {
 		header = new Label("", Gui.skin);
 		Gui.setFontSize(header, Gui.FONT_L);
 
-		invTable.setBackground(Gui.darkBackground);
+		invTable.setBackground(GuiSkin.darkBackground);
 		invTable.align(Align.topLeft);
 		invTable.setWidth(WIDTH);
 		invScrollTable.add(invTable);
@@ -74,7 +75,7 @@ public class InventoryUI extends GameDialog {
 		invContainer.setFillParent(true);
 		
 		super.add(invContainer);
-		super.setBackground(Gui.transparency);
+		super.setBackground(GuiSkin.transparency);
 
 		items = 0;
 		Gui.setAction(craftMenuButton, () -> Gui.openCraftMenu(0));

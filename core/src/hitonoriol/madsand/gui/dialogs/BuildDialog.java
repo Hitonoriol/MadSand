@@ -19,6 +19,7 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.ItemUI;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.object.MapObject;
@@ -41,7 +42,7 @@ public class BuildDialog extends GameDialog {
 		super.setTitle("Build menu");
 		super.add().padTop(15).row();
 		super.add(unlockProgressLabel).width(WIDTH).row();
-		buildTable.setBackground(Gui.darkBackgroundSizeable);
+		buildTable.setBackground(GuiSkin.darkBackgroundSizeable);
 		BuildDialogEntry buildEntry;
 		Player player = MadSand.player();
 		for (Entry<Integer, String> object : ObjectProp.buildRecipes.entrySet()) {
@@ -109,7 +110,7 @@ class BuildDialogEntry extends Group {
 			}
 
 			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-				container.setBackground(Gui.transparency);
+				container.setBackground(GuiSkin.transparency);
 			}
 		});
 

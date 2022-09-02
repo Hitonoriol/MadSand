@@ -47,7 +47,6 @@ public class MadSand extends Game {
 		Gdx.graphics.setContinuousRendering(false);
 		Timer.instance().start();
 		Resources.loadAll();
-		Gui.init();
 		initScreens();
 		Keyboard.initListener();
 		Mouse.initListener();

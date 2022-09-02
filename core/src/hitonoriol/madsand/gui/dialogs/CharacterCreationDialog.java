@@ -1,5 +1,8 @@
 package hitonoriol.madsand.gui.dialogs;
 
+import static hitonoriol.madsand.gui.Gui.BTN_HEIGHT;
+import static hitonoriol.madsand.gui.Gui.DEFAULT_WIDTH;
+
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import hitonoriol.madsand.MadSand;
@@ -25,14 +28,14 @@ public class CharacterCreationDialog extends PlayerStatDialog {
 	}
 
 	void createCharDialog() {
-		float width = Gui.DEF_LABEL_WIDTH;
 		rollStats();
 		restoreOnChange = true;
 
 		TextButton statRollBtn = new TextButton("Reroll", Gui.skin);
 		TextButton createCharBtn = new TextButton("Create", Gui.skin);
-		add(statRollBtn).width(width).row();
-		add(createCharBtn).width(width).row();
+		defaults().size(DEFAULT_WIDTH, BTN_HEIGHT * 2);
+		add(statRollBtn).row();
+		add(createCharBtn).row();
 
 		Gui.setAction(createCharBtn, () -> {
 			if (hasUnassignedPoints())

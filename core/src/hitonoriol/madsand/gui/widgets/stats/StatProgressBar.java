@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.entities.skill.SkillValue;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.util.Utils;
 
 public class StatProgressBar extends Group {
@@ -115,7 +116,7 @@ public class StatProgressBar extends Group {
 	}
 
 	public StatProgressBar setStyle(Color color) {
-		ProgressBar.ProgressBarStyle style = Gui.createProgressBarStyle(WIDTH, HEIGHT - 5, color);
+		ProgressBar.ProgressBarStyle style = GuiSkin.createProgressBarStyle(WIDTH, HEIGHT - 5, color);
 		progressBar.setStyle(style);
 		return this;
 	}

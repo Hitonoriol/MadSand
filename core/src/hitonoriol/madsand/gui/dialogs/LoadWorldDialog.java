@@ -19,7 +19,7 @@ public class LoadWorldDialog extends GameDialog {
 	float PAD_TITLE = 15;
 	float PAD_BTN = 5;
 
-	float BTN_WIDTH = Gui.DEF_LABEL_WIDTH;
+	float BTN_WIDTH = Gui.DEFAULT_WIDTH;
 	float BTN_HEIGHT = 40;
 
 	Skin skin = Gui.skin;
@@ -32,9 +32,10 @@ public class LoadWorldDialog extends GameDialog {
 	}
 
 	void createDialog() {
-		float width = Gui.DEF_LABEL_WIDTH;
+		float width = Gui.DEFAULT_WIDTH;
 
 		scrollTable = new Table();
+		scrollTable.defaults().size(BTN_WIDTH, BTN_HEIGHT);
 		scroll = new AutoFocusScrollPane(scrollTable);
 
 		super.setTitle("\nLoad Game\n");
@@ -58,7 +59,7 @@ public class LoadWorldDialog extends GameDialog {
 			loadButton = new TextButton(worldName, skin);
 			delButton = new TextButton("X", skin);
 
-			scrollTable.add(loadButton).pad(PAD_BTN).size(BTN_WIDTH, BTN_HEIGHT);
+			scrollTable.add(loadButton).pad(PAD_BTN);
 			scrollTable.add(delButton).size(BTN_HEIGHT).padRight(PAD_BTN).row();
 
 			Gui.setAction(loadButton, () -> {
@@ -83,6 +84,6 @@ public class LoadWorldDialog extends GameDialog {
 		}
 
 		if (worldDirs.length == 0)
-			scrollTable.add(new TextButton("No worlds to load", skin)).width(BTN_WIDTH).row();
+			scrollTable.add(new TextButton("No worlds to load", skin)).row();
 	}
 }

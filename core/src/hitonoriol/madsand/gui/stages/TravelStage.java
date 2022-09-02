@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.MouseoverListener;
 import hitonoriol.madsand.gui.widgets.TimedProgressBar;
 
@@ -40,7 +41,7 @@ public class TravelStage extends Stage {
 		travelContainer.add(travelLabel).align(Align.center).size(WIDTH, ENTRY_HEIGHT).row();
 		travelContainer.add(travelProgressBar).align(Align.center).size(WIDTH, ENTRY_HEIGHT).row();
 
-		travelContainer.setBackground(Gui.darkBackgroundSizeable);
+		travelContainer.setBackground(GuiSkin.darkBackgroundSizeable);
 
 		travelContainer.setFillParent(true);
 

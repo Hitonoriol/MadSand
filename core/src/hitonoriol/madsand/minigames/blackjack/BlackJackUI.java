@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Timer;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.minigames.Card;
 import hitonoriol.madsand.minigames.CardGameUI;
@@ -40,8 +41,8 @@ public class BlackJackUI extends CardGameUI {
 		super.add("Your hand").padBottom(PAD).row();
 		super.add(playerCards).size(GAME_WIDTH, GAME_HEIGHT).padBottom(PAD).row();
 
-		playerCards.setBackground(Gui.darkBackgroundSizeable);
-		dealerCards.setBackground(Gui.darkBackgroundSizeable);
+		playerCards.setBackground(GuiSkin.darkBackgroundSizeable);
+		dealerCards.setBackground(GuiSkin.darkBackgroundSizeable);
 
 		buttonTable.defaults().size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT).pad(5);
 		buttonTable.add(hitButton);

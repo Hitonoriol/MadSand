@@ -13,6 +13,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Storage;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.MouseoverListener;
 import hitonoriol.madsand.gui.dialogs.AbilityDialog;
 import hitonoriol.madsand.gui.dialogs.BestiaryDialog;
@@ -47,7 +48,7 @@ public class OverlayBottomMenu extends Table {
 		addButton("Land", Keys.L, () -> new LandDialog(MadSand.world().getLocation()));
 		addButton("Waypoints", Keys.O, () -> new WaypointDialog());
 
-		container.setBackground(new NinePatchDrawable(Gui.darkBackgroundSizeable));
+		container.setBackground(new NinePatchDrawable(GuiSkin.darkBackgroundSizeable));
 
 		super.add(container).size(Gdx.graphics.getWidth(), HEIGHT + BUTTON_PADDING * 2);
 		container.align(Align.bottomLeft);

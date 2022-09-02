@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.minigames.Card;
 import hitonoriol.madsand.minigames.CardGameUI;
@@ -50,7 +51,7 @@ public class VideoPokerUI extends CardGameUI {
 		super.addCloseButton();
 
 		combTable.align(Align.center);
-		cards.setBackground(Gui.darkBackgroundSizeable);
+		cards.setBackground(GuiSkin.darkBackgroundSizeable);
 		cards.defaults().align(Align.center);
 		drawButton.setVisible(false);
 		setBetText(0);
@@ -129,7 +130,7 @@ public class VideoPokerUI extends CardGameUI {
 		combTable.pad(PAD);
 		combTable.add("Combination multipliers:").align(Align.center).colspan(4).row();
 		Gui.skipLine(combTable);
-		combTable.setBackground(Gui.darkBackgroundSizeable);
+		combTable.setBackground(GuiSkin.darkBackgroundSizeable);
 		int opposite = Combination.COMBINATIONS / 2;
 		Combination combinations[] = Combination.values();
 		Cell<Label> lastCell;

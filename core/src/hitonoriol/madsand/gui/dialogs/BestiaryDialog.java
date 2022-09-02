@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.properties.NpcContainer;
 import hitonoriol.madsand.properties.NpcProp;
@@ -96,7 +97,7 @@ public class BestiaryDialog extends GameDialog {
 
 		entry.add(bottomLabel).row();
 
-		entry.setBackground(Gui.darkBackgroundSizeable);
+		entry.setBackground(GuiSkin.darkBackgroundSizeable);
 		return entry;
 	}
 

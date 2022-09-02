@@ -29,6 +29,7 @@ import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.widgets.TimedProgressBar;
 import hitonoriol.madsand.map.FishingSpot;
 import hitonoriol.madsand.resources.Resources;
@@ -43,7 +44,7 @@ public class FishingUI extends GameDialog {
 	static TextureRegion fishTx = Resources.getTexture(resPath + "fish");
 	static TextureRegion bobberTx = Resources.getTexture(resPath + "bobber");
 	static NinePatchDrawable backgroundTx = Resources.loadNinePatch(resPath + "bg");
-	static ProgressBar.ProgressBarStyle barStyle = Gui.createProgressBarStyle(BAR_WIDTH, BAR_HEIGHT, Color.LIME, true);
+	static ProgressBar.ProgressBarStyle barStyle = GuiSkin.createProgressBarStyle(BAR_WIDTH, BAR_HEIGHT, Color.LIME, true);
 
 	int FISH_OFFSET_MAX = 200;
 	int FISH_OFFSET_MIN = 30;

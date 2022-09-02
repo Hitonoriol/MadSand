@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.GuiSkin;
 
 public class DeathStage extends Stage {
 	Label titleLabel, deathMsgLabel;
@@ -26,11 +27,11 @@ public class DeathStage extends Stage {
 		Gui.setFontSize(deathMsgLabel, 19);
 		titleLabel.setAlignment(Align.center);
 
-		container.add(titleLabel).align(Align.center).width(Gui.DEF_LABEL_WIDTH).padBottom(30f).row();
+		container.add(titleLabel).align(Align.center).width(Gui.DEFAULT_WIDTH).padBottom(30f).row();
 		container.add(deathMsgLabel).padBottom(75).row();
 		container.add(respawnButton).size(Gui.BTN_WIDTH * SIZE_COEF, Gui.BTN_HEIGHT * SIZE_COEF).row();
 		container.setFillParent(true);
-		container.setBackground(Gui.darkBackground);
+		container.setBackground(GuiSkin.darkBackground);
 		super.addActor(container);
 
 		Gui.setAction(respawnButton, () -> {

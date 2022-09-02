@@ -41,7 +41,7 @@ public class PlayerStatDialog extends GameDialog {
 	}
 
 	private void init() {
-		float width = Gui.DEF_LABEL_WIDTH;
+		float width = Gui.DEFAULT_WIDTH;
 
 		Label title = super.getTitleLabel();
 
@@ -64,7 +64,7 @@ public class PlayerStatDialog extends GameDialog {
 
 	private float BUTTON_WIDTH = 15, BUTTON_PADDING = 4;
 	private float ENTRY_HEIGHT = 15;
-	private float LABEL_WIDTH = Gui.DEF_LABEL_WIDTH - ((BUTTON_WIDTH + BUTTON_PADDING) * 2);
+	private float LABEL_WIDTH = Gui.DEFAULT_WIDTH - ((BUTTON_WIDTH + BUTTON_PADDING) * 2);
 
 	private void addStatEntry(StatLabels.StatLabel label) {
 		Stat stat = label.stat;

@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.resources.Resources;
@@ -249,8 +250,8 @@ public class GameDialog extends Dialog {
 	protected final void makeBordered() {
 		clear();
 		dialogContainer.clear();
-		setBackground(Gui.getColorDrawable(Color.DARK_GRAY));
-		dialogContainer.setBackground(Gui.getColorDrawable(Color.LIGHT_GRAY));
+		setBackground(GuiSkin.getColorDrawable(Color.DARK_GRAY));
+		dialogContainer.setBackground(GuiSkin.getColorDrawable(Color.LIGHT_GRAY));
 		add(dialogContainer).pad(BORDER_PAD).padTop(TITLE_PAD);
 		dialogContainer.pad(BORDER_PAD);
 		bordered = true;

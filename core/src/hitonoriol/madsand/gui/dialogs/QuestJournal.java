@@ -14,6 +14,7 @@ import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.map.Map;
@@ -55,7 +56,7 @@ public class QuestJournal extends GameDialog {
 		emptyJournalLabel = createTitle("Your journal is empty");
 
 		questTable = new Table();
-		questTable.setBackground(Gui.darkBackgroundSizeable);
+		questTable.setBackground(GuiSkin.darkBackgroundSizeable);
 		questTable.align(Align.top);
 
 		questScroll = new AutoFocusScrollPane(questTable);

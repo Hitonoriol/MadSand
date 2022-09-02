@@ -19,6 +19,7 @@ import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.gui.widgets.itembutton.CraftButton;
 import hitonoriol.madsand.properties.ItemProp;
@@ -107,7 +108,7 @@ public class CraftStage extends Stage {
 		scroll.addAction(Actions.alpha(0));
 		scroll.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-		containerTable.setBackground(Gui.darkBackgroundSizeable);
+		containerTable.setBackground(GuiSkin.darkBackgroundSizeable);
 		containerTable.setFillParent(true);
 		containerTable.add(titleLabel).align(Align.center).row();
 
@@ -136,7 +137,7 @@ public class CraftStage extends Stage {
 				craftStationId == 0 ? () -> MadSand.switchScreen(Screens.Game) : () -> MadSand.reset());
 	}
 
-	private final static Drawable entryBg = Gui.getColorDrawable(new Color(0, 0, 0, 0.2f));
+	private final static Drawable entryBg = GuiSkin.getColorDrawable(new Color(0, 0, 0, 0.2f));
 
 	private Table createEntry(int id) {
 		Table entry = new Table();
