@@ -19,6 +19,7 @@ import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.containers.HashMapFactory;
+import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.gui.Gui;
@@ -33,6 +34,7 @@ import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.screens.WorldRenderer;
 import hitonoriol.madsand.util.TimeUtils;
+import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
 
 public class Keyboard {
@@ -193,6 +195,13 @@ public class Keyboard {
 				ItemProp.buildReq.keySet()
 						.forEach(recipe -> player().unlockBuildRecipe(recipe));
 				TimeUtils.scheduleTask(() -> Gui.overlay.closeAllDialogs(), 2f);
+			}
+			
+			else if (key == Keys.I) {
+				new InputDialog("Give random items", "Enter item quantity:", input -> {
+					for (int i = 0; i < Integer.parseInt(input); ++i)
+						MadSand.player().addItem(Item.createRandom().setQuantity(Utils.rand(1, 10)));
+				}).setInitialText("10").show();
 			}
 
 			else if (key == Keys.I) {
