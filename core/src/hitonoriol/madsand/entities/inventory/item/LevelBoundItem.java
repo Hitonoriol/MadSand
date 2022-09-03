@@ -21,14 +21,18 @@ public abstract class LevelBoundItem extends Item {
 		return playerLvl >= minLvl;
 	}
 
-	protected void useIfPossible(Player player, Runnable useAction) {
+	protected void doIfPossible(Player player, Runnable action) {
 		if (!canBeUsed(player))
 			Gui.drawOkDialog(
-					"Your level is too low! You need to be at least level " + lvl + " to equip this item.");
+					"Your level is too low! You need to be at least level [WARNING]" + lvl + "[] to use this item.");
 		else {
-			super.use(player);
-			useAction.run();
+			action.run();
 		}
+	}
+	
+	@Override
+	public void equip(Player player) {
+		doIfPossible(player, () -> super.equip(player));
 	}
 
 	@Override

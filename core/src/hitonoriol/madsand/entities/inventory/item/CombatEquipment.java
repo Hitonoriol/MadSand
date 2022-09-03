@@ -48,12 +48,12 @@ public abstract class CombatEquipment extends AbstractEquipment {
 
 	@Override
 	public void equip(Player player) {
-		player.stats.equipment.equip(this);
+		doIfPossible(player, () -> player.stats.equipment.equip(this));
 	}
 
 	@Override
 	public void use(Player player) {
-		super.useIfPossible(player, () -> equip(player));
+		equip(player);
 	}
 
 	@Override

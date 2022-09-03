@@ -19,7 +19,7 @@ public class FishingBait extends LevelBoundItem {
 
 	@Override
 	public void use(Player player) {
-		super.useIfPossible(player, () -> toggleEquipped());
+		toggleEquipped();
 	}
 
 	@Override

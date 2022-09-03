@@ -66,12 +66,12 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 
 	@Override
 	public void use(Player player) {
-		useIfPossible(player, () -> equip(player));
+		equip(player);
 	}
 
 	@Override
 	public void leftClickAction() {
-		useIfPossible(MadSand.player(), () -> toggleEquipped());
+		toggleEquipped();
 	}
 
 	public boolean damage(int amt) {
