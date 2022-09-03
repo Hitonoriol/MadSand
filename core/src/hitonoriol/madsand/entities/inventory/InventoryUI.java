@@ -28,9 +28,9 @@ public class InventoryUI extends GameDialog {
 
 	private Table invContainer = new Table();
 	private Table itemTable = new Table();
-	private AutoFocusScrollPane invScroll = new AutoFocusScrollPane(itemTable);;
+	private AutoFocusScrollPane invScroll = new AutoFocusScrollPane(itemTable);
 	private Label header = new Label("", Gui.skin);
-	private ItemSearchPanel searchPanel = new ItemSearchPanel(true);
+	private ItemSearchPanel searchPanel = new ItemSearchPanel(this);
 
 	private Inventory inventory;
 	private int items;
@@ -74,15 +74,13 @@ public class InventoryUI extends GameDialog {
 			Screens.Game.screen().onShow(() -> refresh());
 		});
 		searchPanel.onChange(() -> refresh());
-		refresh();
+		refresh();		
 	}
 
 	private void refresh() {
 		items = 0;
 		itemTable.clear();
-		inventory.getItems().stream()
-				.filter(searchPanel.getFilter())
-				.sorted(searchPanel.getSort())
+		searchPanel.search(inventory.getItems())
 				.forEach(item -> addItem(item));
 		itemTable.align(items > ITEMS_PER_ROW ? Align.top : Align.topLeft);
 		refreshTitle();

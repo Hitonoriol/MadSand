@@ -8,8 +8,9 @@ import java.util.Comparator;
 import hitonoriol.madsand.entities.inventory.item.Item;
 
 public class ItemSort implements Comparator<Item> {
+	public static final ItemSort defaultSort = create("Default", comparingInt(Item::id));
 	private static final ItemSort sortings[] = {
-			create("Default", comparingInt(Item::id)),
+			defaultSort,
 			create("Name", Comparator.comparing(Item::name)),
 			create("Price", comparingInt(Item::getPrice)),
 			create("Weight", comparingDouble(Item::getWeight)),
