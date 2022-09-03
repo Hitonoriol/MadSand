@@ -22,6 +22,14 @@ public class TimeUtils {
 		return scheduleTask(Timer.instance(), task, delaySec);
 	}
 	
+	public static Timer.Task scheduleTask(Timer timer, Timer.Task task, float delaySec) {
+		return timer.scheduleTask(task, delaySec);
+	}
+	
+	public static Timer.Task scheduleTask(Timer.Task task, float delaySec) {
+		return scheduleTask(Timer.instance(), task, delaySec);
+	}
+	
 	public static Timer.Task scheduleTask(Runnable task) {
 		return scheduleTask(task, Gui.DELAY);
 	}
