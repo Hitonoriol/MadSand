@@ -1,16 +1,12 @@
 package hitonoriol.madsand.entities.inventory;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 
-import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.dialog.GameDialog;
-import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
@@ -18,27 +14,24 @@ import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 
 public class InventoryUI extends GameDialog {
-	int ITEMS_PER_ROW = 5;
-	int WIDTH = 400;
-	int HEIGHT = 500;
-	int OFFSET = 5;
+	private static final int ITEMS_PER_ROW = 5;
+	private static final int WIDTH = 400;
+	private static final int HEIGHT = 500;
+	private static final int OFFSET = 5;
 
-	float BUTTON_PADDING = 5;
-	float BUTTON_WIDTH = 250;
-	float BUTTON_HEIGHT = 50;
+	private static final float BUTTON_PADDING = 5;
+	private static final float BUTTON_WIDTH = 250;
+	private static final float BUTTON_HEIGHT = 50;
 
-	Table invContainer;
-	Table invTable;
-	AutoFocusScrollPane invScroll;
-	Table invScrollTable;
-	Label header;
-	TextButton craftMenuButton;
+	private Table invContainer;
+	private Table invTable;
+	private AutoFocusScrollPane invScroll;
+	private Table invScrollTable;
+	private Label header;
+	private TextButton craftMenuButton;
 
 	private Inventory inventory;
-	private Map<Item, InventoryUICell> itemUI = new HashMap<>();
-
-	boolean dialogActive;
-	int items;
+	private int items;
 
 	public InventoryUI(Inventory inventory) {
 		super(Gui.overlay);
@@ -73,22 +66,26 @@ public class InventoryUI extends GameDialog {
 		invContainer.add(Gui.setAction(Widgets.button("Close [E]"), () -> hide()))
 				.size(BUTTON_WIDTH, BUTTON_HEIGHT).row();
 		invContainer.setFillParent(true);
-		
+
 		super.add(invContainer);
 		super.setBackground(GuiSkin.transparency);
 
-		items = 0;
-		Gui.setAction(craftMenuButton, () -> Gui.openCraftMenu(0));
+		Gui.setAction(craftMenuButton, () -> {
+			Gui.openCraftMenu(0);
+			Screens.Game.screen().onShow(() -> refresh());
+		});
+		refresh();
 	}
 
-	void refresh() {
+	private void refresh() {
 		items = 0;
 		invTable.clear();
-		itemUI.entrySet().removeIf(uiEntry -> uiEntry.getKey().equals(Item.nullItem));
-		itemUI.forEach((item, itemUICell) -> addCell(itemUICell));
+		inventory.getItems().stream()
+				.forEach(item -> addItem(item));
+		refreshTitle();
 	}
 
-	void refreshTitle() {
+	private void refreshTitle() {
 		setHeader(inventory.getWeightString());
 	}
 
@@ -101,69 +98,29 @@ public class InventoryUI extends GameDialog {
 	}
 
 	private void addItem(Item item) {
-		InventoryUICell cell = new InventoryUICell(item);
-		itemUI.put(item, cell);
-		addCell(cell);
+		addCell(new InventoryUICell(this, item));
 	}
 
-	private void removeItem(Item item) {
-		itemUI.remove(item);
-		--items;
-		refresh();
-	}
-
-	public void refreshItem(Item item) {
-		if (itemExists(item)) {
-			if (item.quantity > 0 && !item.equals(Item.nullItem))
-				itemUI.get(item).refresh();
-			else
-				removeItem(item);
-		} else if (!item.equals(Item.nullItem)) {
-			addItem(item);
+	void refreshCell(InventoryUICell cell) {
+		Item item = cell.getItem();
+		if (item.quantity > 0 && !item.equals(Item.nullItem))
+			cell.refresh();
+		else
 			refresh();
-		}
 		refreshTitle();
 	}
 
-	public InventoryUICell getUICell(Item item) {
-		return itemUI.get(item);
-	}
-
-	public void clearContextMenus() {
-		itemUI.forEach((item, uiCell) -> {
-			if (uiCell.contextActive())
-				uiCell.hideContext();
-		});
-	}
-
-	/* Equip/Unequip for equippable & usable items */
-	public void equipItem(Item item) {
-		Player player = MadSand.player();
-		InventoryUICell itemCell = getUICell(item);
-		if (player.stats.equipment.itemEquipped(item)) {
-			if (player.unEquip(item))
-				itemCell.unEquipItem();
-		} else {
-			Item prev = player.stats.equipment.previouslyEquipped(item);
-			if (player.unEquip(prev))
-				getUICell(prev).unEquipItem();
-
-			player.equip(item);
-			refreshItem(prev);
-			itemCell.equipItem();
+	void openingContextMenu(InventoryUICell cell) {
+		Object obj = getUserObject();
+		if (!(obj instanceof InventoryUICell))
+			setUserObject(cell);
+		else {
+			((InventoryUICell) obj).closeContextMenu();
+			setUserObject(null);
 		}
-	}
-
-	public void hide() {
-		super.hide();
-		clearContextMenus();
 	}
 
 	void setHeader(String str) {
 		header.setText(str);
-	}
-
-	boolean itemExists(Item item) {
-		return itemUI.containsKey(item);
 	}
 }

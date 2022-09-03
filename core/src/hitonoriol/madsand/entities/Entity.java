@@ -67,7 +67,7 @@ public abstract class Entity extends MapEntity {
 
 	protected Pair coords = new Pair();
 
-	public Inventory inventory;
+	public Inventory inventory = new Inventory();
 	public Stats stats;
 
 	private Queue<Movement> movementQueue = new ArrayDeque<>();
@@ -80,7 +80,6 @@ public abstract class Entity extends MapEntity {
 		stats = isPlayer() ? new PlayerStats() : new Stats();
 		stats.name = name;
 		initStatActions();
-		initInventory();
 	}
 
 	public Entity() {
@@ -193,11 +192,6 @@ public abstract class Entity extends MapEntity {
 
 	public boolean at(Pair coords) {
 		return at(coords.x, coords.y);
-	}
-
-	public Inventory initInventory() {
-		inventory = new Inventory();
-		return inventory;
 	}
 
 	@JsonIgnore
@@ -432,8 +426,8 @@ public abstract class Entity extends MapEntity {
 	public void dropInventory() {
 		Item item;
 		Map curLoc = MadSand.world().getCurLoc();
-		for (int i = inventory.items.size() - 1; i >= 0; --i) {
-			item = inventory.items.get(i);
+		for (int i = inventory.getItems().size() - 1; i >= 0; --i) {
+			item = inventory.getItems().get(i);
 			curLoc.putLoot(x, y, item.copy());
 			inventory.delItem(item);
 		}

@@ -3,26 +3,24 @@ package hitonoriol.madsand.entities.inventory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.mutable.MutableBoolean;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
 import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.util.Utils;
 
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class Inventory {
 	public static final double MAX_WEIGHT = Integer.MAX_VALUE;
 
-	public ArrayList<Item> items = new ArrayList<Item>();
-
-	public float curWeight, maxWeight;
-
-	@JsonIgnore
-	private InventoryUI inventoryUI;
+	private ArrayList<Item> items = new ArrayList<Item>();
+	private float curWeight, maxWeight;
 
 	public Inventory(float maxWeight) {
 		setMaxWeight(maxWeight);
@@ -33,31 +31,8 @@ public class Inventory {
 		maxWeight = 0;
 	}
 
-	public void initUI() {
-		inventoryUI = new InventoryUI(this);
-	}
-
-	@JsonIgnore
-	public InventoryUI getUI() {
-		return inventoryUI;
-	}
-
-	public boolean hasUI() {
-		return inventoryUI != null;
-	}
-
-	private void updateUI(Consumer<InventoryUI> action) {
-		if (hasUI())
-			action.accept(inventoryUI);
-	}
-
 	public void setMaxWeight(float val) {
 		maxWeight = val;
-		refreshUITitle();
-	}
-
-	public void refreshUITitle() {
-		updateUI(ui -> ui.refreshTitle());
 	}
 
 	@JsonIgnore
@@ -78,7 +53,6 @@ public class Inventory {
 		for (int i = 0; i < items.size(); ++i) {
 			Item item = items.get(i);
 			item.reinit();
-			updateUI(ui -> ui.refreshItem(item));
 		}
 		refreshWeight();
 	}
@@ -87,7 +61,6 @@ public class Inventory {
 		curWeight = 0;
 		for (Item item : items)
 			curWeight += item.getTotalWeight();
-		refreshUITitle();
 	}
 
 	public void dump() {
@@ -197,9 +170,7 @@ public class Inventory {
 	}
 
 	public boolean damageEquipment(AbstractEquipment item, int dmg) {
-		boolean itemDestroyed = item.damage(dmg);
-		updateUI(ui -> ui.refreshItem(item));
-		return itemDestroyed;
+		return item.damage(dmg);
 	}
 
 	/*
@@ -213,7 +184,6 @@ public class Inventory {
 		if (item.quantity < 1)
 			return true;
 
-		Item updItem;
 		float newWeight = item.getTotalWeight() + curWeight;
 		int existingIdx = getIndex(item);
 
@@ -221,15 +191,11 @@ public class Inventory {
 			existingIdx = -1;
 
 		if (newWeight <= maxWeight) {
-			if (existingIdx != -1) {
+			if (existingIdx != -1)
 				items.get(existingIdx).quantity += item.quantity;
-				updItem = items.get(existingIdx);
-			} else {
+			else
 				items.add(item);
-				updItem = item;
-			}
 			curWeight = newWeight;
-			updateUI(ui -> ui.refreshItem(updItem));
 			return true;
 		}
 
@@ -292,7 +258,6 @@ public class Inventory {
 				foundItem.quantity -= quantity;
 				if (foundItem.quantity < 1)
 					items.remove(i);
-				updateUI(ui -> ui.refreshItem(foundItem));
 				return true;
 			}
 		}
@@ -306,6 +271,10 @@ public class Inventory {
 
 	public boolean delItem(int id) {
 		return delItem(id, 1);
+	}
+	
+	public List<Item> getItems() {
+		return items;
 	}
 
 	public boolean isEmpty() {

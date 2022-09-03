@@ -153,7 +153,7 @@ public class InventoryTest {
 	private Item pickRandom(Inventory inventory) {
 		Item item;
 		do
-			item = Utils.randElement(inventory.items);
+			item = Utils.randElement(inventory.getItems());
 		while (item.isCurrency());
 
 		return item;
@@ -175,7 +175,7 @@ public class InventoryTest {
 	}
 
 	private List<Item> copyInventoryContents(Inventory inventory) {
-		return inventory.items.stream()
+		return inventory.getItems().stream()
 				.map(item -> item.copy())
 				.collect(Collectors.toList());
 	}

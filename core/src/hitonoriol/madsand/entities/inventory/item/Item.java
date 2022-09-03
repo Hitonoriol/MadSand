@@ -121,6 +121,10 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 		return this;
 	}
 
+	public int getQuantity() {
+		return quantity;
+	}
+	
 	public void use(Player player) {
 		if (useAction != null)
 			Lua.execute(useAction, this);
@@ -129,9 +133,13 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 	public void equip(Player player) {
 		player.stats.equipment.equip(this);
 	}
-
+	
 	protected void toggleEquipped() {
-		MadSand.player().inventory.getUI().equipItem(this);
+		Player player = MadSand.player();
+		if (player.stats().equipment.itemEquipped(this))
+			player.unEquip(this);
+		else
+			equip(player);
 	}
 
 	/* Some Items may perform different actions when left-clicked from InventoryUI
@@ -257,6 +265,10 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 	@JsonIgnore
 	public float getTotalWeight() {
 		return weight * (float) quantity;
+	}
+	
+	public float getWeight() {
+		return weight;
 	}
 
 	public boolean isCraftable() {

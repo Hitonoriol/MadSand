@@ -34,7 +34,6 @@ import hitonoriol.madsand.entities.ability.Ability;
 import hitonoriol.madsand.entities.ability.ActiveAbility;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
 import hitonoriol.madsand.entities.inventory.CraftWorker;
-import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.ItemUI;
 import hitonoriol.madsand.entities.inventory.item.Consumable;
 import hitonoriol.madsand.entities.inventory.item.CropSeeds;
@@ -123,7 +122,6 @@ public class Player extends Entity {
 		super(name);
 		stats = stats();
 		super.setSprites(standingSprites);
-		initInventory();
 		setFov();
 		quests.setPlayer(this);
 		setLuminosity(DEF_LUMINOSITY);
@@ -136,7 +134,6 @@ public class Player extends Entity {
 
 	@Override
 	public void postLoadInit() {
-		inventory.initUI();
 		initStatActions();
 		quests.setPlayer(this);
 		turn(stats.look);
@@ -350,14 +347,6 @@ public class Player extends Entity {
 	@JsonIgnore
 	public List<Pair> getVisibleArea() {
 		return visibleArea;
-	}
-
-	@Override
-	public Inventory initInventory() {
-		super.initInventory();
-		inventory.initUI();
-		inventory.refreshUITitle();
-		return inventory;
 	}
 
 	public void increaseSkill(Skill skill, double by) {
@@ -1010,8 +999,6 @@ public class Player extends Entity {
 
 		if (!silent && item.id() != Item.NULL_ITEM)
 			MadSand.print("You put " + item.name + " back to your inventory");
-
-		inventory.getUI().refreshItem(item);
 	}
 
 	public void freeHands(EquipSlot slot) {

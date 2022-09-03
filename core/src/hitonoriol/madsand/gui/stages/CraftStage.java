@@ -133,8 +133,12 @@ public class CraftStage extends Stage {
 			scroll.addAction(Actions.fadeIn(FADE_DELAY));
 		});
 
-		Gui.setAction(backBtn,
-				craftStationId == 0 ? () -> MadSand.switchScreen(Screens.Game) : () -> MadSand.reset());
+		Gui.setAction(backBtn, () -> {
+			if (craftStationId == 0)
+				MadSand.switchScreen(Screens.Game);
+			else
+				MadSand.reset();
+		});
 	}
 
 	private final static Drawable entryBg = GuiSkin.getColorDrawable(new Color(0, 0, 0, 0.2f));

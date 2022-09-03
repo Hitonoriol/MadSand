@@ -121,7 +121,7 @@ public class LandDialog extends GameDialog {
 
 		container.add("Warehouse " + settlement.warehouse.getWeightString() + ":").row();
 		container.add(getWarehouseContents()).row();
-		Table warehouseTbl = ItemUI.createItemList(settlement.warehouse.items, ITEMS_PER_ROW);
+		Table warehouseTbl = ItemUI.createItemList(settlement.warehouse.getItems(), ITEMS_PER_ROW);
 		for (Cell<Actor> cell : warehouseTbl.getCells()) {
 			cell.getActor().scaleBy(-ITEM_SCALE);
 			cell.size(ItemUI.SIZE * (1f - ITEM_SCALE));
@@ -151,11 +151,11 @@ public class LandDialog extends GameDialog {
 
 	private String getWarehouseContents() {
 		StringBuilder sb = new StringBuilder();
-		for (Item item : settlement.warehouse.items)
+		for (Item item : settlement.warehouse.getItems())
 			sb.append("* " + item.quantity + " " + item.name + " (" + Utils.round(item.getTotalWeight()) + " kg)")
 					.append(Resources.LINEBREAK);
 
-		return settlement.warehouse.items.isEmpty() ? "Empty" : sb.toString();
+		return settlement.warehouse.getItems().isEmpty() ? "Empty" : sb.toString();
 	}
 
 	@Override

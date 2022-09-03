@@ -214,7 +214,6 @@ public abstract class AbstractNpc extends Entity {
 		if (properties.defaultState != null)
 			state = properties.defaultState;
 
-		initInventory();
 		inventory.setMaxWeight(stats.calcMaxInventoryWeight());
 		if (properties.loot != null)
 			inventory.putItem(properties.loot.rollItems());

@@ -25,7 +25,7 @@ public class InventoryUICell extends ItemUI {
 	private Table contextContainer; // RMB context menu container and buttons
 	private Label equippedLabel;
 
-	public InventoryUICell(Item item) {
+	public InventoryUICell(InventoryUI inventoryUI, Item item) {
 		super(item);
 		initContextMenu(item);
 
@@ -36,11 +36,15 @@ public class InventoryUICell extends ItemUI {
 		Gui.setClickAction(this, Buttons.LEFT, () -> {
 			Player player = MadSand.player();
 			item.leftClickAction();
-			refreshEquippedStatus();
 			player.doAction(player.stats.minorCost);
+			inventoryUI.refreshCell(this);
 		});
 
-		Gui.setClickAction(this, Buttons.RIGHT, () -> toggleContextMenu());
+		Gui.setClickAction(this, Buttons.RIGHT, () -> {
+			if (!contextActive())
+				inventoryUI.openingContextMenu(this);
+			toggleContextMenu();
+		});
 	}
 
 	private void initContextMenu(Item item) {
@@ -51,7 +55,7 @@ public class InventoryUICell extends ItemUI {
 		super.addActor(contextContainer);
 
 		Gui.setAction(dropBtn, () -> {
-			hideContext();
+			closeContextMenu();
 
 			if (MadSand.player().stats().equipment.itemEquipped(item)
 					&& AbstractEquipment.isCursed(item)) {
@@ -71,14 +75,13 @@ public class InventoryUICell extends ItemUI {
 	}
 
 	private void toggleContextMenu() {
-		if (!contextContainer.isVisible()) {
+		if (!contextActive()) {
 			toFront();
-			MadSand.player().inventory.getUI().clearContextMenus();
 			contextContainer.setVisible(true);
 			Mouse.updScreenCoords();
 			contextContainer.setPosition(SIZE / 2, SIZE / 2);
 		} else
-			contextContainer.setVisible(false);
+			closeContextMenu();
 	}
 
 	public void equipItem() {
@@ -89,10 +92,6 @@ public class InventoryUICell extends ItemUI {
 		equippedLabel.setVisible(false);
 	}
 
-	private void closeContextMenu() {
-		contextContainer.setVisible(false);
-	}
-
 	private void addContextBtn(TextButton btn) {
 		contextContainer.add(btn).width(CONTEXT_BTN_WIDTH).height(CONTEXT_BTN_HEIGHT).row();
 	}
@@ -101,8 +100,8 @@ public class InventoryUICell extends ItemUI {
 		return contextContainer.isVisible();
 	}
 
-	void hideContext() {
-		closeContextMenu();
+	void closeContextMenu() {
+		contextContainer.setVisible(false);
 	}
 
 	public void refreshEquippedStatus() {

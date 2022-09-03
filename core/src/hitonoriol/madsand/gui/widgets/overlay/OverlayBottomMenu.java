@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Storage;
 import hitonoriol.madsand.dialog.GameDialog;
+import hitonoriol.madsand.entities.inventory.InventoryUI;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.MouseoverListener;
@@ -40,7 +41,7 @@ public class OverlayBottomMenu extends Table {
 		
 		MouseoverListener.setUp(this);
 		addButton("Character", Keys.Q, () -> new CharacterInfoWindow());
-		addButton("Inventory", Keys.E, () -> MadSand.player().inventory.getUI());
+		addButton("Inventory", Keys.E, () -> new InventoryUI(MadSand.player().inventory));
 		addButton("Abilities", Keys.R, () -> new AbilityDialog(MadSand.player().getAbilities()));
 		addButton("Journal", Keys.J, () -> new QuestJournal(MadSand.player().getQuestWorker()));
 		addButton("Build", Keys.B, () -> new BuildDialog());

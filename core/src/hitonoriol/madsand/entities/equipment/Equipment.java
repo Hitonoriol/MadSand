@@ -89,7 +89,7 @@ public class Equipment {
 		ArrayList<Integer> list = new ArrayList<>();
 
 		for (EquipSlot slot : EquipSlot.values())
-			list.add(inventory.items.indexOf(getItem(slot)));
+			list.add(inventory.getItems().indexOf(getItem(slot)));
 
 		return list;
 	}
