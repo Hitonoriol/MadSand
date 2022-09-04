@@ -24,13 +24,13 @@ import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.screens.AbstractScreen;
-import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
 
 public class GameDialog extends Dialog {
 	private static final float TITLE_YPAD = 18, TITLE_XPAD = 3;
 	private static final float TEXT_YPAD = 15, BTN_TEXT_XPAD = 30;
 	public static final float WIDTH = 500, HEIGHT = 250, PADDING = 10;
+	public static final float FADE_DURATION = 0.3f;
 
 	private AutoFocusScrollPane textScroll;
 	private Table dialogContainer = new Table(Gui.skin);
@@ -119,11 +119,9 @@ public class GameDialog extends Dialog {
 	@Override
 	public boolean remove() {
 		boolean ret = super.remove();
-		TimeUtils.scheduleTask(() -> {
-			Utils.dbg("Closing `%s`", textLbl.getText());
-			Gui.closeDialog();
-			Gui.overlay.refreshActionButton();
-		}, Gui.DELAY);
+		Utils.dbg("Closing `%s`", textLbl.getText());
+		Gui.closeDialog();
+		Gui.overlay.refreshActionButton();
 		return ret;
 	}
 
@@ -144,7 +142,7 @@ public class GameDialog extends Dialog {
 		Gui.openDialog();
 		setScale(1);
 		show(stage, sequence(Actions.alpha(0),
-				Actions.fadeIn(0.35f, Interpolation.fade),
+				Actions.fadeIn(FADE_DURATION, Interpolation.fade),
 				Actions.run(() -> Gui.overlay.hideActionBtn())));
 		centerOnStage();
 		return this;
@@ -224,7 +222,7 @@ public class GameDialog extends Dialog {
 
 	protected TextButton createCloseButton() {
 		TextButton closeButton = new TextButton("Close", Gui.skin);
-		Gui.setAction(closeButton, () -> remove());
+		Gui.setAction(closeButton, () -> hide());
 		return closeButton;
 	}
 

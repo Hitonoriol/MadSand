@@ -61,7 +61,7 @@ public class OverlayBottomMenu extends Table {
 		Storage<GameDialog> dialog = new Storage<>();
 		addButton(text, key, () -> {
 			if (Gui.overlay.getActors().contains(dialog.get(), true))
-				dialog.get().remove();
+				dialog.get().hide();
 			else if (!Gui.isDialogActive())
 				dialog.set(dialogCreator.get()).show();
 		});
