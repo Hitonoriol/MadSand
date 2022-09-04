@@ -8,6 +8,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -18,13 +19,13 @@ import com.badlogic.gdx.utils.Timer;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.util.Functional;
 import hitonoriol.madsand.util.TimeUtils;
-import hitonoriol.madsand.util.Utils;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 
 public class ItemSearchPanel extends Table {
 	private static final float BOX_WIDTH = 150, BOX_HEIGHT = 30;
-	private static final float PAD = 15;
+	private static final float PAD = 15, NAME_PAD = Gui.getTextWidth(" ");
 	private static final int SEARCH_CUTOFF = 61;
 
 	private Runnable onChange = () -> {};
@@ -44,13 +45,13 @@ public class ItemSearchPanel extends Table {
 		else
 			defaults().padRight(PAD);
 
-		addEntry("Search: ", searchField);
-		addEntry("Sort: ", sortBox);
-		if (vertical)
-			addEntry("", orderBox);
-		else
-			add(orderBox).size(BOX_WIDTH / 2, BOX_HEIGHT);
-		addEntry("Filter: ", filterBox);
+		addEntry("Search:", searchField);
+		Functional.with(addEntry("Sort:", sortBox), sort -> {
+			if (!vertical)
+				sort.padRight(0);
+		});
+		addEntry("", orderBox);
+		addEntry("Filter:", filterBox);
 
 		sortBox.setItems(ItemSort.getSortings());
 		orderBox.setItems(ItemSort.Order.values());
@@ -73,34 +74,35 @@ public class ItemSearchPanel extends Table {
 		});
 		setUpTextFieldUnfocusers(parent);
 	}
-	
+
 	public ItemSearchPanel(Actor parent) {
 		this(parent, true);
 	}
-	
+
 	private void setUpTextFieldUnfocusers(Actor parent) {
 		parent.addListener(new InputListener() {
 			/* Unfocus the item search text field on scroll */
 			public boolean scrolled(InputEvent event, float x, float y, float amountX, float amountY) {
-				getStage().setKeyboardFocus(null);
+				MadSand.getStage().setKeyboardFocus(null);
 				return super.scrolled(event, x, y, amountX, amountY);
 			}
 		});
-		
+
 		parent.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				if (event.getTarget() != searchField)
-					getStage().setKeyboardFocus(null);
+					MadSand.getStage().setKeyboardFocus(null);
 			}
 		});
 	}
 
-	private void addEntry(String name, Actor entry) {
-		add(name);
-		add(entry).size(BOX_WIDTH, BOX_HEIGHT);
+	private Cell<Actor> addEntry(String name, Actor entry) {
+		add(name).padRight(NAME_PAD);
+		Cell<Actor> cell = add(entry).size(BOX_WIDTH, BOX_HEIGHT);
 		if (vertical)
 			row();
+		return cell;
 	}
 
 	public Stream<Item> search(List<Item> list) {
@@ -117,10 +119,7 @@ public class ItemSearchPanel extends Table {
 					.extractSorted(query, list, item -> item.name(),
 							query.length() > 2 ? SEARCH_CUTOFF : SEARCH_CUTOFF - 1)
 					.stream()
-					.map(result -> {
-						Utils.dbg("Score: %d", result.getScore());
-						return result.getReferent();
-					});
+					.map(result -> result.getReferent());
 		}
 		items = items.filter(getFilter());
 
