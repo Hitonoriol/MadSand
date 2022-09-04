@@ -21,7 +21,6 @@ import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.Prefs;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.screens.AbstractScreen;
-import hitonoriol.madsand.screens.CraftScreen;
 import hitonoriol.madsand.screens.DeathScreen;
 import hitonoriol.madsand.screens.GameScreen;
 import hitonoriol.madsand.screens.MainMenu;
@@ -61,7 +60,6 @@ public class MadSand extends Game {
 		worldRenderer = new WorldRenderer();
 		Screens.MainMenu.set(new MainMenu(worldRenderer));
 		Screens.Game.set(new GameScreen(worldRenderer));
-		Screens.Crafting.set(new CraftScreen(worldRenderer));
 		Screens.Death.set(new DeathScreen(worldRenderer));
 		Screens.Travel.set(new TravelScreen());
 	}
@@ -219,7 +217,7 @@ public class MadSand extends Game {
 	}
 
 	public enum Screens {
-		MainMenu, Game, Crafting, Death, Travel;
+		MainMenu, Game, Death, Travel;
 
 		private AbstractScreen<?> screen;
 

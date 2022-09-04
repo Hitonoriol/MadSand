@@ -1,11 +1,11 @@
-package hitonoriol.madsand.gui.stages;
+package hitonoriol.madsand.entities.inventory;
 
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.MadSand.Screens;
+import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.Gui;
@@ -27,26 +27,32 @@ import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
 
-public class CraftStage extends Stage {
+public class CraftDialog extends GameDialog {
 	private static float FADE_DELAY = 0.15f;
 	private static float ENTRY_XPAD = 50, ENTRY_YPAD = 5;
 	private static float BACK_BUTTON_HEIGHT = 50, BACK_BUTTON_WIDTH = 250;
 	private static float TITLE_PADDING = 30;
 	private static String titleString = "Crafting";
-	static final int ENTRIES_PER_ROW = 2;
+	private static final int ENTRIES_PER_ROW = 2;
 
 	private Table containerTable = new Table();
 	private Table craftTable = new Table();
 	private AutoFocusScrollPane scroll = new AutoFocusScrollPane(craftTable);
 	private Label titleLabel = new Label(titleString, Gui.skin);
+	TextButton backBtn = createCloseButton();
 	private float scrollX, scrollY;
 	private int craftStationId;
 
-	public CraftStage() {
-		super(Gui.viewport());
+	public CraftDialog(int craftStationId) {
+		this.craftStationId = craftStationId;
+		setBackground(GuiSkin.transparency);
+		setFillParent(true);
 		titleLabel.setAlignment(Align.center);
 		Gui.setFontSize(titleLabel, Gui.FONT_M);
-
+		scroll.setFillParent(true);
+		add(containerTable);
+		refreshCraftMenu();
+		
 		addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -56,14 +62,36 @@ public class CraftStage extends Stage {
 				super.clicked(event, x, y);
 			}
 		});
+		
+		addListener(new InputListener() {
+			@Override
+			public boolean keyDown(InputEvent event, int keycode) {
+				event.cancel();
+				return true;
+			}
+			
+			@Override
+			public boolean keyUp(InputEvent event, int keycode) {
+				event.cancel();
+				return true;
+			}
+		});
+	}
+	
+	public CraftDialog(InventoryUI inventoryUi) {
+		this(0);
+		Gui.setAction(backBtn, () -> {
+			inventoryUi.refresh();
+			inventoryUi.addAction(Actions.fadeIn(FADE_DURATION));
+		});
 	}
 
-	public void refreshCraftMenu() {
-		refreshCraftMenu(0);
+	@Override
+	public void show() {
+		super.show();
 	}
-
-	public void refreshCraftMenu(int craftStationId) {
-		this.craftStationId = craftStationId;
+	
+	private void refreshCraftMenu() {
 		Player player = MadSand.player();
 		List<Integer> itemList;
 		String stationName = titleString;
@@ -106,7 +134,6 @@ public class CraftStage extends Stage {
 		craftTable.align(Align.center);
 		craftTable.pack();
 		scroll.addAction(Actions.alpha(0));
-		scroll.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 		containerTable.setBackground(GuiSkin.darkBackgroundSizeable);
 		containerTable.setFillParent(true);
@@ -120,11 +147,9 @@ public class CraftStage extends Stage {
 						Gdx.graphics.getHeight() - (BACK_BUTTON_HEIGHT + titleLabel.getHeight() + TITLE_PADDING))
 				.row();
 
-		TextButton backBtn = new TextButton("Back", Gui.skin);
 		backBtn.align(Align.center);
 
 		containerTable.add(backBtn).size(BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT).align(Align.center).row();
-		super.addActor(containerTable);
 		TimeUtils.scheduleTask(() -> {
 			Utils.dbg("Restoring position %f %f", scrollX, scrollY);
 			scroll.setScrollY(scrollY);
@@ -132,16 +157,9 @@ public class CraftStage extends Stage {
 			scroll.updateVisualScroll();
 			scroll.addAction(Actions.fadeIn(FADE_DELAY));
 		});
-
-		Gui.setAction(backBtn, () -> {
-			if (craftStationId == 0)
-				MadSand.switchScreen(Screens.Game);
-			else
-				MadSand.reset();
-		});
 	}
 
-	private final static Drawable entryBg = GuiSkin.getColorDrawable(new Color(0, 0, 0, 0.2f));
+	private final static Drawable entryBg = GuiSkin.getColorDrawable(new Color(0.25f, 0.25f, 0.25f, 0.5f));
 
 	private Table createEntry(int id) {
 		Table entry = new Table();
@@ -157,8 +175,8 @@ public class CraftStage extends Stage {
 		return entry;
 	}
 
-	public void afterCrafting() {
+	private void afterCrafting() {
 		scroll.addAction(Actions.sequence(Actions.fadeOut(FADE_DELAY),
-				Actions.run(() -> refreshCraftMenu(craftStationId))));
+				Actions.run(() -> refreshCraftMenu())));
 	}
 }

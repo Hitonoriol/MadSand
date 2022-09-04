@@ -2,12 +2,12 @@ package hitonoriol.madsand.entities.inventory;
 
 import static com.badlogic.gdx.Gdx.graphics;
 
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 
-import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.Gui;
@@ -70,14 +70,14 @@ public class InventoryUI extends GameDialog {
 		buttonTable.add(Gui.setAction(Widgets.button("Close [E]"), () -> hide()));
 
 		Gui.setAction(craftMenuButton, () -> {
-			Gui.openCraftMenu(0);
-			Screens.Game.screen().onShow(() -> refresh());
+			addAction(Actions.fadeOut(FADE_DURATION));
+			new CraftDialog(this).show();	
 		});
 		searchPanel.onChange(() -> refresh());
 		refresh();		
 	}
 
-	private void refresh() {
+	void refresh() {
 		items = 0;
 		itemTable.clear();
 		searchPanel.search(inventory.getItems())

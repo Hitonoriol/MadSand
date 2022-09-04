@@ -19,9 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.MadSand.Screens;
+import hitonoriol.madsand.entities.inventory.CraftDialog;
 import hitonoriol.madsand.gui.dialogs.OkDialog;
-import hitonoriol.madsand.gui.stages.CraftStage;
 import hitonoriol.madsand.gui.stages.Overlay;
 import hitonoriol.madsand.util.BooleanTally;
 import hitonoriol.madsand.util.TimeUtils;
@@ -47,8 +46,7 @@ public class Gui {
 	}
 
 	public static void openCraftMenu(int id) {
-		Screens.Crafting.stage(CraftStage.class).ifPresent(craft -> craft.refreshCraftMenu(id));
-		MadSand.switchScreen(Screens.Crafting);
+		new CraftDialog(id).show();
 	}
 
 	private static OkDialog drawOkDialog(String title, String msg, Stage stage) {
