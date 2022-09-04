@@ -1,6 +1,10 @@
 package hitonoriol.madsand.entities.inventory;
 
+import static hitonoriol.madsand.MadSand.player;
+
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -14,12 +18,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 
-import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.gui.widgets.itembutton.CraftButton;
 import hitonoriol.madsand.properties.ItemProp;
@@ -31,28 +35,48 @@ public class CraftDialog extends GameDialog {
 	private static float FADE_DELAY = 0.15f;
 	private static float ENTRY_XPAD = 50, ENTRY_YPAD = 5;
 	private static float BACK_BUTTON_HEIGHT = 50, BACK_BUTTON_WIDTH = 250;
-	private static float TITLE_PADDING = 30;
+	private static float TITLE_PADDING = 10;
 	private static String titleString = "Crafting";
 	private static final int ENTRIES_PER_ROW = 2;
 
-	private Table containerTable = new Table();
+	private Table container = new Table();
 	private Table craftTable = new Table();
 	private AutoFocusScrollPane scroll = new AutoFocusScrollPane(craftTable);
 	private Label titleLabel = new Label(titleString, Gui.skin);
-	TextButton backBtn = createCloseButton();
+	private Label unlockProgressLabel = Widgets.label();
+	private TextButton backBtn = createCloseButton();
+	private ItemSearchPanel searchPanel = new ItemSearchPanel(this, false);
 	private float scrollX, scrollY;
+	private int entries = 0;
+
 	private int craftStationId;
+	private List<Item> craftStationItems;
 
 	public CraftDialog(int craftStationId) {
+		clear();
 		this.craftStationId = craftStationId;
 		setBackground(GuiSkin.transparency);
 		setFillParent(true);
 		titleLabel.setAlignment(Align.center);
 		Gui.setFontSize(titleLabel, Gui.FONT_M);
-		scroll.setFillParent(true);
-		add(containerTable);
-		refreshCraftMenu();
+		container.setBackground(GuiSkin.darkBackgroundSizeable);
+		craftTable.align(Align.center);
+		titleLabel.setText(isPlayerCraftMenu() ? titleString : ObjectProp.getName(craftStationId));
+		backBtn.align(Align.center);
+		unlockProgressLabel.setAlignment(Align.center);
 		
+		container.add(titleLabel).align(Align.top).padBottom(TITLE_PADDING).row();
+		if (isPlayerCraftMenu())
+			container.add(unlockProgressLabel).padBottom(TITLE_PADDING).row();
+		container.add(searchPanel).growX().row();
+		container.add(scroll).grow().row();
+		container.add(backBtn).size(BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT).align(Align.center).row();
+		add(container).grow().row();
+
+		createItemList();
+		refreshCraftMenu();
+
+		searchPanel.onChange(() -> refreshCraftMenu());
 		addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -62,14 +86,14 @@ public class CraftDialog extends GameDialog {
 				super.clicked(event, x, y);
 			}
 		});
-		
+
 		addListener(new InputListener() {
 			@Override
 			public boolean keyDown(InputEvent event, int keycode) {
 				event.cancel();
 				return true;
 			}
-			
+
 			@Override
 			public boolean keyUp(InputEvent event, int keycode) {
 				event.cancel();
@@ -77,7 +101,20 @@ public class CraftDialog extends GameDialog {
 			}
 		});
 	}
-	
+
+	private void createItemList() {
+		craftStationItems = (isPlayerCraftMenu()
+				? player().getCraftRecipes()
+				: ItemProp.craftStationRecipes.get(craftStationId))
+						.stream()
+						.map(id -> ItemProp.getItem(id))
+						.collect(Collectors.toList());
+	}
+
+	private List<Item> getItemList() {
+		return craftStationItems;
+	}
+
 	public CraftDialog(InventoryUI inventoryUi) {
 		this(0);
 		Gui.setAction(backBtn, () -> {
@@ -90,66 +127,51 @@ public class CraftDialog extends GameDialog {
 	public void show() {
 		super.show();
 	}
-	
+
+	private boolean isPlayerCraftMenu() {
+		return craftStationId == 0;
+	}
+
+	private Stream<Item> getCraftableItems() {
+		return searchPanel.search(getItemList());
+	}
+
 	private void refreshCraftMenu() {
-		Player player = MadSand.player();
+		Player player = player();
 		List<Integer> itemList;
-		String stationName = titleString;
-		Label unlockProgressLabel = null;
+		entries = 0;
 
 		Utils.out("Refreshing craft menu id: " + craftStationId);
 		craftTable.clear();
-		containerTable.clear();
 
 		if (craftStationId == 0) {
 			itemList = player.getCraftRecipes();
-			unlockProgressLabel = new Label("Craft recipes unlocked: " + player.craftRecipeProgress(), Gui.skin);
-			unlockProgressLabel.setAlignment(Align.center);
+			unlockProgressLabel.setText("Crafting recipes unlocked: " + player.craftRecipeProgress());
 		} else {
 			itemList = ItemProp.craftStationRecipes.get(craftStationId);
-			stationName = ObjectProp.getName(craftStationId);
 		}
-
-		titleLabel.setText(stationName);
 
 		int craftSz = itemList.size();
 		Utils.out("Total unlocked recipes: " + craftSz + " out of " + ItemProp.craftReq.size());
 
 		if (craftSz == 0)
-			craftTable.add(new Label("You don't know any craft recipes.", Gui.skin));
+			craftTable.add(new Label("You don't know any crafting recipes.", Gui.skin));
 
-		int i = 0;
-		for (int id : itemList) {
-			boolean lastInRow = (i + 1) % ENTRIES_PER_ROW == 0;
-			craftTable.add(createEntry(id))
+		getCraftableItems().forEach(item -> {
+			boolean lastInRow = (entries + 1) % ENTRIES_PER_ROW == 0;
+			craftTable.add(createEntry(item))
 					.padRight(!lastInRow ? ENTRY_XPAD : 0)
 					.padBottom(ENTRY_YPAD);
 
 			if (lastInRow)
 				craftTable.row();
-			++i;
-		}
-		craftTable.row();
+			++entries;
+		});
 
-		craftTable.align(Align.center);
+		craftTable.row();
 		craftTable.pack();
 		scroll.addAction(Actions.alpha(0));
 
-		containerTable.setBackground(GuiSkin.darkBackgroundSizeable);
-		containerTable.setFillParent(true);
-		containerTable.add(titleLabel).align(Align.center).row();
-
-		if (craftStationId == 0)
-			containerTable.add(unlockProgressLabel).padTop(TITLE_PADDING / 3).row();
-
-		containerTable.add(scroll)
-				.size(Gdx.graphics.getWidth(),
-						Gdx.graphics.getHeight() - (BACK_BUTTON_HEIGHT + titleLabel.getHeight() + TITLE_PADDING))
-				.row();
-
-		backBtn.align(Align.center);
-
-		containerTable.add(backBtn).size(BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT).align(Align.center).row();
 		TimeUtils.scheduleTask(() -> {
 			Utils.dbg("Restoring position %f %f", scrollX, scrollY);
 			scroll.setScrollY(scrollY);
@@ -161,10 +183,10 @@ public class CraftDialog extends GameDialog {
 
 	private final static Drawable entryBg = GuiSkin.getColorDrawable(new Color(0.25f, 0.25f, 0.25f, 0.5f));
 
-	private Table createEntry(int id) {
+	private Table createEntry(Item item) {
 		Table entry = new Table();
-		CraftButton craftButton = new CraftButton(ItemProp.getItem(id), () -> afterCrafting());
-		Label recipeLabel = new Label(Item.createReadableItemList(ItemProp.getCraftRecipe(id)), Gui.skin);
+		CraftButton craftButton = new CraftButton(item, () -> afterCrafting());
+		Label recipeLabel = new Label(Item.createReadableItemList(ItemProp.getCraftRecipe(item.id())), Gui.skin);
 		recipeLabel.setAlignment(Align.left);
 		recipeLabel.setWrap(true);
 		final float width = craftButton.getWidth();
