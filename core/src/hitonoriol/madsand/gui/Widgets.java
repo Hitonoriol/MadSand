@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -34,6 +35,17 @@ public class Widgets {
 
 	public static TextButton button() {
 		return button("");
+	}
+	
+	public static CheckBox checkbox(String text) {
+		return new CheckBox("", Gui.skin);
+	}
+	
+	public static CheckBox plainCheckbox() {
+		CheckBox checkbox = checkbox("");
+		Gui.removeActor(checkbox, checkbox.getLabel());
+		checkbox.pack();
+		return checkbox;
 	}
 
 	public static Label label(String text) {
