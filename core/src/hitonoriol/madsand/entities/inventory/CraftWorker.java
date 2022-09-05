@@ -15,15 +15,25 @@ public class CraftWorker {
 
 	public CraftWorker(Entity entity, Item itemToCraft) {
 		this.entity = entity;
-		this.itemToCraft = itemToCraft;
+		setItemToCraft(itemToCraft);
+	}
+	
+	public CraftWorker(Entity entity) {
+		this(entity, Item.nullItem);
+	}
+	
+	public void setItemToCraft(Item item) {
+		itemToCraft = item;
 		calcMaxCraftQuantity();
 	}
 
 	private void calcMaxCraftQuantity() {
-		if (!entity.inventory.itemsExist(itemToCraft.recipe)) {
-			maxCraftQuantity = 0;
+		maxCraftQuantity = 0;
+		if (!itemToCraft.isCraftable())
 			return;
-		}
+		
+		if (!entity.inventory.itemsExist(itemToCraft.recipe))
+			return;
 
 		List<Integer> reqQuantities = Item.parseItemString(itemToCraft.recipe)
 				.stream()
