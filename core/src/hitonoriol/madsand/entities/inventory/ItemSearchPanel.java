@@ -1,5 +1,7 @@
 package hitonoriol.madsand.entities.inventory;
 
+import static hitonoriol.madsand.gui.Widgets.label;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
@@ -97,12 +99,25 @@ public class ItemSearchPanel extends Table {
 		});
 	}
 
-	private Cell<Actor> addEntry(String name, Actor entry) {
-		add(name).padRight(NAME_PAD);
-		Cell<Actor> cell = add(entry).size(BOX_WIDTH, BOX_HEIGHT);
+	private Cell<Actor> addEntry(Actor leftActor, Actor rightActor, boolean leftToRight) {
+		Actor searchComponent = leftToRight ? rightActor : leftActor;
+		if (searchComponent instanceof TextField)
+			searchComponent.addListener(new SearchQueryUpdater());
+		else
+			Gui.setAction(searchComponent, this::changed);
+		add(leftActor).padRight(NAME_PAD);
+		Cell<Actor> cell = add(rightActor).fillX().maxWidth(BOX_WIDTH).height(BOX_HEIGHT);
 		if (vertical)
 			row();
 		return cell;
+	}
+
+	protected Cell<Actor> addEntry(String name, Actor entry) {
+		return addEntry(label(name), entry, true);
+	}
+
+	protected Cell<Actor> addEntry(Actor entry, String name) {
+		return addEntry(entry, label(name), false);
 	}
 
 	public Stream<Item> search(List<Item> list) {
@@ -137,22 +152,25 @@ public class ItemSearchPanel extends Table {
 		return filterBox.getSelected();
 	}
 
+	protected void changed() {
+		onChange.run();
+	}
+
 	public void onChange(Runnable action) {
 		onChange = action;
-		Gui.setAction(sortBox, onChange);
-		Gui.setAction(orderBox, onChange);
-		Gui.setAction(filterBox, onChange);
-		searchField.addListener(new InputListener() {
-			private Timer.Task updateTask = TimeUtils.createTask(onChange);
+	}
 
-			@Override
-			public boolean keyTyped(InputEvent event, char character) {
-				if (updateTask.isScheduled())
-					updateTask.cancel();
+	private class SearchQueryUpdater extends InputListener {
+		private static final float DELAY = 0.2f;
+		private Timer.Task updateTask = TimeUtils.createTask(ItemSearchPanel.this::changed);
 
-				TimeUtils.scheduleTask(updateTask, 0.2f);
-				return super.keyTyped(event, character);
-			}
-		});
+		@Override
+		public boolean keyTyped(InputEvent event, char character) {
+			if (updateTask.isScheduled())
+				updateTask.cancel();
+
+			TimeUtils.scheduleTask(updateTask, DELAY);
+			return super.keyTyped(event, character);
+		}
 	}
 }
