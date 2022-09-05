@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -32,11 +31,11 @@ import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
 
 public class CraftDialog extends GameDialog {
-	private static float FADE_DELAY = 0.15f;
-	private static float ENTRY_XPAD = 50, ENTRY_YPAD = 5;
-	private static float BACK_BUTTON_HEIGHT = 50, BACK_BUTTON_WIDTH = 250;
-	private static float TITLE_PADDING = 10;
-	private static String titleString = "Crafting";
+	private static final float FADE_DELAY = 0.15f;
+	private static final float ENTRY_XPAD = 50, ENTRY_YPAD = 5;
+	private static final float BACK_BUTTON_HEIGHT = 50, BACK_BUTTON_WIDTH = 250;
+	private static final float TITLE_PADDING = 10;
+	private static final String titleString = "Crafting";
 	private static final int ENTRIES_PER_ROW = 2;
 
 	private Table container = new Table();
@@ -65,9 +64,10 @@ public class CraftDialog extends GameDialog {
 		backBtn.align(Align.center);
 		unlockProgressLabel.setAlignment(Align.center);
 		
-		container.add(titleLabel).align(Align.top).padBottom(TITLE_PADDING).row();
+		container.defaults().padBottom(TITLE_PADDING);
+		container.add(titleLabel).padTop(TITLE_PADDING).align(Align.top).row();
 		if (isPlayerCraftMenu())
-			container.add(unlockProgressLabel).padBottom(TITLE_PADDING).row();
+			container.add(unlockProgressLabel).row();
 		container.add(searchPanel).growX().row();
 		container.add(scroll).grow().row();
 		container.add(backBtn).size(BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT).align(Align.center).row();
