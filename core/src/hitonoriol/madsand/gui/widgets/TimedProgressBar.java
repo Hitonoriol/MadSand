@@ -44,9 +44,14 @@ public class TimedProgressBar extends ProgressBar {
 		defaultValue = triggerWhenFull ? MIN_VALUE : MAX_VALUE;
 		reset();
 	}
-	
+
 	protected void finish() {
 		done = true;
+	}
+
+	public void actionTriggered() {
+		action.run();
+		finish();
 	}
 
 	public void reset() {
@@ -62,16 +67,18 @@ public class TimedProgressBar extends ProgressBar {
 		super.setValue(triggerValue);
 	}
 
-	protected void setAction(Runnable action) {
+	public void setAction(Runnable action) {
 		this.action = action;
+	}
+
+	public Runnable getAction() {
+		return action;
 	}
 
 	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
 
-		if (!done && super.getVisualValue() == triggerValue) {
-			action.run();
-			finish();
-		}
+		if (!done && super.getVisualValue() == triggerValue)
+			actionTriggered();
 	}
 }
