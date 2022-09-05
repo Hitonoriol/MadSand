@@ -44,7 +44,7 @@ public class CraftDialog extends GameDialog {
 	private Label titleLabel = new Label(titleString, Gui.skin);
 	private Label unlockProgressLabel = Widgets.label();
 	private TextButton backBtn = createCloseButton();
-	private ItemSearchPanel searchPanel = new ItemSearchPanel(this, false);
+	private ItemSearchPanel searchPanel = new CraftItemSearchPanel(this);
 	private float scrollX, scrollY;
 	private int entries = 0;
 
