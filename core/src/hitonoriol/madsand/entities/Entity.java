@@ -4,6 +4,7 @@ import static hitonoriol.madsand.resources.Resources.TILESIZE;
 import static hitonoriol.madsand.screens.WorldRenderer.TARGET_FRAME_DELTA;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Queue;
@@ -54,7 +55,7 @@ public abstract class Entity extends MapEntity {
 	@JsonIgnore
 	private Sprite[] sprites; // Same order as in Direction.baseValues
 
-	public static final Comparator<Entity> speedComparator = (e1, e2) -> Double.compare(e2.getSpeed(), e1.getSpeed());
+	public static final Comparator<Entity> speedComparator = Comparator.comparingDouble(Entity::getSpeed).reversed();
 
 	public int x, y; // Grid coords
 	public PairFloat screenPosition = new PairFloat(); // Screen space coords
@@ -671,6 +672,19 @@ public abstract class Entity extends MapEntity {
 
 	protected void look(Direction dir) {
 		stats.look = dir;
+	}
+
+	public <T extends MapObject> List<T> getAdjacentObjects(Class<T> type) {
+		Map map = MadSand.world().getCurLoc();
+		List<T> objects = new ArrayList<>();
+		Pair coords = getPosition();
+		Direction.directions.forEach(direction -> {
+			map.getObject(coords.addDirection(direction))
+					.as(type)
+					.ifPresent(object -> objects.add(object));
+			coords.addDirection(direction.opposite());
+		});
+		return objects;
 	}
 
 	boolean canWalk(Direction dir) {
