@@ -1,6 +1,7 @@
 package hitonoriol.madsand.map;
 
 import static hitonoriol.madsand.MadSand.player;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -1080,9 +1081,10 @@ public class Map {
 	public Pair getFreeTileNear(Pair coords) {
 		Pair direction = new Pair();
 		Pair freeTile = new Pair();
-		Collections.shuffle(Direction.directions);
+		List<Direction> directions = Direction.asList();
+		Collections.shuffle(directions);
 
-		for (Direction dir : Direction.directions)
+		for (Direction dir : directions)
 			if (isFreeTile(freeTile.set(coords).add(direction.fromDirection(dir))))
 				return freeTile;
 

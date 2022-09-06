@@ -5,6 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.apache.commons.text.WordUtils;
+
+import com.badlogic.gdx.Input.Keys;
+
 import hitonoriol.madsand.util.Utils;
 
 public enum Direction {
@@ -12,9 +16,13 @@ public enum Direction {
 
 	private static final Direction[] values = Direction.values();
 	public static final Direction[] baseValues = { RIGHT, UP, LEFT, DOWN };
-	public static List<Direction> directions = new ArrayList<>(Arrays.asList(values));
+	public static final List<Direction> directions = Arrays.asList(values);
 	public static final int BASE_DIRECTIONS = baseValues.length, TOTAL_DIRECTIONS = values.length;
 
+	public static List<Direction> asList() {
+		return new ArrayList<>(directions);
+	}
+	
 	public Direction opposite() {
 		switch (this) {
 		case DOWN:
@@ -36,6 +44,14 @@ public enum Direction {
 		default:
 			return null;
 		}
+	}
+	
+	public boolean isPositive() {
+		return !isDown() && !isLeft();
+	}
+	
+	public boolean isNegative() {
+		return !isPositive();
 	}
 	
 	public boolean isLeft() {
@@ -94,6 +110,10 @@ public enum Direction {
 	public Direction getBase(int idx) {
 		return baseValues[idx];
 	}
+	
+	public int toKey() {
+		return Keys.valueOf(toString());
+	}
 
 	public static void forEachBase(Consumer<Direction> action) {
 		for (Direction dir : baseValues)
@@ -102,5 +122,10 @@ public enum Direction {
 
 	public static Direction random() {
 		return Utils.randElement(baseValues);
+	}
+	
+	@Override
+	public String toString() {
+		return WordUtils.capitalizeFully(name());
 	}
 }
