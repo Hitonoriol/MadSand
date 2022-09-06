@@ -65,7 +65,7 @@ public class QuestListDialog extends GameDialog {
 
 				questButton = new TextButton(buttonString, Gui.skin);
 				questButton.getLabel().setWrap(true);
-				scrollTable.add(questButton).width(BUTTON_WIDTH).pad(BUTTON_PAD).row();
+				scrollTable.add(questButton).size(BUTTON_WIDTH, BUTTON_HEIGHT).pad(BUTTON_PAD).row();
 
 				questButton.addListener(new ChangeListener() {
 					@Override
