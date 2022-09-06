@@ -71,7 +71,7 @@ public class OverlayBottomMenu extends Table {
 		TextButton button = new TextButton(text + " [" + Keys.toString(key) + "]", Gui.skin);
 		container.add(button).size(WIDTH, HEIGHT).pad(BUTTON_PADDING);
 		Gui.setAction(button, action);
-		Keyboard.getKeyBindManager().bind(key, true, () -> action.run());
+		Keyboard.getKeyBindManager().bind(action::run, true, key);
 	}
 
 }

@@ -259,8 +259,8 @@ public class Player extends Entity {
 		if (abilityKeyBinds.getOrDefault(key, -1) != abilityId)
 			abilityKeyBinds.put(key, abilityId);
 
-		Gui.overlay.getHotbar().addEntry(MadSand.player().getAbility(abilityId).as(ActiveAbility.class).get());
-		Keyboard.getKeyBindManager().bind(key, () -> MadSand.player().getAbility(abilityId).apply());
+		Gui.overlay.getHotbar().addEntry(getAbility(abilityId).as(ActiveAbility.class).get());
+		Keyboard.getKeyBindManager().bind(getAbility(abilityId)::apply, key);
 	}
 
 	public void unbindAbility(int key) {

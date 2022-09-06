@@ -35,6 +35,7 @@ import hitonoriol.madsand.gui.widgets.overlay.InfoPanel;
 import hitonoriol.madsand.gui.widgets.overlay.OverlayBottomMenu;
 import hitonoriol.madsand.gui.widgets.stats.StatProgressBar;
 import hitonoriol.madsand.gui.widgets.waypoint.WaypointArrow;
+import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.util.Functional;
@@ -72,6 +73,7 @@ public class Overlay extends Stage {
 
 	public Overlay() {
 		super(Gui.viewport());
+		addListener(Keyboard.getListener());
 	}
 
 	public void setPlayer(Player player) {

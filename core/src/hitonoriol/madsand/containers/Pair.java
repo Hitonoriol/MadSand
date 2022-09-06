@@ -54,6 +54,10 @@ public class Pair {
 		return add(arg.x, arg.y);
 	}
 
+	public Pair multiply(Pair rhs) {
+		return multiply(rhs.x, rhs.y);
+	}
+	
 	public Pair multiply(int mx, int my) {
 		return set(this.x * mx, this.y * my);
 	}

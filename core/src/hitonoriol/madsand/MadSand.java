@@ -47,7 +47,6 @@ public class MadSand extends Game {
 		Timer.instance().start();
 		Resources.loadAll();
 		initScreens();
-		Keyboard.initListener();
 		Mouse.initListener();
 		initNewGame();
 		Keyboard.initDefaultKeyBinds();
