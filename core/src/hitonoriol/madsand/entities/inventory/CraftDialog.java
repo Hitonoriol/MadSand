@@ -25,6 +25,7 @@ import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.gui.widgets.itembutton.CraftButton;
+import hitonoriol.madsand.map.object.CraftingStation;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.util.TimeUtils;
@@ -63,7 +64,7 @@ public class CraftDialog extends GameDialog {
 		titleLabel.setText(isPlayerCraftMenu() ? titleString : ObjectProp.getName(craftStationId));
 		backBtn.align(Align.center);
 		unlockProgressLabel.setAlignment(Align.center);
-		
+
 		container.defaults().padBottom(TITLE_PADDING);
 		container.add(titleLabel).padTop(TITLE_PADDING).align(Align.top).row();
 		if (isPlayerCraftMenu())
@@ -106,9 +107,19 @@ public class CraftDialog extends GameDialog {
 		craftStationItems = (isPlayerCraftMenu()
 				? player().getCraftRecipes()
 				: ItemProp.craftStationRecipes.get(craftStationId))
+						.stream().map(ItemProp::getItem).collect(Collectors.toList());
+
+		/* If this dialog is opened from the InventoryUI, search for crafting stations
+		 * on all tiles adjacent to player and append recipes from their recipe lists to
+		 * the dialog's recipe list */
+		if (isPlayerCraftMenu()) {
+			player().getAdjacentObjects(CraftingStation.class).forEach(station -> {
+				ItemProp.craftStationRecipes.get(station.id())
 						.stream()
-						.map(id -> ItemProp.getItem(id))
-						.collect(Collectors.toList());
+						.map(ItemProp::getItem)
+						.forEach(craftStationItems::add);
+			});
+		}
 	}
 
 	private List<Item> getItemList() {
@@ -133,7 +144,7 @@ public class CraftDialog extends GameDialog {
 	}
 
 	private Stream<Item> getCraftableItems() {
-		return searchPanel.search(getItemList());
+		return searchPanel.search(getItemList()).distinct();
 	}
 
 	private void refreshCraftMenu() {
