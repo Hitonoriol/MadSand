@@ -9,7 +9,6 @@ import java.util.stream.Stream;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 
-import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.containers.HashMapFactory;
@@ -79,7 +78,7 @@ public class Keyboard {
 					else
 						renderer.setZoom(WorldRenderer.DEFAULT_ZOOM);
 				}, Keys.NUMPAD_5)
-				.bind(GameSaver::save, Keys.G);
+				.bind(world()::save, Keys.G);
 
 		/* Debug keys */
 		if (Globals.debugMode) {
@@ -160,6 +159,9 @@ public class Keyboard {
 				}, Keys.CONTROL_LEFT, dir.toKey());
 			});
 
+			/* Force update light */
+			bind(world()::updateLight, Keys.CONTROL_LEFT, Keys.L);
+			
 			/* Quick access to minigames */
 			bind(() -> {
 				new SelectDialog("Minigames")

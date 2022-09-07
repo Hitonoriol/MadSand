@@ -65,7 +65,7 @@ public class MadSand extends Game {
 
 	public static void initNewGame() {
 		game.createWorld();
-		MadSand.player().updCoords();
+		player().updCoords();
 		Lua.init();
 		Gui.overlay.getGameLog().clear();
 		if (!Globals.headless() && isWorldUntouched())
