@@ -1,5 +1,7 @@
 package hitonoriol.madsand.containers.rolltable;
 
+import static hitonoriol.madsand.resources.Resources.loader;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -15,7 +17,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import hitonoriol.madsand.containers.rolltable.LootTable.Deserializer;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.properties.Globals;
-import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
 @JsonDeserialize(using = Deserializer.class)
@@ -40,7 +41,7 @@ public class LootTable extends RollTable<LootTable.LootEntry> {
 		
 		if (!lootTblString.contains("|")) {
 			try {
-				return Resources.getMapper().readValue(lootTblString, LootTable.class);
+				return loader().readValue(lootTblString, LootTable.class);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;

@@ -1,5 +1,7 @@
 package hitonoriol.madsand.map;
 
+import static hitonoriol.madsand.resources.Resources.loader;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -16,7 +18,7 @@ public interface Placeable extends Enumerable {
 	@JsonSetter("placeable")
 	default void loadPlaceable(ObjectNode json) {
 		json.put("@type", "PlaceableItem");
-		createPlaceable(Resources.load(json, PlaceableItem.class));
+		createPlaceable(loader().load(json, PlaceableItem.class));
 	}
 
 	void createPlaceable(PlaceableItem item);

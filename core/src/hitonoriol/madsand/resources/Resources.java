@@ -1,13 +1,9 @@
 package hitonoriol.madsand.resources;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Calendar;
 import java.util.Queue;
-import java.util.function.Consumer;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -24,22 +20,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.fasterxml.jackson.core.TreeNode;
-import com.fasterxml.jackson.core.json.JsonReadFeature;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.type.MapType;
-import com.fasterxml.jackson.databind.type.TypeFactory;
 
-import hitonoriol.madsand.Enumerable;
-import hitonoriol.madsand.GameSaver;
-import hitonoriol.madsand.containers.Pair;
-import hitonoriol.madsand.containers.Pair.PairKeyDeserializer;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.gui.Gui;
@@ -60,6 +41,7 @@ import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.worldgen.WorldGenPreset;
 
 public class Resources {
+	private static final SimpleDateFormat accurateDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH'h'mm'm'-ss's'SSS");
 	private static final String QUEST_FILE = "quests.json";
 	private static final String WORLDGEN_FILE = "worldgen.json";
 	private static final String ENCOUNTER_FILE = "encounters.json";
@@ -74,8 +56,7 @@ public class Resources {
 	public static final String SKILL_FILE = "skills.json";
 	public static final String SCRIPT_DIR = "scripts/";
 	public static final String ENCOUNTER_DIR = "encounter/";
-	public static final String ERR_FILE = "MadSandCritical.log";
-	public static final String OUT_FILE = "MadSandOutput.log";
+	public static final String OUT_FILE = String.format("MadSand-%s.log", accurateDateFormat.format(Calendar.getInstance().getTime()));
 	
 	public static final int TILESIZE = 33;
 
@@ -88,14 +69,13 @@ public class Resources {
 
 	public static final String emptyField = "-1";
 	public static final int emptyId = -1;
-	public static String Space = " ", Colon = ":";
+	public static final String Space = " ", Colon = ":";
 	public static final String Tab = "    ";
 	public static final String LINEBREAK = Character.toString('\n');
-	public static String COLOR_END = "[]";
+	public static final String COLOR_END = "[]";
 
 	private final static Queue<Runnable> initQueue = new ArrayDeque<>();
-	private final static ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-	private final static TypeFactory typeFactory = mapper.getTypeFactory();
+	private final static Serializer loader = new Serializer();
 
 	public static void loadAll() {
 		try {
@@ -109,7 +89,6 @@ public class Resources {
 	private static void init() throws Exception {
 		Utils.out("Loading resources...");
 		Gdx.graphics.setCursor(Gdx.graphics.newCursor(loadPixmap("textures/cursor.png"), 0, 0));
-		initObjectMapper();
 		Globals.loadGlobals();
 		loadMapTiles();
 		loadMapObjects();
@@ -132,42 +111,32 @@ public class Resources {
 		initQueue.forEach(action -> action.run());
 	}
 
-	private static void initObjectMapper() {
-		mapper.configure(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS.mappedFeature(), true);
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		mapper.activateDefaultTyping(mapper.getPolymorphicTypeValidator());
-
-		SimpleModule simpleModule = new SimpleModule();
-		simpleModule.addKeyDeserializer(Pair.class, new PairKeyDeserializer());
-		mapper.registerModule(simpleModule);
-	}
-
 	private static void loadTutorial() {
-		Tutorial.strings = loadMap(TUTORIAL_FILE, String.class, String.class);
+		Tutorial.strings = loader.loadMap(TUTORIAL_FILE, String.class, String.class);
 	}
 
 	private static void loadQuests() {
-		QuestList.quests = loadEnumerableMap(QUEST_FILE, Quest.class);
+		QuestList.quests = loader.loadEnumerableMap(QUEST_FILE, Quest.class);
 		Utils.out(QuestList.quests.size() + " quests");
 	}
 
 	private static void loadNpcs() {
-		NpcProp.npcs = loadEnumerableMap(NPC_FILE, NpcContainer.class);
+		NpcProp.npcs = loader.loadEnumerableMap(NPC_FILE, NpcContainer.class);
 		Utils.out(NpcProp.npcs.size() + " NPCs");
 	}
 
 	private static void loadMapTiles() {
-		TileProp.tiles = loadEnumerableMap(TILE_FILE, Tile.class);
+		TileProp.tiles = loader.loadEnumerableMap(TILE_FILE, Tile.class);
 		Utils.out(TileProp.tiles.size() + " tiles");
 	}
 
 	private static void loadMapObjects() {
-		ObjectProp.objects = loadEnumerableMap(OBJECT_FILE, MapObject.class);
+		ObjectProp.objects = loader.loadEnumerableMap(OBJECT_FILE, MapObject.class);
 		Utils.out(ObjectProp.objects.size() + " map objects");
 	}
 
 	private static void loadItems() {
-		ItemProp.items = loadEnumerableMap(ITEM_FILE, Item.class);
+		ItemProp.items = loader.loadEnumerableMap(ITEM_FILE, Item.class);
 		finalizeInit();
 		ItemProp.items.forEach((id, item) -> {
 			item.initRecipe();
@@ -177,31 +146,14 @@ public class Resources {
 	}
 
 	private static void loadWorldGen() {
-		WorldGenProp.biomes = loadMap(WORLDGEN_FILE, Integer.class, WorldGenPreset.class);
-		WorldGenProp.encounters = loadList(ENCOUNTER_FILE, String.class);
+		WorldGenProp.biomes = loader.loadMap(WORLDGEN_FILE, Integer.class, WorldGenPreset.class);
+		WorldGenProp.encounters = loader.loadList(ENCOUNTER_FILE, String.class);
 		Utils.out(WorldGenProp.biomes.size() + " biomes");
 	}
 
-	private static <T extends Enumerable> Map<Integer, T> loadEnumerableMap(
-			String internalFile,
-			Class<T> type,
-			Consumer<T> initAction) {
-		Map<Integer, T> map = loadMap(internalFile, Integer.class, type);
-		map.forEach((id, value) -> {
-			value.setId(id);
-			if (initAction != null)
-				initAction.accept(value);
-		});
-		return map;
-	}
-
-	private static <T extends Enumerable> Map<Integer, T> loadEnumerableMap(String internalFile, Class<T> type) {
-		return loadEnumerableMap(internalFile, type, null);
-	}
-
 	private static void loadItemProducers() {
-		ObjectProp.itemProducers = loadMap(ITEMFACTORY_FILE, Integer.class, ItemProducer.class);
-		ObjectProp.buildRecipes = loadMap(BUILDRECIPE_FILE, Integer.class, String.class);
+		ObjectProp.itemProducers = loader.loadMap(ITEMFACTORY_FILE, Integer.class, ItemProducer.class);
+		ObjectProp.buildRecipes = loader.loadMap(BUILDRECIPE_FILE, Integer.class, String.class);
 		ObjectProp.buildRecipes.forEach((id, recipe) -> ItemProp.buildReq.put(id, Item.parseCraftRequirements(recipe)));
 	}
 
@@ -255,119 +207,8 @@ public class Resources {
 		return Gdx.files.internal(file).readString();
 	}
 
-	public static <T> T update(T obj, JsonNode json) {
-		try {
-			return mapper.readerForUpdating(obj).readValue(json);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public static <T> T loadString(String jsonStr, Class<T> type) {
-		try {
-			return mapper.readerFor(type).readValue(jsonStr);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public static <T> T load(TreeNode node, Class<T> type) {
-		try {
-			return mapper.treeToValue(node, type);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public static <T> T load(String internalFile, Class<T> type) {
-		return loadString(readInternal(internalFile), type);
-	}
-
-	public static void save(String file, Object object) {
-		try {
-			mapper.writeValue(new File(file), object);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static <T> ArrayList<T> loadList(String internalFile, Class<T> type) {
-		try {
-			return mapper.readValue(readInternal(internalFile),
-					typeFactory.constructCollectionType(ArrayList.class, type));
-		} catch (Exception e) {
-			return null;
-		}
-	}
-
-	public static MapType getMapType(Class<?> key, Class<?> value) {
-		return typeFactory.constructMapType(HashMap.class, key, value);
-	}
-
-	public static ObjectWriter getMapWriter(Class<?> key, Class<?> value) {
-		return mapper.writerFor(getMapType(key, value));
-	}
-
-	public static ObjectReader getMapReader(Class<?> key, Class<?> value) {
-		return mapper.readerFor(getMapType(key, value));
-	}
-
-	public static ObjectReader getMapReader(Class<?> value) {
-		return getMapReader(Pair.class, value);
-	}
-
-	public static ObjectWriter getMapWriter(Class<?> value) {
-		return getMapWriter(Pair.class, value);
-	}
-
-	private static <K, V> HashMap<K, V> loadMap(String file, Class<K> keyType, Class<V> valueType, boolean internal) {
-		try {
-			return mapper.readValue(internal ? readInternal(file) : GameSaver.readFile(file),
-					getMapType(keyType, valueType));
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public static <K, V> HashMap<K, V> loadMap(String internalFile, Class<K> keyType, Class<V> valueType) {
-		return loadMap(internalFile, keyType, valueType, true);
-	}
-
-	public static <K, V> HashMap<K, V> readMap(String file, Class<K> keyType, Class<V> valueType) {
-		return loadMap(file, keyType, valueType, false);
-	}
-
-	public static <V> HashMap<Pair, V> readMap(String file, Class<V> valueType) {
-		return readMap(file, Pair.class, valueType);
-	}
-
-	public static String saveMap(Map<?, ?> map, Class<?> keyType, Class<?> valType) {
-		try {
-			return getMapWriter(keyType, valType).writeValueAsString(map);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public static String saveMap(Map<?, ?> map, Class<?> valType) {
-		return saveMap(map, Pair.class, valType);
-	}
-
-	public static <K, V> void saveMap(String file, Map<K, V> map, Class<K> keyType, Class<V> valType) {
-		try {
-			getMapWriter(keyType, valType).writeValue(new File(file), map);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static ObjectMapper getMapper() {
-		return mapper;
+	public static Serializer loader() {
+		return loader;
 	}
 
 	public static NinePatchDrawable loadNinePatch(String file) {
@@ -381,9 +222,7 @@ public class Resources {
 	public static Pixmap loadPixmap(String file) {
 		return new Pixmap(Gdx.files.internal(file));
 	}
-
-	private static SimpleDateFormat screenshotDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
-
+	
 	public static void takeScreenshot() {
 		Gui.unfocusGame();
 		TimeUtils.scheduleTask(() -> {
@@ -397,7 +236,7 @@ public class Resources {
 					Pixmap.Format.RGBA8888);
 
 			BufferUtils.copy(pixels, 0, pixmap.getPixels(), pixels.length);
-			PixmapIO.writePNG(Gdx.files.local(Utils.now(screenshotDateFormat) + ".png"), pixmap);
+			PixmapIO.writePNG(Gdx.files.local(Utils.now(accurateDateFormat) + ".png"), pixmap);
 			pixmap.dispose();
 			Gui.resumeGameFocus();
 		}, Gui.DELAY);

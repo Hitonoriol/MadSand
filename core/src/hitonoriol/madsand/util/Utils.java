@@ -1,7 +1,5 @@
 package hitonoriol.madsand.util;
 
-import static hitonoriol.madsand.resources.Resources.ERR_FILE;
-
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryUsage;
 import java.math.RoundingMode;
@@ -28,6 +26,7 @@ import com.badlogic.gdx.graphics.Color;
 import hitonoriol.madsand.dialog.TextSubstitutor;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.properties.Globals;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Functional.SafeRunnable;
 import me.xdrop.jrand.JRand;
 
@@ -146,7 +145,7 @@ public class Utils {
 				.newLine()
 				.appendText("You can continue playing. If you notice more strange behavior, relaunch the game.")
 				.newLine(2)
-				.appendText("Here's some useless info (this will also be saved to " + ERR_FILE + "):")
+				.appendText("Here's some useless info (this will also be saved to " + Resources.OUT_FILE + "):")
 				.newLine()
 				.appendText(msg);
 	}

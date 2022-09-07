@@ -1,9 +1,8 @@
 package hitonoriol.madsand.properties;
 
 import static hitonoriol.madsand.resources.Resources.GLOBALS_FILE;
-import static hitonoriol.madsand.resources.Resources.getMapper;
-import static hitonoriol.madsand.resources.Resources.loadList;
 import static hitonoriol.madsand.resources.Resources.readInternal;
+import static hitonoriol.madsand.resources.Resources.loader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,12 +65,12 @@ public class Globals {
 	}
 
 	public static void loadGlobals() throws Exception {
-		instance = getMapper().readValue(readInternal(GLOBALS_FILE), Globals.class);
+		instance = loader().readValue(readInternal(GLOBALS_FILE), Globals.class);
 		instance.abilities.entrySet().stream().forEach(entry -> entry.getValue().id = entry.getKey());
 	}
 
 	public void loadMisc() {
-		tips = loadList("tips.json", String.class);
+		tips = loader().loadList("tips.json", String.class);
 
 		createScriptMap("pills", map -> {
 			abilities.forEach((id, ability) -> map.put(ability.name, "player:addAbility(" + id + ")"));

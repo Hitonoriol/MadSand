@@ -1,5 +1,7 @@
 package hitonoriol.madsand.entities.skill;
 
+import static hitonoriol.madsand.resources.Resources.loader;
+
 import java.util.HashMap;
 
 import hitonoriol.madsand.MadSand;
@@ -9,7 +11,7 @@ import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
 public class SkillContainer extends HashMap<Skill, SkillValue> {
-	private static HashMap<Skill, SkillValue> reqList = Resources.loadMap(Resources.SKILL_FILE, Skill.class,
+	private static HashMap<Skill, SkillValue> reqList = loader().loadMap(Resources.SKILL_FILE, Skill.class,
 			SkillValue.class);
 	public final static int MAX_SKILL_LVL = 100; // max effective lvl (possible to get higher lvls, but lvl bonuses won't increase further than this)
 	private final static SkillContainer maxSkills = new SkillContainer();
