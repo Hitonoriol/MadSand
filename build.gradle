@@ -8,7 +8,7 @@ allprojects {
 		appName = "MadSand"
 		gdxVersion = '1.11.0'
 		aiVersion = '1.6.0'
-		jacksonVersion = '2.12.1'
+		jacksonVersion = '2.13.4'
 	}
 	
 	repositories {
