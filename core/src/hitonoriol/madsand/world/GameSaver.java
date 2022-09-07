@@ -22,8 +22,8 @@ import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.lua.Lua;
-import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.resources.Serializer;
+import hitonoriol.madsand.util.Log;
 import hitonoriol.madsand.util.Utils;
 
 public class GameSaver {
@@ -272,7 +272,7 @@ public class GameSaver {
 		Gui.drawOkDialog(
 				"Couldn't to load this world. \n"
 						+ "Maybe it was saved in older/newer version of the game or some files are corrupted.\n"
-						+ "Check " + Resources.OUT_FILE + " for details.");
+						+ "Check " + Log.OUT_FILE + " for details.");
 	}
 
 	public boolean verifyNextSector(int x, int y) {

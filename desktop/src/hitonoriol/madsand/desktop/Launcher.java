@@ -10,9 +10,9 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.properties.Prefs;
-import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Functional;
 import hitonoriol.madsand.util.If;
+import hitonoriol.madsand.util.Log;
 
 public class Launcher {
 
@@ -52,7 +52,7 @@ public class Launcher {
 		Globals.silentMode = parser.argExists("silent");
 
 		if (!Globals.debugMode) {
-			PrintStream out = new PrintStream(Resources.OUT_FILE);
+			PrintStream out = new PrintStream(Log.OUT_FILE);
 			System.setOut(out);
 			System.setErr(out);
 		}

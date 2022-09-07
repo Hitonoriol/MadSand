@@ -3,6 +3,7 @@ package hitonoriol.madsand.util;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryUsage;
 import java.math.RoundingMode;
+import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -26,7 +27,6 @@ import com.badlogic.gdx.graphics.Color;
 import hitonoriol.madsand.dialog.TextSubstitutor;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.properties.Globals;
-import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Functional.SafeRunnable;
 import me.xdrop.jrand.JRand;
 
@@ -80,7 +80,7 @@ public class Utils {
 
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss.SSS");
 
-	public static String now(SimpleDateFormat format) {
+	public static String now(DateFormat format) {
 		return format.format(Calendar.getInstance().getTime());
 	}
 
@@ -145,7 +145,7 @@ public class Utils {
 				.newLine()
 				.appendText("You can continue playing. If you notice more strange behavior, relaunch the game.")
 				.newLine(2)
-				.appendText("Here's some useless info (this will also be saved to " + Resources.OUT_FILE + "):")
+				.appendText("Here's some useless info (this will also be saved to " + Log.OUT_FILE + "):")
 				.newLine()
 				.appendText(msg);
 	}

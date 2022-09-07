@@ -1,8 +1,6 @@
 package hitonoriol.madsand.resources;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
-import java.util.Calendar;
 import java.util.Queue;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -36,12 +34,12 @@ import hitonoriol.madsand.properties.QuestList;
 import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.properties.Tutorial;
 import hitonoriol.madsand.properties.WorldGenProp;
+import hitonoriol.madsand.util.Log;
 import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.worldgen.WorldGenPreset;
 
 public class Resources {
-	private static final SimpleDateFormat accurateDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH'h'mm'm'-ss's'SSS");
 	private static final String QUEST_FILE = "quests.json";
 	private static final String WORLDGEN_FILE = "worldgen.json";
 	private static final String ENCOUNTER_FILE = "encounters.json";
@@ -56,8 +54,6 @@ public class Resources {
 	public static final String SKILL_FILE = "skills.json";
 	public static final String SCRIPT_DIR = "scripts/";
 	public static final String ENCOUNTER_DIR = "encounter/";
-	public static final String OUT_FILE = String.format("MadSand-%s.log", accurateDateFormat.format(Calendar.getInstance().getTime()));
-	
 	public static final int TILESIZE = 33;
 
 	private static final TextureAtlas textures = loadAtlas("textures");
@@ -236,7 +232,7 @@ public class Resources {
 					Pixmap.Format.RGBA8888);
 
 			BufferUtils.copy(pixels, 0, pixmap.getPixels(), pixels.length);
-			PixmapIO.writePNG(Gdx.files.local(Utils.now(accurateDateFormat) + ".png"), pixmap);
+			PixmapIO.writePNG(Gdx.files.local(Utils.now(Log.getAccurateDateFormat()) + ".png"), pixmap);
 			pixmap.dispose();
 			Gui.resumeGameFocus();
 		}, Gui.DELAY);
