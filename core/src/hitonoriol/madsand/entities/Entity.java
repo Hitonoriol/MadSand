@@ -71,6 +71,7 @@ public abstract class Entity extends MapEntity {
 	public Inventory inventory = new Inventory();
 	public Stats stats;
 
+	@JsonIgnore
 	private Queue<Movement> movementQueue = new ArrayDeque<>();
 
 	protected boolean hasMoved = false;

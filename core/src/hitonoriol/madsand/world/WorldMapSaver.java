@@ -1,16 +1,15 @@
 package hitonoriol.madsand.world;
 
-import static hitonoriol.madsand.resources.Resources.getMapReader;
-import static hitonoriol.madsand.resources.Resources.getMapper;
-import static hitonoriol.madsand.resources.Resources.readMap;
-import static hitonoriol.madsand.resources.Resources.save;
-import static hitonoriol.madsand.resources.Resources.saveMap;
+import static hitonoriol.madsand.util.ByteUtils.decode2;
+import static hitonoriol.madsand.util.ByteUtils.decode8;
+import static hitonoriol.madsand.util.ByteUtils.encode2;
+import static hitonoriol.madsand.util.ByteUtils.encode8;
+import static hitonoriol.madsand.world.GameSaver.serializer;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 
-import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.map.Loot;
@@ -19,7 +18,6 @@ import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.properties.ObjectProp;
-import hitonoriol.madsand.util.ByteUtils;
 import hitonoriol.madsand.util.Utils;
 
 public class WorldMapSaver {
@@ -27,13 +25,12 @@ public class WorldMapSaver {
 	private final byte[] block = new byte[BLOCK_SIZE];
 	private final byte[] longBlock = new byte[LONG_BLOCK_SIZE];
 
+	private GameSaver saver;
 	private WorldMap worldMap;
 
-	public WorldMapSaver(WorldMap worldMap) {
-		setWorldMap(worldMap);
+	public WorldMapSaver(GameSaver saver) {
+		this.saver = saver;
 	}
-
-	public WorldMapSaver() {}
 
 	public byte[] locationToBytes(int wx, int wy) {
 		Pair coords = new Pair();
@@ -41,15 +38,15 @@ public class WorldMapSaver {
 		try {
 			Location location = worldMap.getLocation(coords.set(wx, wy));
 			// Header: format version, sector layer count
-			stream.write(ByteUtils.encode8(GameSaver.saveFormatVersion));
-			stream.write(ByteUtils.encode2(location.getLayerCount()));
+			stream.write(encode8(GameSaver.saveFormatVersion));
+			stream.write(encode2(location.getLayerCount()));
 
 			// Save all layers of sector
 			for (int layerNum : location.getLayers().keySet()) {
 				byte[] layer = sectorToBytes(wx, wy, layerNum);
 				long size = layer.length;
-				stream.write(ByteUtils.encode2(layerNum));
-				stream.write(ByteUtils.encode8(size));
+				stream.write(encode2(layerNum));
+				stream.write(encode8(size));
 				stream.write(layer);
 				System.gc();
 			}
@@ -63,7 +60,7 @@ public class WorldMapSaver {
 	}
 
 	public void saveLocationInfo(int wx, int wy) throws Exception {
-		getMapper().writeValue(GameSaver.getLocationFile(wx, wy), worldMap.getLocation(new Pair(wx, wy)));
+		serializer().writeValue(saver.getLocationFile(wx, wy), worldMap.getLocation(new Pair(wx, wy)));
 	}
 
 	public void bytesToLocation(byte[] locationData, int wx, int wy) throws Exception {
@@ -84,54 +81,55 @@ public class WorldMapSaver {
 	}
 
 	public Location loadLocationInfo(int wx, int wy) throws Exception {
-		Location location = getMapper().readValue(GameSaver.getLocationFile(wx, wy), Location.class);
+		Location location = serializer().readValue(saver.getLocationFile(wx, wy), Location.class);
 		worldMap.addLocation(new Pair(wx, wy), location);
-		Utils.dbg("{%X} Loaded location {%X} info @ (%d, %d)", worldMap.hashCode(), location.hashCode(), wx, wy);
+		Utils.dbg("World map: {%X}, Location: {%X} @ (%d, %d)", worldMap.hashCode(), location.hashCode(), wx, wy);
 		return location;
 	}
 
 	private byte[] sectorToBytes(int wx, int wy, int layer) {
 		try {
-			Utils.out("Saving sector [%d, %d] Layer: %d", wx, wy, layer);
+			Utils.out("Saving sector (%d, %d): %d", wx, wy, layer);
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			Map map = worldMap.getLocation(new Pair(wx, wy)).getLayer(layer);
 
-			saveMap(GameSaver.getNpcFile(wx, wy, layer), map.getNpcs(), Pair.class, AbstractNpc.class);
-			save(GameSaver.getTimeDependentFile(wx, wy, layer), map.getTimeDependentMapEntities());
+			Utils.out("Saving NPCs and time-dependent entities...");
+			serializer().saveMap(saver.getNpcFile(wx, wy, layer), map.getNpcs(), Pair.class, AbstractNpc.class);
+			serializer().save(saver.getTimeDependentFile(wx, wy, layer), map.getTimeDependentMapEntities());
 
 			int xsz = map.getWidth();
 			int ysz = map.getHeight();
 			// header: width, height
-			stream.write(ByteUtils.encode2(xsz));
-			stream.write(ByteUtils.encode2(ysz));
+			stream.write(encode2(xsz));
+			stream.write(encode2(ysz));
 
-			// Misc map properties as a json string
-			writeStringBlock(stream, getMapper().writeValueAsString(map));
+			Utils.out("Saving map (%dx%d) data...", xsz, ysz);
+			writeStringBlock(stream, serializer().writeValueAsString(map));
 
 			for (int y = 0; y < ysz; ++y) {
 				for (int x = 0; x < xsz; ++x) {
 					// Save tile
 					Tile tile = map.getTile(x, y);
-					stream.write(ByteUtils.encode2(tile.id()));
-					stream.write(ByteUtils.encode2(tile.visited ? 1 : 0));
+					stream.write(encode2(tile.id()));
+					stream.write(encode2(tile.visited ? 1 : 0));
 
 					// Save object
 					MapObject obj = map.getObject(x, y);
-					stream.write(ByteUtils.encode2(obj.id()));
-					stream.write(ByteUtils.encode2(obj.hp));
-					stream.write(ByteUtils.encode2(obj.maxHp));
+					stream.write(encode2(obj.id()));
+					stream.write(encode2(obj.hp));
+					stream.write(encode2(obj.maxHp));
 				}
 			}
 
-			// Save loot
-			writeStringBlock(stream, saveMap(map.getLoot(), Loot.class));
+			Utils.out("Saving loot...");
+			writeStringBlock(stream, serializer().saveMap(map.getLoot(), Loot.class));
 
-			// Save modified MapObject names
+			Utils.out("Saving custom object names...");
 			HashMap<Pair, String> modifiedObjNames = new HashMap<>();
 			map.getObjects().stream()
 					.filter(obj -> !obj.getName().equals(ObjectProp.getName(obj.id())))
 					.forEach(obj -> modifiedObjNames.put(obj.getPosition(), obj.getName()));
-			writeStringBlock(stream, saveMap(modifiedObjNames, String.class));
+			writeStringBlock(stream, serializer().saveMap(modifiedObjNames, String.class));
 			return stream.toByteArray();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -142,28 +140,31 @@ public class WorldMapSaver {
 
 	private void bytesToSector(byte[] sectorData, int wx, int wy, int layer) {
 		try {
-			Utils.dbg("Loading sector (%d, %d) Layer %d...", wx, wy, layer);
+			Utils.out("Loading sector (%d, %d):%d...", wx, wy, layer);
 			ByteArrayInputStream stream = new ByteArrayInputStream(sectorData);
 			// Read header
 			int xsz = nextBlock(stream, block);
 			int ysz = nextBlock(stream, block);
 
-			Pair worldPos = new Pair(wx, wy);
-			Map map = getMapper().readValue(nextStringBlock(stream), Map.class);
+			Map map = serializer().readValue(nextStringBlock(stream), Map.class);
 			map.setSize(xsz, ysz);
 			map.purge();
+			worldMap.addMap(new Pair(wx, wy), layer, map);
+			Utils.out("Loaded map (%dx%d) properties...", xsz, ysz);
 
-			// Load time dependent entities
-			HashMap<Pair, MapEntity> timeDepMap = readMap(GameSaver.getTimeDependentFile(wx, wy, layer),
+			Utils.out("Restoring time dependent entities...");
+			HashMap<Pair, MapEntity> timeDepMap = serializer().readMap(saver.getTimeDependentFile(wx, wy, layer),
 					MapEntity.class);
 			map.setTimeDependentMapEntities(timeDepMap);
 
-			// Load NPCs
-			HashMap<Pair, AbstractNpc> npcs = readMap(GameSaver.getNpcFile(wx, wy, layer), AbstractNpc.class);
-			npcs.forEach((coords, npc) -> npc.postLoadInit());
-			map.setNpcs(npcs);
+			Utils.out("Loading NPCs...");
+			HashMap<Pair, AbstractNpc> npcs = serializer().readMap(saver.getNpcFile(wx, wy, layer), AbstractNpc.class);
+			map.setNpcs(npcs).forEach((coords, npc) -> {
+				npc.postLoadInit();
+				Utils.out("(%s): [%s]", coords, npc);
+			});
 
-			// Load tiles & objects
+			Utils.out("Loading tiles & objects...");
 			for (int y = 0; y < ysz; ++y) {
 				for (int x = 0; x < xsz; ++x) {
 					map.addTile(x, y, nextBlock(stream, block), true);
@@ -175,31 +176,33 @@ public class WorldMapSaver {
 				}
 			}
 
-			// Load loot
-			HashMap<Pair, Loot> mapLoot = getMapReader(Loot.class).readValue(nextStringBlock(stream));
+			Utils.out("Loading loot...");
+			HashMap<Pair, Loot> mapLoot = serializer().getMapReader(Loot.class).readValue(nextStringBlock(stream));
 			map.setLoot(mapLoot);
 
-			// Load modified MapObject names
-			HashMap<Pair, String> modifiedObjNames = getMapReader(String.class).readValue(nextStringBlock(stream));
+			Utils.out("Loading custom object names...");
+			HashMap<Pair, String> modifiedObjNames = serializer().getMapReader(String.class)
+					.readValue(nextStringBlock(stream));
 			modifiedObjNames.forEach((position, name) -> map.getObject(position).name = name);
 
-			// Add loaded layer map to location @(wx, wy)
+			Utils.out("Finishing up...");
 			map.postLoadInit();
-			worldMap.addMap(worldPos, layer, map);
 		} catch (Exception e) {
 			e.printStackTrace();
 			Utils.die();
 		}
 	}
 
-	/* Writes String as bytes to stream as a sequence: [(long) string length][string bytes] */
+	/* Writes String as bytes to stream as a sequence: [(long) string length][string
+	 * bytes] */
 	private void writeStringBlock(ByteArrayOutputStream stream, String str) throws Exception {
 		byte bytes[] = str.getBytes();
-		stream.write(ByteUtils.encode8(bytes.length));
+		stream.write(encode8(bytes.length));
 		stream.write(bytes);
 	}
 
-	/* Reads byte sequence: [(long) length of contents][contents] and returns contents as String*/
+	/* Reads byte sequence: [(long) length of contents][contents] and returns
+	 * contents as String */
 	private String nextStringBlock(ByteArrayInputStream stream) throws Exception {
 		byte bytes[] = new byte[(int) nextLongBlock(stream, longBlock)];
 		stream.read(bytes);
@@ -208,12 +211,12 @@ public class WorldMapSaver {
 
 	private long nextLongBlock(ByteArrayInputStream stream, byte[] buffer) throws Exception {
 		stream.read(buffer);
-		return ByteUtils.decode8(buffer);
+		return decode8(buffer);
 	}
 
 	private int nextBlock(ByteArrayInputStream stream, byte[] buffer) throws Exception {
 		stream.read(buffer);
-		return ByteUtils.decode2(buffer);
+		return decode2(buffer);
 	}
 
 	public void setWorldMap(WorldMap worldMap) {

@@ -1,8 +1,6 @@
-package hitonoriol.madsand;
+package hitonoriol.madsand.world;
 
-import static hitonoriol.madsand.resources.Resources.ERR_FILE;
 import static hitonoriol.madsand.resources.Resources.LINEBREAK;
-import static hitonoriol.madsand.resources.Resources.getMapper;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,18 +15,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
 
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.lua.Lua;
+import hitonoriol.madsand.resources.Resources;
+import hitonoriol.madsand.resources.Serializer;
 import hitonoriol.madsand.util.Utils;
-import hitonoriol.madsand.world.World;
-import hitonoriol.madsand.world.WorldMapSaver;
 
 public class GameSaver {
-	public static String SECTOR_DELIM = "!";
-	public final static long saveFormatVersion = 9;
+	public static final String SECTOR_DELIM = "!";
+	public static final long saveFormatVersion = 9;
 
 	public static final String SAVE_EXT = ".msf";
 	public static final String SAVEDIR = "MadSand_Saves/";
@@ -38,9 +38,33 @@ public class GameSaver {
 	public static final String WORLDFILE = "/World" + SAVE_EXT;
 
 	private final static List<Runnable> loaderTasks = new ArrayList<>();
+	private final static Serializer serializer = new Serializer(DefaultTyping.EVERYTHING);
+	
+	private String saveDir;
+	private World world;
+	private WorldMapSaver worldMapSaver = new WorldMapSaver(this);
 
-	public static void save() {
-		World world = MadSand.world();
+	public GameSaver(String worldName) {
+		saveDir = getCurSaveDir(worldName);
+	}
+
+	public GameSaver(World world) {
+		this.world = world;
+	}
+	
+	public WorldMapSaver getWorldMapSaver() {
+		return worldMapSaver;
+	}
+	
+	public WorldMap getWorldMap() {
+		return world.getWorldMap();
+	}
+	
+	public void setWorldMap(WorldMap worldMap) {
+		worldMapSaver.setWorldMap(worldMap);
+	}
+
+	public void save() {
 		if (world.inEncounter()) {
 			Gui.drawOkDialog("You can't save during an encounter!");
 			return;
@@ -54,10 +78,10 @@ public class GameSaver {
 			MadSand.print("Couldn't save the game. Check logs.");
 	}
 
-	public static boolean load(String filename) {
-		Utils.dbg("Loading world [%s]...", filename);
+	public boolean load() {
+		Utils.out("Loading world [%s]...", getCurSaveDir());
 		Utils.printMemoryInfo();
-		File f = new File(GameSaver.MAPDIR + filename);
+		File f = new File(getCurSaveDir());
 
 		if (!f.exists() || !f.isDirectory()) {
 			MadSand.switchScreen(Screens.MainMenu);
@@ -66,8 +90,7 @@ public class GameSaver {
 		}
 
 		Gui.overlay.getGameLog().clear();
-		MadSand.world().close();
-		createDirs();
+		MadSand.world().close(); // Close the current world (might not be the same as this.world)
 
 		if (!loadWorld()) {
 			loadErrMsg();
@@ -76,10 +99,10 @@ public class GameSaver {
 
 		if (loadLocation()) {
 			Lua.init();
-			MadSand.world().updateLight();
+			world.updateLight();
+			Utils.dbg("Loaded world map: %X", MadSand.world().getWorldMap().hashCode());
 			loadLog();
-			MadSand.print("Loaded Game!");
-			Utils.dbg("Loaded [%s] successfully!", filename);
+			Utils.out("Loaded [%s] successfully!", getCurSaveDir());
 			System.gc();
 			Utils.printMemoryInfo();
 			return true;
@@ -89,8 +112,8 @@ public class GameSaver {
 		}
 	}
 
-	public static boolean saveLocation(int wx, int wy) {
-		WorldMapSaver saver = MadSand.world().getMapSaver();
+	public boolean saveLocation(int wx, int wy) {
+		WorldMapSaver saver = world.getMapSaver();
 		try {
 			OutputStream os = new FileOutputStream(getSectorFile(wx, wy));
 			os.write(saver.locationToBytes(wx, wy));
@@ -103,20 +126,18 @@ public class GameSaver {
 		}
 	}
 
-	public static boolean saveLocation() {
-		return saveLocation(MadSand.world().wx(), MadSand.world().wy());
+	public boolean saveLocation() {
+		return saveLocation(world.wx(), world.wy());
 	}
 
-	public static boolean loadLocation(int wx, int wy) {
-		WorldMapSaver saver = MadSand.world().getMapSaver();
-
+	public boolean loadLocation(int wx, int wy) {
+		WorldMapSaver saver = world.getMapSaver();
 		try {
 			byte[] data = Files.readAllBytes(Paths.get(getSectorFile(wx, wy).toURI()));
-			Utils.out("Loading location [%d, %d]", wx, wy);
-
+			Utils.out("Loading location data for [%d, %d]...", wx, wy);
 			saver.loadLocationInfo(wx, wy);
+			Utils.out("Loading location layers...", wx, wy);
 			saver.bytesToLocation(data, wx, wy);
-			MadSand.world().setWorldMap(saver.getWorldMap());
 			finalizeLoading();
 			System.gc();
 			return true;
@@ -126,21 +147,17 @@ public class GameSaver {
 		}
 	}
 
-	public static boolean loadLocation() {
-		World world = MadSand.world();
+	public boolean loadLocation() {
 		return loadLocation(world.wx(), world.wy());
 	}
 
-	private static boolean saveWorld() {
+	private boolean saveWorld() {
 		try {
 			File worldFile = new File(getCurSaveDir() + GameSaver.WORLDFILE);
 			Player player = MadSand.player();
-
 			player.stats.equipment.setStatBonus(false);
-			/*Resources.mapper.writeValue(new File(fl), player);*/
-			getMapper().writeValue(worldFile, MadSand.world());
+			serializer.writeValue(worldFile, world);
 			player.stats.equipment.setStatBonus(true);
-
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -148,16 +165,16 @@ public class GameSaver {
 		}
 	}
 
-	private static boolean loadWorld() {
+	private boolean loadWorld() {
 		try {
-			Utils.out("Loading world info...");
 			String worldFile = getCurSaveDir() + GameSaver.WORLDFILE;
-
-			World world = getMapper().readValue(readFile(worldFile), World.class);
+			Utils.out("Loading world data from `%s`...", worldFile);
+			world = serializer.readValue(readFile(worldFile), World.class);
 			world.getPlayer().postLoadInit();
+			Utils.out("Loaded player: %s", world.getPlayer());
 			MadSand.game().setWorld(world);
 			System.gc();
-			Utils.out("Done loading world info.");
+			Utils.out("Done loading world data.");
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -210,12 +227,12 @@ public class GameSaver {
 		return readFile(name, false);
 	}
 
-	public static String getTimeDependentFile(int wx, int wy, int layer) {
+	public String getTimeDependentFile(int wx, int wy, int layer) {
 		return getCurSaveDir() + "timedependent" + getSectorString(wx, wy, layer)
 				+ GameSaver.SAVE_EXT;
 	}
 
-	static String getSectorString(int wx, int wy, int layer) {
+	public static String getSectorString(int wx, int wy, int layer) {
 		return getSectorString(wx, wy) + SECTOR_DELIM + layer;
 	}
 
@@ -223,23 +240,29 @@ public class GameSaver {
 		return SECTOR_DELIM + wx + SECTOR_DELIM + wy;
 	}
 
-	public static String getCurSaveDir() {
-		return GameSaver.MAPDIR + MadSand.world().getName() + "/";
+	public String getCurSaveDir(String worldName) {
+		return GameSaver.MAPDIR + worldName + "/";
 	}
 
-	static String getWorldXYPath(String file, int wx, int wy) {
+	public String getCurSaveDir() {
+		if (saveDir == null)
+			saveDir = getCurSaveDir(world.getName());
+		return saveDir;
+	}
+
+	public String getWorldXYPath(String file, int wx, int wy) {
 		return getCurSaveDir() + file + getSectorString(wx, wy) + GameSaver.SAVE_EXT;
 	}
 
-	public static File getLocationFile(int wx, int wy) {
+	public File getLocationFile(int wx, int wy) {
 		return new File(getWorldXYPath("location", wx, wy));
 	}
 
-	static File getSectorFile(int wx, int wy) {
+	public File getSectorFile(int wx, int wy) {
 		return new File(getWorldXYPath("sector", wx, wy));
 	}
 
-	public static String getNpcFile(int wx, int wy, int layer) {
+	public String getNpcFile(int wx, int wy, int layer) {
 		return getCurSaveDir() + GameSaver.NPCSFILE + getSectorString(wx, wy, layer)
 				+ GameSaver.SAVE_EXT;
 	}
@@ -249,15 +272,15 @@ public class GameSaver {
 		Gui.drawOkDialog(
 				"Couldn't to load this world. \n"
 						+ "Maybe it was saved in older/newer version of the game or some files are corrupted.\n"
-						+ "Check " + ERR_FILE + " for details.");
+						+ "Check " + Resources.OUT_FILE + " for details.");
 	}
 
-	public static boolean verifyNextSector(int x, int y) {
+	public boolean verifyNextSector(int x, int y) {
 		File sectorFile = getSectorFile(x, y);
 		return sectorFile.exists();
 	}
 
-	private static boolean saveLog() {
+	private boolean saveLog() {
 		try {
 			FileWriter fw = new FileWriter(getCurSaveDir() + GameSaver.LOGFILE);
 
@@ -273,7 +296,7 @@ public class GameSaver {
 		}
 	}
 
-	private static boolean loadLog() {
+	private boolean loadLog() {
 		try {
 			BufferedReader br = new BufferedReader(
 					new FileReader(getCurSaveDir() + GameSaver.LOGFILE));
@@ -293,7 +316,7 @@ public class GameSaver {
 
 	}
 
-	public static void createDirs() {
+	public void createDirs() {
 		new File(GameSaver.SAVEDIR).mkdirs();
 		new File(GameSaver.MAPDIR).mkdirs();
 		new File(getCurSaveDir()).mkdirs();
@@ -305,6 +328,10 @@ public class GameSaver {
 
 	private static void finalizeLoading() {
 		Utils.dbg("Running post-loading tasks (%s)...", loaderTasks.size());
-		loaderTasks.forEach(task -> task.run());
+		loaderTasks.forEach(Runnable::run);
+	}
+	
+	static Serializer serializer() {
+		return serializer;
 	}
 }

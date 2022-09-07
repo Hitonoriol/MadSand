@@ -7,12 +7,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 
-import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
+import hitonoriol.madsand.world.GameSaver;
 
 public class LoadWorldDialog extends GameDialog {
 
@@ -63,12 +63,12 @@ public class LoadWorldDialog extends GameDialog {
 			scrollTable.add(delButton).size(BTN_HEIGHT).padRight(PAD_BTN).row();
 
 			Gui.setAction(loadButton, () -> {
-				if (GameSaver.load(worldName)) {
+				if (new GameSaver(worldName).load()) {
 					MadSand.switchScreen(Screens.Game);
 					MadSand.enterWorld();
+					Gui.overlay.refresh();
 				}
 
-				Gui.overlay.refresh();
 				remove();
 			});
 

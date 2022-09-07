@@ -19,7 +19,7 @@ import hitonoriol.madsand.util.Utils;
 public class Inventory {
 	public static final double MAX_WEIGHT = Integer.MAX_VALUE;
 
-	private ArrayList<Item> items = new ArrayList<Item>();
+	private List<Item> items = new ArrayList<Item>();
 	private float curWeight, maxWeight;
 
 	public Inventory(float maxWeight) {

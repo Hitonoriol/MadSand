@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 
-import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.gui.Gui;
@@ -74,7 +73,7 @@ public class MainMenuStage extends Stage {
 		Gui.setAction(resumeButton, () -> MadSand.switchScreen(Screens.Game));
 
 		Gui.setAction(saveGameButton, () -> {
-			GameSaver.save();
+			MadSand.world().save();
 			MadSand.switchScreen(Screens.Game);
 		});
 

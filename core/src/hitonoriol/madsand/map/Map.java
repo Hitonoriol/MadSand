@@ -154,8 +154,9 @@ public class Map {
 		return mapNpcs;
 	}
 
-	public void setNpcs(HashMap<Pair, AbstractNpc> npcs) {
-		npcs.forEach((coords, npc) -> add(coords, npc));
+	public HashMap<Pair, AbstractNpc> setNpcs(HashMap<Pair, AbstractNpc> npcs) {
+		npcs.forEach(this::add);
+		return mapNpcs;
 	}
 
 	@JsonIgnore
@@ -193,7 +194,6 @@ public class Map {
 	public void setSize(int xsz, int ysz) {
 		this.xsz = xsz;
 		this.ysz = ysz;
-
 	}
 
 	@JsonIgnore

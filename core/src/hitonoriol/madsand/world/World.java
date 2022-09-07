@@ -13,7 +13,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.containers.Pair;
@@ -52,11 +51,12 @@ public class World {
 	
 	@JsonIgnore
 	private ArrayDeque<Pair> previousLocations = new ArrayDeque<>(); // Maps that are currently loaded in WorldMap
+	
+	@JsonIgnore
+	private GameSaver saver = new GameSaver(this);
 
 	@JsonIgnore
 	private WorldGen worldGen = new WorldGen();
-	@JsonIgnore
-	private WorldMapSaver worldMapSaver = new WorldMapSaver();
 
 	@JsonIgnore
 	private EntityTimeProcessor entityEvents = new EntityTimeProcessor(this);
@@ -186,7 +186,7 @@ public class World {
 	public void setWorldMap(WorldMap worldMap) {
 		this.worldMap = worldMap;
 		worldGen.setWorldMap(worldMap);
-		worldMapSaver.setWorldMap(worldMap);
+		saver.setWorldMap(worldMap);
 	}
 
 	public WorldMap getWorldMap() {
@@ -360,8 +360,8 @@ public class World {
 
 		if (x == prevX && y == prevY && worldMap.curLayer != Location.LAYER_OVERWORLD)
 			generate(layer);
-		else if (GameSaver.verifyNextSector(x, y))
-			GameSaver.loadLocation();
+		else if (saver.verifyNextSector(x, y))
+			saver.loadLocation();
 		else
 			generate();
 
@@ -377,7 +377,7 @@ public class World {
 		Utils.out("Switch location in direction " + dir);
 
 		if (!inEncounter)
-			GameSaver.save();
+			saver.save();
 		else {
 			Utils.dbg("Removing encounter location");
 			worldMap.remove();
@@ -444,7 +444,7 @@ public class World {
 		int travelItem = Globals.values().travelItem;
 		Pair nextSector = coords.set(worldMap.wx(), worldMap.wy()).addDirection(direction);
 
-		if (!GameSaver.verifyNextSector(nextSector.x, nextSector.y))
+		if (!saver.verifyNextSector(nextSector.x, nextSector.y))
 			if (!player.hasItem(travelItem)) {
 				Gui.drawOkDialog(
 						"You need at least 1 " + ItemProp.getItemName(travelItem)
@@ -784,6 +784,10 @@ public class World {
 		Gui.refreshOverlay();
 		Lua.executeScript(Lua.onCreationScript);
 	}
+	
+	public void save() {
+		saver.save();
+	}
 
 	public String getName() {
 		return name;
@@ -791,6 +795,7 @@ public class World {
 	
 	public void setName(String name) {
 		this.name = name;
+		
 	}
 	
 	@JsonIgnore
@@ -831,7 +836,7 @@ public class World {
 
 	@JsonIgnore
 	public WorldMapSaver getMapSaver() {
-		return worldMapSaver;
+		return saver.getWorldMapSaver();
 	}
 
 	@JsonIgnore

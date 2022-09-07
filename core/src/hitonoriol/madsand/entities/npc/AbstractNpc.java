@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -15,7 +14,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
-import hitonoriol.madsand.GameSaver;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.containers.Storage;
@@ -40,10 +38,11 @@ import hitonoriol.madsand.properties.NpcContainer;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
+import hitonoriol.madsand.world.GameSaver;
 import me.xdrop.jrand.JRand;
 import me.xdrop.jrand.generators.basics.FloatGenerator;
 
-@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+//@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
 @JsonSubTypes({ @Type(Npc.class), @Type(Trader.class), @Type(QuestMaster.class), @Type(FarmAnimal.class) })
 public abstract class AbstractNpc extends Entity {
@@ -73,6 +72,7 @@ public abstract class AbstractNpc extends Entity {
 	private float timePassed; // time passed since last action
 	private float tickCharge = 0;
 	private float prevTickCharge;
+	@JsonIgnore
 	private Pair futurePosition = new Pair();
 
 	private Entity enemy;
@@ -110,6 +110,7 @@ public abstract class AbstractNpc extends Entity {
 	public void postLoadInit() {
 		loadSprite();
 		initStatActions();
+		updCoords();
 	}
 
 	@Override
