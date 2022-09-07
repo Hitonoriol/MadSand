@@ -52,8 +52,9 @@ public class Launcher {
 		Globals.silentMode = parser.argExists("silent");
 
 		if (!Globals.debugMode) {
-			System.setOut(new PrintStream(Resources.OUT_FILE));
-			System.setErr(new PrintStream(Resources.ERR_FILE));
+			PrintStream out = new PrintStream(Resources.OUT_FILE);
+			System.setOut(out);
+			System.setErr(out);
 		}
 	}
 
