@@ -93,7 +93,7 @@ public class CharacterInfoWindow extends GameDialog {
 		info.align(Align.left);
 		info.defaults().align(Align.left).padBottom(LINE_PAD);
 		Player player = MadSand.player();
-		info.add("Creatures killed: " + player.getKillCount()).row();
+		info.add("Creatures killed: " + player.getTotalKillCount()).row();
 		info.add("Settlements established: " + player.getEstablishedSettlements()).row();
 		return info;
 	}

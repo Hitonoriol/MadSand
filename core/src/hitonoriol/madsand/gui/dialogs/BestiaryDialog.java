@@ -1,6 +1,6 @@
 package hitonoriol.madsand.gui.dialogs;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -40,7 +40,7 @@ public class BestiaryDialog extends GameDialog {
 		emptyLabel.setAlignment(Align.center);
 		scroll = new AutoFocusScrollPane(scrollTable);
 		scrollTable.align(Align.topLeft);
-		HashMap<Integer, Integer> killCount = player.getTotalKillCount();
+		Map<Integer, Integer> killCount = player.getKillCount();
 
 		if (killCount.isEmpty())
 			scrollTable.add(emptyLabel).align(Align.center).expand();

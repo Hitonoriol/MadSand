@@ -142,6 +142,7 @@ public class Player extends Entity {
 		inventory.refreshContents();
 		refreshAvailableRecipes();
 		setFov();
+		updCoords();
 	}
 
 	public void finishCreation() {
@@ -190,7 +191,7 @@ public class Player extends Entity {
 		return abilities;
 	}
 
-	public HashMap<Integer, Integer> getTotalKillCount() {
+	public HashMap<Integer, Integer> getKillCount() {
 		return killCount;
 	}
 
@@ -488,7 +489,7 @@ public class Player extends Entity {
 	}
 
 	@JsonIgnore
-	public int getKillCount() {
+	public int getTotalKillCount() {
 		int totalKills = 0;
 		for (int id : killCount.keySet())
 			totalKills += getKillCount(id);
