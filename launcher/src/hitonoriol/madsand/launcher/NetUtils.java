@@ -14,8 +14,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
 public class NetUtils {
-
-	static final String HOST = "api.github.com";
+	public static final String API_HOST = "api.github.com";
+	public static final String noConnectionMsg = "Oops! Either GitHub is down, or there's no network connection.";
 
 	public static void downloadFile(String remotePath, String localPath) {
 		BufferedInputStream in = null;
@@ -37,7 +37,7 @@ public class NetUtils {
 
 				sumCount += count;
 				if (size > 0)
-					Main.launcher.printInfo("Downloading: " + (int) Math.round((sumCount / size * 100.0)) + "%");
+					Main.getWindow().printInfo("Downloading: " + (int) Math.round((sumCount / size * 100.0)) + "%");
 			}
 
 		} catch (Exception e) {
@@ -65,7 +65,7 @@ public class NetUtils {
 			socket.close();
 			return true;
 		} catch (IOException e) {
-			Main.launcher.printInfo(Launcher.noConnectionMsg);
+			Main.getWindow().printInfo(noConnectionMsg);
 			e.printStackTrace();
 			return false;
 		}

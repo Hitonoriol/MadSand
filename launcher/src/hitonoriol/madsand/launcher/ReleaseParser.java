@@ -13,7 +13,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class ReleaseParser {
-	static final String RELEASES_URL = "https://" + NetUtils.HOST + "/repos/hitonoriol/madsand/releases";
+	static final String RELEASES_URL = "https://" + NetUtils.API_HOST + "/repos/hitonoriol/madsand/releases";
 
 	/* Version / Date / Changelog */
 	private static final String changelogTemplate = "<h1>%s</h1><h3>[%s]</h3>%s<hr>";
@@ -60,7 +60,7 @@ public class ReleaseParser {
 		return latestVersion;
 	}
 
-	String getChangelog() {
+	public String getChangelog() {
 		StringBuilder sb = new StringBuilder();
 		releases.forEach(element -> {
 			JsonObject release = element.getAsJsonObject();
@@ -71,6 +71,6 @@ public class ReleaseParser {
 	}
 
 	public void downloadGame() {
-		NetUtils.downloadFile(gameLink, Launcher.GAME_FILE);
+		NetUtils.downloadFile(gameLink, GameLauncher.GAME_FILENAME);
 	}
 }

@@ -1,37 +1,17 @@
 package hitonoriol.madsand.launcher;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.PrintWriter;
+import hitonoriol.madsand.launcher.gui.LauncherFrame;
 
 public class Main {
-	static final String VERSION = Main.class.getPackage().getImplementationVersion();
-	static Launcher launcher = new Launcher();
+	public static final String VERSION = Main.class.getPackage().getImplementationVersion();
+	private static final LauncherFrame launcherFrame = new LauncherFrame();
 
 	public static void main(String[] args) {
-		launcher.checkForUpdates();
+		launcherFrame.setVisible(true);
+		launcherFrame.checkForUpdates();
 	}
 
-	public static String readLine(String name) {
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(name));
-			String line = br.readLine();
-			br.close();
-			return line;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "error";
-		}
-	}
-
-	public static void writeFile(File file, String text) {
-		try {
-			PrintWriter pw = new PrintWriter(file);
-			pw.print(text);
-			pw.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public static LauncherFrame getWindow() {
+		return launcherFrame;
 	}
 }

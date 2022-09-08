@@ -1,12 +1,10 @@
-package hitonoriol.madsand.launcher;
+package hitonoriol.madsand.launcher.gui;
+
+import static hitonoriol.madsand.launcher.GameLauncher.gameFile;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.jar.JarInputStream;
 
 import javax.swing.JButton;
@@ -16,98 +14,79 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
-public class Launcher extends JFrame {
-	static final String GAME_FILE = "madsand.jar";
-	static final String RUN_CONF = "java -jar -Xmx1024m -Xms256m " + GAME_FILE;
+import hitonoriol.madsand.launcher.GameLauncher;
+import hitonoriol.madsand.launcher.Main;
+import hitonoriol.madsand.launcher.NetUtils;
+import hitonoriol.madsand.launcher.ReleaseParser;
 
-	static String noConnectionMsg = "Oops! Either GitHub is down, or there's no network connection.";
-	static int CHANGELOG_PADDING = 55;
+public class LauncherFrame extends JFrame {
 
-	JLabel infoLabel = new JLabel("");
-	JLabel changelogLabel = new JLabel("");
+	private static final int CHANGELOG_PADDING = 55;
 
-	JScrollPane changelogScroll = new JScrollPane();
-	JButton launchButton = new JButton("Launch");
-	JButton forceUpdateButton = new JButton("Force update");
-	JPanel bottomPanel = new JPanel();
+	private JLabel infoLabel = new JLabel("");
+	private JLabel changelogLabel = new JLabel("");
+
+	private JScrollPane changelogScroll = new JScrollPane();
+	private JButton launchButton = new JButton("Launch");
+	private JButton forceUpdateButton = new JButton("Force update");
+	private JPanel bottomPanel = new JPanel();
 
 	JPanel containerPanel = new JPanel();
 	String changelogTemplate, infoTemplate = "<html><h3>%s</h3></html>";
 
 	ReleaseParser parser = new ReleaseParser();
 
-	public Launcher() {
+	public LauncherFrame() {
 		super("MadSand Launcher " + Main.VERSION);
+		initLayout();
+		initActionListeners();
+	}
+
+	private void initLayout() {
 		setBounds(100, 100, 500, 600);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
-		setVisible(true);
 		launchButton.setEnabled(false);
 		forceUpdateButton.setEnabled(false);
 
-		containerPanel.setLayout(new BorderLayout());
 		bottomPanel.setLayout(new GridLayout(2, 1));
 		bottomPanel.add(launchButton);
 		bottomPanel.add(forceUpdateButton);
-
-		containerPanel.add(infoLabel, "North");
 
 		changelogScroll.setVerticalScrollBarPolicy(22);
 		changelogScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		changelogScroll.getVerticalScrollBar().setUnitIncrement(16);
 		changelogScroll.add(changelogLabel);
 		changelogScroll.setViewportView(changelogLabel);
-		containerPanel.add(changelogScroll);
-		containerPanel.add(bottomPanel, BorderLayout.PAGE_END);
-		add(containerPanel, BorderLayout.CENTER);
 		changelogLabel.setVerticalAlignment(JLabel.TOP);
 		changelogTemplate = "<html><div width = " + (super.getWidth() - CHANGELOG_PADDING) + ">%s</div></html>";
 
-		if (new File(GAME_FILE).exists())
+		containerPanel.setLayout(new BorderLayout());
+		containerPanel.add(infoLabel, "North");
+		containerPanel.add(changelogScroll);
+		containerPanel.add(bottomPanel, BorderLayout.PAGE_END);
+		add(containerPanel, BorderLayout.CENTER);
+
+		if (gameFile().exists())
 			launchButton.setEnabled(true);
+	}
 
-		launchButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				launchGame();
+	private void initActionListeners() {
+		launchButton.addActionListener(event -> new GameLauncher().launch());
+		forceUpdateButton.addActionListener(event -> {
+			if (!checkConnection())
+				return;
+			refreshChangelog();
+			gameFile().delete();
+			try {
+				new Thread(() -> updateGame()).start();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		});
-
-		forceUpdateButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if (checkConnection()) {
-					try {
-						refreshChangelog();
-						new File(GAME_FILE).delete();
-						new Thread(() -> updateGame()).start();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}
-
-		});
 	}
 
-	String getGameVersion() {
-		try (JarInputStream jarStream = new JarInputStream(new FileInputStream(GAME_FILE))) {
-			return jarStream.getManifest().getMainAttributes().getValue("Implementation-Version");
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "-";
-		}
-	}
-
-	void launchGame() {
-		try {
-			Runtime.getRuntime().exec(RUN_CONF);
-			Main.launcher.dispose();
-			System.exit(0);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	void printInfo(String arg) {
+	public void printInfo(String arg) {
 		infoLabel.setText(String.format(infoTemplate, arg));
 	}
 
@@ -116,7 +95,7 @@ public class Launcher extends JFrame {
 		changelogLabel.setText(contents);
 	}
 
-	void checkForUpdates() {
+	public void checkForUpdates() {
 		printInfo("Checking for updates...");
 		parser.refresh();
 		if (checkConnection()) {
@@ -128,8 +107,8 @@ public class Launcher extends JFrame {
 				printInfo("Failed to check for updates.");
 			}
 		} else {
-			printInfo(noConnectionMsg);
-			if (!new File(GAME_FILE).exists()) {
+			printInfo(NetUtils.noConnectionMsg);
+			if (!gameFile().exists()) {
 				launchButton.setEnabled(false);
 			}
 		}
@@ -147,10 +126,9 @@ public class Launcher extends JFrame {
 	}
 
 	void update() throws Exception {
-		File gameFile = new File(GAME_FILE);
 		String latestVersion = parser.getLatestVersion();
 
-		if (gameFile.exists()) {
+		if (gameFile().exists()) {
 			launchButton.setEnabled(true);
 			forceUpdateButton.setEnabled(true);
 
@@ -171,8 +149,17 @@ public class Launcher extends JFrame {
 		}
 	}
 
+	String getGameVersion() {
+		try (JarInputStream jarStream = new JarInputStream(new FileInputStream(gameFile()))) {
+			return jarStream.getManifest().getMainAttributes().getValue("Implementation-Version");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "-";
+		}
+	}
+
 	boolean checkConnection() {
 		printInfo("Connecting...");
-		return NetUtils.pingHost(NetUtils.HOST, 80, 10000);
+		return NetUtils.pingHost(NetUtils.API_HOST, 80, 10000);
 	}
 }
