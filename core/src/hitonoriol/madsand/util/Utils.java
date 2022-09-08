@@ -1,5 +1,7 @@
 package hitonoriol.madsand.util;
 
+import static java.lang.System.getProperty;
+
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryUsage;
 import java.math.RoundingMode;
@@ -334,11 +336,16 @@ public class Utils {
 		double nonHeapMem = toMB(ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage());
 		double totalMem = toMB(runtime.totalMemory()), freeMem = toMB(runtime.freeMemory());
 		double memInUse = totalMem - freeMem;
-		return String.format("Memory: %.2fMB (%.2fMB used)",
-				totalMem + nonHeapMem, memInUse);
+		return String.format("Memory allocated: %.2fMB (%.2fMB used), off-heap: %.2fMB",
+				totalMem, memInUse, nonHeapMem);
 	}
 
 	public static void printMemoryInfo() {
 		out(memoryUsageString());
+	}
+
+	public static void printSystemInfo() {
+		out("Using Java %s on %s (%s)",
+				getProperty("java.version"), getProperty("os.name"), getProperty("os.arch"));
 	}
 }

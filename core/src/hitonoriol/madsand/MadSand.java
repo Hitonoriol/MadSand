@@ -42,6 +42,7 @@ public class MadSand extends Game {
 
 	public void create() {
 		Utils.out("Starting initialization!");
+		Utils.printSystemInfo();
 		game = this;
 		Gdx.graphics.setContinuousRendering(false);
 		Timer.instance().start();
