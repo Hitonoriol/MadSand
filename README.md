@@ -21,20 +21,34 @@
 ![screenshot](https://raw.githubusercontent.com/Hitonoriol/MadSand/master/screenshots/crafting%20menu.png)
 ![screenshot](https://raw.githubusercontent.com/Hitonoriol/MadSand/master/screenshots/quest%20journal.png)
 
-### How to build
+### Building
 
-**Game**
+**`JDK 18+` is required**  
 
-```
-./gradlew texturePacker desktop:dist
-```
-
-Output file: `desktop/build/libs/MadSand-<VERSION>.jar`  
+There are two subprojects that can be built:  
+* `desktop` -- the game itself;
+* `launcher` -- a lightweight launcher that accesses this repository's release section via GitHub API to keep the game up-to-date and fetch changelogs.  
 
 \
-**Launcher**
+**Building jars:**
+
+Invoke `dist` task of the desired project, for example:
+
 ```
-./gradlew launcher:dist
+./gradlew desktop:dist
 ```
 
-Output file:  `launcher/build/libs/MadSandLauncher-<VERSION>.jar`
+Resulting files will be located in `<project-name>/build/libs`.  
+
+\
+**Building self-contained native packages:**  
+
+Invoke `jpackage` task of the desired project, for example:
+
+```
+./gradlew desktop:jpackage
+```
+
+or `nativeDist` to create the package as a zip archive.  
+
+Resulting files will be located in: `<project-name>/build/distribution`  

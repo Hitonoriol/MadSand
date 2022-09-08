@@ -1,0 +1,48 @@
+ext {
+	jpackageDir = "${buildDir}/distribution"
+	distDir = "${jpackageDir}/${appName}"
+}
+
+task jpackage(type: Exec, dependsOn: [dist, ":createRuntime"]) {
+	doFirst() {
+		project.delete("${buildDir}/distribution/$project.appName")
+	}
+	workingDir project.projectDir
+	def commands = [
+			"${javaBin}/jpackage", '--win-console',
+			'--dest', jpackageDir,
+			'--input', "${buildDir}/libs",
+			'--type', 'app-image',
+			'--name', project.appName,
+			'--app-version', "${project.versionCode}",
+			'--vendor', 'Hitonoriol',
+			'--main-class', project.mainClassName,
+			'--main-jar', jar.archiveFile.get().asFile.getName(),
+			'--runtime-image', jlinkRuntimeImg
+	]
+	
+	if (osName.contains('windows')) {
+		commands << '--icon'
+		commands << "${project.assetsDir}/icons/icon-256.ico"
+	} else if (osName.contains('linux')) {
+		commands << '--icon'
+		commands << "${project.projectDir}/icon-64.png"
+	} else if (osName.contains('mac')) {
+		commands << '--java-options'
+		commands << "-XstartOnFirstThread"
+	}
+
+	commandLine = commands
+}
+
+task nativeDist(type: Zip, dependsOn: jpackage) {
+	def shortOsName = osName.split(' ')[0]
+    archiveFileName = "${appName}-${project.version}-${shortOsName}.zip"
+    destinationDirectory = file(jpackageDir)
+    from(distDir) {
+	    into file(distDir).name
+    }
+    doLast {
+    	delete distDir
+    }
+}

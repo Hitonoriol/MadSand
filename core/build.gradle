@@ -1,10 +1,8 @@
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-sourceSets.main.java.srcDirs = [ "src/" ]
-sourceSets.main.resources.srcDirs = []
+sourceSets {
+	main.java.srcDirs = [ "src/" ]
+	main.resources.srcDirs = []
+}
 
 eclipse.project.name = appName + "-core"
-
-compileJava {
-	options.release = 8
-}

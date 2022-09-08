@@ -1,14 +1,46 @@
 gradle.startParameter.showStacktrace = org.gradle.api.logging.configuration.ShowStacktrace.ALWAYS
+
+/* App metadata */
+ext {
+	appName = "MadSand"
+	versionCode = '0.49.19'
+}
+
+ext.javaVersion = 18
+
+ext {
+	rootDir = file(".").absolutePath
+	assetsDir = file("${rootDir}/core/assets")
+}
+
+/* System properties */
+ext {
+	javaHome = System.getProperty('java.home')
+	javaBin = "${javaHome}/bin"
+	osName = System.getProperty('os.name').toLowerCase(Locale.ROOT).split(' ')[0]
+}
+
+/* Dependency versions */
+ext {
+	gdxVersion = '1.11.0'
+	aiVersion = '1.6.0'
+	jacksonVersion = '2.13.4'
+}
+
+/* jlink configuration */
+ext {
+	jlinkRuntimeDir = "${rootDir}/jlink"
+	jlinkRuntimeImg = "${jlinkRuntimeDir}/runtime"
+}
+
 allprojects {
 	apply plugin: "eclipse"
+	version = "v${versionCode}a"
 
-	version = 'v0.49.19a'
-	
-	ext {
-		appName = "MadSand"
-		gdxVersion = '1.11.0'
-		aiVersion = '1.6.0'
-		jacksonVersion = '2.13.4'
+	plugins.withType(JavaPlugin) {
+		compileJava {
+			options.release = project.javaVersion
+		}
 	}
 	
 	repositories {
@@ -60,4 +92,20 @@ project(":core") {
 		implementation files('../lib/luaj-jse-3.0.2.jar')
 		implementation files('../lib/jrand-0.2.7-alpha.jar')
 	}
+}
+
+task createRuntime(type: Exec) {
+	workingDir project.projectDir
+	commandLine = [
+			"${javaBin}/jlink",
+			'-p', "${javaHome}/jmods",
+			'--add-modules', 'java.base,java.desktop,jdk.unsupported,java.management,jdk.crypto.ec',
+			'--strip-debug',
+			'--no-header-files',
+			'--no-man-pages',
+			"--vm=server",
+			"--compress=2",
+			'--output', jlinkRuntimeImg
+	]
+	outputs.dir(jlinkRuntimeDir)
 }

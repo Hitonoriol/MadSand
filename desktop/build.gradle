@@ -1,18 +1,25 @@
-sourceSets.main.java.srcDirs = [ "src/" ]
-sourceSets.main.resources.srcDirs = ["../core/assets"]
-sourceSets.test.java.srcDirs = []
-
-project.ext.mainClassName = "hitonoriol.madsand.desktop.Launcher"
-project.ext.rootDir = file(".")
-project.ext.runDir = file(rootDir.absolutePath + "/desktop")
-project.ext.assetsDir = file(rootDir.absolutePath + "/core/assets")
-archivesBaseName = appName
-
-compileJava {
-	options.release = 8
+sourceSets {
+	main.java.srcDirs = [ "src/" ]
+	main.resources.srcDirs = ["../core/assets"]
+	test.java.srcDirs = []
 }
 
-task run(dependsOn: classes, type: JavaExec) {
+archivesBaseName = appName
+
+ext {
+	runDir = file(rootDir)
+	mainClassName = "hitonoriol.madsand.desktop.Launcher"
+}
+
+import com.badlogic.gdx.tools.texturepacker.TexturePacker
+import static groovy.io.FileType.DIRECTORIES
+task texturePacker {
+	doLast {
+		TexturePacker.process("${rootDir}/core/textures", "${assetsDir}/textures", "textures")
+	}
+}
+
+task run(type: JavaExec, dependsOn: [classes, texturePacker]) {
 	main = project.mainClassName
 	classpath = sourceSets.main.runtimeClasspath
 	standardInput = System.in
@@ -20,16 +27,7 @@ task run(dependsOn: classes, type: JavaExec) {
 	ignoreExitValue = true
 }
 
-import com.badlogic.gdx.tools.texturepacker.TexturePacker
-import static groovy.io.FileType.DIRECTORIES
-task texturePacker {
-	doLast {
-		def root = project.rootDir.absolutePath + "/core"
-		TexturePacker.process(root + "/textures", root + "/assets/textures", "textures")
-	}
-}
-
-task debug(dependsOn: classes, type: JavaExec) {
+task debug(type: JavaExec, dependsOn: classes) {
 	main = project.mainClassName
 	classpath = sourceSets.main.runtimeClasspath
 	standardInput = System.in
@@ -38,7 +36,8 @@ task debug(dependsOn: classes, type: JavaExec) {
 	debug = true
 }
 
-task dist(type: Jar) {
+task dist(type: Jar, dependsOn: texturePacker) {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 	manifest {
 		attributes 	'Main-Class': project.mainClassName,
 					'Implementation-Title': appName,
@@ -51,7 +50,8 @@ task dist(type: Jar) {
 	with jar
 }
 
-
 dist.dependsOn classes
+
+apply from: "${rootDir}/jpackage.gradle"
 
 eclipse.project.name = appName + "-desktop"

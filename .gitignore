@@ -58,3 +58,5 @@ launcher/madsand.jar
 launcher/build
 core/assets/textures
 !core/assets/textures/cursor.png
+
+jlink
