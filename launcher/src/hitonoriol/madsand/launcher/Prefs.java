@@ -4,10 +4,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
 
-import org.hildan.fxgson.FxGsonBuilder;
+import org.hildan.fxgson.FxGson;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -16,14 +15,14 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Prefs {
-	public List<GameVersionEntry> gameVersions = new ArrayList<>();
+	public LinkedList<GameVersionEntry> gameVersions = new LinkedList<>();
 	public SimpleStringProperty vmArgs = new SimpleStringProperty(GameLauncher.DEFAULT_VM_ARGS);
 	public SimpleStringProperty gameArgs = new SimpleStringProperty("");
 	public SimpleBooleanProperty showConsole = new SimpleBooleanProperty(false);
 	public SimpleBooleanProperty autoCheckForUpdates = new SimpleBooleanProperty(true);
 
 	private static Prefs instance;
-	private static final Gson gson = new FxGsonBuilder().create();
+	private static final Gson gson = FxGson.coreBuilder().setPrettyPrinting().create();
 	private static final File prefsFile = new File("prefs.json");
 
 	private Prefs() {}

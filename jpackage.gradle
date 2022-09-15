@@ -1,21 +1,45 @@
+/* Params:
+ *  jlinkRuntimeDir - directory to write runtime image to
+ *  jlinkModuleDir - jmod directories
+ *  jlinkModuleList - list of modules to include
+ */
+
 ext {
 	jpackageDir = "${buildDir}/distribution"
 	distDir = "${jpackageDir}/${appName}"
+	jlinkRuntimeImg = "${project.jlinkRuntimeDir}/runtime"
 }
 
-task jpackage(type: Exec, dependsOn: [dist, ":createRuntime"]) {
+task createRuntime(type: Exec) {
+	workingDir project.projectDir
+	inputs.property("runtime", jlinkRuntimeImg)
+	commandLine = [
+			"${javaBin}/jlink",
+			'--module-path', jlinkModuleDir,
+			'--add-modules', jlinkModuleList,
+			'--strip-debug',
+			'--no-header-files',
+			'--no-man-pages',
+			"--vm=server",
+			"--compress=2",
+			'--output', jlinkRuntimeImg
+	]
+	outputs.dir(jlinkRuntimeDir)
+}
+
+task jpackage(type: Exec, dependsOn: [dist, createRuntime]) {
 	doFirst() {
-		project.delete("${buildDir}/distribution/$project.appName")
+		project.delete("${jpackageDir}/$project.appName")
 	}
 	workingDir project.projectDir
 	def commands = [
-			"${javaBin}/jpackage", '--win-console',
+			"${javaBin}/jpackage",
 			'--dest', jpackageDir,
 			'--input', "${buildDir}/libs",
 			'--type', 'app-image',
 			'--name', project.appName,
 			'--app-version', "${project.versionCode}",
-			'--vendor', 'Hitonoriol',
+			'--vendor', author,
 			'--main-class', project.mainClassName,
 			'--main-jar', jar.archiveFile.get().asFile.getName(),
 			'--runtime-image', jlinkRuntimeImg
@@ -26,7 +50,7 @@ task jpackage(type: Exec, dependsOn: [dist, ":createRuntime"]) {
 		commands << "${project.assetsDir}/icons/icon-256.ico"
 	} else if (osName.contains('linux')) {
 		commands << '--icon'
-		commands << "${project.projectDir}/icon-64.png"
+		commands << "${project.assetsDir}/icons/icon-64.png"
 	} else if (osName.contains('mac')) {
 		commands << '--java-options'
 		commands << "-XstartOnFirstThread"

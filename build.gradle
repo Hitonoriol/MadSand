@@ -4,9 +4,8 @@ gradle.startParameter.showStacktrace = org.gradle.api.logging.configuration.Show
 ext {
 	appName = "MadSand"
 	versionCode = '0.49.19'
+	author = 'Hitonoriol'
 }
-
-ext.javaVersion = 18
 
 ext {
 	rootDir = file(".").absolutePath
@@ -15,9 +14,11 @@ ext {
 
 /* System properties */
 ext {
+	javaVersion = 18
 	javaHome = System.getProperty('java.home')
 	javaBin = "${javaHome}/bin"
 	osName = System.getProperty('os.name').toLowerCase(Locale.ROOT).split(' ')[0]
+	pathSep = File.pathSeparatorChar
 }
 
 /* Dependency versions */
@@ -30,7 +31,8 @@ ext {
 /* jlink configuration */
 ext {
 	jlinkRuntimeDir = "${rootDir}/jlink"
-	jlinkRuntimeImg = "${jlinkRuntimeDir}/runtime"
+	jlinkModuleDir = "${javaHome}/jmods"
+	jlinkModuleList = "java.base,java.desktop,jdk.unsupported,java.management,jdk.crypto.ec"
 }
 
 allprojects {
@@ -92,20 +94,4 @@ project(":core") {
 		implementation files('../lib/luaj-jse-3.0.2.jar')
 		implementation files('../lib/jrand-0.2.7-alpha.jar')
 	}
-}
-
-task createRuntime(type: Exec) {
-	workingDir project.projectDir
-	commandLine = [
-			"${javaBin}/jlink",
-			'-p', "${javaHome}/jmods",
-			'--add-modules', 'java.base,java.desktop,jdk.unsupported,java.management,jdk.crypto.ec',
-			'--strip-debug',
-			'--no-header-files',
-			'--no-man-pages',
-			"--vm=server",
-			"--compress=2",
-			'--output', jlinkRuntimeImg
-	]
-	outputs.dir(jlinkRuntimeDir)
 }

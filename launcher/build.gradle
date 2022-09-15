@@ -39,6 +39,7 @@ ext {
 version = versionCode
 
 task dist(type: Jar) {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 	manifest {
 		attributes 	'Main-Class': mainClassName,
 					'Implementation-Title': archivesBaseName,
@@ -51,6 +52,11 @@ task dist(type: Jar) {
 	with jar
 }
 
+ext {
+	jlinkRuntimeDir = "${rootDir}/jlink-launcher"
+	jlinkModuleDir += "${pathSep}${sourceSets.main.runtimeClasspath.asPath}"
+	jlinkModuleList += ",java.sql,javafx.controls,javafx.fxml,javafx.web"
+}
 apply from: "${rootDir}/jpackage.gradle"
 
 eclipse.project.name = rootProject.appName + "-launcher"

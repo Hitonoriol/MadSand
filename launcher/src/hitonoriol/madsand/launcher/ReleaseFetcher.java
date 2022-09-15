@@ -6,9 +6,8 @@ import static javafx.application.Platform.runLater;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 import org.kohsuke.github.GHRelease;
@@ -25,13 +24,12 @@ import hitonoriol.madsand.launcher.util.RateLimiter;
 
 public class ReleaseFetcher {
 	private static final String GAME_REPO = "Hitonoriol/MadSand";
-	private static final int PREV_RELEASES = 10;
+	private static final int PREV_RELEASES = 100;
 
 	private LauncherLayoutController controller;
 
-	private int maxPrevReleases = PREV_RELEASES;
 	private List<GHRelease> releases = new ArrayList<>();
-	private List<GameVersionEntry> gameVersions;
+	private LinkedList<GameVersionEntry> gameVersions;
 
 	public ReleaseFetcher(LauncherLayoutController controller) {
 		this.controller = controller;
@@ -57,12 +55,12 @@ public class ReleaseFetcher {
 
 	private void connect() throws IOException {
 		GitHub github = new GitHubBuilder()
-				.withRateLimitChecker(new RateLimiter(maxPrevReleases))
+				.withRateLimitChecker(new RateLimiter())
 				.build();
-		
+
 		setStatusText("Fetching release info...");
-		stream(Releases.get(github, GAME_REPO).withPageSize(maxPrevReleases).spliterator(), false)
-				.limit(maxPrevReleases)
+		stream(Releases.get(github, GAME_REPO).withPageSize(PREV_RELEASES).spliterator(), false)
+				.limit(PREV_RELEASES)
 				.forEach(releases::add);
 	}
 
@@ -74,17 +72,16 @@ public class ReleaseFetcher {
 	/* No idea why they marked GHRelease#assets() as deprecated as this is the only
 	 * way to access cached version of release's asset list. */
 	private void parseReleases() {
+		var newestCachedVersion = !gameVersions.isEmpty() ? gameVersions.getFirst() : GameVersionEntry.OLDEST;
 		getReleases().stream()
 				.filter(release -> !release.getTagName().contains("launcher"))
 				.map(release -> {
 					return new GameVersionEntry(release.getTagName(), release.assets());
 				})
+				.takeWhile(version -> version.greaterThan(newestCachedVersion))
 				.filter(GameVersionEntry::isDownloadable)
-				.forEach(gameVersions::add);
+				.forEach(gameVersions::addFirst);
 		gameVersions.sort(Comparator.reverseOrder());
-		Set<GameVersionEntry> versionSet = new LinkedHashSet<>(gameVersions);
-		gameVersions.clear();
-		gameVersions.addAll(versionSet);
 	}
 
 	private List<GHRelease> getReleases() {

@@ -8,15 +8,6 @@ public class Exceptions {
 		return null;
 	}
 
-	public static <T> T supplyOrNull(ThrowingSupplier<T> supplier) {
-		try {
-			return supplier.get();
-		} catch (Throwable e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
 	public static <T> Supplier<T> asUnchecked(ThrowingSupplier<T> task) {
 		return () -> {
 			try {

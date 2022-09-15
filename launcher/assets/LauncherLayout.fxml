@@ -34,7 +34,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.layout.BorderPane?>
@@ -74,13 +74,13 @@
                   <HBox alignment="CENTER_LEFT" spacing="10.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label text="Version:" />
-                        <ChoiceBox fx:id="versionSelector" focusTraversable="false" maxWidth="1.7976931348623157E308" HBox.hgrow="NEVER" />
-                        <Button fx:id="deleteBtn" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deleteSelectedVersionEntry" text="Delete" HBox.hgrow="NEVER" />
+                        <ComboBox fx:id="versionSelector" />
+                        <Button fx:id="deleteBtn" alignment="CENTER" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deleteSelectedVersionEntry" text="Delete" HBox.hgrow="NEVER" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" spacing="10.0" HBox.hgrow="NEVER">
                      <children>
-                        <Button fx:id="openPreferencesView" mnemonicParsing="false" onAction="#openPreferencesView" text="Preferences" />
+                        <Button fx:id="preferencesBtn" mnemonicParsing="false" onAction="#openPreferencesView" text="Preferences" />
                      </children>
                   </HBox>
                </children>
@@ -105,7 +105,7 @@
                      </rowConstraints>
                      <children>
                         <ProgressBar fx:id="taskProgress" focusTraversable="false" maxWidth="1.7976931348623157E308" progress="0.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
-                        <Label fx:id="statusLabel" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" text="Status" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+                        <Label fx:id="statusLabel" alignment="CENTER" blendMode="EXCLUSION" contentDisplay="CENTER" focusTraversable="false" text="Status" textAlignment="CENTER" textFill="WHITE" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                            <GridPane.margin>
                               <Insets bottom="1.0" />
                            </GridPane.margin>
