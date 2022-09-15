@@ -2,7 +2,7 @@
 
 > Open-world survival sandbox RPG
 
-### [Download Launcher](https://github.com/Hitonoriol/MadSand/releases/download/launcher/MadSandLauncher.jar)
+### [Download Launcher](https://github.com/Hitonoriol/MadSand/releases/launcher)
 
 ### Screenshots
 ![screenshot](https://raw.githubusercontent.com/Hitonoriol/MadSand/master/screenshots/title%20screen.png)
