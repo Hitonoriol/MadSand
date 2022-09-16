@@ -317,8 +317,7 @@ public class GameSaver {
 	}
 
 	public void createDirs() {
-		new File(GameSaver.SAVEDIR).mkdirs();
-		new File(GameSaver.MAPDIR).mkdirs();
+		createSaveDir();
 		new File(getCurSaveDir()).mkdirs();
 	}
 
@@ -333,5 +332,9 @@ public class GameSaver {
 	
 	static Serializer serializer() {
 		return serializer;
+	}
+
+	public static void createSaveDir() {
+		new File(MAPDIR).mkdirs();		
 	}
 }

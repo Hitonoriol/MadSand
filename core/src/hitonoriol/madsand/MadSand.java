@@ -28,6 +28,7 @@ import hitonoriol.madsand.screens.TravelScreen;
 import hitonoriol.madsand.screens.WorldRenderer;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.util.cast.Cast;
+import hitonoriol.madsand.world.GameSaver;
 import hitonoriol.madsand.world.World;
 
 public class MadSand extends Game {
@@ -47,6 +48,7 @@ public class MadSand extends Game {
 		Gdx.graphics.setContinuousRendering(false);
 		Timer.instance().start();
 		Resources.loadAll();
+		GameSaver.createSaveDir();
 		initScreens();
 		Mouse.initListener();
 		initNewGame();
