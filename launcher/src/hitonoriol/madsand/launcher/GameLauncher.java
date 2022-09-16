@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 public class GameLauncher {
-	private static final String JAVA_BIN = String.format("\"%s/bin/javaw\"", System.getProperty("java.home"));
+	private static final String JAVA_BIN = String.format("%s/bin/java", System.getProperty("java.home"));
 	public static final String DEFAULT_VM_ARGS = "-Xmx1024m -Xms256m";
 	public static final String JAR_DIRECTORY = "MadSand";
 
