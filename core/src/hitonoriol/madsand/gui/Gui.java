@@ -64,7 +64,6 @@ public class Gui {
 	}
 
 	public static void openDialog() {
-		Utils.dbg("[Opening a dialog]");
 		overlay.hideTooltip();
 		overlay.getContextMenu().close();
 		gameDialogs.action();
@@ -73,7 +72,7 @@ public class Gui {
 	public static void closeDialog() {
 		if (gameDialogs.reverseAction())
 			overlay.showTooltip();
-		Utils.dbg("[Closing a dialog (all dialogs closed = %b)]", gameDialogs.isNeutral());
+		Utils.dbg("[Dialog closed (all dialogs closed = %b)]", gameDialogs.isNeutral());
 	}
 
 	public static boolean isDialogActive() {

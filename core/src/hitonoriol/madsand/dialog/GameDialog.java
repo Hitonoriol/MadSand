@@ -119,7 +119,7 @@ public class GameDialog extends Dialog {
 	@Override
 	public boolean remove() {
 		boolean ret = super.remove();
-		Utils.dbg("Closing `%s`", textLbl.getText());
+		Utils.dbg("Closing %X", hashCode());
 		Gui.closeDialog();
 		Gui.overlay.refreshActionButton();
 		return ret;
@@ -139,6 +139,7 @@ public class GameDialog extends Dialog {
 
 	@Override
 	public Dialog show(Stage stage) {
+		Utils.dbg("Opening %X", hashCode());
 		Gui.openDialog();
 		setScale(1);
 		show(stage, sequence(Actions.alpha(0),
