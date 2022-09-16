@@ -4,8 +4,9 @@ import java.io.PrintStream;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Files.FileType;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration.GLEmulation;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.properties.Globals;
@@ -15,8 +16,7 @@ import hitonoriol.madsand.util.If;
 import hitonoriol.madsand.util.Log;
 
 public class Launcher {
-
-	static LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+	private static Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 
 	public static void main(String[] args) throws Exception {
 		main(args, new MadSand());
@@ -26,23 +26,24 @@ public class Launcher {
 		applyArgs(args);
 		Prefs.loadPrefs();
 		Prefs prefs = Prefs.values();
-		config.title = "MadSand " + Globals.VERSION;
-		config.resizable = false;
-		config.allowSoftwareMode = true;
+		config.setTitle("MadSand " + Globals.VERSION);
+		config.setResizable(false);
+		config.setOpenGLEmulation(GLEmulation.GL20, 3, 2);
 
-		config.addIcon("icons/icon-32.png", FileType.Internal);
-		config.addIcon("icons/icon-64.png", FileType.Internal);
-		config.addIcon("icons/icon-128.png", FileType.Internal);
-		config.addIcon("icons/icon-256.png", FileType.Internal);
+		config.setWindowIcon(FileType.Internal,
+				"icons/icon-32.png",
+				"icons/icon-64.png",
+				"icons/icon-128.png",
+				"icons/icon-256.png");
+		config.useVsync(true);
+		if (prefs.fullscreen)
+			config.setFullscreenMode(prefs.getCurDisplayMode());
+		else
+			config.setWindowedMode(prefs.screenWidth, prefs.screenHeight);
+		config.setForegroundFPS(59);
+		config.setIdleFPS(10);
 
-		config.vSyncEnabled = true;
-		config.width = prefs.screenWidth;
-		config.height = prefs.screenHeight;
-		config.fullscreen = prefs.fullscreen;
-		config.foregroundFPS = 59;
-		config.backgroundFPS = -1;
-
-		new LwjglApplication(app, config);
+		new Lwjgl3Application(app, config);
 	}
 
 	private static void applyArgs(String[] args) throws Exception {
@@ -59,8 +60,7 @@ public class Launcher {
 	}
 
 	public static void startHidden() {
-		config.x = config.y = Integer.MAX_VALUE;
+		config.setWindowPosition(Integer.MAX_VALUE, Integer.MAX_VALUE);
 		Globals.HEADLESS = true;
 	}
-
 }

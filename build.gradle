@@ -30,7 +30,6 @@ ext {
 
 /* jlink configuration */
 ext {
-	jlinkRuntimeDir = "${rootDir}/jlink"
 	jlinkModuleDir = "${javaHome}/jmods"
 	jlinkModuleList = "java.base,java.desktop,jdk.unsupported,java.management,jdk.crypto.ec"
 }
@@ -66,7 +65,7 @@ project(":desktop") {
 
 	dependencies {
 		implementation project(":core")
-		api "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+		api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
 		api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 		api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
 	}
@@ -76,9 +75,9 @@ project(":core") {
 	apply plugin: "java-library"
 
 	dependencies {
-		implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
-		implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-		implementation "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+		api "com.badlogicgames.gdx:gdx:$gdxVersion"
+		api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+		api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
 		
 		implementation 'org.apache.commons:commons-lang3:3.9'
 		implementation 'org.apache.commons:commons-text:1.9'
