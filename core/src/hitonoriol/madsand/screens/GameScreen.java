@@ -1,7 +1,5 @@
 package hitonoriol.madsand.screens;
 
-import com.badlogic.gdx.Gdx;
-
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.stages.Overlay;
 import hitonoriol.madsand.input.Keyboard;
@@ -19,7 +17,6 @@ public class GameScreen extends AbstractScreen<Overlay> {
 	@Override
 	public void show() {
 		super.show();
-		Gdx.graphics.setContinuousRendering(false);
 		gameWorld.setCamFollowPlayer(true);
 		if (!Gui.isGameUnfocused())
 			stage.showTooltip();

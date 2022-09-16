@@ -18,7 +18,6 @@ public class DeathScreen extends AbstractScreen<DeathStage> {
 	@Override
 	public void show() {
 		super.show();
-		Gdx.graphics.setContinuousRendering(true);
 		stage.setDeathMessage("You survived " + Utils.timeString(MadSand.player().getSurvivedTime()));
 	}
 
@@ -26,5 +25,6 @@ public class DeathScreen extends AbstractScreen<DeathStage> {
 	public void render(float delta) {
 		gameWorld.render(delta);
 		super.render(delta);
+		Gdx.graphics.requestRendering();
 	}
 }
