@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 public class Widgets {
 	public static Table table() {
@@ -58,5 +59,13 @@ public class Widgets {
 
 	public static Label label(String text, int fontSize) {
 		return Gui.setFontSize(label(text), fontSize);
+	}
+	
+	public static TextField textField(String text) {
+		return new TextField(text, Gui.skin);
+	}
+	
+	public static TextField textField() {
+		return textField("");
 	}
 }
