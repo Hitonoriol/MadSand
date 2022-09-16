@@ -92,7 +92,7 @@ public abstract class Entity extends MapEntity {
 		this.uid = uid;
 	}
 
-	public abstract void postLoadInit();
+	public abstract void postLoadInit(Map map);
 
 	public Stats stats() {
 		return stats;
@@ -475,8 +475,7 @@ public abstract class Entity extends MapEntity {
 		return ticks;
 	}
 
-	public void updCoords() {
-		Map map = MadSand.world().getCurLoc();
+	public void updCoords(Map map) {
 		if (x >= map.getWidth())
 			x = map.getWidth() - 1;
 		if (y >= map.getHeight())
@@ -487,6 +486,10 @@ public abstract class Entity extends MapEntity {
 			y = 0;
 		screenPosition.x = (x * Resources.TILESIZE);
 		screenPosition.y = (y * Resources.TILESIZE);
+	}
+	
+	public void updCoords() {
+		updCoords(MadSand.world().getCurLoc());
 	}
 
 	public void teleport(int x, int y) {

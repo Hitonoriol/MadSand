@@ -133,7 +133,7 @@ public class Player extends Entity {
 	}
 
 	@Override
-	public void postLoadInit() {
+	public void postLoadInit(Map map) {
 		initStatActions();
 		quests.setPlayer(this);
 		turn(stats.look);
@@ -142,7 +142,7 @@ public class Player extends Entity {
 		inventory.refreshContents();
 		refreshAvailableRecipes();
 		setFov();
-		updCoords();
+		updCoords(map);
 	}
 
 	public void finishCreation() {

@@ -142,7 +142,7 @@ public class Map {
 
 	public void setTimeDependentMapEntities(HashMap<Pair, MapEntity> timeDependentMap) {
 		timeDependentMap.forEach((coords, entity) -> {
-			entity.as(Entity.class).ifPresent(creature -> creature.postLoadInit());
+			entity.as(Entity.class).ifPresent(creature -> creature.postLoadInit(this));
 			boolean restored = entity.add(this, coords);
 			Utils.dbg("{%X} Restoring %s at %s: %b",
 					timeScheduler.hashCode(), entity.getName(), coords, restored);

@@ -160,7 +160,7 @@ public class WorldMapSaver {
 			Utils.out("Loading NPCs...");
 			HashMap<Pair, AbstractNpc> npcs = serializer().readMap(saver.getNpcFile(wx, wy, layer), AbstractNpc.class);
 			map.setNpcs(npcs).forEach((coords, npc) -> {
-				npc.postLoadInit();
+				npc.postLoadInit(map);
 				Utils.out("(%s): [%s]", coords, npc);
 			});
 

@@ -107,10 +107,10 @@ public abstract class AbstractNpc extends Entity {
 	}
 
 	@Override
-	public void postLoadInit() {
+	public void postLoadInit(Map map) {
 		loadSprite();
 		initStatActions();
-		updCoords();
+		updCoords(map);
 	}
 
 	@Override
