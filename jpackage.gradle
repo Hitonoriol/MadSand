@@ -1,5 +1,6 @@
 /* Params:
- *  jlinkRuntimeDir - directory to write runtime image to
+ *  rootDir - project's root directory
+ *  appName - name of the application
  *  jlinkModuleDir - jmod directories
  *  jlinkModuleList - list of modules to include
  */
@@ -7,7 +8,8 @@
 ext {
 	jpackageDir = "${buildDir}/distribution"
 	distDir = "${jpackageDir}/${appName}"
-	jlinkRuntimeImg = "${project.jlinkRuntimeDir}/runtime"
+	jlinkRuntimeDir = "${rootDir}/jlink/${appName}-${osName}"
+	jlinkRuntimeImg = "${jlinkRuntimeDir}/runtime"
 }
 
 task createRuntime(type: Exec) {
@@ -60,8 +62,7 @@ task jpackage(type: Exec, dependsOn: [dist, createRuntime]) {
 }
 
 task nativeDist(type: Zip, dependsOn: jpackage) {
-	def shortOsName = osName.split(' ')[0]
-    archiveFileName = "${appName}-${project.version}-${shortOsName}.zip"
+    archiveFileName = "${appName}-${project.version}-${osName}.zip"
     destinationDirectory = file(jpackageDir)
     from(distDir) {
 	    into file(distDir).name

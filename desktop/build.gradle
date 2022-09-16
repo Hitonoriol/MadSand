@@ -7,7 +7,7 @@ sourceSets {
 archivesBaseName = appName
 
 ext {
-	runDir = file(rootDir)
+	runDir = "${rootDir}/desktop"
 	mainClassName = "hitonoriol.madsand.desktop.Launcher"
 }
 
