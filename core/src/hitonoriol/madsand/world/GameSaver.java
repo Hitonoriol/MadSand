@@ -102,6 +102,9 @@ public class GameSaver {
 			world.updateLight();
 			Utils.dbg("Loaded world map: %X", MadSand.world().getWorldMap().hashCode());
 			loadLog();
+			world.getPlayer().postLoadInit(world.getCurLoc());
+			Utils.out("Initialized player: %s", world.getPlayer());
+			MadSand.game().setWorld(world);
 			Utils.out("Loaded [%s] successfully!", getCurSaveDir());
 			System.gc();
 			Utils.printMemoryInfo();
@@ -170,9 +173,6 @@ public class GameSaver {
 			String worldFile = getCurSaveDir() + GameSaver.WORLDFILE;
 			Utils.out("Loading world data from `%s`...", worldFile);
 			world = serializer.readValue(readFile(worldFile), World.class);
-			world.getPlayer().postLoadInit();
-			Utils.out("Loaded player: %s", world.getPlayer());
-			MadSand.game().setWorld(world);
 			System.gc();
 			Utils.out("Done loading world data.");
 			return true;
