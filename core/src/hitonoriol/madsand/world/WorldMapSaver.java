@@ -8,6 +8,7 @@ import static hitonoriol.madsand.world.GameSaver.serializer;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 
 import hitonoriol.madsand.containers.Pair;
@@ -63,12 +64,12 @@ public class WorldMapSaver {
 		serializer().writeValue(saver.getLocationFile(wx, wy), worldMap.getLocation(new Pair(wx, wy)));
 	}
 
-	public void bytesToLocation(byte[] locationData, int wx, int wy) throws Exception {
+	public void bytesToLocation(byte[] locationData, int wx, int wy) throws IOException  {
 		ByteArrayInputStream stream = new ByteArrayInputStream(locationData);
 
 		long saveVersion = nextLongBlock(stream, longBlock);
 		if (saveVersion != GameSaver.saveFormatVersion)
-			throw (new Exception("Incompatible save format version!"));
+			throw new RuntimeException("Incompatible save format version!");
 
 		int layers = nextBlock(stream, block);
 		for (int i = 0; i < layers; ++i) {
@@ -80,7 +81,7 @@ public class WorldMapSaver {
 		}
 	}
 
-	public Location loadLocationInfo(int wx, int wy) throws Exception {
+	public Location loadLocationInfo(int wx, int wy) throws IOException {
 		Location location = serializer().readValue(saver.getLocationFile(wx, wy), Location.class);
 		worldMap.addLocation(new Pair(wx, wy), location);
 		Utils.dbg("World map: {%X}, Location: {%X} @ (%d, %d)", worldMap.hashCode(), location.hashCode(), wx, wy);
@@ -209,12 +210,12 @@ public class WorldMapSaver {
 		return new String(bytes);
 	}
 
-	private long nextLongBlock(ByteArrayInputStream stream, byte[] buffer) throws Exception {
+	private long nextLongBlock(ByteArrayInputStream stream, byte[] buffer) throws IOException {
 		stream.read(buffer);
 		return decode8(buffer);
 	}
 
-	private int nextBlock(ByteArrayInputStream stream, byte[] buffer) throws Exception {
+	private int nextBlock(ByteArrayInputStream stream, byte[] buffer) throws IOException {
 		stream.read(buffer);
 		return decode2(buffer);
 	}

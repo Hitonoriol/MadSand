@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.MadSand.Screens;
+import hitonoriol.madsand.commons.exception.Exceptions;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.Player;
@@ -360,8 +361,15 @@ public class World {
 
 		if (x == prevX && y == prevY && worldMap.curLayer != Location.LAYER_OVERWORLD)
 			generate(layer);
-		else if (saver.verifyNextSector(x, y))
-			saver.loadLocation();
+		else if (saver.verifyNextSector(x, y)) {
+			/* Temporary: will crash the whole game if something goes wrong
+			 * TODO:
+			 * 		1. Attempt to load the location before switching to it
+			 * 		2. Load existing (already explored) locations asynchronously
+			 * 			when player gets close to the current location's boundary
+			 */
+			Exceptions.asUnchecked(() -> saver.loadLocation());
+		}
 		else
 			generate();
 

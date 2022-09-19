@@ -1,10 +1,5 @@
 package hitonoriol.madsand.gui.dialogs;
 
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
-
 import java.io.File;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
@@ -16,6 +11,7 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.MadSand.Screens;
+import hitonoriol.madsand.commons.exception.Exceptions;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.Widgets;
@@ -89,24 +85,20 @@ public class LoadWorldDialog extends GameDialog {
 	private void loadWorld(String path) {
 		loadingStart = Utils.now();
 		closeBtn.setDisabled(true);
-		scrollTable.addAction(sequence(
-				fadeOut(0.1f),
-				run(() -> {
-					scrollTable.clearChildren();
-					addEntry("Loading...");
-					addEntry(() -> String.format("%s", Utils.timeString(Utils.now() - loadingStart)));
-				}),
-				fadeIn(0.1f)));
-
-		CompletableFuture.supplyAsync(new GameSaver(path)::load)
-				.thenAccept(loaded -> {
-					if (loaded) {
+		Gui.seamlessRefresh(scrollTable, () -> {
+			addEntry("Loading...");
+			addEntry(() -> String.format("%s", Utils.timeString(Utils.now() - loadingStart)));
+		});
+		CompletableFuture.runAsync(Exceptions.asUnchecked(new GameSaver(path)::load))
+				.thenRun(() -> {
+					Gui.doLater(() -> {
 						remove();
 						MadSand.switchScreen(Screens.Game);
 						MadSand.enterWorld();
 						Gui.overlay.refresh();
-					}
-				});
+					});
+				})
+				.exceptionally(GameSaver::loadingError);
 	}
 
 	private void deleteWorld(String path) {

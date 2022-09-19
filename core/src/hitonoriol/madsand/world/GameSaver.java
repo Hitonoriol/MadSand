@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -14,11 +15,14 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.MadSand.Screens;
+import hitonoriol.madsand.commons.exception.Exceptions;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.lua.Lua;
@@ -39,7 +43,7 @@ public class GameSaver {
 
 	private final static List<Runnable> loaderTasks = new ArrayList<>();
 	private final static Serializer serializer = new Serializer(DefaultTyping.EVERYTHING);
-	
+
 	private String saveDir;
 	private World world;
 	private WorldMapSaver worldMapSaver = new WorldMapSaver(this);
@@ -51,19 +55,19 @@ public class GameSaver {
 	public GameSaver(World world) {
 		this.world = world;
 	}
-	
+
 	public WorldMapSaver getWorldMapSaver() {
 		return worldMapSaver;
 	}
-	
+
 	public WorldMap getWorldMap() {
 		return world.getWorldMap();
 	}
-	
+
 	public void setWorldMap(WorldMap worldMap) {
 		worldMapSaver.setWorldMap(worldMap);
 	}
-
+	
 	public void save() {
 		if (world.inEncounter()) {
 			Gui.drawOkDialog("You can't save during an encounter!");
@@ -77,44 +81,7 @@ public class GameSaver {
 		else
 			MadSand.print("Couldn't save the game. Check logs.");
 	}
-
-	public boolean load() {
-		Utils.out("Loading world [%s]...", getCurSaveDir());
-		Utils.printMemoryInfo();
-		File f = new File(getCurSaveDir());
-
-		if (!f.exists() || !f.isDirectory()) {
-			MadSand.switchScreen(Screens.MainMenu);
-			Gui.drawOkDialog("Couldn't load this world");
-			return false;
-		}
-
-		Gui.overlay.getGameLog().clear();
-		MadSand.world().close(); // Close the current world (might not be the same as this.world)
-
-		if (!loadWorld()) {
-			loadErrMsg();
-			return false;
-		}
-
-		if (loadLocation()) {
-			Lua.init();
-			world.updateLight();
-			Utils.dbg("Loaded world map: %X", MadSand.world().getWorldMap().hashCode());
-			loadLog();
-			world.getPlayer().postLoadInit(world.getCurLoc());
-			Utils.out("Initialized player: %s", world.getPlayer());
-			MadSand.game().setWorld(world);
-			Utils.out("Loaded [%s] successfully!", getCurSaveDir());
-			System.gc();
-			Utils.printMemoryInfo();
-			return true;
-		} else {
-			loadErrMsg();
-			return false;
-		}
-	}
-
+	
 	public boolean saveLocation(int wx, int wy) {
 		WorldMapSaver saver = world.getMapSaver();
 		try {
@@ -132,28 +99,7 @@ public class GameSaver {
 	public boolean saveLocation() {
 		return saveLocation(world.wx(), world.wy());
 	}
-
-	public boolean loadLocation(int wx, int wy) {
-		WorldMapSaver saver = world.getMapSaver();
-		try {
-			byte[] data = Files.readAllBytes(Paths.get(getSectorFile(wx, wy).toURI()));
-			Utils.out("Loading location data for [%d, %d]...", wx, wy);
-			saver.loadLocationInfo(wx, wy);
-			Utils.out("Loading location layers...", wx, wy);
-			saver.bytesToLocation(data, wx, wy);
-			finalizeLoading();
-			System.gc();
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
-
-	public boolean loadLocation() {
-		return loadLocation(world.wx(), world.wy());
-	}
-
+	
 	private boolean saveWorld() {
 		try {
 			File worldFile = new File(getCurSaveDir() + GameSaver.WORLDFILE);
@@ -167,19 +113,71 @@ public class GameSaver {
 			return false;
 		}
 	}
-
-	private boolean loadWorld() {
+	
+	private boolean saveLog() {
 		try {
-			String worldFile = getCurSaveDir() + GameSaver.WORLDFILE;
-			Utils.out("Loading world data from `%s`...", worldFile);
-			world = serializer.readValue(readFile(worldFile), World.class);
-			System.gc();
-			Utils.out("Done loading world data.");
+			FileWriter fw = new FileWriter(getCurSaveDir() + GameSaver.LOGFILE);
+
+			for (Label logLabel : Gui.overlay.getGameLog().getLabels())
+				fw.write(logLabel.getText().toString() + LINEBREAK);
+
+			fw.close();
+
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	public void load() throws IOException {
+		Utils.out("Loading world [%s]...", getCurSaveDir());
+		Utils.printMemoryInfo();
+		File worldFile = new File(getCurSaveDir());
+
+		if (!worldFile.exists() || !worldFile.isDirectory()) {
+			MadSand.switchScreen(Screens.MainMenu);
+			Gui.drawOkDialog("Couldn't load this world");
+			return;
+		}
+
+		Gui.overlay.getGameLog().clear();
+		MadSand.world().close(); // Close the current world (might not be the same as this.world)
+
+		loadWorld();
+		Lua.init();
+		world.updateLight();
+		Utils.dbg("Loaded world map: %X", MadSand.world().getWorldMap().hashCode());
+		loadLog();
+		world.getPlayer().postLoadInit(world.getCurLoc());
+		Utils.out("Initialized player: %s", world.getPlayer());
+		MadSand.game().setWorld(world);
+		Utils.out("Loaded [%s] successfully!", getCurSaveDir());
+		System.gc();
+		Utils.printMemoryInfo();
+	}
+
+	public void loadLocation(int wx, int wy) throws IOException {
+		WorldMapSaver saver = world.getMapSaver();
+		byte[] data = Files.readAllBytes(Paths.get(getSectorFile(wx, wy).toURI()));
+		Utils.out("Loading location data for [%d, %d]...", wx, wy);
+		saver.loadLocationInfo(wx, wy);
+		Utils.out("Loading location layers...", wx, wy);
+		saver.bytesToLocation(data, wx, wy);
+		finalizeLoading();
+		System.gc();
+	}
+
+	public void loadLocation() throws IOException {
+		loadLocation(world.wx(), world.wy());
+	}
+
+	private void loadWorld() throws IOException {
+		String worldFile = getCurSaveDir() + GameSaver.WORLDFILE;
+		Utils.out("Loading world data from `%s`...", worldFile);
+		world = serializer.readValue(readFile(worldFile), World.class);
+		System.gc();
+		Utils.out("Done loading world data.");
 	}
 
 	public static boolean deleteDirectory(File dir) {
@@ -267,33 +265,9 @@ public class GameSaver {
 				+ GameSaver.SAVE_EXT;
 	}
 
-	public static void loadErrMsg() {
-		MadSand.switchScreen(Screens.MainMenu);
-		Gui.drawOkDialog(
-				"Couldn't to load this world. \n"
-						+ "Maybe it was saved in older/newer version of the game or some files are corrupted.\n"
-						+ "Check " + Log.OUT_FILE + " for details.");
-	}
-
 	public boolean verifyNextSector(int x, int y) {
 		File sectorFile = getSectorFile(x, y);
 		return sectorFile.exists();
-	}
-
-	private boolean saveLog() {
-		try {
-			FileWriter fw = new FileWriter(getCurSaveDir() + GameSaver.LOGFILE);
-
-			for (Label logLabel : Gui.overlay.getGameLog().getLabels())
-				fw.write(logLabel.getText().toString() + LINEBREAK);
-
-			fw.close();
-
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
 	}
 
 	private boolean loadLog() {
@@ -329,12 +303,20 @@ public class GameSaver {
 		Utils.dbg("Running post-loading tasks (%s)...", loaderTasks.size());
 		loaderTasks.forEach(Runnable::run);
 	}
-	
+
 	static Serializer serializer() {
 		return serializer;
 	}
 
 	public static void createSaveDir() {
-		new File(MAPDIR).mkdirs();		
+		new File(MAPDIR).mkdirs();
+	}
+
+	public static Void loadingError(Throwable e) {
+		Gui.drawOkDialog(
+				"Couldn't load this world. \n\n"
+						+ ExceptionUtils.getStackTrace(e) + "\n\n"
+						+ "Check " + Log.OUT_FILE + " for details.");
+		return Exceptions.printStackTrace(e);
 	}
 }
