@@ -1,11 +1,13 @@
 package hitonoriol.madsand.world.worldgen;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.github.czyzby.noise4j.map.Grid;
 import com.github.czyzby.noise4j.map.generator.room.dungeon.DungeonGenerator;
 
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.commons.reflection.Reflection;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.containers.rolltable.LootTable;
 import hitonoriol.madsand.map.Map;
@@ -14,16 +16,17 @@ import hitonoriol.madsand.world.Location;
 import hitonoriol.madsand.world.World;
 
 public class DungeonGen extends DungeonGenerator {
-	Map map;
+	private static final float DUNGEON_CORRIDOR_LEVEL = 0.0f;
+	private static final float DUNGEON_WALL_LEVEL = 1.0f;
+	private static final float DUNGEON_ROOM_LEVEL = 0.5f;
+
+	private Map map;
+	private List<Room> roomList;
 
 	public DungeonGen(Map map) {
 		super();
 		this.map = map;
 	}
-
-	private float DUNGEON_CORRIDOR_LEVEL = 0.0f;
-	private float DUNGEON_WALL_LEVEL = 1.0f;
-	private float DUNGEON_ROOM_LEVEL = 0.5f;
 
 	public void generate(DungeonPreset dungeon, int depth) {
 		ArrayList<DungeonFloorContents> contents = dungeon.dungeonContents;
@@ -119,8 +122,17 @@ public class DungeonGen extends DungeonGenerator {
 			placeExit(dungeon);
 		else
 			placeObjectInRoom(dungeon.staircaseDownObject);
+	}
 
-		rooms.clear();
+	@Override
+	protected void reset() {
+		/* DungeonGenerator's `rooms` list is not exposed in any way despite being the
+		 * only place where room params are stored, so the only way to access it is copy
+		 * it here via reflection, as it gets cleared after grid generation. */
+		roomList = Reflection.readField(this, "rooms");
+		if (!roomList.isEmpty())
+			roomList = new ArrayList<>(roomList);
+		super.reset();
 	}
 
 	private void luckLootRoll(int x, int y) {
@@ -190,7 +202,7 @@ public class DungeonGen extends DungeonGenerator {
 	}
 
 	private Room getRandomRoom() {
-		return rooms.get(Utils.rand(rooms.size()));
+		return Utils.randElement(roomList);
 	}
 
 	private boolean isDoorway(Grid grid, int x, int y, int xsz, int ysz) {
@@ -207,7 +219,10 @@ public class DungeonGen extends DungeonGenerator {
 		if (x + 1 < xsz)
 			right = grid.get(x + 1, y);
 
-		return (current == DUNGEON_CORRIDOR_LEVEL) && (up == DUNGEON_ROOM_LEVEL || down == DUNGEON_ROOM_LEVEL
-				|| left == DUNGEON_ROOM_LEVEL || right == DUNGEON_ROOM_LEVEL);
+		return (current == DUNGEON_CORRIDOR_LEVEL)
+				&& (up == DUNGEON_ROOM_LEVEL
+						|| down == DUNGEON_ROOM_LEVEL
+						|| left == DUNGEON_ROOM_LEVEL
+						|| right == DUNGEON_ROOM_LEVEL);
 	}
 }
