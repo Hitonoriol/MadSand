@@ -3,6 +3,7 @@ package hitonoriol.madsand.entities.inventory;
 import static com.badlogic.gdx.Gdx.graphics;
 
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -28,7 +29,8 @@ public class InventoryUI extends GameDialog {
 
 	private Table invContainer = new Table();
 	private Table itemTable = new Table();
-	private AutoFocusScrollPane invScroll = new AutoFocusScrollPane(itemTable);
+	private Container<Table> itemTableBg = new Container<>(itemTable);
+	private AutoFocusScrollPane invScroll = new AutoFocusScrollPane(itemTableBg);
 	private Label header = new Label("", Gui.skin);
 	private ItemSearchPanel searchPanel = new ItemSearchPanel(this);
 
@@ -40,7 +42,8 @@ public class InventoryUI extends GameDialog {
 		this.inventory = inventory;
 		BODY_WIDTH = ITEMS_PER_ROW * InventoryUICell.SIZE + ITEMS_PER_ROW * ITEM_PAD * 2;
 		Gui.setFontSize(header, Gui.FONT_L);
-		itemTable.setBackground(GuiSkin.darkBackground);
+		itemTableBg.align(Align.topLeft);
+		itemTableBg.setBackground(GuiSkin.darkBackground);
 		invScroll.setOverscroll(false, false);
 		invScroll.setScrollingDisabled(true, false);
 
@@ -71,18 +74,19 @@ public class InventoryUI extends GameDialog {
 
 		Gui.setAction(craftMenuButton, () -> {
 			addAction(Actions.fadeOut(FADE_DURATION));
-			new CraftDialog(this).show();	
+			new CraftDialog(this).show();
 		});
 		searchPanel.onChange(() -> refresh());
-		refresh();		
+		refresh();
 	}
 
 	void refresh() {
 		items = 0;
-		itemTable.clear();
-		searchPanel.search(inventory.getItems())
-				.forEach(item -> addItem(item));
-		itemTable.align(items > ITEMS_PER_ROW ? Align.top : Align.topLeft);
+		Gui.seamlessRefresh(itemTable, () -> {
+			searchPanel.search(inventory.getItems())
+					.forEach(item -> addItem(item));
+			itemTable.align(items > ITEMS_PER_ROW ? Align.top : Align.topLeft);
+		});
 		refreshTitle();
 	}
 

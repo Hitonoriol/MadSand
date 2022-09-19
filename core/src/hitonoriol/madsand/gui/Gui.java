@@ -1,5 +1,9 @@
 package hitonoriol.madsand.gui;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 import static hitonoriol.madsand.MadSand.getRenderer;
 
 import com.badlogic.gdx.Gdx;
@@ -7,6 +11,7 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
@@ -61,6 +66,24 @@ public class Gui {
 
 	public static OkDialog drawOkDialog(String msg) {
 		return drawOkDialog(OkDialog.DEFAULT_TITLE, msg);
+	}
+	
+	public static void doLater(Runnable action) {
+		Gdx.app.postRunnable(action);
+	}
+	
+	public static <T extends Group> void seamlessRefresh(T container, Runnable populator, float duration) {
+		container.addAction(sequence(
+				fadeOut(duration),
+				run(() -> {
+					container.clearChildren();
+					populator.run();
+				}),
+				fadeIn(duration)));
+	}
+	
+	public static <T extends Group> void seamlessRefresh(T container, Runnable populator) {
+		seamlessRefresh(container, populator, 0.1f);
 	}
 
 	public static void openDialog() {

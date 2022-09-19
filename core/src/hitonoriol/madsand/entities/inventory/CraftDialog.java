@@ -18,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.dialog.GameDialog;
-import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
@@ -28,7 +27,6 @@ import hitonoriol.madsand.gui.widgets.itembutton.CraftButton;
 import hitonoriol.madsand.map.object.CraftingStation;
 import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.properties.ObjectProp;
-import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
 
 public class CraftDialog extends GameDialog {
@@ -77,7 +75,7 @@ public class CraftDialog extends GameDialog {
 		createItemList();
 		refreshCraftMenu();
 
-		searchPanel.onChange(() -> refreshCraftMenu());
+		searchPanel.onChange(this::refresh);
 		addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -146,26 +144,19 @@ public class CraftDialog extends GameDialog {
 	private Stream<Item> getCraftableItems() {
 		return searchPanel.search(getItemList()).distinct();
 	}
+	
+	private void refresh() {
+		Gui.seamlessRefresh(craftTable, this::refreshCraftMenu, FADE_DELAY);
+	}
 
 	private void refreshCraftMenu() {
-		Player player = player();
-		List<Integer> itemList;
 		entries = 0;
-
 		Utils.out("Refreshing craft menu id: " + craftStationId);
-		craftTable.clear();
 
-		if (craftStationId == 0) {
-			itemList = player.getCraftRecipes();
-			unlockProgressLabel.setText("Crafting recipes unlocked: " + player.craftRecipeProgress());
-		} else {
-			itemList = ItemProp.craftStationRecipes.get(craftStationId);
-		}
+		if (isPlayerCraftMenu())
+			unlockProgressLabel.setText("Crafting recipes unlocked: " + player().craftRecipeProgress());
 
-		int craftSz = itemList.size();
-		Utils.out("Total unlocked recipes: " + craftSz + " out of " + ItemProp.craftReq.size());
-
-		if (craftSz == 0)
+		if (getItemList().isEmpty())
 			craftTable.add(new Label("You don't know any crafting recipes.", Gui.skin));
 
 		getCraftableItems().forEach(item -> {
@@ -181,22 +172,18 @@ public class CraftDialog extends GameDialog {
 
 		craftTable.row();
 		craftTable.pack();
-		scroll.addAction(Actions.alpha(0));
 
-		TimeUtils.scheduleTask(() -> {
-			Utils.dbg("Restoring position %f %f", scrollX, scrollY);
-			scroll.setScrollY(scrollY);
-			scroll.setScrollX(scrollX);
-			scroll.updateVisualScroll();
-			scroll.addAction(Actions.fadeIn(FADE_DELAY));
-		});
+		Utils.dbg("Restoring position %f %f", scrollX, scrollY);
+		scroll.setScrollY(scrollY);
+		scroll.setScrollX(scrollX);
+		scroll.updateVisualScroll();
 	}
 
 	private final static Drawable entryBg = GuiSkin.getColorDrawable(new Color(0.25f, 0.25f, 0.25f, 0.5f));
 
 	private Table createEntry(Item item) {
 		Table entry = new Table();
-		CraftButton craftButton = new CraftButton(item, () -> afterCrafting());
+		CraftButton craftButton = new CraftButton(item, this::refresh);
 		Label recipeLabel = new Label(Item.createReadableItemList(ItemProp.getCraftRecipe(item.id())), Gui.skin);
 		recipeLabel.setAlignment(Align.left);
 		recipeLabel.setWrap(true);
@@ -206,10 +193,5 @@ public class CraftDialog extends GameDialog {
 		entry.setBackground(entryBg);
 		entry.pack();
 		return entry;
-	}
-
-	private void afterCrafting() {
-		scroll.addAction(Actions.sequence(Actions.fadeOut(FADE_DELAY),
-				Actions.run(() -> refreshCraftMenu())));
 	}
 }
