@@ -1,4 +1,4 @@
-package hitonoriol.madsand.launcher.util;
+package hitonoriol.madsand.commons.exception;
 
 import java.util.function.Supplier;
 

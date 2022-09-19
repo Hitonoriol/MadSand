@@ -7,7 +7,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
 
-import hitonoriol.madsand.launcher.util.Exceptions;
+import hitonoriol.madsand.commons.exception.Exceptions;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

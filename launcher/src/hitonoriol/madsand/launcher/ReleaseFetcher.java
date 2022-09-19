@@ -17,8 +17,8 @@ import org.kohsuke.github.Releases;
 
 import com.github.rjeschke.txtmark.Processor;
 
+import hitonoriol.madsand.commons.exception.Exceptions;
 import hitonoriol.madsand.launcher.gui.controller.LauncherLayoutController;
-import hitonoriol.madsand.launcher.util.Exceptions;
 import hitonoriol.madsand.launcher.util.GitHubUtils;
 import hitonoriol.madsand.launcher.util.RateLimiter;
 

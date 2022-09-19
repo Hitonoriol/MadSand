@@ -9,13 +9,13 @@ import java.util.LinkedList;
 import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
 
+import hitonoriol.madsand.commons.exception.Exceptions;
 import hitonoriol.madsand.launcher.GameLauncher;
 import hitonoriol.madsand.launcher.GameVersionEntry;
 import hitonoriol.madsand.launcher.Prefs;
 import hitonoriol.madsand.launcher.ReleaseFetcher;
 import hitonoriol.madsand.launcher.gui.GuiUtils;
 import hitonoriol.madsand.launcher.gui.Layout;
-import hitonoriol.madsand.launcher.util.Exceptions;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

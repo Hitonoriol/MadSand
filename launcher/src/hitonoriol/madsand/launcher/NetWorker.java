@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import hitonoriol.madsand.launcher.util.Exceptions;
+import hitonoriol.madsand.commons.exception.Exceptions;
 
 public class NetWorker {
 	private String url;
