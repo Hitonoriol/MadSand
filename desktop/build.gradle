@@ -16,7 +16,9 @@ import static groovy.io.FileType.DIRECTORIES
 task texturePacker {
 	doLast {
 		TexturePacker.process("${rootDir}/core/textures", "${assetsDir}/textures", "textures")
+		TexturePacker.process("${assetsDir}/skin/raw", "${assetsDir}/skin", "skin")
 	}
+	finalizedBy processResources
 }
 
 task run(type: JavaExec, dependsOn: [classes, texturePacker]) {
@@ -25,15 +27,6 @@ task run(type: JavaExec, dependsOn: [classes, texturePacker]) {
 	standardInput = System.in
 	workingDir = project.runDir
 	ignoreExitValue = true
-}
-
-task debug(type: JavaExec, dependsOn: classes) {
-	main = project.mainClassName
-	classpath = sourceSets.main.runtimeClasspath
-	standardInput = System.in
-	workingDir = project.runDir
-	ignoreExitValue = true
-	debug = true
 }
 
 task dist(type: Jar, dependsOn: texturePacker) {
