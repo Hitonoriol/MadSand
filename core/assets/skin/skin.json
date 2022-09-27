@@ -1,6 +1,7 @@
 {
   com.badlogic.gdx.graphics.Color: {
     white: { r: 1, g: 1, b: 1, a: 1 },
+	whiteSemiTransparent: { r: 1, g: 1, b: 1, a: 0.65 },
     gray: { r: 0.5, g: 0.5, b: 0.5, a: 1 },
     black: { r: 0, g: 0, b: 0, a: 1 },
     
@@ -16,7 +17,7 @@
     
     font: white
     fontOver: white
-    fontDown: gray
+    fontDown: whiteSemiTransparent
     fontChecked: checkedOver
     fontCheckedOver: checked
     fontDisabled: gray
@@ -83,7 +84,7 @@
     treeMinus: { name: tree-minus, color: up },
     treePlus: { name: tree-plus, color: up },
     window: { name: window, color: background },
-	windowBackground: { name: dot, color: background },
+	dialog: { name: window-notitle, color: background },
     alpha: { name: dot, color: semiTransparent }
   },
   com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
@@ -171,6 +172,6 @@
   },
   com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
     default: { titleFont: h3, background: window, titleFontColor: white },
-    dialog: { titleFont: h3, background: window, titleFontColor: white, stageBackground: alpha }
+    dialog: { titleFont: h3, background: dialog, titleFontColor: white, stageBackground: alpha }
   }
 }
