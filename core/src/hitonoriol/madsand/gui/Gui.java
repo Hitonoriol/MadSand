@@ -40,7 +40,7 @@ public class Gui {
 	private static BooleanTally gameFocus = new BooleanTally();
 	private static BooleanTally gameDialogs = new BooleanTally();
 
-	public static final Skin skin = GuiSkin.init();
+	public static final Skin skin = GuiSkin.get();
 
 	public static Overlay overlay;
 	private static ScreenViewport viewport = new ScreenViewport();
@@ -67,11 +67,11 @@ public class Gui {
 	public static OkDialog drawOkDialog(String msg) {
 		return drawOkDialog(OkDialog.DEFAULT_TITLE, msg);
 	}
-	
+
 	public static void doLater(Runnable action) {
 		Gdx.app.postRunnable(action);
 	}
-	
+
 	public static <T extends Group> void seamlessRefresh(T container, Runnable populator, float duration) {
 		container.addAction(sequence(
 				fadeOut(duration),
@@ -81,7 +81,7 @@ public class Gui {
 				}),
 				fadeIn(duration)));
 	}
-	
+
 	public static <T extends Group> void seamlessRefresh(T container, Runnable populator) {
 		seamlessRefresh(container, populator, 0.1f);
 	}
@@ -131,7 +131,19 @@ public class Gui {
 	public static <T extends Drawable> T setMinSize(T drawable, float width, float height) {
 		drawable.setMinWidth(width);
 		drawable.setMinHeight(height);
+		if (width == 0) {
+			drawable.setLeftWidth(width);
+			drawable.setRightWidth(width);
+		}
+		if (height == 0) {
+			drawable.setTopHeight(height);
+			drawable.setBottomHeight(height);
+		}
 		return drawable;
+	}
+	
+	public static <T extends Drawable> T clearMinSize(T drawable) {
+		return setMinSize(drawable, 0, 0);
 	}
 
 	public static <T extends Drawable> T setMinSize(T drawable, float size) {
@@ -217,7 +229,7 @@ public class Gui {
 	public static float relativeCenterX(float aX, float aWidth, float bWidth, boolean projectedFromWorld) {
 		return (aX + aWidth * 0.5f * (projectedFromWorld ? getRenderer().getCamZoom() : 1f)) - bWidth * 0.5f;
 	}
-	
+
 	public static float relativeCenterX(float aX, float aWidth, float bWidth) {
 		return relativeCenterX(aX, aWidth, bWidth, true);
 	}

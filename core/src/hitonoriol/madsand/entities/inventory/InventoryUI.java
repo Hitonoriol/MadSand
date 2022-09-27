@@ -43,7 +43,7 @@ public class InventoryUI extends GameDialog {
 		BODY_WIDTH = ITEMS_PER_ROW * InventoryUICell.SIZE + ITEMS_PER_ROW * ITEM_PAD * 2;
 		Gui.setFontSize(header, Gui.FONT_L);
 		itemTableBg.align(Align.topLeft);
-		itemTableBg.setBackground(GuiSkin.darkBackground);
+		itemTableBg.setBackground(GuiSkin.dialogBackground());
 		invScroll.setOverscroll(false, false);
 		invScroll.setScrollingDisabled(true, false);
 
@@ -62,7 +62,7 @@ public class InventoryUI extends GameDialog {
 		invContainer.setFillParent(true);
 
 		super.add(invContainer);
-		super.setBackground(GuiSkin.transparency);
+		super.setBackground(GuiSkin.transparency());
 
 		TextButton craftMenuButton = new TextButton("Crafting", Gui.skin);
 		buttonTable.defaults()

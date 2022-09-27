@@ -3,9 +3,9 @@ package hitonoriol.madsand.entities.npc;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.TimeDependent;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.gamecontent.NpcDescriptor;
 import hitonoriol.madsand.gui.textgenerator.CellInfoGenerator;
 import hitonoriol.madsand.map.ItemProducer;
-import hitonoriol.madsand.properties.NpcContainer;
 import hitonoriol.madsand.util.Strings;
 import me.xdrop.jrand.JRand;
 import me.xdrop.jrand.generators.basics.NaturalGenerator;
@@ -16,7 +16,7 @@ public class FarmAnimal extends AbstractNpc implements TimeDependent {
 	private static final long STARVE_TIME = MadSand.world().timeToActionTicks(1800);
 	private static NaturalGenerator initialFoodGen = JRand.natural().range(0, 30);
 
-	public FarmAnimal(NpcContainer protoNpc) {
+	public FarmAnimal(NpcDescriptor protoNpc) {
 		super(protoNpc);
 		animalProduct = new ItemProducer(-id);
 		animalProduct.addRawMaterial(initialFoodGen.gen());

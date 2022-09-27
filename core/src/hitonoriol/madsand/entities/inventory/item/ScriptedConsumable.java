@@ -9,10 +9,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.gamecontent.Globals;
+import hitonoriol.madsand.gamecontent.Items;
 import hitonoriol.madsand.gfx.ConditionalEffects;
 import hitonoriol.madsand.gfx.Effects;
-import hitonoriol.madsand.properties.Globals;
-import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.util.Utils;
 
 public class ScriptedConsumable extends Item {
@@ -120,7 +120,7 @@ public class ScriptedConsumable extends Item {
 
 	public static ScriptedConsumable create(String mapName, String consumableName) {
 		return new ScriptedConsumable(
-				(ScriptedConsumable) ItemProp.getItem(getScriptMap(mapName).getBaseItemId()),
+				(ScriptedConsumable) Items.all().get(getScriptMap(mapName).getBaseItemId()),
 				consumableName);
 	}
 

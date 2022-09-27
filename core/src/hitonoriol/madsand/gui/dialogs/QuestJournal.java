@@ -56,7 +56,7 @@ public class QuestJournal extends GameDialog {
 		emptyJournalLabel = createTitle("Your journal is empty");
 
 		questTable = new Table();
-		questTable.setBackground(GuiSkin.darkBackgroundSizeable);
+		questTable.setBackground(GuiSkin.darkBackground());
 		questTable.align(Align.top);
 
 		questScroll = new AutoFocusScrollPane(questTable);

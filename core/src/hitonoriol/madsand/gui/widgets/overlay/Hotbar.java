@@ -35,7 +35,7 @@ public class Hotbar extends Table {
 		container.defaults().padRight(5).padLeft(5).size(E_WIDTH, HEIGHT);
 		container.align(Align.left);
 		super.align(Align.bottomLeft);
-		super.setBackground(GuiSkin.darkBackgroundSizeable);
+		super.setBackground(GuiSkin.darkBackground());
 		super.pack();
 		super.moveBy(0, OverlayBottomMenu.HEIGHT + OverlayBottomMenu.BUTTON_PADDING * 2);
 		container.moveBy(5, 0);

@@ -18,12 +18,12 @@ import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.ItemUI;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.gamecontent.Objects;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.object.MapObject;
-import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.resources.Resources;
 
 public class BuildDialog extends GameDialog {
@@ -42,10 +42,10 @@ public class BuildDialog extends GameDialog {
 		super.setTitle("Build menu");
 		super.add().padTop(15).row();
 		super.add(unlockProgressLabel).width(WIDTH).row();
-		buildTable.setBackground(GuiSkin.darkBackgroundSizeable);
+		buildTable.setBackground(GuiSkin.darkBackground());
 		BuildDialogEntry buildEntry;
 		Player player = MadSand.player();
-		for (Entry<Integer, String> object : ObjectProp.buildRecipes.entrySet()) {
+		for (Entry<Integer, String> object : Objects.all().buildRecipes().entrySet()) {
 			if (player.getBuildRecipes().contains(object.getKey())) {
 				buildEntry = new BuildDialogEntry(this, object.getKey(), object.getValue());
 				buildTable.add(buildEntry).size(buildEntry.WIDTH, buildEntry.HEIGHT).padBottom(PAD).row();
@@ -91,9 +91,9 @@ class BuildDialogEntry extends Group {
 		resourceLabel.setWrap(true);
 		resourceLabel.setAlignment(Align.center);
 
-		container.add(ObjectProp.getName(id)).padBottom(PAD).row();
+		container.add(Objects.all().getName(id)).padBottom(PAD).row();
 		container.add(objImage).align(Align.center).height(objImage.getHeight()).padBottom(PAD).row();
-		container.add(ObjectProp.getObject(id).getBuildInfo()).padBottom(PAD).row();
+		container.add(Objects.all().get(id).getBuildInfo()).padBottom(PAD).row();
 		container.add(resourceLabel).align(Align.center).width(WIDTH).row();
 		container.setFillParent(true);
 
@@ -110,7 +110,7 @@ class BuildDialogEntry extends Group {
 			}
 
 			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-				container.setBackground(GuiSkin.transparency);
+				container.setBackground(GuiSkin.transparency());
 			}
 		});
 

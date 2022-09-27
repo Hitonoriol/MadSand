@@ -28,14 +28,14 @@ import hitonoriol.madsand.entities.inventory.item.PlaceableItem;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.gamecontent.Objects;
+import hitonoriol.madsand.gamecontent.Tiles;
 import hitonoriol.madsand.gfx.TextureProcessor;
 import hitonoriol.madsand.gui.animation.Animations;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.map.Placeable;
-import hitonoriol.madsand.properties.ObjectProp;
-import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
@@ -182,7 +182,7 @@ public class MapObject extends MapEntity implements Placeable {
 		if (harvestHp < 0) {
 			--hp;
 			int excDmg = Math.abs(harvestHp) - 1;
-			harvestHp = ObjectProp.getObject(id).harvestHp;
+			harvestHp = Objects.all().get(id).harvestHp;
 			if (excDmg > 0)
 				takeHarvestDamage(excDmg);
 			dmg = true;
@@ -235,7 +235,7 @@ public class MapObject extends MapEntity implements Placeable {
 		if (damage < 0)
 			return -1;
 
-		int maxHp = ObjectProp.getObject(id).harvestHp;
+		int maxHp = Objects.all().get(id).harvestHp;
 		if (!takeHarvestDamage(damage))
 			MadSand.print("You hit " + name + " [ " + harvestHp + " / " + maxHp + " ]");
 		else
@@ -291,7 +291,7 @@ public class MapObject extends MapEntity implements Placeable {
 	}
 
 	public static int rollTileResource(int id, Tool.Type heldTool) {
-		return rollResource(id, heldTool, TileProp.getTileProp(id).altItems);
+		return rollResource(id, heldTool, Tiles.all().get(id).altItems);
 	}
 
 	@Override
@@ -337,7 +337,7 @@ public class MapObject extends MapEntity implements Placeable {
 	}
 
 	public static MapObject create(int id) {
-		return ObjectProp.getObject(id).copy();
+		return Objects.all().get(id).copy();
 	}
 
 	@Override

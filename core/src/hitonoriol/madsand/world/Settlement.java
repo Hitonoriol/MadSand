@@ -14,9 +14,9 @@ import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategories;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 import hitonoriol.madsand.entities.skill.Skill;
+import hitonoriol.madsand.gamecontent.Globals;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.object.ResourceObject;
-import hitonoriol.madsand.properties.Globals;
 
 public class Settlement {
 	private static float WAREHOUSE_DEF_WEIGHT = 50;

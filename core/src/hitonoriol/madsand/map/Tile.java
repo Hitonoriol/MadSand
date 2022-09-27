@@ -12,9 +12,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import hitonoriol.madsand.entities.inventory.ItemUI;
 import hitonoriol.madsand.entities.inventory.item.PlaceableItem;
 import hitonoriol.madsand.entities.inventory.item.Tool;
+import hitonoriol.madsand.gamecontent.Tiles;
 import hitonoriol.madsand.gfx.TextureProcessor;
 import hitonoriol.madsand.map.object.MapObject;
-import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.resources.Resources;
 
 public class Tile implements Placeable {
@@ -39,7 +39,7 @@ public class Tile implements Placeable {
 	private int lightLevel = 0;
 
 	public Tile(int id) {
-		final Tile tileProp = TileProp.getTileProp(id);
+		final Tile tileProp = Tiles.all().get(id);
 
 		this.id = id;
 		this.name = tileProp.name;

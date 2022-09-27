@@ -10,11 +10,11 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.gamecontent.NpcDescriptor;
+import hitonoriol.madsand.gamecontent.Npcs;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
-import hitonoriol.madsand.properties.NpcContainer;
-import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.resources.Resources;
 
 public class BestiaryDialog extends GameDialog {
@@ -66,7 +66,7 @@ public class BestiaryDialog extends GameDialog {
 	int STAT_KILLS = 10;
 
 	Table createNpcEntry(int id, int kills) {
-		NpcContainer npc = NpcProp.npcs.get(id);
+		NpcDescriptor npc = Npcs.all().get(id);
 		Table entry = new Table();
 		Label topLabel = new Label(npc.name, Gui.skin);
 		Label bottomLabel = new Label("Kills: " + kills, Gui.skin);
@@ -97,7 +97,7 @@ public class BestiaryDialog extends GameDialog {
 
 		entry.add(bottomLabel).row();
 
-		entry.setBackground(GuiSkin.darkBackgroundSizeable);
+		entry.setBackground(GuiSkin.darkBackground());
 		return entry;
 	}
 

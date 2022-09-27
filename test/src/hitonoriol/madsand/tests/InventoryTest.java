@@ -17,11 +17,11 @@ import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.trade.TradeInventory;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
+import hitonoriol.madsand.gamecontent.Globals;
+import hitonoriol.madsand.gamecontent.Items;
+import hitonoriol.madsand.gamecontent.Npcs;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
-import hitonoriol.madsand.properties.Globals;
-import hitonoriol.madsand.properties.ItemProp;
-import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.util.Functional;
 import hitonoriol.madsand.util.Utils;
 import me.xdrop.jrand.JRand;
@@ -29,7 +29,7 @@ import me.xdrop.jrand.generators.basics.NaturalGenerator;
 
 public class InventoryTest {
 	Entity player = MadSand.player();
-	AbstractNpc npc = NpcProp.spawnNpc(1);
+	AbstractNpc npc = Npcs.all().spawnNpc(1);
 	Inventory inventory = player.inventory;
 	Inventory npcInv = npc.inventory;
 	Map map = MadSand.world().getCurLoc();
@@ -160,7 +160,7 @@ public class InventoryTest {
 	}
 
 	private Item getRandomCraftableItem() {
-		return Item.create(Utils.randElement(ItemProp.craftReq.keySet()));
+		return Item.create(Utils.randElement(Items.all().craftRequirements().keySet()));
 	}
 
 	private void addRandomItems(Inventory inventory) {

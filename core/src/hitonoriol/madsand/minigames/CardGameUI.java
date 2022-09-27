@@ -9,17 +9,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
+import hitonoriol.madsand.gamecontent.Globals;
+import hitonoriol.madsand.gamecontent.Items;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.dialogs.SliderDialog;
 import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.map.object.MapObject;
-import hitonoriol.madsand.properties.Globals;
-import hitonoriol.madsand.properties.ItemProp;
 
 public class CardGameUI extends GameDialog {
 
 	protected final int currency = Globals.getCurrency().id();
-	protected final String currencyName = ItemProp.getItemName(currency);
+	protected final String currencyName = Items.all().getName(currency);
 
 	protected Label betLabel = new Label("", Gui.skin);
 	protected Optional<MapEntity> gameMachine;

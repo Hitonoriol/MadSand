@@ -22,11 +22,11 @@ import hitonoriol.madsand.dialog.TextSubstitutor;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
+import hitonoriol.madsand.gamecontent.Items;
+import hitonoriol.madsand.gamecontent.Npcs;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.widgets.waypoint.QuestArrow;
 import hitonoriol.madsand.lua.Lua;
-import hitonoriol.madsand.properties.ItemProp;
-import hitonoriol.madsand.properties.NpcProp;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
@@ -169,7 +169,7 @@ public class Quest implements Enumerable {
 	@JsonIgnore
 	private String getKillObjectiveString() {
 		return getObjectiveString(killObjective,
-				entry -> "Kill " + NpcProp.npcs.get(entry.getKey()).name +
+				entry -> "Kill " + Npcs.all().get(entry.getKey()).name +
 						" (" + getKillObjectiveProgress(entry.getKey()) + "/" + entry.getValue() + ")",
 				false);
 	}
@@ -177,7 +177,7 @@ public class Quest implements Enumerable {
 	@JsonIgnore
 	private String getItemObjectiveString() {
 		return getObjectiveString(itemObjective,
-				entry -> "Get " + ItemProp.getItemName(entry.getKey()) +
+				entry -> "Get " + Items.all().getName(entry.getKey()) +
 						" (" + getItemObjectiveProgress(entry.getKey()) + "/" + entry.getValue() + ")",
 				false);
 	}
@@ -314,8 +314,8 @@ public class Quest implements Enumerable {
 		showQuestDialog(endMsg);
 	}
 
-	protected NameGetter itemNames = id -> ItemProp.getItemName(id);
-	protected NameGetter npcNames = id -> NpcProp.npcs.get(id).name;
+	protected NameGetter itemNames = id -> Items.all().getName(id);
+	protected NameGetter npcNames = id -> Npcs.all().get(id).name;
 
 	private interface NameGetter {
 		String get(int id);

@@ -4,8 +4,8 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.properties.Globals;
-import hitonoriol.madsand.properties.ItemProp;
+import hitonoriol.madsand.gamecontent.Globals;
+import hitonoriol.madsand.gamecontent.Items;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
@@ -21,7 +21,7 @@ public class WaitDialog extends SliderDialog {
 		super.setSliderTitle("How much time to skip:");
 		super.getBottomLabel().setAlignment(Align.center);
 
-		String timeSkipItem = ItemProp.getItemName(Globals.values().timeSkipItem);
+		String timeSkipItem = Items.all().getName(Globals.values().timeSkipItem);
 		super.setSliderAction(
 				ticks -> {
 					timeSkipItemSpent = (int) Math.max((float) ticks / Player.TIMESKIP_COEF, 1);

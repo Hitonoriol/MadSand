@@ -51,7 +51,7 @@ public class VideoPokerUI extends CardGameUI {
 		super.addCloseButton();
 
 		combTable.align(Align.center);
-		cards.setBackground(GuiSkin.darkBackgroundSizeable);
+		cards.setBackground(GuiSkin.darkBackground());
 		cards.defaults().align(Align.center);
 		drawButton.setVisible(false);
 		setBetText(0);
@@ -130,7 +130,7 @@ public class VideoPokerUI extends CardGameUI {
 		combTable.pad(PAD);
 		combTable.add("Combination multipliers:").align(Align.center).colspan(4).row();
 		Gui.skipLine(combTable);
-		combTable.setBackground(GuiSkin.darkBackgroundSizeable);
+		combTable.setBackground(GuiSkin.darkBackground());
 		int opposite = Combination.COMBINATIONS / 2;
 		Combination combinations[] = Combination.values();
 		Cell<Label> lastCell;

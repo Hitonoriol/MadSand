@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
 import hitonoriol.madsand.entities.inventory.item.Item;
-import hitonoriol.madsand.properties.ItemProp;
-import hitonoriol.madsand.properties.ObjectProp;
+import hitonoriol.madsand.gamecontent.Items;
+import hitonoriol.madsand.gamecontent.Objects;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class ItemProducer {
@@ -38,7 +38,7 @@ public class ItemProducer {
 	}
 
 	private void loadProperties() {
-		ItemProducer properties = ObjectProp.itemProducers.get(this.id);
+		ItemProducer properties = Objects.all().itemProducers().get(this.id);
 		producedMaterial = properties.producedMaterial;
 		consumedMaterial = properties.consumedMaterial;
 
@@ -114,12 +114,12 @@ public class ItemProducer {
 
 	@JsonIgnore
 	public String getConsumableName() {
-		return ItemProp.getItemName(consumedMaterial);
+		return Items.all().getName(consumedMaterial);
 	}
 
 	@JsonIgnore
 	public String getProductName() {
-		return ItemProp.getItemName(producedMaterial);
+		return Items.all().getName(producedMaterial);
 	}
 
 	public int getId() {

@@ -14,10 +14,10 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Reputation;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
+import hitonoriol.madsand.gamecontent.Quests;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.dialogs.QuestListDialog;
 import hitonoriol.madsand.lua.Lua;
-import hitonoriol.madsand.properties.QuestList;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
@@ -68,7 +68,7 @@ public class QuestWorker {
 
 	public Quest questById(int id) {
 		if (id >= 0)
-			return QuestList.quests.get(id);
+			return Quests.all().get(id);
 
 		return findQuest(id, (ProceduralQuest squest, Long sid) -> squest.id() == sid.longValue());
 	}
@@ -245,6 +245,6 @@ public class QuestWorker {
 			if (isQuestInProgress(qid) || !isQuestCompleted(qid))
 				return qid;
 
-		return QuestList.NO_QUESTS_STATUS;
+		return Quests.NO_QUESTS_STATUS;
 	}
 }

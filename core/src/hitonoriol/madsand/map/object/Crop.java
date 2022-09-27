@@ -3,11 +3,11 @@ package hitonoriol.madsand.map.object;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.TimeDependent;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.gamecontent.Items;
+import hitonoriol.madsand.gamecontent.Objects;
 import hitonoriol.madsand.map.CropGrowthStage;
 import hitonoriol.madsand.map.CropGrowthStageContainer;
 import hitonoriol.madsand.map.Map;
-import hitonoriol.madsand.properties.ItemProp;
-import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.util.Utils;
 
 public class Crop extends MapObject implements TimeDependent {
@@ -21,10 +21,10 @@ public class Crop extends MapObject implements TimeDependent {
 	public Crop(int id, long plantTime) {
 		super();
 		itemId = id;
-		growthStages = ItemProp.getCropStages(id);
+		growthStages = Items.all().getCropStages(id);
 		this.plantTime = plantTime;
 		objId = growthStages.getStageObject(curStage);
-		initProperties(ObjectProp.getObject(objId));
+		initProperties(Objects.all().get(objId));
 	}
 
 	public Crop(int id, long plantTime, int stage) {

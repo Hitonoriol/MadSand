@@ -31,6 +31,7 @@ public class GameDialog extends Dialog {
 	private static final float TEXT_YPAD = 15, BTN_TEXT_XPAD = 30;
 	public static final float WIDTH = 500, HEIGHT = 250, PADDING = 10;
 	public static final float FADE_DURATION = 0.3f;
+	private final static String STYLE_NAME = "dialog";
 
 	private AutoFocusScrollPane textScroll;
 	private Table dialogContainer = new Table(Gui.skin);
@@ -40,10 +41,10 @@ public class GameDialog extends Dialog {
 	private boolean hasNext = false;
 
 	public GameDialog(String title, String text, Stage stage) {
-		super(title, Gui.skin);
-		Table titleTbl = super.getTitleTable();
-		Label titleLbl = super.getTitleLabel();
-		titleTbl.getCell(titleLbl);
+		super(title, Gui.skin, STYLE_NAME);
+		setMovable(false);
+		Table titleTbl = getTitleTable();
+		titleTbl.getCell(getTitleLabel());
 		titleTbl.padTop(TITLE_YPAD).padLeft(TITLE_XPAD);
 		getButtonTable().defaults().size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT);
 		row();

@@ -23,6 +23,7 @@ import hitonoriol.madsand.entities.equipment.EquipSlot;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.entities.skill.Skill;
+import hitonoriol.madsand.gamecontent.Globals;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.widgets.gametooltip.GameTooltip;
@@ -37,7 +38,6 @@ import hitonoriol.madsand.gui.widgets.stats.StatProgressBar;
 import hitonoriol.madsand.gui.widgets.waypoint.WaypointArrow;
 import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.map.Map;
-import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.util.Functional;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
@@ -137,7 +137,7 @@ public class Overlay extends Stage {
 
 	private void initOverlayTable() {
 		topTable.setSize(Gdx.graphics.getWidth(), StatProgressBar.HEIGHT);
-		topTable.setBackground(GuiSkin.darkBackgroundSizeable);
+		topTable.setBackground(GuiSkin.darkBackground());
 		topTable.align(Align.left);
 
 		expBar = StatProgressBar.createLevelBar();

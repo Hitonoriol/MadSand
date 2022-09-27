@@ -1,7 +1,5 @@
-package hitonoriol.madsand.properties;
+package hitonoriol.madsand.gamecontent;
 
-import static hitonoriol.madsand.resources.Resources.GLOBALS_FILE;
-import static hitonoriol.madsand.resources.Resources.readInternal;
 import static hitonoriol.madsand.resources.Resources.loader;
 
 import java.util.ArrayList;
@@ -13,8 +11,10 @@ import hitonoriol.madsand.entities.ability.Ability;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.ScriptedConsumable.ScriptMap;
 import hitonoriol.madsand.entities.quest.ProceduralQuest;
+import hitonoriol.madsand.resources.GameAssetManager;
+import hitonoriol.madsand.resources.loaders.JsonLoader;
 
-public class Globals {
+public class Globals implements Loadable {
 	private static final String DEV_VER_STR = "[Development Build]";
 	public static final String VERSION = getVersion();
 	public static boolean HEADLESS = false;
@@ -64,23 +64,6 @@ public class Globals {
 		return version;
 	}
 
-	public static void loadGlobals() throws Exception {
-		instance = loader().readValue(readInternal(GLOBALS_FILE), Globals.class);
-		instance.abilities.entrySet().stream().forEach(entry -> entry.getValue().id = entry.getKey());
-	}
-
-	public void loadMisc() {
-		tips = loader().loadList("tips.json", String.class);
-
-		createScriptMap("pills", map -> {
-			abilities.forEach((id, ability) -> map.put(ability.name, "player:addAbility(" + id + ")"));
-		});
-		createScriptMap("craft_recipes", map -> {
-			ItemProp.craftReq.keySet()
-					.forEach(id -> map.put(ItemProp.getItemName(id), "player:unlockCraftRecipe(" + id + ")"));
-		});
-	}
-
 	private void createScriptMap(String name, Consumer<ScriptMap> populator) {
 		ScriptMap map = new ScriptMap();
 		scriptMaps.put(name, map);
@@ -92,6 +75,29 @@ public class Globals {
 	}
 
 	public static Item getCurrency() {
-		return ItemProp.getItem(instance.currencyId);
+		return Items.all().get(instance.currencyId);
+	}
+
+	@Override
+	public void registerLoader(GameAssetManager manager) {
+		manager.setLoader(Globals.class, new JsonLoader<>(manager, Globals.class) {
+			@Override
+			protected void load(Globals globals) {
+				instance = globals;
+				globals.abilities.entrySet().stream().forEach(entry -> entry.getValue().id = entry.getKey());
+				globals.tips = loader().loadList("tips.json", String.class);
+				globals.createScriptMap("pills", map -> {
+					globals.abilities.forEach((id, ability) -> map.put(ability.name, "player:addAbility(" + id + ")"));
+				});
+
+				Items.deferInit(() -> {
+					globals.createScriptMap("craft_recipes", map -> {
+						Items.all().craftRequirements().keySet()
+								.forEach(
+										id -> map.put(Items.all().getName(id), "player:unlockCraftRecipe(" + id + ")"));
+					});
+				});
+			}
+		});
 	}
 }

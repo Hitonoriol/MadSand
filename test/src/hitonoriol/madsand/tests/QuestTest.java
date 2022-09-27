@@ -13,9 +13,9 @@ import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.entities.skill.SkillContainer;
+import hitonoriol.madsand.gamecontent.Quests;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.stages.Overlay;
-import hitonoriol.madsand.properties.QuestList;
 
 public class QuestTest {
 	Player player = MadSand.player();
@@ -26,7 +26,7 @@ public class QuestTest {
 
 	@Test
 	void startEndQuestTest() {
-		QuestList.quests.forEach((id, quest) -> {
+		Quests.all().get().forEach((id, quest) -> {
 			player.inventory.clear();
 			expectedSkills.increaseSkill(Skill.Level, quest.exp);
 			int expectedLvl = expectedSkills.getLvl(), expectedExp = expectedSkills.getExp();

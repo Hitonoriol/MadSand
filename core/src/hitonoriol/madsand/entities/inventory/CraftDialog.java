@@ -19,14 +19,14 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.gamecontent.Items;
+import hitonoriol.madsand.gamecontent.Objects;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.gui.widgets.itembutton.CraftButton;
 import hitonoriol.madsand.map.object.CraftingStation;
-import hitonoriol.madsand.properties.ItemProp;
-import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.util.Utils;
 
 public class CraftDialog extends GameDialog {
@@ -53,13 +53,13 @@ public class CraftDialog extends GameDialog {
 	public CraftDialog(int craftStationId) {
 		clear();
 		this.craftStationId = craftStationId;
-		setBackground(GuiSkin.transparency);
+		setBackground(GuiSkin.transparency());
 		setFillParent(true);
 		titleLabel.setAlignment(Align.center);
 		Gui.setFontSize(titleLabel, Gui.FONT_M);
-		container.setBackground(GuiSkin.darkBackgroundSizeable);
+		container.setBackground(GuiSkin.darkBackground());
 		craftTable.align(Align.center);
-		titleLabel.setText(isPlayerCraftMenu() ? titleString : ObjectProp.getName(craftStationId));
+		titleLabel.setText(isPlayerCraftMenu() ? titleString : Objects.all().getName(craftStationId));
 		backBtn.align(Align.center);
 		unlockProgressLabel.setAlignment(Align.center);
 
@@ -104,17 +104,17 @@ public class CraftDialog extends GameDialog {
 	private void createItemList() {
 		craftStationItems = (isPlayerCraftMenu()
 				? player().getCraftRecipes()
-				: ItemProp.craftStationRecipes.get(craftStationId))
-						.stream().map(ItemProp::getItem).collect(Collectors.toList());
+				: Items.all().craftStationRecipes().get(craftStationId))
+						.stream().map(Items.all()::get).collect(Collectors.toList());
 
 		/* If this dialog is opened from the InventoryUI, search for crafting stations
 		 * on all tiles adjacent to player and append recipes from their recipe lists to
 		 * the dialog's recipe list */
 		if (isPlayerCraftMenu()) {
 			player().getAdjacentObjects(CraftingStation.class).forEach(station -> {
-				ItemProp.craftStationRecipes.get(station.id())
+				Items.all().craftStationRecipes().get(station.id())
 						.stream()
-						.map(ItemProp::getItem)
+						.map(Items.all()::get)
 						.forEach(craftStationItems::add);
 			});
 		}
@@ -184,7 +184,7 @@ public class CraftDialog extends GameDialog {
 	private Table createEntry(Item item) {
 		Table entry = new Table();
 		CraftButton craftButton = new CraftButton(item, this::refresh);
-		Label recipeLabel = new Label(Item.createReadableItemList(ItemProp.getCraftRecipe(item.id())), Gui.skin);
+		Label recipeLabel = new Label(Item.createReadableItemList(Items.all().getCraftRecipe(item.id())), Gui.skin);
 		recipeLabel.setAlignment(Align.left);
 		recipeLabel.setWrap(true);
 		final float width = craftButton.getWidth();

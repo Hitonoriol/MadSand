@@ -1,21 +1,23 @@
 {
-	"Crafting" : {
-		"requiredExp" : 10,
-		"lvUpMultiplier" : 0.01
-	},
-	"Fishing" : {
-		"requiredExp" : 15,
-		"lvUpMultiplier" : 0.0135
-	},
-	"Woodcutting" : {
-		"requiredExp" : 30
-	},
-	"Evasion" : {
-		"requiredExp" : 50,
-		"lvUpMultiplier" : 0.05
-	},
-	"Level" : {
-		"requiredExp" : 85,
-		"lvUpMultiplier" : 0.06
+	"requirements" : {
+		"Crafting" : {
+			"requiredExp" : 10,
+			"lvUpMultiplier" : 0.01
+		},
+		"Fishing" : {
+			"requiredExp" : 15,
+			"lvUpMultiplier" : 0.0135
+		},
+		"Woodcutting" : {
+			"requiredExp" : 30
+		},
+		"Evasion" : {
+			"requiredExp" : 50,
+			"lvUpMultiplier" : 0.05
+		},
+		"Level" : {
+			"requiredExp" : 85,
+			"lvUpMultiplier" : 0.06
+		}
 	}
 }

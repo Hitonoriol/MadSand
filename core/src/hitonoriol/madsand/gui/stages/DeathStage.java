@@ -31,7 +31,7 @@ public class DeathStage extends Stage {
 		container.add(deathMsgLabel).padBottom(75).row();
 		container.add(respawnButton).size(Gui.BTN_WIDTH * SIZE_COEF, Gui.BTN_HEIGHT * SIZE_COEF).row();
 		container.setFillParent(true);
-		container.setBackground(GuiSkin.darkBackground);
+		container.setBackground(GuiSkin.darkBackground());
 		super.addActor(container);
 
 		Gui.setAction(respawnButton, () -> {

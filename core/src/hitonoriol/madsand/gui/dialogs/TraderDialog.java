@@ -8,10 +8,10 @@ import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.npc.Trader;
 import hitonoriol.madsand.entities.quest.ProceduralQuest;
+import hitonoriol.madsand.gamecontent.Globals;
+import hitonoriol.madsand.gamecontent.Items;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.widgets.AutoSizeTooltip;
-import hitonoriol.madsand.properties.Globals;
-import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.Location;
@@ -50,7 +50,7 @@ public class TraderDialog extends GameDialog {
 	private void addQuestReward(ProceduralQuest quest) {
 		int currency = Globals.values().currencyId;
 		int curQuantity = npc.rollTraderCurrency();
-		String currencyName = ItemProp.getItemName(currency);
+		String currencyName = Items.all().getName(currency);
 		quest.endMsg += Resources.LINEBREAK +
 				DialogChainGenerator.LBRACKET + "Trader gets +" + curQuantity + " " + currencyName + "s"
 				+ DialogChainGenerator.RBRACKET;

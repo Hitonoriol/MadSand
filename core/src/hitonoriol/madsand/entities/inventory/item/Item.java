@@ -33,10 +33,10 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategories;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
+import hitonoriol.madsand.gamecontent.Globals;
+import hitonoriol.madsand.gamecontent.Items;
 import hitonoriol.madsand.gfx.TextureProcessor;
 import hitonoriol.madsand.lua.Lua;
-import hitonoriol.madsand.properties.Globals;
-import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.util.cast.DynamicallyCastable;
@@ -198,7 +198,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 	}
 
 	public Item reinit() {
-		loadProperties(ItemProp.getItem(id));
+		loadProperties(Items.all().get(id));
 		return this;
 	}
 
@@ -225,7 +225,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 		if (recipe.contains(CRAFTSTATION_DELIM)) {
 			String[] craftStationRecipe = recipe.split("\\" + Item.CRAFTSTATION_DELIM);
 			recipe = craftStationRecipe[1];
-			ItemProp.addCraftStationRecipe(Utils.val(craftStationRecipe[0]), id);
+			Items.all().addCraftStationRecipe(Utils.val(craftStationRecipe[0]), id);
 		}
 		/* If craftable by hand */
 		else {
@@ -234,7 +234,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 			if (!unlockableRecipe)
 				recipe = recipe.substring(1);
 
-			ItemProp.craftReq.put(id, parseCraftRequirements(recipe));
+			Items.all().craftRequirements().put(id, parseCraftRequirements(recipe));
 		}
 
 	}
@@ -367,7 +367,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 	}
 
 	protected boolean isProto() {
-		return ItemProp.getItem(id) == this;
+		return Items.all().get(id) == this;
 	}
 
 	public boolean isEquipment() {
@@ -381,7 +381,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 	 */
 	@JsonSetter("category")
 	private void setCategory(ObjectNode categoryNodeList) {
-		Resources.deferInit(() -> categoryNodeList.fieldNames()
+		Items.deferInit(() -> categoryNodeList.fieldNames()
 				.forEachRemaining(categoryName -> ItemCategories.get()
 						.addItem(id,
 								ItemCategory.valueOf(categoryName),
@@ -447,7 +447,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 		parseListString(itemListStr, (id, quantity) -> {
 			if (countItems)
 				ret.append(MadSand.player().inventory.countItems(id) + "/");
-			ret.append(quantity + " " + ItemProp.getItemName(id) + ", ");
+			ret.append(quantity + " " + Items.all().getName(id) + ", ");
 		});
 
 		if (ret.length() > 0) {
@@ -473,12 +473,12 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 	}
 
 	public static int getAltObject(int id) {
-		return ItemProp.getAltObject(id);
+		return Items.all().getAltObject(id);
 	}
 
 	public static Item getProto(int id) {
-		if (ItemProp.items.containsKey(id))
-			return ItemProp.getItem(id);
+		if (Items.all().get().containsKey(id))
+			return Items.all().get(id);
 
 		return nullItem;
 	}
@@ -492,7 +492,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 	}
 
 	public static Item create(int id, int quantity) {
-		return create(ItemProp.getItem(id), quantity);
+		return create(Items.all().get(id), quantity);
 	}
 
 	public static Item create(int id) {
@@ -500,7 +500,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 	}
 
 	public static Item create(String partialName, int quantity) {
-		return create(Enumerable.find(ItemProp.items, partialName), quantity);
+		return create(Enumerable.find(Items.all().get(), partialName), quantity);
 	}
 
 	public static Item create(String partialName) {
@@ -508,7 +508,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 	}
 
 	public static Item createRandom() {
-		return create(Utils.randElement(ItemProp.items.keySet(), 1));
+		return create(Utils.randElement(Items.all().get().keySet(), 1));
 	}
 
 	public static int dynamicTextureCacheSize() {

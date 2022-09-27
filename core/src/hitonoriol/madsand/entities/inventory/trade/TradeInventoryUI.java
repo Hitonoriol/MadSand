@@ -10,10 +10,10 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.gamecontent.Items;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
-import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.resources.Resources;
 
 public class TradeInventoryUI extends GameDialog {
@@ -97,7 +97,7 @@ public class TradeInventoryUI extends GameDialog {
 		int quantity = 0;
 		String text = action.name() + Resources.LINEBREAK;
 		text += action == TradeAction.Sell ? "Your " : "Trader's ";
-		text += ItemProp.getItemName(playerSell.currency) + "s: ";
+		text += Items.all().getName(playerSell.currency) + "s: ";
 		if (!currency.equals(Item.nullItem))
 			quantity = currency.quantity;
 		text += quantity;

@@ -21,6 +21,9 @@ import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.gamecontent.Globals;
+import hitonoriol.madsand.gamecontent.Items;
+import hitonoriol.madsand.gamecontent.WorldGenPresets;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.lua.Lua;
@@ -28,9 +31,6 @@ import hitonoriol.madsand.map.LightEngine;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.pathfinding.Graph;
-import hitonoriol.madsand.properties.Globals;
-import hitonoriol.madsand.properties.ItemProp;
-import hitonoriol.madsand.properties.WorldGenProp;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
@@ -455,7 +455,7 @@ public class World {
 		if (!saver.verifyNextSector(nextSector.x, nextSector.y))
 			if (!player.hasItem(travelItem)) {
 				Gui.drawOkDialog(
-						"You need at least 1 " + ItemProp.getItemName(travelItem)
+						"You need at least 1 " + Items.all().getName(travelItem)
 								+ " to travel to the next sector.");
 				return;
 			}
@@ -469,7 +469,7 @@ public class World {
 		inEncounter = true;
 		clearCurLoc();
 
-		Lua.executeScript(Resources.ENCOUNTER_DIR + Utils.randElement(WorldGenProp.encounters) + ".lua");
+		Lua.executeScript(Resources.ENCOUNTER_DIR + Utils.randElement(WorldGenPresets.all().encounters()) + ".lua");
 		getCurLoc().refreshPathfindingGraph();
 	}
 

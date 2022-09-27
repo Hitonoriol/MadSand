@@ -8,8 +8,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.JsonNode;
 
-public class WorldGenPreset {
-	private final static String DEF_PATH = "worldgen/";
+import hitonoriol.madsand.Enumerable;
+
+public class WorldGenPreset implements Enumerable {
+	private final static String DEF_DIR = "worldgen/";
+
 	public String biomeName;
 	public double settlementProbability = 10;
 	public double ownedByFactionProbability = 12.5;
@@ -18,14 +21,14 @@ public class WorldGenPreset {
 	public OverworldPreset overworld = new OverworldPreset();
 
 	// Lake generator params & lake tiles
-	public LakePreset lake = loader().load(DEF_PATH + "lake_defaults.json", LakePreset.class);
+	public LakePreset lake = loader().load(DEF_DIR + "lake_defaults.json", LakePreset.class);
 
 	// default cave tile & object
-	public CavePreset cave = loader().load(DEF_PATH + "cave_defaults.json", CavePreset.class);
+	public CavePreset cave = loader().load(DEF_DIR + "cave_defaults.json", CavePreset.class);
 
 	//Dungeon params
 	public int dungeonProbability; // Probability to generate dungeon instead of normal cave
-	public DungeonPreset dungeon = loader().load(DEF_PATH + "dungeon_defaults.json", DungeonPreset.class);
+	public DungeonPreset dungeon = loader().load(DEF_DIR + "dungeon_defaults.json", DungeonPreset.class);
 
 	public String postGenScript;
 
@@ -77,5 +80,18 @@ public class WorldGenPreset {
 	@JsonSetter("cave")
 	private void setCave(JsonNode json) {
 		cave = loader().update(cave, json);
+	}
+
+	@Override
+	public void setId(int id) {}
+
+	@Override
+	public int id() {
+		return 0;
+	}
+
+	@Override
+	public String name() {
+		return biomeName;
 	}
 }

@@ -1,5 +1,6 @@
 package hitonoriol.madsand.screens;
 
+import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.stages.Overlay;
 import hitonoriol.madsand.input.Keyboard;
@@ -21,6 +22,12 @@ public class GameScreen extends AbstractScreen<Overlay> {
 		if (!Gui.isGameUnfocused())
 			stage.showTooltip();
 	}
+	
+	@Override
+	public void hide() {
+		getStage().getContextMenu().close();
+		super.hide();
+	}
 
 	@Override
 	public void render(float delta) {
@@ -31,5 +38,14 @@ public class GameScreen extends AbstractScreen<Overlay> {
 			Keyboard.pollGameKeys();
 		}
 		super.render(delta);
+	}
+	
+	@Override
+	public void resize(int width, int height) {
+		gameWorld.updateViewport();
+		getStage().getViewport().update(width, height, true);
+		getStage().updateWidgetPositions();
+		MadSand.player().setFov();
+		super.resize(width, height);
 	}
 }

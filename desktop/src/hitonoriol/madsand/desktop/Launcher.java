@@ -9,8 +9,8 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration.GLEmulation;
 
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.properties.Globals;
-import hitonoriol.madsand.properties.Prefs;
+import hitonoriol.madsand.gamecontent.Globals;
+import hitonoriol.madsand.gamecontent.Prefs;
 import hitonoriol.madsand.util.Functional;
 import hitonoriol.madsand.util.If;
 import hitonoriol.madsand.util.Log;

@@ -52,6 +52,12 @@ public class Widgets {
 	public static Label label(String text) {
 		return new Label(text, Gui.skin);
 	}
+	
+	public static Label label(int alignment, String text) {
+		Label label = label(text);
+		label.setAlignment(alignment);
+		return label;
+	}
 
 	public static Label label() {
 		return label("");

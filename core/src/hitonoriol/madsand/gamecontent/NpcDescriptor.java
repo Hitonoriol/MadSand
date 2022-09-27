@@ -1,4 +1,4 @@
-package hitonoriol.madsand.properties;
+package hitonoriol.madsand.gamecontent;
 
 import java.util.ArrayList;
 
@@ -13,7 +13,7 @@ import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.entities.npc.Npc;
 import hitonoriol.madsand.util.Utils;
 
-public class NpcContainer implements Enumerable {
+public class NpcDescriptor implements Enumerable {
 	private int id = -1;
 	public String name;
 

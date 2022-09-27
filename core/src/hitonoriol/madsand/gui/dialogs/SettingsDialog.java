@@ -14,12 +14,12 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.dialog.GameDialog;
+import hitonoriol.madsand.gamecontent.Prefs;
+import hitonoriol.madsand.gamecontent.Prefs.DisplayModeDescriptor;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.widgets.AutoCheckBox;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.gui.widgets.AutoFocusSelectBox;
-import hitonoriol.madsand.properties.Prefs;
-import hitonoriol.madsand.properties.Prefs.DisplayModeDescriptor;
 import hitonoriol.madsand.util.TimeUtils;
 
 public class SettingsDialog extends GameDialog {

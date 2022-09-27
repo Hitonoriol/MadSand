@@ -58,7 +58,7 @@ public class CharacterInfoWindow extends GameDialog {
 
 		// Dialog Title (Player's name & Level progressbar)
 		add(nameLbl).row();
-		setBackground(GuiSkin.darkBackground);
+		setBackground(GuiSkin.darkBackground());
 		add().row();
 		statLabels.refreshStatLabels();
 		add(StatProgressBar.createLevelBar()

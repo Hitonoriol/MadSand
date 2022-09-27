@@ -1,6 +1,7 @@
 package hitonoriol.madsand.world.worldgen;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.github.czyzby.noise4j.map.Grid;
 import com.github.czyzby.noise4j.map.generator.noise.NoiseGenerator;
@@ -10,10 +11,10 @@ import hitonoriol.madsand.Enumerable;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Faction;
+import hitonoriol.madsand.gamecontent.Tiles;
+import hitonoriol.madsand.gamecontent.WorldGenPresets;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.map.Map;
-import hitonoriol.madsand.properties.TileProp;
-import hitonoriol.madsand.properties.WorldGenProp;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.Location;
 import hitonoriol.madsand.world.WorldMap;
@@ -30,7 +31,7 @@ public class WorldGen {
 	private float scaleBy;
 	private boolean friendlyOnly, skipLandPropGen;
 
-	private static int dungeonTile = Enumerable.findId(TileProp.tiles, "Dungeon Trapdoor");
+	private int dungeonTile = Enumerable.findId(Tiles.all().get(), "Dungeon Trapdoor");
 
 	public WorldGen(WorldMap worldMap) {
 		setWorldMap(worldMap);
@@ -65,7 +66,7 @@ public class WorldGen {
 
 	public WorldGen setBiome(int biome) {
 		this.curBiomeId = biome;
-		this.curBiome = WorldGenProp.getBiome(biome);
+		this.curBiome = WorldGenPresets.all().get(biome);
 		return this;
 	}
 
@@ -100,7 +101,7 @@ public class WorldGen {
 
 		if (curLayer == Location.LAYER_OVERWORLD) {
 
-			if (curBiome.equals(WorldGenProp.nullPreset))
+			if (curBiome.equals(WorldGenPresets.all().defaultValue()))
 				setBiome(chooseRandomBiome());
 
 			Utils.dbg("Biome: " + curBiomeId);
@@ -228,7 +229,7 @@ public class WorldGen {
 				}
 			}
 		}
-		Utils.out("Generated " + tiles + " " + TileProp.getName(lake.tile) + " tiles");
+		Utils.out("Generated " + tiles + " " + Tiles.all().getName(lake.tile) + " tiles");
 	}
 
 	private void genCave() {
@@ -306,7 +307,7 @@ public class WorldGen {
 	}
 
 	private WorldGenPreset setCurBiome(int biome) {
-		curBiome = WorldGenProp.getBiome(biome);
+		curBiome = WorldGenPresets.all().get(biome);
 		return curBiome;
 	}
 
@@ -315,7 +316,7 @@ public class WorldGen {
 	}
 
 	public int chooseRandomBiome() {
-		ArrayList<Integer> keyList = new ArrayList<Integer>(WorldGenProp.biomes.keySet());
+		List<Integer> keyList = new ArrayList<Integer>(WorldGenPresets.all().get().keySet());
 		return keyList.get(Utils.random.nextInt(keyList.size()));
 	}
 

@@ -32,6 +32,11 @@ import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.entities.npc.Npc;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.gamecontent.Items;
+import hitonoriol.madsand.gamecontent.Npcs;
+import hitonoriol.madsand.gamecontent.Objects;
+import hitonoriol.madsand.gamecontent.Tiles;
+import hitonoriol.madsand.gamecontent.WorldGenPresets;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.widgets.waypoint.StaticWaypointArrow;
 import hitonoriol.madsand.gui.widgets.waypoint.WaypointArrow;
@@ -40,11 +45,6 @@ import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.map.object.ResourceObject;
 import hitonoriol.madsand.pathfinding.Graph;
 import hitonoriol.madsand.pathfinding.PathfinfingEngine;
-import hitonoriol.madsand.properties.ItemProp;
-import hitonoriol.madsand.properties.NpcProp;
-import hitonoriol.madsand.properties.ObjectProp;
-import hitonoriol.madsand.properties.TileProp;
-import hitonoriol.madsand.properties.WorldGenProp;
 import hitonoriol.madsand.util.Functional;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.Location;
@@ -591,7 +591,7 @@ public class Map {
 	}
 
 	void setObjectSize(int x, int y, int id) { // If object is bigger than 1x1, fill the rest of the space with COLLISION_MASK_ID
-		MapObject objectProp = ObjectProp.getObject(id);
+		MapObject objectProp = Objects.all().get(id);
 		int i = objectProp.maskHeight;
 		if (y + 1 < ysz - 1) {
 			while (i > 0) {
@@ -850,7 +850,7 @@ public class Map {
 			return false;
 		if (objectExists(x, y))
 			return false;
-		if (getTile(x, y).id() != ItemProp.getCropSoil(crop.getSeedsId()))
+		if (getTile(x, y).id() != Items.all().getCropSoil(crop.getSeedsId()))
 			return false;
 
 		return add(coords, crop);
@@ -870,7 +870,7 @@ public class Map {
 		if (!getNpc(coords.x, coords.y).equals(nullNpc))
 			return false;
 
-		AbstractNpc npc = NpcProp.spawnNpc(id, x, y);
+		AbstractNpc npc = Npcs.all().spawnNpc(id, x, y);
 		return add(new Pair(x, y), npc);
 	}
 
@@ -979,7 +979,7 @@ public class Map {
 		if (MadSand.world().curLayer() != Location.LAYER_OVERWORLD)
 			return;
 
-		WorldGenPreset preset = WorldGenProp.getBiome(MadSand.world().getLocBiome());
+		WorldGenPreset preset = WorldGenPresets.all().get(MadSand.world().getLocBiome());
 		OverworldPreset overworld = preset.overworld;
 		double forceVal = force ? 100 : 0;
 
@@ -1027,7 +1027,7 @@ public class Map {
 		if (MadSand.world().curLayer() != Location.LAYER_OVERWORLD)
 			return;
 
-		WorldGenPreset preset = WorldGenProp.getBiome(MadSand.world().getLocBiome());
+		WorldGenPreset preset = WorldGenPresets.all().get(MadSand.world().getLocBiome());
 		OverworldPreset overworld = preset.overworld;
 
 		if (overworld.regenerateObjects == null)
@@ -1118,11 +1118,11 @@ public class Map {
 	}
 
 	public Pair locateTile(int id) {
-		return locate(TileProp.tiles.get(id), false);
+		return locate(Tiles.all().get(id), false);
 	}
 
 	public Pair locateObject(int id) {
-		return locate(ObjectProp.getObject(id), false);
+		return locate(Objects.all().get(id), false);
 	}
 
 	public Pair locateObject(MapObject object) {

@@ -14,16 +14,16 @@ import hitonoriol.madsand.entities.inventory.item.CropSeeds;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
+import hitonoriol.madsand.gamecontent.Items;
+import hitonoriol.madsand.gamecontent.Objects;
+import hitonoriol.madsand.gamecontent.Prefs;
+import hitonoriol.madsand.gamecontent.Tiles;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.MouseoverListener;
 import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.map.object.MapObject;
-import hitonoriol.madsand.properties.ItemProp;
-import hitonoriol.madsand.properties.ObjectProp;
-import hitonoriol.madsand.properties.Prefs;
-import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.TimeUtils;
 
@@ -113,13 +113,13 @@ public class ActionButton extends Table {
 		Item item = player.stats.hand();
 
 		int tileItem = MapObject.rollTileResource(tile.id(), player.stats.getEquippedToolType());
-		String tileAction = TileProp.getOnInteract(tile.id());
-		String objAction = ObjectProp.getOnInteract(objectInFront.id());
+		String tileAction = Tiles.all().getOnInteract(tile.id());
+		String objAction = Objects.all().getOnInteract(objectInFront.id());
 		boolean holdsShovel = player.stats.isToolEquipped(Tool.Type.Shovel);
 
 		initButton();
 
-		if (object.isEmpty() && item.is(CropSeeds.class) && tile.id() == ItemProp.getCropSoil(item.id()))
+		if (object.isEmpty() && item.is(CropSeeds.class) && tile.id() == Items.all().getCropSoil(item.id()))
 			activateButton("Plant " + item.name, () -> MadSand.player().useItem());
 
 		else if (player.canTravel())
@@ -132,7 +132,7 @@ public class ActionButton extends Table {
 			if (tileItem != -1 && holdsShovel)
 				tileMsg = "Dig ";
 
-			activateButton(tileMsg + TileProp.getName(tile.id()), () -> {
+			activateButton(tileMsg + Tiles.all().getName(tile.id()), () -> {
 				player.useItem();
 			});
 

@@ -27,8 +27,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 
 import hitonoriol.madsand.dialog.TextSubstitutor;
+import hitonoriol.madsand.gamecontent.Globals;
 import hitonoriol.madsand.gui.Gui;
-import hitonoriol.madsand.properties.Globals;
 import hitonoriol.madsand.util.Functional.SafeRunnable;
 import me.xdrop.jrand.JRand;
 
@@ -118,13 +118,17 @@ public class Utils {
 			System.out.println();
 	}
 
-	public static void die(String... msg) {
-		out("Seems like some fatal error has occured.");
-		if (msg.length > 0) {
-			for (String m : msg)
-				out(m);
-		}
-		Gdx.app.exit();
+	public static void die(Throwable e) {
+		Gui.doLater(Gdx.app::exit); // Schedule an exit in case if the exception is caught
+		throw new RuntimeException(e);
+	}
+	
+	public static void die(String msg) {
+		die(new Exception(msg));
+	}
+	
+	public static void die() {
+		die("Seems like some fatal error has occured.");
 	}
 
 	private static final int MAX_ERRORS = 5;

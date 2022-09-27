@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import hitonoriol.madsand.containers.rolltable.LootTable.Deserializer;
 import hitonoriol.madsand.entities.inventory.item.Item;
-import hitonoriol.madsand.properties.Globals;
+import hitonoriol.madsand.gamecontent.Globals;
 import hitonoriol.madsand.util.Utils;
 
 @JsonDeserialize(using = Deserializer.class)

@@ -11,9 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.entities.quest.QuestWorker;
+import hitonoriol.madsand.gamecontent.Quests;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
-import hitonoriol.madsand.properties.QuestList;
 import hitonoriol.madsand.resources.Resources;
 
 public class QuestListDialog extends GameDialog {
@@ -57,7 +57,7 @@ public class QuestListDialog extends GameDialog {
 		String buttonString;
 		for (int id : questList)
 			if (quests.isQuestAvailable(id)) {
-				quest = QuestList.quests.get(id);
+				quest = Quests.all().get(id);
 				buttonString = quest.name;
 
 				if (quests.isQuestInProgress(id))

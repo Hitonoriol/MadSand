@@ -2,7 +2,7 @@ package hitonoriol.madsand.entities.inventory.trade;
 
 import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.inventory.item.Item;
-import hitonoriol.madsand.properties.Globals;
+import hitonoriol.madsand.gamecontent.Globals;
 
 public class TradeInventory {
 	Inventory seller;

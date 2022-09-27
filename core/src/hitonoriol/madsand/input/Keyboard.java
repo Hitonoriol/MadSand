@@ -17,6 +17,8 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.gamecontent.Globals;
+import hitonoriol.madsand.gamecontent.Items;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.dialogs.SelectDialog;
 import hitonoriol.madsand.gui.dialogs.SliderDialog;
@@ -24,8 +26,6 @@ import hitonoriol.madsand.minigames.blackjack.BlackJackUI;
 import hitonoriol.madsand.minigames.farkle.FarkleUI;
 import hitonoriol.madsand.minigames.videopoker.VideoPokerUI;
 import hitonoriol.madsand.pathfinding.Node;
-import hitonoriol.madsand.properties.Globals;
-import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.screens.WorldRenderer;
 import hitonoriol.madsand.util.Utils;
@@ -87,9 +87,9 @@ public class Keyboard {
 
 			/* Unlock all recipes */
 			bind(() -> {
-				ItemProp.craftReq.keySet()
+				Items.all().craftRequirements().keySet()
 						.forEach(player()::unlockCraftRecipe);
-				ItemProp.buildReq.keySet()
+				Items.all().buildRequirements().keySet()
 						.forEach(player()::unlockBuildRecipe);
 			}, Keys.CONTROL_LEFT, Keys.U);
 

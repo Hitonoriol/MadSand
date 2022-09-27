@@ -2,10 +2,10 @@ package hitonoriol.madsand.entities.inventory.item;
 
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
-import hitonoriol.madsand.properties.CropContainer;
+import hitonoriol.madsand.gamecontent.CropDescriptor;
 
 public class CropSeeds extends PlaceableItem {
-	public CropContainer cropContainer;
+	public CropDescriptor cropContainer;
 	
 	public CropSeeds(CropSeeds protoItem) {
 		super(protoItem);

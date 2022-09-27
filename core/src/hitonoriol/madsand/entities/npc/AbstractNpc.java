@@ -28,13 +28,13 @@ import hitonoriol.madsand.entities.Stats;
 import hitonoriol.madsand.entities.inventory.item.Projectile;
 import hitonoriol.madsand.entities.movement.Movement;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.gamecontent.NpcDescriptor;
 import hitonoriol.madsand.gui.animation.Animations;
 import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.pathfinding.NodePair;
 import hitonoriol.madsand.pathfinding.Path;
-import hitonoriol.madsand.properties.NpcContainer;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
@@ -87,7 +87,7 @@ public abstract class AbstractNpc extends Entity {
 	private Pair prevDestination = new Pair();
 	private int pathIdx = 0;
 
-	public AbstractNpc(NpcContainer protoNpc) {
+	public AbstractNpc(NpcDescriptor protoNpc) {
 		id = protoNpc.id();
 		setUid(MadSand.world().nextEntityUID());
 		stats.spawnTime = MadSand.world().currentTick();
@@ -184,7 +184,7 @@ public abstract class AbstractNpc extends Entity {
 	private String NAMED_NPC_STR = " the ";
 	private int CAN_GIVE_QUESTS_CHANCE = 15;
 
-	void loadProperties(NpcContainer properties) {
+	void loadProperties(NpcDescriptor properties) {
 		int maxLvl = MadSand.player().getLvl() + MAX_LVL_GAP;
 		int lvl = Utils.rand(properties.lvl, maxLvl);
 

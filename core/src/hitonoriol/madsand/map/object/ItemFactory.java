@@ -2,9 +2,9 @@ package hitonoriol.madsand.map.object;
 
 import hitonoriol.madsand.TimeDependent;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.gamecontent.Items;
 import hitonoriol.madsand.gui.dialogs.ItemFactoryUI;
 import hitonoriol.madsand.map.ItemProducer;
-import hitonoriol.madsand.properties.ItemProp;
 import hitonoriol.madsand.resources.Resources;
 
 public class ItemFactory extends BuiltObject implements TimeDependent {
@@ -46,10 +46,10 @@ public class ItemFactory extends BuiltObject implements TimeDependent {
 
 	@Override
 	public String getBuildInfo() {
-		String info = "Produces " + ItemProp.getItemName(getItemProducer().getProductId());
+		String info = "Produces " + Items.all().getName(getItemProducer().getProductId());
 
 		if (!itemProducer.isEndless())
-			info += Resources.LINEBREAK + "Consumes " + ItemProp.getItemName(itemProducer.getConsumedMaterialId());
+			info += Resources.LINEBREAK + "Consumes " + Items.all().getName(itemProducer.getConsumedMaterialId());
 
 		return info;
 	}

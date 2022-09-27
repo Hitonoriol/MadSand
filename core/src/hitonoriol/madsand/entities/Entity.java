@@ -33,6 +33,8 @@ import hitonoriol.madsand.entities.movement.MeleeAttackMovement;
 import hitonoriol.madsand.entities.movement.Movement;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.gamecontent.Globals;
+import hitonoriol.madsand.gamecontent.Tiles;
 import hitonoriol.madsand.gui.animation.Animations;
 import hitonoriol.madsand.gui.animation.EntityAnimation;
 import hitonoriol.madsand.gui.dialogs.LootDialog;
@@ -41,8 +43,6 @@ import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.pathfinding.Path;
-import hitonoriol.madsand.properties.Globals;
-import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
@@ -661,7 +661,7 @@ public abstract class Entity extends MapEntity {
 
 	public int tileDmg() {
 		int tid = MadSand.world().getTileId(x, y);
-		int dmg = TileProp.getTileProp(tid).damage;
+		int dmg = Tiles.all().get(tid).damage;
 		if (dmg > 0)
 			damage(dmg);
 		return tid;

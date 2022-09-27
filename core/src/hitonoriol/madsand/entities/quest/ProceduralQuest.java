@@ -13,10 +13,10 @@ import hitonoriol.madsand.entities.Faction;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategories;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
-import hitonoriol.madsand.properties.Globals;
-import hitonoriol.madsand.properties.NpcContainer;
-import hitonoriol.madsand.properties.NpcProp;
-import hitonoriol.madsand.properties.WorldGenProp;
+import hitonoriol.madsand.gamecontent.Globals;
+import hitonoriol.madsand.gamecontent.NpcDescriptor;
+import hitonoriol.madsand.gamecontent.Npcs;
+import hitonoriol.madsand.gamecontent.WorldGenPresets;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.worldgen.OverworldPreset;
 
@@ -179,16 +179,16 @@ public class ProceduralQuest extends Quest {
 	}
 
 	private void randomKillQuest() {
-		OverworldPreset biome = WorldGenProp.getBiome(MadSand.world().getLocBiome()).overworld;
+		OverworldPreset biome = WorldGenPresets.all().get(MadSand.world().getLocBiome()).overworld;
 		ArrayList<Integer> mobs = new ArrayList<>();
 		mobs.addAll(biome.friendlyMobs.idList);
 		mobs.addAll(biome.hostileMobs.idList);
 
 		Iterator<Integer> i = mobs.iterator();
-		NpcContainer mob;
+		NpcDescriptor mob;
 		Faction faction = getNpc().stats.faction;
 		while (i.hasNext()) {
-			mob = NpcProp.npcs.get(i.next());
+			mob = Npcs.all().get(i.next());
 			if (mob.faction == faction) // Npc can't request to kill npcs from his faction
 				i.remove();
 		}

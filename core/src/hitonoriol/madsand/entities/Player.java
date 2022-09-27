@@ -57,6 +57,10 @@ import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.enums.Direction;
+import hitonoriol.madsand.gamecontent.Globals;
+import hitonoriol.madsand.gamecontent.Items;
+import hitonoriol.madsand.gamecontent.Objects;
+import hitonoriol.madsand.gamecontent.Tiles;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.animation.SimpleAnimation;
 import hitonoriol.madsand.gui.dialogs.FishingUI;
@@ -75,10 +79,6 @@ import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.map.object.ResourceObject;
 import hitonoriol.madsand.pathfinding.Path;
-import hitonoriol.madsand.properties.Globals;
-import hitonoriol.madsand.properties.ItemProp;
-import hitonoriol.madsand.properties.ObjectProp;
-import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
@@ -574,9 +574,9 @@ public class Player extends Entity {
 			return false;
 
 		if (recipeList == craftRecipes)
-			MadSand.notice("You figure out how to craft " + ItemProp.getItemName(recipe) + "!");
+			MadSand.notice("You figure out how to craft " + Items.all().getName(recipe) + "!");
 		else if (recipeList == buildRecipes)
-			MadSand.notice("You now know how to build " + ObjectProp.getName(recipe) + "!");
+			MadSand.notice("You now know how to build " + Objects.all().getName(recipe) + "!");
 		recipeList.add(recipe);
 
 		return true;
@@ -604,16 +604,16 @@ public class Player extends Entity {
 		int unlocked = recipeList.size();
 		int totalRecipes = 0;
 		if (recipeList == craftRecipes)
-			totalRecipes = ItemProp.craftReq.size();
+			totalRecipes = Items.all().craftRequirements().size();
 		else if (recipeList == buildRecipes)
-			totalRecipes = ItemProp.buildReq.size();
+			totalRecipes = Items.all().buildRequirements().size();
 		return unlocked + "/" + totalRecipes + " (" + Utils.round(100 * ((float) unlocked / (float) totalRecipes))
 				+ "%)";
 
 	}
 
 	public void unlockRandomBuildRecipe() {
-		if (!unlockRandomRecipe(ItemProp.buildReq, buildRecipes))
+		if (!unlockRandomRecipe(Items.all().buildRequirements(), buildRecipes))
 			MadSand.notice("No recipes were unlocked. You already know everything!");
 	}
 
@@ -638,7 +638,7 @@ public class Player extends Entity {
 		boolean itemRecipe = recipeList == craftRecipes;
 		List<Integer> newlyUnlockedItems = new ArrayList<>();
 		reqMap.forEach((itemId, craftReqs) -> {
-			if (itemRecipe && !ItemProp.getItem(itemId).isRecipeUnlockable())
+			if (itemRecipe && !Items.all().get(itemId).isRecipeUnlockable())
 				return;
 
 			Set<Integer> itemCraftReqs = new HashSet<>(craftReqs);
@@ -661,14 +661,14 @@ public class Player extends Entity {
 
 	private void showItemUnlockNotification(List<Integer> unlockedItems) {
 		Table newItems = ItemUI.createItemList(unlockedItems.stream()
-				.map(id -> ItemProp.getItem(id)).collect(Collectors.toList()));
+				.map(id -> Items.all().get(id)).collect(Collectors.toList()));
 		Gui.drawOkDialog("You now know how to craft following items:")
 				.addContents(newItems);
 	}
 
 	public void refreshAvailableRecipes() {
-		refreshRecipes(ItemProp.craftReq, craftRecipes);
-		refreshRecipes(ItemProp.buildReq, buildRecipes);
+		refreshRecipes(Items.all().craftRequirements(), craftRecipes);
+		refreshRecipes(Items.all().buildRequirements(), buildRecipes);
 	}
 
 	@Override
@@ -803,7 +803,7 @@ public class Player extends Entity {
 		if (location.isPlayerOwnedSettlement()) {
 			int hireCost = location.settlement.getHireCost();
 			TextButton recruitButton = new TextButton("Will you work for me? " + Quest.OBJECTIVE_COLOR + "[[" + hireCost
-					+ " " + ItemProp.getItemName(currency) + "s]" + Resources.COLOR_END, Gui.skin);
+					+ " " + Items.all().getName(currency) + "s]" + Resources.COLOR_END, Gui.skin);
 			if (!location.settlement.isOccupied(npc.uid()))
 				npcDialog.addButton(recruitButton);
 
@@ -964,7 +964,7 @@ public class Player extends Entity {
 	}
 
 	private boolean useScriptedTile() {
-		String tileAction = TileProp.getOnInteract(MadSand.world().getTileId(x, y));
+		String tileAction = Tiles.all().getOnInteract(MadSand.world().getTileId(x, y));
 		if (!tileAction.equals(Resources.emptyField)) {
 			Lua.execute(tileAction);
 			return true;
@@ -1228,7 +1228,7 @@ public class Player extends Entity {
 		Item timeSkipItem = inventory.getItem(timeSkipItemId);
 		if (timeSkipItem.equals(Item.nullItem)) {
 			Gui.drawOkDialog(
-					"You need at least 1 " + ItemProp.getItemName(timeSkipItemId) + " to be able to skip time.");
+					"You need at least 1 " + Items.all().getName(timeSkipItemId) + " to be able to skip time.");
 			return;
 		}
 
@@ -1259,7 +1259,7 @@ public class Player extends Entity {
 	@Override
 	public int tileDmg() {
 		int tid = super.tileDmg();
-		final Tile tile = TileProp.getTileProp(tid);
+		final Tile tile = Tiles.all().get(tid);
 		if (tile.damage > 0)
 			MadSand.print("You took " + tile.damage + " damage from " + (tile.name));
 		return tid;

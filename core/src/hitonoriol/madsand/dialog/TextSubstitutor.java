@@ -9,10 +9,10 @@ import org.apache.commons.text.StringSubstitutor;
 
 import hitonoriol.madsand.Enumerable;
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.gamecontent.Items;
+import hitonoriol.madsand.gamecontent.Objects;
+import hitonoriol.madsand.gamecontent.Tiles;
 import hitonoriol.madsand.lua.Lua;
-import hitonoriol.madsand.properties.ItemProp;
-import hitonoriol.madsand.properties.ObjectProp;
-import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Strings;
 import hitonoriol.madsand.util.Utils;
@@ -103,11 +103,11 @@ public class TextSubstitutor {
 			Map<Integer, ? extends Enumerable> map;
 			String type = matcher.group(1);
 			if (type.equals("item"))
-				map = ItemProp.items;
+				map = Items.all().get();
 			else if (type.equals("object"))
-				map = ObjectProp.objects;
+				map = Objects.all().get();
 			else
-				map = TileProp.tiles;
+				map = Tiles.all().get();
 
 			sb.replace(matcher.start(), matcher.end(), Utils.str(Enumerable.findId(map, matcher.group(2))));
 		});

@@ -13,12 +13,12 @@ import java.util.HashMap;
 
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
+import hitonoriol.madsand.gamecontent.Objects;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.map.object.MapObject;
-import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.util.Utils;
 
 public class WorldMapSaver {
@@ -128,7 +128,7 @@ public class WorldMapSaver {
 			Utils.out("Saving custom object names...");
 			HashMap<Pair, String> modifiedObjNames = new HashMap<>();
 			map.getObjects().stream()
-					.filter(obj -> !obj.getName().equals(ObjectProp.getName(obj.id())))
+					.filter(obj -> !obj.getName().equals(Objects.all().getName(obj.id())))
 					.forEach(obj -> modifiedObjNames.put(obj.getPosition(), obj.getName()));
 			writeStringBlock(stream, serializer().saveMap(modifiedObjNames, String.class));
 			return stream.toByteArray();

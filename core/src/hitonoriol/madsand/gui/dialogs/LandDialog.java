@@ -16,9 +16,9 @@ import hitonoriol.madsand.entities.Faction;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.ItemUI;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.gamecontent.WorldGenPresets;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
-import hitonoriol.madsand.properties.WorldGenProp;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.Location;
@@ -65,7 +65,7 @@ public class LandDialog extends GameDialog {
 		dialogContents.align(Align.topLeft);
 		dialogContents.defaults().align(Align.topLeft).padBottom(PAD).padLeft(13);
 
-		dialogContents.add("* Biome: " + WorldGenProp.getBiome(location.biome).biomeName).row();
+		dialogContents.add("* Biome: " + WorldGenPresets.all().get(location.biome).biomeName).row();
 		dialogContents.add(location.faction == Faction.None ? "* Ownerless land" : ("* Owned by " + location.faction))
 				.row();
 		dialogContents.add("").row();

@@ -7,15 +7,15 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategories;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
-import hitonoriol.madsand.properties.Globals;
-import hitonoriol.madsand.properties.NpcContainer;
+import hitonoriol.madsand.gamecontent.Globals;
+import hitonoriol.madsand.gamecontent.NpcDescriptor;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.World;
 
 public class Trader extends AbstractNpc {
 	public ItemCategory tradeCategory;
 
-	public Trader(NpcContainer protoNpc) {
+	public Trader(NpcDescriptor protoNpc) {
 		super(protoNpc);
 		tradeCategory = protoNpc.tradeCategory;
 

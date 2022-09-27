@@ -1,13 +1,13 @@
 package hitonoriol.madsand.entities.npc;
 
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.properties.NpcContainer;
+import hitonoriol.madsand.gamecontent.NpcDescriptor;
 import hitonoriol.madsand.util.Utils;
 
 public class Npc extends AbstractNpc {
 	public boolean canTrade = false;
 
-	public Npc(NpcContainer protoNpc) {
+	public Npc(NpcDescriptor protoNpc) {
 		super(protoNpc);
 		canTrade = protoNpc.canTrade;
 

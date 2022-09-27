@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import hitonoriol.madsand.Enumerable;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.PlaceableItem;
-import hitonoriol.madsand.properties.ItemProp;
+import hitonoriol.madsand.gamecontent.Items;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
@@ -24,8 +24,8 @@ public interface Placeable extends Enumerable {
 	void createPlaceable(PlaceableItem item);
 
 	default void createPlaceable(PlaceableItem item, Runnable initTask) {
-		Resources.deferInit(() -> {
-			java.util.Map<Integer, Item> items = ItemProp.items;
+		Items.deferInit(() -> {
+			java.util.Map<Integer, Item> items = Items.all().get();
 			item.setAltObject(id());
 			item.setId(Item.getLastId() + 1);
 			items.put(item.id(), item);

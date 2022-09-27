@@ -61,9 +61,9 @@ public class FarkleUI extends CardGameUI {
 
 		clearScoreTable();
 		scoreTable.align(Align.topLeft);
-		scoreTable.setBackground(GuiSkin.darkBackgroundSizeable);
-		binTable.setBackground(GuiSkin.darkBackgroundSizeable);
-		handTable.setBackground(GuiSkin.darkBackgroundSizeable);
+		scoreTable.setBackground(GuiSkin.darkBackground());
+		binTable.setBackground(GuiSkin.darkBackground());
+		handTable.setBackground(GuiSkin.darkBackground());
 		add(betLabel).row();
 		addButton(betButton).row();
 		addButton(shuffleButton).row();
@@ -225,7 +225,7 @@ public class FarkleUI extends CardGameUI {
 
 	private static Table createCombinationsTable() {
 		Table table = new Table(Gui.skin), combTable = new Table(Gui.skin);
-		table.setBackground(GuiSkin.darkBackgroundSizeable);
+		table.setBackground(GuiSkin.darkBackground());
 		table.align(Align.topLeft);
 		table.add("Combinations:").row();
 		combTable.defaults().align(Align.left);

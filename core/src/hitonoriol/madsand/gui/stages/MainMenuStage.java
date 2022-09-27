@@ -12,12 +12,12 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.MadSand.Screens;
+import hitonoriol.madsand.gamecontent.Globals;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.dialogs.CreateWorldDialog;
 import hitonoriol.madsand.gui.dialogs.LoadWorldDialog;
 import hitonoriol.madsand.gui.dialogs.SettingsDialog;
-import hitonoriol.madsand.properties.Globals;
 
 public class MainMenuStage extends Stage {
 	private static final float BUTTON_WIDTH = 260, BUTTON_HEIGHT = 60;
@@ -47,7 +47,7 @@ public class MainMenuStage extends Stage {
 		versionLabel.setAlignment(Align.center);
 
 		menuTable.setFillParent(true);
-		menuTable.setBackground(GuiSkin.darkBackground);
+		menuTable.setBackground(GuiSkin.darkBackground());
 		menuTable.defaults().size(BUTTON_WIDTH, BUTTON_HEIGHT);
 		menuTable.add(titleLabel).padBottom(TITLE_PADBOTTOM).row();
 		menuTable.add(resumeTable).row();

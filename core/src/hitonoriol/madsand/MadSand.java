@@ -13,12 +13,12 @@ import com.badlogic.gdx.utils.Timer;
 
 import hitonoriol.madsand.containers.Storage;
 import hitonoriol.madsand.entities.Player;
+import hitonoriol.madsand.gamecontent.Globals;
+import hitonoriol.madsand.gamecontent.Prefs;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.lua.Lua;
-import hitonoriol.madsand.properties.Globals;
-import hitonoriol.madsand.properties.Prefs;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.screens.AbstractScreen;
 import hitonoriol.madsand.screens.DeathScreen;
@@ -47,15 +47,18 @@ public class MadSand extends Game {
 		game = this;
 		Gdx.graphics.setContinuousRendering(false);
 		Timer.instance().start();
-		Resources.loadAll();
-		GameSaver.createSaveDir();
-		initScreens();
-		Mouse.initListener();
-		initNewGame();
-		Keyboard.initDefaultKeyBinds();
-		switchScreen(Screens.MainMenu);
-		Utils.out("End of initialization (%.3f sec spent)", Utils.toSeconds(System.currentTimeMillis() - startTime));
-		Utils.printMemoryInfo();
+		Resources.loadAll().onCompletion(() -> {
+			initScreens();
+			GameSaver.createSaveDir();
+			Mouse.initListener();
+			initNewGame();
+			Keyboard.initDefaultKeyBinds();
+			switchScreen(Screens.MainMenu);
+			System.gc();
+			Utils.out("End of initialization (%.3f secs spent)",
+					Utils.toSeconds(System.currentTimeMillis() - startTime));
+			Utils.printMemoryInfo();
+		});
 	}
 
 	private void initScreens() {
@@ -83,7 +86,6 @@ public class MadSand extends Game {
 	}
 
 	public static void switchScreen(Screen screen) {
-		Gui.overlay.getContextMenu().close();
 		game.setScreen(screen);
 		System.gc();
 	}
@@ -111,23 +113,10 @@ public class MadSand extends Game {
 	}
 
 	@Override
-	public void resume() {}
-
-	@Override
-	public void resize(int width, int height) {
-		worldRenderer.updateViewport();
-		Gui.overlay.getViewport().update(width, height, true);
-		Gui.overlay.updateWidgetPositions();
-		player().setFov();
-	}
-
-	@Override
-	public void pause() {}
-
-	@Override
 	public void dispose() {
 		Prefs.savePrefs();
 		Utils.out("Bye! Session lasted for [%s]", Utils.timeString((long) (Utils.now() - Utils.toSeconds(startTime))));
+		super.dispose();
 	}
 
 	public static OrthographicCamera getCamera() {
@@ -141,7 +130,7 @@ public class MadSand extends Game {
 	public static WorldRenderer getRenderer() {
 		return game.worldRenderer;
 	}
-	
+
 	public static float toScreen(float value) {
 		return value * game.worldRenderer.getCamZoom();
 	}

@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.type.MapType;
 
 import hitonoriol.madsand.Enumerable;
+import hitonoriol.madsand.commons.reflection.Reflection;
 import hitonoriol.madsand.containers.Pair;
 
 public class Serializer extends ObjectMapper {
@@ -33,20 +34,20 @@ public class Serializer extends ObjectMapper {
 		configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		configure(Feature.ALLOW_COMMENTS, true);
 		configure(Feature.ALLOW_YAML_COMMENTS, true);
-		//configure(MapperFeature.REQUIRE_SETTERS_FOR_GETTERS, true);
-		
 		activateDefaultTyping(getPolymorphicTypeValidator(), typing);
-		registerModules();
-	}
-	
-	public Serializer() {
-		this(DefaultTyping.OBJECT_AND_NON_CONCRETE);
+		regsiterModules();
 	}
 
-	private void registerModules() {
-		SimpleModule simpleModule = new SimpleModule();
-		simpleModule.addKeyDeserializer(Pair.class, new Pair.PairKeyDeserializer());
-		registerModule(simpleModule);
+	public Serializer() {
+		this(DefaultTyping.OBJECT_AND_NON_CONCRETE);
+		
+	}
+
+	private void regsiterModules() {
+		SimpleModule module = new SimpleModule();
+		module.addKeyDeserializer(Pair.class, new Pair.PairKeyDeserializer());
+		module.addAbstractTypeMapping(Map.class, HashMap.class);
+		registerModule(module);
 	}
 
 	public <T> T update(T obj, JsonNode json) {
@@ -97,16 +98,24 @@ public class Serializer extends ObjectMapper {
 		}
 	}
 
-	public MapType getMapType(Class<?> key, Class<?> value) {
-		return getTypeFactory().constructMapType(HashMap.class, key, value);
+	public MapType getMapType(Class<? extends Map<?, ?>> mapClass, Class<?> key, Class<?> value) {
+		return getTypeFactory().constructMapType(mapClass, key, value);
+	}
+
+	public ObjectWriter getMapWriter(Class<? extends Map<?, ?>> mapClass, Class<?> key, Class<?> value) {
+		return writerFor(getMapType(mapClass, key, value));
 	}
 
 	public ObjectWriter getMapWriter(Class<?> key, Class<?> value) {
-		return writerFor(getMapType(key, value));
+		return getMapWriter(Reflection.mapClass(HashMap.class), key, value);
+	}
+
+	public ObjectReader getMapReader(Class<? extends Map<?, ?>> mapClass, Class<?> key, Class<?> value) {
+		return readerFor(getMapType(mapClass, key, value));
 	}
 
 	public ObjectReader getMapReader(Class<?> key, Class<?> value) {
-		return readerFor(getMapType(key, value));
+		return getMapReader(Reflection.mapClass(HashMap.class), key, value);
 	}
 
 	public ObjectReader getMapReader(Class<?> value) {
@@ -117,21 +126,27 @@ public class Serializer extends ObjectMapper {
 		return getMapWriter(Pair.class, value);
 	}
 
-	private <K, V> HashMap<K, V> loadMap(String file, Class<K> keyType, Class<V> valueType, boolean internal) {
+	private <T extends Map<K, V>, K, V> T loadMap(String file, Class<T> mapClass, Class<K> keyType, Class<V> valueType,
+			boolean internal) {
 		try {
-			return readValue(internal ? readInternal(file) : readFile(file), getMapType(keyType, valueType));
+			return readValue(internal ? readInternal(file) : readFile(file), getMapType(mapClass, keyType, valueType));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	public <K, V> HashMap<K, V> loadMap(String internalFile, Class<K> keyType, Class<V> valueType) {
-		return loadMap(internalFile, keyType, valueType, true);
+	public <T extends Map<K, V>, K, V> T loadMap(String internalFile, Class<T> mapClass, Class<K> keyType,
+			Class<V> valueType) {
+		return loadMap(internalFile, mapClass, keyType, valueType, true);
+	}
+
+	public <T extends Map<K, V>, K, V> T loadMap(String internalFile, Class<K> keyType, Class<V> valueType) {
+		return loadMap(internalFile, Reflection.mapClass(HashMap.class), keyType, valueType);
 	}
 
 	public <K, V> HashMap<K, V> readMap(String file, Class<K> keyType, Class<V> valueType) {
-		return loadMap(file, keyType, valueType, false);
+		return loadMap(file, Reflection.mapClass(HashMap.class), keyType, valueType, false);
 	}
 
 	public <V> HashMap<Pair, V> readMap(String file, Class<V> valueType) {
@@ -158,12 +173,12 @@ public class Serializer extends ObjectMapper {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public <T extends Enumerable> Map<Integer, T> loadEnumerableMap(
 			String internalFile,
 			Class<T> type,
 			Consumer<T> initAction) {
-		Map<Integer, T> map = loadMap(internalFile, Integer.class, type);
+		Map<Integer, T> map = loadMap(internalFile, Enumerable.idType, type);
 		map.forEach((id, value) -> {
 			value.setId(id);
 			if (initAction != null)

@@ -8,11 +8,11 @@ import org.junit.jupiter.api.Test;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
+import hitonoriol.madsand.gamecontent.Objects;
+import hitonoriol.madsand.gamecontent.Tiles;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.map.object.MapObject;
-import hitonoriol.madsand.properties.ObjectProp;
-import hitonoriol.madsand.properties.TileProp;
 import hitonoriol.madsand.util.Utils;
 
 public class MapTest {
@@ -52,12 +52,12 @@ public class MapTest {
 	private int pickTileId() {
 		int tileId;
 		do
-			tileId = Utils.randElement(TileProp.tiles.keySet());
+			tileId = Utils.randElement(Tiles.all().get().keySet());
 		while (tileId == map.defTile);
 		return tileId;
 	}
 
 	private int pickObjectId() {
-		return Utils.randElement(ObjectProp.objects.keySet(), 1);
+		return Utils.randElement(Objects.all().get().keySet(), 1);
 	}
 }

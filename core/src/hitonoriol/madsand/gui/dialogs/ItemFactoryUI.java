@@ -12,11 +12,11 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.gamecontent.Items;
+import hitonoriol.madsand.gamecontent.Npcs;
+import hitonoriol.madsand.gamecontent.Objects;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.map.ItemProducer;
-import hitonoriol.madsand.properties.ItemProp;
-import hitonoriol.madsand.properties.NpcProp;
-import hitonoriol.madsand.properties.ObjectProp;
 import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
 
@@ -56,14 +56,14 @@ public class ItemFactoryUI extends GameDialog {
 		super(Gui.overlay);
 		this.producer = producer;
 		this.player = MadSand.player();
-		consumedMaterial = ItemProp.getItemName(producer.getConsumedMaterialId());
-		producedMaterial = ItemProp.getItemName(producer.getProductId());
+		consumedMaterial = Items.all().getName(producer.getConsumedMaterialId());
+		producedMaterial = Items.all().getName(producer.getProductId());
 		int id = producer.getId();
 
 		if (id > 0)
-			producerName = ObjectProp.getName(id);
+			producerName = Objects.all().getName(id);
 		else
-			producerName = NpcProp.npcs.get(-id).name;
+			producerName = Npcs.all().get(-id).name;
 
 		consumableSlider.setSize(ENTRY_WIDTH, ENTRY_HEIGHT);
 		productSlider.setSize(ENTRY_WIDTH, ENTRY_HEIGHT);

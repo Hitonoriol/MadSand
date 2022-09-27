@@ -41,7 +41,7 @@ public class TravelStage extends Stage {
 		travelContainer.add(travelLabel).align(Align.center).size(WIDTH, ENTRY_HEIGHT).row();
 		travelContainer.add(travelProgressBar).align(Align.center).size(WIDTH, ENTRY_HEIGHT).row();
 
-		travelContainer.setBackground(GuiSkin.darkBackgroundSizeable);
+		travelContainer.setBackground(GuiSkin.darkBackground());
 
 		travelContainer.setFillParent(true);
 

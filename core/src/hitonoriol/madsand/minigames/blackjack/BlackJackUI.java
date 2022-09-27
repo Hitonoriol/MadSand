@@ -41,8 +41,8 @@ public class BlackJackUI extends CardGameUI {
 		super.add("Your hand").padBottom(PAD).row();
 		super.add(playerCards).size(GAME_WIDTH, GAME_HEIGHT).padBottom(PAD).row();
 
-		playerCards.setBackground(GuiSkin.darkBackgroundSizeable);
-		dealerCards.setBackground(GuiSkin.darkBackgroundSizeable);
+		playerCards.setBackground(GuiSkin.darkBackground());
+		dealerCards.setBackground(GuiSkin.darkBackground());
 
 		buttonTable.defaults().size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT).pad(5);
 		buttonTable.add(hitButton);
