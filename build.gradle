@@ -43,7 +43,10 @@ allprojects {
 			options.release = project.javaVersion
 		}
 		dependencies {
-			implementation project(":commons")
+			implementation 'org.apache.commons:commons-lang3:3.9'
+			implementation 'org.apache.commons:commons-text:1.9'
+			implementation 'org.apache.commons:commons-math3:3.6.1'
+			implementation 'org.apache.commons:commons-collections4:4.4'
 		}
 	}
 	
@@ -63,13 +66,13 @@ allprojects {
 	}
 }
 
-project(":commons") {
-	apply plugin: "java-library"
-	dependencies {
-		implementation 'org.apache.commons:commons-lang3:3.9'
-		implementation 'org.apache.commons:commons-text:1.9'
-		implementation 'org.apache.commons:commons-math3:3.6.1'
-		implementation 'org.apache.commons:commons-collections4:4.4'
+def commons = project(":commons")
+configure(allprojects - commons) {
+	plugins.withType(JavaPlugin) {
+		dependencies {
+			implementation commons
+		}
+		println(project.name)
 	}
 }
 

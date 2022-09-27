@@ -10,11 +10,9 @@ hs_err_pid*
 .classpath
 .project
 .metadata/
-/android/bin/
 /core/bin/
 /desktop/bin/
-/html/bin/
-/ios/bin/
+/commons/build/
 *.tmp
 *.bak
 *.swp
@@ -60,3 +58,5 @@ core/assets/textures
 
 jlink
 jlink-launcher
+core/assets/skin/skin.atlas
+core/assets/skin/skin.png
