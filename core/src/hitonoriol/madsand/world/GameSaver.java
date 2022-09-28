@@ -145,6 +145,7 @@ public class GameSaver {
 		MadSand.world().close(); // Close the current world (might not be the same as this.world)
 
 		loadWorld();
+		loadLocation();
 		Lua.init();
 		world.updateLight();
 		Utils.dbg("Loaded world map: %X", MadSand.world().getWorldMap().hashCode());
