@@ -35,6 +35,7 @@ import hitonoriol.madsand.entities.inventory.item.category.ItemCategories;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 import hitonoriol.madsand.gamecontent.Globals;
 import hitonoriol.madsand.gamecontent.Items;
+import hitonoriol.madsand.gamecontent.Textures;
 import hitonoriol.madsand.gfx.TextureProcessor;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.resources.Resources;
@@ -349,7 +350,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 	}
 
 	protected Texture createDynamicTexture() {
-		Texture dynamicTx = TextureProcessor.createTexture(Resources.getItem(id));
+		Texture dynamicTx = TextureProcessor.createTexture(Textures.getItem(id));
 		dynamicTxPool.put(this, dynamicTx);
 		return dynamicTx;
 	}
@@ -357,7 +358,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 	@JsonIgnore
 	public Drawable getDrawable() {
 		if (isProto())
-			return new TextureRegionDrawable(Resources.getItem(id));
+			return new TextureRegionDrawable(Textures.getItem(id));
 
 		return new TextureRegionDrawable(getTexture());
 	}

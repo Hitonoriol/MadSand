@@ -12,10 +12,10 @@ import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.gamecontent.NpcDescriptor;
 import hitonoriol.madsand.gamecontent.Npcs;
+import hitonoriol.madsand.gamecontent.Textures;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
-import hitonoriol.madsand.resources.Resources;
 
 public class BestiaryDialog extends GameDialog {
 
@@ -77,7 +77,7 @@ public class BestiaryDialog extends GameDialog {
 		bottomLabel.setAlignment(Align.center);
 
 		entry.add(topLabel).align(Align.center).width(ENTRY_WIDTH).row();
-		entry.add(new Image(Resources.getNpc(id))).expandY().row();
+		entry.add(new Image(Textures.getNpc(id))).expandY().row();
 
 		if (kills >= STAT_KILLS) {
 			entry.add(new Label("HP: " + npc.hp, Gui.skin)).align(Align.center).row();

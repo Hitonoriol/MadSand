@@ -29,6 +29,7 @@ import hitonoriol.madsand.entities.inventory.item.Projectile;
 import hitonoriol.madsand.entities.movement.Movement;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.gamecontent.NpcDescriptor;
+import hitonoriol.madsand.gamecontent.Textures;
 import hitonoriol.madsand.gui.animation.Animations;
 import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.input.Mouse;
@@ -103,7 +104,7 @@ public abstract class AbstractNpc extends Entity {
 	}
 
 	public void loadSprite() {
-		setSprites(new Sprite(Resources.getNpc(id)));
+		setSprites(new Sprite(Textures.getNpc(id)));
 	}
 
 	@Override

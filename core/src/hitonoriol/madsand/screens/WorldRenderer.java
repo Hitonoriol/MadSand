@@ -25,6 +25,7 @@ import hitonoriol.madsand.containers.PairFloat;
 import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
+import hitonoriol.madsand.gamecontent.Textures;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.animation.WorldAnimation;
 import hitonoriol.madsand.input.Mouse;
@@ -59,7 +60,7 @@ public class WorldRenderer {
 	private List<WorldAnimation> animations = new ArrayList<>();
 	private ConcurrentHashMap<Path, PathDescriptor> paths = new ConcurrentHashMap<>();
 
-	private TextureRegion mapCursor = Resources.getTexture("misc/map_cursor");
+	private TextureRegion mapCursor = Textures.getTexture("misc/map_cursor");
 
 	public WorldRenderer() {
 		updateViewport();
@@ -147,7 +148,7 @@ public class WorldRenderer {
 			batch.draw(loot.get(0).getTexture(),
 					x, y, LOOT_SIZE, LOOT_SIZE);
 		else
-			batch.draw(Resources.getObject(OBJECT_LOOT),
+			batch.draw(Textures.getObject(OBJECT_LOOT),
 					x, y, LOOT_SIZE, LOOT_SIZE);
 
 	}
@@ -358,7 +359,7 @@ public class WorldRenderer {
 		private final static String REGION = "light";
 
 		private LightMap() {
-			super(Resources.getAtlas(), REGION);
+			super(Textures.get(), REGION);
 			createLightLevels();
 
 			for (int dst = 1, lightLvl = 1, occurences = 0; dst <= MAX_DISTANCE; ++dst) {

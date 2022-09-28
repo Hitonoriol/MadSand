@@ -19,6 +19,7 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.ItemUI;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gamecontent.Objects;
+import hitonoriol.madsand.gamecontent.Textures;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
@@ -84,7 +85,7 @@ class BuildDialogEntry extends Group {
 		this.id = id;
 		this.recipe = recipe;
 
-		Image objImage = new Image(Resources.getObject(id));
+		Image objImage = new Image(Textures.getObject(id));
 		Label resourceLabel = new Label(
 				"Resources required to build:" + Resources.LINEBREAK + Item.createReadableItemList(recipe),
 				Gui.skin);

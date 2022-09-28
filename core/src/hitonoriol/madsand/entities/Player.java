@@ -60,6 +60,7 @@ import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.gamecontent.Globals;
 import hitonoriol.madsand.gamecontent.Items;
 import hitonoriol.madsand.gamecontent.Objects;
+import hitonoriol.madsand.gamecontent.Textures;
 import hitonoriol.madsand.gamecontent.Tiles;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.animation.SimpleAnimation;
@@ -161,7 +162,7 @@ public class Player extends Entity {
 	private static void loadPlayerAnimation() {
 		walkAnim = new SimpleAnimation[Direction.BASE_DIRECTIONS];
 		standingSprites = new Sprite[Direction.BASE_DIRECTIONS];
-		TextureRegion[][] animSheet = Resources.getTexture("player/anim").split(ANIM_WIDTH, ANIM_HEIGHT);
+		TextureRegion[][] animSheet = Textures.getTexture("player/anim").split(ANIM_WIDTH, ANIM_HEIGHT);
 
 		Direction.forEachBase(direction -> {
 			int dirIdx = direction.baseOrdinal();

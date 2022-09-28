@@ -10,7 +10,7 @@ import hitonoriol.madsand.Enumerable;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.PlaceableItem;
 import hitonoriol.madsand.gamecontent.Items;
-import hitonoriol.madsand.resources.Resources;
+import hitonoriol.madsand.gamecontent.Textures;
 import hitonoriol.madsand.util.Utils;
 
 public interface Placeable extends Enumerable {
@@ -29,7 +29,7 @@ public interface Placeable extends Enumerable {
 			item.setAltObject(id());
 			item.setId(Item.getLastId() + 1);
 			items.put(item.id(), item);
-			Resources.getAtlas().addRegion("inv/" + item.id(), createPlaceableTexture());
+			Textures.get().addRegion("inv/" + item.id(), createPlaceableTexture());
 			initTask.run();
 			item.initRecipe();
 			Utils.dbg("Created dynamic Placeable: {%s}", item);

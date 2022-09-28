@@ -23,6 +23,7 @@ import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.gamecontent.Globals;
 import hitonoriol.madsand.gamecontent.Items;
+import hitonoriol.madsand.gamecontent.Textures;
 import hitonoriol.madsand.gamecontent.WorldGenPresets;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.input.Mouse;
@@ -590,7 +591,7 @@ public class World {
 
 	public TextureRegion getTileOrDefault(int x, int y) {
 		Map map = getCurLoc();
-		return Resources.getTile(map.validCoords(x, y)
+		return Textures.getTile(map.validCoords(x, y)
 				? map.getTile(x, y).id()
 				: getDefaultTile());
 	}

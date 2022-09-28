@@ -10,13 +10,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import hitonoriol.madsand.MadSand;
+import hitonoriol.madsand.gamecontent.Textures;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.util.Log;
@@ -29,13 +29,7 @@ public class Resources {
 	public static final int TILESIZE = 33;
 
 	private static final GameAssetManager assetManager = new GameAssetManager();
-
-	private static TextureAtlas textures;
-	private static TextureMap<String> textureMap;
-	private static TextureMap<Integer> tiles;
-	private static TextureMap<Integer> objects;
-	private static TextureMap<Integer> items;
-	private static TextureMap<Integer> npcs;
+	private static final Serializer loader = new Serializer();
 
 	public static final String emptyField = "-1";
 	public static final int emptyId = -1;
@@ -44,22 +38,12 @@ public class Resources {
 	public static final String LINEBREAK = Character.toString('\n');
 	public static final String COLOR_END = "[]";
 
-	private final static Serializer loader = new Serializer();
-
 	public static GameAssetManager loadAll() {
 		try {
 			Utils.out("Loading game content...");
 			Gdx.graphics.setCursor(Gdx.graphics.newCursor(loadPixmap("textures/cursor.png"), 0, 0));
 			GuiSkin.get();
 			MadSand.switchScreen(assetManager.createLoadingScreen());
-			loadAtlas("textures", atlas -> {
-				textures = atlas;
-				textureMap = new TextureMap<>(textures);
-				tiles = new TextureMap<>(textures, "terrain");
-				objects = new TextureMap<>(textures, "obj");
-				items = new TextureMap<>(textures, "inv");
-				npcs = new TextureMap<>(textures, "npc");
-			});
 			Content.asList().forEach(Resources::load);
 			Utils.printMemoryInfo();
 			return assetManager;
@@ -69,32 +53,8 @@ public class Resources {
 		}
 	}
 
-	private static <T> void load(Content asset) {
+	private static void load(Content asset) {
 		assetManager.load(asset.descriptor());
-	}
-
-	public static TextureRegion getTile(int id) {
-		return tiles.get(id);
-	}
-
-	public static TextureRegion getObject(int id) {
-		return objects.get(id);
-	}
-
-	public static TextureRegion getItem(int id) {
-		return items.get(id);
-	}
-
-	public static TextureRegion getNpc(int id) {
-		return npcs.get(id);
-	}
-
-	public static TextureRegion getTexture(String name) {
-		return textureMap.get(name);
-	}
-
-	public static TextureAtlas getAtlas() {
-		return textures;
 	}
 
 	static final String FONT_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"'<>";
@@ -140,7 +100,7 @@ public class Resources {
 	}
 
 	public static NinePatchDrawable loadNinePatch(String file) {
-		return new NinePatchDrawable(new NinePatch(getTexture(file)));
+		return new NinePatchDrawable(new NinePatch(Textures.getTexture(file)));
 	}
 
 	public static Texture loadTexture(String file) {

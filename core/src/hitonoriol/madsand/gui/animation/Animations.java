@@ -2,7 +2,7 @@ package hitonoriol.madsand.gui.animation;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import hitonoriol.madsand.resources.Resources;
+import hitonoriol.madsand.gamecontent.Textures;
 
 public class Animations {
 	private static final int DEFAULT_FRAME_SIZE = 32;
@@ -19,7 +19,7 @@ public class Animations {
 	}
 
 	private static TextureRegion[] loadAnimationStrip(String file, int frameSize) { // load 1xN animation strip from file
-		TextureRegion[][] animStrip = Resources.getTexture(file).split(frameSize, frameSize);
+		TextureRegion[][] animStrip = Textures.getTexture(file).split(frameSize, frameSize);
 		return getAnimationStrip(animStrip, 0, animStrip[0].length);
 	}
 

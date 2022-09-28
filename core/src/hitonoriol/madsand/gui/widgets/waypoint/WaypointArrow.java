@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
+import hitonoriol.madsand.gamecontent.Textures;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.textgenerator.StaticTextGenerator;
 import hitonoriol.madsand.gui.widgets.gametooltip.RefreshableLabel;
@@ -25,7 +26,7 @@ public class WaypointArrow extends Group {
 	private final static float ANIM_TIME = 0.2f;
 	private final static int FONT = Gui.FONT_XS;
 	private static final float MIN_DISTANCE = 3;
-	private static TextureRegion waypointArrow = Resources.getTexture("gui/arrow");
+	private static TextureRegion waypointArrow = Textures.getTexture("gui/arrow");
 
 	private Image arrow = new Image(waypointArrow);
 	private String name = "Waypoint";

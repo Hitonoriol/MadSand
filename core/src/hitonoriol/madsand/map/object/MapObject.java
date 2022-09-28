@@ -29,6 +29,7 @@ import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.gamecontent.Objects;
+import hitonoriol.madsand.gamecontent.Textures;
 import hitonoriol.madsand.gamecontent.Tiles;
 import hitonoriol.madsand.gfx.TextureProcessor;
 import hitonoriol.madsand.gui.animation.Animations;
@@ -318,7 +319,7 @@ public class MapObject extends MapEntity implements Placeable {
 	
 	@Override
 	public TextureRegion getSprite() {
-		return Resources.getObject(id);
+		return Textures.getObject(id);
 	}
 
 	@JsonIgnore
@@ -328,7 +329,7 @@ public class MapObject extends MapEntity implements Placeable {
 
 	@JsonIgnore
 	public TextureRegion getTexture() {
-		return Resources.getObject(id);
+		return Textures.getObject(id);
 	}
 
 	@Override

@@ -2,12 +2,12 @@ package hitonoriol.madsand.minigames.farkle;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import hitonoriol.madsand.resources.Resources;
+import hitonoriol.madsand.gamecontent.Textures;
 import hitonoriol.madsand.util.Utils;
 
 public class Die implements Comparable<Die> {
 	public static final int WIDTH = 41, HEIGHT = 50;
-	private static TextureRegion[][] dice = Resources.getTexture("gui/dice").split(WIDTH, HEIGHT);
+	private static TextureRegion[][] dice = Textures.getTexture("gui/dice").split(WIDTH, HEIGHT);
 	public final static int MIN_VALUE = 1, MAX_VALUE = 6;
 	private int value;
 

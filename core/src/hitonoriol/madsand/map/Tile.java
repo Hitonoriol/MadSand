@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import hitonoriol.madsand.entities.inventory.ItemUI;
 import hitonoriol.madsand.entities.inventory.item.PlaceableItem;
 import hitonoriol.madsand.entities.inventory.item.Tool;
+import hitonoriol.madsand.gamecontent.Textures;
 import hitonoriol.madsand.gamecontent.Tiles;
 import hitonoriol.madsand.gfx.TextureProcessor;
 import hitonoriol.madsand.map.object.MapObject;
@@ -107,7 +108,7 @@ public class Tile implements Placeable {
 	@Override
 	public TextureRegion createPlaceableTexture() {
 		return new TextureRegion(new Texture(
-				TextureProcessor.extractPixmap(Resources.getTile(id), ItemUI.SIZE)));
+				TextureProcessor.extractPixmap(Textures.getTile(id), ItemUI.SIZE)));
 	}
 
 	@Override

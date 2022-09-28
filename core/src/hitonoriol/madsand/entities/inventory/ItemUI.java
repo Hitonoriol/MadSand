@@ -16,8 +16,8 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
+import hitonoriol.madsand.gamecontent.Textures;
 import hitonoriol.madsand.gui.Gui;
-import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
 public class ItemUI extends Group {
@@ -33,7 +33,7 @@ public class ItemUI extends Group {
 	protected Item item;
 	protected ItemTooltip tooltip;
 
-	public final static Drawable emptyItem = new TextureRegionDrawable(Resources.getTexture("gui/placeholder"));
+	public final static Drawable emptyItem = new TextureRegionDrawable(Textures.getTexture("gui/placeholder"));
 
 	public ItemUI(Item item) {
 		this.item = item;

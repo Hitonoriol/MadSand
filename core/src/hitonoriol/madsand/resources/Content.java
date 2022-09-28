@@ -14,11 +14,13 @@ import hitonoriol.madsand.gamecontent.Npcs;
 import hitonoriol.madsand.gamecontent.Objects;
 import hitonoriol.madsand.gamecontent.Quests;
 import hitonoriol.madsand.gamecontent.Skills;
+import hitonoriol.madsand.gamecontent.Textures;
 import hitonoriol.madsand.gamecontent.Tiles;
 import hitonoriol.madsand.gamecontent.Tutorial;
 import hitonoriol.madsand.gamecontent.WorldGenPresets;
 
 public enum Content {
+	textures("textures/textures.atlas", Textures.get()),
 	globals("globals.json", Globals.values()),
 	tiles("tiles.json", Tiles.all()),
 	objects("objects.json", Objects.all()),

@@ -11,6 +11,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
+import hitonoriol.madsand.gamecontent.Textures;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.map.Map;
@@ -58,7 +59,7 @@ public class Projectile extends LevelBoundItem {
 
 	public void launchProjectile(Pair from, Pair to, Consumer<MapEntity> impactAction) {
 		final int imgSize = (int) (Resources.TILESIZE * MadSand.getRenderer().getCamZoom());
-		Image projectileImg = new Image(Resources.getItem(id));
+		Image projectileImg = new Image(Textures.getItem(id));
 		Vector3 screenCoords = new Vector3();
 		projectileImg.setOrigin(Align.center);
 		projectileImg.setSize(imgSize, imgSize);
