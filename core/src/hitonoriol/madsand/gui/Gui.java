@@ -178,7 +178,7 @@ public class Gui {
 	public static BitmapFont getFont(int size) {
 		return GuiSkin.getLabelStyle(size).font;
 	}
-
+	
 	public static Label setFontSize(Label label, int size) {
 		label.setStyle(GuiSkin.getLabelStyle(size));
 		return label;

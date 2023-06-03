@@ -4,9 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
+import com.github.tommyettinger.textra.TypingLabel;
 
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.Gui;
@@ -27,7 +27,7 @@ public class OkDialog extends GameDialog {
 		super.align(Align.left);
 		super.setTitle(title);
 
-		textLbl = new Label(text, Gui.skin);
+		textLbl = new TypingLabel(text, Gui.skin);
 		textLbl.setWrap(true);
 		textLbl.setFillParent(true);
 		textLbl.setAlignment(Align.left);
@@ -63,7 +63,7 @@ public class OkDialog extends GameDialog {
 	public void setFillScreen(boolean fill) {
 		fillScreen = fill;
 		final float maxWidth = fill ? Gdx.graphics.getWidth() : LBL_MAX_WIDTH;
-		textCell.width(Math.max(LBL_MIN_WIDTH, Math.min(maxWidth, Gui.getTextWidth(textLbl.getText().toString()))));
+		textCell.width(Math.max(LBL_MIN_WIDTH, Math.min(maxWidth, Gui.getTextWidth(textLbl.storedText.toString()))));
 	}
 
 	public OkDialog fillScreen() {

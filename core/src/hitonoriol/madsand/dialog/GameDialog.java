@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
+import com.github.tommyettinger.textra.TypingLabel;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.gui.Gui;
@@ -35,29 +36,39 @@ public class GameDialog extends Dialog {
 
 	private AutoFocusScrollPane textScroll;
 	private Table dialogContainer = new Table(Gui.skin);
-	protected Label textLbl;
+	protected TypingLabel textLbl;
 	protected TextButton proceedButton;
 	protected Stage stage;
 	private boolean hasNext = false;
 
 	public GameDialog(String title, String text, Stage stage) {
 		super(title, Gui.skin, STYLE_NAME);
+		this.stage = stage;
 		setMovable(false);
+
+		// Set up title
 		Table titleTbl = getTitleTable();
 		titleTbl.getCell(getTitleLabel());
 		titleTbl.padTop(TITLE_YPAD).padLeft(TITLE_XPAD);
-		getButtonTable().defaults().size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT);
 		row();
-		textLbl = new Label("", Gui.skin);
+
+		// Set up main text label
+		textLbl = new TypingLabel("", GuiSkin.getLabelStyle(Gui.FONT_S));
 		setText(text);
+		textLbl.setDefaultToken("{STYLE=SHADOW}{SPEED=1.15}");
 		textLbl.setAlignment(Align.topLeft);
 		textLbl.setWrap(true);
-		dialogContainer.add(textLbl).size(WIDTH, HEIGHT);
+		textLbl.layout.getFont().adjustLineHeight(1.25f);
+
+		// Set up the layout
+		dialogContainer.add(textLbl).width(WIDTH);
 		dialogContainer.align(Align.topLeft);
-		add(textScroll = new AutoFocusScrollPane(dialogContainer)).size(WIDTH, HEIGHT)
+		add(textScroll = new AutoFocusScrollPane(dialogContainer))
+				.size(WIDTH, HEIGHT)
 				.pad(PADDING)
 				.padTop(TEXT_YPAD).row();
-		this.stage = stage;
+		Gui.setClickAction(this, () -> textLbl.skipToTheEnd());
+		getButtonTable().defaults().size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT);
 	}
 
 	public GameDialog(String text, Stage stage) {
@@ -92,7 +103,7 @@ public class GameDialog extends Dialog {
 	}
 
 	public GameDialog appendText(String text) {
-		setText(textLbl.getText() + text);
+		setText(textLbl.storedText + text);
 		return this;
 	}
 
