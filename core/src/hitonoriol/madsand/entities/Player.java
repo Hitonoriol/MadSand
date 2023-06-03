@@ -329,7 +329,7 @@ public class Player extends Entity {
 		setFov((int) (Gdx.graphics.getWidth() / Resources.TILESIZE / 1.65));
 	}
 
-	public void setVisibleArea(int radius) {
+	private void setVisibleArea(int radius) {
 		final int center = radius, diameter = radius * 2;
 		visibleArea.clear();
 		for (int y = 0; y < diameter; ++y) {
