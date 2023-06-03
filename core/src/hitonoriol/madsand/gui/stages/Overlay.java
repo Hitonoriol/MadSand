@@ -76,6 +76,11 @@ public class Overlay extends Stage {
 		addListener(Keyboard.getListener());
 	}
 
+	public void setVisible(boolean visible) {
+		getActors().forEach(actor -> actor.setVisible(visible));
+		refresh();
+	}
+	
 	public void setPlayer(Player player) {
 		if (!layoutSetUp())
 			initLayout();

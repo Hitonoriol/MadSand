@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -95,6 +96,12 @@ public class Map {
 		purge();
 	}
 
+	public void forEachTile(BiConsumer<Integer, Integer> coordAction) {
+		for (int x = 0; x < xsz; ++x)
+			for(int y = 0; y < ysz; ++y)
+				coordAction.accept(x, y);
+	}
+	
 	public void postLoadInit() {}
 
 	/* Cleanup, called on map switch/World.close() */

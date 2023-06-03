@@ -43,7 +43,10 @@ public class Resources {
 			Utils.out("Loading game content...");
 			Gdx.graphics.setCursor(Gdx.graphics.newCursor(loadPixmap("textures/cursor.png"), 0, 0));
 			GuiSkin.get();
-			MadSand.switchScreen(assetManager.createLoadingScreen());
+			var backgrounds = loader.loadList("textures/loading/backgrounds.json", String.class);
+			var loadingScreen = assetManager.createLoadingScreen();
+			loadingScreen.getStage().setBackground(loadTexture(Utils.randElement(backgrounds)));
+			MadSand.switchScreen(loadingScreen);
 			Content.asList().forEach(Resources::load);
 			Utils.printMemoryInfo();
 			return assetManager;
@@ -111,8 +114,13 @@ public class Resources {
 		return new Pixmap(Gdx.files.internal(file));
 	}
 
-	public static void takeScreenshot() {
+	public static void takeScreenshot(boolean withGui) {
 		Gui.unfocusGame();
+		MadSand.player().setFov(
+			(int) (1.25f * (Gdx.graphics.getWidth() / (Resources.TILESIZE * MadSand.getRenderer().getCamZoom())))
+		);
+		if (!withGui)
+			Gui.overlay.setVisible(false);
 		TimeUtils.scheduleTask(() -> {
 			byte[] pixels = ScreenUtils.getFrameBufferPixels(0, 0, Gdx.graphics.getBackBufferWidth(),
 					Gdx.graphics.getBackBufferHeight(), true);
@@ -126,6 +134,9 @@ public class Resources {
 			BufferUtils.copy(pixels, 0, pixmap.getPixels(), pixels.length);
 			PixmapIO.writePNG(Gdx.files.local(Utils.now(Log.getAccurateDateFormat()) + ".png"), pixmap);
 			pixmap.dispose();
+			if (!withGui)
+				Gui.overlay.setVisible(true);
+			MadSand.player().setFov();
 			Gui.resumeGameFocus();
 		}, Gui.DELAY);
 	}

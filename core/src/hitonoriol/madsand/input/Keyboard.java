@@ -85,6 +85,12 @@ public class Keyboard {
 			bind(() -> Globals.debugMode = !Globals.debugMode, Keys.Z);
 			bind(Gui.overlay::toggleGameConsole, Keys.GRAVE);
 
+			/* Mark all tiles on map as already visited */
+			bind(() -> {
+				var map = world().getCurLoc();
+				map.forEachTile((x, y) -> map.getTile(x, y).visited = true);
+			}, Keys.SHIFT_LEFT, Keys.V);
+			
 			/* Unlock all recipes */
 			bind(() -> {
 				Items.all().craftRequirements().keySet()
@@ -183,8 +189,10 @@ public class Keyboard {
 	}
 
 	public static void pollGlobalHotkeys() {
-		if (Gdx.input.isKeyJustPressed(Keys.F12))
-			Resources.takeScreenshot();
+		// [Shift] + F12 - Take a screenshot [with GUI]
+		if (Gdx.input.isKeyJustPressed(Keys.F12)) {
+			Resources.takeScreenshot(!Gdx.input.isKeyPressed(Keys.SHIFT_LEFT));
+		}
 	}
 
 	public static boolean isKeyPressed(int key) {
