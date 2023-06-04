@@ -1,5 +1,7 @@
 package hitonoriol.madsand.gui;
 
+import static hitonoriol.madsand.gui.Gui.setFontSize;
+
 import java.util.function.Consumer;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -78,7 +80,7 @@ public class Widgets {
 	}
 
 	public static Label label(String text, int fontSize) {
-		return Gui.setFontSize(label(text), fontSize);
+		return setFontSize(label(text), fontSize);
 	}
 	
 	public static TextField textField(String text) {

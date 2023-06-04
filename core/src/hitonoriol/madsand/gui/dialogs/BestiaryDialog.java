@@ -1,5 +1,7 @@
 package hitonoriol.madsand.gui.dialogs;
 
+import static hitonoriol.madsand.gui.Widgets.label;
+
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -48,8 +50,8 @@ public class BestiaryDialog extends GameDialog {
 		int i = 1;
 		for (Entry<Integer, Integer> entry : killCount.entrySet()) {
 			scrollTable.add(createNpcEntry(entry.getKey(), entry.getValue()))
-					.width(ENTRY_WIDTH).height(ENTRY_HEIGHT)
-					.padRight(ENTRY_PAD).padBottom(PAD_BOTTOM);
+				.width(ENTRY_WIDTH).height(ENTRY_HEIGHT)
+				.padRight(ENTRY_PAD).padBottom(PAD_BOTTOM);
 
 			if (i % ENTRIES_PER_ROW == 0) {
 				scrollTable.row();
@@ -68,6 +70,7 @@ public class BestiaryDialog extends GameDialog {
 	Table createNpcEntry(int id, int kills) {
 		NpcDescriptor npc = Npcs.all().get(id);
 		Table entry = new Table();
+		entry.debugAll();
 		Label topLabel = new Label(npc.name, Gui.skin);
 		Label bottomLabel = new Label("Kills: " + kills, Gui.skin);
 
@@ -77,25 +80,25 @@ public class BestiaryDialog extends GameDialog {
 		bottomLabel.setAlignment(Align.center);
 
 		entry.add(topLabel).align(Align.center).width(ENTRY_WIDTH).row();
-		entry.add(new Image(Textures.getNpc(id))).expandY().row();
+		entry.add(new Image(Textures.getNpc(id))).growY().row();
 
 		if (kills >= STAT_KILLS) {
-			entry.add(new Label("HP: " + npc.hp, Gui.skin)).align(Align.center).row();
-			entry.add(new Label("Def: " + npc.defense, Gui.skin)).align(Align.center).row();
-			entry.add(new Label("Str: " + npc.strength, Gui.skin)).align(Align.center).row();
-			entry.add(new Label("Acc: " + npc.accuracy, Gui.skin)).align(Align.center).row();
-			entry.add(new Label("Dex: " + npc.dexterity, Gui.skin)).align(Align.center).padBottom(10).row();
+			entry.add(label("HP: " + npc.hp)).align(Align.center).row();
+			entry.add(label("Def: " + npc.defense)).align(Align.center).row();
+			entry.add(label("Str: " + npc.strength)).align(Align.center).row();
+			entry.add(label("Acc: " + npc.accuracy)).align(Align.center).row();
+			entry.add(label("Dex: " + npc.dexterity)).align(Align.center).padBottom(10).row();
 		} else {
-			Label killMoreLbl = new Label("Kill " + (STAT_KILLS - kills) + " more to unlock its stats", Gui.skin);
+			var killMoreLbl = label("Kill " + (STAT_KILLS - kills) + " more to unlock its stats");
 			killMoreLbl.setWrap(true);
 			killMoreLbl.setAlignment(Align.center);
 			entry.add(killMoreLbl)
-					.width(ENTRY_WIDTH)
-					.align(Align.center)
-					.pad(10).row();
+				.growX()
+				.align(Align.center)
+				.pad(10).row();
 		}
 
-		entry.add(bottomLabel).row();
+		entry.add(bottomLabel).growX().row();
 
 		entry.setBackground(GuiSkin.darkBackground());
 		return entry;

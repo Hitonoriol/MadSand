@@ -19,7 +19,6 @@ public class RefreshableLabel extends Label {
 	public RefreshableLabel(TextGenerator generator) {
 		super("", Gui.skin);
 		this.generator = generator;
-		setWrap(true);
 		setOriginY(Align.topLeft);
 		setAlignment(Align.topLeft);
 	}
