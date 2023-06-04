@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -46,6 +47,33 @@ public class Gui {
 	private static ScreenViewport viewport = new ScreenViewport();
 	private static GlyphLayout glyphLayout = new GlyphLayout();
 
+	public static void fitChildren(WidgetGroup group) {
+		group.setSize(group.getPrefWidth(), group.getPrefHeight());
+	}
+	
+	public static float screenHeight() {
+		return Gdx.graphics.getHeight();
+	}
+	
+	public static float screenWidth() {
+		return Gdx.graphics.getWidth();
+	}
+	
+	public static float screenHeight(float coef) {
+		return Gdx.graphics.getHeight() * coef;
+	}
+	
+	public static float screenWidth(float coef) {
+		return Gdx.graphics.getWidth() * coef;
+	}
+	
+	public static void screenSize(Actor actor, float widthCoef, float heightCoef) {
+		actor.setSize(
+			screenWidth(widthCoef),
+			screenHeight(heightCoef)
+		);
+	}
+	
 	public static ScreenViewport viewport() {
 		return viewport;
 	}

@@ -1031,7 +1031,6 @@ public class Player extends Entity {
 		freeHands();
 		Gui.drawOkDialog("Awakening",
 				"You wake up without any memories about the previous " + Utils.timeString(getSurvivedTime()) + ".")
-				.setMaxWidth(500)
 				.newLine(2)
 				.appendText(
 						"Seems like you got into some trouble, but were miraculously saved by an unknown creature... Or force.")

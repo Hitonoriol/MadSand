@@ -21,6 +21,7 @@ import com.github.tommyettinger.textra.TypingLabel;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.resources.Resources;
@@ -51,14 +52,11 @@ public class GameDialog extends Dialog {
 		titleTbl.getCell(getTitleLabel());
 		titleTbl.padTop(TITLE_YPAD).padLeft(TITLE_XPAD);
 		row();
-
+		
 		// Set up main text label
-		textLbl = new TypingLabel("", GuiSkin.getLabelStyle(Gui.FONT_S));
-		setText(text);
-		textLbl.setDefaultToken("{STYLE=SHADOW}{SPEED=1.15}");
+		textLbl = Widgets.typingLabel(text);
 		textLbl.setAlignment(Align.topLeft);
 		textLbl.setWrap(true);
-		textLbl.layout.getFont().adjustLineHeight(1.25f);
 
 		// Set up the layout
 		dialogContainer.add(textLbl).width(WIDTH);
@@ -103,7 +101,8 @@ public class GameDialog extends Dialog {
 	}
 
 	public GameDialog appendText(String text) {
-		setText(textLbl.storedText + text);
+		Utils.dbg("Appending `%s` to `%s`", text, textLbl.storedText);
+		setText(textLbl.storedText += text);
 		return this;
 	}
 
@@ -116,7 +115,8 @@ public class GameDialog extends Dialog {
 	}
 
 	public void setText(String text) {
-		textLbl.setText(TextSubstitutor.replace(text));
+		sizeChanged();
+		textLbl.restart(TextSubstitutor.replace(text));
 	}
 
 	public GameDialog setTitle(String text) {
@@ -265,6 +265,7 @@ public class GameDialog extends Dialog {
 		dialogContainer.setBackground(GuiSkin.getColorDrawable(Color.LIGHT_GRAY));
 		add(dialogContainer).pad(BORDER_PAD).padTop(TITLE_PAD);
 		dialogContainer.pad(BORDER_PAD);
+		dialogContainer.row();
 		bordered = true;
 	}
 
