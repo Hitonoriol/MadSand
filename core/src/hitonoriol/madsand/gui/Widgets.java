@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.utils.Align;
+import com.github.tommyettinger.textra.TypingLabel;
 
 public class Widgets {
 	public static Table table() {
@@ -47,6 +49,18 @@ public class Widgets {
 		Gui.removeActor(checkbox, checkbox.getLabel());
 		checkbox.pack();
 		return checkbox;
+	}
+	
+	public static TypingLabel typingLabel() {
+		return typingLabel("");
+	}
+	
+	public static TypingLabel typingLabel(String text) {
+		var label = new TypingLabel(text, GuiSkin.getLabelStyle(Gui.FONT_S));
+		label.setDefaultToken("{STYLE=SHADOW}{SPEED=1.15}");
+		label.layout.getFont().adjustLineHeight(1.25f);
+		label.setAlignment(Align.left);
+		return label;
 	}
 
 	public static Label label(String text) {
