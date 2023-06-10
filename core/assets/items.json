@@ -1917,5 +1917,33 @@
 		"@type" : "Consumable",
 		"weight" : 0.35,
 		"category" : {"Food":3}
+	},
+	"199" : {
+		"name" : "Fish Eggs",
+		"satiationAmount" : 5,
+		"staminaAmount" : 1,
+		"healAmount" : 5,
+		"cost" : 15,
+		"@type" : "Consumable",
+		"weight" : 0.025,
+		"category" : {"Food":2}
+	},
+	"200" : {
+		"@type" : "Item",
+		"name" : "Wrench",
+		"cost" : 20,
+		"weight" : 0.75
+	},
+	"201" : {
+		"@type" : "Item",
+		"name" : "Cloth",
+		"cost" : 3,
+		"weight" : 0.03
+	},
+	"202" : {
+		"@type" : "Item",
+		"name" : "Tattered Cloth",
+		"cost" : 1,
+		"weight" : 0.001
 	}
 }

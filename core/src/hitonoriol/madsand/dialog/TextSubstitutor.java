@@ -41,7 +41,7 @@ public class TextSubstitutor {
 	static {
 		add(LINEBREAK, Resources.LINEBREAK);
 		add(TAB, Resources.Tab);
-		add("PAR", Resources.LINEBREAK + Resources.Tab);
+		add("p", Resources.LINEBREAK + Resources.LINEBREAK);
 		add("PLAYER", () -> MadSand.player().getName());
 		add(RAND_NAME, () -> JRand.firstname().gen());
 		add(RAND_NAME_M, () -> JRand.firstname().gender(Gender.MALE).gen());

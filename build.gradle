@@ -3,7 +3,7 @@ gradle.startParameter.showStacktrace = org.gradle.api.logging.configuration.Show
 /* App metadata */
 ext {
 	appName = "MadSand"
-	versionCode = '0.49.19'
+	versionCode = '0.49.20'
 	author = 'Hitonoriol'
 }
 

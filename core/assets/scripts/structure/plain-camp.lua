@@ -4,7 +4,10 @@ local map = world:getCurLoc();
 structure:clear();
 map:fillTile(structure.x, structure.y, structure.width, structure.height, 23);	-- Fill & erode camp tiles
 map:erodeTileRectangle(structure.x, structure.y, structure.width, structure.height, 1, 0);
-map:spawnNpc(5, structure.x + 5, structure.y + 5);		-- Spawn tutorial quest branch NPC
-map:addObject(structure.x + 5, structure.y + 4, 6);		-- Add campfire
+map:addObject(structure.x + 5, structure.y + 4, 6);	-- Add campfire
+
+local nx, ny = structure.x + 5, structure.y + 5;
+map:spawnNpc(5, nx, ny); -- Spawn tutorial questline NPC
+map:addWaypoint(nx, ny):setDestinationName("Stranger");
 
 return true;
