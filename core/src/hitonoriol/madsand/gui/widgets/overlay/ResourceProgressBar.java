@@ -19,6 +19,7 @@ import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.entities.skill.SkillContainer;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.TimedProgressBar;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.map.object.MapObject;
@@ -33,7 +34,7 @@ public class ResourceProgressBar extends Table {
 	private static ProgressBarStyle style = GuiSkin.createProgressBarStyle(WIDTH, HEIGHT, Color.DARK_GRAY);
 
 	private TimedProgressBar bar = new TimedProgressBar();
-	private Label progressLabel = new Label("", Gui.skin);
+	private Label progressLabel = Widgets.label("");
 
 	private MapObject object;
 	private int totalHits;

@@ -2,16 +2,16 @@ package hitonoriol.madsand.gui.dialogs;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 
 public class SelectDialog extends GameDialog {
 	private static float XPAD = 35;
 
-	private Table entryTable = new Table(Gui.skin);
+	private Table entryTable = Widgets.table();
 
 	public SelectDialog(String title, String description) {
 		makeBordered();
@@ -36,7 +36,7 @@ public class SelectDialog extends GameDialog {
 	}
 
 	public SelectDialog addOption(String text, Runnable action) {
-		Button entryBtn = new TextButton(text, Gui.skin);
+		Button entryBtn = Widgets.button(text);
 		Gui.setAction(entryBtn, () -> {
 			remove();
 			action.run();

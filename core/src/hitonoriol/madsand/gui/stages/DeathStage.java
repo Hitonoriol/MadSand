@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
+import hitonoriol.madsand.gui.Widgets;
 
 public class DeathStage extends Stage {
 	Label titleLabel, deathMsgLabel;
@@ -16,13 +17,13 @@ public class DeathStage extends Stage {
 
 	public DeathStage() {
 		super(Gui.viewport());
-		Table container = new Table();
+		Table container = Widgets.table();
 		final float SIZE_COEF = 1.85f;
 
-		deathMsgLabel = new Label("", Gui.skin);
+		deathMsgLabel = Widgets.label("");
 		deathMsgLabel.setAlignment(Align.center);
-		respawnButton = new TextButton("Respawn", Gui.skin);
-		titleLabel = new Label("You Died", Gui.skin);
+		respawnButton = Widgets.button("Respawn");
+		titleLabel = Widgets.label("You Died");
 		Gui.setFontSize(titleLabel, Gui.FONT_XL);
 		Gui.setFontSize(deathMsgLabel, 19);
 		titleLabel.setAlignment(Align.center);

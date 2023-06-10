@@ -11,14 +11,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
+import hitonoriol.madsand.gui.Widgets;
 
 public class AutoSizeTooltip extends Tooltip<Table> {
 	private float WIDTH = 200f, HEIGHT = 50f, PAD = 7.5f;
 	private final static Drawable background = GuiSkin.getColorDrawable(new Color(0, 0, 0, 0.85f));
 
 	private float maxWidth;
-	private Table tooltipTbl = new Table();
-	private Label tooltipLbl = new Label("", Gui.skin);
+	private Table tooltipTbl = Widgets.table();
+	private Label tooltipLbl = Widgets.label("");
 	private Supplier<String> updater;
 
 	public AutoSizeTooltip() {

@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.entities.inventory.ItemUI;
 import hitonoriol.madsand.entities.inventory.item.Item;
-import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.Widgets;
 
 public abstract class ItemButton extends Group {
 	private final float WIDTH = 390;
@@ -31,12 +31,12 @@ public abstract class ItemButton extends Group {
 	public ItemButton(Item item) {
 		buttonItem = item;
 		String buttonText = createButtonText();
-		itemLabel = new Label(buttonText, Gui.skin);
+		itemLabel = Widgets.label(buttonText);
 		itemLabel.setWrap(true);
 		itemImage = new Image(item.getDrawable());
 		itemImage.setSize(IMAGE_SIZE, IMAGE_SIZE);
 
-		buttonTable = new Table();
+		buttonTable = Widgets.table();
 		buttonTable.add(itemImage).align(Align.left);
 		buttonTable.add(itemLabel).width(150).align(Align.center);
 		buttonTable.setFillParent(true);

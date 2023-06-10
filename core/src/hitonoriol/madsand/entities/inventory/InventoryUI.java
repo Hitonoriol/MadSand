@@ -27,11 +27,11 @@ public class InventoryUI extends GameDialog {
 	private static final float BUTTON_WIDTH = 250;
 	private static final float BUTTON_HEIGHT = 50;
 
-	private Table invContainer = new Table();
-	private Table itemTable = new Table();
+	private Table invContainer = Widgets.table();
+	private Table itemTable = Widgets.table();
 	private Container<Table> itemTableBg = new Container<>(itemTable);
 	private AutoFocusScrollPane invScroll = new AutoFocusScrollPane(itemTableBg);
-	private Label header = new Label("", Gui.skin);
+	private Label header = Widgets.label("");
 	private ItemSearchPanel searchPanel = new ItemSearchPanel(this);
 
 	private Inventory inventory;
@@ -64,7 +64,7 @@ public class InventoryUI extends GameDialog {
 		super.add(invContainer);
 		super.setBackground(GuiSkin.transparency());
 
-		TextButton craftMenuButton = new TextButton("Crafting", Gui.skin);
+		TextButton craftMenuButton = Widgets.button("Crafting");
 		buttonTable.defaults()
 				.size(BUTTON_WIDTH, BUTTON_HEIGHT)
 				.align(Align.center)

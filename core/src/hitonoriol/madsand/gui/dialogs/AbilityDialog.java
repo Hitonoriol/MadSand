@@ -16,6 +16,7 @@ import hitonoriol.madsand.entities.ability.Ability;
 import hitonoriol.madsand.entities.ability.ActiveAbility;
 import hitonoriol.madsand.entities.ability.PassiveAbility;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.util.Functional;
 import hitonoriol.madsand.util.TimeUtils;
 
@@ -24,7 +25,7 @@ public class AbilityDialog extends GameDialog {
 	private List<Ability> abilities;
 	static final float BTN_HEIGHT = 50, MIN_BTN_WIDTH = 75;
 	static float PAD = 30;
-	Table container = new Table(Gui.skin);
+	Table container = Widgets.table();
 
 	public AbilityDialog(List<Ability> abilities) {
 		super.setTitle("Abilities");
@@ -120,7 +121,7 @@ public class AbilityDialog extends GameDialog {
 	}
 
 	private Cell<TextButton> addAbilityButton(String text, Runnable action) {
-		Cell<TextButton> cell = container.add(new TextButton(text, Gui.skin))
+		Cell<TextButton> cell = container.add(Widgets.button(text))
 				.size(300, BTN_HEIGHT);
 		Gui.setAction(cell.getActor(), action);
 		return cell;

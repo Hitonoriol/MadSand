@@ -20,6 +20,7 @@ import hitonoriol.madsand.gamecontent.Prefs;
 import hitonoriol.madsand.gamecontent.Tiles;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.MouseoverListener;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.Tile;
@@ -35,7 +36,7 @@ public class ActionButton extends Table {
 	public static final float ACTION_TBL_YPOS = Gdx.graphics.getHeight() / 5.75f;
 
 	public ActionButton() {
-		interactButton = new TextButton("", Gui.skin);
+		interactButton = Widgets.button("");
 		Label label = interactButton.getLabel();
 		label.setWrap(true);
 		Gui.setFontSize(label, Gui.FONT_XS);

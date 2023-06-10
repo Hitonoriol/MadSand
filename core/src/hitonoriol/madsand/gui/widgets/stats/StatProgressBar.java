@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.entities.skill.SkillValue;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.util.Utils;
 
 public class StatProgressBar extends Group {
@@ -21,7 +22,7 @@ public class StatProgressBar extends Group {
 
 	String stat;
 	ProgressBar progressBar;
-	Label statLabel = new Label("", Gui.skin);
+	Label statLabel = Widgets.label("");
 	boolean round = true;
 	private Supplier<Float> valueSupplier, maxValueSupplier, progressSupplier;
 

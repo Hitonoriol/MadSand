@@ -10,6 +10,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Container;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.minigames.CardGameUI;
 import hitonoriol.madsand.util.TimeUtils;
@@ -19,14 +20,14 @@ public class FarkleUI extends CardGameUI {
 	private Farkle farkle = new Farkle();
 
 	private static Table helpTable = createCombinationsTable();
-	private Label scoreLabel = new Label("0", Gui.skin);
-	private Table gameContainer = new Table();
-	private Table diceContainer = new Table(Gui.skin);
-	private Table binTable = new Table(Gui.skin), handTable = new Table(Gui.skin), scoreTable = new Table(Gui.skin);
-	private Label roundLabel = new Label("", Gui.skin), roundScoreLabel;
+	private Label scoreLabel = Widgets.label("0");
+	private Table gameContainer = Widgets.table();
+	private Table diceContainer = Widgets.table();
+	private Table binTable = Widgets.table(), handTable = Widgets.table(), scoreTable = Widgets.table();
+	private Label roundLabel = Widgets.label(""), roundScoreLabel;
 
-	private TextButton shuffleButton = new TextButton("Shuffle Dice", Gui.skin);
-	private TextButton endRoundButton = new TextButton("End Round", Gui.skin);
+	private TextButton shuffleButton = Widgets.button("Shuffle Dice");
+	private TextButton endRoundButton = Widgets.button("End Round");
 
 	private int bank;
 
@@ -42,7 +43,7 @@ public class FarkleUI extends CardGameUI {
 		Gui.setFontSize(scoreLabel, Gui.FONT_L);
 		add(roundLabel).row();
 		add(scoreLabel).row();
-		add(new Label("(score " + Farkle.WINNING_SCORE + " to win)", Gui.skin)).row();
+		add(Widgets.label("(score " + Farkle.WINNING_SCORE + " to win)")).row();
 
 		gameContainer.add(scoreTable)
 				.size(SCORE_WIDTH, GAME_HEIGHT)
@@ -144,7 +145,7 @@ public class FarkleUI extends CardGameUI {
 			return;
 		}
 		farkle.startRound();
-		scoreTable.add(roundScoreLabel = new Label("", Gui.skin)).row();
+		scoreTable.add(roundScoreLabel = Widgets.label("")).row();
 		update();
 
 		checkForFarkle();
@@ -213,7 +214,7 @@ public class FarkleUI extends CardGameUI {
 	}
 
 	private static Table createHelpEntry(FarkleHand hand) {
-		Table entry = new Table(Gui.skin);
+		Table entry = Widgets.table();
 		entry.align(Align.topLeft);
 		hand.getDice().forEach(die -> entry.add(new Image(die.getTexture()))
 				.size(Die.WIDTH / 2, Die.HEIGHT / 2)
@@ -224,7 +225,7 @@ public class FarkleUI extends CardGameUI {
 	}
 
 	private static Table createCombinationsTable() {
-		Table table = new Table(Gui.skin), combTable = new Table(Gui.skin);
+		Table table = Widgets.table(), combTable = Widgets.table();
 		table.setBackground(GuiSkin.darkBackground());
 		table.align(Align.topLeft);
 		table.add("Combinations:").row();

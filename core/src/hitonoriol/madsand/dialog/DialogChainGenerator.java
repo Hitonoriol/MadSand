@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.util.Utils;
 
@@ -57,7 +58,7 @@ public class DialogChainGenerator {
 		String buttonTokens[];
 		TextButton scriptButton;
 
-		TextButton nextDialogButton = new TextButton("", Gui.skin);
+		TextButton nextDialogButton = Widgets.button("");
 
 		while (buttonMatcher.find()) {
 			buttonString = buttonMatcher.group(1);
@@ -65,7 +66,7 @@ public class DialogChainGenerator {
 			if (buttonString.contains(DIALOG_BTN_SCRIPT_DELIMITER)) {
 				Utils.dbg("Contains Script Character! buttonString: [" + buttonString + "]");
 				buttonTokens = buttonString.split(DIALOG_BTN_SCRIPT_DELIMITER); // [Button Text @ lua code]
-				scriptButton = new TextButton(buttonTokens[0], Gui.skin);
+				scriptButton = Widgets.button(buttonTokens[0]);
 				final String buttonScriptString = buttonTokens[1];
 				dialog.addButton(scriptButton);
 				Gui.setAction(scriptButton, () -> Lua.execute(buttonScriptString));

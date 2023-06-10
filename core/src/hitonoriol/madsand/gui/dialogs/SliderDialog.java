@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.Widgets;
 
 public class SliderDialog extends GameDialog {
 
@@ -60,14 +61,14 @@ public class SliderDialog extends GameDialog {
 
 		titleTbl.padTop(TITLE_YPADDING).padLeft(TITLE_XPADDING);
 
-		cancelButton = new TextButton("Cancel", Gui.skin);
-		confirmButton = new TextButton("Confirm", Gui.skin);
-		buttonTable = new Table();
+		cancelButton = Widgets.button("Cancel");
+		confirmButton = Widgets.button("Confirm");
+		buttonTable = Widgets.table();
 		buttonTable.add(confirmButton).size(BUTTON_WIDTH, BUTTON_HEIGHT).pad(BUTTON_PADDING);
 		buttonTable.add(cancelButton).size(BUTTON_WIDTH, BUTTON_HEIGHT).pad(BUTTON_PADDING);
 
-		topLabel = new Label("", Gui.skin);
-		bottomLabel = new Label("", Gui.skin);
+		topLabel = Widgets.label("");
+		bottomLabel = Widgets.label("");
 		setCancelAction(() -> remove());
 	}
 

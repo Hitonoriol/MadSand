@@ -1,6 +1,9 @@
 package hitonoriol.madsand.gui.dialogs;
 
-import static hitonoriol.madsand.gui.Gui.*;
+import static hitonoriol.madsand.gui.Gui.BTN_HEIGHT;
+import static hitonoriol.madsand.gui.Gui.FONT_M;
+import static hitonoriol.madsand.gui.Gui.FONT_S;
+import static hitonoriol.madsand.gui.Gui.setFontSize;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,11 +15,12 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.map.object.Waypoint;
 
 public class WaypointDialog extends GameDialog {
-	private Table container = new Table(Gui.skin);
+	private Table container = Widgets.table();
 
 	public WaypointDialog() {
 		centerTitle();
@@ -44,7 +48,7 @@ public class WaypointDialog extends GameDialog {
 	private final static float ENTRY_WIDTH = 225, ENTRY_PAD = 10;
 
 	private Table createWaypointEntry(Waypoint waypoint) {
-		Table entry = new Table(Gui.skin);
+		Table entry = Widgets.table();
 		entry.defaults().width(ENTRY_WIDTH).height(FONT_S).padRight(ENTRY_PAD);
 		/* Create table header */
 		if (waypoint == null) {
@@ -55,7 +59,7 @@ public class WaypointDialog extends GameDialog {
 		}
 		entry.add(waypoint.name);
 		entry.add(waypoint.getPosition().toString());
-		TextButton toggleBtn = updateButton(new TextButton("", Gui.skin), waypoint);
+		TextButton toggleBtn = updateButton(Widgets.button(""), waypoint);
 		entry.add(toggleBtn).size(ENTRY_WIDTH, BTN_HEIGHT);
 		Gui.setAction(toggleBtn, () -> {
 			waypoint.toggleArrow();

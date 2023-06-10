@@ -22,6 +22,7 @@ import hitonoriol.madsand.gamecontent.Objects;
 import hitonoriol.madsand.gamecontent.Textures;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.object.MapObject;
@@ -32,9 +33,9 @@ public class BuildDialog extends GameDialog {
 	float WIDTH = 300;
 	float HEIGHT = 400;
 
-	Table buildTable = new Table();
-	Label emptyLabel = new Label("You don't know how to build anything", Gui.skin);
-	Label unlockProgressLabel = new Label("", Gui.skin);
+	Table buildTable = Widgets.table();
+	Label emptyLabel = Widgets.label("You don't know how to build anything");
+	Label unlockProgressLabel = Widgets.label("");
 	AutoFocusScrollPane buildScroll;
 	float PAD = 50;
 
@@ -74,7 +75,7 @@ class BuildDialogEntry extends Group {
 	final float HEIGHT = 170;
 	final float PAD = 10;
 	BuildDialog dialog;
-	Table container = new Table(Gui.skin);
+	Table container = Widgets.table();
 	Player player = MadSand.player();
 	String recipe;
 	int id;

@@ -31,6 +31,7 @@ import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.gamecontent.Textures;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.TimedProgressBar;
 import hitonoriol.madsand.map.FishingSpot;
 import hitonoriol.madsand.resources.Resources;
@@ -82,14 +83,14 @@ public class FishingUI extends GameDialog {
 		resetCatchBar();
 		super.add(catchBar).size(BAR_WIDTH, BAR_HEIGHT).padTop(15).row();
 		bobber = new Image(bobberTx);
-		Table background = new Table();
+		Table background = Widgets.table();
 		background.setBackground(backgroundTx);
 		background.setFillParent(true);
 		gameContainer.addActor(background);
 		gameContainer.addActor(bobber);
 		bobber.setPosition((WIDTH / 2) + bobber.getImageWidth() / 2, HEIGHT / 2);
 
-		Label infoLabel = new Label("[LMB] Catch", Gui.skin);
+		Label infoLabel = Widgets.label("[LMB] Catch");
 		infoLabel.setAlignment(Align.center);
 		super.add(gameContainer).size(WIDTH, HEIGHT).row();
 		super.add(infoLabel).pad(10).row();
@@ -156,7 +157,7 @@ public class FishingUI extends GameDialog {
 	private final static float FADEOUT_DUR = 2.25f;
 
 	private void animateLogText() {
-		Label textLbl = new Label(Gui.overlay.getGameLog().getLastPrintedLine(), Gui.skin);
+		Label textLbl = Widgets.label(Gui.overlay.getGameLog().getLastPrintedLine());
 		Gui.setFontSize(textLbl, Utils.rand(9, 17));
 		applyFadeout(textLbl);
 	}

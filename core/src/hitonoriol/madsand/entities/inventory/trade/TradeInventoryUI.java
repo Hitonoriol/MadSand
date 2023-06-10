@@ -13,6 +13,7 @@ import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gamecontent.Items;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.resources.Resources;
 
@@ -38,22 +39,22 @@ public class TradeInventoryUI extends GameDialog {
 		this.playerInventory = playerInventory;
 		this.traderInventory = traderInventory;
 
-		sellHeader = new Label("Sell", Gui.skin);
-		buyHeader = new Label("Buy", Gui.skin);
+		sellHeader = Widgets.label("Sell");
+		buyHeader = Widgets.label("Buy");
 		sellHeader.setAlignment(Align.center);
 		buyHeader.setAlignment(Align.center);
 		setTitle("Trade");
 		centerTitle();
 
-		tradeUITable = new Table();
+		tradeUITable = Widgets.table();
 
 		tradeUITable.setSize(WIDTH, HEIGHT);
-		sellTable = new Table();
-		buyTable = new Table();
+		sellTable = Widgets.table();
+		buyTable = Widgets.table();
 		sellTable.setHeight(HEIGHT);
 		buyTable.setHeight(HEIGHT);
 
-		exitBtn = new TextButton("Done", Gui.skin);
+		exitBtn = Widgets.button("Done");
 
 		setBackground(GuiSkin.getColorDrawable(Color.DARK_GRAY));
 		align(Align.topLeft);

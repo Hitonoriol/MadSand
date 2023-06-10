@@ -13,6 +13,7 @@ import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.gamecontent.Quests;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.resources.Resources;
 
@@ -41,8 +42,8 @@ public class QuestListDialog extends GameDialog {
 		this.questList = questList;
 
 		super.setTitle(npcName + "'s Quests");
-		container = new Table();
-		scrollTable = new Table();
+		container = Widgets.table();
+		scrollTable = Widgets.table();
 		scroll = new AutoFocusScrollPane(scrollTable);
 		container.add(scroll).size(BUTTON_WIDTH, SCROLL_HEIGHT).row();
 		super.add(container);
@@ -63,7 +64,7 @@ public class QuestListDialog extends GameDialog {
 				if (quests.isQuestInProgress(id))
 					buttonString += Resources.LINEBREAK + "(In Progress)";
 
-				questButton = new TextButton(buttonString, Gui.skin);
+				questButton = Widgets.button(buttonString);
 				questButton.getLabel().setWrap(true);
 				scrollTable.add(questButton).size(BUTTON_WIDTH, BUTTON_HEIGHT).pad(BUTTON_PAD).row();
 

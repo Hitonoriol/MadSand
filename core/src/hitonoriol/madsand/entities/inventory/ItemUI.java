@@ -17,7 +17,7 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gamecontent.Textures;
-import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.util.Utils;
 
 public class ItemUI extends Group {
@@ -37,11 +37,11 @@ public class ItemUI extends Group {
 
 	public ItemUI(Item item) {
 		this.item = item;
-		topLabel = new Label("", Gui.skin);
+		topLabel = Widgets.label("");
 		highlight = new Image(ItemUI.emptyItem);
-		toolHpLabel = new Label("", Gui.skin);
+		toolHpLabel = Widgets.label("");
 		itemBtn = new ImageButton(item.getDrawable());
-		itemQuantityLabel = new Label(item.quantity + "", Gui.skin);
+		itemQuantityLabel = Widgets.label(item.quantity + "");
 		tooltip = new ItemTooltip(item);
 
 		toolHpLabel.setPosition(itemQuantityLabel.getX() + SIZE / 1.95f, itemQuantityLabel.getY() + 6);
@@ -128,7 +128,7 @@ public class ItemUI extends Group {
 	}
 
 	public static Table createItemList(List<Item> items, int itemsPerRow) {
-		return createItemList(new Table(Gui.skin), items, itemsPerRow);
+		return createItemList(Widgets.table(), items, itemsPerRow);
 	}
 
 	public static Table createItemList(List<Item> items) {

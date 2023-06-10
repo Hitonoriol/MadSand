@@ -18,6 +18,7 @@ import hitonoriol.madsand.entities.inventory.ItemUI;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gamecontent.WorldGenPresets;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
@@ -37,7 +38,7 @@ public class LandDialog extends GameDialog {
 	private Settlement settlement;
 	private Timer.Task refreshTask;
 
-	Table dialogContents = new Table(Gui.skin);
+	Table dialogContents = Widgets.table();
 
 	public LandDialog(Location location) {
 		super(Gui.overlay);
@@ -89,7 +90,7 @@ public class LandDialog extends GameDialog {
 		for (Item item : reqItems)
 			reqs &= player.inventory.hasItem(item.id(), item.quantity);
 
-		TextButton createBtn = new TextButton("Establish", Gui.skin);
+		TextButton createBtn = Widgets.button("Establish");
 		if (reqs)
 			container.add(createBtn).size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT).align(Align.center);
 		else

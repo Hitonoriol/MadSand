@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
+import hitonoriol.madsand.gui.Widgets;
 
 public class ConfirmDialog extends GameDialog {
 
@@ -19,9 +20,9 @@ public class ConfirmDialog extends GameDialog {
 	private float BTN_WIDTH = Gui.DEFAULT_WIDTH / 2;
 	private float BTN_HEIGHT = 40;
 
-	private Table buttonTable = new Table();
-	private TextButton confirmBtn = new TextButton("Confirm", Gui.skin);
-	private TextButton cancelBtn = new TextButton("Cancel", Gui.skin);
+	private Table buttonTable = Widgets.table();
+	private TextButton confirmBtn = Widgets.button("Confirm");
+	private TextButton cancelBtn = Widgets.button("Cancel");
 
 	private Label msgLabel;
 
@@ -31,7 +32,7 @@ public class ConfirmDialog extends GameDialog {
 		super.setSize(WIDTH, HEIGHT);
 		super.setTitle("Confirm action");
 		super.getTitleLabel().setAlignment(Align.center);
-		msgLabel = new Label(msg, Gui.skin);
+		msgLabel = Widgets.label(msg);
 		msgLabel.setWrap(true);
 		msgLabel.setAlignment(Align.center);
 		super.add(msgLabel).size(WIDTH, HEIGHT).row();

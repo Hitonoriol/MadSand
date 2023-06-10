@@ -55,7 +55,7 @@ public class QuestJournal extends GameDialog {
 		npcLocationLabel = createTitle("Turn in to");
 		emptyJournalLabel = createTitle("Your journal is empty");
 
-		questTable = new Table();
+		questTable = Widgets.table();
 		questTable.setBackground(GuiSkin.darkBackground());
 		questTable.align(Align.top);
 
@@ -94,12 +94,12 @@ public class QuestJournal extends GameDialog {
 		AbstractNpc npc;
 		for (Quest quest : allQuests) {
 			quest.setPlayer(MadSand.player());
-			questName = new Label(quest.name, Gui.skin);
+			questName = Widgets.label(quest.name);
 			questName.setWrap(true);
 			questName.setAlignment(Align.topLeft);
-			questObjective = new Label(quest.getObjectiveString(), Gui.skin);
+			questObjective = Widgets.label(quest.getObjectiveString());
 			questObjective.setWrap(true);
-			npcInfo = new Label("", Gui.skin);
+			npcInfo = Widgets.label("");
 			npcInfo.setWrap(true);
 
 			npc = quest.getNpc();
@@ -123,8 +123,8 @@ public class QuestJournal extends GameDialog {
 
 	private Label createProgressLabel(boolean inProgress) {
 		Label label = inProgress
-				? new Label("[ORANGE]In Progress[]", Gui.skin)
-				: new Label("[LIME]Complete[]", Gui.skin);
+				? Widgets.label("[ORANGE]In Progress[]")
+				: Widgets.label("[LIME]Complete[]");
 		label.setAlignment(Align.topLeft);
 		return label;
 	}

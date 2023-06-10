@@ -26,6 +26,7 @@ import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.gamecontent.Globals;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.gametooltip.GameTooltip;
 import hitonoriol.madsand.gui.widgets.overlay.ActionButton;
 import hitonoriol.madsand.gui.widgets.overlay.EquipmentSidebar;
@@ -49,8 +50,8 @@ import hitonoriol.madsand.world.World;
 public class Overlay extends Stage {
 	static float SIDEBAR_XPADDING = 5;
 
-	private Table overlayTable = new Table();
-	private Table topTable = new Table();
+	private Table overlayTable = Widgets.table();
+	private Table topTable = Widgets.table();
 	public GameTooltip gameTooltip = new GameTooltip();
 	private GameContextMenu gameContextMenu = new GameContextMenu();
 	public ActionButton actionButton = new ActionButton();
@@ -150,8 +151,8 @@ public class Overlay extends Stage {
 		staminaBar = StatProgressBar.createStaminaBar();
 		foodBar = new StatProgressBar("Food").setStyle(Color.ORANGE);
 
-		timeLabel = new Label(" ", Gui.skin);
-		overlayStatLabel = new Label(" ", Gui.skin);
+		timeLabel = Widgets.label(" ");
+		overlayStatLabel = Widgets.label(" ");
 		overlayStatLabel.setAlignment(Align.center);
 
 		topTable.add(expBar).padLeft(ENTRY_PAD).padRight(ENTRY_PAD);

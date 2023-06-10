@@ -12,6 +12,7 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.dialogs.ConfirmDialog;
 import hitonoriol.madsand.gui.dialogs.SliderDialog;
 import hitonoriol.madsand.input.Mouse;
@@ -48,8 +49,8 @@ public class InventoryUICell extends ItemUI {
 	}
 
 	private void initContextMenu(Item item) {
-		contextContainer = new Table(Gui.skin);
-		TextButton dropBtn = new TextButton("Drop", Gui.skin);
+		contextContainer = Widgets.table();
+		TextButton dropBtn = Widgets.button("Drop");
 		addContextBtn(dropBtn);
 		contextContainer.setVisible(false);
 		super.addActor(contextContainer);
@@ -106,7 +107,7 @@ public class InventoryUICell extends ItemUI {
 
 	public void refreshEquippedStatus() {
 		if (equippedLabel == null)
-			equippedLabel = new Label("[#387aff]E []", Gui.skin);
+			equippedLabel = Widgets.label("[#387aff]E []");
 
 		equippedLabel.setVisible(MadSand.player().stats.equipment.itemEquipped(item));
 	}

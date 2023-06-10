@@ -12,6 +12,7 @@ import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gamecontent.Globals;
 import hitonoriol.madsand.gamecontent.Items;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.dialogs.SliderDialog;
 import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.map.object.MapObject;
@@ -21,9 +22,9 @@ public class CardGameUI extends GameDialog {
 	protected final int currency = Globals.getCurrency().id();
 	protected final String currencyName = Items.all().getName(currency);
 
-	protected Label betLabel = new Label("", Gui.skin);
+	protected Label betLabel = Widgets.label("");
 	protected Optional<MapEntity> gameMachine;
-	protected TextButton closeButton, betButton = new TextButton("Place Bet", Gui.skin);
+	protected TextButton closeButton, betButton = Widgets.button("Place Bet");
 
 	public CardGameUI(MapEntity gameMachine) {
 		super(Gui.overlay);

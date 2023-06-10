@@ -11,10 +11,11 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
+import hitonoriol.madsand.entities.BaseStats;
 import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.Stat;
-import hitonoriol.madsand.entities.BaseStats;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.stats.StatLabels;
 import me.xdrop.jrand.JRand;
 
@@ -50,7 +51,7 @@ public class PlayerStatDialog extends GameDialog {
 
 		nameField = new TextField(JRand.name().gen(), Gui.skin);
 		statLabels.refreshStatLabels();
-		super.add(new Label("\nCharacter name:", Gui.skin)).width(width).row();
+		super.add(Widgets.label("\nCharacter name:")).width(width).row();
 
 		super.add(nameField).width(width).row();
 
@@ -68,7 +69,7 @@ public class PlayerStatDialog extends GameDialog {
 
 	private void addStatEntry(StatLabels.StatLabel label) {
 		Stat stat = label.stat;
-		Table group = new Table();
+		Table group = Widgets.table();
 
 		TextButton incButton = getStatButton(stat, true);
 		TextButton decButton = getStatButton(stat, false);
@@ -86,7 +87,7 @@ public class PlayerStatDialog extends GameDialog {
 	}
 
 	private TextButton getStatButton(Stat stat, boolean inc) {
-		TextButton button = new TextButton(inc ? "+" : "-", Gui.skin);
+		TextButton button = Widgets.button(inc ? "+" : "-");
 		ChangeListener listener = new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				PlayerStats stats = statLabels.getStats();

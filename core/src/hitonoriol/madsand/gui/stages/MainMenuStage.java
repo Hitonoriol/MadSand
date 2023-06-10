@@ -15,6 +15,7 @@ import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.gamecontent.Globals;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.dialogs.CreateWorldDialog;
 import hitonoriol.madsand.gui.dialogs.LoadWorldDialog;
 import hitonoriol.madsand.gui.dialogs.SettingsDialog;
@@ -23,17 +24,17 @@ public class MainMenuStage extends Stage {
 	private static final float BUTTON_WIDTH = 260, BUTTON_HEIGHT = 60;
 	private static float TITLE_PADBOTTOM = 50;
 
-	private Table menuTable = new Table();
-	private Table resumeTable = new Table();
+	private Table menuTable = Widgets.table();
+	private Table resumeTable = Widgets.table();
 
-	private Label titleLabel = new Label("MadSand", Gui.skin);
-	private TextButton newGameButton = new TextButton("New game", Gui.skin);
-	private TextButton resumeButton = new TextButton("Resume game", Gui.skin);
-	private TextButton saveGameButton = new TextButton("Save game", Gui.skin);
-	private TextButton settingsButton = new TextButton("Settings", Gui.skin);
-	private TextButton loadGameButton = new TextButton("Load game", Gui.skin);
-	private TextButton exitButton = new TextButton("Exit", Gui.skin);
-	private Label versionLabel = new Label(getVersion(), Gui.skin);
+	private Label titleLabel = Widgets.label("MadSand");
+	private TextButton newGameButton = Widgets.button("New game");
+	private TextButton resumeButton = Widgets.button("Resume game");
+	private TextButton saveGameButton = Widgets.button("Save game");
+	private TextButton settingsButton = Widgets.button("Settings");
+	private TextButton loadGameButton = Widgets.button("Load game");
+	private TextButton exitButton = Widgets.button("Exit");
+	private Label versionLabel = Widgets.label(getVersion());
 
 	public MainMenuStage() {
 		super(Gui.viewport());

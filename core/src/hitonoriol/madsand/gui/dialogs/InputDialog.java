@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.Widgets;
 
 public class InputDialog extends GameDialog {
 	private static final float PAD = Gui.BTN_HEIGHT * 0.65f;
@@ -26,7 +27,7 @@ public class InputDialog extends GameDialog {
 		else
 			skipLine();
 		add(textField).size(250, Gui.BTN_HEIGHT).padBottom(PAD).row();
-		TextButton okBtn = new TextButton("Confirm", Gui.skin);
+		TextButton okBtn = Widgets.button("Confirm");
 		Gui.setAction(okBtn, () -> {
 			String text = textField.getText().trim();
 			if (text.length() == 0)

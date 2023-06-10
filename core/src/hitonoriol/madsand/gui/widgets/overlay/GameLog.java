@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiColors;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.world.World;
@@ -39,7 +40,7 @@ public class GameLog extends ScrollablePanel {
 	public GameLog() {
 		getContentTable().pad(3);
 		for (int i = 0; i < LOG_LENGTH; ++i) {
-			logLabels[i] = new Label(" ", Gui.skin);
+			logLabels[i] = Widgets.label(" ");
 			logLabels[i].setWrap(true);
 			addContents(logLabels[i]).width(WIDTH).padTop(ENTRY_PAD).padBottom(ENTRY_PAD).row();
 		}

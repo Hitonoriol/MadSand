@@ -16,6 +16,7 @@ import hitonoriol.madsand.gamecontent.Items;
 import hitonoriol.madsand.gamecontent.Npcs;
 import hitonoriol.madsand.gamecontent.Objects;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.map.ItemProducer;
 import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
@@ -42,13 +43,13 @@ public class ItemFactoryUI extends GameDialog {
 	private ItemProducer producer;
 	private Player player;
 
-	private TextButton upgradeButton = new TextButton("", Gui.skin);
-	private TextButton addConsumableButton = new TextButton("", Gui.skin),
-			takeProductButton = new TextButton("", Gui.skin);
+	private TextButton upgradeButton = Widgets.button("");
+	private TextButton addConsumableButton = Widgets.button(""),
+			takeProductButton = Widgets.button("");
 	private Slider consumableSlider = new Slider(0, 1, 1, false, Gui.skin),
 			productSlider = new Slider(0, 1, 1, false, Gui.skin);
-	private Label productStorageLabel = new Label("", Gui.skin), consumableStorageLabel = new Label("", Gui.skin);
-	private Label produceLabel = new Label("", Gui.skin), consumeLabel = new Label("", Gui.skin);
+	private Label productStorageLabel = Widgets.label(""), consumableStorageLabel = Widgets.label("");
+	private Label produceLabel = Widgets.label(""), consumeLabel = Widgets.label("");
 
 	Timer.Task refreshTask = TimeUtils.createTask(() -> refresh());
 
@@ -90,9 +91,9 @@ public class ItemFactoryUI extends GameDialog {
 		if (!endless)
 			add(consumableStorageLabel).colspan(2).padBottom(PAD_VERTICAL * 2).row();
 
-		add(new Label(takeProductStr + producedMaterial, Gui.skin));
+		add(Widgets.label(takeProductStr + producedMaterial));
 		if (!endless)
-			add(new Label(addConsumableStr + consumedMaterial, Gui.skin));
+			add(Widgets.label(addConsumableStr + consumedMaterial));
 		row();
 
 		add(productSlider).size(ENTRY_WIDTH, ENTRY_HEIGHT);
@@ -106,7 +107,7 @@ public class ItemFactoryUI extends GameDialog {
 		row();
 
 		if (!endless) {
-			/*add(new Label(upgradeLblString, Gui.skin)).colspan(2).align(Align.center).row();*/
+			/*add(Widgets.label(upgradeLblString)).colspan(2).align(Align.center).row();*/
 			add(upgradeButton).size(ENTRY_WIDTH, ENTRY_HEIGHT).padBottom(PAD_VERTICAL * 2).colspan(2)
 					.align(Align.center).row();
 		} else

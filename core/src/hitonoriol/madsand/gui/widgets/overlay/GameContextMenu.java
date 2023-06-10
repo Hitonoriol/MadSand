@@ -8,6 +8,7 @@ import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.map.Map;
 
@@ -54,7 +55,7 @@ public class GameContextMenu extends Table {
 	}
 
 	public void addButton(String text, Runnable action) {
-		TextButton button = new TextButton(text, Gui.skin);
+		TextButton button = Widgets.button(text);
 		button.getLabel().setWrap(true);
 
 		super.add(button).row();

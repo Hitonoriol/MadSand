@@ -25,7 +25,7 @@ public class LoadingStage extends Stage {
 
 	private ProgressBar progressBar = new ProgressBar(0, 1, 0.005f, false, Gui.skin);
 	private Label statusLabel = Widgets.label(Align.center, "Doing stuff...");
-	private Table container = new Table();
+	private Table container = Widgets.table();
 	
 	public LoadingStage(GameAssetManager manager) {
 		super(Gui.viewport());

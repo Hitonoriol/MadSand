@@ -17,6 +17,7 @@ import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.entities.skill.SkillContainer;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.gui.widgets.stats.StatLabels;
 import hitonoriol.madsand.gui.widgets.stats.StatProgressBar;
@@ -44,7 +45,7 @@ public class CharacterInfoWindow extends GameDialog {
 	}
 
 	public void createDialog() {
-		Table scrollTable = new Table();
+		Table scrollTable = Widgets.table();
 		scrollTable.defaults().width(Gui.DEFAULT_WIDTH);
 		AutoFocusScrollPane dialogScroll = new AutoFocusScrollPane(scrollTable);
 		Player player = MadSand.player();
@@ -89,7 +90,7 @@ public class CharacterInfoWindow extends GameDialog {
 	}
 
 	private Table createMiscInfoTable() {
-		Table info = new Table(Gui.skin);
+		Table info = Widgets.table();
 		info.align(Align.left);
 		info.defaults().align(Align.left).padBottom(LINE_PAD);
 		Player player = MadSand.player();
@@ -99,9 +100,9 @@ public class CharacterInfoWindow extends GameDialog {
 	}
 
 	private void addTitle(Table table, String text) {
-		Label label = new Label(text, Gui.skin);
+		Label label = Widgets.label(text);
 		label.setStyle(GuiSkin.getLabelStyle(Gui.FONT_M));
-		table.add(new Label("", Gui.skin)).row();
+		table.add(Widgets.label("")).row();
 		table.add(label)
 				.width(Gui.DEFAULT_WIDTH)
 				.padLeft(headerLeftPadding)
@@ -109,7 +110,7 @@ public class CharacterInfoWindow extends GameDialog {
 	}
 
 	private Table createRepTable() {
-		Table repTable = new Table(Gui.skin);
+		Table repTable = Widgets.table();
 		repTable.align(Align.left);
 		for (Faction faction : Faction.values()) {
 			if (faction == Faction.None)
@@ -137,7 +138,7 @@ public class CharacterInfoWindow extends GameDialog {
 	private Table createSkillTable() {
 		Label skillLbl;
 		SkillContainer skills = MadSand.player().stats.skills;
-		Table skillTable = new Table();
+		Table skillTable = Widgets.table();
 		skillTable.align(Align.left);
 		Player player = MadSand.player();
 		for (Skill skill : Skill.values()) {

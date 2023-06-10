@@ -37,10 +37,10 @@ public class CraftDialog extends GameDialog {
 	private static final String titleString = "Crafting";
 	private static final int ENTRIES_PER_ROW = 2;
 
-	private Table container = new Table();
-	private Table craftTable = new Table();
+	private Table container = Widgets.table();
+	private Table craftTable = Widgets.table();
 	private AutoFocusScrollPane scroll = new AutoFocusScrollPane(craftTable);
-	private Label titleLabel = new Label(titleString, Gui.skin);
+	private Label titleLabel = Widgets.label(titleString);
 	private Label unlockProgressLabel = Widgets.label();
 	private TextButton backBtn = createCloseButton();
 	private ItemSearchPanel searchPanel = new CraftItemSearchPanel(this);
@@ -157,7 +157,7 @@ public class CraftDialog extends GameDialog {
 			unlockProgressLabel.setText("Crafting recipes unlocked: " + player().craftRecipeProgress());
 
 		if (getItemList().isEmpty())
-			craftTable.add(new Label("You don't know any crafting recipes.", Gui.skin));
+			craftTable.add(Widgets.label("You don't know any crafting recipes."));
 
 		getCraftableItems().forEach(item -> {
 			boolean lastInRow = (entries + 1) % ENTRIES_PER_ROW == 0;
@@ -182,9 +182,9 @@ public class CraftDialog extends GameDialog {
 	private final static Drawable entryBg = GuiSkin.getColorDrawable(new Color(0.25f, 0.25f, 0.25f, 0.5f));
 
 	private Table createEntry(Item item) {
-		Table entry = new Table();
+		Table entry = Widgets.table();
 		CraftButton craftButton = new CraftButton(item, this::refresh);
-		Label recipeLabel = new Label(Item.createReadableItemList(Items.all().getCraftRecipe(item.id())), Gui.skin);
+		Label recipeLabel = Widgets.label(Item.createReadableItemList(Items.all().getCraftRecipe(item.id())));
 		recipeLabel.setAlignment(Align.left);
 		recipeLabel.setWrap(true);
 		final float width = craftButton.getWidth();

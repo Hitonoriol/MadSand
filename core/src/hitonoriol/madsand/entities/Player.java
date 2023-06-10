@@ -63,6 +63,7 @@ import hitonoriol.madsand.gamecontent.Objects;
 import hitonoriol.madsand.gamecontent.Textures;
 import hitonoriol.madsand.gamecontent.Tiles;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.animation.SimpleAnimation;
 import hitonoriol.madsand.gui.dialogs.FishingUI;
 import hitonoriol.madsand.gui.dialogs.GrabBagDialog;
@@ -793,7 +794,7 @@ public class Player extends Entity {
 		npcDialog.getProceedButton().setText("Goodbye");
 
 		if (npc.canGiveQuests) {
-			TextButton questButton = new TextButton("Do you need any help?", Gui.skin);
+			TextButton questButton = Widgets.button("Do you need any help?");
 			npcDialog.addButton(questButton);
 			Gui.setAction(questButton, () -> {
 				npcDialog.remove();

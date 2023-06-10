@@ -36,7 +36,7 @@ public class GameDialog extends Dialog {
 	private final static String STYLE_NAME = "dialog";
 
 	private AutoFocusScrollPane textScroll;
-	private Table dialogContainer = new Table(Gui.skin);
+	private Table dialogContainer = Widgets.table();
 	protected TypingLabel textLbl;
 	protected TextButton proceedButton;
 	protected Stage stage;
@@ -182,19 +182,19 @@ public class GameDialog extends Dialog {
 	}
 
 	public void chainReply(String btnText, GameDialog nextDialog) {
-		TextButton nextBtn = new TextButton(btnText, Gui.skin);
+		TextButton nextBtn = Widgets.button(btnText);
 		addButton(nextBtn);
 		chainReply(nextBtn, nextDialog);
 	}
 
 	public void addOkButton(String text) {
-		TextButton okBtn = new TextButton(text, Gui.skin);
+		TextButton okBtn = Widgets.button(text);
 		Gui.setAction(okBtn, () -> hide());
 		addButton(okBtn);
 	}
 
 	public void addLuaButton(String buttonText, String luaCode) {
-		TextButton button = new TextButton(buttonText, Gui.skin);
+		TextButton button = Widgets.button(buttonText);
 		Gui.setAction(button, () -> Lua.execute(luaCode));
 		addButton(button);
 	}
@@ -217,7 +217,7 @@ public class GameDialog extends Dialog {
 	}
 
 	public Cell<TextButton> addButton(String text, Runnable action) {
-		Cell<TextButton> cell = addButton(new TextButton(text, Gui.skin));
+		Cell<TextButton> cell = addButton(Widgets.button(text));
 		Gui.setAction(cell.getActor(), action);
 		return cell;
 	}
@@ -234,7 +234,7 @@ public class GameDialog extends Dialog {
 	}
 
 	protected TextButton createCloseButton() {
-		TextButton closeButton = new TextButton("Close", Gui.skin);
+		TextButton closeButton = Widgets.button("Close");
 		Gui.setAction(closeButton, () -> hide());
 		return closeButton;
 	}

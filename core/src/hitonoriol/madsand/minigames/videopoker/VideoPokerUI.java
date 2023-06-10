@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.minigames.Card;
 import hitonoriol.madsand.minigames.CardGameUI;
@@ -27,10 +28,10 @@ public class VideoPokerUI extends CardGameUI {
 
 	VideoPoker videoPoker = new VideoPoker();
 
-	Table cards = new Table(Gui.skin);
-	Table combTable = new Table(Gui.skin);
-	Label combLabel = new Label("", Gui.skin);
-	TextButton drawButton = new TextButton("Draw", Gui.skin);
+	Table cards = Widgets.table();
+	Table combTable = Widgets.table();
+	Label combLabel = Widgets.label("");
+	TextButton drawButton = Widgets.button("Draw");
 	List<Image> cardUI = new ArrayList<>(PokerHand.CARDS);
 
 	private static int GAME_WIDTH = Card.WIDTH * (PokerHand.CARDS + 1);
@@ -147,7 +148,7 @@ public class VideoPokerUI extends CardGameUI {
 	}
 
 	private Label createHeldLbl(int cardIdx) {
-		Label label = new Label(videoPoker.isHeld(cardIdx) ? "Held" : "", Gui.skin);
+		Label label = Widgets.label(videoPoker.isHeld(cardIdx) ? "Held" : "");
 		label.setAlignment(Align.center);
 		return label;
 	}

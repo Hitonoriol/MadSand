@@ -11,6 +11,7 @@ import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.MouseoverListener;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.TimedProgressBar;
 
 public class TravelStage extends Stage {
@@ -29,9 +30,9 @@ public class TravelStage extends Stage {
 
 	public TravelStage() {
 		super(Gui.viewport());
-		travelLabel = new Label(travelString, Gui.skin);
+		travelLabel = Widgets.label(travelString);
 		travelProgressBar = new TimedProgressBar(travelDelay);
-		travelContainer = new Table();
+		travelContainer = Widgets.table();
 		MouseoverListener.setUp(travelContainer);
 
 		travelProgressBar.setSize(WIDTH, ENTRY_HEIGHT);

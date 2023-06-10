@@ -17,6 +17,7 @@ import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gamecontent.Prefs;
 import hitonoriol.madsand.gamecontent.Prefs.DisplayModeDescriptor;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.AutoCheckBox;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.gui.widgets.AutoFocusSelectBox;
@@ -29,9 +30,9 @@ public class SettingsDialog extends GameDialog {
 	int curDisplayMode = prefs.getCurDisplayModeIdx();
 
 	SelectBox<DisplayModeDescriptor> resolutionSelector = new AutoFocusSelectBox<>();
-	TextButton applyBtn = new TextButton("Apply", Gui.skin);
+	TextButton applyBtn = Widgets.button("Apply");
 
-	Table buttonTbl = new Table(Gui.skin);
+	Table buttonTbl = Widgets.table();
 
 	static float HEIGHT = 350;
 
@@ -83,7 +84,7 @@ public class SettingsDialog extends GameDialog {
 	}
 
 	private void addTitle(String text) {
-		buttonTbl.add(Gui.setFontSize(new Label(text, Gui.skin), Gui.FONT_M))
+		buttonTbl.add(Gui.setFontSize(Widgets.label(text), Gui.FONT_M))
 				.padTop(Gui.FONT_S)
 				.row();
 	}
@@ -97,7 +98,7 @@ public class SettingsDialog extends GameDialog {
 	static float LBL_WIDTH = Gui.BTN_WIDTH * 1.1f;
 
 	private Cell<Actor> addSetting(String name, Actor actor) {
-		Label settingLbl = new Label(name + ":", Gui.skin);
+		Label settingLbl = Widgets.label(name + ":");
 		settingLbl.setWrap(true);
 		settingLbl.setAlignment(Align.right);
 		buttonTbl.add(settingLbl)

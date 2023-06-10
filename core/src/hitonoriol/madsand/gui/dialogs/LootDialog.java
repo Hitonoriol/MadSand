@@ -14,6 +14,7 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.ItemUI;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.map.Loot;
 
@@ -22,11 +23,11 @@ public class LootDialog extends GameDialog {
 	private static int TABLE_PADDING = 25;
 
 	Player player = MadSand.player();
-	Table lootTable = new Table(Gui.skin);
+	Table lootTable = Widgets.table();
 	Loot loot;
 
-	TextButton pickUpAllBtn = new TextButton("Pick Up All", Gui.skin);
-	TextButton mergeBtn = new TextButton("Merge All Stacks", Gui.skin);
+	TextButton pickUpAllBtn = Widgets.button("Pick Up All");
+	TextButton mergeBtn = Widgets.button("Merge All Stacks");
 
 	public LootDialog(Loot loot) {
 		super(Gui.overlay);
@@ -38,7 +39,7 @@ public class LootDialog extends GameDialog {
 				.padTop(TABLE_PADDING).row();
 		super.skipLine();
 
-		Table buttonTable = new Table();
+		Table buttonTable = Widgets.table();
 		buttonTable.defaults().size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT).pad(5);
 		buttonTable.add(pickUpAllBtn);
 		buttonTable.add(mergeBtn).row();

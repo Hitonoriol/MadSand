@@ -16,6 +16,7 @@ import hitonoriol.madsand.entities.inventory.InventoryUI;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.MouseoverListener;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.dialogs.AbilityDialog;
 import hitonoriol.madsand.gui.dialogs.BestiaryDialog;
 import hitonoriol.madsand.gui.dialogs.BuildDialog;
@@ -34,7 +35,7 @@ public class OverlayBottomMenu extends Table {
 	static float TABLE_PADDING_LEFT = 25;
 
 	Overlay overlay;
-	Table container = new Table();
+	Table container = Widgets.table();
 
 	public OverlayBottomMenu(Overlay overlay) {
 		this.overlay = overlay;
@@ -68,7 +69,7 @@ public class OverlayBottomMenu extends Table {
 	}
 
 	private void addButton(String text, int key, Runnable action) {
-		TextButton button = new TextButton(text + " [" + Keys.toString(key) + "]", Gui.skin);
+		TextButton button = Widgets.button(text + " [" + Keys.toString(key) + "]");
 		container.add(button).size(WIDTH, HEIGHT).pad(BUTTON_PADDING);
 		Gui.setAction(button, action);
 		Keyboard.getKeyBindManager().bind(action::run, true, key);

@@ -35,7 +35,9 @@ public class Widgets {
 	}
 
 	public static TextButton button(String text) {
-		return new TextButton(text, Gui.skin);
+		var button = new TextButton(text, Gui.skin);
+		button.setSize(Gui.screenWidth(0.25f), Gui.screenHeight(0.2f));
+		return button;
 	}
 
 	public static TextButton button() {

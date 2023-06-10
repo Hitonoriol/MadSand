@@ -16,6 +16,7 @@ import hitonoriol.madsand.HotbarAssignable;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.MouseoverListener;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.util.Functional;
 
@@ -25,7 +26,7 @@ public class Hotbar extends Table {
 
 	private List<Entry> hotEntries = new ArrayList<>();
 
-	Table container = new Table();
+	Table container = Widgets.table();
 
 	public Hotbar() {
 		AutoFocusScrollPane scroll = new AutoFocusScrollPane(container);
@@ -100,7 +101,7 @@ public class Hotbar extends Table {
 
 		public Entry(HotbarAssignable item, Hotbar hotbar) {
 			this.item = item;
-			button = new TextButton(item.getHotbarString(), Gui.skin);
+			button = Widgets.button(item.getHotbarString());
 			Gui.setFontSize(button.getLabel(), Gui.FONT_XXS);
 			Gui.setAction(button, () -> item.hotbarAction());
 			MouseoverListener.setUp(button);

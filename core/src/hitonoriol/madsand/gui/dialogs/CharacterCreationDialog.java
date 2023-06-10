@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Stats;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.stats.StatLabels;
 
 public class CharacterCreationDialog extends PlayerStatDialog {
@@ -31,8 +32,8 @@ public class CharacterCreationDialog extends PlayerStatDialog {
 		rollStats();
 		restoreOnChange = true;
 
-		TextButton statRollBtn = new TextButton("Reroll", Gui.skin);
-		TextButton createCharBtn = new TextButton("Create", Gui.skin);
+		TextButton statRollBtn = Widgets.button("Reroll");
+		TextButton createCharBtn = Widgets.button("Create");
 		defaults().size(DEFAULT_WIDTH, BTN_HEIGHT * 2);
 		add(statRollBtn).row();
 		add(createCharBtn).row();

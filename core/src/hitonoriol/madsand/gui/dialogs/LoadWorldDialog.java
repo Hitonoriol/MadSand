@@ -25,7 +25,7 @@ public class LoadWorldDialog extends GameDialog {
 	private static final float PAD_TITLE = 15, PAD_BTN = 5;
 	private static final float BTN_WIDTH = Gui.DEFAULT_WIDTH, BTN_HEIGHT = 40;
 
-	private Table scrollTable = new Table();
+	private Table scrollTable = Widgets.table();
 	private AutoFocusScrollPane scroll = new AutoFocusScrollPane(scrollTable);
 	private TextButton closeBtn = createCloseButton();
 

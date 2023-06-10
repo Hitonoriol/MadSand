@@ -17,6 +17,7 @@ import hitonoriol.madsand.gamecontent.Npcs;
 import hitonoriol.madsand.gamecontent.Textures;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 
 public class BestiaryDialog extends GameDialog {
@@ -30,9 +31,9 @@ public class BestiaryDialog extends GameDialog {
 	float WIDTH = (ENTRY_WIDTH * ENTRIES_PER_ROW) + (ENTRY_PAD * ENTRIES_PER_ROW);
 	float HEIGHT = (ENTRY_HEIGHT * 2) + PAD_BOTTOM;
 
-	Table scrollTable = new Table();
+	Table scrollTable = Widgets.table();
 	AutoFocusScrollPane scroll;
-	Label emptyLabel = new Label("You haven't killed any monsters yet", Gui.skin);
+	Label emptyLabel = Widgets.label("You haven't killed any monsters yet");
 
 	public BestiaryDialog(Player player) {
 		super(Gui.overlay);
@@ -69,10 +70,10 @@ public class BestiaryDialog extends GameDialog {
 
 	Table createNpcEntry(int id, int kills) {
 		NpcDescriptor npc = Npcs.all().get(id);
-		Table entry = new Table();
+		Table entry = Widgets.table();
 		entry.debugAll();
-		Label topLabel = new Label(npc.name, Gui.skin);
-		Label bottomLabel = new Label("Kills: " + kills, Gui.skin);
+		Label topLabel = Widgets.label(npc.name);
+		Label bottomLabel = Widgets.label("Kills: " + kills);
 
 		topLabel.setWrap(true);
 		bottomLabel.setWrap(true);

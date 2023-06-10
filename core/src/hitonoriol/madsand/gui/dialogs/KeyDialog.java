@@ -10,11 +10,12 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.Gui;
+import hitonoriol.madsand.gui.Widgets;
 
 public class KeyDialog extends GameDialog {
 
 	private int key = 0;
-	private Label keyLabel = new Label("None", Gui.skin);
+	private Label keyLabel = Widgets.label("None");
 	private Runnable removeBindingAction;
 
 	public KeyDialog(Consumer<Integer> keyConsumer) {

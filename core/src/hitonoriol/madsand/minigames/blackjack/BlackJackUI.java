@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Timer;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
+import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.minigames.Card;
 import hitonoriol.madsand.minigames.CardGameUI;
@@ -20,10 +21,10 @@ public class BlackJackUI extends CardGameUI {
 	BlackJack blackjack = new BlackJack();
 
 	int PAD = 5;
-	Label resultLabel = new Label("", Gui.skin);
-	Table playerCards = new Table(Gui.skin), dealerCards = new Table(Gui.skin);
-	Table buttonTable = new Table();
-	TextButton hitButton = new TextButton("Hit", Gui.skin), standButton = new TextButton("Stand", Gui.skin);
+	Label resultLabel = Widgets.label("");
+	Table playerCards = Widgets.table(), dealerCards = Widgets.table();
+	Table buttonTable = Widgets.table();
+	TextButton hitButton = Widgets.button("Hit"), standButton = Widgets.button("Stand");
 	
 	private static float GAME_WIDTH = Card.WIDTH * 7, GAME_HEIGHT = Card.HEIGHT * 1.5f;
 
@@ -139,7 +140,7 @@ public class BlackJackUI extends CardGameUI {
 			hand.cards.add(Card.nullCard);
 
 		table.clear();
-		Table cardTable = new Table();
+		Table cardTable = Widgets.table();
 		for (Card card : hand.cards)
 			cardTable.add(new Image(card.getTexture())).size(Card.WIDTH, Card.HEIGHT).pad(5);
 		table.add(cardTable).row();
