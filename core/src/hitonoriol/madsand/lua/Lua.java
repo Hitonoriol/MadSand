@@ -22,9 +22,9 @@ public class Lua {
 	public static Globals globals;
 	public static Runnable onAction;
 
-	public static final String initScript = "map_init_newgame.lua";
-	public static final String onActionScript = "player_onaction.lua";
-	public static final String onCreationScript = "player_oncreation.lua";
+	public static final String onNewGame = "on_new_game.lua";
+	public static final String onCreationScript = "on_player_creation.lua";
+	public static final String onActionScript = "on_player_action.lua";
 	public static final String offlineRewardScript = "offline_reward.lua";
 
 	static {

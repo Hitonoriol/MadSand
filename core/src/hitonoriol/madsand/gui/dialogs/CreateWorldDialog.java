@@ -12,6 +12,7 @@ import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.Widgets;
+import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.GameSaver;
 
@@ -59,5 +60,6 @@ public class CreateWorldDialog extends GameDialog {
 		MadSand.enterWorld();
 		MadSand.player().updCoords();
 		new CharacterCreationDialog().show();
+		Lua.executeScript(Lua.onNewGame);
 	}
 }
