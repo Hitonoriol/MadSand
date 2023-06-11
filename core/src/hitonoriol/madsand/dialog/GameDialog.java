@@ -41,6 +41,8 @@ public class GameDialog extends Dialog {
 	protected TextButton proceedButton;
 	protected Stage stage;
 	private boolean hasNext = false;
+	private float fadeInDuration = FADE_DURATION;
+	private float fadeOutDuration = HIDE_DURATION;
 
 	public GameDialog(String title, String text, Stage stage) {
 		super(title, Gui.skin, STYLE_NAME);
@@ -52,7 +54,7 @@ public class GameDialog extends Dialog {
 		titleTbl.getCell(getTitleLabel());
 		titleTbl.padTop(TITLE_YPAD).padLeft(TITLE_XPAD);
 		row();
-		
+
 		// Set up main text label
 		textLbl = Widgets.typingLabel(text);
 		textLbl.setAlignment(Align.topLeft);
@@ -62,9 +64,9 @@ public class GameDialog extends Dialog {
 		dialogContainer.add(textLbl).width(WIDTH);
 		dialogContainer.align(Align.topLeft);
 		add(textScroll = new AutoFocusScrollPane(dialogContainer))
-				.size(WIDTH, HEIGHT)
-				.pad(PADDING)
-				.padTop(TEXT_YPAD).row();
+			.size(WIDTH, HEIGHT)
+			.pad(PADDING)
+			.padTop(TEXT_YPAD).row();
 		Gui.setClickAction(this, () -> textLbl.skipToTheEnd());
 		getButtonTable().defaults().size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT);
 	}
@@ -143,10 +145,14 @@ public class GameDialog extends Dialog {
 	public void hide() {
 		setOrigin(Align.center);
 		if (!hasNext)
-			hide(Actions.parallel(fadeOut(HIDE_DURATION, Interpolation.fade),
-					Actions.scaleTo(HIDE_SCALE, HIDE_SCALE, HIDE_DURATION, Interpolation.smoother)));
+			hide(
+				Actions.parallel(
+					fadeOut(fadeOutDuration, Interpolation.fade),
+					Actions.scaleTo(HIDE_SCALE, HIDE_SCALE, HIDE_DURATION, Interpolation.smoother)
+				)
+			);
 		else
-			hide(fadeOut(HIDE_DURATION, Interpolation.fade));
+			hide(fadeOut(fadeOutDuration, Interpolation.fade));
 	}
 
 	@Override
@@ -154,17 +160,28 @@ public class GameDialog extends Dialog {
 		Utils.dbg("Opening %X", hashCode());
 		Gui.openDialog();
 		setScale(1);
-		show(stage, sequence(Actions.alpha(0),
-				Actions.fadeIn(FADE_DURATION, Interpolation.fade),
-				Actions.run(() -> Gui.overlay.hideActionBtn())));
+		if (fadeInDuration == 0)
+			super.show(stage, null);
+		else
+			show(
+				stage, sequence(
+					Actions.alpha(0),
+					Actions.fadeIn(fadeInDuration, Interpolation.fade),
+					Actions.run(() -> Gui.overlay.hideActionBtn())
+				)
+			);
 		centerOnStage();
 		return this;
 	}
 
 	public void centerOnStage(boolean animated) {
-		addAction(Actions.moveTo(Math.round((stage.getWidth() - getWidth()) / 2),
+		addAction(
+			Actions.moveTo(
+				Math.round((stage.getWidth() - getWidth()) / 2),
 				Math.round((stage.getHeight() - getHeight()) / 2),
-				animated ? 0.125f : 0f));
+				animated ? 0.125f : 0f
+			)
+		);
 	}
 
 	public void centerOnStage() {
@@ -176,8 +193,8 @@ public class GameDialog extends Dialog {
 			hasNext = true;
 
 		Gui.setAction(replyButton, () -> {
-			hide();
 			nextDialog.show(stage);
+			hide();
 		});
 	}
 
@@ -204,9 +221,9 @@ public class GameDialog extends Dialog {
 			proceedButton = button;
 
 		Cell<TextButton> cell = add(button)
-				.width(Math.max(Gui.BTN_WIDTH, Gui.getTextWidth(button.getText()) + BTN_TEXT_XPAD))
-				.height(Gui.BTN_HEIGHT)
-				.padBottom(PADDING / 2);
+			.width(Math.max(Gui.BTN_WIDTH, Gui.getTextWidth(button.getText()) + BTN_TEXT_XPAD))
+			.height(Gui.BTN_HEIGHT)
+			.padBottom(PADDING / 2);
 		if (breakRow)
 			cell.row();
 		return cell;
@@ -255,6 +272,20 @@ public class GameDialog extends Dialog {
 			return super.add(actor);
 	}
 
+	public void setStageBackgroundOpacity(float opacity) {
+		var style = new WindowStyle(getStyle());
+		var color = Color.BLACK;
+		color.a = opacity;
+		style.stageBackground = GuiSkin.getColorDrawable(color);
+		setStyle(style);
+	}
+
+	public void setBackgroundOpacity(float opacity) {
+		var color = Color.BLACK;
+		color.a = opacity;
+		background(GuiSkin.getTintedDrawable("dialog", color));
+	}
+
 	private boolean bordered = false;
 	private final static int TITLE_PAD = 20, BORDER_PAD = 5;
 
@@ -267,6 +298,18 @@ public class GameDialog extends Dialog {
 		dialogContainer.pad(BORDER_PAD);
 		dialogContainer.row();
 		bordered = true;
+	}
+
+	public void setFadeOutDuration(float duration) {
+		fadeOutDuration = duration;
+	}
+
+	public void setFadeInDuration(float duration) {
+		fadeInDuration = duration;
+	}
+
+	public TypingLabel getTextLabel() {
+		return textLbl;
 	}
 
 	public static GameDialog generateDialogChain(String text, Stage stage) {

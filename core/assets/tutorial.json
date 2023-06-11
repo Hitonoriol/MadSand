@@ -1,19 +1,20 @@
 {
 	"strings" : {
 		"GameStart" : "
-			%Tutorial%
-			Welcome to MadSand, {PLAYER}![What? How do you know my name?]=>
-			This game *someday will be* an open-world survival sandbox RPG.
-			{p}It's in the early stage of development, so feel free to explore and provide feedback and suggestions 
-			about what you see in the game or what you want to see in the future.[Mkaaay...]=>
-			If I were you, I'd start by exploring and interacting with things. [Oh, ok]=>
-			To interact with an Object or NPC, approach it and click on it with LMB or click on it with RMB and choose the \"interact\" option, or, 
-			for keyboard lovers - turn your character to it using arrow keys and press enter. [Understood]=>
-			Via interaction with objects you can gather resources that can be crafted into something or sold to a trader. 
-			You'll have to gather all the needed components for a certain item to unlock a craft recipe for it.[Cool, I'll try it out]=>
-			And if you decide to interact with an NPC, you can talk to them by left clicking. Some NPCs can give you various tasks and some can trade with you.=>
-			And almost forgot, here are the controls:[Show 'em to me!]=>
+			%Welcome%
+			{FASTER}
+			Welcome to MadSand, {PLAYER}!
+			{p}This game *someday will be* an open-world survival sandbox RPG.
+			{p}It's in the early stage of development, so feel free to explore and provide feedback and suggestions about what you see in the game or what you want to see in the future.
+			{p}If I were you, I'd start by exploring and interacting with things.
+			{p}To interact with an object or NPC, approach it and click on it with LMB or click on it with RMB and choose the \"interact\" option, or, for keyboard lovers - turn your character to it using arrow keys and press enter.
+			{p}Via interaction with objects you can gather resources that can be crafted into something or sold to a trader. You'll have to gather all the needed components for a certain item to unlock a craft recipe for it.
+			{p}And if you decide to interact with an NPC, you can talk to them by left clicking. Some NPCs can give you various tasks and some can trade with you. [I didn't ask, but thanks!] =>
+
 			#Controls#
+			{FASTER}
+			And almost forgot, here are the controls:
+			{p}
 			* WASD or LMB click - walk around{br}
 			* Middle mouse button or Arrow keys - turn around without moving{br}
 			* LMB click or Enter - interact with an object/NPC{br}

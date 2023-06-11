@@ -97,6 +97,10 @@ public class GuiSkin {
 		clearMinSize(drawable);
 		return drawable;
 	}
+	
+	public static Drawable getTintedDrawable(String name, Color color) {
+		return skin.newDrawable(name, color);
+	}
 
 	public static ProgressBarStyle createProgressBarStyle(float width, float height, Color color, boolean transparent) {
 		Drawable knob = getColorDrawable(color);

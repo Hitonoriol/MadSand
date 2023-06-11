@@ -1,7 +1,11 @@
 package hitonoriol.madsand.dialog;
 
+import static hitonoriol.madsand.util.Strings.getFirstMatch;
+import static hitonoriol.madsand.util.Strings.getLastMatch;
+import static hitonoriol.madsand.util.Strings.parseRegex;
+import static hitonoriol.madsand.util.Strings.removeRegex;
+
 import java.util.StringTokenizer;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -15,90 +19,129 @@ import hitonoriol.madsand.util.Utils;
 public class DialogChainGenerator {
 	public static final String DEFAULT_BTN_TEXT = "[Proceed]";
 
-	public static final String DIALOG_TEXT_DELIMITER = "=>";
+	/* Dialog body delimiter */
+	public static final String DIALOG_DELIMITER = "=>";
 
 	public static final String BTN_NEXT_DIALOG = "^"; // Shows which button will call the next dialog
 	public static final String DIALOG_BTN_SCRIPT_DELIMITER = "@"; // Everything after this character will be executed as a Lua script
 	public static final String DIALOG_BTN_TREE_REPLY_DELIMITER = "$";
 
-	public static final String DIALOG_TITLE_REGEX = "\\#(.*?)\\#"; // #Title# -- set current dialog title
-	public static final String DEFAULT_TITLE_REGEX = "\\%(.*?)\\%"; // %Title% -- set default title for every dialog in chain after the current one
-	public static final String DIALOG_BUTTON_REGEX = "\\[(.*?)\\]";
+	/* Dialog markup tags: */
 
-	public static Pattern defTitlePattern = Pattern.compile(DEFAULT_TITLE_REGEX);
-	public static Pattern titlePattern = Pattern.compile(DIALOG_TITLE_REGEX);
-	public static Pattern buttonPattern = Pattern.compile(DIALOG_BUTTON_REGEX);
+	/* Defaults(...) -- set default tags for each dialog in chain */
+	public static Pattern defaultsPattern = property("Defaults", true);
+
+	/* StageOpacity(float) -- set stage opacity */
+	public static Pattern stageBgPattern = property("StageOpacity");
+
+	/* BackgroundOpacity(float) -- set dialog background opacity */
+	public static Pattern bgPattern = property("BackgroundOpacity");
+
+	/* FadeIn(float) -- fade id duration in seconds */
+	public static Pattern fadeInPattern = property("FadeIn");
+
+	/* FadeOut(float) -- fade id duration in seconds */
+	public static Pattern fadeOutPattern = property("FadeOut");
+
+	/* %Title% -- set default title for every dialog in chain after the current one */
+	public static Pattern defTitlePattern = Pattern.compile("\\%(.*?)\\%");
+
+	/* #Title# -- set current dialog title */
+	public static Pattern titlePattern = Pattern.compile("\\#(.*?)\\#");
+
+	/* [Text] -- specify the "continue" button text */
+	public static Pattern buttonPattern = Pattern.compile("\\[(.*?)\\]");
 
 	private String dialogChainString;
-	private String defaultTitle;
+	private String defaultTitle = "";
+	private String defaults = "";
 
-	/*
-	 * Chain dialog generator Syntax:
-	 * %Default title%
-	 * #Title# Dialog text [Button text] [Script Button Text @ world.player:fooBar()] => Next Text => ....
-	 * 
-	 */
+	private static Pattern property(String name) {
+		return property(name, false);
+	}
+	
+	private static Pattern property(String name, boolean canContainOtherProperties) {
+		return Pattern.compile(
+			"\\/" + name + "\\(((.|\\n)*"
+				+ (canContainOtherProperties ? "" : "?") + ")\\)"
+		);
+	}
 
 	public DialogChainGenerator(String text) {
 		dialogChainString = text;
 	}
 
-	private TextButton generateDialog(String dialogBody, GameDialog dialog) { // returns a reference to the button which calls the next dialog
+	/* Returns a reference to the button which calls the next dialog */
+	private TextButton generateDialog(String dialogBody, GameDialog dialog) {
+		// If there's no button tags within the dialog markup, add the default button
 		if (!dialogBody.contains("["))
 			dialogBody += DEFAULT_BTN_TEXT;
-		Matcher buttonMatcher = buttonPattern.matcher(dialogBody);
-		String buttonString;
 
-		String defTitle = getFirstMatch(defTitlePattern, dialogBody);
-		String title = getFirstMatch(titlePattern, dialogBody);
+		// Parse defaults tag
+		getFirstMatch(defaultsPattern, dialogBody).ifPresent(
+			defaultTags -> {
+				defaults = defaultTags;
+				Utils.dbg("Set defaults to: %s", defaults);
+			}
+		);
 
-		if (defTitle != null)
-			defaultTitle = defTitle;
+		// Insert defaults into the dialog markup string
+		dialogBody = dialogBody.replaceFirst(defaultsPattern.pattern(), "");
+		if (!defaults.isEmpty())
+			dialogBody = defaults + dialogBody;
 
-		String buttonTokens[];
-		TextButton scriptButton;
+		// Parse default title tag
+		getFirstMatch(defTitlePattern, dialogBody).ifPresent(
+			defTitle -> setDefaultTitle(defTitle)
+		);
 
-		TextButton nextDialogButton = Widgets.button("");
+		// If title is not set, set it to the default one
+		dialog.setTitle(getFirstMatch(titlePattern, dialogBody).orElse(defaultTitle));
 
-		while (buttonMatcher.find()) {
-			buttonString = buttonMatcher.group(1);
+		getLastMatch(stageBgPattern, dialogBody).ifPresent(
+			stageOpacity -> dialog.setStageBackgroundOpacity(Float.parseFloat(stageOpacity))
+		);
 
+		getLastMatch(bgPattern, dialogBody).ifPresent(
+			bgOpacity -> dialog.setBackgroundOpacity(Float.parseFloat(bgOpacity))
+		);
+
+		getLastMatch(fadeInPattern, dialogBody).ifPresent(
+			fadeIn -> dialog.setFadeInDuration(Float.parseFloat(fadeIn))
+		);
+
+		getLastMatch(fadeOutPattern, dialogBody).ifPresent(
+			fadeOut -> dialog.setFadeOutDuration(Float.parseFloat(fadeOut))
+		);
+
+		// Parse button patterns
+		var nextDialogButton = Widgets.button("");
+		parseRegex(dialogBody, buttonPattern, buttonMatcher -> {
+			var buttonString = buttonMatcher.group(1);
+
+			// Add a script button - executes specified lua code
 			if (buttonString.contains(DIALOG_BTN_SCRIPT_DELIMITER)) {
 				Utils.dbg("Contains Script Character! buttonString: [" + buttonString + "]");
-				buttonTokens = buttonString.split(DIALOG_BTN_SCRIPT_DELIMITER); // [Button Text @ lua code]
-				scriptButton = Widgets.button(buttonTokens[0]);
-				final String buttonScriptString = buttonTokens[1];
+				String buttonTokens[] = buttonString.split(DIALOG_BTN_SCRIPT_DELIMITER);
+				var scriptButton = Widgets.button(buttonTokens[0]);
+				var buttonScriptString = buttonTokens[1];
 				dialog.addButton(scriptButton);
 				Gui.setAction(scriptButton, () -> Lua.execute(buttonScriptString));
-			} else {
+			}
+
+			// Add a "next" button - closes this dialog, opens the next one in chain
+			else {
 				nextDialogButton.setText(buttonString);
 				dialog.addButton(nextDialogButton);
 			}
-		}
+		});
 
-		if (title == null) {
-			if (defaultTitle != null)
-				title = defaultTitle;
-			else
-				title = "";
-		}
-
-		dialog.setTitle(title);
 		dialog.setText(unescapeChars(removeDialogRegex(dialogBody)));
-
 		return nextDialogButton;
 	}
 
-	private String getFirstMatch(Pattern pattern, String haystack) {
-		Matcher matcher = pattern.matcher(haystack);
-		if (matcher.find())
-			return matcher.group(1);
-		else
-			return null;
-	}
-
-	private StringBuilder removeRegex(Pattern pattern, StringBuilder text) {
-		return text.replace(0, text.length(), pattern.matcher(text).replaceAll(""));
+	private void setDefaultTitle(String title) {
+		defaultTitle = title;
 	}
 
 	private String removeDialogRegex(String text) {
@@ -106,6 +149,10 @@ public class DialogChainGenerator {
 		removeRegex(buttonPattern, builder);
 		removeRegex(defTitlePattern, builder);
 		removeRegex(titlePattern, builder);
+		removeRegex(stageBgPattern, builder);
+		removeRegex(bgPattern, builder);
+		removeRegex(fadeInPattern, builder);
+		removeRegex(fadeOutPattern, builder);
 		return builder.toString().trim();
 	}
 
@@ -123,19 +170,14 @@ public class DialogChainGenerator {
 	}
 
 	public GameDialog generate(Stage stage) { // generates a chain of dialogs
-		StringTokenizer dialogTokens = new StringTokenizer(dialogChainString, DIALOG_TEXT_DELIMITER);
+		var dialogTokens = new StringTokenizer(dialogChainString, DIALOG_DELIMITER);
+		var dialog = new GameDialog("", stage); // Current dialog
+		var nextButton = generateDialog(dialogTokens.nextToken(), dialog);
+		var firstInChain = dialog;
 
-		GameDialog dialog = null; // Current dialog
 		GameDialog newDialog = null; // Next dialog in chain
-		TextButton nextButton = null;
 		TextButton newNextButton = null;
-
 		String dialogText; // Current dialog body text
-
-		dialog = new GameDialog("", stage);
-		nextButton = generateDialog(dialogTokens.nextToken(), dialog);
-		GameDialog firstInChain = dialog;
-
 		while (dialogTokens.hasMoreTokens()) {
 			dialogText = dialogTokens.nextToken();
 
@@ -148,7 +190,7 @@ public class DialogChainGenerator {
 			dialog = newDialog;
 		}
 
-		GameDialog lastInChain = dialog;
+		var lastInChain = dialog;
 		Gui.setAction(nextButton, () -> lastInChain.hide());
 		return firstInChain;
 	}
