@@ -85,7 +85,7 @@ public class CharacterInfoWindow extends GameDialog {
 		addTitle(scrollTable, "Reputation:");
 		scrollTable.add(createRepTable()).row();
 
-		add(dialogScroll).width(GameDialog.WIDTH).height(400).row();
+		add(dialogScroll).width(GameDialog.defaultWidth()).height(400).row();
 		add(createCloseButton()).padTop(35).padBottom(LINE_PAD).row();
 	}
 

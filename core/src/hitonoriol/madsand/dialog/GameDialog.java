@@ -31,7 +31,7 @@ import hitonoriol.madsand.util.Utils;
 public class GameDialog extends Dialog {
 	private static final float TITLE_YPAD = 18, TITLE_XPAD = 3;
 	private static final float TEXT_YPAD = 15, BTN_TEXT_XPAD = 30;
-	public static final float WIDTH = 500, HEIGHT = 250, PADDING = 10;
+	public static final float PADDING = 10;
 	public static final float FADE_DURATION = 0.3f;
 	private final static String STYLE_NAME = "dialog";
 
@@ -61,10 +61,10 @@ public class GameDialog extends Dialog {
 		textLbl.setWrap(true);
 
 		// Set up the layout
-		dialogContainer.add(textLbl).width(WIDTH);
+		dialogContainer.add(textLbl).width(defaultWidth());
 		dialogContainer.align(Align.topLeft);
 		add(textScroll = new AutoFocusScrollPane(dialogContainer))
-			.size(WIDTH, HEIGHT)
+			.height(defaultHeight())
 			.pad(PADDING)
 			.padTop(TEXT_YPAD).row();
 		Gui.setClickAction(this, () -> textLbl.skipToTheEnd());
@@ -314,6 +314,14 @@ public class GameDialog extends Dialog {
 
 	public static GameDialog generateDialogChain(String text, Stage stage) {
 		return new DialogChainGenerator(text).generate(stage);
+	}
+	
+	public static float defaultWidth() {
+		return Gui.screenWidth(0.45f);
+	}
+	
+	public static float defaultHeight() {
+		return Gui.screenHeight(0.4f);
 	}
 
 	@Override

@@ -42,7 +42,7 @@ public class LoadWorldDialog extends GameDialog {
 		super.setTitle("\nLoad Game\n");
 		super.getTitleLabel().setAlignment(Align.center);
 		super.add().padBottom(PAD_TITLE).row();
-		super.add(scroll).size(WIDTH, HEIGHT).row();
+		super.add(scroll).size(defaultWidth(), defaultHeight()).row();
 		super.add(closeBtn).size(BTN_WIDTH / 2, BTN_HEIGHT).row();
 	}
 

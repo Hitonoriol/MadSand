@@ -22,7 +22,7 @@ public class SelectDialog extends GameDialog {
 		if (description != null)
 			entryTable.add(description).row();
 		
-		add(new AutoFocusScrollPane(entryTable)).height(HEIGHT).row();
+		add(new AutoFocusScrollPane(entryTable)).height(defaultHeight()).row();
 		addCloseButton();
 		pack();
 	}

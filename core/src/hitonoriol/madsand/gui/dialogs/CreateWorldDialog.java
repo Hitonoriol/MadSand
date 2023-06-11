@@ -17,7 +17,7 @@ import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.GameSaver;
 
 public class CreateWorldDialog extends GameDialog {
-	private final static float BTN_WIDTH = WIDTH / 2, BTN_HEIGHT = 40;
+	private final static float BTN_WIDTH = defaultWidth() / 2, BTN_HEIGHT = 40;
 
 	public CreateWorldDialog() {
 		super(Screens.MainMenu.screen());
@@ -34,8 +34,8 @@ public class CreateWorldDialog extends GameDialog {
 		super.getTitleLabel().setAlignment(Align.center);
 		worldNameField.setAlignment(Align.center);
 		super.row();
-		super.add(nameLabel).padTop(50).width(WIDTH).row();
-		super.add(worldNameField).width(WIDTH).padBottom(65).row();
+		super.add(nameLabel).padTop(50).width(defaultWidth()).row();
+		super.add(worldNameField).width(defaultWidth()).padBottom(65).row();
 		super.add(createWorldBtn).size(BTN_WIDTH, BTN_HEIGHT).row();
 		super.add(createCloseButton()).size(BTN_WIDTH, BTN_HEIGHT).row();
 
