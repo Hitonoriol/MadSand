@@ -50,30 +50,30 @@ public class Gui {
 	public static void fitChildren(WidgetGroup group) {
 		group.setSize(group.getPrefWidth(), group.getPrefHeight());
 	}
-	
+
 	public static float screenHeight() {
 		return Gdx.graphics.getHeight();
 	}
-	
+
 	public static float screenWidth() {
 		return Gdx.graphics.getWidth();
 	}
-	
+
 	public static float screenHeight(float coef) {
 		return Gdx.graphics.getHeight() * coef;
 	}
-	
+
 	public static float screenWidth(float coef) {
 		return Gdx.graphics.getWidth() * coef;
 	}
-	
+
 	public static void screenSize(Actor actor, float widthCoef, float heightCoef) {
 		actor.setSize(
 			screenWidth(widthCoef),
 			screenHeight(heightCoef)
 		);
 	}
-	
+
 	public static ScreenViewport viewport() {
 		return viewport;
 	}
@@ -83,7 +83,7 @@ public class Gui {
 	}
 
 	private static OkDialog drawOkDialog(String title, String msg, Stage stage) {
-		OkDialog dialog = new OkDialog(title, msg, stage);
+		var dialog = new OkDialog(title, msg, stage);
 		TimeUtils.scheduleTask(() -> dialog.show(), DELAY);
 		return dialog;
 	}
@@ -101,13 +101,16 @@ public class Gui {
 	}
 
 	public static <T extends Group> void seamlessRefresh(T container, Runnable populator, float duration) {
-		container.addAction(sequence(
+		container.addAction(
+			sequence(
 				fadeOut(duration),
 				run(() -> {
 					container.clearChildren();
 					populator.run();
 				}),
-				fadeIn(duration)));
+				fadeIn(duration)
+			)
+		);
 	}
 
 	public static <T extends Group> void seamlessRefresh(T container, Runnable populator) {
@@ -169,7 +172,7 @@ public class Gui {
 		}
 		return drawable;
 	}
-	
+
 	public static <T extends Drawable> T clearMinSize(T drawable) {
 		return setMinSize(drawable, 0, 0);
 	}
@@ -206,7 +209,7 @@ public class Gui {
 	public static BitmapFont getFont(int size) {
 		return GuiSkin.getLabelStyle(size).font;
 	}
-	
+
 	public static Label setFontSize(Label label, int size) {
 		label.setStyle(GuiSkin.getLabelStyle(size));
 		return label;

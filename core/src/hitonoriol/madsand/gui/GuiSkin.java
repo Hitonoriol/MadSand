@@ -80,7 +80,7 @@ public class GuiSkin {
 	}
 
 	static LabelStyle createLabelStyle(int size) {
-		LabelStyle style = new LabelStyle();
+		var style = new LabelStyle();
 		style.font = Resources.createFont(size);
 		style.fontColor = Color.WHITE;
 		return style;
@@ -88,25 +88,27 @@ public class GuiSkin {
 
 	public static int getFontSize(BitmapFont font) {
 		return labelStyles.keySet().stream()
-				.filter(size -> Gui.getFont(size) == font)
-				.findFirst().orElse(-1);
+			.filter(size -> Gui.getFont(size) == font)
+			.findFirst().orElse(-1);
 	}
 
 	public static Drawable getColorDrawable(Color color) {
-		Drawable drawable = skin.newDrawable("dot", color);
+		var drawable = skin.newDrawable("dot", color);
 		clearMinSize(drawable);
 		return drawable;
 	}
-	
+
 	public static Drawable getTintedDrawable(String name, Color color) {
 		return skin.newDrawable(name, color);
 	}
 
 	public static ProgressBarStyle createProgressBarStyle(float width, float height, Color color, boolean transparent) {
-		Drawable knob = getColorDrawable(color);
+		var knob = getColorDrawable(color);
 		knob.setMinWidth(5);
-		ProgressBarStyle style = new ProgressBarStyle(transparent ? transparency() : getColorDrawable(Color.GRAY),
-				knob);
+		var style = new ProgressBarStyle(
+			transparent ? transparency() : getColorDrawable(Color.GRAY),
+			knob
+		);
 
 		style.background.setMinWidth(width);
 		style.background.setMinHeight(height);

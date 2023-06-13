@@ -50,7 +50,7 @@ public abstract class Ability implements DynamicallyCastable<Ability> {
 	public static Ability get(int id) {
 		return Globals.values().abilities.get(id);
 	}
-	
+
 	@Override
 	public String toString() {
 		return name + " Lvl. " + lvl;

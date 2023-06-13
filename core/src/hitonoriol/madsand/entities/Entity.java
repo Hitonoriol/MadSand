@@ -141,12 +141,12 @@ public abstract class Entity extends MapEntity {
 
 	/* Time required for the entity to move one tile in any direction */
 	public float getMovementAnimationDuration() {
-		return ((float) TILESIZE / getMovementSpeed()) * TARGET_FRAME_DELTA;
+		return (TILESIZE / getMovementSpeed()) * TARGET_FRAME_DELTA;
 	}
 
 	public float getMeleeAttackAnimationDuration() {
-		return 2f * (((float) TILESIZE / (getMovementSpeed() * MeleeAttackMovement.SPEED_FACTOR))
-				* TARGET_FRAME_DELTA);
+		return 2f * ((TILESIZE / (getMovementSpeed() * MeleeAttackMovement.SPEED_FACTOR))
+			* TARGET_FRAME_DELTA);
 	}
 
 	protected void addActDuration(float actDuration) {
@@ -241,17 +241,19 @@ public abstract class Entity extends MapEntity {
 	public abstract void meleeAttack(Direction dir);
 
 	protected Pair rangedAttack(Pair targetPos, Projectile projectile) {
-		Map map = MadSand.world().getCurLoc();
-		Pair thisCoords = new Pair(x, y);
-		Pair obstacleCoords = map.rayCast(thisCoords, targetPos);
+		var map = MadSand.world().getCurLoc();
+		var thisCoords = new Pair(x, y);
+		var obstacleCoords = map.rayCast(thisCoords, targetPos);
 		if (obstacleCoords.isEmpty())
 			obstacleCoords.set(targetPos);
 
 		addActDuration(Projectile.ANIMATION_DURATION);
-		Damage damage = new Damage(this).ranged(projectile, distanceTo(obstacleCoords));
-		projectile.launchProjectile(thisCoords.copy().toScreen(),
-				obstacleCoords.copy().toScreen(),
-				target -> attack(target, damage));
+		var damage = new Damage(this).ranged(projectile, distanceTo(obstacleCoords));
+		projectile.launchProjectile(
+			thisCoords.copy().toScreen(),
+			obstacleCoords.copy().toScreen(),
+			target -> attack(target, damage)
+		);
 		MadSand.getRenderer().queuePath(Path.create(thisCoords, obstacleCoords), 0.675f, Color.RED);
 		return obstacleCoords;
 	}
@@ -278,11 +280,11 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public void addItem(List<Item> items) {
-		items.forEach(item -> addItem(item));
+		items.forEach(this::addItem);
 	}
 
 	public boolean addItem(int id, int quantity) {
-		Item overflowingItem = inventory.putItem(id, quantity);
+		var overflowingItem = inventory.putItem(id, quantity);
 		boolean itemAdded = overflowingItem.equals(Item.nullItem);
 
 		if (!itemAdded)
@@ -318,7 +320,7 @@ public abstract class Entity extends MapEntity {
 
 	public boolean pickUpLoot(Loot loot, Item item, int quantity) {
 		boolean removeStack = quantity >= item.quantity;
-		Item pickedUpItem = removeStack ? loot.remove(item) : Item.duplicate(item, quantity);
+		var pickedUpItem = removeStack ? loot.remove(item) : Item.duplicate(item, quantity);
 
 		if (!removeStack)
 			item.quantity -= quantity;
@@ -337,7 +339,7 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public void pickUpLoot() {
-		Loot loot = MadSand.world().getCurLoc().getLoot(x, y);
+		var loot = MadSand.world().getCurLoc().getLoot(x, y);
 
 		if (loot.equals(Map.nullLoot))
 			return;
@@ -347,10 +349,10 @@ public abstract class Entity extends MapEntity {
 
 	protected static boolean isObstacle(Pair coords) {
 		int nx = coords.x, ny = coords.y;
-		Map loc = MadSand.world().getCurLoc();
+		var loc = MadSand.world().getCurLoc();
 
-		MapObject obj = loc.getObject(nx, ny);
-		AbstractNpc npc = loc.getNpc(nx, ny);
+		var obj = loc.getObject(nx, ny);
+		var npc = loc.getNpc(nx, ny);
 
 		if (!npc.equals(Map.nullNpc))
 			return true;
@@ -364,7 +366,7 @@ public abstract class Entity extends MapEntity {
 
 	@JsonIgnore
 	public boolean isInBackground() {
-		Map loc = MadSand.world().getCurLoc();
+		var loc = MadSand.world().getCurLoc();
 		return (loc.getObject(x, y).isCollisionMask() || loc.getTile(x, y).foreground);
 	}
 
@@ -427,7 +429,7 @@ public abstract class Entity extends MapEntity {
 
 	public void dropInventory() {
 		Item item;
-		Map curLoc = MadSand.world().getCurLoc();
+		var curLoc = MadSand.world().getCurLoc();
 		for (int i = inventory.getItems().size() - 1; i >= 0; --i) {
 			item = inventory.getItems().get(i);
 			curLoc.putLoot(x, y, item.copy());
@@ -487,7 +489,7 @@ public abstract class Entity extends MapEntity {
 		screenPosition.x = (x * Resources.TILESIZE);
 		screenPosition.y = (y * Resources.TILESIZE);
 	}
-	
+
 	public void updCoords() {
 		updCoords(MadSand.world().getCurLoc());
 	}
@@ -510,7 +512,7 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public boolean isOnMapBound(Direction dir) {
-		Map map = MadSand.world().getCurLoc();
+		var map = MadSand.world().getCurLoc();
 		boolean ret = false;
 		ret |= x >= map.getWidth() - 1 && (dir == Direction.RIGHT);
 		ret |= y >= map.getHeight() - 1 && (dir == Direction.UP);
@@ -625,7 +627,7 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public final boolean move(Movement movement) {
-		Direction dir = movement.direction();
+		var dir = movement.direction();
 		if (isDead())
 			return false;
 
@@ -644,7 +646,7 @@ public abstract class Entity extends MapEntity {
 		if (isOnMapBound(dir))
 			return false;
 
-		Pair coords = new Pair(x, y).addDirection(dir);
+		var coords = new Pair(x, y).addDirection(dir);
 		if (movement.applyChanges())
 			setPosition(coords);
 		queueMovement(movement);
@@ -652,7 +654,7 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public void move(Path path) {
-		path.forEachDirection(direction -> queueMovement(direction));
+		path.forEachDirection(this::queueMovement);
 	}
 
 	public boolean isDead() {
@@ -679,23 +681,20 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public <T extends MapObject> List<T> getAdjacentObjects(Class<T> type) {
-		Map map = MadSand.world().getCurLoc();
+		var map = MadSand.world().getCurLoc();
 		List<T> objects = new ArrayList<>();
-		Pair coords = getPosition();
+		var coords = getPosition();
 		Direction.directions.forEach(direction -> {
 			map.getObject(coords.addDirection(direction))
-					.as(type)
-					.ifPresent(object -> objects.add(object));
+				.as(type)
+				.ifPresent(object -> objects.add(object));
 			coords.addDirection(direction.opposite());
 		});
 		return objects;
 	}
 
 	boolean canWalk(Direction dir) {
-		if (dir.isDiagonal())
-			return false;
-
-		if (isMoving())
+		if (dir.isDiagonal() || isMoving())
 			return false;
 
 		stats.look = dir;
@@ -737,6 +736,7 @@ public abstract class Entity extends MapEntity {
 		return distanceTo(entity) <= fov;
 	}
 
+	@Override
 	public Pair getPosition() {
 		return new Pair(x, y);
 	}
@@ -747,9 +747,9 @@ public abstract class Entity extends MapEntity {
 	}
 
 	public boolean rayCast(Entity entity, Predicate<MapEntity> obstaclePredicate) {
-		MutableBoolean result = new MutableBoolean(true);
-		Map map = MadSand.world().getCurLoc();
-		Pair coords = new Pair();
+		var result = new MutableBoolean(true);
+		var map = MadSand.world().getCurLoc();
+		var coords = new Pair();
 
 		Line.rayCast(x, y, entity.x, entity.y, (x, y) -> {
 			if (this.at(x, y))
@@ -825,6 +825,7 @@ public abstract class Entity extends MapEntity {
 		return getHealthState(stats.getHealthPercent());
 	}
 
+	@Override
 	public String getName() {
 		return stats.name;
 	}
@@ -832,19 +833,23 @@ public abstract class Entity extends MapEntity {
 	@JsonIgnore
 	public String getInfoString() {
 		int hpPercent = stats.getHealthPercent();
-		String ret;
-		ret = String.format("Health: %s (%d%%)", getHealthState(hpPercent), hpPercent);
-		return ret;
+		return String.format(
+			"Health: %s (%d%%)",
+			getHealthState(hpPercent), hpPercent
+		);
 	}
 
+	@Override
 	public String toString() {
-		return String.format("{%s uid: %d} %s (%d, %d) Lvl. %d [HP: %d/%d]",
-				getClass().getSimpleName(),
-				uid,
-				getName(),
-				x, y,
-				getLvl(),
-				stats.hp, stats.mhp);
+		return String.format(
+			"{%s uid: %d} %s (%d, %d) Lvl. %d [HP: %d/%d]",
+			getClass().getSimpleName(),
+			uid,
+			getName(),
+			x, y,
+			getLvl(),
+			stats.hp, stats.mhp
+		);
 	}
 
 	protected final String debugName() {

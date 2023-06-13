@@ -40,18 +40,18 @@ public class Tile implements Placeable {
 	private int lightLevel = 0;
 
 	public Tile(int id) {
-		final Tile tileProp = Tiles.all().get(id);
+		final var tileProp = Tiles.all().get(id);
 
 		this.id = id;
-		this.name = tileProp.name;
-		this.foreground = tileProp.foreground;
-		this.damage = tileProp.damage;
-		this.fishingSpot = tileProp.fishingSpot;
+		name = tileProp.name;
+		foreground = tileProp.foreground;
+		damage = tileProp.damage;
+		fishingSpot = tileProp.fishingSpot;
 	}
 
 	public Tile() {
-		this.id = 0;
-		this.onInteract = Resources.emptyField;
+		id = 0;
+		onInteract = Resources.emptyField;
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class Tile implements Placeable {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	@Override
 	public String name() {
 		return name;
@@ -100,15 +100,18 @@ public class Tile implements Placeable {
 	@Override
 	public void createPlaceable(PlaceableItem item) {
 		createPlaceable(item, () -> {
-			item.name = this.name;
+			item.name = name;
 			item.setType(PlaceableItem.Type.Tile);
 		});
 	}
 
 	@Override
 	public TextureRegion createPlaceableTexture() {
-		return new TextureRegion(new Texture(
-				TextureProcessor.extractPixmap(Textures.getTile(id), ItemUI.SIZE)));
+		return new TextureRegion(
+			new Texture(
+				TextureProcessor.extractPixmap(Textures.getTile(id), ItemUI.SIZE)
+			)
+		);
 	}
 
 	@Override
@@ -118,7 +121,7 @@ public class Tile implements Placeable {
 		if (obj == this)
 			return true;
 
-		Tile rhs = (Tile) obj;
+		var rhs = (Tile) obj;
 		return new EqualsBuilder().append(id, rhs.id).isEquals();
 	}
 }

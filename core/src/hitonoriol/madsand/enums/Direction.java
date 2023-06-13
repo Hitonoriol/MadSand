@@ -22,7 +22,7 @@ public enum Direction {
 	public static List<Direction> asList() {
 		return new ArrayList<>(directions);
 	}
-	
+
 	public Direction opposite() {
 		switch (this) {
 		case DOWN:
@@ -45,19 +45,19 @@ public enum Direction {
 			return null;
 		}
 	}
-	
+
 	public boolean isPositive() {
 		return !isDown() && !isLeft();
 	}
-	
+
 	public boolean isNegative() {
 		return !isPositive();
 	}
-	
+
 	public boolean isLeft() {
 		return this == LEFT || this == UP_LEFT || this == DOWN_LEFT;
 	}
-	
+
 	public boolean isRight() {
 		return this == RIGHT || this == UP_RIGHT || this == DOWN_RIGHT;
 	}
@@ -65,11 +65,11 @@ public enum Direction {
 	public boolean isDown() {
 		return this == DOWN || this == DOWN_LEFT || this == DOWN_RIGHT;
 	}
-	
+
 	public boolean isUp() {
 		return this == UP || this == UP_LEFT || this == UP_RIGHT;
 	}
-	
+
 	public boolean isVertical() {
 		return this == UP || this == DOWN;
 	}
@@ -110,7 +110,7 @@ public enum Direction {
 	public Direction getBase(int idx) {
 		return baseValues[idx];
 	}
-	
+
 	public int toKey() {
 		return Keys.valueOf(toString());
 	}
@@ -123,7 +123,7 @@ public enum Direction {
 	public static Direction random() {
 		return Utils.randElement(baseValues);
 	}
-	
+
 	@Override
 	public String toString() {
 		return WordUtils.capitalizeFully(name());

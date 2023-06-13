@@ -4,23 +4,23 @@ public class ByteUtils {
 
 	public static byte[] concat(byte[]... arrays) {
 		int totalLength = 0;
-		for (int i = 0; i < arrays.length; i++)
-			totalLength += arrays[i].length;
+		for (byte[] array : arrays)
+			totalLength += array.length;
 
 		byte[] result = new byte[totalLength];
 
 		int currentIndex = 0;
-		for (int i = 0; i < arrays.length; i++) {
-			System.arraycopy(arrays[i], 0, result, currentIndex, arrays[i].length);
-			currentIndex += arrays[i].length;
+		for (byte[] array : arrays) {
+			System.arraycopy(array, 0, result, currentIndex, array.length);
+			currentIndex += array.length;
 		}
 
 		return result;
 	}
 
 	public static byte[] encode8(long l) {
-		byte[] result = new byte[8];
-		for (int i = 7; i >= 0; i--) {
+		var result = new byte[8];
+		for (var i = 7; i >= 0; i--) {
 			result[i] = (byte) (l & 0xFF);
 			l >>= 8;
 		}
@@ -28,7 +28,7 @@ public class ByteUtils {
 	}
 
 	public static long decode8(byte[] b) {
-		long result = 0;
+		long result = 0L;
 		for (int i = 0; i < 8; i++) {
 			result <<= 8;
 			result |= (b[i] & 0xFF);

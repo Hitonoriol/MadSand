@@ -39,10 +39,10 @@ public abstract class MapEntity implements DynamicallyCastable<MapEntity> {
 
 	@JsonIgnore
 	public abstract Pair getPosition();
-	
+
 	@JsonIgnore
 	public PairFloat getVisualPosition() {
-		Pair position = getPosition().toScreen();
+		var position = getPosition().toScreen();
 		return new PairFloat(position.x, position.y);
 	}
 
@@ -51,19 +51,18 @@ public abstract class MapEntity implements DynamicallyCastable<MapEntity> {
 	protected void populateContextMenu(GameContextMenu menu) {}
 
 	public void playAnimation(TextureRegion[] animation) {
-		Pair worldPos = getPosition().toScreen();
+		var worldPos = getPosition().toScreen();
 		getRenderer().queueAnimation(new WorldAnimation(animation).setCoords(worldPos.x, worldPos.y));
 	}
-	
+
 	public void playTextAnimation(String text) {
 		getStage().addActor(new AnimatedWorldText(this, text));
 	}
 
 	protected abstract void playDamageAnimation();
-	
+
 	@JsonIgnore
 	public abstract TextureRegion getSprite();
-	
 
 	@JsonIgnore
 	public abstract boolean isEmpty();

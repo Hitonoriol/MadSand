@@ -47,12 +47,13 @@ public class LoadWorldDialog extends GameDialog {
 	}
 
 	private void refreshSaveList() {
-		String[] worldDirs = new File(GameSaver.MAPDIR).list((current, name) -> new File(current, name).isDirectory());
+		String[] worldDirs = new File(GameSaver.MAPDIR)
+			.list((current, name) -> new File(current, name).isDirectory());
 		scrollTable.clear();
 
 		for (String worldName : worldDirs) {
-			TextButton loadButton = Widgets.button(worldName);
-			TextButton delButton = Widgets.button("X");
+			var loadButton = Widgets.button(worldName);
+			var delButton = Widgets.button("X");
 			scrollTable.add(loadButton).pad(PAD_BTN);
 			scrollTable.add(delButton).size(BTN_HEIGHT).padRight(PAD_BTN).row();
 			Gui.setAction(loadButton, () -> loadWorld(worldName));
@@ -69,15 +70,15 @@ public class LoadWorldDialog extends GameDialog {
 
 	private void addEntry(Label label) {
 		label.setAlignment(Align.center);
-		TextButton loadingInfo = Widgets.button();
+		var loadingInfo = Widgets.button();
 		loadingInfo.setLabel(label);
 		scrollTable.add(loadingInfo).row();
 	}
 
 	private void addEntry(Supplier<String> infoSupplier) {
 		var infoLabel = labelRefresher
-				.addTextGenerator(new StaticTextGenerator(infoSupplier))
-				.update(1);
+			.addTextGenerator(new StaticTextGenerator(infoSupplier))
+			.update(1);
 		infoLabel.refresh();
 		addEntry(infoLabel);
 	}
@@ -90,23 +91,25 @@ public class LoadWorldDialog extends GameDialog {
 			addEntry(() -> String.format("%s", Utils.timeString(Utils.now() - loadingStart)));
 		});
 		CompletableFuture.runAsync(Exceptions.asUnchecked(new GameSaver(path)::load))
-				.thenRun(() -> {
-					Gui.doLater(() -> {
-						remove();
-						MadSand.switchScreen(Screens.Game);
-						MadSand.enterWorld();
-						Gui.overlay.refresh();
-					});
-				})
-				.exceptionally(GameSaver::loadingError);
+			.thenRun(() -> {
+				Gui.doLater(() -> {
+					remove();
+					MadSand.switchScreen(Screens.Game);
+					MadSand.enterWorld();
+					Gui.overlay.refresh();
+				});
+			})
+			.exceptionally(GameSaver::loadingError);
 	}
 
 	private void deleteWorld(String path) {
-		new ConfirmDialog("Are you sure you want to delete " + path + "?",
-				() -> {
-					if (!GameSaver.deleteDirectory(new File(GameSaver.MAPDIR + path)))
-						Gui.drawOkDialog("Couldn't delete this save slot.");
-					refreshSaveList();
-				}, stage).show();
+		new ConfirmDialog(
+			"Are you sure you want to delete " + path + "?",
+			() -> {
+				if (!GameSaver.deleteDirectory(new File(GameSaver.MAPDIR + path)))
+					Gui.drawOkDialog("Couldn't delete this save slot.");
+				refreshSaveList();
+			}, stage
+		).show();
 	}
 }

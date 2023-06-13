@@ -60,7 +60,7 @@ public class TextSubstitutor {
 	}
 
 	public static String replace(String str) {
-		StringBuilder sb = new StringBuilder(str);
+		var sb = new StringBuilder(str);
 		replaceDynamic(sb);
 		parsePatterns(sb);
 		applyFlags(sb);
@@ -77,7 +77,7 @@ public class TextSubstitutor {
 
 	private static void applyFlags(StringBuilder sb) {
 		if (flagExists(sb, INDENT_FLAG)) {
-			for (int idx = sb.indexOf(Resources.LINEBREAK); idx != -1; idx = sb.indexOf(Resources.LINEBREAK, idx + 1))
+			for (var idx = sb.indexOf(Resources.LINEBREAK); idx != -1; idx = sb.indexOf(Resources.LINEBREAK, idx + 1))
 				sb.insert(idx + 1, Resources.Tab);
 		}
 	}
@@ -94,14 +94,14 @@ public class TextSubstitutor {
 	private static void parsePatterns(StringBuilder sb) {
 		/* Replace lua expressions with their evaluation result */
 		Strings.parseRegex(sb, luaPattern, matcher -> {
-			String exprResult = Lua.execute("return " + matcher.group(1) + ";").tojstring();
+			var exprResult = Lua.execute("return " + matcher.group(1) + ";").tojstring();
 			sb.replace(matcher.start(), matcher.end(), exprResult);
 		});
 
 		/* Replace Item / MapObject / Tile names with their id's */
 		Strings.parseRegex(sb, idPattern, matcher -> {
 			Map<Integer, ? extends Enumerable> map;
-			String type = matcher.group(1);
+			var type = matcher.group(1);
 			if (type.equals("item"))
 				map = Items.all().get();
 			else if (type.equals("object"))

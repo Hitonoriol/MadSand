@@ -7,7 +7,6 @@ public class CameraShaker {
 	private float time = 0;
 	private float currentTime = 0;
 	private float intensity = 0;
-	private float currentIntensity = 0;
 	private Vector3 position = new Vector3();
 	private OrthographicCamera camera;
 
@@ -29,7 +28,7 @@ public class CameraShaker {
 		if (currentTime > time)
 			time = 0;
 		else {
-			currentIntensity = intensity * ((time - currentTime) / time);
+			float currentIntensity = intensity * ((time - currentTime) / time);
 			position.x = (Utils.random.nextFloat() - 0.5f) * 2 * currentIntensity;
 			position.y = (Utils.random.nextFloat() - 0.5f) * 2 * currentIntensity;
 			currentTime += delta;

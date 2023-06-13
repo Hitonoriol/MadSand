@@ -10,7 +10,7 @@ public class SimpleAnimation extends Animation<TextureRegion> {
 	public SimpleAnimation(float frameDuration, TextureRegion[] strip) {
 		super(frameDuration, strip);
 	}
-	
+
 	public SimpleAnimation(TextureRegion[] strip) {
 		this(Animations.ACTION_ANIM_DURATION, strip);
 	}
@@ -21,13 +21,13 @@ public class SimpleAnimation extends Animation<TextureRegion> {
 
 	public TextureRegion getCurrentKeyFrame(boolean looping) {
 		elapsedTime += Gdx.graphics.getDeltaTime();
-		return (TextureRegion) super.getKeyFrame(elapsedTime, looping);
+		return super.getKeyFrame(elapsedTime, looping);
 	}
 
 	public TextureRegion getCurrentKeyFrame() {
 		return getCurrentKeyFrame(false);
 	}
-	
+
 	public float getElapsedTime() {
 		return elapsedTime;
 	}

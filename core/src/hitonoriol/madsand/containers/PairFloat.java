@@ -46,7 +46,7 @@ public class PairFloat { // jus a container for them float coords
 		if (obj == this)
 			return true;
 
-		PairFloat rhs = (PairFloat) obj;
+		var rhs = (PairFloat) obj;
 		return new EqualsBuilder().append(x, rhs.x).append(y, rhs.y).isEquals();
 	}
 }

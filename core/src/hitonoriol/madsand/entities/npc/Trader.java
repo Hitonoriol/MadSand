@@ -1,7 +1,5 @@
 package hitonoriol.madsand.entities.npc;
 
-import java.util.List;
-
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
@@ -10,7 +8,6 @@ import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 import hitonoriol.madsand.gamecontent.Globals;
 import hitonoriol.madsand.gamecontent.NpcDescriptor;
 import hitonoriol.madsand.util.Utils;
-import hitonoriol.madsand.world.World;
 
 public class Trader extends AbstractNpc {
 	public ItemCategory tradeCategory;
@@ -21,7 +18,7 @@ public class Trader extends AbstractNpc {
 
 		inventory.setMaxWeight(Integer.MAX_VALUE);
 		lvl = ItemCategories.rollTier();
-		List<Item> items = ItemCategories.get().roll(tradeCategory, lvl);
+		var items = ItemCategories.get().roll(tradeCategory, lvl);
 
 		int markup;
 		for (Item item : items) {
@@ -38,7 +35,7 @@ public class Trader extends AbstractNpc {
 
 	@Override
 	protected void despawnProcess() {
-		World world = MadSand.world();
+		var world = MadSand.world();
 		if (!world.isUnderGround() && !world.inEncounter() && !stats().luckRoll())
 			damage(0.05f);
 		Utils.dbg("Despawning Trader {%s}", this);

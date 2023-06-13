@@ -27,11 +27,11 @@ public abstract class EnumerableStorage<K, T extends Enumerable> implements Load
 	public T get(K id) {
 		return content.getOrDefault(id, defaultValue);
 	}
-	
+
 	protected void setDefaultValue(T value) {
 		defaultValue = value;
 	}
-	
+
 	public T defaultValue() {
 		return defaultValue;
 	}

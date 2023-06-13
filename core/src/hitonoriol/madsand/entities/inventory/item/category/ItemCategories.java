@@ -11,8 +11,8 @@ import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.util.Utils;
 
 /*
- * Container for TradeItemList 
- * where for each TradeCategory there can be multiple TradeItemLists 
+ * Container for TradeItemList
+ * where for each TradeCategory there can be multiple TradeItemLists
  */
 
 public class ItemCategories {
@@ -53,7 +53,7 @@ public class ItemCategories {
 			}
 			tier = rerollTier(tier);
 		}
-		Pair range = new Pair();
+		var range = new Pair();
 		capItemQuantity(items, item -> {
 			range.x = (int) ((tierDistribution(MAX_TIER - rolledTier) / 100d) * MAX_ITEMS) / 10;
 			range.y = Utils.rand(MAX_ITEMS / 20, MAX_ITEMS);
@@ -69,17 +69,17 @@ public class ItemCategories {
 
 	public static List<Item> capItemQuantity(List<Item> items, Function<Item, Pair> rangeSupplier) {
 		items.stream()
-				.filter(item -> {
-					int max = rangeSupplier.apply(item).y;
-					boolean overflow = item.quantity > max;
-					if (overflow)
-						item.quantity = max;
-					return overflow;
-				})
-				.forEach(item -> {
-					Pair range = rangeSupplier.apply(item);
-					item.setQuantity(Utils.rand(Math.min(1, range.x), range.y));
-				});
+			.filter(item -> {
+				int max = rangeSupplier.apply(item).y;
+				boolean overflow = item.quantity > max;
+				if (overflow)
+					item.quantity = max;
+				return overflow;
+			})
+			.forEach(item -> {
+				var range = rangeSupplier.apply(item);
+				item.setQuantity(Utils.rand(Math.min(1, range.x), range.y));
+			});
 		return items;
 	}
 
@@ -92,7 +92,7 @@ public class ItemCategories {
 	}
 
 	private List<ItemCategoryList> getCategoryList(ItemCategory category) {
-		List<ItemCategoryList> valList = categories.get(category);
+		var valList = categories.get(category);
 		if (valList == null) {
 			valList = new ArrayList<>();
 			categories.put(category, valList);
@@ -101,14 +101,14 @@ public class ItemCategories {
 	}
 
 	public ItemCategoryList getItemList(ItemCategory category, int tier, boolean createIfNull) {
-		List<ItemCategoryList> itemLists = getCategoryList(category);
+		var itemLists = getCategoryList(category);
 		tier = clampTier(tier);
 
 		for (ItemCategoryList list : itemLists)
 			if (list.tier == tier)
 				return list;
 
-		ItemCategoryList list = createIfNull ? new ItemCategoryList(tier) : itemLists.get(0);
+		var list = createIfNull ? new ItemCategoryList(tier) : itemLists.get(0);
 		if (createIfNull)
 			itemLists.add(list);
 
@@ -147,7 +147,7 @@ public class ItemCategories {
 	}
 
 	public int rerollTier(int tier) {
-		/* Higher tiers have higher chances of rerolling 
+		/* Higher tiers have higher chances of rerolling
 		 * + tiers can only be rerolled "down" */
 		int newTier = (Utils.percentRoll(100 - tierDistribution(tier)) ? rollTier() : tier);
 		return Math.min(tier, newTier);

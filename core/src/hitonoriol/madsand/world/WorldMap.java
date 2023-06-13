@@ -3,8 +3,8 @@ package hitonoriol.madsand.world;
 import java.util.HashMap;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.map.Map;
@@ -38,7 +38,7 @@ public class WorldMap {
 	}
 
 	public Location createLocation(int wx, int wy) {
-		Location location = new Location();
+		var location = new Location();
 		addLocation(new Pair(wx, wy), location);
 		return location;
 	}
@@ -49,10 +49,12 @@ public class WorldMap {
 			addLocation(coords, new Location());
 		}
 
-		Location location = getLocation(coords);
+		var location = getLocation(coords);
 		location.putLayer(layer, map);
-		Utils.dbg("{%X} Adding map {%X} to Location {%X} @ %s", hashCode(), map.hashCode(), location.hashCode(),
-				coords);
+		Utils.dbg(
+			"{%X} Adding map {%X} to Location {%X} @ %s", hashCode(), map.hashCode(), location.hashCode(),
+			coords
+		);
 		return location;
 	}
 

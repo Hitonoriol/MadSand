@@ -33,7 +33,7 @@ public enum ItemCategory {
 
 	public boolean isFlag() {
 		return this == ItemCategory.Random ||
-				this == ItemCategory.All;
+			this == ItemCategory.All;
 	}
 
 	public static ItemCategory random() {

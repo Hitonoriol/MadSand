@@ -2,14 +2,11 @@ package hitonoriol.madsand.entities.quest;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.containers.Pair;
-import hitonoriol.madsand.entities.Faction;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategories;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
@@ -18,7 +15,6 @@ import hitonoriol.madsand.gamecontent.NpcDescriptor;
 import hitonoriol.madsand.gamecontent.Npcs;
 import hitonoriol.madsand.gamecontent.WorldGenPresets;
 import hitonoriol.madsand.util.Utils;
-import hitonoriol.madsand.world.worldgen.OverworldPreset;
 
 public class ProceduralQuest extends Quest {
 	public static final int QUEST_TIMEOUT = 6000;
@@ -45,7 +41,6 @@ public class ProceduralQuest extends Quest {
 	}
 
 	public ProceduralQuest() {
-		super();
 	}
 
 	public void generate() {
@@ -100,14 +95,17 @@ public class ProceduralQuest extends Quest {
 	}
 
 	private int rollRewardAmount() {
-		return Utils.rand(EXP_MIN,
-				(int) (EXP_BASE_MAX + (EXP_BASE_MAX * getLvlFactor())));
+		return Utils.rand(
+			EXP_MIN,
+			(int) (EXP_BASE_MAX + (EXP_BASE_MAX * getLvlFactor()))
+		);
 	}
 
 	private int rollMaxObjective(int baseObjective) {
 		return baseObjective + (int) (baseObjective * getLvlFactor());
 	}
 
+	@Override
 	protected void createEndMsg() {
 		super.endMsg = "Thank you, " + MadSand.player().getName() + "!";
 		super.createEndMsg();
@@ -124,13 +122,13 @@ public class ProceduralQuest extends Quest {
 	 * maxQuantity - max quantity of requirement
 	 * name.get(int) - name getter function which must return requirement's name by
 	 * its id
-	 * 
+	 *
 	 * Returns quest requirementString
 	 */
 	private String randomQuest(List<Integer> list, int maxRolls, int maxQuantity) {
-		String reqStr = "";
+		var reqStr = "";
 
-		HashSet<Integer> usedItems = new HashSet<>();
+		var usedItems = new HashSet<Integer>();
 		int rolls = Utils.rand(1, maxRolls);
 		int quantity;
 		int item;
@@ -147,12 +145,12 @@ public class ProceduralQuest extends Quest {
 	}
 
 	private void randomItemQuest(List<Integer> items) {
-		String quest = randomQuest(items, MAX_RESOURCE_REQS, rollMaxObjective(MAX_ITEM_Q));
+		var quest = randomQuest(items, MAX_RESOURCE_REQS, rollMaxObjective(MAX_ITEM_Q));
 		super.reqItems += quest;
 	}
 
 	private void randomResourceQuest() {
-		List<Item> items = ItemCategories.get().roll(ItemCategory.Materials, 0);
+		var items = ItemCategories.get().roll(ItemCategory.Materials, 0);
 		List<Integer> reqs = new ArrayList<>();
 
 		for (Item item : items)
@@ -169,7 +167,7 @@ public class ProceduralQuest extends Quest {
 	private void randomFetchQuest() {
 		List<Integer> fetchItem = new ArrayList<>();
 		fetchItem.add(Utils.randElement(Globals.values().fetchQuestItems));
-		Pair coords = MadSand.world().getCurLoc().randPlaceLoot(fetchItem.get(0));
+		var coords = MadSand.world().getCurLoc().randPlaceLoot(fetchItem.get(0));
 		super.reqItems += randomQuest(fetchItem, 1, 1);
 		super.startMsg += " I think the lost item is somewhere near (" + coords + ").";
 	}
@@ -179,21 +177,21 @@ public class ProceduralQuest extends Quest {
 	}
 
 	private void randomKillQuest() {
-		OverworldPreset biome = WorldGenPresets.all().get(MadSand.world().getLocBiome()).overworld;
-		ArrayList<Integer> mobs = new ArrayList<>();
+		var biome = WorldGenPresets.all().get(MadSand.world().getLocBiome()).overworld;
+		var mobs = new ArrayList<Integer>();
 		mobs.addAll(biome.friendlyMobs.idList);
 		mobs.addAll(biome.hostileMobs.idList);
 
-		Iterator<Integer> i = mobs.iterator();
+		var i = mobs.iterator();
 		NpcDescriptor mob;
-		Faction faction = getNpc().stats.faction;
+		var faction = getNpc().stats.faction;
 		while (i.hasNext()) {
 			mob = Npcs.all().get(i.next());
 			if (mob.faction == faction) // Npc can't request to kill npcs from his faction
 				i.remove();
 		}
 
-		String quest = randomQuest(mobs, MAX_KILL_REQS, rollMaxObjective(MAX_KILL_Q));
+		var quest = randomQuest(mobs, MAX_KILL_REQS, rollMaxObjective(MAX_KILL_Q));
 		super.reqKills += quest;
 	}
 

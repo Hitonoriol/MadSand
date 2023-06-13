@@ -4,7 +4,6 @@ import static hitonoriol.madsand.MadSand.player;
 import static hitonoriol.madsand.MadSand.world;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
@@ -18,10 +17,8 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
 import hitonoriol.madsand.entities.inventory.item.Item;
-import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.gamecontent.Globals;
 import hitonoriol.madsand.gui.Gui;
@@ -38,13 +35,11 @@ import hitonoriol.madsand.gui.widgets.overlay.OverlayBottomMenu;
 import hitonoriol.madsand.gui.widgets.stats.StatProgressBar;
 import hitonoriol.madsand.gui.widgets.waypoint.WaypointArrow;
 import hitonoriol.madsand.input.Keyboard;
-import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.util.Functional;
 import hitonoriol.madsand.util.Utils;
-import hitonoriol.madsand.world.World;
 
 /*
- * Main in-game overlay (GameStage.GAME) 
+ * Main in-game overlay (GameStage.GAME)
  */
 
 public class Overlay extends Stage {
@@ -81,7 +76,7 @@ public class Overlay extends Stage {
 		getActors().forEach(actor -> actor.setVisible(visible));
 		refresh();
 	}
-	
+
 	public void setPlayer(Player player) {
 		if (!layoutSetUp())
 			initLayout();
@@ -110,10 +105,12 @@ public class Overlay extends Stage {
 		if (!layoutSetUp())
 			return;
 
-		equipmentSidebar.setPosition(this.getWidth() - SIDEBAR_XPADDING,
-				equipmentSidebar.getHeight() + (this.getHeight() - equipmentSidebar.getHeight()) * 0.5f,
-				Align.topRight);
-		overlayTable.getCell(topTable).width(this.getWidth());
+		equipmentSidebar.setPosition(
+			getWidth() - SIDEBAR_XPADDING,
+			equipmentSidebar.getHeight() + (getHeight() - equipmentSidebar.getHeight()) * 0.5f,
+			Align.topRight
+		);
+		overlayTable.getCell(topTable).width(getWidth());
 	}
 
 	private void initInfoPanel() {
@@ -125,11 +122,15 @@ public class Overlay extends Stage {
 
 		Globals.debug(() -> {
 			infoPanel.addHeader("Debug");
-			infoPanel.addEntry(() -> Utils.memoryUsageString()).update(5);
-			infoPanel.addEntry(() -> String.format("FPS: %2d (%-6.4f)",
-					Gdx.graphics.getFramesPerSecond(), Gdx.graphics.getDeltaTime())).update(1);
+			infoPanel.addEntry(Utils::memoryUsageString).update(5);
+			infoPanel.addEntry(
+				() -> String.format(
+					"FPS: %2d (%-6.4f)",
+					Gdx.graphics.getFramesPerSecond(), Gdx.graphics.getDeltaTime()
+				)
+			).update(1);
 			infoPanel.addEntry(() -> {
-				Map map = world().getCurLoc();
+				var map = world().getCurLoc();
 				return String.format("Map size: %dx%d", map.getWidth(), map.getHeight());
 			});
 			infoPanel.addEntry(() -> "Objects on map: " + world().getCurLoc().getObjectCount());
@@ -166,9 +167,9 @@ public class Overlay extends Stage {
 		overlayTable.add(topTable).width(Gdx.graphics.getWidth()).row();
 
 		overlayTable.defaults()
-				.padTop(ENTRY_PAD)
-				.padLeft(ENTRY_PAD)
-				.align(Align.topLeft);
+			.padTop(ENTRY_PAD)
+			.padLeft(ENTRY_PAD)
+			.align(Align.topLeft);
 		overlayTable.add(gameLog).padBottom(ENTRY_PAD).row();
 		overlayTable.add(infoPanel).padTop(-getGameLog().getConsoleField().getHeight() + 3).row();
 		gameLog.toFront();
@@ -204,16 +205,16 @@ public class Overlay extends Stage {
 	public void showTooltip() {
 		gameTooltip.show();
 	}
-	
+
 	public GameTooltip getTooltip() {
 		return gameTooltip;
 	}
 
 	public WaypointArrow getWaypointArrow(int destX, int destY) {
 		return waypointArrows.stream()
-				.filter(arrow -> arrow.getDestination().equals(destX, destY))
-				.findFirst()
-				.orElse(null);
+			.filter(arrow -> arrow.getDestination().equals(destX, destY))
+			.findFirst()
+			.orElse(null);
 	}
 
 	public void addWaypointArrow(WaypointArrow arrow) {
@@ -224,7 +225,7 @@ public class Overlay extends Stage {
 	}
 
 	private void refreshWaypointArrows() {
-		Iterator<WaypointArrow> it = waypointArrows.iterator();
+		var it = waypointArrows.iterator();
 		WaypointArrow arrow;
 		while (it.hasNext()) {
 			arrow = it.next();
@@ -235,13 +236,13 @@ public class Overlay extends Stage {
 				arrow.update();
 		}
 
-		QuestWorker quests = MadSand.player().getQuestWorker();
+		var quests = MadSand.player().getQuestWorker();
 		quests.questsInProgress.stream()
-				.filter(quest -> quest.isComplete() && !quest.hasQuestArrow())
-				.forEach(quest -> {
-					quest.completionNotice();
-					addWaypointArrow(quest.questArrow());
-				});
+			.filter(quest -> quest.isComplete() && !quest.hasQuestArrow())
+			.forEach(quest -> {
+				quest.completionNotice();
+				addWaypointArrow(quest.questArrow());
+			});
 	}
 
 	public void closeAllDialogs() {
@@ -254,17 +255,17 @@ public class Overlay extends Stage {
 	}
 
 	public void refresh() {
-		Player player = MadSand.player();
-		PlayerStats stats = player.stats;
+		var player = MadSand.player();
+		var stats = player.stats;
 
 		hpBar.setRange(0, stats.mhp).setValue(stats.hp);
 		foodBar.setRange(0, stats.maxFood).setValue(stats.food);
 		staminaBar.setRange(0, stats.maxstamina).setValue(stats.stamina);
 		expBar.setStatText("LVL " + stats.skills.getLvl())
-				.update();
+			.update();
 
-		String info = (MadSand.world().getLocation().name +
-				", Cell (" + player.x + ", " + player.y + ")" + getSectorString());
+		var info = (MadSand.world().getLocation().name +
+			", Cell (" + player.x + ", " + player.y + ")" + getSectorString());
 
 		timeLabel.setText(getTimeString());
 		overlayStatLabel.setText(info);
@@ -275,11 +276,11 @@ public class Overlay extends Stage {
 	}
 
 	private String getTimeString() {
-		World world = MadSand.world();
-		String hour = fixTime(Utils.str(world.getWorldTimeHour()));
-		String minute = fixTime(Utils.str(world.getWorldTimeMinute()));
+		var world = MadSand.world();
+		var hour = fixTime(Utils.str(world.getWorldTimeHour()));
+		var minute = fixTime(Utils.str(world.getWorldTimeMinute()));
 
-		String time = "Day " + world.getWorldTimeDay();
+		var time = "Day " + world.getWorldTimeDay();
 		time += ", " + hour + ":" + minute;
 		return time;
 	}
@@ -292,8 +293,8 @@ public class Overlay extends Stage {
 
 	private String getSectorString() {
 		return (MadSand.world().inEncounter()
-				? " @ Random Encounter"
-				: " @ Sector (" + MadSand.world().getCurWPos() + ")");
+			? " @ Random Encounter"
+			: " @ Sector (" + MadSand.world().getCurWPos() + ")");
 
 	}
 

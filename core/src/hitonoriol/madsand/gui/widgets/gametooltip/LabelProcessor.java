@@ -22,7 +22,7 @@ public class LabelProcessor {
 	}
 
 	public RefreshableLabel addTextGenerator(int position, TextGenerator generator) {
-		RefreshableLabel label = new RefreshableLabel(generator);
+		var label = new RefreshableLabel(generator);
 		if (position < 0 || position >= labels.size())
 			labels.add(label);
 		else

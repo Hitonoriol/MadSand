@@ -59,7 +59,7 @@ public class DialogChainGenerator {
 	private static Pattern property(String name) {
 		return property(name, false);
 	}
-	
+
 	private static Pattern property(String name, boolean canContainOtherProperties) {
 		return Pattern.compile(
 			"\\/" + name + "\\(((.|\\n)*"
@@ -92,7 +92,7 @@ public class DialogChainGenerator {
 
 		// Parse default title tag
 		getFirstMatch(defTitlePattern, dialogBody).ifPresent(
-			defTitle -> setDefaultTitle(defTitle)
+			this::setDefaultTitle
 		);
 
 		// If title is not set, set it to the default one
@@ -145,7 +145,7 @@ public class DialogChainGenerator {
 	}
 
 	private String removeDialogRegex(String text) {
-		StringBuilder builder = new StringBuilder(text);
+		var builder = new StringBuilder(text);
 		removeRegex(buttonPattern, builder);
 		removeRegex(defTitlePattern, builder);
 		removeRegex(titlePattern, builder);
@@ -160,8 +160,7 @@ public class DialogChainGenerator {
 
 	private String unescapeChars(String string) {
 		string = string.replace(LBRACKET, "[");
-		string = string.replace(RBRACKET, "]");
-		return string;
+		return string.replace(RBRACKET, "]");
 	}
 
 	public DialogChainGenerator setAllTitles(String title) {

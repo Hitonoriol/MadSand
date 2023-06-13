@@ -16,7 +16,7 @@ public class AnyValueMap<K> {
 			values.put(valueType, typedValues = new HashMap<>());
 		return (V) typedValues.put(key, value);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public <V> V get(Class<V> valueType, K key) {
 		return (V) values.get(valueType).get(key);

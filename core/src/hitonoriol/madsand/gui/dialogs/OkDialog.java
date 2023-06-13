@@ -37,7 +37,7 @@ public class OkDialog extends GameDialog {
 			.row();
 		optionalCell = add();
 		optionalCell.row();
-		var okCell = addButton("Ok", () -> hide());
+		var okCell = addButton("Ok", this::hide);
 		okCell
 			.size(BTN_WIDTH, BUTTON_HEIGHT)
 			.padTop(BUTTON_PAD_TOP)
@@ -84,7 +84,7 @@ public class OkDialog extends GameDialog {
 		pack();
 		return optionalCell;
 	}
-	
+
 	@Override
 	public void show() {
 		super.show();

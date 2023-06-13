@@ -2,8 +2,8 @@ package hitonoriol.madsand.entities.inventory;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.entities.BaseStats;
+import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.entities.inventory.item.CombatEquipment;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
@@ -41,7 +41,7 @@ public class EquipStats {
 	}
 
 	public EquipStats() {
-		this.lvl = 0;
+		lvl = 0;
 	}
 
 	@JsonIgnore
@@ -97,7 +97,7 @@ public class EquipStats {
 
 	@JsonIgnore
 	public String getString() {
-		String ret = "";
+		var ret = "";
 		int statValue;
 		for (Stat stat : Stat.values())
 			if ((statValue = stats.get(stat)) != 0)

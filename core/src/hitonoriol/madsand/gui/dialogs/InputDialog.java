@@ -5,8 +5,6 @@ import java.util.function.Consumer;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 import hitonoriol.madsand.dialog.GameDialog;
@@ -27,15 +25,15 @@ public class InputDialog extends GameDialog {
 		else
 			skipLine();
 		add(textField).size(250, Gui.BTN_HEIGHT).padBottom(PAD).row();
-		TextButton okBtn = Widgets.button("Confirm");
+		var okBtn = Widgets.button("Confirm");
 		Gui.setAction(okBtn, () -> {
-			String text = textField.getText().trim();
+			var text = textField.getText().trim();
 			if (text.length() == 0)
 				return;
 			inputConsumer.accept(text);
 			remove();
 		});
-		Table btnTable = getButtonTable();
+		var btnTable = getButtonTable();
 		btnTable.add(okBtn).padRight(5);
 		btnTable.add(createCloseButton());
 		add(btnTable);

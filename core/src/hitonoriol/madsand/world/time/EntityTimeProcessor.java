@@ -8,7 +8,6 @@ import org.apache.commons.collections4.iterators.PeekingIterator;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Entity;
-import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
@@ -24,16 +23,16 @@ public class EntityTimeProcessor {
 
 	public void processEntityActions(float worldTime) {
 		final float maxSimDst = world.getMaxSimDistance();
-		Player player = MadSand.player();
+		var player = MadSand.player();
 
-		PeekingIterator<Entity> entities = new PeekingIterator<>(prepareEntities().iterator());
+		var entities = new PeekingIterator<Entity>(prepareEntities().iterator());
 		while (entities.hasNext()) {
-			Entity entity = entities.next();
+			var entity = entities.next();
 
 			/* Don't simulate entities outside of the simulation radius during time skip */
 			if (world.timeSkipInProgress() && entity.distanceTo(player) > maxSimDst)
 				continue;
-			
+
 			entity.prepareToAnimateAction();
 			/* Schedule actions for potentially visible entities / entities out of view act immediately */
 			if (player.isInsideFov(entity) && entity.hasActDelay())
@@ -43,15 +42,15 @@ public class EntityTimeProcessor {
 		}
 
 		float timeToEnd = getTimeToEndOfTurn();
-		TimeUtils.scheduleTask(() -> afterAllActions(), timeToEnd);
+		TimeUtils.scheduleTask(this::afterAllActions, timeToEnd);
 		Utils.dbg("All entities (%d) should finish their actions in ~%f seconds", this.entities.size(), timeToEnd);
 	}
-	
+
 	private List<Entity> prepareEntities() {
 		entities.clear();
 		entities.addAll(world.getCurLoc().getNpcs().values());
 		entities.add(world.getPlayer());
-		entities.forEach(entity -> entity.prepareToAct());
+		entities.forEach(Entity::prepareToAct);
 		Collections.sort(entities, Entity.speedComparator);
 		return entities;
 	}
@@ -66,7 +65,7 @@ public class EntityTimeProcessor {
 
 	private float getTimeToEndOfTurn() {
 		return entities.stream()
-				.map(entity -> entity.getActDelay() + entity.getActDuration())
-				.reduce(Float::max).orElse(0f);
+			.map(entity -> entity.getActDelay() + entity.getActDuration())
+			.reduce(Float::max).orElse(0f);
 	}
 }

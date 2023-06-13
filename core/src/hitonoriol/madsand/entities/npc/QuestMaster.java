@@ -6,7 +6,7 @@ import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.gamecontent.NpcDescriptor;
 
 public class QuestMaster extends AbstractNpc {
-	public ArrayList<Integer> questList = new ArrayList<Integer>();
+	public ArrayList<Integer> questList = new ArrayList<>();
 
 	public QuestMaster(NpcDescriptor protoNpc) {
 		super(protoNpc);
@@ -15,9 +15,8 @@ public class QuestMaster extends AbstractNpc {
 	}
 
 	public QuestMaster() {
-		super();
 	}
-	
+
 	@Override
 	public void interact(Player player) {
 		player.interact(this);

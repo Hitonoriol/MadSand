@@ -34,15 +34,15 @@ public class Tuple<T1, T2> {
 			return true;
 
 		@SuppressWarnings("unchecked")
-		Tuple<T1, T2> rhs = (Tuple<T1, T2>) obj;
+		var rhs = (Tuple<T1, T2>) obj;
 		return new EqualsBuilder().append(l, rhs.l).append(r, rhs.r).isEquals();
 	}
 
 	public static Tuple<Integer, Double> makeTuple(int key, double val) {
-		return new Tuple<Integer, Double>(key, val);
+		return new Tuple<>(key, val);
 	}
 
 	public static Tuple<Integer, String> makeTuple(int key, String val) {
-		return new Tuple<Integer, String>(key, val);
+		return new Tuple<>(key, val);
 	}
 }

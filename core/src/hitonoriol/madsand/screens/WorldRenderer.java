@@ -2,7 +2,6 @@ package hitonoriol.madsand.screens;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.IntUnaryOperator;
@@ -21,17 +20,12 @@ import com.badlogic.gdx.math.Vector3;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Line;
-import hitonoriol.madsand.containers.PairFloat;
 import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.gamecontent.Textures;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.animation.WorldAnimation;
 import hitonoriol.madsand.input.Mouse;
-import hitonoriol.madsand.map.Loot;
-import hitonoriol.madsand.map.Map;
-import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.pathfinding.Path;
 import hitonoriol.madsand.resources.Resources;
@@ -73,11 +67,13 @@ public class WorldRenderer {
 		if (object.centered)
 			x -= object.getRenderOffset();
 
-		TextureRegion texture = object.getTexture();
+		var texture = object.getTexture();
 		float w = texture.getRegionWidth(), h = texture.getRegionHeight();
 		if ((object.id() != MapObject.NULL_OBJECT_ID) && (object.id() != MapObject.COLLISION_MASK_ID))
-			batch.draw(texture, x, y, w / 2f, h / 2f, w, h, 1f, 1f,
-					object.getDirection().getRotation());
+			batch.draw(
+				texture, x, y, w / 2f, h / 2f, w, h, 1f, 1f,
+				object.getDirection().getRotation()
+			);
 	}
 
 	public void queueAnimation(WorldAnimation animation) {
@@ -107,7 +103,7 @@ public class WorldRenderer {
 
 	private void drawPaths() {
 		paths.forEach((path, duration) -> {
-			PathDescriptor pInfo = paths.get(path);
+			var pInfo = paths.get(path);
 			drawPath(path, pInfo.color);
 
 			if (pInfo.noTimeLimit())
@@ -124,7 +120,7 @@ public class WorldRenderer {
 		if (animations.isEmpty())
 			return;
 
-		Iterator<WorldAnimation> it = animations.iterator();
+		var it = animations.iterator();
 		WorldAnimation animation;
 		while (it.hasNext()) {
 			animation = it.next();
@@ -139,22 +135,26 @@ public class WorldRenderer {
 	private static final float LOOT_OFFSET = (Resources.TILESIZE - LOOT_SIZE) * 0.5f;
 
 	private void drawLoot(float x, float y) {
-		Loot loot = MadSand.world().getCurLoc().getLoot((int) x, (int) y);
+		var loot = MadSand.world().getCurLoc().getLoot((int) x, (int) y);
 
 		x = x * Resources.TILESIZE + LOOT_OFFSET;
 		y = y * Resources.TILESIZE + LOOT_OFFSET;
 
 		if (loot.getItemCount() == 1)
-			batch.draw(loot.get(0).getTexture(),
-					x, y, LOOT_SIZE, LOOT_SIZE);
+			batch.draw(
+				loot.get(0).getTexture(),
+				x, y, LOOT_SIZE, LOOT_SIZE
+			);
 		else
-			batch.draw(Textures.getObject(OBJECT_LOOT),
-					x, y, LOOT_SIZE, LOOT_SIZE);
+			batch.draw(
+				Textures.getObject(OBJECT_LOOT),
+				x, y, LOOT_SIZE, LOOT_SIZE
+			);
 
 	}
 
 	private void drawEntity(Entity entity) {
-		PairFloat drawPos = entity.getScreenPosition();
+		var drawPos = entity.getScreenPosition();
 		if (entity.isMoving())
 			entity.animateMovement();
 
@@ -162,8 +162,10 @@ public class WorldRenderer {
 
 		if (followPlayer && entity instanceof Player) {
 			if (enableFloatingCamera && !Gui.isDialogActive()) {
-				Vector3 offset = new Vector3(offsetFactor * (Mouse.worldX() - drawPos.x),
-						offsetFactor * (Mouse.worldY() - drawPos.y), 0);
+				var offset = new Vector3(
+					offsetFactor * (Mouse.worldX() - drawPos.x),
+					offsetFactor * (Mouse.worldY() - drawPos.y), 0
+				);
 				camera.position.set(offset.x + drawPos.x, offset.y + drawPos.y, 0);
 				if (Line.calcDistance(camera.position.x, camera.position.y, drawPos.x, drawPos.y) > cameraRadius) {
 					offset.nor();
@@ -200,14 +202,14 @@ public class WorldRenderer {
 	}
 
 	private void drawGame() {
-		Map map = MadSand.world().getCurLoc();
-		Player player = MadSand.player();
+		var map = MadSand.world().getCurLoc();
+		var player = MadSand.player();
 
 		if (player.isInBackground()) // Draw player under tiles & objects if he is currently in the background
 			drawEntity(player);
 
 		player.forEachInFov((x, y) -> { // Render background tiles
-			Tile tile = map.getTile(x, y);
+			var tile = map.getTile(x, y);
 
 			if (!tile.visible() && !tile.visited) //Don't render tiles which were never seen
 				return;
@@ -219,9 +221,9 @@ public class WorldRenderer {
 		});
 
 		player.forEachInFov((x, y) -> { // Render objects, loot, NPCs and player
-			Tile tile = map.getTile(x, y);
-			MapObject object = map.getObject(x, y);
-			AbstractNpc npc = map.getNpc(x, y);
+			var tile = map.getTile(x, y);
+			var object = map.getObject(x, y);
+			var npc = map.getNpc(x, y);
 			boolean tileVisited = tile.visited && !tile.visible();
 
 			if (!map.validCoords(x, y) && MadSand.world().isUnderGround())
@@ -337,11 +339,11 @@ public class WorldRenderer {
 	public void shakeCamera(float intensity, float duration) {
 		shaker.shake(intensity, duration);
 	}
-	
+
 	public void enableFloatingCamera(boolean enable) {
 		enableFloatingCamera = enable;
 	}
-	
+
 	public boolean isFloatingCameraEnbled() {
 		return enableFloatingCamera;
 	}
@@ -352,8 +354,8 @@ public class WorldRenderer {
 		/* How often <n> repeats */
 		private final static IntUnaryOperator lightLevelFunction = n -> (int) Math.log(1.2 * n);
 		private final static int MAX_DISTANCE = IntStream.range(1, LIGHT_LEVELS + 1)
-				.map(lightLevelFunction)
-				.sum();
+			.map(lightLevelFunction)
+			.sum();
 		private final static java.util.Map<Integer, Integer> lightLvlMap = new HashMap<>();
 
 		private final static String REGION = "light";
@@ -372,9 +374,9 @@ public class WorldRenderer {
 		}
 
 		private void createLightLevels() {
-			Color color = new Color(Color.BLACK);
+			var color = new Color(Color.BLACK);
 			for (int lvl = 1; lvl <= LIGHT_LEVELS; ++lvl) {
-				Pixmap light = new Pixmap(Resources.TILESIZE, Resources.TILESIZE, Format.RGBA8888);
+				var light = new Pixmap(Resources.TILESIZE, Resources.TILESIZE, Format.RGBA8888);
 				color.a = Math.min(LIGHT_START + ALPHA_STEP * (lvl - 1), 1f);
 				light.setColor(color);
 				light.fill();

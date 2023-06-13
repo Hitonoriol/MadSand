@@ -24,6 +24,7 @@ import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.util.Functional;
 import hitonoriol.madsand.util.TimeUtils;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
+import me.xdrop.fuzzywuzzy.model.BoundExtractedResult;
 
 public class ItemSearchPanel extends Table {
 	private static final float BOX_WIDTH = 150, BOX_HEIGHT = 30;
@@ -84,6 +85,7 @@ public class ItemSearchPanel extends Table {
 	private void setUpTextFieldUnfocusers(Actor parent) {
 		parent.addListener(new InputListener() {
 			/* Unfocus the item search text field on scroll */
+			@Override
 			public boolean scrolled(InputEvent event, float x, float y, float amountX, float amountY) {
 				MadSand.getStage().setKeyboardFocus(null);
 				return super.scrolled(event, x, y, amountX, amountY);
@@ -100,13 +102,13 @@ public class ItemSearchPanel extends Table {
 	}
 
 	private Cell<Actor> addEntry(Actor leftActor, Actor rightActor, boolean leftToRight) {
-		Actor searchComponent = leftToRight ? rightActor : leftActor;
+		var searchComponent = leftToRight ? rightActor : leftActor;
 		if (searchComponent instanceof TextField)
 			searchComponent.addListener(new SearchQueryUpdater());
 		else
 			Gui.setAction(searchComponent, this::changed);
 		add(leftActor).padRight(NAME_PAD);
-		Cell<Actor> cell = add(rightActor).fillX().maxWidth(BOX_WIDTH).height(BOX_HEIGHT);
+		var cell = add(rightActor).fillX().maxWidth(BOX_WIDTH).height(BOX_HEIGHT);
 		if (vertical)
 			row();
 		return cell;
@@ -125,16 +127,18 @@ public class ItemSearchPanel extends Table {
 			return Stream.empty();
 
 		Stream<Item> items;
-		String query = searchField.getText();
-		boolean performSearch = !query.isEmpty();
+		var query = searchField.getText();
+		var performSearch = !query.isEmpty();
 		if (!performSearch)
 			items = list.stream();
 		else {
 			items = FuzzySearch
-					.extractSorted(query, list, item -> item.name(),
-							query.length() > 2 ? SEARCH_CUTOFF : SEARCH_CUTOFF - 1)
-					.stream()
-					.map(result -> result.getReferent());
+				.extractSorted(
+					query, list, Item::name,
+					query.length() > 2 ? SEARCH_CUTOFF : SEARCH_CUTOFF - 1
+				)
+				.stream()
+				.map(BoundExtractedResult::getReferent);
 		}
 		items = items.filter(getFilter());
 

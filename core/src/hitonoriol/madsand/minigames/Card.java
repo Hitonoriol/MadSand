@@ -37,7 +37,7 @@ public class Card implements Comparable<Card> {
 
 	@Override
 	public int compareTo(Card o) {
-		return Integer.compare(this.rank, o.rank);
+		return Integer.compare(rank, o.rank);
 	}
 
 	public TextureRegion getTexture() {
@@ -55,28 +55,30 @@ public class Card implements Comparable<Card> {
 		if (obj == this)
 			return true;
 
-		Card rhs = (Card) obj;
+		var rhs = (Card) obj;
 		return new EqualsBuilder().append(suit, rhs.suit).append(rank, rhs.rank).isEquals();
 	}
 
 	@Override
 	public String toString() {
-		return String.format("[%s(%d) of %s]",
-				rank <= 10 ? rank : Rank.byValue(rank),
-				rank,
-				suit.name());
+		return String.format(
+			"[%s(%d) of %s]",
+			rank <= 10 ? rank : Rank.byValue(rank),
+			rank,
+			suit.name()
+		);
 	}
 
 	public static int SUITS = 4;
 
-	public static enum Suit {
+	public enum Suit {
 		HEARTS,
 		DIAMONDS,
 		CLUBS,
 		SPADES;
 	}
 
-	public static enum Rank {
+	public enum Rank {
 		NUMBER, // 2-10
 		JACK, // 11
 		QUEEN, // 12

@@ -41,6 +41,7 @@ public class MadSand extends Game {
 	private boolean worldUntouched = true;
 	private long startTime = System.currentTimeMillis();
 
+	@Override
 	public void create() {
 		Utils.out("Starting initialization!");
 		Utils.printSystemInfo();
@@ -55,8 +56,10 @@ public class MadSand extends Game {
 			Keyboard.initDefaultKeyBinds();
 			switchScreen(Screens.MainMenu);
 			System.gc();
-			Utils.out("End of initialization (%.3f secs spent)",
-					Utils.toSeconds(System.currentTimeMillis() - startTime));
+			Utils.out(
+				"End of initialization (%.3f secs spent)",
+				Utils.toSeconds(System.currentTimeMillis() - startTime)
+			);
 			Utils.printMemoryInfo();
 		});
 	}

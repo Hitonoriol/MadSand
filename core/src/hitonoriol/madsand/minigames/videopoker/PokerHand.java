@@ -1,7 +1,6 @@
 package hitonoriol.madsand.minigames.videopoker;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -24,7 +23,7 @@ public class PokerHand extends Hand {
 	}
 
 	private boolean isStraight() {
-		List<Card> sortedCards = super.createSortedList();
+		var sortedCards = super.createSortedList();
 		Utils.dbg("Sorted hand: %s", Hand.getCardListString(sortedCards));
 		for (int i = 0; i < CARDS - 1; ++i)
 			if (Math.abs(sortedCards.get(i).rank - sortedCards.get(i + 1).rank) != 0)
@@ -75,7 +74,7 @@ public class PokerHand extends Hand {
 	@Override
 	public int evaluate() {
 		Utils.dbg("Evaluating poker hand...");
-		Combination dupComb = getDuplicateCombination();
+		var dupComb = getDuplicateCombination();
 		if (isRoyalFlush())
 			set(Combination.ROYAL_FLUSH);
 
@@ -93,7 +92,7 @@ public class PokerHand extends Hand {
 
 		else
 			set(dupComb);
-		
+
 		Utils.dbg("Hand: %s | Combination: %s", this, combination);
 		return 0;
 	}
@@ -117,7 +116,7 @@ public class PokerHand extends Hand {
 		return this;
 	}
 
-	public static enum Combination {
+	public enum Combination {
 		HIGH_CARD(0),
 		PAIR(0.95f),
 		TWO_PAIR(1.25f),
@@ -138,7 +137,7 @@ public class PokerHand extends Hand {
 		}
 
 		public String getName() {
-			return WordUtils.capitalizeFully(this.name().replace("_", " "));
+			return WordUtils.capitalizeFully(name().replace("_", " "));
 		}
 
 		public String getWinCoefStr() {

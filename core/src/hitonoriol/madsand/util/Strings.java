@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 public class Strings {
 	public static CharSequence parseRegex(CharSequence str, Pattern regex, Consumer<Matcher> action) {
-		Matcher matcher = regex.matcher(str);
+		var matcher = regex.matcher(str);
 		while (matcher.find())
 			action.accept(matcher);
 		return str;
@@ -18,11 +18,11 @@ public class Strings {
 	public static Optional<String> getFirstMatch(Pattern pattern, String haystack) {
 		return getMatch(pattern, haystack, false);
 	}
-	
+
 	public static Optional<String> getLastMatch(Pattern pattern, String haystack) {
 		return getMatch(pattern, haystack, true);
 	}
-	
+
 	private static Optional<String> getMatch(Pattern pattern, String haystack, boolean last) {
 		var matcher = pattern.matcher(haystack);
 		Optional<String> match = Optional.empty();
@@ -33,11 +33,11 @@ public class Strings {
 		}
 		return match;
 	}
-	
+
 	public static StringBuilder removeRegex(Pattern pattern, StringBuilder text) {
 		return text.replace(0, text.length(), pattern.matcher(text).replaceAll(""));
 	}
-	
+
 	public static StringBuilder clearBuilder(StringBuilder sb) {
 		sb.setLength(0);
 		return sb;

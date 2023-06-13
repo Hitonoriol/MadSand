@@ -24,8 +24,10 @@ public class TimeScheduler {
 		if (!updateMap.containsKey(updateRate)) {
 			List<TimeDependent> newUpdateList = new ArrayList<>();
 			updateMap.put(updateRate, newUpdateList);
-			TimeUtils.scheduleRepeatingTask(timer, () -> update(newUpdateList),
-					MadSand.world().actionTicksToTime(updateRate));
+			TimeUtils.scheduleRepeatingTask(
+				timer, () -> update(newUpdateList),
+				MadSand.world().actionTicksToTime(updateRate)
+			);
 		}
 
 		updateMap.get(updateRate).add(entity);
@@ -33,10 +35,10 @@ public class TimeScheduler {
 
 	public void remove(TimeDependent entity) {
 		long updateRate = entity.getUpdateRate();
-		List<TimeDependent> updateList = updateMap.get(updateRate);
+		var updateList = updateMap.get(updateRate);
 		postUpdateActions.add(() -> updateList.remove(entity));
 	}
-	
+
 	public void resume() {
 		timer.start();
 	}
@@ -53,12 +55,14 @@ public class TimeScheduler {
 
 	public void forEach(Consumer<TimeDependent> action) {
 		updateMap
-				.forEach((updRate, entityList) -> entityList
-						.forEach(entity -> action.accept(entity)));
+			.forEach(
+				(updRate, entityList) -> entityList
+					.forEach(entity -> action.accept(entity))
+			);
 	}
 
 	private void update(List<TimeDependent> entities) {
-		entities.forEach(entity -> entity.update());
-		postUpdateActions.forEach(action -> action.run());
+		entities.forEach(TimeDependent::update);
+		postUpdateActions.forEach(Runnable::run);
 	}
 }

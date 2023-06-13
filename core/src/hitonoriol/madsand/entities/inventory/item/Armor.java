@@ -17,7 +17,6 @@ public class Armor extends CombatEquipment {
 	}
 
 	public Armor() {
-		super();
 	}
 
 	@Override
@@ -51,13 +50,13 @@ public class Armor extends CombatEquipment {
 		}
 		return null;
 	}
-	
+
 	@Override
 	protected ItemCategory combatCategory() {
 		return ItemCategory.Armor;
 	}
 
-	public static enum Type {
+	public enum Type {
 		HeadArmor, ChestArmor, LegArmor, FootArmor, Shield
 	}
 }

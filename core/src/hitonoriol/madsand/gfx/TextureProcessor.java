@@ -23,8 +23,8 @@ public class TextureProcessor {
 	}
 
 	public TextureProcessor foreachPixel(Consumer<Color> pixelAction) {
-		Pixmap pixmap = getPixmap();
-		Color pixelColor = new Color();
+		var pixmap = getPixmap();
+		var pixelColor = new Color();
 
 		for (int x = 0; x < pixmap.getWidth(); x++)
 			for (int y = 0; y < pixmap.getHeight(); y++) {
@@ -86,7 +86,7 @@ public class TextureProcessor {
 	}
 
 	public static TextureData getTextureData(Texture texture) {
-		TextureData data = texture.getTextureData();
+		var data = texture.getTextureData();
 
 		if (!data.isPrepared())
 			data.prepare();
@@ -99,7 +99,7 @@ public class TextureProcessor {
 	}
 
 	public static Texture copyTexture(Texture src) {
-		Texture copy = new Texture(src.getWidth(), src.getHeight(), Pixmap.Format.RGBA8888);
+		var copy = new Texture(src.getWidth(), src.getHeight(), Pixmap.Format.RGBA8888);
 		loadPixmap(copy, getTextureData(src).consumePixmap());
 		return copy;
 	}
@@ -120,18 +120,20 @@ public class TextureProcessor {
 	}
 
 	public static Pixmap extractPixmap(TextureRegion textureRegion, int newWidth, int newHeight) {
-		TextureData textureData = getTextureData(textureRegion.getTexture());
-		Pixmap srcMap = textureData.consumePixmap();
-		Pixmap resizedMap = new Pixmap(
-				newWidth,
-				newHeight,
-				textureData.getFormat());
+		var textureData = getTextureData(textureRegion.getTexture());
+		var srcMap = textureData.consumePixmap();
+		var resizedMap = new Pixmap(
+			newWidth,
+			newHeight,
+			textureData.getFormat()
+		);
 		resizedMap.drawPixmap(
-				srcMap,
-				textureRegion.getRegionX(), textureRegion.getRegionY(),
-				textureRegion.getRegionWidth(), textureRegion.getRegionHeight(),
-				0, 0,
-				resizedMap.getWidth(), resizedMap.getHeight());
+			srcMap,
+			textureRegion.getRegionX(), textureRegion.getRegionY(),
+			textureRegion.getRegionWidth(), textureRegion.getRegionHeight(),
+			0, 0,
+			resizedMap.getWidth(), resizedMap.getHeight()
+		);
 		return resizedMap;
 	}
 }

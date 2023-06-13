@@ -7,7 +7,6 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
@@ -18,15 +17,14 @@ import hitonoriol.madsand.gui.GuiColors;
 import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.lua.Lua;
-import hitonoriol.madsand.world.World;
 
 public class GameLog extends ScrollablePanel {
 	private final static int LOG_LENGTH = 30;
 	private final static float ENTRY_PAD = 3f;
-	
+
 	private Color noticeColor = GuiColors.NOTICE;
 	private final static String NOTICE_TAG = GuiColors.getTag(GuiColors.NOTICE),
-			NOTICE_ALT_TAG = GuiColors.getTag(GuiColors.NOTICE_ALT);
+		NOTICE_ALT_TAG = GuiColors.getTag(GuiColors.NOTICE_ALT);
 	private Label[] logLabels = new Label[LOG_LENGTH];
 	private int lineRepeat = 1;
 	private int lineNum;
@@ -58,7 +56,7 @@ public class GameLog extends ScrollablePanel {
 		if (prevConsoleInputs.isEmpty())
 			return;
 
-		String tmp = console.getText();
+		var tmp = console.getText();
 		if (!switchingInputs())
 			startSwitching(tmp);
 
@@ -83,7 +81,7 @@ public class GameLog extends ScrollablePanel {
 				}
 
 				else if (keycode == Keys.ENTER) {
-					String cmd = console.getText().trim();
+					var cmd = console.getText().trim();
 					try {
 						Lua.execute(cmd);
 					} catch (Exception e) {
@@ -127,7 +125,7 @@ public class GameLog extends ScrollablePanel {
 	}
 
 	public void toggleConsole() {
-		Stage stage = MadSand.getStage();
+		var stage = MadSand.getStage();
 		if (stage.getKeyboardFocus() != console) {
 			Gui.unfocusGame();
 			console.setVisible(true);
@@ -140,24 +138,25 @@ public class GameLog extends ScrollablePanel {
 		}
 	}
 
+	@Override
 	public void clear() {
 		for (Label label : logLabels)
 			label.setText("");
 	}
 
 	private String getWorldTimeString() {
-		World world = MadSand.world();
-		return String.format("[LIGHT_GRAY][%02d:%02d][] ", world.getWorldTimeHour(), world.getWorldTimeMinute()); 
+		var world = MadSand.world();
+		return String.format("[LIGHT_GRAY][%02d:%02d][] ", world.getWorldTimeHour(), world.getWorldTimeMinute());
 	}
-	
+
 	private void setLogText(int idx, String text, boolean specialMsg) {
 		logLabels[idx].setText((specialMsg ? "" : getWorldTimeString()) + text);
 	}
-	
+
 	public void print(String arg) {
 		print(arg, false);
 	}
-	
+
 	public void print(String arg, boolean specialMsg) {
 		if (!printedLine.equals(arg)) {
 			lineRepeat = 1;

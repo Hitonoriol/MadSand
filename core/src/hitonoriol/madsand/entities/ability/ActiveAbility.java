@@ -6,7 +6,6 @@ import com.badlogic.gdx.Input.Keys;
 
 import hitonoriol.madsand.HotbarAssignable;
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.resources.Resources;
 
 public class ActiveAbility extends Ability implements HotbarAssignable {
@@ -16,7 +15,7 @@ public class ActiveAbility extends Ability implements HotbarAssignable {
 
 	@Override
 	public void apply() {
-		Player player = MadSand.player();
+		var player = MadSand.player();
 		if (player.stats.stamina < staminaCost) {
 			MadSand.warn("You don't have enough stamina to use this ability!");
 			return;
@@ -41,17 +40,17 @@ public class ActiveAbility extends Ability implements HotbarAssignable {
 	@Override
 	public String toString() {
 		return super.toString() + Resources.LINEBREAK
-				+ "(" + staminaCost + " stamina)";
+			+ "(" + staminaCost + " stamina)";
 	}
 
 	public String getBindKeyString() {
 		return "[" + Optional.of(MadSand.player().getAbilityKey(id))
-				.filter(key -> key != -1)
-				.map(key -> Keys.toString(key))
-				.orElse("None") + "]";
+			.filter(key -> key != -1)
+			.map(Keys::toString)
+			.orElse("None") + "]";
 	}
 
-	public static enum Type {
+	public enum Type {
 		Oneshot, Toggleable
 	}
 

@@ -1,7 +1,5 @@
 package hitonoriol.madsand.gui.dialogs;
 
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
 import hitonoriol.madsand.dialog.GameDialog;
@@ -24,19 +22,20 @@ public class TraderDialog extends GameDialog {
 		super(npc.stats.name, Utils.randElement(Globals.values().traderGreetings), Gui.overlay);
 		this.npc = npc;
 
-		TextButton tradeButton = Widgets.button("What do you have for sale?");
-		TextButton helpButton = Widgets.button("Do you need any help?");
-		TextButton closeButton = Widgets.button("Bye");
+		var tradeButton = Widgets.button("What do you have for sale?");
+		var helpButton = Widgets.button("Do you need any help?");
+		var closeButton = Widgets.button("Bye");
 
 		helpButton.addListener(
-				new AutoSizeTooltip("Completing tasks for this trader will increase their currency supply"));
+			new AutoSizeTooltip("Completing tasks for this trader will increase their currency supply")
+		);
 
 		super.addButton(tradeButton);
 
 		if (!MadSand.world().inEncounter() && MadSand.world().curLayer() == Location.LAYER_OVERWORLD) {
 			super.addButton(helpButton);
 			Gui.setAction(helpButton, () -> {
-				ProceduralQuest quest = player.getQuestWorker().startProceduralQuest(npc.uid());
+				var quest = player.getQuestWorker().startProceduralQuest(npc.uid());
 				if (quest != ProceduralQuest.timeoutQuest)
 					addQuestReward(quest);
 				remove();
@@ -45,17 +44,17 @@ public class TraderDialog extends GameDialog {
 
 		super.addButton(closeButton);
 		Gui.setAction(tradeButton, () -> player.tradeWith(npc));
-		Gui.setAction(closeButton, () -> remove());
+		Gui.setAction(closeButton, this::remove);
 	}
 
 	private void addQuestReward(ProceduralQuest quest) {
 		int currency = Globals.values().currencyId;
 		int curQuantity = npc.rollTraderCurrency();
-		String currencyName = Items.all().getName(currency);
+		var currencyName = Items.all().getName(currency);
 		quest.endMsg += Resources.LINEBREAK +
-				DialogChainGenerator.LBRACKET + "Trader gets +" + curQuantity + " " + currencyName + "s"
-				+ DialogChainGenerator.RBRACKET;
+			DialogChainGenerator.LBRACKET + "Trader gets +" + curQuantity + " " + currencyName + "s"
+			+ DialogChainGenerator.RBRACKET;
 		quest.execOnCompletion = "world:getCurLoc():getNpc(" + npc.uid() + "):addItem(" + currency + ", " + curQuantity
-				+ ");";
+			+ ");";
 	}
 }

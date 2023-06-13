@@ -27,8 +27,8 @@ public class LuaLambda {
 		return arg -> Lua.callChunk(chunk, arg).toboolean();
 	}
 
-	public static interface LuaPredicate extends Predicate<Object> {}
-	public static interface LuaConsumer extends Consumer<Object> {}
-	public static interface LuaBiConsumer extends BiConsumer<Object, Object> {}
-	public static interface LuaIntBiConsumer extends BiConsumer<Integer, Integer> {}
+	public interface LuaPredicate extends Predicate<Object> {}
+	public interface LuaConsumer extends Consumer<Object> {}
+	public interface LuaBiConsumer extends BiConsumer<Object, Object> {}
+	public interface LuaIntBiConsumer extends BiConsumer<Integer, Integer> {}
 }

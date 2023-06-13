@@ -27,8 +27,6 @@ public class StatProgressBar extends Group {
 	private Supplier<Float> valueSupplier, maxValueSupplier, progressSupplier;
 
 	public StatProgressBar(String stat) {
-		super();
-
 		progressBar = new ProgressBar(0, 100, 0.02f, false, Gui.skin);
 		progressBar.setAnimateDuration(0.1f);
 
@@ -99,9 +97,11 @@ public class StatProgressBar extends Group {
 	}
 
 	public void update() {
-		setValue(valueSupplier.get().intValue() + "/" + maxValueSupplier.get().intValue(),
-				progressSupplier.get(),
-				progressBar.getMaxValue());
+		setValue(
+			valueSupplier.get().intValue() + "/" + maxValueSupplier.get().intValue(),
+			progressSupplier.get(),
+			progressBar.getMaxValue()
+		);
 	}
 
 	public StatProgressBar setProgressSize(float width, float height) {
@@ -117,7 +117,7 @@ public class StatProgressBar extends Group {
 	}
 
 	public StatProgressBar setStyle(Color color) {
-		ProgressBar.ProgressBarStyle style = GuiSkin.createProgressBarStyle(WIDTH, HEIGHT - 5, color);
+		var style = GuiSkin.createProgressBarStyle(WIDTH, HEIGHT - 5, color);
 		progressBar.setStyle(style);
 		return this;
 	}
@@ -132,6 +132,6 @@ public class StatProgressBar extends Group {
 
 	public static StatProgressBar createLevelBar() {
 		return new StatProgressBar("LVL")
-				.setStyle(Color.GOLDENROD);
+			.setStyle(Color.GOLDENROD);
 	}
 }

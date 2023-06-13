@@ -15,7 +15,6 @@ public class GameTooltip extends Table {
 	private LabelProcessor processor = new LabelProcessor();
 
 	public GameTooltip() {
-		super();
 		super.align(Align.topLeft);
 		super.setOriginY(Align.topLeft);
 		super.setHeight(TOOLTIP_HEIGHT);

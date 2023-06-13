@@ -65,26 +65,26 @@ public class WorldGen {
 	}
 
 	public WorldGen setBiome(int biome) {
-		this.curBiomeId = biome;
-		this.curBiome = WorldGenPresets.all().get(biome);
+		curBiomeId = biome;
+		curBiome = WorldGenPresets.all().get(biome);
 		return this;
 	}
 
 	public WorldGen setSize(int w, int h) {
-		this.width = w;
-		this.height = h;
+		width = w;
+		height = h;
 		return this;
 	}
 
 	public void reset() {
-		this.setSize(-1, -1).setBiome(-1);
+		setSize(-1, -1).setBiome(-1);
 		friendlyOnly = false;
 		skipLandPropGen = false;
 	}
 
 	public void generate() {
 		curLocation = worldMap.getLocation(curMapCoords);
-		this.curMap = curLocation.getLayer(curLayer);
+		curMap = curLocation.getLayer(curLayer);
 
 		Utils.out("Generating " + curMapCoords + ": " + curLayer);
 		Utils.dbg("Dungeon tile: " + dungeonTile);
@@ -151,7 +151,7 @@ public class WorldGen {
 	static float STRUCTURE_SCALE_FACTOR = 0.35f;
 
 	private void genBiomeStructures() {
-		ArrayList<String> structures = curBiome.overworld.structures;
+		var structures = curBiome.overworld.structures;
 
 		if (structures.isEmpty())
 			return;
@@ -174,7 +174,7 @@ public class WorldGen {
 		curMap.fillTile();
 		Utils.dbg("Default tile: " + defaultTile);
 
-		ArrayList<RollList> tileGenList = curBiome.getBiomeTiles();
+		var tileGenList = curBiome.getBiomeTiles();
 
 		ArrayList<Integer> tileIdList;
 		int listSize;
@@ -189,7 +189,7 @@ public class WorldGen {
 
 	private void genBiomeObjects() {
 		Utils.out("Generating biome objects!");
-		ArrayList<RollList> objectGenList = curBiome.getBiomeObjects();
+		var objectGenList = curBiome.getBiomeObjects();
 
 		for (RollList objectRollList : objectGenList)
 			curMap.rollObjects(objectRollList);
@@ -200,13 +200,13 @@ public class WorldGen {
 	private void genLakes() {
 		Utils.out("Generating lakes!");
 		int w = curMap.getWidth(), h = curMap.getHeight();
-		LakePreset lakes = curBiome.getBiomeLake();
+		var lakes = curBiome.getBiomeLake();
 
 		if (lakes.intervals.isEmpty())
 			return;
 
-		final Grid grid = new Grid(w, h);
-		final NoiseGenerator noiseGenerator = new NoiseGenerator();
+		final var grid = new Grid(w, h);
+		final var noiseGenerator = new NoiseGenerator();
 
 		noiseGenerator.setRadius(lakes.lakeRadius);
 		noiseGenerator.setModifier(lakes.lakeModifier);
@@ -235,14 +235,14 @@ public class WorldGen {
 	private void genCave() {
 		Utils.out("Generating underworld...");
 		getLocationBiome();
-		CavePreset cave = curBiome.getBiomeCave();
-		ArrayList<Integer> oreList = cave.caveOre;
+		var cave = curBiome.getBiomeCave();
+		var oreList = cave.caveOre;
 		int oreListSize = oreList.size();
 
 		int maxOreFieldSize = cave.maxVeinSize;
 		int count = cave.maxVeinCount;
 		int cdef = cave.caveTile;
-		Map loc = currentMap();
+		var loc = currentMap();
 		loc.purge();
 		loc.fillTile(cdef);
 		loc.defObject = cave.caveObject;
@@ -277,7 +277,7 @@ public class WorldGen {
 
 	private void rollDungeonEntrance() {
 		if (worldMap.getLocation(curMapCoords).hasDungeon = Utils.percentRoll(curBiome.dungeonProbability)) {
-			Pair coords = currentMap().randPlaceTile(dungeonTile);
+			var coords = currentMap().randPlaceTile(dungeonTile);
 			Utils.dbg("Created dungeon entrance @ (%s)", coords);
 		} else
 			Utils.dbg("No dungeon entrance generated in this location");
@@ -285,12 +285,12 @@ public class WorldGen {
 	}
 
 	private void genDungeon() {
-		Location loc = worldMap.getLocation(curMapCoords);
+		var loc = worldMap.getLocation(curMapCoords);
 
 		if (!loc.hasDungeon)
 			return;
 
-		Map curLoc = loc.getLayer(curLayer);
+		var curLoc = loc.getLayer(curLayer);
 
 		getLocationBiome();
 		curLoc.rollSize();
@@ -299,8 +299,8 @@ public class WorldGen {
 
 		Utils.out("Generating dungeon!");
 
-		DungeonPreset dungeon = curBiome.getBiomeDungeon();
-		DungeonGen dungeonGen = new DungeonGen(curLoc);
+		var dungeon = curBiome.getBiomeDungeon();
+		var dungeonGen = new DungeonGen(curLoc);
 		dungeonGen.generate(dungeon, curLayer);
 
 		Utils.out("Done generating dungeon!");
@@ -316,7 +316,7 @@ public class WorldGen {
 	}
 
 	public int chooseRandomBiome() {
-		List<Integer> keyList = new ArrayList<Integer>(WorldGenPresets.all().get().keySet());
+		List<Integer> keyList = new ArrayList<>(WorldGenPresets.all().get().keySet());
 		return keyList.get(Utils.random.nextInt(keyList.size()));
 	}
 

@@ -20,9 +20,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Damage;
-import hitonoriol.madsand.entities.Entity;
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.inventory.ItemUI;
 import hitonoriol.madsand.entities.inventory.item.PlaceableItem;
 import hitonoriol.madsand.entities.inventory.item.Tool;
@@ -42,8 +40,10 @@ import hitonoriol.madsand.util.Utils;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
-@JsonSubTypes({ @Type(CraftingStation.class), @Type(ItemFactory.class), @Type(ResourceObject.class),
-		@Type(ItemPipeline.class), @Type(Waypoint.class) })
+@JsonSubTypes(
+	{ @Type(CraftingStation.class), @Type(ItemFactory.class), @Type(ResourceObject.class),
+		@Type(ItemPipeline.class), @Type(Waypoint.class) }
+)
 public class MapObject extends MapEntity implements Placeable {
 	public static final int NULL_OBJECT_ID = 0;
 	public static final int COLLISION_MASK_ID = 666;
@@ -118,8 +118,10 @@ public class MapObject extends MapEntity implements Placeable {
 		if (MadSand.world().getCurLoc().editable)
 			interaction.run();
 		else
-			MadSand.notice("You try to interact with " + name + "..." + Resources.LINEBREAK
-					+ "But suddenly, you feel that it's protected by some mysterious force");
+			MadSand.notice(
+				"You try to interact with " + name + "..." + Resources.LINEBREAK
+					+ "But suddenly, you feel that it's protected by some mysterious force"
+			);
 	}
 
 	protected void interact(Player player, Runnable interaction) {
@@ -151,9 +153,9 @@ public class MapObject extends MapEntity implements Placeable {
 	}
 
 	public void destroy() {
-		this.id = 0; // cleaned up later in map
+		id = 0; // cleaned up later in map
 
-		Pair coords = getPosition();
+		var coords = getPosition();
 		if (dropOnDestruction != 0)
 			MadSand.world().getCurLoc().putLoot(coords.x, coords.y, dropOnDestruction);
 	}
@@ -167,7 +169,7 @@ public class MapObject extends MapEntity implements Placeable {
 	}
 
 	private boolean verify() {
-		if (this.hp > 0)
+		if (hp > 0)
 			return true;
 		else {
 			destroy();
@@ -205,12 +207,11 @@ public class MapObject extends MapEntity implements Placeable {
 	public void acceptDamage(Damage damage) {
 		super.acceptDamage(damage);
 
-		Entity dealer = damage.getDealer();
+		var dealer = damage.getDealer();
 		if (dealer != MadSand.player()) {
-		if (!damage.missed())
-			MadSand.print(dealer.getName() + " hits " + name + " dealing " + damage.getValueString() + " damage");
-		}
-		else {
+			if (!damage.missed())
+				MadSand.print(dealer.getName() + " hits " + name + " dealing " + damage.getValueString() + " damage");
+		} else {
 			if (damage.missed())
 				MadSand.print("You hit " + name + " but deal no damage");
 			else
@@ -223,7 +224,7 @@ public class MapObject extends MapEntity implements Placeable {
 
 	/* Used when precalculating hits during the resource gathering */
 	protected final int simulateHit(Player player, Skill skill) {
-		PlayerStats stats = player.stats();
+		var stats = player.stats();
 		return stats.skills.getBaseSkillDamage(skill) + stats.getEquippedToolDamage(skill);
 	}
 
@@ -302,10 +303,11 @@ public class MapObject extends MapEntity implements Placeable {
 		if (obj == this)
 			return true;
 
-		MapObject rhs = (MapObject) obj;
+		var rhs = (MapObject) obj;
 		return new EqualsBuilder().append(id, rhs.id).isEquals();
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -313,10 +315,10 @@ public class MapObject extends MapEntity implements Placeable {
 	@JsonIgnore
 	public Skill getInteractionSkill() {
 		return as(ResourceObject.class)
-				.map(resource -> resource.skill)
-				.orElse(Skill.None);
+			.map(resource -> resource.skill)
+			.orElse(Skill.None);
 	}
-	
+
 	@Override
 	public TextureRegion getSprite() {
 		return Textures.getObject(id);
@@ -352,15 +354,20 @@ public class MapObject extends MapEntity implements Placeable {
 
 	@Override
 	public TextureRegion createPlaceableTexture() {
-		return new TextureRegion(new Texture(
-				TextureProcessor.extractPixmap(getTexture(), ItemUI.SIZE)));
+		return new TextureRegion(
+			new Texture(
+				TextureProcessor.extractPixmap(getTexture(), ItemUI.SIZE)
+			)
+		);
 	}
 
 	@Override
 	public String toString() {
-		return String.format("{%s} %s [%d/%d]",
-				getClass().getSimpleName(),
-				getName(),
-				hp, maxHp);
+		return String.format(
+			"{%s} %s [%d/%d]",
+			getClass().getSimpleName(),
+			getName(),
+			hp, maxHp
+		);
 	}
 }

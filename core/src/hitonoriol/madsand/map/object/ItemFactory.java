@@ -21,7 +21,6 @@ public class ItemFactory extends BuiltObject implements TimeDependent {
 	}
 
 	public ItemFactory() {
-		super();
 	}
 
 	public ItemProducer getItemProducer() {
@@ -30,9 +29,9 @@ public class ItemFactory extends BuiltObject implements TimeDependent {
 
 		return itemProducer;
 	}
-	
+
 	public void setItemProducer(ItemProducer producer) {
-		this.itemProducer = producer;
+		itemProducer = producer;
 	}
 
 	private void initItemProducer() {
@@ -46,14 +45,14 @@ public class ItemFactory extends BuiltObject implements TimeDependent {
 
 	@Override
 	public String getBuildInfo() {
-		String info = "Produces " + Items.all().getName(getItemProducer().getProductId());
+		var info = "Produces " + Items.all().getName(getItemProducer().getProductId());
 
 		if (!itemProducer.isEndless())
 			info += Resources.LINEBREAK + "Consumes " + Items.all().getName(itemProducer.getConsumedMaterialId());
 
 		return info;
 	}
-	
+
 	@Override
 	public void update() {
 		itemProducer.produce();

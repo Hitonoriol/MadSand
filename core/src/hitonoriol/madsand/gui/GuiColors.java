@@ -20,10 +20,10 @@ public class GuiColors extends Color {
 	public static String getTag(Color color) {
 		return "[#" + color + "]";
 	}
-	
+
 	public static Color invert(Color color) {
 		float alpha = color.a;
-		Color inverted = new Color(Color.WHITE).sub(color);
+		var inverted = new Color(Color.WHITE).sub(color);
 		inverted.a = alpha;
 		return inverted;
 	}

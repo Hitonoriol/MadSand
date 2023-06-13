@@ -1,7 +1,7 @@
 package hitonoriol.madsand.resources;
 
 import java.util.function.Consumer;
-
+import java.lang.Character;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -64,9 +64,9 @@ public class Resources {
 	static final String FONT_PATH = "fonts/8bitoperator.ttf";
 
 	public static BitmapFont createFont(int size) {
-		BitmapFont font = new BitmapFont();
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
-		FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		var font = new BitmapFont();
+		var generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
+		var param = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		param.characters = FONT_CHARS;
 		param.size = size;
 		param.color = Color.WHITE;
@@ -122,14 +122,18 @@ public class Resources {
 		if (!withGui)
 			Gui.overlay.setVisible(false);
 		TimeUtils.scheduleTask(() -> {
-			byte[] pixels = ScreenUtils.getFrameBufferPixels(0, 0, Gdx.graphics.getBackBufferWidth(),
-					Gdx.graphics.getBackBufferHeight(), true);
+			byte[] pixels = ScreenUtils.getFrameBufferPixels(
+				0, 0, Gdx.graphics.getBackBufferWidth(),
+				Gdx.graphics.getBackBufferHeight(), true
+			);
 
 			for (int i = 4; i < pixels.length; i += 4)
 				pixels[i - 1] = (byte) 255;
 
-			Pixmap pixmap = new Pixmap(Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(),
-					Pixmap.Format.RGBA8888);
+			var pixmap = new Pixmap(
+				Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(),
+				Pixmap.Format.RGBA8888
+			);
 
 			BufferUtils.copy(pixels, 0, pixmap.getPixels(), pixels.length);
 			PixmapIO.writePNG(Gdx.files.local(Utils.now(Log.getAccurateDateFormat()) + ".png"), pixmap);

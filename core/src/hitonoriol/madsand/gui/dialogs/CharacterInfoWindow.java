@@ -10,11 +10,8 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Faction;
-import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.Reputation;
 import hitonoriol.madsand.entities.skill.Skill;
-import hitonoriol.madsand.entities.skill.SkillContainer;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.Widgets;
@@ -23,7 +20,7 @@ import hitonoriol.madsand.gui.widgets.stats.StatLabels;
 import hitonoriol.madsand.gui.widgets.stats.StatProgressBar;
 
 /*
- * Character info in-game menu 
+ * Character info in-game menu
  */
 
 public class CharacterInfoWindow extends GameDialog {
@@ -45,14 +42,17 @@ public class CharacterInfoWindow extends GameDialog {
 	}
 
 	public void createDialog() {
-		Table scrollTable = Widgets.table();
+		var scrollTable = Widgets.table();
 		scrollTable.defaults().width(Gui.DEFAULT_WIDTH);
-		AutoFocusScrollPane dialogScroll = new AutoFocusScrollPane(scrollTable);
-		Player player = MadSand.player();
-		PlayerStats stats = player.stats;
-		Label nameLbl = new Label(player.stats.name, skin);
-		Label levelLbl = new Label("Level: " + player.stats.skills.getLvl(Skill.Level) + " ("
-				+ player.stats.skills.getExpString(Skill.Level) + ")", skin);
+		var dialogScroll = new AutoFocusScrollPane(scrollTable);
+		var player = MadSand.player();
+		var stats = player.stats;
+		var nameLbl = new Label(player.stats.name, skin);
+		var levelLbl = new Label(
+			"Level: " + player.stats.skills.getLvl(Skill.Level) + " ("
+				+ player.stats.skills.getExpString(Skill.Level) + ")",
+			skin
+		);
 
 		Gui.setFontSize(levelLbl, Gui.FONT_M);
 		Gui.setFontSize(nameLbl, Gui.FONT_M);
@@ -62,11 +62,13 @@ public class CharacterInfoWindow extends GameDialog {
 		setBackground(GuiSkin.darkBackground());
 		add().row();
 		statLabels.refreshStatLabels();
-		add(StatProgressBar.createLevelBar()
+		add(
+			StatProgressBar.createLevelBar()
 				.setStatText("LVL " + stats.skills.getLvl())
 				.setSkill(player.stats.skills.get(Skill.Level))
-				.setProgressSize(BAR_WIDTH * 1.75f, BAR_HEIGHT))
-				.row();
+				.setProgressSize(BAR_WIDTH * 1.75f, BAR_HEIGHT)
+		)
+			.row();
 		add().width(Gui.DEFAULT_WIDTH).row();
 
 		// Stat list
@@ -90,57 +92,59 @@ public class CharacterInfoWindow extends GameDialog {
 	}
 
 	private Table createMiscInfoTable() {
-		Table info = Widgets.table();
+		var info = Widgets.table();
 		info.align(Align.left);
 		info.defaults().align(Align.left).padBottom(LINE_PAD);
-		Player player = MadSand.player();
+		var player = MadSand.player();
 		info.add("Creatures killed: " + player.getTotalKillCount()).row();
 		info.add("Settlements established: " + player.getEstablishedSettlements()).row();
 		return info;
 	}
 
 	private void addTitle(Table table, String text) {
-		Label label = Widgets.label(text);
+		var label = Widgets.label(text);
 		label.setStyle(GuiSkin.getLabelStyle(Gui.FONT_M));
 		table.add(Widgets.label("")).row();
 		table.add(label)
-				.width(Gui.DEFAULT_WIDTH)
-				.padLeft(headerLeftPadding)
-				.padBottom(headerBottomPadding).row();
+			.width(Gui.DEFAULT_WIDTH)
+			.padLeft(headerLeftPadding)
+			.padBottom(headerBottomPadding).row();
 	}
 
 	private Table createRepTable() {
-		Table repTable = Widgets.table();
+		var repTable = Widgets.table();
 		repTable.align(Align.left);
 		for (Faction faction : Faction.values()) {
 			if (faction == Faction.None)
 				continue;
 
 			repTable.add(faction.name() + ": ")
-					.width(130)
-					.align(Align.left)
-					.padBottom(LINE_PAD);
+				.width(130)
+				.align(Align.left)
+				.padBottom(LINE_PAD);
 
-			repTable.add(new StatProgressBar()
+			repTable.add(
+				new StatProgressBar()
 					.setStyle(repStyle)
 					.setRange(-Reputation.RANGE, Reputation.RANGE)
 					.roundValues(false)
 					.setStatText("") // TODO: Reputation levels
 					.setValue(MadSand.player().getReputation().get(faction))
-					.setProgressSize(BAR_WIDTH, BAR_HEIGHT))
-					.size(BAR_WIDTH, BAR_HEIGHT)
-					.padBottom(LINE_PAD)
-					.row();
+					.setProgressSize(BAR_WIDTH, BAR_HEIGHT)
+			)
+				.size(BAR_WIDTH, BAR_HEIGHT)
+				.padBottom(LINE_PAD)
+				.row();
 		}
 		return repTable;
 	}
 
 	private Table createSkillTable() {
 		Label skillLbl;
-		SkillContainer skills = MadSand.player().stats.skills;
-		Table skillTable = Widgets.table();
+		var skills = MadSand.player().stats.skills;
+		var skillTable = Widgets.table();
 		skillTable.align(Align.left);
-		Player player = MadSand.player();
+		var player = MadSand.player();
 		for (Skill skill : Skill.values()) {
 			if (skill == Skill.Level || skill == Skill.None)
 				continue;
@@ -148,16 +152,18 @@ public class CharacterInfoWindow extends GameDialog {
 			skillLbl = new Label(skill + ": ", skin);
 
 			skillTable.add(skillLbl)
-					.width(130)
-					.align(Align.left)
-					.padBottom(LINE_PAD);
-			skillTable.add(new StatProgressBar(skill.name())
+				.width(130)
+				.align(Align.left)
+				.padBottom(LINE_PAD);
+			skillTable.add(
+				new StatProgressBar(skill.name())
 					.setStyle(skillStyle)
 					.setStatText("LVL " + skills.getLvl(skill))
 					.setSkill(player.stats.skills.get(skill))
-					.setProgressSize(BAR_WIDTH, BAR_HEIGHT))
-					.size(BAR_WIDTH, BAR_HEIGHT)
-					.padBottom(LINE_PAD);
+					.setProgressSize(BAR_WIDTH, BAR_HEIGHT)
+			)
+				.size(BAR_WIDTH, BAR_HEIGHT)
+				.padBottom(LINE_PAD);
 			skillTable.row();
 		}
 

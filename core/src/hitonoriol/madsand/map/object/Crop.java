@@ -2,7 +2,6 @@ package hitonoriol.madsand.map.object;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.TimeDependent;
-import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.gamecontent.Items;
 import hitonoriol.madsand.gamecontent.Objects;
 import hitonoriol.madsand.map.CropGrowthStage;
@@ -19,7 +18,6 @@ public class Crop extends MapObject implements TimeDependent {
 	int objId, itemId;
 
 	public Crop(int id, long plantTime) {
-		super();
 		itemId = id;
 		growthStages = Items.all().getCropStages(id);
 		this.plantTime = plantTime;
@@ -54,12 +52,14 @@ public class Crop extends MapObject implements TimeDependent {
 		Utils.dbg("%s has grown: stage %d/%d", getName(), curStage, LAST_STAGE);
 		if (curStage == LAST_STAGE)
 			MadSand.world().exec(map -> {
-				Pair position = getPosition();
+				var position = getPosition();
 				if (position.isEmpty()) {
 					map.getTimeScheduler().remove(this);
-					Utils.dbg("{%X} Crop {%s} was not found on the map, removing...",
-							map.getTimeScheduler().hashCode(),
-							this);
+					Utils.dbg(
+						"{%X} Crop {%s} was not found on the map, removing...",
+						map.getTimeScheduler().hashCode(),
+						this
+					);
 					return;
 				}
 				Utils.dbg("%s has reached its final growth stage: replacing object at %s", getName(), position);
@@ -95,7 +95,7 @@ public class Crop extends MapObject implements TimeDependent {
 	public boolean isFullyGrown() {
 		return getHarvestTime() <= 0;
 	}
-	
+
 	@Override
 	public boolean isEmpty() {
 		return super.isEmpty() || this == Map.nullCrop;

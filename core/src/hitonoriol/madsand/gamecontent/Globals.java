@@ -54,7 +54,7 @@ public class Globals implements Loadable {
 	}
 
 	private static String getVersion() {
-		String version = Globals.class.getPackage().getImplementationVersion();
+		var version = Globals.class.getPackage().getImplementationVersion();
 
 		if (version == null) {
 			version = DEV_VER_STR;
@@ -65,7 +65,7 @@ public class Globals implements Loadable {
 	}
 
 	private void createScriptMap(String name, Consumer<ScriptMap> populator) {
-		ScriptMap map = new ScriptMap();
+		var map = new ScriptMap();
 		scriptMaps.put(name, map);
 		populator.accept(map);
 	}
@@ -93,8 +93,9 @@ public class Globals implements Loadable {
 				Items.deferInit(() -> {
 					globals.createScriptMap("craft_recipes", map -> {
 						Items.all().craftRequirements().keySet()
-								.forEach(
-										id -> map.put(Items.all().getName(id), "player:unlockCraftRecipe(" + id + ")"));
+							.forEach(
+								id -> map.put(Items.all().getName(id), "player:unlockCraftRecipe(" + id + ")")
+							);
 					});
 				});
 			}

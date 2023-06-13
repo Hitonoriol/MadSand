@@ -23,7 +23,6 @@ public class KeyDialog extends GameDialog {
 	}
 
 	public KeyDialog(Consumer<Integer> keyConsumer, int initKey) {
-		super();
 		super.setTitle("Set keybinding");
 		super.centerTitle();
 		super.skipLine();
@@ -49,7 +48,7 @@ public class KeyDialog extends GameDialog {
 
 	private void sendKey(int keycode) {
 		key = keycode;
-		String keyText = keycode == Keys.ESCAPE ? "Remove binding" : Keys.toString(keycode);
+		var keyText = keycode == Keys.ESCAPE ? "Remove binding" : Keys.toString(keycode);
 		keyLabel.setText(keyText);
 	}
 

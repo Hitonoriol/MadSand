@@ -2,7 +2,6 @@ package hitonoriol.madsand.gui.stages;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 
@@ -17,7 +16,7 @@ public class DeathStage extends Stage {
 
 	public DeathStage() {
 		super(Gui.viewport());
-		Table container = Widgets.table();
+		var container = Widgets.table();
 		final float SIZE_COEF = 1.85f;
 
 		deathMsgLabel = Widgets.label("");

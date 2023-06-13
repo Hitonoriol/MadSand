@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.Gui;
@@ -35,7 +34,7 @@ public class InventoryUICell extends ItemUI {
 		super.addActor(equippedLabel);
 
 		Gui.setClickAction(this, Buttons.LEFT, () -> {
-			Player player = MadSand.player();
+			var player = MadSand.player();
 			item.leftClickAction();
 			player.doAction(player.stats.minorCost);
 			inventoryUI.refreshCell(this);
@@ -50,7 +49,7 @@ public class InventoryUICell extends ItemUI {
 
 	private void initContextMenu(Item item) {
 		contextContainer = Widgets.table();
-		TextButton dropBtn = Widgets.button("Drop");
+		var dropBtn = Widgets.button("Drop");
 		addContextBtn(dropBtn);
 		contextContainer.setVisible(false);
 		super.addActor(contextContainer);
@@ -58,8 +57,10 @@ public class InventoryUICell extends ItemUI {
 		Gui.setAction(dropBtn, () -> {
 			closeContextMenu();
 
-			if (MadSand.player().stats().equipment.itemEquipped(item)
-					&& AbstractEquipment.isCursed(item)) {
+			if (
+				MadSand.player().stats().equipment.itemEquipped(item)
+					&& AbstractEquipment.isCursed(item)
+			) {
 				Gui.drawOkDialog("Cursed item", item.name + " is cursed and can't be dropped!");
 				return;
 			}
@@ -67,11 +68,11 @@ public class InventoryUICell extends ItemUI {
 			Consumer<Integer> dropAction = quantity -> MadSand.player().dropItem(item, quantity);
 			if (item.quantity > 1)
 				new SliderDialog(item.quantity).setTitle("Drop " + item.name)
-						.setSliderTitle("Quantity of " + item.name + " to drop").setOnUpdateText(item.name)
-						.setConfirmAction(dropAction).show();
+					.setSliderTitle("Quantity of " + item.name + " to drop").setOnUpdateText(item.name)
+					.setConfirmAction(dropAction).show();
 			else
 				new ConfirmDialog("Drop " + item.name + "?", () -> dropAction.accept(item.quantity), Gui.overlay)
-						.show();
+					.show();
 		});
 	}
 

@@ -12,7 +12,7 @@ public class Node implements IndexedNode<Node>, Comparable<Node> {
 	private int index;
 	public final int x, y;
 
-	Array<Connection<Node>> connections = new Array<Connection<Node>>();
+	Array<Connection<Node>> connections = new Array<>();
 
 	public Node(int x, int y, int index) {
 		this.index = index;
@@ -48,7 +48,7 @@ public class Node implements IndexedNode<Node>, Comparable<Node> {
 			return;
 
 		if (!hasNeighbor(node))
-			connections.add(new DefaultConnection<Node>(this, node));
+			connections.add(new DefaultConnection<>(this, node));
 	}
 
 	public boolean hasNeighbor(Node node) {
@@ -79,6 +79,7 @@ public class Node implements IndexedNode<Node>, Comparable<Node> {
 
 	}
 
+	@Override
 	public String toString() {
 		return String.format("#%d (%d, %d) [%d neighbors]", index, x, y, connections.size);
 	}

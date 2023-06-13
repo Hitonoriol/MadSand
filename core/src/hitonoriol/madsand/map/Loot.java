@@ -1,7 +1,6 @@
 package hitonoriol.madsand.map;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -32,7 +31,7 @@ public class Loot {
 	}
 
 	private void genInfo() { // generates human-readable contents of loot cell
-		String ret = "";
+		var ret = "";
 		int i = 0, sz = contents.size();
 		for (Item item : contents) {
 			ret += item.quantity + " " + item.name;
@@ -46,14 +45,14 @@ public class Loot {
 	}
 
 	public boolean isEmpty() {
-		for (int i = 0; i < contents.size(); ++i)
-			if (contents.get(i).id() != 0)
+		for (Item content : contents)
+			if (content.id() != 0)
 				return false;
 		return true;
 	}
 
 	public Item remove(int idx) {
-		Item removedItem = contents.remove(idx);
+		var removedItem = contents.remove(idx);
 		genInfo();
 		return removedItem;
 	}
@@ -94,7 +93,7 @@ public class Loot {
 	}
 
 	public void mergeItemStacks() {
-		Iterator<Item> it = contents.iterator();
+		var it = contents.iterator();
 		int idx;
 		Item item, foundItem;
 		while (it.hasNext()) {

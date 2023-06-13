@@ -20,7 +20,7 @@ public class Widgets {
 	}
 
 	public static Table table(Consumer<Cell<Actor>> forEachCell, Actor... actors) {
-		Table table = table();
+		var table = table();
 		for (Actor actor : actors) {
 			Cell<Actor> cell = table.add(actor);
 			if (forEachCell != null)
@@ -43,22 +43,22 @@ public class Widgets {
 	public static TextButton button() {
 		return button("");
 	}
-	
+
 	public static CheckBox checkbox(String text) {
 		return new CheckBox("", Gui.skin);
 	}
-	
+
 	public static CheckBox plainCheckbox() {
-		CheckBox checkbox = checkbox("");
+		var checkbox = checkbox("");
 		Gui.removeActor(checkbox, checkbox.getLabel());
 		checkbox.pack();
 		return checkbox;
 	}
-	
+
 	public static TypingLabel typingLabel() {
 		return typingLabel("");
 	}
-	
+
 	public static TypingLabel typingLabel(String text) {
 		var label = new TypingLabel(text, GuiSkin.getLabelStyle(Gui.FONT_S));
 		label.setDefaultToken("{STYLE=SHADOW}{SPEED=1.15}");
@@ -70,9 +70,9 @@ public class Widgets {
 	public static Label label(String text) {
 		return new Label(text, Gui.skin);
 	}
-	
+
 	public static Label label(int alignment, String text) {
-		Label label = label(text);
+		var label = label(text);
 		label.setAlignment(alignment);
 		return label;
 	}
@@ -84,11 +84,11 @@ public class Widgets {
 	public static Label label(String text, int fontSize) {
 		return setFontSize(label(text), fontSize);
 	}
-	
+
 	public static TextField textField(String text) {
 		return new TextField(text, Gui.skin);
 	}
-	
+
 	public static TextField textField() {
 		return textField("");
 	}

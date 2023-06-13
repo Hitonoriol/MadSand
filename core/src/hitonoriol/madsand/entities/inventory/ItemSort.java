@@ -10,13 +10,13 @@ import hitonoriol.madsand.entities.inventory.item.Item;
 public class ItemSort implements Comparator<Item> {
 	public static final ItemSort defaultSort = create("Default", comparingInt(Item::id));
 	private static final ItemSort sortings[] = {
-			defaultSort,
-			create("Name", Comparator.comparing(Item::name)),
-			create("Price", comparingInt(Item::getPrice)),
-			create("Weight", comparingDouble(Item::getWeight)),
-			create("Quantity", comparingInt(Item::getQuantity)),
-			create("Stack weight", comparingDouble(Item::getTotalWeight)),
-			create("Stack price", comparingDouble(Item::getTotalPrice))
+		defaultSort,
+		create("Name", Comparator.comparing(Item::name)),
+		create("Price", comparingInt(Item::getPrice)),
+		create("Weight", comparingDouble(Item::getWeight)),
+		create("Quantity", comparingInt(Item::getQuantity)),
+		create("Stack weight", comparingDouble(Item::getTotalWeight)),
+		create("Stack price", comparingDouble(Item::getTotalPrice))
 	};
 
 	private String name;
@@ -26,11 +26,11 @@ public class ItemSort implements Comparator<Item> {
 		this.name = name;
 		this.comparator = comparator;
 	}
-	
+
 	public Comparator<Item> applyOrder(Order order) {
 		return order == Order.Ascending ? this : reversed();
 	}
-	
+
 	@Override
 	public int compare(Item o1, Item o2) {
 		return comparator.compare(o1, o2);
@@ -44,11 +44,11 @@ public class ItemSort implements Comparator<Item> {
 	public static ItemSort[] getSortings() {
 		return sortings;
 	}
-	
+
 	public static ItemSort create(String name, Comparator<Item> comparator) {
 		return new ItemSort(name, comparator);
 	}
-	
+
 	public enum Order {
 		Ascending, Descending
 	}

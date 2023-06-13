@@ -20,7 +20,7 @@ public class Functional {
 	}
 
 	public static void sequence(Runnable... actions) {
-		Stream.of(actions).forEach(action -> action.run());
+		Stream.of(actions).forEach(Runnable::run);
 	}
 
 	public static void repeat(int times, Consumer<Integer> action) {
@@ -50,7 +50,7 @@ public class Functional {
 			elseAction.run();
 	}
 
-	public static interface SafeRunnable {
+	public interface SafeRunnable {
 		void run() throws Exception;
 	}
 

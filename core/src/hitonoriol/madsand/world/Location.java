@@ -115,10 +115,10 @@ public class Location {
 	}
 
 	public static Settlement.Status isSettlement(int wx, int wy) {
-		World world = MadSand.world();
-		WorldMap worldMap = world.getWorldMap();
+		var world = MadSand.world();
+		var worldMap = world.getWorldMap();
 		Location tmpLoc;
-		Pair coords = new Pair(wx, wy);
+		var coords = new Pair(wx, wy);
 		boolean locLoaded = false;
 		Settlement.Status status;
 		try {
@@ -145,12 +145,15 @@ public class Location {
 		}
 	}
 
+	@Override
 	public String toString() {
-		return String.format("Location {%s} Settlement: %b",
-				name, isSettlement());
+		return String.format(
+			"Location {%s} Settlement: %b",
+			name, isSettlement()
+		);
 	}
 
-	public static enum Layer {
+	public enum Layer {
 		Overworld(0), Dungeon(0, 30), Cave(30, LAYER_MAX);
 
 		private final static Layer values[] = values();
@@ -174,7 +177,7 @@ public class Location {
 		public int max() {
 			return max;
 		}
-		
+
 		public int count() {
 			return max - base;
 		}

@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
-import hitonoriol.madsand.entities.inventory.Inventory;
 import hitonoriol.madsand.entities.npc.Npc;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.util.Utils;
@@ -51,7 +50,7 @@ public class Stats {
 
 	@JsonIgnore
 	protected Entity owner;
-	
+
 	private final static Stats maxStats = new Stats(new Npc());
 	static {
 		Stat.rollableStats.forEach(stat -> maxStats.baseStats.set(stat, BaseStats.MAX_LVL));
@@ -123,8 +122,8 @@ public class Stats {
 			actionPtsMax = 1;
 		else
 			actionPtsMax = (Utils.log(Math.pow(dexterity + 0.1, 1.7), 5)
-					/ (3 + ((2 * Math.sqrt(dexterity)) / dexterity)))
-					* 9.9;
+				/ (3 + ((2 * Math.sqrt(dexterity)) / dexterity)))
+				* 9.9;
 		actionPtsMax -= actionPtsMax * getEncumbranceCoef();
 		return (actionPts = actionPtsMax);
 	}
@@ -157,7 +156,7 @@ public class Stats {
 	}
 
 	public double calcRangedAttackMissChance(int distance) {
-		return calcAttackMissChance() + Math.exp((double) distance * 0.55) * (1d / Math.sqrt(get(Stat.Accuracy)));
+		return calcAttackMissChance() + Math.exp(distance * 0.55) * (1d / Math.sqrt(get(Stat.Accuracy)));
 	}
 
 	public boolean rangedAttackMissed(int distance) {
@@ -180,7 +179,7 @@ public class Stats {
 	}
 
 	public float getEncumbrancePercent() {
-		Inventory inv = owner.inventory;
+		var inv = owner.inventory;
 		float maxWeight = inv.getMaxWeight();
 		if (maxWeight == 0)
 			return 0;
@@ -201,7 +200,7 @@ public class Stats {
 	public float calcMaxInventoryWeight() {
 		return BASE_MAX_WEIGHT + (get(Stat.Strength) + get(Stat.Dexterity)) * WEIGHT_MULTIPLIER;
 	}
-	
+
 	public static Stats max() {
 		return maxStats;
 	}

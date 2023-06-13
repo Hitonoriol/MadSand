@@ -1,11 +1,8 @@
 package hitonoriol.madsand.gui.dialogs;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
@@ -13,7 +10,6 @@ import com.badlogic.gdx.utils.Timer;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Faction;
-import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.ItemUI;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gamecontent.WorldGenPresets;
@@ -43,7 +39,7 @@ public class LandDialog extends GameDialog {
 	public LandDialog(Location location) {
 		super(Gui.overlay);
 		this.location = location;
-		this.settlement = location.settlement;
+		settlement = location.settlement;
 		super.setTitle(location.name);
 		super.skipLine();
 		super.add(new AutoFocusScrollPane(dialogContents)).height(240).pad(PAD * 2).row();
@@ -68,18 +64,18 @@ public class LandDialog extends GameDialog {
 
 		dialogContents.add("* Biome: " + WorldGenPresets.all().get(location.biome).biomeName).row();
 		dialogContents.add(location.faction == Faction.None ? "* Ownerless land" : ("* Owned by " + location.faction))
-				.row();
+			.row();
 		dialogContents.add("").row();
 
-		if (this.settlement == null)
+		if (settlement == null)
 			addSettlementCreationMenu(dialogContents);
 		else
 			addSettlementInfo(dialogContents);
 	}
 
 	private void addSettlementCreationMenu(Table container) {
-		Player player = MadSand.player();
-		ArrayList<Item> reqItems = player.getSettlementCreationReq();
+		var player = MadSand.player();
+		var reqItems = player.getSettlementCreationReq();
 
 		container.add("There's no civilization nearby").align(Align.center).row();
 		container.add("").row();
@@ -90,7 +86,7 @@ public class LandDialog extends GameDialog {
 		for (Item item : reqItems)
 			reqs &= player.inventory.hasItem(item.id(), item.quantity);
 
-		TextButton createBtn = Widgets.button("Establish");
+		var createBtn = Widgets.button("Establish");
 		if (reqs)
 			container.add(createBtn).size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT).align(Align.center);
 		else
@@ -122,7 +118,7 @@ public class LandDialog extends GameDialog {
 
 		container.add("Warehouse " + settlement.warehouse.getWeightString() + ":").row();
 		container.add(getWarehouseContents()).row();
-		Table warehouseTbl = ItemUI.createItemList(settlement.warehouse.getItems(), ITEMS_PER_ROW);
+		var warehouseTbl = ItemUI.createItemList(settlement.warehouse.getItems(), ITEMS_PER_ROW);
 		for (Cell<Actor> cell : warehouseTbl.getCells()) {
 			cell.getActor().scaleBy(-ITEM_SCALE);
 			cell.size(ItemUI.SIZE * (1f - ITEM_SCALE));
@@ -131,7 +127,7 @@ public class LandDialog extends GameDialog {
 	}
 
 	private String getWorkerList() {
-		StringBuilder sb = new StringBuilder();
+		var sb = new StringBuilder();
 
 		WorkerContainer workers;
 		for (WorkerType type : WorkerType.values()) {
@@ -139,10 +135,12 @@ public class LandDialog extends GameDialog {
 				continue;
 
 			sb.append("* " + type.name() + ": " + workers.getQuantity() + " ");
-			sb.append("(" + Utils.round(workers.getGatheringRate() / MadSand.world().getRealtimeActionSeconds(), DEC_PLACES)
-					+ " actions/sec) ")
-					.append("[[" + Utils.round(workers.itemCharge * 100f) + "%]")
-					.append(Resources.LINEBREAK);
+			sb.append(
+				"(" + Utils.round(workers.getGatheringRate() / MadSand.world().getRealtimeActionSeconds(), DEC_PLACES)
+					+ " actions/sec) "
+			)
+				.append("[[" + Utils.round(workers.itemCharge * 100f) + "%]")
+				.append(Resources.LINEBREAK);
 		}
 		if (settlement.workers.isEmpty())
 			sb.append("No workers recruited");
@@ -151,10 +149,10 @@ public class LandDialog extends GameDialog {
 	}
 
 	private String getWarehouseContents() {
-		StringBuilder sb = new StringBuilder();
+		var sb = new StringBuilder();
 		for (Item item : settlement.warehouse.getItems())
 			sb.append("* " + item.quantity + " " + item.name + " (" + Utils.round(item.getTotalWeight()) + " kg)")
-					.append(Resources.LINEBREAK);
+				.append(Resources.LINEBREAK);
 
 		return settlement.warehouse.getItems().isEmpty() ? "Empty" : sb.toString();
 	}

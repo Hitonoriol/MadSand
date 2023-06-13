@@ -26,7 +26,7 @@ public class LoadingStage extends Stage {
 	private ProgressBar progressBar = new ProgressBar(0, 1, 0.005f, false, Gui.skin);
 	private Label statusLabel = Widgets.label(Align.center, "Doing stuff...");
 	private Table container = Widgets.table();
-	
+
 	public LoadingStage(GameAssetManager manager) {
 		super(Gui.viewport());
 		this.manager = manager;
@@ -36,20 +36,20 @@ public class LoadingStage extends Stage {
 		container.add(Widgets.label("Loading...", Gui.FONT_XL)).align(Align.center).padBottom(20).row();
 		container.add(progressBar).size(Gdx.graphics.getWidth() * 0.5f, 35).row();
 		container.add(statusLabel).growX().row();
-		
+
 		// Darken the container's background
 		var darkBg = new Color(Color.BLACK);
 		darkBg.a = 0.75f;
 		container.setBackground(GuiSkin.getColorDrawable(darkBg));
-		
+
 		addActor(container);
 	}
-	
+
 	public void setStatusText(String text) {
 		statusLabel.setText(text);
 	}
-	
-	public void setBackground(Texture background) { 
+
+	public void setBackground(Texture background) {
 		var bg = new Image(background);
 		bg.setFillParent(true);
 		addActor(bg);
@@ -59,10 +59,12 @@ public class LoadingStage extends Stage {
 		float duration = 0.5f;
 		bg.addAction(scaleBy(scale, scale));
 		bg.addAction(
-			forever(sequence(
+			forever(
+				sequence(
 					scaleBy(-scale, -scale, duration, Interpolation.smooth),
 					scaleBy(scale, scale, duration, Interpolation.smooth)
-			))
+				)
+			)
 		);
 	}
 

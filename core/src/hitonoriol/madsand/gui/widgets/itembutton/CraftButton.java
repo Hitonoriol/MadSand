@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.CraftWorker;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.Gui;
@@ -38,7 +37,7 @@ public class CraftButton extends ItemButton {
 		AutoSizeTooltip tooltip;
 		addListener(tooltip = new AutoSizeTooltip(() -> {
 			boolean canBeCrafted = craftWorker.canBeCrafted();
-			String text = (canBeCrafted ? "[LIME]Can be crafted" : "[RED]Can't be crafted") + "[]";
+			var text = (canBeCrafted ? "[LIME]Can be crafted" : "[RED]Can't be crafted") + "[]";
 			text += Resources.LINEBREAK + Resources.LINEBREAK + Item.createReadableItemList(item.recipe, true);
 			return text;
 		}).setMaxWidth(250));
@@ -47,9 +46,9 @@ public class CraftButton extends ItemButton {
 
 	@Override
 	protected String createButtonText() {
-		String buttonString = buttonItem.name;
+		var buttonString = buttonItem.name;
 
-		Player player = MadSand.player();
+		var player = MadSand.player();
 		if (!player.knowsItem(buttonItem.id()))
 			buttonString += " (New!)";
 		else
@@ -63,7 +62,7 @@ public class CraftButton extends ItemButton {
 
 	@Override
 	protected ClickListener setButtonPressListener() {
-		Player player = MadSand.player();
+		var player = MadSand.player();
 		return Gui.setClickAction(this, () -> {
 			if (!craftWorker.canBeCrafted()) {
 				Gui.drawOkDialog("Not enough resources to craft " + buttonItem.name);
@@ -78,18 +77,21 @@ public class CraftButton extends ItemButton {
 
 			if (maxQuantity == 1) {
 				new ConfirmDialog(
-						"Are you sure you want to craft " + buttonItem.craftQuantity + " " + buttonItem.name + "?",
-						() -> craftAction.accept(maxQuantity)).show();
+					"Are you sure you want to craft " + buttonItem.craftQuantity + " " + buttonItem.name + "?",
+					() -> craftAction.accept(maxQuantity)
+				).show();
 				return;
 			}
 
-			SliderDialog craftDialog = new SliderDialog(maxQuantity);
+			var craftDialog = new SliderDialog(maxQuantity);
 			craftDialog.setTitle("Crafting " + buttonItem.name)
-					.setSliderTitle("Quantity of " + buttonItem.name + " to craft:")
-					.setConfirmAction(craftAction)
-					.setSliderAction(quantity -> craftDialog
-							.setSliderText((quantity * buttonItem.craftQuantity) + " " + buttonItem.name))
-					.show(MadSand.getStage());
+				.setSliderTitle("Quantity of " + buttonItem.name + " to craft:")
+				.setConfirmAction(craftAction)
+				.setSliderAction(
+					quantity -> craftDialog
+						.setSliderText((quantity * buttonItem.craftQuantity) + " " + buttonItem.name)
+				)
+				.show(MadSand.getStage());
 		});
 	}
 

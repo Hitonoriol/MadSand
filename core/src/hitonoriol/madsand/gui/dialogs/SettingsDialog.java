@@ -2,11 +2,9 @@ package hitonoriol.madsand.gui.dialogs;
 
 import java.util.Arrays;
 
-import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -49,9 +47,9 @@ public class SettingsDialog extends GameDialog {
 		buttonTbl.align(Align.left);
 		buttonTbl.defaults().align(Align.left);
 		super.add(new AutoFocusScrollPane(buttonTbl))
-				.height(HEIGHT)
-				.padLeft(Gui.BTN_HEIGHT).padRight(Gui.BTN_HEIGHT)
-				.row();
+			.height(HEIGHT)
+			.padLeft(Gui.BTN_HEIGHT).padRight(Gui.BTN_HEIGHT)
+			.row();
 		super.skipLine();
 
 		addTitle("Video");
@@ -61,32 +59,40 @@ public class SettingsDialog extends GameDialog {
 
 		addTitle("Gameplay");
 		addSetting("Skip tutorials", new AutoCheckBox(prefs.skipTutorials, checked -> prefs.skipTutorials = checked));
-		addSetting("Enable in-game action suggestion button",
-				new AutoCheckBox(prefs.enableActionBtn, checked -> prefs.enableActionBtn = checked));
-		addSetting("Realtime mechanics", new AutoCheckBox(prefs.enableRealtimeMechanics,
-				checked -> prefs.enableRealtimeMechanics = checked));
+		addSetting(
+			"Enable in-game action suggestion button",
+			new AutoCheckBox(prefs.enableActionBtn, checked -> prefs.enableActionBtn = checked)
+		);
+		addSetting(
+			"Realtime mechanics", new AutoCheckBox(
+				prefs.enableRealtimeMechanics,
+				checked -> prefs.enableRealtimeMechanics = checked
+			)
+		);
 
 		super.add(applyBtn).size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT).row();
 		super.addCloseButton();
 
-		Gui.setAction(applyBtn, () -> applySettings());
+		Gui.setAction(applyBtn, this::applySettings);
 	}
 
 	private void prepareResolutionList() {
 		resolutionSelector.setAlignment(Align.center);
 		resolutionSelector.setMaxListCount(10);
 		resolutionSelector.getList().setAlignment(Align.center);
-		resolutionSelector.setItems(Arrays.stream(prefs.getDisplayModes())
+		resolutionSelector.setItems(
+			Arrays.stream(prefs.getDisplayModes())
 				.filter(mode -> mode.width >= Prefs.MIN_SCREEN_WIDTH)
-				.map(mode -> new DisplayModeDescriptor(mode))
-				.toArray(DisplayModeDescriptor[]::new));
+				.map(DisplayModeDescriptor::new)
+				.toArray(DisplayModeDescriptor[]::new)
+		);
 		resolutionSelector.setSelected(new DisplayModeDescriptor(prefs.getCurDisplayMode()));
 	}
 
 	private void addTitle(String text) {
 		buttonTbl.add(Gui.setFontSize(Widgets.label(text), Gui.FONT_M))
-				.padTop(Gui.FONT_S)
-				.row();
+			.padTop(Gui.FONT_S)
+			.row();
 	}
 
 	@SuppressWarnings("unused")
@@ -98,19 +104,19 @@ public class SettingsDialog extends GameDialog {
 	static float LBL_WIDTH = Gui.BTN_WIDTH * 1.1f;
 
 	private Cell<Actor> addSetting(String name, Actor actor) {
-		Label settingLbl = Widgets.label(name + ":");
+		var settingLbl = Widgets.label(name + ":");
 		settingLbl.setWrap(true);
 		settingLbl.setAlignment(Align.right);
 		buttonTbl.add(settingLbl)
-				.size(LBL_WIDTH, Gui.BTN_HEIGHT)
-				.align(Align.right);
-		Cell<Actor> cell = buttonTbl.add(actor).size(Gui.BTN_HEIGHT).pad(PADDING);
+			.size(LBL_WIDTH, Gui.BTN_HEIGHT)
+			.align(Align.right);
+		var cell = buttonTbl.add(actor).size(Gui.BTN_HEIGHT).pad(PADDING);
 		cell.row();
 		return cell;
 	}
 
 	private void applySettings() {
-		DisplayMode curMode = resolutionSelector.getSelected().mode;
+		var curMode = resolutionSelector.getSelected().mode;
 		prefs.screenWidth = curMode.width;
 		prefs.screenHeight = curMode.height;
 		prefs.apply();

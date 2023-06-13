@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
@@ -19,7 +19,7 @@ import hitonoriol.madsand.util.Utils;
 public class Inventory {
 	public static final double MAX_WEIGHT = Integer.MAX_VALUE;
 
-	private List<Item> items = new ArrayList<Item>();
+	private List<Item> items = new ArrayList<>();
 	private float curWeight, maxWeight;
 
 	public Inventory(float maxWeight) {
@@ -50,8 +50,7 @@ public class Inventory {
 	}
 
 	public void refreshContents() {
-		for (int i = 0; i < items.size(); ++i) {
-			Item item = items.get(i);
+		for (Item item : items) {
 			item.reinit();
 		}
 		refreshWeight();
@@ -79,10 +78,10 @@ public class Inventory {
 
 	public <T extends Item> Optional<T> getItem(Class<T> itemType) {
 		return items.stream()
-				.filter(item -> item.is(itemType))
-				.findFirst()
-				.map(item -> item.as(itemType))
-				.orElse(Optional.empty());
+			.filter(item -> item.is(itemType))
+			.findFirst()
+			.map(item -> item.as(itemType))
+			.orElse(Optional.empty());
 	}
 
 	public <T extends Item> boolean hasItem(Class<T> itemType) {
@@ -99,7 +98,7 @@ public class Inventory {
 
 	public boolean containsAll(List<Item> items) {
 		for (Item item : items) {
-			Item invItem = getItem(item.id());
+			var invItem = getItem(item.id());
 			if (invItem == Item.nullItem || invItem.quantity < item.quantity)
 				return false;
 		}
@@ -116,9 +115,9 @@ public class Inventory {
 	/* In case of unique items (same id but different hashes) this will count all of them */
 	public int countItems(int id) {
 		return items.stream()
-				.filter(item -> item.equals(id))
-				.mapToInt(item -> item.quantity)
-				.sum();
+			.filter(item -> item.equals(id))
+			.mapToInt(item -> item.quantity)
+			.sum();
 	}
 
 	public int getIndex(int id) {
@@ -148,7 +147,7 @@ public class Inventory {
 	}
 
 	public Item getItem(int id) { // get item by its id, not the index
-		Item ret = Item.nullItem;
+		var ret = Item.nullItem;
 		int pos = getIndex(id);
 
 		if (pos != -1)
@@ -219,7 +218,7 @@ public class Inventory {
 		if (id == Item.NULL_ITEM)
 			return Item.nullItem;
 
-		Item item = Item.create(id, quantity);
+		var item = Item.create(id, quantity);
 		if (item.isEquipment() && quantity > 1)
 			putItem(id, quantity - 1);
 
@@ -252,9 +251,9 @@ public class Inventory {
 			return false;
 
 		for (int i = items.size() - 1; i >= 0; --i) {
-			Item foundItem = items.get(i);
+			var foundItem = items.get(i);
 			if (foundItem.equals(item)) {
-				curWeight -= foundItem.weight * (float) quantity;
+				curWeight -= foundItem.weight * quantity;
 				foundItem.quantity -= quantity;
 				if (foundItem.quantity < 1)
 					items.remove(i);
@@ -272,7 +271,7 @@ public class Inventory {
 	public boolean delItem(int id) {
 		return delItem(id, 1);
 	}
-	
+
 	public List<Item> getItems() {
 		return items;
 	}
@@ -282,7 +281,7 @@ public class Inventory {
 	}
 
 	public boolean itemsExist(String sequence) {
-		MutableBoolean itemsExist = new MutableBoolean(true);
+		var itemsExist = new MutableBoolean(true);
 		Item.parseListString(sequence, (id, quantity) -> {
 			if (!itemsExist.booleanValue())
 				return;
@@ -295,9 +294,11 @@ public class Inventory {
 
 	@Override
 	public String toString() {
-		return String.format("Inventory: {%s}",
-				items.stream()
-						.map(item -> item.toString())
-						.collect(Collectors.joining(", ")));
+		return String.format(
+			"Inventory: {%s}",
+			items.stream()
+				.map(Item::toString)
+				.collect(Collectors.joining(", "))
+		);
 	}
 }

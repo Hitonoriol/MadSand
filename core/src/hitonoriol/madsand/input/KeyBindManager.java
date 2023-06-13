@@ -46,7 +46,7 @@ public class KeyBindManager {
 	}
 
 	public KeyBindManager bind(Runnable action, boolean execAlways, int key, int... modifiers) {
-		KeyBind bind = new KeyBind(action, execAlways);
+		var bind = new KeyBind(action, execAlways);
 		if (modifiers.length == 0)
 			keyBindings.put(key, bind);
 		else

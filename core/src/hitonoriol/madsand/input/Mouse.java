@@ -14,23 +14,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
-import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.gui.Gui;
-import hitonoriol.madsand.gui.stages.Overlay;
 import hitonoriol.madsand.gui.textgenerator.CellInfoGenerator;
 import hitonoriol.madsand.gui.textgenerator.NotificationGenerator;
 import hitonoriol.madsand.gui.textgenerator.StaticTextGenerator;
-import hitonoriol.madsand.gui.widgets.overlay.GameContextMenu;
-import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
-import hitonoriol.madsand.map.MapCell;
-import hitonoriol.madsand.map.MapEntity;
-import hitonoriol.madsand.map.object.MapObject;
-import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.pathfinding.Path;
 import hitonoriol.madsand.resources.Resources;
-import hitonoriol.madsand.screens.WorldRenderer;
 import hitonoriol.madsand.util.Functional;
 
 public class Mouse {
@@ -46,14 +36,15 @@ public class Mouse {
 	private static CellInfoGenerator cellInfo = new CellInfoGenerator();
 	private static NotificationGenerator notifications = new NotificationGenerator();
 	private static StaticTextGenerator clickActionText = new StaticTextGenerator(
-			"[LMB] choose this tile" + Resources.LINEBREAK + "[RMB] cancel" + Resources.LINEBREAK);
+		"[LMB] choose this tile" + Resources.LINEBREAK + "[RMB] cancel" + Resources.LINEBREAK
+	);
 
 	private static Path rangedPath;
 	private static Path pathToCursor = new Path();
 	private static int DEF_CUR_PATH_LEN = 8, maxCurPathLen = DEF_CUR_PATH_LEN;
 
 	public static void initListener() {
-		Overlay overlay = Gui.overlay;
+		var overlay = Gui.overlay;
 		initTooltip();
 		overlay.addListener(new ClickListener(Buttons.LEFT) {
 			private boolean ignoreClick = false;
@@ -90,6 +81,7 @@ public class Mouse {
 				}
 			}
 
+			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				if (skipClick())
 					return;
@@ -97,6 +89,7 @@ public class Mouse {
 				handleMouseClick();
 			}
 
+			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				if (ignoreClick = Gui.isGameUnfocused() || !Mouse.isInteractionPossible())
 					heldButtons.add(button);
@@ -104,7 +97,7 @@ public class Mouse {
 				super.touchDown(event, x, y, pointer, button);
 				return true;
 			}
-			
+
 			@Override
 			public boolean scrolled(InputEvent event, float x, float y, float amountX, float amountY) {
 				if (Keyboard.isKeyPressed(Keys.CONTROL_LEFT)) {
@@ -116,7 +109,7 @@ public class Mouse {
 	}
 
 	private static void toggleContextMenu() {
-		GameContextMenu menu = Gui.overlay.getContextMenu();
+		var menu = Gui.overlay.getContextMenu();
 		if (Gui.overlay.getTooltip().isVisible()) {
 			menu.open();
 			cellInfo.getCell().populateContextMenu(menu);
@@ -129,9 +122,9 @@ public class Mouse {
 		clickActionText.setEnabled(false);
 		Functional.with(Gui.overlay.getTooltip(), tooltip -> {
 			tooltip.addTextGenerator(new StaticTextGenerator((x, y) -> String.format("Looking at (%d, %d)", x, y)))
-					.addTextGenerator(clickActionText)
-					.addTextGenerator(notifications)
-					.addTextGenerator(cellInfo);
+				.addTextGenerator(clickActionText)
+				.addTextGenerator(notifications)
+				.addTextGenerator(cellInfo);
 		});
 	}
 
@@ -153,10 +146,7 @@ public class Mouse {
 		wx = (int) Math.floor(worldCoords.x / Resources.TILESIZE);
 		wy = (int) Math.floor(worldCoords.y / Resources.TILESIZE);
 
-		if (Gui.isGameUnfocused())
-			return;
-
-		if (prevCoords.equals(wx, wy))
+		if (Gui.isGameUnfocused() || prevCoords.equals(wx, wy))
 			return;
 		prevCoords.set(wx, wy);
 
@@ -174,15 +164,15 @@ public class Mouse {
 	private static void refreshPathToCursor() {
 		pathToCursor.clear();
 		MadSand.world().getCurLoc().getPathfindingEngine()
-				.searchPath(MadSand.player().x, MadSand.player().y, wx, wy, pathToCursor);
+			.searchPath(MadSand.player().x, MadSand.player().y, wx, wy, pathToCursor);
 
 		if (!pathToCursor.isEmpty() && pathToCursor.getCount() > maxCurPathLen)
 			pathToCursor.truncate(maxCurPathLen);
 	}
 
 	private static void highlightRangedTarget() {
-		Player player = MadSand.player();
-		WorldRenderer renderer = MadSand.getRenderer();
+		var player = MadSand.player();
+		var renderer = MadSand.getRenderer();
 
 		if (!player.canPerformRangedAttack())
 			return;
@@ -193,14 +183,16 @@ public class Mouse {
 				renderer.removePath(rangedPath);
 		}
 
-		else if (rangedPath == null
-				|| (rangedPath != null && !rangedPath.getDestination().at(x, y))) {
+		else if (
+			rangedPath == null
+				|| (rangedPath != null && !rangedPath.getDestination().at(x, y))
+		) {
 			renderer.removePath(rangedPath);
 			renderer.queuePath(rangedPath = Path.create(player.x, player.y, x, y));
 		}
 
 		if (rangedPath != null) {
-			Node destNode = rangedPath.getDestination();
+			var destNode = rangedPath.getDestination();
 			if (!MadSand.world().getCurLoc().npcExists(destNode.x, destNode.y))
 				renderer.removePath(rangedPath);
 
@@ -246,10 +238,10 @@ public class Mouse {
 		if (pathToCursor.isEmpty())
 			return;
 
-		BiConsumer<Integer, Integer> action = clickAction;
+		var action = clickAction;
 		cancelClickAction();
 
-		Node destination = pathToCursor.getDestination();
+		var destination = pathToCursor.getDestination();
 		action.accept(destination.x, destination.y);
 	}
 
@@ -266,19 +258,19 @@ public class Mouse {
 	public static boolean isInteractionPossible() {
 		int clickDst = getClickDistance();
 		return pointingAtObject() &&
-				(clickDst == CLICK_CUR_TILE || clickDst == CLICK_ADJ_TILE || MadSand.player().canPerformRangedAttack());
+			(clickDst == CLICK_CUR_TILE || clickDst == CLICK_ADJ_TILE || MadSand.player().canPerformRangedAttack());
 	}
 
 	public static void handleMouseClick() {
 		int clickDst = getClickDistance();
 		boolean adjacentTileClicked = (clickDst == CLICK_ADJ_TILE);
 		boolean currentTileClicked = (clickDst == CLICK_CUR_TILE);
-		MapCell cell = cellInfo.getCell();
-		Loot loot = cell.getLoot();
-		AbstractNpc npc = cell.getNpc();
-		MapObject object = cell.getObject();
-		MapEntity target = object != Map.nullObject ? cell.getObject() : npc;
-		Player player = MadSand.player();
+		var cell = cellInfo.getCell();
+		var loot = cell.getLoot();
+		var npc = cell.getNpc();
+		var object = cell.getObject();
+		var target = object != Map.nullObject ? cell.getObject() : npc;
+		var player = MadSand.player();
 
 		if ((player.isMoving()) || Gui.isGameUnfocused() || !pointingAtObject())
 			return;
@@ -317,19 +309,19 @@ public class Mouse {
 			MadSand.player().walk(MadSand.player().stats.look);
 		}
 	}
-	
+
 	public static int screenX() {
 		return x;
 	}
-	
+
 	public static int screenY() {
 		return y;
 	}
-	
+
 	public static float worldX() {
 		return worldCoords.x;
 	}
-	
+
 	public static float worldY() {
 		return worldCoords.y;
 	}

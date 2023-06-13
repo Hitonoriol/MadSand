@@ -2,7 +2,6 @@ package hitonoriol.madsand.containers.rolltable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -12,12 +11,7 @@ import hitonoriol.madsand.util.Utils;
 public class RollTable<T> {
 	public boolean exclusiveRoll = false; // Stop after the first successful roll
 	public int rollCount = 1;
-	public SortedMap<Float, Entry<T>> lootTable = new TreeMap<>(new Comparator<Float>() {
-		@Override
-		public int compare(Float o1, Float o2) {
-			return o1.compareTo(o2);
-		}
-	});
+	public SortedMap<Float, Entry<T>> lootTable = new TreeMap<>((o1, o2) -> o1.compareTo(o2));
 
 	@SafeVarargs
 	public final RollTable<T> add(float probability, T... items) {
@@ -25,7 +19,7 @@ public class RollTable<T> {
 		if (lootTable.containsKey(probability))
 			entry = lootTable.get(probability);
 		else
-			entry = new Entry<T>();
+			entry = new Entry<>();
 		entry.items.addAll(Arrays.asList(items));
 		return this;
 	}
@@ -57,7 +51,7 @@ public class RollTable<T> {
 	}
 
 	public ArrayList<T> roll(int times) {
-		ArrayList<T> itemList = new ArrayList<>();
+		var itemList = new ArrayList<T>();
 
 		for (int i = 0; i < times; ++i)
 			roll(itemList);

@@ -14,31 +14,31 @@ import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.PlaceableItem;
 import hitonoriol.madsand.map.CropGrowthStageContainer;
 import hitonoriol.madsand.resources.Content;
-import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.resources.GameAssetManager;
 import hitonoriol.madsand.resources.GameAssetManager.Dependencies;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.resources.loaders.ContentLoader;
 
 public class Items extends ContentStorage<Item> {
 	private static final Items instance = new Items();
-	
+
 	private Queue<Runnable> initQueue = new ArrayDeque<>();
 	private Map<Integer, List<Integer>> craftStationRecipes = new HashMap<>();
 	private Map<Integer, List<Integer>> craftRequirements = new HashMap<>();
 	private Map<Integer, List<Integer>> buildRequirements = new HashMap<>();
-	
+
 	protected Items() {
 		super(Item.nullItem);
 	}
-	
+
 	public Map<Integer, List<Integer>> craftStationRecipes() {
 		return craftStationRecipes;
 	}
-	
+
 	public Map<Integer, List<Integer>> craftRequirements() {
 		return craftRequirements;
 	}
-	
+
 	public Map<Integer, List<Integer>> buildRequirements() {
 		return buildRequirements;
 	}
@@ -77,7 +77,7 @@ public class Items extends ContentStorage<Item> {
 	}
 
 	public String getOnUseAction(int id) {
-		String action = get(id).useAction;
+		var action = get(id).useAction;
 
 		if (action == null)
 			return Resources.emptyField;
@@ -103,9 +103,9 @@ public class Items extends ContentStorage<Item> {
 	}
 
 	private void finalizeInit() {
-		initQueue.forEach(action -> action.run());
+		initQueue.forEach(Runnable::run);
 	}
-	
+
 	@Override
 	public void registerLoader(GameAssetManager manager) {
 		manager.setLoader(Items.class, new ContentLoader<>(manager, instance, Item.class) {
@@ -117,7 +117,7 @@ public class Items extends ContentStorage<Item> {
 					item.initCategory();
 				});
 			}
-			
+
 			@Override
 			public Dependencies getDependencies(String fileName, FileHandle file, Parameters<Items> parameter) {
 				return Content.asDependencies(Content.globals);

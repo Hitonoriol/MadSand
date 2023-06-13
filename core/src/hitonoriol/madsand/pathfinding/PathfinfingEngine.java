@@ -54,11 +54,11 @@ public class PathfinfingEngine {
 	}
 
 	private void linkToNeighbors(int x, int y) {
-		Node node = getNode(x, y);
+		var node = getNode(x, y);
 		if (node == null)
 			return;
 
-		Pair nCoords = new Pair();
+		var nCoords = new Pair();
 		for (Direction dir : Direction.baseValues) {
 			nCoords.set(x, y).addDirection(dir);
 
@@ -71,7 +71,7 @@ public class PathfinfingEngine {
 
 	// Unlink node at x, y from all its neighbors
 	private void unlinkFromNeighbors(int x, int y) {
-		Node node = nodeMap.get(x, y);
+		var node = nodeMap.get(x, y);
 
 		if (node == null)
 			return;
@@ -121,7 +121,7 @@ public class PathfinfingEngine {
 		if (graph.getNodeCount() == 0)
 			return;
 
-		Node node = nodeMap.putNew(x, y);
+		var node = nodeMap.putNew(x, y);
 		graph.addNode(node);
 		linkToNeighbors(x, y);
 		Utils.dbg("Object @ (%d, %d) removed. Added new node {%s}", x, y, node);

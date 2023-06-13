@@ -10,7 +10,6 @@ public class Graph extends DefaultIndexedGraph<Node> {
 	private int changedIdx;
 
 	public Graph() {
-		super();
 		resetChangedIdx();
 	}
 

@@ -17,11 +17,11 @@ public class CraftWorker {
 		this.entity = entity;
 		setItemToCraft(itemToCraft);
 	}
-	
+
 	public CraftWorker(Entity entity) {
 		this(entity, Item.nullItem);
 	}
-	
+
 	public void setItemToCraft(Item item) {
 		itemToCraft = item;
 		calcMaxCraftQuantity();
@@ -29,17 +29,14 @@ public class CraftWorker {
 
 	private void calcMaxCraftQuantity() {
 		maxCraftQuantity = 0;
-		if (!itemToCraft.isCraftable())
-			return;
-		
-		if (!entity.inventory.itemsExist(itemToCraft.recipe))
+		if (!itemToCraft.isCraftable() || !entity.inventory.itemsExist(itemToCraft.recipe))
 			return;
 
 		List<Integer> reqQuantities = Item.parseItemString(itemToCraft.recipe)
-				.stream()
-				.mapToInt(item -> entity.inventory.getItem(item).quantity / item.quantity)
-				.boxed()
-				.collect(Collectors.toList());
+			.stream()
+			.mapToInt(item -> entity.inventory.getItem(item).quantity / item.quantity)
+			.boxed()
+			.collect(Collectors.toList());
 		maxCraftQuantity = itemToCraft.isEquipment() ? 1 : Collections.min(reqQuantities);
 	}
 
@@ -58,7 +55,7 @@ public class CraftWorker {
 		for (int i = 0; i < quantity; ++i)
 			entity.inventory.delItem(itemToCraft.recipe);
 
-		Item craftedItem = Item.create(itemToCraft.id(), quantity * itemToCraft.craftQuantity);
+		var craftedItem = Item.create(itemToCraft.id(), quantity * itemToCraft.craftQuantity);
 		entity.addItem(craftedItem);
 		return craftedItem;
 	}

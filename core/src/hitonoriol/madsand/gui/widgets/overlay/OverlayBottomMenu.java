@@ -5,7 +5,6 @@ import java.util.function.Supplier;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 
@@ -39,16 +38,16 @@ public class OverlayBottomMenu extends Table {
 
 	public OverlayBottomMenu(Overlay overlay) {
 		this.overlay = overlay;
-		
+
 		MouseoverListener.setUp(this);
-		addButton("Character", Keys.Q, () -> new CharacterInfoWindow());
+		addButton("Character", Keys.Q, CharacterInfoWindow::new);
 		addButton("Inventory", Keys.E, () -> new InventoryUI(MadSand.player().inventory));
 		addButton("Abilities", Keys.R, () -> new AbilityDialog(MadSand.player().getAbilities()));
 		addButton("Journal", Keys.J, () -> new QuestJournal(MadSand.player().getQuestWorker()));
-		addButton("Build", Keys.B, () -> new BuildDialog());
+		addButton("Build", Keys.B, BuildDialog::new);
 		addButton("Bestiary", Keys.X, () -> new BestiaryDialog(MadSand.player()));
 		addButton("Land", Keys.L, () -> new LandDialog(MadSand.world().getLocation()));
-		addButton("Waypoints", Keys.O, () -> new WaypointDialog());
+		addButton("Waypoints", Keys.O, WaypointDialog::new);
 
 		container.setBackground(new NinePatchDrawable(GuiSkin.darkBackground()));
 
@@ -59,7 +58,7 @@ public class OverlayBottomMenu extends Table {
 	}
 
 	private void addButton(String text, int key, Supplier<GameDialog> dialogCreator) {
-		Storage<GameDialog> dialog = new Storage<>();
+		var dialog = new Storage<GameDialog>();
 		addButton(text, key, () -> {
 			if (Gui.overlay.getActors().contains(dialog.get(), true))
 				dialog.get().hide();
@@ -69,7 +68,7 @@ public class OverlayBottomMenu extends Table {
 	}
 
 	private void addButton(String text, int key, Runnable action) {
-		TextButton button = Widgets.button(text + " [" + Keys.toString(key) + "]");
+		var button = Widgets.button(text + " [" + Keys.toString(key) + "]");
 		container.add(button).size(WIDTH, HEIGHT).pad(BUTTON_PADDING);
 		Gui.setAction(button, action);
 		Keyboard.getKeyBindManager().bind(action::run, true, key);

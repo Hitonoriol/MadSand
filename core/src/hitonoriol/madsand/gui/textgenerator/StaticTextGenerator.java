@@ -13,11 +13,11 @@ public class StaticTextGenerator extends TextGenerator {
 	}
 
 	public StaticTextGenerator(BiFunction<Integer, Integer, String> updateAction) {
-		this.textUpdater = updateAction;
+		textUpdater = updateAction;
 	}
 
 	public StaticTextGenerator(Supplier<String> updateAction) {
-		this.textUpdater = (x, y) -> updateAction.get();
+		textUpdater = (x, y) -> updateAction.get();
 	}
 
 	@Override

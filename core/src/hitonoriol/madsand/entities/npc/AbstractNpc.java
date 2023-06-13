@@ -120,8 +120,8 @@ public abstract class AbstractNpc extends Entity {
 	}
 
 	protected final NodePair findPath(int x, int y) {
-		Map map = MadSand.world().getCurLoc();
-		NodePair nextPair = new NodePair();
+		var map = MadSand.world().getCurLoc();
+		var nextPair = new NodePair();
 		Utils.dbg("Pathfinding to %d, %d...", x, y);
 		if (!prevDestination.equals(x, y) || pathIdx + 1 >= path.getCount()) {
 			Utils.dbg("Recalculating path...");
@@ -140,8 +140,10 @@ public abstract class AbstractNpc extends Entity {
 		}
 
 		nextPair.set(path.get(pathIdx), path.get(pathIdx + 1));
-		Utils.dbg("Success! Returning the next node pair in path: (%d, %d) -> (%d, %d) [%s]",
-				nextPair.l.x, nextPair.l.y, nextPair.r.x, nextPair.r.y, nextPair.relativeDirection().name());
+		Utils.dbg(
+			"Success! Returning the next node pair in path: (%d, %d) -> (%d, %d) [%s]",
+			nextPair.l.x, nextPair.l.y, nextPair.r.x, nextPair.r.y, nextPair.relativeDirection().name()
+		);
 		++pathIdx;
 		return nextPair;
 	}
@@ -151,7 +153,7 @@ public abstract class AbstractNpc extends Entity {
 			return;
 
 		Utils.tryTo(() -> {
-			NodePair nextNodePair = findPath(x, y);
+			var nextNodePair = findPath(x, y);
 			if (!nextNodePair.isEmpty()) {
 				if (!walk(nextNodePair.relativeDirection())) {
 					Utils.dbg("Oopsie, can't move in calculated direction, moving randomly");
@@ -202,9 +204,9 @@ public abstract class AbstractNpc extends Entity {
 		stats.set(Stat.Strength, (int) (properties.strength + lvl * STR_PER_LVL));
 		stats.set(Stat.Accuracy, (int) (properties.accuracy + lvl * ACC_PER_LVL));
 
-		stats.meleeAttackCost += (float) lvl * MELEE_SPD_PER_LVL;
-		stats.rangedAttackCost += (float) lvl * RANGED_SPD_PER_LVL;
-		stats.walkCost += (float) lvl * MOVE_SPD_PER_LVL;
+		stats.meleeAttackCost += lvl * MELEE_SPD_PER_LVL;
+		stats.rangedAttackCost += lvl * RANGED_SPD_PER_LVL;
+		stats.walkCost += lvl * MOVE_SPD_PER_LVL;
 
 		rewardExp = properties.rewardExp + (int) (lvl * EXP_PER_LVL);
 
@@ -222,7 +224,7 @@ public abstract class AbstractNpc extends Entity {
 
 		if (properties.projectiles != null)
 			properties.projectiles.stream()
-					.forEach(id -> inventory.putItem(id, (int) (Utils.rand(10, 30) * Math.sqrt(this.lvl))));
+				.forEach(id -> inventory.putItem(id, (int) (Utils.rand(10, 30) * Math.sqrt(this.lvl))));
 
 		friendly = properties.friendly;
 		spawnOnce = properties.spawnOnce;
@@ -232,6 +234,7 @@ public abstract class AbstractNpc extends Entity {
 		canGiveQuests = Utils.percentRoll(CAN_GIVE_QUESTS_CHANCE);
 	}
 
+	@Override
 	@JsonIgnore
 	public int getLvl() {
 		return lvl;
@@ -268,10 +271,12 @@ public abstract class AbstractNpc extends Entity {
 			addActDuration(movement.getDuration());
 			super.queueMovement(movement);
 			if (!isNeutral())
-				Utils.dbg("%s is queueing movement (%s): %f",
-						debugName(),
-						movement.getClass().getSimpleName(),
-						getMovementAnimationDuration());
+				Utils.dbg(
+					"%s is queueing movement (%s): %f",
+					debugName(),
+					movement.getClass().getSimpleName(),
+					getMovementAnimationDuration()
+				);
 		}
 	}
 
@@ -284,7 +289,7 @@ public abstract class AbstractNpc extends Entity {
 	}
 
 	protected boolean planToWalk(Direction direction) {
-		Pair tmpPosition = futurePosition.copy().addDirection(direction);
+		var tmpPosition = futurePosition.copy().addDirection(direction);
 		if (!isObstacle(tmpPosition) && !MadSand.player().at(tmpPosition)) {
 			futurePosition.set(tmpPosition);
 			return true;
@@ -298,15 +303,17 @@ public abstract class AbstractNpc extends Entity {
 
 	private Movement createWalkMovement(Direction direction) {
 		return Movement.walk(this, direction)
-				.applyChanges(false)
-				.onMovementFinish(movement -> {
-					Pair newPosition = getPosition().addDirection(movement.direction());
-					MadSand.world().getCurLoc().moveNpc(this, newPosition.x, newPosition.y);
-					updCoords();
-					if (!hasQueuedMovement() && !futurePosition.equals(newPosition))
-						Utils.dbg("%s expected to be at (%s), but ended up at (%s)",
-								debugName(), futurePosition, newPosition);
-				});
+			.applyChanges(false)
+			.onMovementFinish(movement -> {
+				var newPosition = getPosition().addDirection(movement.direction());
+				MadSand.world().getCurLoc().moveNpc(this, newPosition.x, newPosition.y);
+				updCoords();
+				if (!hasQueuedMovement() && !futurePosition.equals(newPosition))
+					Utils.dbg(
+						"%s expected to be at (%s), but ended up at (%s)",
+						debugName(), futurePosition, newPosition
+					);
+			});
 	}
 
 	@Override
@@ -335,7 +342,7 @@ public abstract class AbstractNpc extends Entity {
 		if (obj == this)
 			return true;
 
-		AbstractNpc rhs = (AbstractNpc) obj;
+		var rhs = (AbstractNpc) obj;
 		return new EqualsBuilder().append(id, rhs.id).isEquals();
 	}
 
@@ -347,10 +354,10 @@ public abstract class AbstractNpc extends Entity {
 	@Override
 	public void meleeAttack(Direction dir) {
 		meleeAttackAnimation(dir, () -> {
-			Pair coords = getPosition().copy().addDirection(dir);
-			Player player = MadSand.player();
-			Entity target = player.at(coords) ? player : MadSand.world().getCurLoc().getNpc(coords);
-			Damage damage = new Damage(this).melee(target.getDefense());
+			var coords = getPosition().copy().addDirection(dir);
+			var player = MadSand.player();
+			var target = player.at(coords) ? player : MadSand.world().getCurLoc().getNpc(coords);
+			var damage = new Damage(this).melee(target.getDefense());
 			if (!target.isEmpty())
 				attack(target, damage);
 		});
@@ -358,7 +365,7 @@ public abstract class AbstractNpc extends Entity {
 
 	@Override
 	public void acceptDamage(Damage damage) {
-		Player player = MadSand.player();
+		var player = MadSand.player();
 		boolean attackedByPlayer = damage.dealtBy(player);
 
 		provoke(damage.getDealer());
@@ -375,23 +382,28 @@ public abstract class AbstractNpc extends Entity {
 
 		if (attackedByPlayer && isDead()) {
 			Mouse.refreshTooltip();
-			MadSand.notice("You kill %s! [+%d exp]",
-					getName(),
-					(int) player.addExp(rewardExp * (1f + Math.sqrt(getLvl() * 0.05))));
+			MadSand.notice(
+				"You kill %s! [+%d exp]",
+				getName(),
+				(int) player.addExp(rewardExp * (1f + Math.sqrt(getLvl() * 0.05)))
+			);
 			player.getReputation().change(stats().faction, Reputation.KILL_PENALTY);
 
 			if (player.addToKillCount(id)) // If killed for the first time
 				MadSand.print("You now know more about " + getName());
 
-			Map map = MadSand.world().getCurLoc();
+			var map = MadSand.world().getCurLoc();
 			if (!map.editable && map.getHostileNpcCount() == 0 && MadSand.world().isUnderGround()) {
-				MadSand.print("The curse of the dungeon has been lifted!" + Resources.LINEBREAK
-						+ "You can now break objects on this floor of the dungeon.");
+				MadSand.print(
+					"The curse of the dungeon has been lifted!" + Resources.LINEBREAK
+						+ "You can now break objects on this floor of the dungeon."
+				);
 				map.editable = true;
 			}
 		}
 	}
 
+	@Override
 	public void die() {
 		super.die();
 
@@ -413,6 +425,7 @@ public abstract class AbstractNpc extends Entity {
 		tickCharge -= timePassed;
 	}
 
+	@Override
 	public int doAction(double ap) {
 		if (canBeDespawned())
 			despawnProcess();
@@ -449,7 +462,7 @@ public abstract class AbstractNpc extends Entity {
 	}
 
 	protected void addLifetime() {
-		addLifetime(Math.sqrt((float) lvl * 0.1f + 0.15f) * 0.1f);
+		addLifetime(Math.sqrt(lvl * 0.1f + 0.15f) * 0.1f);
 	}
 
 	public boolean canBeDespawned() {
@@ -496,7 +509,7 @@ public abstract class AbstractNpc extends Entity {
 		Utils.out("[Aggro] %s lost sight of %s", debugName(), enemy);
 
 		enemy.unTarget();
-		this.enemy = null;
+		enemy = null;
 	}
 
 	@JsonSetter
@@ -530,7 +543,7 @@ public abstract class AbstractNpc extends Entity {
 			if (!canAct(stats.meleeAttackCost))
 				return;
 
-			Direction enemyDirection = futureRelativeDirection(enemy);
+			var enemyDirection = futureRelativeDirection(enemy);
 			look(enemyDirection);
 			meleeAttack(enemyDirection);
 			doAction(stats.meleeAttackCost);
@@ -557,7 +570,7 @@ public abstract class AbstractNpc extends Entity {
 
 	private void actRangedAttack(Entity enemy) {
 		int dst = futureDistanceTo(enemy);
-		Projectile projectile = inventory.getItem(Projectile.class).get();
+		var projectile = inventory.getItem(Projectile.class).get();
 		if (dst > MAX_DST)
 			getCloserTo(enemy);
 
@@ -610,16 +623,20 @@ public abstract class AbstractNpc extends Entity {
 		act();
 
 		if (!isNeutral() && enemySpotted())
-			Utils.dbg("%s (aggroed at %s) will act for %f secs / wait for %f secs",
-					debugName(), enemy.getName(), getActDuration(), getActDelay());
+			Utils.dbg(
+				"%s (aggroed at %s) will act for %f secs / wait for %f secs",
+				debugName(), enemy.getName(), getActDuration(), getActDelay()
+			);
 
 		if (enemyIsSlower()) {
-			Utils.dbg("%s's enemy (%s) is slower, so their action will be delayed by %f seconds",
-					debugName(), enemy.getName(), getActDuration());
+			Utils.dbg(
+				"%s's enemy (%s) is slower, so their action will be delayed by %f seconds",
+				debugName(), enemy.getName(), getActDuration()
+			);
 			enemy.waitFor(this);
 		}
 
-		TimeUtils.scheduleTask(() -> finishActing(), getActDuration());
+		TimeUtils.scheduleTask(this::finishActing, getActDuration());
 	}
 
 	private void act() {
@@ -650,7 +667,7 @@ public abstract class AbstractNpc extends Entity {
 
 		case Hostile:
 			if (!enemySpotted()) {
-				Entity enemy = findTarget();
+				var enemy = findTarget();
 				if (!enemy.isEmpty())
 					targetEnemy(enemy);
 				else {
@@ -682,19 +699,16 @@ public abstract class AbstractNpc extends Entity {
 	}
 
 	private Entity findTarget() {
-		Map map = MadSand.world().getCurLoc();
-		Storage<Entity> potentialTarget = new Storage<>(canSee(MadSand.player()) ? MadSand.player() : Map.nullNpc);
+		var map = MadSand.world().getCurLoc();
+		var potentialTarget = new Storage<Entity>(canSee(MadSand.player()) ? MadSand.player() : Map.nullNpc);
 
 		/* Have a chance based on intelligence to skip looking for other victims if player is already in FOV */
 		if (!potentialTarget.get().isEmpty() && stats().roll(Stat.Intelligence))
 			return potentialTarget.get();
 
 		forEachInFov((x, y) -> {
-			AbstractNpc npc = map.getNpc(x, y);
-			if (npc.isEmpty() || !canSee(npc))
-				return;
-
-			if (npc.stats().faction == stats().faction)
+			var npc = map.getNpc(x, y);
+			if (npc.isEmpty() || !canSee(npc) || (npc.stats().faction == stats().faction))
 				return;
 
 			if (distanceTo(npc) < distanceTo(potentialTarget.get()))
@@ -711,10 +725,10 @@ public abstract class AbstractNpc extends Entity {
 		float delay = (float) (randomActionDelay.gen() * (Stats.max().calcSpeed() - stats().calcSpeed()));
 		addActDelay(delay);
 
-		Player player = MadSand.player();
+		var player = MadSand.player();
 		if (player.canSee(this) && !isNeutral() && isTargeting(player) && getSpeed() > player.getSpeed()) {
 			Keyboard.ignoreInput();
-			setOnActionFinish(() -> Keyboard.resumeInput());
+			setOnActionFinish(Keyboard::resumeInput);
 		}
 	}
 
@@ -746,8 +760,9 @@ public abstract class AbstractNpc extends Entity {
 			return stats.name + " doesn't see you";
 	}
 
+	@Override
 	public String getInfoString() {
-		String info = super.getInfoString() + Resources.LINEBREAK;
+		var info = super.getInfoString() + Resources.LINEBREAK;
 
 		if (MadSand.player().knowsNpc(id))
 			info += "Faction: " + stats.faction + Resources.LINEBREAK;
@@ -761,11 +776,12 @@ public abstract class AbstractNpc extends Entity {
 		return info;
 	}
 
+	@Override
 	public boolean isEmpty() {
 		return this == Map.nullNpc;
 	}
 
-	public static enum State {
+	public enum State {
 		Still, Idle, Hostile
 	}
 }

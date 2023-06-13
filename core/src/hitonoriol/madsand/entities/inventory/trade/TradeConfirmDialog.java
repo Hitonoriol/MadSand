@@ -27,12 +27,12 @@ public class TradeConfirmDialog extends SliderDialog {
 
 	public TradeConfirmDialog(TradeInventory seller, Item item, TradeAction tradeAction, TradeUIRefresher refresher) {
 		super(TradeInventory.maxAffordableQuantity(seller.buyer, item));
-		this.tradeInventory = seller;
+		tradeInventory = seller;
 		this.tradeAction = tradeAction;
 		this.item = item;
-		this.itemPrice = item.getPrice();
+		itemPrice = item.getPrice();
 		this.refresher = refresher;
-		this.currentQuantity = minValue;
+		currentQuantity = minValue;
 		setCostLabelText(currentQuantity);
 
 		super.setSliderTitle(getTradeText());
@@ -63,9 +63,11 @@ public class TradeConfirmDialog extends SliderDialog {
 				return;
 			}
 
-			Utils.out("%s sold %d %s for %d coins",
-					TradeInventory.getBuyerString(tradeAction), quantity, item.name,
-					item.getPrice() * quantity);
+			Utils.out(
+				"%s sold %d %s for %d coins",
+				TradeInventory.getBuyerString(tradeAction), quantity, item.name,
+				item.getPrice() * quantity
+			);
 			refresher.refreshUI();
 			remove();
 		});
@@ -73,7 +75,7 @@ public class TradeConfirmDialog extends SliderDialog {
 
 	private void setCostLabelText(int itemQuantity) {
 		costLabelText = itemQuantity + Resources.Space + item.name
-				+ costFor + (itemPrice * itemQuantity) + Resources.Space + currencyName;
+			+ costFor + (itemPrice * itemQuantity) + Resources.Space + currencyName;
 		super.setSliderText(costLabelText);
 	}
 
@@ -84,6 +86,7 @@ public class TradeConfirmDialog extends SliderDialog {
 			super.setTitle(titleSellText + item.name);
 	}
 
+	@Override
 	public void show() {
 		super.show(Gui.overlay);
 	}

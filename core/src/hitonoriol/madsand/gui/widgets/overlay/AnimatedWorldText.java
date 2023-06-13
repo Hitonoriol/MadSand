@@ -17,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 
-import hitonoriol.madsand.containers.PairFloat;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.map.MapEntity;
@@ -36,7 +35,6 @@ public class AnimatedWorldText extends Group {
 	private final float MAX_OFFSET = toScreen(2.5f * TILESIZE);
 
 	private AnimatedWorldText(String text) {
-		super();
 		addActor(label);
 		label.setText(text);
 		Gui.setFontSize(label, Utils.rand(17, 20));
@@ -45,18 +43,22 @@ public class AnimatedWorldText extends Group {
 		offset.x = JRand.flt().range(-TILESIZE / 8f, TILESIZE / 8f).gen();
 
 		final float animTime = JRand.flt().range(1f, 1.85f).gen();
-		addAction(sequence(
+		addAction(
+			sequence(
 				alpha(0),
 				fadeIn(0.1f, Interpolation.fade),
 				parallel(
-						scaleTo(0.3f, 0.3f, animTime),
-						fadeOut(animTime, Interpolation.fade)),
-				run(() -> remove())));
+					scaleTo(0.3f, 0.3f, animTime),
+					fadeOut(animTime, Interpolation.fade)
+				),
+				run(this::remove)
+			)
+		);
 	}
 
 	public AnimatedWorldText(MapEntity entity, String text) {
 		this(text);
-		PairFloat coords = entity.getVisualPosition();
+		var coords = entity.getVisualPosition();
 		objectWidth = entity.getSprite().getRegionWidth();
 		offset.y = toScreen(0.25f * entity.getSprite().getRegionHeight());
 		setCoordUpdater(() -> screenPosition.set(coords.x, coords.y, 0));

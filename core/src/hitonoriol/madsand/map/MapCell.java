@@ -51,9 +51,9 @@ public class MapCell {
 
 	public boolean isOccupied() {
 		return hasNpc() ||
-				hasObject() ||
-				tile.hasFishingSpot() ||
-				hasPlayer();
+			hasObject() ||
+			tile.hasFishingSpot() ||
+			hasPlayer();
 	}
 
 	public Tile getTile() {
@@ -74,8 +74,8 @@ public class MapCell {
 
 	public ItemProducer getItemFactoryProducer() {
 		return object.as(ItemFactory.class)
-				.map(itemFactory -> itemFactory.getItemProducer())
-				.orElse(null);
+			.map(ItemFactory::getItemProducer)
+			.orElse(null);
 	}
 
 	public AbstractNpc getNpc() {

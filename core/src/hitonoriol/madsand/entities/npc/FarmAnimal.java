@@ -61,7 +61,7 @@ public class FarmAnimal extends AbstractNpc implements TimeDependent {
 
 	@Override
 	public String getInfoString() {
-		StringBuilder sb = new StringBuilder();
+		var sb = new StringBuilder();
 		CellInfoGenerator.getItemProducerInfo(sb, animalProduct);
 
 		if (isStarving()) {

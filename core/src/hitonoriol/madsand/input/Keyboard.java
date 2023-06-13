@@ -13,9 +13,7 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.containers.HashMapFactory;
 import hitonoriol.madsand.containers.Pair;
-import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
-import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.gamecontent.Globals;
 import hitonoriol.madsand.gamecontent.Items;
@@ -25,11 +23,9 @@ import hitonoriol.madsand.gui.dialogs.SliderDialog;
 import hitonoriol.madsand.minigames.blackjack.BlackJackUI;
 import hitonoriol.madsand.minigames.farkle.FarkleUI;
 import hitonoriol.madsand.minigames.videopoker.VideoPokerUI;
-import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.screens.WorldRenderer;
 import hitonoriol.madsand.util.Utils;
-import hitonoriol.madsand.world.World;
 
 public class Keyboard {
 	private static final GameInputListener inputListener = new GameInputListener();
@@ -38,17 +34,19 @@ public class Keyboard {
 
 	public static void initDefaultKeyBinds() {
 		/* Movement key polling */
-		final Map<Integer, Direction> keyDirs = HashMapFactory.create(map -> map
+		final Map<Integer, Direction> keyDirs = HashMapFactory.create(
+			map -> map
 				.put(Keys.W, Direction.UP)
 				.put(Keys.A, Direction.LEFT)
 				.put(Keys.S, Direction.DOWN)
-				.put(Keys.D, Direction.RIGHT));
+				.put(Keys.D, Direction.RIGHT)
+		);
 		Stream.of(Keys.W, Keys.A, Keys.S, Keys.D)
-				.forEach(key -> keyBinds.poll(key, () -> {
-					player().walk(keyDirs.get(key));
-					if (Gdx.input.isKeyJustPressed(key))
-						player().attackHostile();
-				}));
+			.forEach(key -> keyBinds.poll(key, () -> {
+				player().walk(keyDirs.get(key));
+				if (Gdx.input.isKeyJustPressed(key))
+					player().attackHostile();
+			}));
 
 		/* Turning keys */
 		Direction.forEachBase(dir -> {
@@ -57,28 +55,28 @@ public class Keyboard {
 
 		/* Action keys */
 		keyBinds
-				.bind(player()::interact, Keys.ENTER)
-				.bind(player()::useItem, Keys.U)
-				.bind(player()::freeHands, Keys.F)
-				.bind(player()::rest, Keys.SPACE)
-				.bind(world()::travel, Keys.N);
+			.bind(player()::interact, Keys.ENTER)
+			.bind(player()::useItem, Keys.U)
+			.bind(player()::freeHands, Keys.F)
+			.bind(player()::rest, Keys.SPACE)
+			.bind(world()::travel, Keys.N);
 
 		/* Function keys */
 		keyBinds
-				.bind(() -> {
-					if (Gui.isDialogActive())
-						Gui.overlay.closeAllDialogs();
-					else
-						MadSand.switchScreen(Screens.MainMenu);
-				}, true, Keys.ESCAPE)
-				.bind(() -> {
-					WorldRenderer renderer = MadSand.getRenderer();
-					if (renderer.getCamZoom() != 1)
-						renderer.setZoom(1);
-					else
-						renderer.setZoom(WorldRenderer.DEFAULT_ZOOM);
-				}, Keys.NUMPAD_5)
-				.bind(world()::save, Keys.G);
+			.bind(() -> {
+				if (Gui.isDialogActive())
+					Gui.overlay.closeAllDialogs();
+				else
+					MadSand.switchScreen(Screens.MainMenu);
+			}, true, Keys.ESCAPE)
+			.bind(() -> {
+				var renderer = MadSand.getRenderer();
+				if (renderer.getCamZoom() != 1)
+					renderer.setZoom(1);
+				else
+					renderer.setZoom(WorldRenderer.DEFAULT_ZOOM);
+			}, Keys.NUMPAD_5)
+			.bind(world()::save, Keys.G);
 
 		/* Debug keys */
 		if (Globals.debugMode) {
@@ -90,31 +88,31 @@ public class Keyboard {
 				var map = world().getCurLoc();
 				map.forEachTile((x, y) -> map.getTile(x, y).visited = true);
 			}, Keys.SHIFT_LEFT, Keys.V);
-			
+
 			/* Unlock all recipes */
 			bind(() -> {
 				Items.all().craftRequirements().keySet()
-						.forEach(player()::unlockCraftRecipe);
+					.forEach(player()::unlockCraftRecipe);
 				Items.all().buildRequirements().keySet()
-						.forEach(player()::unlockBuildRecipe);
+					.forEach(player()::unlockBuildRecipe);
 			}, Keys.CONTROL_LEFT, Keys.U);
 
 			/* Populate inventory with random items */
 			bind(() -> {
 				new SliderDialog(1, 100)
-						.setTitle("Give random items")
-						.setSliderTitle("Item stacks to give:")
-						.setOnUpdateText("stacks")
-						.setConfirmAction(n -> {
-							for (int i = 0; i < n; ++i)
-								player().addItem(Item.createRandom().setQuantity(Utils.rand(1, 10)));
-						})
-						.show();
+					.setTitle("Give random items")
+					.setSliderTitle("Item stacks to give:")
+					.setOnUpdateText("stacks")
+					.setConfirmAction(n -> {
+						for (int i = 0; i < n; ++i)
+							player().addItem(Item.createRandom().setQuantity(Utils.rand(1, 10)));
+					})
+					.show();
 			}, Keys.CONTROL_LEFT, Keys.I);
 
 			/* Print NPC info */
 			bind(() -> {
-				AbstractNpc npc = Mouse.pointingAt().getCell().getNpc();
+				var npc = Mouse.pointingAt().getCell().getNpc();
 				if (npc.isEmpty())
 					return;
 
@@ -124,14 +122,14 @@ public class Keyboard {
 			/* Teleport to selected tile */
 			bind(() -> {
 				Mouse.setClickAction((x, y) -> {
-					Node dest = Mouse.getPathToCursor().getDestination();
+					var dest = Mouse.getPathToCursor().getDestination();
 					player().teleport(dest.x, dest.y);
 				}, player().getFov());
 			}, Keys.Y);
 
 			/* Skip one hour of world time */
 			bind(() -> {
-				World world = world();
+				var world = world();
 				world.skipToNextHour();
 				world.updateLight();
 				Gui.refreshOverlay();
@@ -151,13 +149,13 @@ public class Keyboard {
 			/* Move between sectors */
 			Direction.forEachBase(dir -> {
 				bind(() -> {
-					Player player = player();
-					hitonoriol.madsand.map.Map map = world().getCurLoc();
-					Pair tpVector = Pair.directionToCoord(dir);
-					Pair tpDelta = dir.isPositive()
-							? new Pair(map.getWidth() - player.x, map.getHeight() - player.y)
-									.multiply(tpVector)
-							: player.getPosition().multiply(tpVector);
+					var player = player();
+					var map = world().getCurLoc();
+					var tpVector = Pair.directionToCoord(dir);
+					var tpDelta = dir.isPositive()
+						? new Pair(map.getWidth() - player.x, map.getHeight() - player.y)
+							.multiply(tpVector)
+						: player.getPosition().multiply(tpVector);
 
 					player.teleport(tpDelta.add(player.getPosition()));
 					player.turn(dir);
@@ -167,14 +165,14 @@ public class Keyboard {
 
 			/* Force update light */
 			bind(world()::updateLight, Keys.CONTROL_LEFT, Keys.L);
-			
+
 			/* Quick access to minigames */
 			bind(() -> {
 				new SelectDialog("Minigames")
-						.addOption("BlackJack", () -> new BlackJackUI().show())
-						.addOption("Videopoker", () -> new VideoPokerUI().show())
-						.addOption("Farkle", () -> new FarkleUI().show())
-						.show();
+					.addOption("BlackJack", () -> new BlackJackUI().show())
+					.addOption("Videopoker", () -> new VideoPokerUI().show())
+					.addOption("Farkle", () -> new FarkleUI().show())
+					.show();
 			}, Keys.CONTROL_LEFT, Keys.M);
 		}
 	}

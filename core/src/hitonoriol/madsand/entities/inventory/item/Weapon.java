@@ -15,7 +15,6 @@ public class Weapon extends CombatEquipment {
 	}
 
 	public Weapon() {
-		super();
 	}
 
 	@Override
@@ -49,8 +48,8 @@ public class Weapon extends CombatEquipment {
 	protected ItemCategory combatCategory() {
 		return ItemCategory.Weapons;
 	}
-	
-	public static enum Type {
+
+	public enum Type {
 		MeleeWeapon, OffhandWeapon, RangedWeapon
 	}
 }

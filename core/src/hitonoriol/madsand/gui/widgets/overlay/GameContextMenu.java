@@ -1,16 +1,13 @@
 package hitonoriol.madsand.gui.widgets.overlay;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
-import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.input.Mouse;
-import hitonoriol.madsand.map.Map;
 
 public class GameContextMenu extends Table {
 	private final static float WIDTH = 155, HEIGHT = Gui.FONT_S * 3;
@@ -22,9 +19,9 @@ public class GameContextMenu extends Table {
 
 	private void refresh() {
 		super.clear();
-		Map map = MadSand.world().getCurLoc();
-		Player player = MadSand.player();
-		Item hand = player.stats.hand();
+		var map = MadSand.world().getCurLoc();
+		var player = MadSand.player();
+		var hand = player.stats.hand();
 
 		defaults().size(WIDTH, HEIGHT);
 
@@ -55,7 +52,7 @@ public class GameContextMenu extends Table {
 	}
 
 	public void addButton(String text, Runnable action) {
-		TextButton button = Widgets.button(text);
+		var button = Widgets.button(text);
 		button.getLabel().setWrap(true);
 
 		super.add(button).row();

@@ -4,11 +4,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class WorldAnimation extends SimpleAnimation {
 	private float x, y;
-	
+
 	public WorldAnimation(TextureRegion[] strip) {
 		super(strip);
 	}
-	
+
 	public WorldAnimation setCoords(float x, float y) {
 		this.x = x;
 		this.y = y;
@@ -31,7 +31,7 @@ public class WorldAnimation extends SimpleAnimation {
 		if (obj == this)
 			return true;
 
-		WorldAnimation rhs = (WorldAnimation) obj;
+		var rhs = (WorldAnimation) obj;
 		return x == rhs.x && y == rhs.y && getKeyFrames() == rhs.getKeyFrames();
 	}
 }

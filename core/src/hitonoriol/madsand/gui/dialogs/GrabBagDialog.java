@@ -22,7 +22,7 @@ public class GrabBagDialog extends GameDialog {
 		this(Gui.overlay);
 		setTitle(bagName);
 		super.skipLine();
-		String itemString = (!items.isEmpty()) ? "Items you found inside:" : "Damn! The bag is empty.";
+		var itemString = (!items.isEmpty()) ? "Items you found inside:" : "Damn! The bag is empty.";
 		super.add(itemString).align(Align.center).row();
 
 		super.add(ItemUI.createItemList(items, ITEMS_PER_ROW)).row();

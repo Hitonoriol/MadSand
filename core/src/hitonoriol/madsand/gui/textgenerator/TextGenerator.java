@@ -35,11 +35,11 @@ public abstract class TextGenerator {
 	protected void clearBuilder() {
 		Strings.clearBuilder(builder);
 	}
-	
+
 	protected void clear() {
 		setText("");
 	}
-	
+
 	public boolean textEmpty() {
 		return text.isEmpty() && builder.length() == 0;
 	}

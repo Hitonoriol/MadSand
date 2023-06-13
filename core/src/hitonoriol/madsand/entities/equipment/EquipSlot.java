@@ -8,8 +8,8 @@ public enum EquipSlot {
 	public final String text;
 
 	EquipSlot(int val, String slotString) {
-		this.number = val;
-		this.text = slotString;
+		number = val;
+		text = slotString;
 	}
 
 	public final static EquipSlot values[] = EquipSlot.values();

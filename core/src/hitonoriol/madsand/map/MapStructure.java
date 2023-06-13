@@ -57,8 +57,8 @@ public class MapStructure {
 	private static final int maxAttempts = 10000;
 
 	public Pair getFreeTile() {
-		Pair coords = new Pair();
-		Map map = MadSand.world().getCurLoc();
+		var coords = new Pair();
+		var map = MadSand.world().getCurLoc();
 		int attempt = 0;
 		do {
 			coords.set(randX(), randY());
@@ -67,8 +67,10 @@ public class MapStructure {
 				break;
 
 			++attempt;
-		} while (MadSand.player().at(coords) ||
-				!map.isFreeTile(coords));
+		} while (
+			MadSand.player().at(coords) ||
+				!map.isFreeTile(coords)
+		);
 
 		return coords;
 	}

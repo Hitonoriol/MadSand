@@ -12,9 +12,9 @@ public enum WorkerType {
 	public static RollTable<WorkerType> workerRollTable = new RollTable<>();
 	static {
 		workerRollTable
-				.add(100, Sweeper)
-				.add(40, Hunter)
-				.add(30, Miner, Digger, Woodcutter);
+			.add(100, Sweeper)
+			.add(40, Hunter)
+			.add(30, Miner, Digger, Woodcutter);
 	}
 
 	public static WorkerType roll() {

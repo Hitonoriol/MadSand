@@ -107,13 +107,13 @@ public class BaseStats extends HashMap<Stat, Integer> {
 		switch (stat) {
 		case Luck:
 			return 0.034459925419825316 * Math.pow(lvl, 2)
-					+ 1.2751306598545928 * lvl
-					+ 0.6652992420539262;
+				+ 1.2751306598545928 * lvl
+				+ 0.6652992420539262;
 
 		case Accuracy:
 			return 0.057563520795230305 * Math.pow(lvl, 2)
-					+ 0.11036796858541652 * lvl
-					+ 25.60873585146606;
+				+ 0.11036796858541652 * lvl
+				+ 25.60873585146606;
 
 		default:
 			return (lvl / MAX_LVL) * 100;
@@ -194,9 +194,11 @@ public class BaseStats extends HashMap<Stat, Integer> {
 
 	@Override
 	public String toString() {
-		return String.format("Base stats: {%s}",
-				Arrays.stream(Stat.values())
-						.map(stat -> stat.name() + ": " + get(stat))
-						.collect(Collectors.joining(", ")));
+		return String.format(
+			"Base stats: {%s}",
+			Arrays.stream(Stat.values())
+				.map(stat -> stat.name() + ": " + get(stat))
+				.collect(Collectors.joining(", "))
+		);
 	}
 }

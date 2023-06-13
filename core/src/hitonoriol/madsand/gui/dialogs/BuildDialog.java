@@ -25,7 +25,6 @@ import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.map.Map;
-import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.resources.Resources;
 
 public class BuildDialog extends GameDialog {
@@ -46,7 +45,7 @@ public class BuildDialog extends GameDialog {
 		super.add(unlockProgressLabel).width(WIDTH).row();
 		buildTable.setBackground(GuiSkin.darkBackground());
 		BuildDialogEntry buildEntry;
-		Player player = MadSand.player();
+		var player = MadSand.player();
 		for (Entry<Integer, String> object : Objects.all().buildRecipes().entrySet()) {
 			if (player.getBuildRecipes().contains(object.getKey())) {
 				buildEntry = new BuildDialogEntry(this, object.getKey(), object.getValue());
@@ -81,15 +80,15 @@ class BuildDialogEntry extends Group {
 	int id;
 
 	public BuildDialogEntry(BuildDialog dialog, int id, String recipe) {
-		super();
 		this.dialog = dialog;
 		this.id = id;
 		this.recipe = recipe;
 
-		Image objImage = new Image(Textures.getObject(id));
-		Label resourceLabel = new Label(
-				"Resources required to build:" + Resources.LINEBREAK + Item.createReadableItemList(recipe),
-				Gui.skin);
+		var objImage = new Image(Textures.getObject(id));
+		var resourceLabel = new Label(
+			"Resources required to build:" + Resources.LINEBREAK + Item.createReadableItemList(recipe),
+			Gui.skin
+		);
 		resourceLabel.setWrap(true);
 		resourceLabel.setAlignment(Align.center);
 
@@ -107,21 +106,26 @@ class BuildDialogEntry extends Group {
 
 	private void initListeners() {
 		super.addListener(new InputListener() {
+			@Override
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
 				container.setBackground(ItemUI.emptyItem);
 			}
 
+			@Override
 			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
 				container.setBackground(GuiSkin.transparency());
 			}
 		});
 
 		super.addListener(new ClickListener(Buttons.LEFT) {
+			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				MapObject object = player.objectLookingAt();
+				var object = player.objectLookingAt();
 				if (!object.equals(Map.nullObject))
-					Gui.drawOkDialog("The tile in front of you is not empty." + Resources.LINEBREAK
-							+ "You can only build on empty tiles.");
+					Gui.drawOkDialog(
+						"The tile in front of you is not empty." + Resources.LINEBREAK
+							+ "You can only build on empty tiles."
+					);
 				else if (!player.inventory.itemsExist(recipe))
 					Gui.drawOkDialog("You don't have enough resources to build this!");
 				else {

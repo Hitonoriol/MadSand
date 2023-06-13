@@ -15,7 +15,6 @@ import hitonoriol.madsand.entities.inventory.item.category.ItemCategories;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.gamecontent.Globals;
-import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.object.ResourceObject;
 
 public class Settlement {
@@ -39,11 +38,11 @@ public class Settlement {
 	}
 
 	public boolean upgradeSize() {
-		Item upgradeCost = Item.create(Globals.values().currencyId, getSizeUpgradeCost());
+		var upgradeCost = Item.create(Globals.values().currencyId, getSizeUpgradeCost());
 		if (!warehouse.itemExists(upgradeCost))
 			return false;
 
-		Map overworld = location.getOverworld();
+		var overworld = location.getOverworld();
 		warehouse.delItem(upgradeCost);
 		overworld.setSize(overworld.getWidth() + SIZE_UPGRADE_BY, overworld.getHeight() + SIZE_UPGRADE_BY);
 
@@ -53,7 +52,7 @@ public class Settlement {
 	@JsonIgnore
 	public int getHireCost() {
 		return (int) (Math.sqrt(getPopulation() + 1d) * BASE_HIRE_COST
-				* (1d + Math.sqrt(MadSand.player().getEstablishedSettlements()) / 25d));
+			* (1d + Math.sqrt(MadSand.player().getEstablishedSettlements()) / 25d));
 	}
 
 	public boolean isOccupied(long npcUid) {
@@ -72,7 +71,7 @@ public class Settlement {
 	}
 
 	public void addWorker(WorkerType type, long uid) {
-		WorkerContainer allWorkers = getWorkers(type);
+		var allWorkers = getWorkers(type);
 		allWorkers.add(uid);
 
 		if (!workers.containsKey(type))
@@ -91,15 +90,15 @@ public class Settlement {
 	private Pair objectCoords;
 
 	private int skillWorkTick(Skill skill) {
-		Map map = location.getOverworld();
+		var map = location.getOverworld();
 
 		if (skill == Skill.Digging)
 			return map.getTile(objectCoords = map.locateDiggableTile()).rollDrop(Tool.Type.Shovel);
 		else if (skill.isResourceSkill())
 			return map.getObject(objectCoords = map.locateObject(skill))
-					.as(ResourceObject.class)
-					.map(resourceObj -> resourceObj.rollDrop(Tool.Type.bySkill(skill)))
-					.orElse(-1);
+				.as(ResourceObject.class)
+				.map(resourceObj -> resourceObj.rollDrop(Tool.Type.bySkill(skill)))
+				.orElse(-1);
 
 		return -1;
 
@@ -108,7 +107,7 @@ public class Settlement {
 	public void timeTick() {
 		//Map map = location.getOverworld(); //TODO: Settlements in turn-based time + damage objects when gathering resources
 		objectCoords = Pair.nullPair;
-		ItemCategories items = ItemCategories.get();
+		var items = ItemCategories.get();
 		Skill workerSkill;
 		WorkerContainer workers;
 		boolean itemAdded;
@@ -142,19 +141,19 @@ public class Settlement {
 
 	public void randPopulate() {
 		location.getOverworld()
-				.pickNpcs(npc -> npc.stats.faction.isHuman())
-				.filter(npc -> {
-					if (leaderUid == -1) {
-						leaderUid = npc.uid();
-						return false;
-					}
-					return true;
-				})
-				.forEach(npc -> addWorker(WorkerType.roll(), npc.uid()));
+			.pickNpcs(npc -> npc.stats.faction.isHuman())
+			.filter(npc -> {
+				if (leaderUid == -1) {
+					leaderUid = npc.uid();
+					return false;
+				}
+				return true;
+			})
+			.forEach(npc -> addWorker(WorkerType.roll(), npc.uid()));
 	}
 
 	public WorkerType recruitWorker(long uid) {
-		WorkerType type = WorkerType.roll();
+		var type = WorkerType.roll();
 		addWorker(type, uid);
 		return type;
 	}
@@ -219,7 +218,7 @@ public class Settlement {
 		}
 	}
 
-	public static enum Status {
+	public enum Status {
 		PlayerOwned, NpcOwned, DoesNotExist, Unknown;
 
 		public boolean exists() {

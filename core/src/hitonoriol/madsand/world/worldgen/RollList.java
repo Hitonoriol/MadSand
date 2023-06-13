@@ -12,7 +12,7 @@ public class RollList {
 	public RollList(int rollCount, ArrayList<Integer> idList) {
 		this.idList = idList;
 		this.rollCount = rollCount;
-		this.scalable = false;
+		scalable = false;
 	}
 
 	@JsonIgnore

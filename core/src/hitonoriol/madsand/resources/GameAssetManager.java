@@ -86,8 +86,10 @@ public class GameAssetManager extends AssetManager {
 		setLoader(Texture.class, new TextureLoader(resolver));
 		setLoader(Skin.class, new SkinLoader(resolver));
 		setLoader(ParticleEffect.class, new ParticleEffectLoader(resolver));
-		setLoader(com.badlogic.gdx.graphics.g3d.particles.ParticleEffect.class,
-				new com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader(resolver));
+		setLoader(
+			com.badlogic.gdx.graphics.g3d.particles.ParticleEffect.class,
+			new com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader(resolver)
+		);
 		setLoader(PolygonRegion.class, new PolygonRegionLoader(resolver));
 		setLoader(I18NBundle.class, new I18NBundleLoader(resolver));
 		setLoader(Model.class, ".g3dj", new G3dModelLoader(new JsonReader(), resolver));
@@ -140,15 +142,19 @@ public class GameAssetManager extends AssetManager {
 		setLoader(type, loader);
 	}
 
-	public final <T extends ContentStorage<E>, E extends Enumerable> void contentLoader(T storage,
-			Class<E> elementType) {
+	public final <T extends ContentStorage<E>, E extends Enumerable> void contentLoader(
+		T storage,
+		Class<E> elementType
+	) {
 		setLoader(Reflection.getClass(storage), new ContentLoader<>(this, storage, elementType));
 	}
 
 	/* Register a loader via a HashMap<K, V> "typedef" T:
 	 * For each loader, T must be a unique class extending HashMap<K, V> */
-	public final <T extends HashMap<K, V>, K, V> void mapLoader(Class<T> storageType, Class<K> keyType,
-			Class<V> valueType) {
+	public final <T extends HashMap<K, V>, K, V> void mapLoader(
+		Class<T> storageType, Class<K> keyType,
+		Class<V> valueType
+	) {
 		setLoader(storageType, new MapLoader<>(this, storageType, keyType, valueType));
 	}
 
@@ -215,7 +221,7 @@ public class GameAssetManager extends AssetManager {
 	}
 
 	public void setStatusText(String format, Object... args) {
-		String str = String.format(format, args);
+		var str = String.format(format, args);
 		Utils.out(str);
 		if (isLoadingScreenAttached())
 			loadingScreen.setStatusText(str);
@@ -240,7 +246,7 @@ public class GameAssetManager extends AssetManager {
 	}
 
 	public LoadingScreen createLoadingScreen() {
-		LoadingScreen screen = new LoadingScreen(this);
+		var screen = new LoadingScreen(this);
 		attachLoadingScreen(screen);
 		return screen;
 	}

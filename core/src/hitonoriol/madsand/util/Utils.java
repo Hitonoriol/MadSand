@@ -63,8 +63,8 @@ public class Utils {
 	}
 
 	public static ArrayList<Integer> parseList(String str) {
-		StringTokenizer list = new StringTokenizer(str, ",");
-		ArrayList<Integer> ret = new ArrayList<>();
+		var list = new StringTokenizer(str, ",");
+		var ret = new ArrayList<Integer>();
 
 		while (list.hasMoreTokens())
 			ret.add(val(list.nextToken()));
@@ -122,11 +122,11 @@ public class Utils {
 		Gui.doLater(Gdx.app::exit); // Schedule an exit in case if the exception is caught
 		throw new RuntimeException(e);
 	}
-	
+
 	public static void die(String msg) {
 		die(new Exception(msg));
 	}
-	
+
 	public static void die() {
 		die("Seems like some fatal error has occured.");
 	}
@@ -148,12 +148,12 @@ public class Utils {
 			die("Too many errors");
 
 		Gui.drawOkDialog("Panic", "Oops, something went horribly wrong.").fillScreen()
-				.newLine()
-				.appendText("You can continue playing. If you notice more strange behavior, relaunch the game.")
-				.newLine(2)
-				.appendText("Here's some useless info (this will also be saved to " + Log.OUT_FILE + "):")
-				.newLine()
-				.appendText(msg);
+			.newLine()
+			.appendText("You can continue playing. If you notice more strange behavior, relaunch the game.")
+			.newLine(2)
+			.appendText("Here's some useless info (this will also be saved to " + Log.OUT_FILE + "):")
+			.newLine()
+			.appendText(msg);
 	}
 
 	public static void tryTo(SafeRunnable action) {
@@ -202,8 +202,8 @@ public class Utils {
 
 	public static <T> T randElement(Set<T> set, int offset) {
 		return set.stream()
-				.skip(rand(0 + offset, set.size() - 1))
-				.findFirst().orElse(null);
+			.skip(rand(0 + offset, set.size() - 1))
+			.findFirst().orElse(null);
 	}
 
 	public static <T> T randElement(List<T> list) {
@@ -277,7 +277,7 @@ public class Utils {
 		if (!verbose)
 			return hours + TIME_DELIM + minutes + TIME_DELIM + secs;
 
-		String time = "";
+		var time = "";
 		if (minutes > 0)
 			time = minutes + " minutes ";
 		if (hours > 0)
@@ -297,7 +297,7 @@ public class Utils {
 	}
 
 	public static <T> String getPackageName(Class<T> clazz) {
-		String fullName = clazz.getName();
+		var fullName = clazz.getName();
 		return fullName.substring(0, fullName.lastIndexOf("."));
 	}
 
@@ -336,12 +336,14 @@ public class Utils {
 	}
 
 	public static String memoryUsageString() {
-		Runtime runtime = Runtime.getRuntime();
+		var runtime = Runtime.getRuntime();
 		double nonHeapMem = toMB(ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage());
 		double totalMem = toMB(runtime.totalMemory()), freeMem = toMB(runtime.freeMemory());
 		double memInUse = totalMem - freeMem;
-		return String.format("Memory allocated: %.2fMB (%.2fMB used), off-heap: %.2fMB",
-				totalMem, memInUse, nonHeapMem);
+		return String.format(
+			"Memory allocated: %.2fMB (%.2fMB used), off-heap: %.2fMB",
+			totalMem, memInUse, nonHeapMem
+		);
 	}
 
 	public static void printMemoryInfo() {
@@ -349,7 +351,9 @@ public class Utils {
 	}
 
 	public static void printSystemInfo() {
-		out("Using Java %s on %s (%s)",
-				getProperty("java.version"), getProperty("os.name"), getProperty("os.arch"));
+		out(
+			"Using Java %s on %s (%s)",
+			getProperty("java.version"), getProperty("os.name"), getProperty("os.arch")
+		);
 	}
 }

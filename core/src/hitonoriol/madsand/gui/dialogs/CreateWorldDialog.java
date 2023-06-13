@@ -2,9 +2,6 @@ package hitonoriol.madsand.gui.dialogs;
 
 import java.io.File;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.MadSand;
@@ -25,9 +22,9 @@ public class CreateWorldDialog extends GameDialog {
 	}
 
 	private void createDialog() {
-		Label nameLabel = Widgets.label("World name:");
-		TextField worldNameField = Widgets.textField(Utils.randWord() + " World");
-		TextButton createWorldBtn = Widgets.button("Proceed");
+		var nameLabel = Widgets.label("World name:");
+		var worldNameField = Widgets.textField(Utils.randWord() + " World");
+		var createWorldBtn = Widgets.button("Proceed");
 
 		nameLabel.setAlignment(Align.center);
 		super.setTitle("New Game");
@@ -43,10 +40,7 @@ public class CreateWorldDialog extends GameDialog {
 	}
 
 	private void createWorld(String worldName) {
-		if (worldName.isEmpty())
-			return;
-
-		if (new File(GameSaver.SAVEDIR + worldName).exists())
+		if (worldName.isEmpty() || new File(GameSaver.SAVEDIR + worldName).exists())
 			return;
 
 		remove();

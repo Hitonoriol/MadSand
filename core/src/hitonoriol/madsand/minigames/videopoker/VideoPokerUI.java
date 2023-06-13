@@ -65,13 +65,14 @@ public class VideoPokerUI extends CardGameUI {
 			});
 		});
 
-		Gui.setAction(drawButton, () -> endGame());
+		Gui.setAction(drawButton, this::endGame);
 	}
 
 	public VideoPokerUI() {
 		this(null);
 	}
 
+	@Override
 	protected void endGame() {
 		super.endGame();
 		videoPoker.draw();
@@ -91,6 +92,7 @@ public class VideoPokerUI extends CardGameUI {
 		for (Card card : videoPoker.hand.cards) {
 			int idx = videoPoker.hand.cards.indexOf(card);
 			cardUI.get(idx).addListener(new ClickListener(Buttons.LEFT) {
+				@Override
 				public void clicked(InputEvent event, float x, float y) {
 					if (!videoPoker.isHeld(idx))
 						videoPoker.holdCard(idx);
@@ -148,7 +150,7 @@ public class VideoPokerUI extends CardGameUI {
 	}
 
 	private Label createHeldLbl(int cardIdx) {
-		Label label = Widgets.label(videoPoker.isHeld(cardIdx) ? "Held" : "");
+		var label = Widgets.label(videoPoker.isHeld(cardIdx) ? "Held" : "");
 		label.setAlignment(Align.center);
 		return label;
 	}

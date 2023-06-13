@@ -26,12 +26,12 @@ public class InfoPanel extends ScrollablePanel {
 		this();
 		setTitle(title);
 	}
-	
+
 	public InfoPanel() {
 		add(createToggleButton())
-				.width(WIDTH)
-				.align(Align.center)
-				.padBottom(1).row();
+			.width(WIDTH)
+			.align(Align.center)
+			.padBottom(1).row();
 		addBody();
 		updateSubTitle();
 	}
@@ -39,25 +39,25 @@ public class InfoPanel extends ScrollablePanel {
 	public void setTitle(String title) {
 		this.title.setText(title);
 	}
-	
+
 	public void setSubTitle(String subTitle) {
 		this.subTitle.setText(subTitle);
 	}
-	
+
 	private TextButton createToggleButton() {
-		TextButton button = Widgets.button();
+		var button = Widgets.button();
 		title.setAlignment(Align.center);
 		button.clearChildren();
 		button.add(title).expand().fill().row();
 		subTitle.setAlignment(Align.center);
 		button.add(subTitle).expand().fill().align(Align.center).row();
 
-		TextButtonStyle style = new TextButtonStyle(button.getStyle());
+		var style = new TextButtonStyle(button.getStyle());
 		style.up = style.over = style.down = style.checked = getContentTable().getBackground();
 		button.setStyle(style);
 
 		MouseoverListener.setUp(button);
-		Gui.setAction(button, () -> toggleEnabled());
+		Gui.setAction(button, this::toggleEnabled);
 		return button;
 	}
 
@@ -72,7 +72,7 @@ public class InfoPanel extends ScrollablePanel {
 	}
 
 	public RefreshableLabel addEntry(TextGenerator generator) {
-		RefreshableLabel label = processor.addTextGenerator(generator);
+		var label = processor.addTextGenerator(generator);
 		addContents(label).padLeft(ENTRY_PAD).row();
 		return label;
 	}

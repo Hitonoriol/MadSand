@@ -29,15 +29,14 @@ public class WaypointDialog extends GameDialog {
 		container.align(Align.topLeft);
 		add(new AutoFocusScrollPane(container)).size(ENTRY_WIDTH * 3.1f, 350).row();
 		List<Waypoint> waypoints = MadSand.world().getCurLoc()
-				.getObjects().stream()
-				.map(object -> object.as(Waypoint.class).orElse(null))
-				.filter(waypoint -> waypoint != null)
-				.collect(Collectors.toList());
+			.getObjects().stream()
+			.map(object -> object.as(Waypoint.class).orElse(null))
+			.filter(waypoint -> waypoint != null)
+			.collect(Collectors.toList());
 		if (waypoints.isEmpty()) {
 			container.align(Align.center);
 			container.add("There are no GPS waypoints in this sector!");
-		}
-		else {
+		} else {
 			container.add(createWaypointEntry()).padBottom(ENTRY_PAD * 2).row();
 			waypoints.forEach(waypoint -> container.add(createWaypointEntry(waypoint)).align(Align.left).row());
 		}
@@ -48,7 +47,7 @@ public class WaypointDialog extends GameDialog {
 	private final static float ENTRY_WIDTH = 225, ENTRY_PAD = 10;
 
 	private Table createWaypointEntry(Waypoint waypoint) {
-		Table entry = Widgets.table();
+		var entry = Widgets.table();
 		entry.defaults().width(ENTRY_WIDTH).height(FONT_S).padRight(ENTRY_PAD);
 		/* Create table header */
 		if (waypoint == null) {
@@ -59,7 +58,7 @@ public class WaypointDialog extends GameDialog {
 		}
 		entry.add(waypoint.name);
 		entry.add(waypoint.getPosition().toString());
-		TextButton toggleBtn = updateButton(Widgets.button(""), waypoint);
+		var toggleBtn = updateButton(Widgets.button(""), waypoint);
 		entry.add(toggleBtn).size(ENTRY_WIDTH, BTN_HEIGHT);
 		Gui.setAction(toggleBtn, () -> {
 			waypoint.toggleArrow();

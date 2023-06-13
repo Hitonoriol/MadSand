@@ -23,7 +23,6 @@ import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.commons.exception.Exceptions;
-import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.resources.Serializer;
@@ -67,7 +66,7 @@ public class GameSaver {
 	public void setWorldMap(WorldMap worldMap) {
 		worldMapSaver.setWorldMap(worldMap);
 	}
-	
+
 	public void save() {
 		if (world.inEncounter()) {
 			Gui.drawOkDialog("You can't save during an encounter!");
@@ -81,9 +80,9 @@ public class GameSaver {
 		else
 			MadSand.print("Couldn't save the game. Check logs.");
 	}
-	
+
 	public boolean saveLocation(int wx, int wy) {
-		WorldMapSaver saver = world.getMapSaver();
+		var saver = world.getMapSaver();
 		try {
 			OutputStream os = new FileOutputStream(getSectorFile(wx, wy));
 			os.write(saver.locationToBytes(wx, wy));
@@ -99,11 +98,11 @@ public class GameSaver {
 	public boolean saveLocation() {
 		return saveLocation(world.wx(), world.wy());
 	}
-	
+
 	private boolean saveWorld() {
 		try {
-			File worldFile = new File(getCurSaveDir() + GameSaver.WORLDFILE);
-			Player player = MadSand.player();
+			var worldFile = new File(getCurSaveDir() + GameSaver.WORLDFILE);
+			var player = MadSand.player();
 			player.stats.equipment.setStatBonus(false);
 			serializer.writeValue(worldFile, world);
 			player.stats.equipment.setStatBonus(true);
@@ -113,10 +112,10 @@ public class GameSaver {
 			return false;
 		}
 	}
-	
+
 	private boolean saveLog() {
 		try {
-			FileWriter fw = new FileWriter(getCurSaveDir() + GameSaver.LOGFILE);
+			var fw = new FileWriter(getCurSaveDir() + GameSaver.LOGFILE);
 
 			for (Label logLabel : Gui.overlay.getGameLog().getLabels())
 				fw.write(logLabel.getText().toString() + LINEBREAK);
@@ -133,7 +132,7 @@ public class GameSaver {
 	public void load() throws IOException {
 		Utils.out("Loading world [%s]...", getCurSaveDir());
 		Utils.printMemoryInfo();
-		File worldFile = new File(getCurSaveDir());
+		var worldFile = new File(getCurSaveDir());
 
 		if (!worldFile.exists() || !worldFile.isDirectory()) {
 			MadSand.switchScreen(Screens.MainMenu);
@@ -159,7 +158,7 @@ public class GameSaver {
 	}
 
 	public void loadLocation(int wx, int wy) throws IOException {
-		WorldMapSaver saver = world.getMapSaver();
+		var saver = world.getMapSaver();
 		byte[] data = Files.readAllBytes(Paths.get(getSectorFile(wx, wy).toURI()));
 		Utils.out("Loading location data for [%d, %d]...", wx, wy);
 		saver.loadLocationInfo(wx, wy);
@@ -174,7 +173,7 @@ public class GameSaver {
 	}
 
 	private void loadWorld() throws IOException {
-		String worldFile = getCurSaveDir() + GameSaver.WORLDFILE;
+		var worldFile = getCurSaveDir() + GameSaver.WORLDFILE;
 		Utils.out("Loading world data from `%s`...", worldFile);
 		world = serializer.readValue(readFile(worldFile), World.class);
 		System.gc();
@@ -192,8 +191,8 @@ public class GameSaver {
 
 	public static void writeFile(String name, String text) {
 		try {
-			File file = new File(name);
-			PrintWriter pw = new PrintWriter(file);
+			var file = new File(name);
+			var pw = new PrintWriter(file);
 			pw.print(text);
 			pw.close();
 		} catch (Exception e) {
@@ -203,8 +202,8 @@ public class GameSaver {
 
 	public static String readFile(File file, boolean withNewline) {
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(file));
-			String lk = "";
+			var br = new BufferedReader(new FileReader(file));
+			var lk = "";
 			String l;
 			while ((l = br.readLine()) != null) {
 				lk += l;
@@ -228,7 +227,7 @@ public class GameSaver {
 
 	public String getTimeDependentFile(int wx, int wy, int layer) {
 		return getCurSaveDir() + "timedependent" + getSectorString(wx, wy, layer)
-				+ GameSaver.SAVE_EXT;
+			+ GameSaver.SAVE_EXT;
 	}
 
 	public static String getSectorString(int wx, int wy, int layer) {
@@ -263,18 +262,19 @@ public class GameSaver {
 
 	public String getNpcFile(int wx, int wy, int layer) {
 		return getCurSaveDir() + GameSaver.NPCSFILE + getSectorString(wx, wy, layer)
-				+ GameSaver.SAVE_EXT;
+			+ GameSaver.SAVE_EXT;
 	}
 
 	public boolean verifyNextSector(int x, int y) {
-		File sectorFile = getSectorFile(x, y);
+		var sectorFile = getSectorFile(x, y);
 		return sectorFile.exists();
 	}
 
 	private boolean loadLog() {
 		try {
-			BufferedReader br = new BufferedReader(
-					new FileReader(getCurSaveDir() + GameSaver.LOGFILE));
+			var br = new BufferedReader(
+				new FileReader(getCurSaveDir() + GameSaver.LOGFILE)
+			);
 			String line;
 			int i = 0;
 			Label[] labels = Gui.overlay.getGameLog().getLabels();
@@ -315,9 +315,10 @@ public class GameSaver {
 
 	public static Void loadingError(Throwable e) {
 		Gui.drawOkDialog(
-				"Couldn't load this world. \n\n"
-						+ ExceptionUtils.getStackTrace(e) + "\n\n"
-						+ "Check " + Log.OUT_FILE + " for details.");
+			"Couldn't load this world. \n\n"
+				+ ExceptionUtils.getStackTrace(e) + "\n\n"
+				+ "Check " + Log.OUT_FILE + " for details."
+		);
 		return Exceptions.printStackTrace(e);
 	}
 }

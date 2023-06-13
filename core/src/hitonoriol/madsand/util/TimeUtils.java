@@ -21,15 +21,15 @@ public class TimeUtils {
 	public static Timer.Task scheduleTask(Runnable task, float delaySec) {
 		return scheduleTask(Timer.instance(), task, delaySec);
 	}
-	
+
 	public static Timer.Task scheduleTask(Timer timer, Timer.Task task, float delaySec) {
 		return timer.scheduleTask(task, delaySec);
 	}
-	
+
 	public static Timer.Task scheduleTask(Timer.Task task, float delaySec) {
 		return scheduleTask(Timer.instance(), task, delaySec);
 	}
-	
+
 	public static Timer.Task scheduleTask(Runnable task) {
 		return scheduleTask(task, Gui.DELAY);
 	}
@@ -43,6 +43,6 @@ public class TimeUtils {
 	}
 
 	public static float timeToExecution(Timer.Task task) {
-		return (float) (task.getExecuteTimeMillis() - System.nanoTime() / 1000000) / 1000f;
+		return (task.getExecuteTimeMillis() - System.nanoTime() / 1000000) / 1000f;
 	}
 }

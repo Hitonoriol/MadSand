@@ -28,9 +28,9 @@ public class ScrollablePanel extends Table {
 	}
 
 	public Cell<Label> addHeader(String text) {
-		Label header = Widgets.label(text);
+		var header = Widgets.label(text);
 		Gui.setFontSize(header, Gui.FONT_M);
-		Cell<Label> cell = addContents(header).padTop(HEADER_TPAD);
+		var cell = addContents(header).padTop(HEADER_TPAD);
 		cell.row();
 		Gui.skipLine(contentTable).padBottom(HEADER_BPAD);
 		return cell;

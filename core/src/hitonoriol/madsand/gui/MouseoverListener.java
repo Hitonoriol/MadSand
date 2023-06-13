@@ -32,10 +32,12 @@ public class MouseoverListener extends InputListener {
 
 	private void log(InputEvent event, int pointer, Actor actor) {
 		if (debug)
-			Utils.dbg("{%X} [%s->%s] pointer=%d actor=%s",
-					hashCode(),
-					prevEvent, event.getType(), pointer,
-					actor != null ? actor.getClass().getSimpleName() : "null");
+			Utils.dbg(
+				"{%X} [%s->%s] pointer=%d actor=%s",
+				hashCode(),
+				prevEvent, event.getType(), pointer,
+				actor != null ? actor.getClass().getSimpleName() : "null"
+			);
 	}
 
 	public static void setUp(Actor actor) {

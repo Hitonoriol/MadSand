@@ -15,7 +15,7 @@ public class NodeMap {
 	}
 
 	public Node putNew(int x, int y) {
-		Node node = new Node(x, y, graph.getNodeCount());
+		var node = new Node(x, y, graph.getNodeCount());
 		map.put(new Pair(x, y), node);
 		return node;
 	}
@@ -39,7 +39,7 @@ public class NodeMap {
 	public void clear() {
 		map.clear();
 	}
-	
+
 	public boolean isEmpty() {
 		return map.isEmpty();
 	}

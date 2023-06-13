@@ -14,8 +14,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.entities.skill.Skill;
 import hitonoriol.madsand.entities.skill.SkillContainer;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
@@ -67,8 +65,8 @@ public class ResourceProgressBar extends Table {
 	public void start() {
 		Gui.overlay.addActor(this);
 		Timer.instance().scheduleTask(wakeTask, WAKE_TIME, WAKE_TIME);
-		Player player = MadSand.player();
-		Vector3 coords = new Vector3(player.x * Resources.TILESIZE, player.y * Resources.TILESIZE, 0);
+		var player = MadSand.player();
+		var coords = new Vector3(player.x * Resources.TILESIZE, player.y * Resources.TILESIZE, 0);
 		final float playerWidth = player.getSprite().getRegionWidth();
 		MadSand.getCamera().project(coords);
 		setPosition(Gui.relativeCenterX(coords.x, playerWidth, getWidth()), coords.y - YPADDING);
@@ -104,14 +102,15 @@ public class ResourceProgressBar extends Table {
 		float duration = hitsLeft() * hitDuration * hitCoef;
 		bar.setAnimateDuration(duration);
 		totalHits = hitsLeft();
-		SkillContainer skills = MadSand.player().stats.skills;
-		Skill skill = object.getInteractionSkill();
+		var skills = MadSand.player().stats.skills;
+		var skill = object.getInteractionSkill();
 		Utils.dbg(
-				"Hits to be made: %d / total duration: %f secs\n"
-						+ "[hitDuration=%f, maxSkillEffect=%f, hpCoef=%f, skillBonus=%f, skillEffect%%=%f]",
-				totalHits, duration, hitDuration, SkillContainer.maxSkillEffect(skill), hitCoef,
-				skills.calcSkillBonusEffect(skill),
-				skills.getSkillEffectPercent(skill));
+			"Hits to be made: %d / total duration: %f secs\n"
+				+ "[hitDuration=%f, maxSkillEffect=%f, hpCoef=%f, skillBonus=%f, skillEffect%%=%f]",
+			totalHits, duration, hitDuration, SkillContainer.maxSkillEffect(skill), hitCoef,
+			skills.calcSkillBonusEffect(skill),
+			skills.getSkillEffectPercent(skill)
+		);
 	}
 
 	private float calcHitCoef() {
@@ -121,7 +120,7 @@ public class ResourceProgressBar extends Table {
 
 	private static float calcHitDuration(MapObject object) {
 		float effectiveness = (float) (1
-				/ MadSand.player().stats.skills.getSkillEffectPercent(object.getInteractionSkill()));
+			/ MadSand.player().stats.skills.getSkillEffectPercent(object.getInteractionSkill()));
 		return (float) Math.sqrt(Math.log(effectiveness + 0.0125)) * 0.135f;
 	}
 

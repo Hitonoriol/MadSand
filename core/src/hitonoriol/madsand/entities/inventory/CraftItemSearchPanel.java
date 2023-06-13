@@ -21,11 +21,11 @@ public class CraftItemSearchPanel extends ItemSearchPanel {
 
 	@Override
 	public Stream<Item> search(List<Item> list) {
-		Stream<Item> items = super.search(list);
+		var items = super.search(list);
 		if (!craftableBox.isChecked())
 			return items;
-		
-		CraftWorker crafting = new CraftWorker(MadSand.player());
+
+		var crafting = new CraftWorker(MadSand.player());
 		return items.filter(item -> {
 			crafting.setItemToCraft(item);
 			return crafting.canBeCrafted();

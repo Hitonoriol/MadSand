@@ -12,7 +12,6 @@ import com.badlogic.gdx.utils.Align;
 
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.gamecontent.NpcDescriptor;
 import hitonoriol.madsand.gamecontent.Npcs;
 import hitonoriol.madsand.gamecontent.Textures;
 import hitonoriol.madsand.gui.Gui;
@@ -69,11 +68,11 @@ public class BestiaryDialog extends GameDialog {
 	int STAT_KILLS = 10;
 
 	Table createNpcEntry(int id, int kills) {
-		NpcDescriptor npc = Npcs.all().get(id);
-		Table entry = Widgets.table();
+		var npc = Npcs.all().get(id);
+		var entry = Widgets.table();
 		entry.debugAll();
-		Label topLabel = Widgets.label(npc.name);
-		Label bottomLabel = Widgets.label("Kills: " + kills);
+		var topLabel = Widgets.label(npc.name);
+		var bottomLabel = Widgets.label("Kills: " + kills);
 
 		topLabel.setWrap(true);
 		bottomLabel.setWrap(true);

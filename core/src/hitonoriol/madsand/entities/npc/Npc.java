@@ -16,7 +16,6 @@ public class Npc extends AbstractNpc {
 	}
 
 	public Npc() {
-		super();
 	}
 
 	@Override

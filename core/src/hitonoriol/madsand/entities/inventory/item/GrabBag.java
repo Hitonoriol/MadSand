@@ -15,15 +15,14 @@ public class GrabBag extends Item {
 	}
 
 	public GrabBag() {
-		super();
 	}
 
 	public LootTable contents() {
 		if (contents == null)
 			contents = Item.getProto(id)
-					.as(getClass())
-					.map(bag -> bag.contents)
-					.orElse(new LootTable());
+				.as(getClass())
+				.map(bag -> bag.contents)
+				.orElse(new LootTable());
 
 		return contents;
 	}

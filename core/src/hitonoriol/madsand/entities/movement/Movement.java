@@ -131,9 +131,9 @@ public class Movement {
 
 	public static MeleeAttackMovement meleeAttack(Entity entity, Direction direction, Runnable attackAction) {
 		return new MeleeAttackMovement(direction, entity.calcMeleeMovementSpeed())
-				.onAttack(attackAction);
+			.onAttack(attackAction);
 	}
-	
+
 	public static MeleeAttackMovement meleeAttack(Entity entity, Runnable attackAction) {
 		return meleeAttack(entity, entity.stats().look, attackAction);
 	}

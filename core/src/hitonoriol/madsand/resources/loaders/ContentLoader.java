@@ -7,8 +7,8 @@ import com.badlogic.gdx.files.FileHandle;
 
 import hitonoriol.madsand.Enumerable;
 import hitonoriol.madsand.gamecontent.ContentStorage;
-import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.resources.GameAssetManager;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
 public class ContentLoader<S extends ContentStorage<T>, T extends Enumerable> extends AssetLoader<S> {
@@ -24,8 +24,10 @@ public class ContentLoader<S extends ContentStorage<T>, T extends Enumerable> ex
 	@Override
 	public final S load(AssetManager assetManager, String fileName, FileHandle file, Parameters<S> parameter) {
 		storage.set(Resources.loader().loadEnumerableMap(fileName, elementType));
-		Utils.out("[%s Loader] Loaded %d %ss",
-				storage.getClass().getSimpleName(), storage.get().size(), elementType.getSimpleName());
+		Utils.out(
+			"[%s Loader] Loaded %d %ss",
+			storage.getClass().getSimpleName(), storage.get().size(), elementType.getSimpleName()
+		);
 		load(Resources.manager(), storage);
 		return storage;
 	}

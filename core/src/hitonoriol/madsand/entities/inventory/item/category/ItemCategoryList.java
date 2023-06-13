@@ -9,9 +9,9 @@ import hitonoriol.madsand.util.Utils;
 
 /*
  * List that contains ids of items for trader npcs
- * 
+ *
  * Used to roll items for trader inventories according to <trader tier>
- * ( and their <TradeCategory> -- in TradeListContainer ) 
+ * ( and their <TradeCategory> -- in TradeListContainer )
  */
 
 public class ItemCategoryList {
@@ -49,7 +49,7 @@ public class ItemCategoryList {
 	}
 
 	public Item rollItem() {
-		Item item = Item.create(getRandomId());
+		var item = Item.create(getRandomId());
 		rollItemQuantity(item);
 
 		return item;

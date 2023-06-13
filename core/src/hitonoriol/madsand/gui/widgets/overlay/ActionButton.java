@@ -3,15 +3,12 @@ package hitonoriol.madsand.gui.widgets.overlay;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
-import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.CropSeeds;
-import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.gamecontent.Items;
@@ -23,7 +20,6 @@ import hitonoriol.madsand.gui.MouseoverListener;
 import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.map.Map;
-import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.TimeUtils;
@@ -37,7 +33,7 @@ public class ActionButton extends Table {
 
 	public ActionButton() {
 		interactButton = Widgets.button("");
-		Label label = interactButton.getLabel();
+		var label = interactButton.getLabel();
 		label.setWrap(true);
 		Gui.setFontSize(label, Gui.FONT_XS);
 		super.setVisible(false);
@@ -84,12 +80,12 @@ public class ActionButton extends Table {
 	}
 
 	private String npcInteractionString(AbstractNpc npc) {
-		String str = "";
+		var str = "";
 
 		if (npc.isNeutral())
 			str = "[LMB] " + npc.interactButtonString() + npc.getName()
-					+ Resources.LINEBREAK + Resources.LINEBREAK
-					+ "[RMB] Attack";
+				+ Resources.LINEBREAK + Resources.LINEBREAK
+				+ "[RMB] Attack";
 
 		return str;
 	}
@@ -103,19 +99,19 @@ public class ActionButton extends Table {
 			return;
 		}
 
-		Map loc = MadSand.world().getCurLoc();
-		Player player = MadSand.player();
-		Pair coords = new Pair(player.x, player.y);
-		Pair inFront = coords.copy().addDirection(player.stats.look);
+		var loc = MadSand.world().getCurLoc();
+		var player = MadSand.player();
+		var coords = new Pair(player.x, player.y);
+		var inFront = coords.copy().addDirection(player.stats.look);
 
-		Tile tile = loc.getTile(coords);
+		var tile = loc.getTile(coords);
 		MapObject objectInFront = loc.getObject(inFront), object = loc.getObject(coords);
-		AbstractNpc npc = loc.getNpc(inFront);
-		Item item = player.stats.hand();
+		var npc = loc.getNpc(inFront);
+		var item = player.stats.hand();
 
 		int tileItem = MapObject.rollTileResource(tile.id(), player.stats.getEquippedToolType());
-		String tileAction = Tiles.all().getOnInteract(tile.id());
-		String objAction = Objects.all().getOnInteract(objectInFront.id());
+		var tileAction = Tiles.all().getOnInteract(tile.id());
+		var objAction = Objects.all().getOnInteract(objectInFront.id());
 		boolean holdsShovel = player.stats.isToolEquipped(Tool.Type.Shovel);
 
 		initButton();
@@ -126,10 +122,12 @@ public class ActionButton extends Table {
 		else if (player.canTravel())
 			activateButton("Travel to the next sector", () -> MadSand.world().travel());
 
-		else if (!tile.equals(Map.nullTile) // Tile interaction
+		else if (
+			!tile.equals(Map.nullTile) // Tile interaction
 				&& (!tileAction.equals(Resources.emptyField)
-						|| (tileItem != -1 && holdsShovel))) {
-			String tileMsg = "Interact with ";
+					|| (tileItem != -1 && holdsShovel))
+		) {
+			var tileMsg = "Interact with ";
 			if (tileItem != -1 && holdsShovel)
 				tileMsg = "Dig ";
 

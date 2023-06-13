@@ -74,7 +74,7 @@ public class StatLabels {
 		}
 
 		public StatLabel refresh() {
-			String text = stat.name() + ": " + applyColor(stats.get(stat));
+			var text = stat.name() + ": " + applyColor(stats.get(stat));
 			if (stat == Stat.Dexterity)
 				text += " (speed: " + Utils.round(stats.actionPtsMax) + ")";
 			super.setText(text);
@@ -85,7 +85,7 @@ public class StatLabels {
 			return "[#99ffaa]" + stat + "[]";
 		}
 	}
-	
+
 	public PlayerStats getStats() {
 		return stats;
 	}

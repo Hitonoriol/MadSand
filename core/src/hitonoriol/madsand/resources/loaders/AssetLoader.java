@@ -12,11 +12,11 @@ public abstract class AssetLoader<T> extends SynchronousAssetLoader<T, Parameter
 	public AssetLoader(GameAssetManager manager) {
 		super(manager.getFileHandleResolver());
 	}
-	
+
 	@Override
 	public Dependencies getDependencies(String fileName, FileHandle file, Parameters<T> parameter) {
 		return null;
 	}
-	
+
 	public static class Parameters<T> extends AssetLoaderParameters<T> {}
 }

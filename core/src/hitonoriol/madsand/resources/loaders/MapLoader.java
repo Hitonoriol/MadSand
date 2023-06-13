@@ -6,8 +6,8 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
 
 import hitonoriol.madsand.commons.reflection.Reflection;
-import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.resources.GameAssetManager;
+import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Utils;
 
 public class MapLoader<T extends HashMap<K, V>, K, V> extends AssetLoader<T> {
@@ -28,9 +28,11 @@ public class MapLoader<T extends HashMap<K, V>, K, V> extends AssetLoader<T> {
 
 	@Override
 	public T load(AssetManager assetManager, String fileName, FileHandle file, Parameters<T> parameter) {
-		T map = Resources.loader().loadMap(fileName, storageType, keyType, valueType);
-		Utils.out("[%s Loader] Loaded %d %ss",
-				storageType.getSimpleName(), map.size(), valueType.getSimpleName());
+		var map = Resources.loader().loadMap(fileName, storageType, keyType, valueType);
+		Utils.out(
+			"[%s Loader] Loaded %d %ss",
+			storageType.getSimpleName(), map.size(), valueType.getSimpleName()
+		);
 		return map;
 	}
 }

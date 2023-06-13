@@ -32,9 +32,9 @@ public class WaypointArrow extends Group {
 	private String name = "Waypoint";
 	private Pair destination = new Pair();
 	private Vector2 screenCoords = new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-	private RefreshableLabel descriptionLabel = new RefreshableLabel(new StaticTextGenerator((x, y) -> {
-		return String.format("%s (%.1f m)", name, toDestination(x, y));
-	}));
+	private RefreshableLabel descriptionLabel = new RefreshableLabel(
+		new StaticTextGenerator((x, y) -> String.format("%s (%.1f m)", name, toDestination(x, y)))
+	);
 
 	public WaypointArrow(int x, int y) {
 		arrow.setOrigin(Align.center);
@@ -61,7 +61,7 @@ public class WaypointArrow extends Group {
 		if (dst <= MIN_DISTANCE) {
 			arrow.setVisible(false);
 			descriptionLabel.setText(name);
-			Vector3 screen = new Vector3(destination.x * Resources.TILESIZE, destination.y * Resources.TILESIZE, 0);
+			var screen = new Vector3(destination.x * Resources.TILESIZE, destination.y * Resources.TILESIZE, 0);
 			MadSand.getRenderer().getCamera().project(screen);
 			descriptionLabel.setX(0);
 			addAction(Actions.moveTo(screen.x - getTextOffset(name), screen.y - Resources.TILESIZE / 2, ANIM_TIME));
@@ -79,8 +79,11 @@ public class WaypointArrow extends Group {
 		arrow.addAction(Actions.rotateTo((float) Math.toDegrees(angle), ANIM_TIME));
 		descriptionLabel.refresh(pX, pY);
 		descriptionLabel.addAction(
-				Actions.moveTo(arrow.getX() - getTextOffset(descriptionLabel.getGenerator().getText()),
-						descriptionLabel.getY(), 0.1f));
+			Actions.moveTo(
+				arrow.getX() - getTextOffset(descriptionLabel.getGenerator().getText()),
+				descriptionLabel.getY(), 0.1f
+			)
+		);
 	}
 
 	private float getTextOffset(String text) {
@@ -108,7 +111,7 @@ public class WaypointArrow extends Group {
 		arrow.setColor(Utils.randomColor(Utils.dataGen));
 		return this;
 	}
-	
+
 	protected Image getArrow() {
 		return arrow;
 	}

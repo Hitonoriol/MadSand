@@ -3,7 +3,6 @@ package hitonoriol.madsand.screens;
 import com.badlogic.gdx.Gdx;
 
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.containers.PairFloat;
 import hitonoriol.madsand.gui.stages.MainMenuStage;
 
 public class MainMenu extends AbstractScreen<MainMenuStage> {
@@ -34,14 +33,13 @@ public class MainMenu extends AbstractScreen<MainMenuStage> {
 	}
 
 	private void initMenuAnimation() {
-		PairFloat playerPos = MadSand.player().screenPosition;
+		var playerPos = MadSand.player().screenPosition;
 		gameWorld.setCamPosition(xmid = playerPos.x, ymid = playerPos.y);
 		gameWorld.updateCamPosition();
 	}
 
 	private float cameraBounce(float n) {
-		float ret = (float) -(n);
-		return ret;
+		return -(n);
 	}
 
 	private void animateMenuBackground() {

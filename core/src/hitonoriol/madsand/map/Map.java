@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.function.BiConsumer;
@@ -23,7 +22,6 @@ import hitonoriol.madsand.TimeDependent;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Entity;
-import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Tool;
@@ -49,9 +47,7 @@ import hitonoriol.madsand.pathfinding.PathfinfingEngine;
 import hitonoriol.madsand.util.Functional;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.Location;
-import hitonoriol.madsand.world.worldgen.OverworldPreset;
 import hitonoriol.madsand.world.worldgen.RollList;
-import hitonoriol.madsand.world.worldgen.WorldGenPreset;
 
 public class Map {
 	public static final Map nullMap = new Map(0, 0);
@@ -98,10 +94,10 @@ public class Map {
 
 	public void forEachTile(BiConsumer<Integer, Integer> coordAction) {
 		for (int x = 0; x < xsz; ++x)
-			for(int y = 0; y < ysz; ++y)
+			for (int y = 0; y < ysz; ++y)
 				coordAction.accept(x, y);
 	}
-	
+
 	public void postLoadInit() {}
 
 	/* Cleanup, called on map switch/World.close() */
@@ -110,7 +106,7 @@ public class Map {
 	}
 
 	public void rollSize(int min, int max) {
-		this.setSize(Utils.rand(min, max), Utils.rand(min, max));
+		setSize(Utils.rand(min, max), Utils.rand(min, max));
 		Utils.out("Rolled map size: " + xsz + ", " + ysz);
 	}
 
@@ -139,9 +135,9 @@ public class Map {
 
 	@JsonIgnore
 	public HashMap<Pair, MapEntity> getTimeDependentMapEntities() {
-		HashMap<Pair, MapEntity> timeDependentMap = new HashMap<>();
+		var timeDependentMap = new HashMap<Pair, MapEntity>();
 		timeScheduler.forEach(tdEntity -> {
-			MapEntity entity = (MapEntity) tdEntity;
+			var entity = (MapEntity) tdEntity;
 			timeDependentMap.put(entity.getPosition(), entity);
 		});
 		return timeDependentMap;
@@ -151,8 +147,10 @@ public class Map {
 		timeDependentMap.forEach((coords, entity) -> {
 			entity.as(Entity.class).ifPresent(creature -> creature.postLoadInit(this));
 			boolean restored = entity.add(this, coords);
-			Utils.dbg("{%X} Restoring %s at %s: %b",
-					timeScheduler.hashCode(), entity.getName(), coords, restored);
+			Utils.dbg(
+				"{%X} Restoring %s at %s: %b",
+				timeScheduler.hashCode(), entity.getName(), coords, restored
+			);
 		});
 	}
 
@@ -220,7 +218,7 @@ public class Map {
 
 	@JsonIgnore
 	public float getScaleFactor() {
-		return (float) getArea() / (float) Math.pow(MIN_MAPSIZE, 2.075);
+		return getArea() / (float) Math.pow(MIN_MAPSIZE, 2.075);
 	}
 
 	@JsonIgnore
@@ -236,13 +234,13 @@ public class Map {
 	@JsonIgnore
 	public int getHostileNpcCount() {
 		return mapNpcs.values().stream()
-				.filter(npc -> !npc.isNeutral())
-				.mapToInt(npc -> 1).sum();
+			.filter(npc -> !npc.isNeutral())
+			.mapToInt(npc -> 1).sum();
 	}
 
 	public Pair rayCast(Pair from, Pair to) {
-		Pair occupiedTile = new Pair(Pair.nullPair);
-		MutableBoolean ignoreTile = new MutableBoolean(true);
+		var occupiedTile = new Pair(Pair.nullPair);
+		var ignoreTile = new MutableBoolean(true);
 
 		Line.rayCast(from, to, (x, y) -> {
 			if (ignoreTile.booleanValue()) {
@@ -266,7 +264,7 @@ public class Map {
 	}
 
 	public MapEntity getAnyMapEntity(Pair coords) {
-		MapEntity entity = getMapEntity(coords);
+		var entity = getMapEntity(coords);
 		if (entity.isEmpty() && MadSand.player().at(coords))
 			return MadSand.player();
 		return entity;
@@ -281,7 +279,7 @@ public class Map {
 	}
 
 	public Pair getRandomPoint(int distanceFromPlayer, int maxDistanceFromPlayer) {
-		Player player = player();
+		var player = player();
 		int x, y;
 		int distance;
 
@@ -322,29 +320,24 @@ public class Map {
 
 	@FunctionalInterface
 	private interface MapAction {
-		public boolean changeMap(int x, int y, int id);
+		boolean changeMap(int x, int y, int id);
 	}
 
-	private MapAction tileAction = (int x, int y, int id) -> {
-		return addTile(x, y, id, true);
-	};
+	private MapAction tileAction = (x, y, id) -> addTile(x, y, id, true);
 
-	private MapAction objectAction = (int x, int y, int id) -> {
+	private MapAction objectAction = (x, y, id) -> {
 		if (id == 0) {
 			delObject(x, y);
 			return true;
 		}
 
-		if (getTile(x, y).foreground)
-			return false;
-
-		if (objectExists(x, y))
+		if (getTile(x, y).foreground || objectExists(x, y))
 			return false;
 
 		return addObject(x, y, id, true);
 	};
 
-	private MapAction lootAction = (int x, int y, int id) -> {
+	private MapAction lootAction = (x, y, id) -> {
 		if (objectExists(x, y))
 			return false;
 
@@ -353,7 +346,7 @@ public class Map {
 		return true;
 	};
 
-	private MapAction cropAction = (int x, int y, int id) -> {
+	private MapAction cropAction = (x, y, id) -> {
 		if (objectExists(x, y))
 			return false;
 
@@ -361,7 +354,7 @@ public class Map {
 	};
 
 	private static double ERODE_PROBABILITY = 30;
-	private MapAction erodeTileAction = (int x, int y, int id) -> {
+	private MapAction erodeTileAction = (x, y, id) -> {
 		if (Utils.percentRoll(ERODE_PROBABILITY))
 			return addTile(x, y, id);
 
@@ -388,9 +381,9 @@ public class Map {
 
 	private Map drawCircle(MapAction action, int x0, int y0, int radius, int id, boolean fill) {
 		int x, y;
-		Pair coords = new Pair();
+		var coords = new Pair();
 		double angle;
-		for (float i = 0; i < 360; ++i) {
+		for (float i = 0F; i < 360; ++i) {
 			angle = Math.toRadians(i);
 			x = x0 + (int) (radius * Math.cos(angle));
 			y = y0 + (int) (radius * Math.sin(angle));
@@ -414,9 +407,9 @@ public class Map {
 		int maxY = Math.max(p1.y, Math.max(p2.y, p3.y));
 		int minY = Math.min(p1.y, Math.min(p2.y, p3.y));
 
-		Vector2 vs1 = new Vector2(p2.x - p1.x, p2.y - p1.y);
-		Vector2 vs2 = new Vector2(p3.x - p1.x, p3.y - p1.y);
-		Vector2 q = new Vector2();
+		var vs1 = new Vector2(p2.x - p1.x, p2.y - p1.y);
+		var vs2 = new Vector2(p3.x - p1.x, p3.y - p1.y);
+		var q = new Vector2();
 		for (int x = minX; x <= maxX; x++) {
 			for (int y = minY; y <= maxY; y++) {
 				q.set(x - p1.x, y - p1.y);
@@ -580,7 +573,7 @@ public class Map {
 
 	public Tile getTile(int x, int y) {
 		if (validCoords(coords.set(x, y))) {
-			Tile ret = mapTiles.get(coords);
+			var ret = mapTiles.get(coords);
 			if (ret == null)
 				ret = nullTile;
 			return ret;
@@ -598,7 +591,7 @@ public class Map {
 	}
 
 	void setObjectSize(int x, int y, int id) { // If object is bigger than 1x1, fill the rest of the space with COLLISION_MASK_ID
-		MapObject objectProp = Objects.all().get(id);
+		var objectProp = Objects.all().get(id);
 		int i = objectProp.maskHeight;
 		if (y + 1 < ysz - 1) {
 			while (i > 0) {
@@ -619,7 +612,7 @@ public class Map {
 	}
 
 	public boolean delObject(Pair coords) {
-		MapObject deletedObject = mapObjects.remove(coords);
+		var deletedObject = mapObjects.remove(coords);
 		boolean removed = deletedObject != null;
 		if (removed) {
 			removeTimeDependent(deletedObject);
@@ -630,13 +623,11 @@ public class Map {
 	}
 
 	public boolean delObject(int x, int y) {
-		Pair coords = new Pair(x, y);
+		var coords = new Pair(x, y);
 		if (!validCoords(coords.set(x, y)))
 			return false;
 
-		boolean removed = delObject(coords);
-
-		return removed;
+		return delObject(coords);
 	}
 
 	public boolean add(Pair coords, MapObject object) {
@@ -649,13 +640,10 @@ public class Map {
 	}
 
 	public boolean addObject(int x, int y, int id, boolean force) {
-		if (!validCoords(coords.set(x, y)) || id == nullObject.id())
+		if (!validCoords(coords.set(x, y)) || id == nullObject.id() || (!force && mapObjects.containsKey(coords)))
 			return false;
 
-		if (!force && mapObjects.containsKey(coords))
-			return false;
-
-		MapObject object = MapObject.create(id);
+		var object = MapObject.create(id);
 		if (add(coords.copy(), object)) {
 			setObjectSize(x, y, id);
 			return true;
@@ -683,7 +671,7 @@ public class Map {
 		if (!validCoords(coords.set(x, y)))
 			return nullObject;
 
-		MapObject ret = mapObjects.get(coords);
+		var ret = mapObjects.get(coords);
 
 		if (ret == null)
 			return nullObject;
@@ -776,7 +764,7 @@ public class Map {
 
 	public Loot getLoot(int x, int y) {
 		if (validCoords(coords.set(x, y))) {
-			Loot ret = mapLoot.get(coords.set(x, y));
+			var ret = mapLoot.get(coords.set(x, y));
 			if (ret != null) {
 				if (ret.isEmpty()) {
 					removeLoot(x, y);
@@ -829,11 +817,13 @@ public class Map {
 	}
 
 	public void putLoot(int x, int y, ItemCategory category, int maxItems) {
-		Pair range = new Pair();
-		List<Item> items = ItemCategories.capItemQuantity(ItemCategories.get().roll(category), item -> {
+		var range = new Pair();
+		var items = ItemCategories.capItemQuantity(ItemCategories.get().roll(category), item -> {
 			range.x = Utils.rand(1, player().stats().get(Stat.Luck));
-			range.y = Utils.rand(item.quantity / 2,
-					(int) (item.quantity * (1 + player().stats().baseStats.getOverallProgress())));
+			range.y = Utils.rand(
+				item.quantity / 2,
+				(int) (item.quantity * (1 + player().stats().baseStats.getOverallProgress()))
+			);
 			return range;
 		});
 		putLoot(x, y, items.subList(0, Math.min(items.size(), maxItems)));
@@ -852,12 +842,8 @@ public class Map {
 	}
 
 	public boolean putCrop(int x, int y, Crop crop) {
-		Pair coords = new Pair(x, y);
-		if (!validCoords(coords))
-			return false;
-		if (objectExists(x, y))
-			return false;
-		if (getTile(x, y).id() != Items.all().getCropSoil(crop.getSeedsId()))
+		var coords = new Pair(x, y);
+		if (!validCoords(coords) || objectExists(x, y) || (getTile(x, y).id() != Items.all().getCropSoil(crop.getSeedsId())))
 			return false;
 
 		return add(coords, crop);
@@ -871,13 +857,10 @@ public class Map {
 	}
 
 	public boolean spawnNpc(int id, int x, int y) {
-		if (!validCoords(coords.set(x, y)))
+		if (!validCoords(coords.set(x, y)) || !getNpc(coords.x, coords.y).equals(nullNpc))
 			return false;
 
-		if (!getNpc(coords.x, coords.y).equals(nullNpc))
-			return false;
-
-		AbstractNpc npc = Npcs.all().spawnNpc(id, x, y);
+		var npc = Npcs.all().spawnNpc(id, x, y);
 		return add(new Pair(x, y), npc);
 	}
 
@@ -886,16 +869,13 @@ public class Map {
 	}
 
 	public AbstractNpc spawnNpc(int id) {
-		Pair npcPos = getRandomPoint().copy();
+		var npcPos = getRandomPoint().copy();
 		spawnNpc(id, npcPos);
 		return getNpc(npcPos);
 	}
 
 	public boolean add(Pair coords, AbstractNpc npc) {
-		if (!validCoords(coords))
-			return false;
-
-		if (!getNpc(coords).equals(nullNpc))
+		if (!validCoords(coords) || !getNpc(coords).equals(nullNpc))
 			return false;
 
 		registerTimeDependent(npc);
@@ -919,7 +899,7 @@ public class Map {
 		if (!validCoords(coords.set(x, y)))
 			return nullNpc;
 
-		AbstractNpc npc = mapNpcs.get(coords);
+		var npc = mapNpcs.get(coords);
 
 		if (npc == null)
 			return nullNpc;
@@ -952,7 +932,7 @@ public class Map {
 		if (!validCoords(coords.set(x, y)))
 			return false;
 
-		AbstractNpc destNpc = getNpc(coords.x, coords.y);
+		var destNpc = getNpc(coords.x, coords.y);
 		if (destNpc != nullNpc)
 			return false;
 
@@ -970,13 +950,10 @@ public class Map {
 	}
 
 	public boolean removeNpc(int x, int y) {
-		if (!validCoords(coords.set(x, y)))
+		if (!validCoords(coords.set(x, y)) || getNpc(coords.x, coords.y).equals(nullNpc))
 			return false;
 
-		if (getNpc(coords.x, coords.y).equals(nullNpc))
-			return false;
-
-		AbstractNpc npc = mapNpcs.remove(coords);
+		var npc = mapNpcs.remove(coords);
 		if (npc != null && npc.isDead())
 			removeTimeDependent(npc);
 		return true;
@@ -986,8 +963,8 @@ public class Map {
 		if (MadSand.world().curLayer() != Location.LAYER_OVERWORLD)
 			return;
 
-		WorldGenPreset preset = WorldGenPresets.all().get(MadSand.world().getLocBiome());
-		OverworldPreset overworld = preset.overworld;
+		var preset = WorldGenPresets.all().get(MadSand.world().getLocBiome());
+		var overworld = preset.overworld;
 		double forceVal = force ? 100 : 0;
 
 		if (getNpcCount() >= getMaxNpcs())
@@ -1034,13 +1011,10 @@ public class Map {
 		if (MadSand.world().curLayer() != Location.LAYER_OVERWORLD)
 			return;
 
-		WorldGenPreset preset = WorldGenPresets.all().get(MadSand.world().getLocBiome());
-		OverworldPreset overworld = preset.overworld;
+		var preset = WorldGenPresets.all().get(MadSand.world().getLocBiome());
+		var overworld = preset.overworld;
 
-		if (overworld.regenerateObjects == null)
-			return;
-
-		if (!Utils.percentRoll(overworld.chanceToRegenerate))
+		if ((overworld.regenerateObjects == null) || !Utils.percentRoll(overworld.chanceToRegenerate))
 			return;
 
 		int maxObjects = getMaxObjects();
@@ -1061,8 +1035,8 @@ public class Map {
 	}
 
 	public MapStructure addStructure(String name) {
-		Pair coords = new Pair();
-		MapStructure structure = new MapStructure(coords.random(xsz, ysz)).setName(name);
+		var coords = new Pair();
+		var structure = new MapStructure(coords.random(xsz, ysz)).setName(name);
 
 		do
 			coords.random(xsz, ysz);
@@ -1086,9 +1060,9 @@ public class Map {
 	}
 
 	public Pair getFreeTileNear(Pair coords) {
-		Pair direction = new Pair();
-		Pair freeTile = new Pair();
-		List<Direction> directions = Direction.asList();
+		var direction = new Pair();
+		var freeTile = new Pair();
+		var directions = Direction.asList();
 		Collections.shuffle(directions);
 
 		for (Direction dir : directions)
@@ -1142,10 +1116,9 @@ public class Map {
 
 	public Pair locateDiggableTile() {
 		List<Entry<Pair, Tile>> entryList = new ArrayList<>();
-		Iterator<Entry<Pair, Tile>> it = mapTiles.entrySet().iterator();
 		Entry<Pair, Tile> tileEntry;
-		while (it.hasNext())
-			if ((tileEntry = it.next()).getValue().id() != defTile)
+		for (Entry<Pair, Tile> element : mapTiles.entrySet())
+			if ((tileEntry = element).getValue().id() != defTile)
 				entryList.add(tileEntry);
 		Collections.shuffle(entryList);
 		Tile tile;
@@ -1159,8 +1132,12 @@ public class Map {
 
 	public Pair locateObject(Skill skill) {
 		for (Entry<Pair, MapObject> entry : mapObjects.entrySet()) {
-			if (Functional.test(entry.getValue().as(ResourceObject.class),
-					resourceObj -> resourceObj.skill == skill))
+			if (
+				Functional.test(
+					entry.getValue().as(ResourceObject.class),
+					resourceObj -> resourceObj.skill == skill
+				)
+			)
 				return entry.getKey();
 		}
 		return Pair.nullPair;

@@ -1,7 +1,6 @@
 package hitonoriol.madsand.gui.widgets.overlay;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +28,7 @@ public class Hotbar extends Table {
 	Table container = Widgets.table();
 
 	public Hotbar() {
-		AutoFocusScrollPane scroll = new AutoFocusScrollPane(container);
+		var scroll = new AutoFocusScrollPane(container);
 		scroll.setScrollingDisabled(false, true);
 		super.add(scroll).size(Gdx.graphics.getWidth(), HEIGHT + Gui.FONT_XXS);
 
@@ -55,7 +54,7 @@ public class Hotbar extends Table {
 		if (getEntry(hotAssignable).isPresent())
 			return;
 
-		Entry entry = new Entry(hotAssignable, this);
+		var entry = new Entry(hotAssignable, this);
 		hotEntries.add(entry);
 		container.add(entry.button);
 		refresh();
@@ -63,21 +62,21 @@ public class Hotbar extends Table {
 
 	public void removeEntry(HotbarAssignable hotAssignable) {
 		getEntry(hotAssignable)
-				.ifPresent(entry -> {
-					hotEntries.remove(entry);
-					container.removeActor(entry.button);
-				});
+			.ifPresent(entry -> {
+				hotEntries.remove(entry);
+				container.removeActor(entry.button);
+			});
 	}
 
 	Optional<Entry> getEntry(HotbarAssignable hotAssignable) {
 		return hotEntries.stream()
-				.filter(entry -> entry.item == hotAssignable)
-				.findFirst();
+			.filter(entry -> entry.item == hotAssignable)
+			.findFirst();
 	}
 
 	public void refresh() {
-		MutableBoolean layoutChanged = new MutableBoolean(false);
-		Iterator<Entry> it = hotEntries.iterator();
+		var layoutChanged = new MutableBoolean(false);
+		var it = hotEntries.iterator();
 		while (it.hasNext()) {
 			Functional.with(it.next(), entry -> {
 				entry.refresh();

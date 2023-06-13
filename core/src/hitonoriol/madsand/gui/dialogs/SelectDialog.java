@@ -18,10 +18,10 @@ public class SelectDialog extends GameDialog {
 		centerTitle();
 		setTitle(title == null ? "Select an option" : title);
 		entryTable.defaults().size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT).padBottom(5).padLeft(XPAD).padRight(XPAD);
-		
+
 		if (description != null)
 			entryTable.add(description).row();
-		
+
 		add(new AutoFocusScrollPane(entryTable)).height(defaultHeight()).row();
 		addCloseButton();
 		pack();

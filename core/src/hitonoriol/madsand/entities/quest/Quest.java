@@ -67,9 +67,7 @@ public class Quest implements Enumerable {
 	public HashMap<Integer, Integer> kills; //	{Npc id, kills} state of player's kill counter on quest start
 
 	private QuestArrow questArrow;
-	public static Comparator<Quest> startTimeComparator = (quest1, quest2) -> {
-		return Long.compare(quest1.startTime, quest2.startTime);
-	};
+	public static Comparator<Quest> startTimeComparator = Comparator.comparing(quest1 -> quest1.startTime);
 
 	public Quest(int id) {
 		this.id = id;
@@ -88,7 +86,7 @@ public class Quest implements Enumerable {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	@Override
 	public String name() {
 		return name;
@@ -127,7 +125,7 @@ public class Quest implements Enumerable {
 	}
 
 	public int getItemObjectiveProgress(int itemId) {
-		Item item = player.inventory.getItem(itemId);
+		var item = player.inventory.getItem(itemId);
 
 		if (isComplete)
 			return itemObjective.get(itemId);
@@ -143,9 +141,11 @@ public class Quest implements Enumerable {
 	 * asList: "1 foo, 2 bar and 5 abc"
 	 * !asList: "1 foo \n 2 bar \n 5 abc"
 	 */
-	private String getObjectiveString(HashMap<Integer, Integer> objectiveList, ObjectiveStringWorker worker,
-			boolean asList) {
-		String objective = "";
+	private String getObjectiveString(
+		HashMap<Integer, Integer> objectiveList, ObjectiveStringWorker worker,
+		boolean asList
+	) {
+		var objective = "";
 		if (objectiveList.isEmpty())
 			return objective;
 
@@ -168,25 +168,31 @@ public class Quest implements Enumerable {
 
 	@JsonIgnore
 	private String getKillObjectiveString() {
-		return getObjectiveString(killObjective,
-				entry -> "Kill " + Npcs.all().get(entry.getKey()).name +
-						" (" + getKillObjectiveProgress(entry.getKey()) + "/" + entry.getValue() + ")",
-				false);
+		return getObjectiveString(
+			killObjective,
+			entry -> "Kill " + Npcs.all().get(entry.getKey()).name +
+				" (" + getKillObjectiveProgress(entry.getKey()) + "/" + entry.getValue() + ")",
+			false
+		);
 	}
 
 	@JsonIgnore
 	private String getItemObjectiveString() {
-		return getObjectiveString(itemObjective,
-				entry -> "Get " + Items.all().getName(entry.getKey()) +
-						" (" + getItemObjectiveProgress(entry.getKey()) + "/" + entry.getValue() + ")",
-				false);
+		return getObjectiveString(
+			itemObjective,
+			entry -> "Get " + Items.all().getName(entry.getKey()) +
+				" (" + getItemObjectiveProgress(entry.getKey()) + "/" + entry.getValue() + ")",
+			false
+		);
 	}
 
 	protected String getObjectiveList(HashMap<Integer, Integer> objective, NameGetter nameGetter, String colorTag) {
-		return getObjectiveString(objective,
-				entry -> colorTag + entry.getValue() + " " + nameGetter.get(entry.getKey())
-						+ Resources.COLOR_END,
-				true);
+		return getObjectiveString(
+			objective,
+			entry -> colorTag + entry.getValue() + " " + nameGetter.get(entry.getKey())
+				+ Resources.COLOR_END,
+			true
+		);
 	}
 
 	protected String getObjectiveList(HashMap<Integer, Integer> objective, NameGetter nameGetter) {
@@ -203,13 +209,17 @@ public class Quest implements Enumerable {
 	}
 
 	private boolean verifyKillObjective() {
-		return verifyObjective(killObjective,
-				entry -> getKillObjectiveProgress(entry.getKey()) >= entry.getValue());
+		return verifyObjective(
+			killObjective,
+			entry -> getKillObjectiveProgress(entry.getKey()) >= entry.getValue()
+		);
 	}
 
 	private boolean verifyItemObjective() {
-		return verifyObjective(itemObjective,
-				entry -> getItemObjectiveProgress(entry.getKey()) >= entry.getValue());
+		return verifyObjective(
+			itemObjective,
+			entry -> getItemObjectiveProgress(entry.getKey()) >= entry.getValue()
+		);
 	}
 
 	@JsonIgnore
@@ -226,9 +236,7 @@ public class Quest implements Enumerable {
 	 * id/quantity:id/quantity:...)
 	 */
 	private boolean createObjectiveMap(String query, HashMap<Integer, Integer> objective) {
-		if (query == null)
-			return false;
-		if (!query.contains(Item.ITEM_DELIM))
+		if ((query == null) || !query.contains(Item.ITEM_DELIM))
 			return false;
 
 		Item.parseListString(query, (id, quantity) -> objective.put(id, quantity));
@@ -252,8 +260,10 @@ public class Quest implements Enumerable {
 	}
 
 	public void completionNotice() {
-		MadSand.notice("You've just completed all objectives for the \"" + name + "\". "
-				+ "Return to " + getNpc().stats.name + " to claim your reward.");
+		MadSand.notice(
+			"You've just completed all objectives for the \"" + name + "\". "
+				+ "Return to " + getNpc().stats.name + " to claim your reward."
+		);
 	}
 
 	protected void createEndMsg() {
@@ -267,8 +277,8 @@ public class Quest implements Enumerable {
 	public void start(Player player, long npcUID) {
 		this.player = player;
 		this.npcUID = npcUID;
-		this.npcWorldPos = new Pair(MadSand.world().getCurWPos());
-		this.startTime = MadSand.world().currentActionTick();
+		npcWorldPos = new Pair(MadSand.world().getCurWPos());
+		startTime = MadSand.world().currentActionTick();
 		isComplete = false;
 		itemObjective = new HashMap<>();
 		killObjective = new HashMap<>();
@@ -281,27 +291,29 @@ public class Quest implements Enumerable {
 	}
 
 	private void setTextSubstitutionValues() {
-		String expRewardString = EXP_COLOR + "+" + exp + " EXP" + Resources.COLOR_END;
-		HashMap<Integer, Integer> reward = new HashMap<>();
-		createObjectiveMap(this.rewardItems, reward);
+		var expRewardString = EXP_COLOR + "+" + exp + " EXP" + Resources.COLOR_END;
+		var reward = new HashMap<Integer, Integer>();
+		createObjectiveMap(rewardItems, reward);
 
 		TextSubstitutor.add(TextSubstitutor.QUEST_ITEM_OBJECTIVE, getObjectiveList(itemObjective, itemNames));
 		TextSubstitutor.add(TextSubstitutor.QUEST_KILL_OBJECTIVE, getObjectiveList(killObjective, npcNames));
-		TextSubstitutor.add(TextSubstitutor.QUEST_ITEM_REWARD,
-				getObjectiveList(reward, itemNames, REWARD_COLOR));
+		TextSubstitutor.add(
+			TextSubstitutor.QUEST_ITEM_REWARD,
+			getObjectiveList(reward, itemNames, REWARD_COLOR)
+		);
 		TextSubstitutor.add(TextSubstitutor.QUEST_EXP_REWARD, expRewardString);
 	}
 
 	private void showQuestDialog(String dialogText) {
 		setTextSubstitutionValues();
 		new DialogChainGenerator(dialogText)
-				.setAllTitles(getNpc().stats.name)
-				.generate(Gui.overlay)
-				.show();
+			.setAllTitles(getNpc().stats.name)
+			.generate(Gui.overlay)
+			.show();
 	}
 
 	public void showQuestInProgressDialog() {
-		showQuestDialog(this.reqMsg);
+		showQuestDialog(reqMsg);
 	}
 
 	public void showQuestStartDialog() {
@@ -341,7 +353,7 @@ public class Quest implements Enumerable {
 		if (obj == this)
 			return true;
 
-		Quest rhs = (Quest) obj;
+		var rhs = (Quest) obj;
 		return new EqualsBuilder().append(id, rhs.id).isEquals();
 	}
 }

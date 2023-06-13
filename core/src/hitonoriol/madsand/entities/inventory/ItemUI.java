@@ -70,10 +70,12 @@ public class ItemUI extends Group {
 		refresh();
 
 		addListener(new InputListener() {
+			@Override
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
 				highlight.setVisible(true);
 			}
 
+			@Override
 			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
 				highlight.setVisible(false);
 			}

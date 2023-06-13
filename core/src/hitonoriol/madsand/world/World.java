@@ -28,10 +28,7 @@ import hitonoriol.madsand.gamecontent.WorldGenPresets;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.input.Mouse;
 import hitonoriol.madsand.lua.Lua;
-import hitonoriol.madsand.map.LightEngine;
 import hitonoriol.madsand.map.Map;
-import hitonoriol.madsand.map.MapEntity;
-import hitonoriol.madsand.pathfinding.Graph;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
@@ -50,10 +47,10 @@ public class World {
 	private Pair coords = new Pair();
 
 	private String name;
-	
+
 	@JsonIgnore
 	private ArrayDeque<Pair> previousLocations = new ArrayDeque<>(); // Maps that are currently loaded in WorldMap
-	
+
 	@JsonIgnore
 	private GameSaver saver = new GameSaver(this);
 
@@ -116,7 +113,7 @@ public class World {
 		}
 
 		realTimeRefresher = new Timer();
-		realtimeSchedule(() -> actionTick());
+		realtimeSchedule(this::actionTick);
 	}
 
 	public void realtimeSchedule(Runnable task, long ticks) {
@@ -128,7 +125,7 @@ public class World {
 	}
 
 	public float actionTicksToTime(long realtimeTicks) {
-		return (float) realtimeTicks * realtimeTickRate;
+		return realtimeTicks * realtimeTickRate;
 	}
 
 	public long timeToActionTicks(long seconds) {
@@ -168,7 +165,7 @@ public class World {
 
 	boolean createLoc(Pair loc, int layer, Map map) {
 		if (!locExists(loc, layer)) {
-			this.worldMap.addMap(loc, layer, map);
+			worldMap.addMap(loc, layer, map);
 			return true;
 		} else
 			return false;
@@ -320,8 +317,8 @@ public class World {
 		if (worldMap.curLayer != Location.LAYER_OVERWORLD)
 			return false;
 
-		Pair coords = worldMap.curWorldPos;
-		String locationScriptPath = Lua.getSectorScriptPath(coords.x, coords.y);
+		var coords = worldMap.curWorldPos;
+		var locationScriptPath = Lua.getSectorScriptPath(coords.x, coords.y);
 
 		if (!Gdx.files.internal(Resources.SCRIPT_DIR + locationScriptPath).exists())
 			return false;
@@ -370,8 +367,7 @@ public class World {
 			 * 			when player gets close to the current location's boundary
 			 */
 			Exceptions.asUnchecked(() -> saver.loadLocation());
-		}
-		else
+		} else
 			generate();
 
 		cleanUpPreviousLocations();
@@ -415,7 +411,7 @@ public class World {
 			return false;
 		}
 
-		Map curLoc = getCurLoc();
+		var curLoc = getCurLoc();
 		int mapWidth = curLoc.getWidth(), mapHeight = curLoc.getHeight();
 
 		if (player.x > mapWidth)
@@ -449,15 +445,16 @@ public class World {
 		if (!player.canTravel())
 			return;
 
-		Direction direction = player.stats.look;
+		var direction = player.stats.look;
 		int travelItem = Globals.values().travelItem;
-		Pair nextSector = coords.set(worldMap.wx(), worldMap.wy()).addDirection(direction);
+		var nextSector = coords.set(worldMap.wx(), worldMap.wy()).addDirection(direction);
 
 		if (!saver.verifyNextSector(nextSector.x, nextSector.y))
 			if (!player.hasItem(travelItem)) {
 				Gui.drawOkDialog(
-						"You need at least 1 " + Items.all().getName(travelItem)
-								+ " to travel to the next sector.");
+					"You need at least 1 " + Items.all().getName(travelItem)
+						+ " to travel to the next sector."
+				);
 				return;
 			}
 
@@ -484,7 +481,7 @@ public class World {
 
 		boolean ret = switchLocation(layer);
 
-		Map loc = getCurLoc();
+		var loc = getCurLoc();
 		String place = null;
 
 		if (!loc.spawnPoint.equals(Pair.nullPair)) { // this means we are in the dungeon
@@ -548,7 +545,7 @@ public class World {
 			return;
 
 		Utils.out("Removing the oldest loaded location...");
-		Pair rootLocation = previousLocations.poll();
+		var rootLocation = previousLocations.poll();
 		worldMap.remove(rootLocation);
 	}
 
@@ -590,10 +587,12 @@ public class World {
 	}
 
 	public TextureRegion getTileOrDefault(int x, int y) {
-		Map map = getCurLoc();
-		return Textures.getTile(map.validCoords(x, y)
+		var map = getCurLoc();
+		return Textures.getTile(
+			map.validCoords(x, y)
 				? map.getTile(x, y).id()
-				: getDefaultTile());
+				: getDefaultTile()
+		);
 	}
 
 	private static int H_DAY = 24;
@@ -656,7 +655,7 @@ public class World {
 	}
 
 	public void hourTick() {
-		Map curLoc = getCurLoc();
+		var curLoc = getCurLoc();
 
 		++worldtime;
 
@@ -686,7 +685,7 @@ public class World {
 	 * Gets called once for every 100% of AP spent by player
 	 */
 	private void timeTick() {
-		Graph graph = getCurLoc().getPathfindingGraph();
+		var graph = getCurLoc().getPathfindingGraph();
 		graph.reIndex();
 		player.stats.perTickCheck();
 		player.tileDmg();
@@ -705,7 +704,7 @@ public class World {
 
 	private void showTips() {
 		long ticksPassed = globalTick - lastTip;
-		if (ticksPassed < ticksPerHour / 3 || !Utils.percentRoll((double) ticksPassed / 50d))
+		if (ticksPassed < ticksPerHour / 3 || !Utils.percentRoll(ticksPassed / 50d))
 			return;
 
 		lastTip = globalTick;
@@ -716,21 +715,21 @@ public class World {
 	 *   `time` - % of max AP player spent on their latest action
 	 */
 	public void timeSubtick(float time) {
-		Map loc = getCurLoc();
-		Graph graph = loc.getPathfindingGraph();
+		var loc = getCurLoc();
+		var graph = loc.getPathfindingGraph();
 		graph.reIndex();
 		entityEvents.processEntityActions(time);
 		graph.reIndex();
 	}
 
 	public void updateLight() {
-		Map map = getCurLoc();
-		LightEngine light = map.getLightEngine();
-		Pair coords = new Pair();
+		var map = getCurLoc();
+		var light = map.getLightEngine();
+		var coords = new Pair();
 		light.begin();
 		light.update(player);
 		player.forEachInFov((x, y) -> {
-			MapEntity entity = map.getMapEntity(coords.set(x, y));
+			var entity = map.getMapEntity(coords.set(x, y));
 			if (entity.isEmpty() || !entity.emitsLight())
 				return;
 
@@ -741,7 +740,7 @@ public class World {
 
 	private void actionTick() {
 		++globalRealtimeTick;
-		Location loc = getLocation();
+		var loc = getLocation();
 
 		if (loc.isSettlement())
 			loc.getSettlement().timeTick();
@@ -771,7 +770,7 @@ public class World {
 		if (offlineHours > maxHours)
 			offlineTime = (long) (maxHours * HOUR);
 
-		String offlineString = "You've been away for ";
+		var offlineString = "You've been away for ";
 
 		offlineString += Utils.timeString(offlineTime) + "." + Resources.LINEBREAK;
 		offlineString += "Your maximum offline bonus is " + maxHours + " hours.";
@@ -793,7 +792,7 @@ public class World {
 		Gui.refreshOverlay();
 		Lua.executeScript(Lua.onCreationScript);
 	}
-	
+
 	public void save() {
 		saver.save();
 	}
@@ -801,12 +800,12 @@ public class World {
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
-		
+
 	}
-	
+
 	@JsonIgnore
 	public boolean isUnderGround() {
 		return worldMap.curLayer != Location.LAYER_OVERWORLD;

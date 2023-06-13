@@ -37,14 +37,14 @@ public enum Content {
 	private AssetDescriptor<?> descriptor;
 
 	<T extends Loadable> Content(String filename, T assetStorage) {
-		this.contentStorage = assetStorage;
+		contentStorage = assetStorage;
 		descriptor = descriptor(filename, Reflection.getClass(assetStorage));
 	}
 
 	public static void registerLoaders(GameAssetManager manager) {
 		values.forEach(asset -> asset.contentStorage.registerLoader(manager));
 	}
-	
+
 	public Loadable contentStorage() {
 		return contentStorage;
 	}
@@ -62,8 +62,10 @@ public enum Content {
 	}
 
 	public static GameAssetManager.Dependencies asDependencies(Content... assets) {
-		return new GameAssetManager.Dependencies(Arrays.stream(assets)
+		return new GameAssetManager.Dependencies(
+			Arrays.stream(assets)
 				.map(Content::descriptor)
-				.toArray(AssetDescriptor[]::new));
+				.toArray(AssetDescriptor[]::new)
+		);
 	}
 }

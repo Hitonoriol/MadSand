@@ -33,7 +33,7 @@ public class TimedProgressBar extends ProgressBar {
 	}
 
 	public void setDelay(float seconds) {
-		this.delay = seconds;
+		delay = seconds;
 		reset();
 	}
 
@@ -75,6 +75,7 @@ public class TimedProgressBar extends ProgressBar {
 		return action;
 	}
 
+	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
 

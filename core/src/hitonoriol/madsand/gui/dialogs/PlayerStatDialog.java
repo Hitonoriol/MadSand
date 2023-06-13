@@ -2,8 +2,6 @@ package hitonoriol.madsand.gui.dialogs;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -12,7 +10,6 @@ import com.badlogic.gdx.utils.Align;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.BaseStats;
-import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.Widgets;
@@ -44,7 +41,7 @@ public class PlayerStatDialog extends GameDialog {
 	private void init() {
 		float width = Gui.DEFAULT_WIDTH;
 
-		Label title = super.getTitleLabel();
+		var title = super.getTitleLabel();
 
 		title.setText(titleString);
 		title.setAlignment(Align.center);
@@ -68,11 +65,11 @@ public class PlayerStatDialog extends GameDialog {
 	private float LABEL_WIDTH = Gui.DEFAULT_WIDTH - ((BUTTON_WIDTH + BUTTON_PADDING) * 2);
 
 	private void addStatEntry(StatLabels.StatLabel label) {
-		Stat stat = label.stat;
-		Table group = Widgets.table();
+		var stat = label.stat;
+		var group = Widgets.table();
 
-		TextButton incButton = getStatButton(stat, true);
-		TextButton decButton = getStatButton(stat, false);
+		var incButton = getStatButton(stat, true);
+		var decButton = getStatButton(stat, false);
 
 		incButton.setSize(BUTTON_WIDTH, BUTTON_WIDTH);
 		decButton.setSize(BUTTON_WIDTH, BUTTON_WIDTH);
@@ -87,14 +84,15 @@ public class PlayerStatDialog extends GameDialog {
 	}
 
 	private TextButton getStatButton(Stat stat, boolean inc) {
-		TextButton button = Widgets.button(inc ? "+" : "-");
+		var button = Widgets.button(inc ? "+" : "-");
 		ChangeListener listener = new ChangeListener() {
+			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				PlayerStats stats = statLabels.getStats();
-				BaseStats baseStats = stats.baseStats;
+				var stats = statLabels.getStats();
+				var baseStats = stats.baseStats;
 				int statSum = stats.getSum();
 				int curValue = baseStats.get(stat);
-				
+
 				if (inc) {
 					if (statSum < maxStatSum && curValue < BaseStats.MAX_LVL)
 						baseStats.increase(stat);

@@ -23,8 +23,8 @@ public class TextureMap<T> {
 	}
 
 	private AtlasRegion getAndCache(T id) {
-		String name = id.toString();
-		AtlasRegion region = atlas.findRegion(subdir != null ? (subdir + name) : name);
+		var name = id.toString();
+		var region = atlas.findRegion(subdir != null ? (subdir + name) : name);
 		textureCache.put(id, region);
 		if (region == null)
 			Utils.dbg("Failed to find region: %s", name);
@@ -37,7 +37,7 @@ public class TextureMap<T> {
 		else
 			return getAndCache(id);
 	}
-	
+
 	public int size() {
 		return textureCache.size();
 	}

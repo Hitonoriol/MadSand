@@ -8,11 +8,11 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 
 public class ScrollFocusListener extends InputListener {
 	private Actor actor;
-	
+
 	public ScrollFocusListener(Actor actor) {
 		this.actor = actor;
 	}
-	
+
 	@Override
 	public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
 		getStage().setScrollFocus(actor);

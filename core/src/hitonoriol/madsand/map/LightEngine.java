@@ -16,7 +16,6 @@ import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.containers.Tuple;
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.util.Strings;
 
 public class LightEngine {
@@ -27,7 +26,7 @@ public class LightEngine {
 	 * Each MapEntity's light map is generated and stored separately,
 	 * where each Tile's lightLevel is identified by a Tuple<Entity, Position hashcode>.
 	 * After all light emitting entities have been processed, their light maps are
-	 * combined and added to the map in the end() method. 
+	 * combined and added to the map in the end() method.
 	 */
 	private HashMap<Tuple<MapEntity, Integer>, Integer> entityLightMap = new HashMap<>();
 	private Tuple<MapEntity, Integer> tmpLightId = new Tuple<>();
@@ -37,9 +36,11 @@ public class LightEngine {
 	}
 
 	private void forEachInRenderArea(BiConsumer<Integer, Integer> action) {
-		Player player = player();
-		Circle.forEachPoint(player.x, player.y, player.getFov(),
-				(x, y) -> action.accept(x + player.x, y + player.y));
+		var player = player();
+		Circle.forEachPoint(
+			player.x, player.y, player.getFov(),
+			(x, y) -> action.accept(x + player.x, y + player.y)
+		);
 	}
 
 	/* Prepare render area, setting light level to 0 (Tile.setVisible()) for all tiles in it */
@@ -55,9 +56,9 @@ public class LightEngine {
 		if (emitters.isEmpty())
 			return;
 
-		Pair tilePos = new Pair();
-		MutableInt lightLevel = new MutableInt(0);
-		Player player = player();
+		var tilePos = new Pair();
+		var lightLevel = new MutableInt(0);
+		var player = player();
 		forEachInRenderArea((x, y) -> {
 			tilePos.set(x, y);
 			lightLevel.setValue(0);
@@ -69,7 +70,7 @@ public class LightEngine {
 				}
 				lightLevel.add(light);
 			});
-			Tile tile = map.getTile(x, y);
+			var tile = map.getTile(x, y);
 			tile.setLightLevel(lightLevel.getValue());
 			if (tile.visible())
 				tile.visited = true;
@@ -84,12 +85,12 @@ public class LightEngine {
 	 * Calculate light level of a single tile,
 	 * 		centerCoords - position of the light source
 	 * 		tilePos - position of the Tile which light level is calculated
-	 * 		luminosity - emitter's light strength 
+	 * 		luminosity - emitter's light strength
 	 */
 	private int update(Pair centerCoords, Pair tilePos, float luminosity) {
 		double dstToCenter = Line.calcDistance(centerCoords.x, centerCoords.y, tilePos.x, tilePos.y);
 		int lightDelta = (int) (dstToCenter - luminosity);
-		MapObject object = map.getObject(tilePos);
+		var object = map.getObject(tilePos);
 		int lightLevel = Integer.MIN_VALUE;
 
 		if (obstacle.equals(centerCoords))

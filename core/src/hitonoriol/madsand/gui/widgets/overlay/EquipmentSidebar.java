@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
@@ -30,7 +29,6 @@ public class EquipmentSidebar extends Table {
 	ItemUI[] equip;
 
 	public EquipmentSidebar() {
-		super();
 		MouseoverListener.setUp(this);
 		super.setBackground(tableBorder);
 
@@ -54,12 +52,12 @@ public class EquipmentSidebar extends Table {
 			clearSlot(slot);
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	private void setSlot(EquipSlot slot, ItemUI item) {
 		item.setTopText(slot.text);
 
 		equip[slot.number] = item;
-		Array<Cell> cells = super.getCells();
+		var cells = super.getCells();
 		Cell<ItemUI> cell = cells.get(slot.number);
 		cell.setActor(equip[slot.number]);
 	}
@@ -73,7 +71,7 @@ public class EquipmentSidebar extends Table {
 	}
 
 	public void equipItem(EquipSlot slot, Item item) {
-		ItemUI itemDisplay = getItemDisplay(item);
+		var itemDisplay = getItemDisplay(item);
 
 		if (slot == null)
 			return;
@@ -81,6 +79,7 @@ public class EquipmentSidebar extends Table {
 		switch (slot) {
 		case MainHand:
 			itemDisplay.addListener(new ClickListener(Buttons.LEFT) {
+				@Override
 				public void clicked(InputEvent event, float x, float y) {
 					MadSand.player().useItem(item);
 				}

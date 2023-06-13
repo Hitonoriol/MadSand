@@ -55,7 +55,7 @@ public class SliderDialog extends GameDialog {
 		super(stage);
 		super.row();
 		super.setWidth(WIDTH);
-		Table titleTbl = super.getTitleTable();
+		var titleTbl = super.getTitleTable();
 		titleLabel = super.getTitleLabel();
 		titleLabel.setAlignment(Align.center);
 
@@ -69,7 +69,7 @@ public class SliderDialog extends GameDialog {
 
 		topLabel = Widgets.label("");
 		bottomLabel = Widgets.label("");
-		setCancelAction(() -> remove());
+		setCancelAction(this::remove);
 	}
 
 	public SliderDialog(int min, int max) {
@@ -123,6 +123,7 @@ public class SliderDialog extends GameDialog {
 		return this;
 	}
 
+	@Override
 	public SliderDialog setTitle(String title) {
 		super.setTitle(title);
 		return this;

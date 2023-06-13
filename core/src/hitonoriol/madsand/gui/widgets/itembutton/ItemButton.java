@@ -30,7 +30,7 @@ public abstract class ItemButton extends Group {
 
 	public ItemButton(Item item) {
 		buttonItem = item;
-		String buttonText = createButtonText();
+		var buttonText = createButtonText();
 		itemLabel = Widgets.label(buttonText);
 		itemLabel.setWrap(true);
 		itemImage = new Image(item.getDrawable());
@@ -53,18 +53,20 @@ public abstract class ItemButton extends Group {
 	}
 
 	protected void setUpListeners() {
-		this.addListener(setMouseOverListener());
-		this.addListener(setButtonPressListener());
+		addListener(setMouseOverListener());
+		addListener(setButtonPressListener());
 	}
 
 	protected abstract String createButtonText();
 
 	private InputListener setMouseOverListener() {
 		return new InputListener() {
+			@Override
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
 				highlight.setVisible(true);
 			}
 
+			@Override
 			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
 				highlight.setVisible(false);
 			}

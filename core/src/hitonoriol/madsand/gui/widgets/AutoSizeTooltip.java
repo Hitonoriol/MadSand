@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Tooltip;
-import com.badlogic.gdx.scenes.scene2d.ui.TooltipManager;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 import hitonoriol.madsand.gui.Gui;
@@ -32,13 +31,13 @@ public class AutoSizeTooltip extends Tooltip<Table> {
 		tooltipTbl.setSize(WIDTH, HEIGHT);
 		setActor(tooltipTbl);
 		setInstant(true);
-		TooltipManager manager = super.getManager();
+		var manager = super.getManager();
 		manager.animations = false;
 		manager.initialTime = 0;
 		manager.resetTime = 0;
 		manager.subsequentTime = 0;
 	}
-	
+
 	public AutoSizeTooltip(String text) {
 		this();
 		setMaxWidth(250);

@@ -18,17 +18,20 @@ public interface Enumerable {
 	}
 
 	static <T extends Enumerable> T find(Map<Integer, T> items, String partialName) {
-		return FuzzySearch.extractOne(partialName,
-				items.values(),
-				item -> item.name() == null ? "" : item.name(),
-				(str1, str2) -> FuzzySearch.weightedRatio(str1, str2))
-				.getReferent();
+		return FuzzySearch.extractOne(
+			partialName,
+			items.values(),
+			item -> item.name() == null ? "" : item.name(),
+			FuzzySearch::weightedRatio
+		)
+			.getReferent();
 	}
 
 	static <T extends Enumerable> int findId(Map<Integer, T> items, String partialName) {
 		return find(items, partialName).id();
 	}
-	
-	static final Class<Integer> idType = Integer.class;
+
+	Class<Integer> idType = Integer.class;
+
 	public static class EnumerableMap<T extends Enumerable> extends HashMap<Integer, T> {}
 }

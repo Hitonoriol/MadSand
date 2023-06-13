@@ -4,13 +4,10 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Stat;
-import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.gamecontent.Globals;
 import hitonoriol.madsand.map.ItemProducer;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapCell;
-import hitonoriol.madsand.map.Tile;
-import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.pathfinding.Node;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.Strings;
@@ -79,7 +76,7 @@ public class CellInfoGenerator extends TextGenerator {
 			addLine("On the ground: %s", cell.getLoot().getInfo());
 
 		if (cell.hasObject()) {
-			MapObject object = cell.getObject();
+			var object = cell.getObject();
 			addLine("Object: " + object.name + " (" + Utils.round(object.getHpPercent()) + "%)");
 		}
 
@@ -101,33 +98,37 @@ public class CellInfoGenerator extends TextGenerator {
 	private void getRangedAttackInfo() {
 		int dst = player.distanceTo(cell.getNpc());
 		addLine("Distance to target: " + dst + " meters")
-				.addLine("Chance to miss: " + Utils.round(player.stats.calcRangedAttackMissChance(dst)) + "%");
+			.addLine("Chance to miss: " + Utils.round(player.stats.calcRangedAttackMissChance(dst)) + "%");
 	}
 
 	private void getNpcInfo() {
-		AbstractNpc npc = cell.getNpc();
+		var npc = cell.getNpc();
 		addLine(npc.stats.name + " (Level " + npc.getLvl() + ")")
-				.addLine((npc.isNeutral()
-						? "Neutral"
-						: "Hostile"));
+			.addLine(
+				(npc.isNeutral()
+					? "Neutral"
+					: "Hostile")
+			);
 		addLine(npc.getInfoString());
 	}
 
 	private void getPlayerInfo() {
 		addLine("You look at yourself")
-				.addLine(player.getInfoString());
+			.addLine(player.getInfoString());
 	}
 
 	public static void getItemProducerInfo(StringBuilder builder, ItemProducer producer) {
 		builder.append("Status: ");
-		String productName = producer.getProductName();
-		String rawMaterialName = producer.getConsumableName();
+		var productName = producer.getProductName();
+		var rawMaterialName = producer.getConsumableName();
 
 		if (producer.canProduce()) {
 			builder.append("producing " + productName)
-					.append(" (" + Utils.round(producer.getProductStorage()) + "/" + producer.getMaxProductStorage()
-							+ ")")
-					.append(NEWLINE);
+				.append(
+					" (" + Utils.round(producer.getProductStorage()) + "/" + producer.getMaxProductStorage()
+						+ ")"
+				)
+				.append(NEWLINE);
 			if (!producer.isEndless())
 				builder.append(rawMaterialName + " left: " + Utils.round(producer.getConsumedMaterialStorage()));
 		} else
@@ -143,34 +144,36 @@ public class CellInfoGenerator extends TextGenerator {
 	}
 
 	private void getCropInfo() {
-		long time = (long) (cell.getCrop().getHarvestTime() * MadSand.world().getRealtimeActionSeconds());
-		addLine((time <= 0)
+		var time = (long) (cell.getCrop().getHarvestTime() * MadSand.world().getRealtimeActionSeconds());
+		addLine(
+			(time <= 0)
 				? ("* Ready to harvest!")
-				: ("[#58FFB1]* Will fully grow in " + Utils.timeString(time) + "[]"));
+				: ("[#58FFB1]* Will fully grow in " + Utils.timeString(time) + "[]")
+		);
 	}
 
 	Pair coords = new Pair();
 
 	private void getDebugInfo() {
-		Tile tile = cell.getTile();
-		MapObject object = cell.getObject();
-		AbstractNpc npc = cell.getNpc();
+		var tile = cell.getTile();
+		var object = cell.getObject();
+		var npc = cell.getNpc();
 		addLine("[#C3C3C3]" + lineDelimiter);
 
 		addLine("Light level: " + tile.getLightLevel() + " (sky: " + MadSand.world().getSkyLight() + ")");
-		String emitterInfo = map.getLightEngine().getEntityLight(coords.set(x, y));
+		var emitterInfo = map.getLightEngine().getEntityLight(coords.set(x, y));
 		if (!emitterInfo.isEmpty())
 			addLine(emitterInfo);
 
 		if (cell.hasObject())
 			addLine("Object HP: " + object.hp + " (" + object.harvestHp + ")")
-					.addLine("Luminosity: " + object.getLuminosity());
+				.addLine("Luminosity: " + object.getLuminosity());
 
 		if (cell.hasNpc())
 			addLine("UID: " + npc.uid())
-					.addLine("HP: " + npc.stats.hp)
-					.addLine("Speed: " + npc.getSpeed() + "(" + npc.stats.get(Stat.Dexterity) + ")")
-					.addLine("Lifetime: " + Utils.round(npc.getLifetime()));
+				.addLine("HP: " + npc.stats.hp)
+				.addLine("Speed: " + npc.getSpeed() + "(" + npc.stats.get(Stat.Dexterity) + ")")
+				.addLine("Lifetime: " + Utils.round(npc.getLifetime()));
 
 		if (node != null)
 			addLine("Node: " + node);
@@ -179,8 +182,10 @@ public class CellInfoGenerator extends TextGenerator {
 
 	@Override
 	public String toString() {
-		return String.format("[%d, %d] Object: %s",
-				x, y,
-				cell.getObject());
+		return String.format(
+			"[%d, %d] Object: %s",
+			x, y,
+			cell.getObject()
+		);
 	}
 }

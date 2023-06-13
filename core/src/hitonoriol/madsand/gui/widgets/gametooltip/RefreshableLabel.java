@@ -63,10 +63,10 @@ public class RefreshableLabel extends Label {
 	}
 
 	public RefreshableLabel update(float periodSeconds) {
-		TimeUtils.scheduleRepeatingTask(updateTask = TimeUtils.createTask(() -> refresh()), periodSeconds);
+		TimeUtils.scheduleRepeatingTask(updateTask = TimeUtils.createTask(this::refresh), periodSeconds);
 		return this;
 	}
-	
+
 	public boolean isAutoUpdated() {
 		return updateTask != null;
 	}

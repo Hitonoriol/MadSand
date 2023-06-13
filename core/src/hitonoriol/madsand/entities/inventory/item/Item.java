@@ -45,10 +45,12 @@ import hitonoriol.madsand.util.cast.DynamicallyCastable;
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
-@JsonSubTypes({ @Type(Armor.class), @Type(Consumable.class), @Type(CropSeeds.class), @Type(FishingBait.class),
+@JsonSubTypes(
+	{ @Type(Armor.class), @Type(Consumable.class), @Type(CropSeeds.class), @Type(FishingBait.class),
 		@Type(GrabBag.class), @Type(PlaceableItem.class), @Type(Projectile.class), @Type(Tool.class),
 		@Type(Weapon.class),
-		@Type(ScriptedConsumable.class) })
+		@Type(ScriptedConsumable.class) }
+)
 public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumerable {
 	private final static char NON_UNLOCKABLE_CHAR = 'X';
 	public final static String ITEM_DELIM = "/", BLOCK_DELIM = ":";
@@ -125,7 +127,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 	public int getQuantity() {
 		return quantity;
 	}
-	
+
 	public void use(Player player) {
 		if (useAction != null)
 			Lua.execute(useAction, this);
@@ -134,9 +136,9 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 	public void equip(Player player) {
 		player.stats.equipment.equip(this);
 	}
-	
+
 	protected void toggleEquipped() {
-		Player player = MadSand.player();
+		var player = MadSand.player();
 		if (player.stats().equipment.itemEquipped(this))
 			player.unEquip(this);
 		else
@@ -189,7 +191,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 	public String getInfoString() {
 		String info;
 		info = getFullName()
-				+ Resources.LINEBREAK + Resources.LINEBREAK;
+			+ Resources.LINEBREAK + Resources.LINEBREAK;
 
 		info += getMiscInfo() + Resources.LINEBREAK;
 		info += getStackInfo("Weight", "kg", Utils.round(weight), Utils.round(getTotalWeight())) + Resources.LINEBREAK;
@@ -205,12 +207,12 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 
 	protected void loadProperties(Item properties) {
 		if (properties.name != null)
-			this.name = properties.name;
+			name = properties.name;
 
-		this.recipe = properties.recipe;
-		this.weight = properties.weight;
-		this.cost = properties.cost;
-		this.useAction = properties.useAction;
+		recipe = properties.recipe;
+		weight = properties.weight;
+		cost = properties.cost;
+		useAction = properties.useAction;
 	}
 
 	/* Generate craft requirement lists for this item if it has a recipe
@@ -265,9 +267,9 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 
 	@JsonIgnore
 	public float getTotalWeight() {
-		return weight * (float) quantity;
+		return weight * quantity;
 	}
-	
+
 	public float getWeight() {
 		return weight;
 	}
@@ -278,14 +280,14 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 
 	/*
 	 *	Returns a new stack with max weight of <weight>
-	 *	Current stack is unchanged 
+	 *	Current stack is unchanged
 	 */
 	public Item split(float weight) {
 		Utils.dbg("Split item %s || weight %f", this, weight);
 		if (this.weight == 0 || getTotalWeight() <= weight)
 			return this;
 
-		Item newStack = copy().setQuantity((int) (weight / this.weight));
+		var newStack = copy().setQuantity((int) (weight / this.weight));
 		Utils.dbg("new stack: %s", newStack);
 		return newStack;
 	}
@@ -350,7 +352,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 	}
 
 	protected Texture createDynamicTexture() {
-		Texture dynamicTx = TextureProcessor.createTexture(Textures.getItem(id));
+		var dynamicTx = TextureProcessor.createTexture(Textures.getItem(id));
 		dynamicTxPool.put(this, dynamicTx);
 		return dynamicTx;
 	}
@@ -382,11 +384,17 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 	 */
 	@JsonSetter("category")
 	private void setCategory(ObjectNode categoryNodeList) {
-		Items.deferInit(() -> categoryNodeList.fieldNames()
-				.forEachRemaining(categoryName -> ItemCategories.get()
-						.addItem(id,
-								ItemCategory.valueOf(categoryName),
-								categoryNodeList.get(categoryName).intValue())));
+		Items.deferInit(
+			() -> categoryNodeList.fieldNames()
+				.forEachRemaining(
+					categoryName -> ItemCategories.get()
+						.addItem(
+							id,
+							ItemCategory.valueOf(categoryName),
+							categoryNodeList.get(categoryName).intValue()
+						)
+				)
+		);
 	}
 
 	@Override
@@ -410,13 +418,15 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 
 	@Override
 	public String toString() {
-		return String.format("[%X] {%s} [id: %d] %d %s (%.2f kg)",
-				hashCode(),
-				getClass().getSimpleName(),
-				id,
-				quantity,
-				name,
-				getTotalWeight());
+		return String.format(
+			"[%X] {%s} [id: %d] %d %s (%.2f kg)",
+			hashCode(),
+			getClass().getSimpleName(),
+			id,
+			quantity,
+			name,
+			getTotalWeight()
+		);
 	}
 
 	// list string format: id1/quantity1:id2/quantity2:...
@@ -437,14 +447,14 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 	}
 
 	public static ArrayList<Item> parseItemString(String itemListStr) {
-		ArrayList<Item> items = new ArrayList<>();
+		var items = new ArrayList<Item>();
 		parseListString(itemListStr, (id, quantity) -> items.add(Item.create(id, quantity)));
 		return items;
 	}
 
 	public static String createReadableItemList(String itemListStr, boolean countItems) {
-		final String delim = ", ";
-		StringBuilder ret = new StringBuilder();
+		final var delim = ", ";
+		var ret = new StringBuilder();
 		parseListString(itemListStr, (id, quantity) -> {
 			if (countItems)
 				ret.append(MadSand.player().inventory.countItems(id) + "/");
@@ -468,7 +478,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 	}
 
 	public static ArrayList<Integer> parseCraftRequirements(String recipe) {
-		ArrayList<Integer> requirements = new ArrayList<>();
+		var requirements = new ArrayList<Integer>();
 		parseListString(recipe, (id, quantity) -> requirements.add(id));
 		return requirements;
 	}
@@ -516,7 +526,5 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 		return dynamicTxPool.size();
 	}
 
-	public static final Comparator<Item> quantityComparator = (item1, item2) -> {
-		return Integer.compare(item1.quantity, item2.quantity);
-	};
+	public static final Comparator<Item> quantityComparator = Comparator.comparing(item1 -> item1.quantity);
 }

@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
 import hitonoriol.madsand.entities.equipment.Equipment;
-import hitonoriol.madsand.entities.inventory.EquipStats;
 import hitonoriol.madsand.entities.inventory.item.AbstractEquipment;
 import hitonoriol.madsand.entities.inventory.item.CombatEquipment;
 import hitonoriol.madsand.entities.inventory.item.Item;
@@ -74,6 +73,7 @@ public class PlayerStats extends Stats {
 		check();
 	}
 
+	@Override
 	public void check() {
 		super.check();
 		skills.check();
@@ -95,6 +95,7 @@ public class PlayerStats extends Stats {
 			stamina = 0;
 	}
 
+	@Override
 	public void calcStats() {
 		super.calcStats();
 		maxstamina = ((get(Stat.Dexterity) + get(Stat.Constitution)) / 2) * 5;
@@ -103,6 +104,7 @@ public class PlayerStats extends Stats {
 			restore();
 	}
 
+	@Override
 	public void restore() {
 		super.restore();
 		stamina = maxstamina;
@@ -126,7 +128,7 @@ public class PlayerStats extends Stats {
 
 	/*
 	 * Max food ticks = Survival skill level + base food ticks
-	 * 
+	 *
 	 * Decrement food ticks on unsuccessful skill roll
 	 * When food ticks < 0, decrement food level
 	 */
@@ -142,6 +144,7 @@ public class PlayerStats extends Stats {
 
 	}
 
+	@Override
 	@JsonIgnore
 	public int getSum() {
 		return super.getSum() - statBonus;
@@ -154,10 +157,12 @@ public class PlayerStats extends Stats {
 	float atkSkillPercent = 0.5f;
 	float evasionSkillPercent = 0.3f;
 
+	@Override
 	public int getBaseAttack() {
 		return (int) (super.getBaseAttack() + skills.getLvl(Skill.Melee) * atkSkillPercent);
 	}
 
+	@Override
 	@JsonIgnore
 	public int getDefense() {
 		return (int) (super.getDefense() + skills.getLvl(Skill.Evasion) * evasionSkillPercent);
@@ -165,7 +170,7 @@ public class PlayerStats extends Stats {
 
 	@JsonIgnore
 	public int getMaxFoodTicks() {
-		float lvl = 0.5f + ((float) skills.getLvl(Skill.Survival) * 0.5f);
+		float lvl = 0.5f + (skills.getLvl(Skill.Survival) * 0.5f);
 		return (int) (Math.sqrt(lvl) * 7.5);
 	}
 
@@ -183,14 +188,14 @@ public class PlayerStats extends Stats {
 
 	public int getEquippedToolDamage(Skill skill) {
 		return getEquippedTool()
-				.map(tool -> tool.getSkillDamage(skill))
-				.orElse(Tool.MIN_SKILL_DMG);
+			.map(tool -> tool.getSkillDamage(skill))
+			.orElse(Tool.MIN_SKILL_DMG);
 	}
 
 	public Tool.Type getEquippedToolType() {
 		return getEquippedTool()
-				.map(tool -> tool.type)
-				.orElse(Tool.Type.None);
+			.map(tool -> tool.type)
+			.orElse(Tool.Type.None);
 	}
 
 	public Optional<AbstractEquipment> getHeldEquipment() {
@@ -210,14 +215,14 @@ public class PlayerStats extends Stats {
 	}
 
 	public void applyBonus(CombatEquipment item) {
-		EquipStats bonus = item.equipStats;
+		var bonus = item.equipStats;
 		baseStats.add(bonus.stats);
 		statBonus += bonus.getTotalBonus();
 		calcStats();
 	}
 
 	public void removeBonus(CombatEquipment item) {
-		EquipStats bonus = item.equipStats;
+		var bonus = item.equipStats;
 		baseStats.sub(bonus.stats);
 		statBonus -= bonus.getTotalBonus();
 		calcStats();

@@ -27,13 +27,14 @@ public abstract class CombatEquipment extends AbstractEquipment {
 
 	protected void initEquipStats(EquipStats protoEquipStats) {
 		equipStats = protoEquipStats == null
-				? new EquipStats(lvl, this)
-				: new EquipStats(protoEquipStats);
+			? new EquipStats(lvl, this)
+			: new EquipStats(protoEquipStats);
 	}
 
+	@Override
 	protected CombatEquipment rollProperties() {
 		if (MadSand.player().stats.luckRoll()) {
-			++this.lvl;
+			++lvl;
 			name += " of " + Utils.randWord();
 		}
 

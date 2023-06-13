@@ -21,7 +21,6 @@ public class Tool extends AbstractEquipment {
 	}
 
 	public Tool() {
-		super();
 	}
 
 	@Override
@@ -44,8 +43,8 @@ public class Tool extends AbstractEquipment {
 			return Utils.rand(MIN_SKILL_DMG, (int) (dmg * Skill.SKILL_DMG_COEF));
 	}
 
-	public static enum Type {
-		None, // -- Bare hands 
+	public enum Type {
+		None, // -- Bare hands
 		Axe, Shovel, Pickaxe, Hoe, Hammer,
 		FishingRod;
 
@@ -83,7 +82,7 @@ public class Tool extends AbstractEquipment {
 	public EquipSlot getEquipSlot() {
 		return EquipSlot.MainHand;
 	}
-	
+
 	@Override
 	public void initCategory() {
 		setCategory(ItemCategory.Tools);

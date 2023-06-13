@@ -1,8 +1,8 @@
 package hitonoriol.madsand.map;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gamecontent.Items;
@@ -34,11 +34,11 @@ public class ItemProducer {
 	}
 
 	public ItemProducer() {
-		this.id = 0;
+		id = 0;
 	}
 
 	private void loadProperties() {
-		ItemProducer properties = Objects.all().itemProducers().get(this.id);
+		var properties = Objects.all().itemProducers().get(id);
 		producedMaterial = properties.producedMaterial;
 		consumedMaterial = properties.consumedMaterial;
 
@@ -68,7 +68,7 @@ public class ItemProducer {
 	public boolean hasRawMaterial() {
 		return consumableMaterialStorage - consumptionRate >= 0;
 	}
-	
+
 	public boolean hasProduct() {
 		return productStorage >= 1;
 	}
@@ -86,7 +86,7 @@ public class ItemProducer {
 			return false;
 
 		consumableMaterialStorage -= upgradeRequirement;
-		productionRate += (float) (++lvl) * upgradeProductionMultiplier;
+		productionRate += (++lvl) * upgradeProductionMultiplier;
 		upgradeRequirement += upgradeRequirement * upgradeRequirementMultiplier;
 		return true;
 	}

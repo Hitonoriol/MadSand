@@ -26,7 +26,7 @@ public class Storage<T> {
 		if (value != null)
 			action.accept(value);
 	}
-	
+
 	public boolean isEmpty() {
 		return value == null;
 	}
@@ -34,8 +34,8 @@ public class Storage<T> {
 	public void clear() {
 		value = null;
 	}
-	
+
 	public static <T> Storage<T> empty() {
-		return new Storage<T>();
+		return new Storage<>();
 	}
 }

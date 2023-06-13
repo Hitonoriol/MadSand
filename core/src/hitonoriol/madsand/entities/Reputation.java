@@ -7,7 +7,7 @@ public class Reputation {
 	final static float HOSTILE_THR = -5;
 
 	public static float LEAVE_PENALTY = 0.15f;
-	
+
 	public static float KILL_PENALTY = -0.25f;
 	public static float QUEST_REWARD = 0.3f;
 

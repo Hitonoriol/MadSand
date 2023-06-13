@@ -46,18 +46,18 @@ public class FarkleUI extends CardGameUI {
 		add(Widgets.label("(score " + Farkle.WINNING_SCORE + " to win)")).row();
 
 		gameContainer.add(scoreTable)
-				.size(SCORE_WIDTH, GAME_HEIGHT)
-				.padLeft(PAD).padRight(PAD);
+			.size(SCORE_WIDTH, GAME_HEIGHT)
+			.padLeft(PAD).padRight(PAD);
 		gameContainer.add(diceContainer)
-				.size(DICE_CONT_WIDTH, Die.HEIGHT * 2 + Gui.FONT_S * 2)
-				.padRight(PAD);
+			.size(DICE_CONT_WIDTH, Die.HEIGHT * 2 + Gui.FONT_S * 2)
+			.padRight(PAD);
 		diceContainer.add("Table:").row();
 		diceContainer.add(binTable).size(DICE_CONT_WIDTH, Die.HEIGHT).padBottom(25).row();
 		diceContainer.add("Your hand:").row();
 		diceContainer.add(handTable).size(DICE_CONT_WIDTH, Die.HEIGHT).row();
 		gameContainer.add(helpTable)
-				.size(175, GAME_HEIGHT)
-				.padRight(PAD);
+			.size(175, GAME_HEIGHT)
+			.padRight(PAD);
 		add(gameContainer).padBottom(35).row();
 
 		clearScoreTable();
@@ -89,8 +89,10 @@ public class FarkleUI extends CardGameUI {
 
 		Gui.setAction(endRoundButton, () -> {
 			if (farkle.bonusThrowAvailable()) {
-				Gui.drawOkDialog("Bonus Round",
-						"Cool, you created combinations with all your dice. Here's your bonus round!");
+				Gui.drawOkDialog(
+					"Bonus Round",
+					"Cool, you created combinations with all your dice. Here's your bonus round!"
+				);
 				farkle.bonusRound();
 				update();
 				checkForFarkle();
@@ -128,14 +130,18 @@ public class FarkleUI extends CardGameUI {
 		if (farkle.gameWon()) {
 			float multiplier = ((float) farkle.getScore() / (float) Farkle.WINNING_SCORE) + 1f;
 			bank *= multiplier;
-			Gui.drawOkDialog("You win!",
-					"Congratulations! You scored " + farkle.getScore() + " points and won " + bank + " " + currencyName
-							+ "!");
+			Gui.drawOkDialog(
+				"You win!",
+				"Congratulations! You scored " + farkle.getScore() + " points and won " + bank + " " + currencyName
+					+ "!"
+			);
 			MadSand.player().addItem(currency, bank);
 		} else
-			Gui.drawOkDialog("You Lose!",
-					"You failed to score at least " + Farkle.WINNING_SCORE + " and lost " + bank + " " + currencyName
-							+ ".");
+			Gui.drawOkDialog(
+				"You Lose!",
+				"You failed to score at least " + Farkle.WINNING_SCORE + " and lost " + bank + " " + currencyName
+					+ "."
+			);
 		hideGameButtons();
 	}
 
@@ -152,7 +158,7 @@ public class FarkleUI extends CardGameUI {
 	}
 
 	private Image createDieButton(Container<Die> moveFrom, Container<Die> moveTo, Die die) {
-		Image dieButton = new Image(die.getTexture());
+		var dieButton = new Image(die.getTexture());
 		Gui.setClickAction(dieButton, () -> {
 			farkle.moveDie(moveFrom, moveTo, die);
 			update();
@@ -163,8 +169,8 @@ public class FarkleUI extends CardGameUI {
 	private void update() {
 		binTable.clear();
 		handTable.clear();
-		DiceBin bin = farkle.getDiceBin();
-		FarkleHand hand = farkle.getDiceHand();
+		var bin = farkle.getDiceBin();
+		var hand = farkle.getDiceHand();
 
 		farkle.getDiceBin().getDice().forEach(die -> binTable.add(createDieButton(bin, hand, die)));
 		farkle.getDiceHand().getDice().forEach(die -> handTable.add(createDieButton(hand, bin, die)));
@@ -197,7 +203,7 @@ public class FarkleUI extends CardGameUI {
 
 		Gui.drawOkDialog("Farkle!", "Oops, no combinations avalilable. Better luck next time!");
 		hideGameButtons();
-		TimeUtils.scheduleTask(() -> startRound(), 1);
+		TimeUtils.scheduleTask(this::startRound, 1);
 		return true;
 	}
 
@@ -214,11 +220,13 @@ public class FarkleUI extends CardGameUI {
 	}
 
 	private static Table createHelpEntry(FarkleHand hand) {
-		Table entry = Widgets.table();
+		var entry = Widgets.table();
 		entry.align(Align.topLeft);
-		hand.getDice().forEach(die -> entry.add(new Image(die.getTexture()))
+		hand.getDice().forEach(
+			die -> entry.add(new Image(die.getTexture()))
 				.size(Die.WIDTH / 2, Die.HEIGHT / 2)
-				.align(Align.left));
+				.align(Align.left)
+		);
 		entry.add("=" + hand.getScore());
 		hand.clear();
 		return entry;
@@ -231,7 +239,7 @@ public class FarkleUI extends CardGameUI {
 		table.add("Combinations:").row();
 		combTable.defaults().align(Align.left);
 
-		FarkleHand hand = new FarkleHand();
+		var hand = new FarkleHand();
 		Gui.skipLine(combTable);
 		combTable.add("Single:").row();
 		combTable.add(createHelpEntry(hand.set(1))).row();

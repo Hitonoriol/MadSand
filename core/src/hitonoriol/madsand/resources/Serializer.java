@@ -40,11 +40,11 @@ public class Serializer extends ObjectMapper {
 
 	public Serializer() {
 		this(DefaultTyping.OBJECT_AND_NON_CONCRETE);
-		
+
 	}
 
 	private void regsiterModules() {
-		SimpleModule module = new SimpleModule();
+		var module = new SimpleModule();
 		module.addKeyDeserializer(Pair.class, new Pair.PairKeyDeserializer());
 		module.addAbstractTypeMapping(Map.class, HashMap.class);
 		registerModule(module);
@@ -91,8 +91,10 @@ public class Serializer extends ObjectMapper {
 
 	public <T> ArrayList<T> loadList(String internalFile, Class<T> type) {
 		try {
-			return readValue(readInternal(internalFile),
-					getTypeFactory().constructCollectionType(ArrayList.class, type));
+			return readValue(
+				readInternal(internalFile),
+				getTypeFactory().constructCollectionType(ArrayList.class, type)
+			);
 		} catch (Exception e) {
 			return null;
 		}
@@ -126,8 +128,10 @@ public class Serializer extends ObjectMapper {
 		return getMapWriter(Pair.class, value);
 	}
 
-	private <T extends Map<K, V>, K, V> T loadMap(String file, Class<T> mapClass, Class<K> keyType, Class<V> valueType,
-			boolean internal) {
+	private <T extends Map<K, V>, K, V> T loadMap(
+		String file, Class<T> mapClass, Class<K> keyType, Class<V> valueType,
+		boolean internal
+	) {
 		try {
 			return readValue(internal ? readInternal(file) : readFile(file), getMapType(mapClass, keyType, valueType));
 		} catch (Exception e) {
@@ -136,8 +140,10 @@ public class Serializer extends ObjectMapper {
 		}
 	}
 
-	public <T extends Map<K, V>, K, V> T loadMap(String internalFile, Class<T> mapClass, Class<K> keyType,
-			Class<V> valueType) {
+	public <T extends Map<K, V>, K, V> T loadMap(
+		String internalFile, Class<T> mapClass, Class<K> keyType,
+		Class<V> valueType
+	) {
 		return loadMap(internalFile, mapClass, keyType, valueType, true);
 	}
 
@@ -175,9 +181,10 @@ public class Serializer extends ObjectMapper {
 	}
 
 	public <T extends Enumerable> Map<Integer, T> loadEnumerableMap(
-			String internalFile,
-			Class<T> type,
-			Consumer<T> initAction) {
+		String internalFile,
+		Class<T> type,
+		Consumer<T> initAction
+	) {
 		Map<Integer, T> map = loadMap(internalFile, Enumerable.idType, type);
 		map.forEach((id, value) -> {
 			value.setId(id);

@@ -7,5 +7,5 @@ import hitonoriol.madsand.resources.GameAssetManager;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public interface Loadable {
-	public void registerLoader(GameAssetManager manager);
+	void registerLoader(GameAssetManager manager);
 }

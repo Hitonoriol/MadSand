@@ -2,6 +2,7 @@ package hitonoriol.madsand.gamecontent;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Comparator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
@@ -26,7 +27,7 @@ public class Prefs {
 	public boolean fullscreen = false;
 	DisplayMode displayModes[];
 
-	/* Global Keybinds ? 
+	/* Global Keybinds ?
 	 * ----------
 	 */
 
@@ -39,7 +40,7 @@ public class Prefs {
 	public DisplayMode[] getDisplayModes() {
 		if (displayModes == null) {
 			displayModes = Gdx.graphics.getDisplayModes();
-			Arrays.sort(displayModes, (o1, o2) -> Integer.compare(o1.width, o2.width));
+			Arrays.sort(displayModes, Comparator.comparing(o1 -> o1.width));
 		}
 		return displayModes;
 	}
@@ -80,7 +81,7 @@ public class Prefs {
 	}
 
 	public static void loadPrefs() {
-		File prefs = new File(PREFS_FILE);
+		var prefs = new File(PREFS_FILE);
 		if (prefs.exists())
 			try {
 				values = mapper.readValue(prefs, Prefs.class);
@@ -114,12 +115,9 @@ public class Prefs {
 
 		@Override
 		public boolean equals(Object obj) {
-			if (obj == this)
+			if ((obj == this) || obj == null || !(obj instanceof DisplayModeDescriptor))
 				return true;
-			
-			if (obj == null || !(obj instanceof DisplayModeDescriptor))
-				return true;
-			
+
 			return mode.equals(((DisplayModeDescriptor) obj).mode);
 		}
 	}

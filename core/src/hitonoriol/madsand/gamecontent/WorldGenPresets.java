@@ -41,6 +41,6 @@ public class WorldGenPresets extends ContentStorage<WorldGenPreset> {
 	public static WorldGenPresets all() {
 		return instance;
 	}
-	
+
 	private static class EncounterList extends ArrayList<String> {}
 }

@@ -26,20 +26,21 @@ public class Line implements Iterable<Pair> {
 	}
 
 	public void setOrigin(int x, int y) {
-		this.x0 = x;
-		this.y0 = y;
+		x0 = x;
+		y0 = y;
 	}
 
 	public void setDestination(int x, int y) {
-		this.x1 = x;
-		this.y1 = y;
+		x1 = x;
+		y1 = y;
 	}
 
 	void build() {
-		points = new ArrayList<Pair>();
+		points = new ArrayList<>();
 		forEachPoint(x0, y0, x1, y1, (x, y) -> points.add(new Pair(x, y)));
 	}
 
+	@Override
 	public Iterator<Pair> iterator() {
 		return points.iterator();
 	}

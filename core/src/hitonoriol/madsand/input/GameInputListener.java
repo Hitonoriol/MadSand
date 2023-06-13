@@ -30,8 +30,10 @@ public class GameInputListener extends InputListener {
 			/* The keystroke has at least 2 keys & all keys have been released */
 			if (keystrokeValid())
 				keyBinds.runBoundAction(currentKeystroke);
-			Utils.dbg("Executed an action bound to: [%s]", currentKeystroke.stream()
-					.map(Keys::toString).collect(Collectors.joining(", ")));
+			Utils.dbg(
+				"Executed an action bound to: [%s]", currentKeystroke.stream()
+					.map(Keys::toString).collect(Collectors.joining(", "))
+			);
 			consumeKeystroke();
 		}
 		return true;

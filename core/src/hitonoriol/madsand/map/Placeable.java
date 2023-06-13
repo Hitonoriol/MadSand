@@ -25,7 +25,7 @@ public interface Placeable extends Enumerable {
 
 	default void createPlaceable(PlaceableItem item, Runnable initTask) {
 		Items.deferInit(() -> {
-			java.util.Map<Integer, Item> items = Items.all().get();
+			var items = Items.all().get();
 			item.setAltObject(id());
 			item.setId(Item.getLastId() + 1);
 			items.put(item.id(), item);

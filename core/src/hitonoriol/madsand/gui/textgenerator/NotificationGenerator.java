@@ -30,7 +30,7 @@ public class NotificationGenerator extends StaticTextGenerator {
 		++notifsInQueue;
 		if (notifsInQueue <= 1)
 			return 1;
-			
+
 		return 1f / ((float) Math.sqrt(notifsInQueue));
 	}
 

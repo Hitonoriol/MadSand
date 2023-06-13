@@ -22,19 +22,21 @@ public class Waypoint extends MapObject {
 	}
 
 	public void toggleArrow() {
-		Pair position = getPosition();
-		WaypointArrow arrow = getArrow();
+		var position = getPosition();
+		var arrow = getArrow();
 		if (arrow != null) {
 			arrow.remove();
 			Gui.refreshOverlay();
 		} else
-			Gui.overlay.addWaypointArrow(new WaypointArrow(position.x, position.y)
+			Gui.overlay.addWaypointArrow(
+				new WaypointArrow(position.x, position.y)
 					.setDestinationName(getName())
-					.randomizeColor());
+					.randomizeColor()
+			);
 	}
 
 	public WaypointArrow getArrow() {
-		Pair position = getPosition();
+		var position = getPosition();
 		return Gui.overlay.getWaypointArrow(position.x, position.y);
 	}
 
@@ -44,9 +46,11 @@ public class Waypoint extends MapObject {
 
 	@Override
 	protected void populateContextMenu(GameContextMenu menu) {
-		menu.addButton("Rename", () -> new InputDialog("Rename Waypoint", newName -> name = newName)
+		menu.addButton(
+			"Rename", () -> new InputDialog("Rename Waypoint", newName -> name = newName)
 				.setInitialText(getName())
-				.show());
+				.show()
+		);
 	}
 
 	@Override
@@ -58,6 +62,6 @@ public class Waypoint extends MapObject {
 
 	@Override
 	public void interact(Player player) {
-		interact(player, () -> toggleArrow());
+		interact(player, this::toggleArrow);
 	}
 }

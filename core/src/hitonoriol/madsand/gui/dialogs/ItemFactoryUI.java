@@ -11,7 +11,6 @@ import com.badlogic.gdx.utils.Timer;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gamecontent.Items;
 import hitonoriol.madsand.gamecontent.Npcs;
 import hitonoriol.madsand.gamecontent.Objects;
@@ -45,18 +44,18 @@ public class ItemFactoryUI extends GameDialog {
 
 	private TextButton upgradeButton = Widgets.button("");
 	private TextButton addConsumableButton = Widgets.button(""),
-			takeProductButton = Widgets.button("");
+		takeProductButton = Widgets.button("");
 	private Slider consumableSlider = new Slider(0, 1, 1, false, Gui.skin),
-			productSlider = new Slider(0, 1, 1, false, Gui.skin);
+		productSlider = new Slider(0, 1, 1, false, Gui.skin);
 	private Label productStorageLabel = Widgets.label(""), consumableStorageLabel = Widgets.label("");
 	private Label produceLabel = Widgets.label(""), consumeLabel = Widgets.label("");
 
-	Timer.Task refreshTask = TimeUtils.createTask(() -> refresh());
+	Timer.Task refreshTask = TimeUtils.createTask(this::refresh);
 
 	public ItemFactoryUI(ItemProducer producer) {
 		super(Gui.overlay);
 		this.producer = producer;
-		this.player = MadSand.player();
+		player = MadSand.player();
 		consumedMaterial = Items.all().getName(producer.getConsumedMaterialId());
 		producedMaterial = Items.all().getName(producer.getProductId());
 		int id = producer.getId();
@@ -109,25 +108,27 @@ public class ItemFactoryUI extends GameDialog {
 		if (!endless) {
 			/*add(Widgets.label(upgradeLblString)).colspan(2).align(Align.center).row();*/
 			add(upgradeButton).size(ENTRY_WIDTH, ENTRY_HEIGHT).padBottom(PAD_VERTICAL * 2).colspan(2)
-					.align(Align.center).row();
+				.align(Align.center).row();
 		} else
 			add().padBottom(PAD_VERTICAL * 2).row();
 
 		add(createCloseButton())
-				.colspan(2)
-				.size(BUTTON_WIDTH, BUTTON_HEIGHT)
-				.padTop(PAD_VERTICAL / 2)
-				.align(Align.center);
+			.colspan(2)
+			.size(BUTTON_WIDTH, BUTTON_HEIGHT)
+			.padTop(PAD_VERTICAL / 2)
+			.align(Align.center);
 		setSize(WIDTH, HEIGHT);
 		pack();
 	}
 
+	@Override
 	public void show() {
 		super.show();
 		float tickRate = MadSand.world().getRealtimeActionSeconds();
 		Timer.instance().scheduleTask(refreshTask, tickRate, tickRate);
 	}
 
+	@Override
 	public boolean remove() {
 		boolean ret = super.remove();
 		refreshTask.cancel();
@@ -137,26 +138,31 @@ public class ItemFactoryUI extends GameDialog {
 	private void refreshRateLabels() {
 		float tickRate = MadSand.world().getRealtimeActionSeconds();
 		produceLabel
-				.setText("Produces: " + producedMaterial
-						+ " (+" + round(producer.getProductionRate() / tickRate) + " per second)");
+			.setText(
+				"Produces: " + producedMaterial
+					+ " (+" + round(producer.getProductionRate() / tickRate) + " per second)"
+			);
 		consumeLabel
-				.setText("Consumes: " + consumedMaterial
-						+ " (-" + round(producer.getConsumptionRate() / tickRate) + " per second)");
+			.setText(
+				"Consumes: " + consumedMaterial
+					+ " (-" + round(producer.getConsumptionRate() / tickRate) + " per second)"
+			);
 	}
 
 	private void refreshStorageLabels() {
 		productStorageLabel
-				.setText(producedMaterial + storageStr + Utils.round(producer.getProductStorage()));
+			.setText(producedMaterial + storageStr + Utils.round(producer.getProductStorage()));
 
 		consumableStorageLabel
-				.setText(consumedMaterial + storageStr + Utils.round(producer.getConsumedMaterialStorage()));
+			.setText(consumedMaterial + storageStr + Utils.round(producer.getConsumedMaterialStorage()));
 	}
 
 	private void initButtonListeners() {
 		Gui.setAction(upgradeButton, () -> {
 			if (!producer.upgrade())
 				Gui.drawOkDialog(
-						"There's not enough " + consumedMaterial + " in storage for upgrade!");
+					"There's not enough " + consumedMaterial + " in storage for upgrade!"
+				);
 			else
 				refresh();
 		});
@@ -208,7 +214,7 @@ public class ItemFactoryUI extends GameDialog {
 	}
 
 	private void refreshSliders() {
-		Item consumable = player.inventory.getItem(producer.getConsumedMaterialId());
+		var consumable = player.inventory.getItem(producer.getConsumedMaterialId());
 		consumableSlider.setRange(0, consumable.quantity);
 		productSlider.setRange(0, producer.getProductStorage());
 	}

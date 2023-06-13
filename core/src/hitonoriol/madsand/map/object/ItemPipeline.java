@@ -10,14 +10,13 @@ import hitonoriol.madsand.TimeDependent;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
-import hitonoriol.madsand.map.ItemProducer;
 import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.util.Functional;
 
 public class ItemPipeline extends MapObject implements TimeDependent {
 	private float transportLimit; // kgs per tick
-	private long transportPeriod; // realtime ticks per update() call 
+	private long transportPeriod; // realtime ticks per update() call
 	private boolean sentItems = false, receivedItems = false;
 
 	public ItemPipeline(ItemPipeline protoObject) {
@@ -40,39 +39,39 @@ public class ItemPipeline extends MapObject implements TimeDependent {
 
 	private List<Item> getItems(Loot loot) {
 		loot.mergeItemStacks();
-		MutableFloat weight = new MutableFloat(0);
+		var weight = new MutableFloat(0);
 		List<Item> items = new ArrayList<>();
 		Functional.takeWhile(loot.getContents().stream(), item -> weight.getValue() < transportLimit)
-				.map(item -> item.split(transportLimit - weight.getValue()))
-				.forEach(item -> {
-					weight.add(item.getTotalWeight());
-					items.add(item);
-				});
+			.map(item -> item.split(transportLimit - weight.getValue()))
+			.forEach(item -> {
+				weight.add(item.getTotalWeight());
+				items.add(item);
+			});
 		items.forEach(item -> loot.remove(item));
 		return items;
 	}
 
 	private void moveItems(Loot from, Pair to) {
 		getItems(from).forEach(item -> MadSand.world().exec(map -> {
-			MapObject destObject = map.getObject(to);
+			var destObject = map.getObject(to);
 			destObject.as(ItemFactory.class)
-					.ifPresent(factory -> {
-						ItemProducer producer = factory.getItemProducer();
-						if (item.equals(producer.getConsumedMaterialId())) {
-							producer.addRawMaterial(item.quantity);
-							item.clear();
-						}
-					});
+				.ifPresent(factory -> {
+					var producer = factory.getItemProducer();
+					if (item.equals(producer.getConsumedMaterialId())) {
+						producer.addRawMaterial(item.quantity);
+						item.clear();
+					}
+				});
 			destObject.as(ItemPipeline.class)
-					.ifPresent(pipeline -> pipeline.receivedItems = true);
+				.ifPresent(pipeline -> pipeline.receivedItems = true);
 			map.putLoot(to, item);
 		}));
 	}
 
 	/*
-	 *	Move items from current tile in set direction - to the next tile or as a material for ItemFactory 
+	 *	Move items from current tile in set direction - to the next tile or as a material for ItemFactory
 	 *	Or, if there's an ItemFactory in an opposite direction one tile away,
-	 *	Pull factory's product to the current tile 
+	 *	Pull factory's product to the current tile
 	 */
 	@Override
 	public void update() {
@@ -81,32 +80,33 @@ public class ItemPipeline extends MapObject implements TimeDependent {
 			if (!sentItems)
 				return;
 		}
-		Pair position = getPosition();
+		var position = getPosition();
 		MadSand.world().exec(map -> {
 			Functional.ifPresentOrElse(
-					map.getObject(position.copy().addDirection(directionFacing.opposite()))
-							.as(ItemFactory.class),
+				map.getObject(position.copy().addDirection(directionFacing.opposite()))
+					.as(ItemFactory.class),
 
-					factory -> {
-						ItemProducer producer = factory.getItemProducer();
-						if (!producer.hasProduct())
-							return;
-						Item product = Item.create(producer.getProductId());
-						map.putLoot(position, producer.getProduct((int) (transportLimit / product.weight)));
-					},
+				factory -> {
+					var producer = factory.getItemProducer();
+					if (!producer.hasProduct())
+						return;
+					var product = Item.create(producer.getProductId());
+					map.putLoot(position, producer.getProduct((int) (transportLimit / product.weight)));
+				},
 
-					() -> {
-						Loot loot = map.getLoot(position);
-						if (loot == Map.nullLoot || loot.isEmpty())
-							return;
+				() -> {
+					var loot = map.getLoot(position);
+					if (loot == Map.nullLoot || loot.isEmpty())
+						return;
 
-						if (sentItems) {
-							sentItems = false;
-							return;
-						}
-						sentItems = true;
-						moveItems(loot, position.addDirection(directionFacing));
-					});
+					if (sentItems) {
+						sentItems = false;
+						return;
+					}
+					sentItems = true;
+					moveItems(loot, position.addDirection(directionFacing));
+				}
+			);
 		});
 	}
 

@@ -9,7 +9,6 @@ public class FishingBait extends LevelBoundItem {
 	}
 
 	public FishingBait() {
-		super();
 	}
 
 	@Override

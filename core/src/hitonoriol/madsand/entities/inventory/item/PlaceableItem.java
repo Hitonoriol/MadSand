@@ -18,7 +18,6 @@ public class PlaceableItem extends Item {
 	}
 
 	public PlaceableItem() {
-		super();
 	}
 
 	@Override
@@ -56,13 +55,13 @@ public class PlaceableItem extends Item {
 	public int getAltObject() {
 		return altObject;
 	}
-	
+
 	@Override
 	public void initCategory() {
 		setCategory(ItemCategory.Building);
 	}
 
-	public static enum Type {
+	public enum Type {
 		Object, Tile
 	}
 }

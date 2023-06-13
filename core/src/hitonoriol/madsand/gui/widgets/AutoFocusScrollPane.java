@@ -13,7 +13,7 @@ public class AutoFocusScrollPane extends ScrollPane {
 		addListener(new ScrollFocusListener(this));
 		setWidth(actor.getWidth());
 	}
-	
+
 	@Override
 	protected void sizeChanged() {
 		var actor = getActor();

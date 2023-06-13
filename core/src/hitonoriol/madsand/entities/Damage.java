@@ -24,8 +24,8 @@ public class Damage {
 	}
 
 	private void calcBaseDamage() {
-		Stats stats = dmgDealer.stats();
-		value = (int) (stats.getBaseAttack());
+		var stats = dmgDealer.stats();
+		value = stats.getBaseAttack();
 		critical = stats.critRoll();
 
 		if (critical)
@@ -35,7 +35,7 @@ public class Damage {
 	}
 
 	public Damage melee(int targetDef) {
-		Stats stats = dmgDealer.stats();
+		var stats = dmgDealer.stats();
 		type = Type.Melee;
 		if (stats.meleeAttackMissed())
 			value = 0;
@@ -48,13 +48,13 @@ public class Damage {
 	}
 
 	public Damage ranged(Projectile proj, int distanceToTarget) {
-		Stats stats = dmgDealer.stats();
+		var stats = dmgDealer.stats();
 		type = Type.Ranged;
 		if (stats.rangedAttackMissed(distanceToTarget))
 			value = 0;
 		else
 			value = proj.calcDamage()
-					+ (int) Math.max(value * RANGED_ATK_FACTOR * MIN_ATK_FACTOR, value * RANGED_ATK_FACTOR);
+				+ (int) Math.max(value * RANGED_ATK_FACTOR * MIN_ATK_FACTOR, value * RANGED_ATK_FACTOR);
 		return this;
 	}
 
@@ -91,7 +91,7 @@ public class Damage {
 		return type;
 	}
 
-	public static enum Type {
+	public enum Type {
 		Universal, Melee, Ranged
 	}
 }

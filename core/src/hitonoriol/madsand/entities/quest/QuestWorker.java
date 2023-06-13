@@ -47,8 +47,10 @@ public class QuestWorker {
 				quest.setPlayer(player);
 	}
 
-	private ProceduralQuest findQuest(List<? extends Quest> list, long val,
-			BiPredicate<ProceduralQuest, Long> criterion) {
+	private ProceduralQuest findQuest(
+		List<? extends Quest> list, long val,
+		BiPredicate<ProceduralQuest, Long> criterion
+	) {
 		for (Quest quest : list)
 			if (quest.id() < 0 && criterion.test((ProceduralQuest) quest, val))
 				return (ProceduralQuest) quest;
@@ -70,11 +72,11 @@ public class QuestWorker {
 		if (id >= 0)
 			return Quests.all().get(id);
 
-		return findQuest(id, (ProceduralQuest squest, Long sid) -> squest.id() == sid.longValue());
+		return findQuest(id, (var squest, var sid) -> squest.id() == sid.longValue());
 	}
 
 	public int getPreviousQuest(int id) {
-		Quest quest = questById(id);
+		var quest = questById(id);
 
 		if (quest.previousQuest == -1)
 			return -1;
@@ -83,16 +85,15 @@ public class QuestWorker {
 	}
 
 	public boolean isQuestAvailable(int id) {
-		Quest quest = questById(id);
+		var quest = questById(id);
 		int prevQuestId = getPreviousQuest(id);
 
 		if (isQuestCompleted(id) && !quest.repeatable)
 			return false;
 
-		if (prevQuestId == -1 && (!isQuestCompleted(id) || quest.repeatable))
-			return true;
-
-		if (isQuestCompleted(prevQuestId))
+		if (
+			(prevQuestId == -1 && (!isQuestCompleted(id) || quest.repeatable)) || isQuestCompleted(prevQuestId)
+		)
 			return true;
 
 		if (isQuestInProgress(id))
@@ -102,7 +103,7 @@ public class QuestWorker {
 	}
 
 	public ArrayList<Integer> getAvailableQuests(ArrayList<Integer> mobQuestList) {
-		ArrayList<Integer> quests = new ArrayList<>();
+		var quests = new ArrayList<Integer>();
 
 		for (int quest : mobQuestList)
 			if (isQuestAvailable(quest))
@@ -112,11 +113,11 @@ public class QuestWorker {
 	}
 
 	private ProceduralQuest findProceduralQuest(long uid) {
-		return findQuest(uid, (ProceduralQuest quest, Long suid) -> quest.npcUID == suid.longValue());
+		return findQuest(uid, (var quest, var suid) -> quest.npcUID == suid.longValue());
 	}
 
 	private ProceduralQuest getProceduralQuest(long npcUID) {
-		ProceduralQuest quest = findProceduralQuest(npcUID);
+		var quest = findProceduralQuest(npcUID);
 		if (quest == null) {
 			quest = new ProceduralQuest(--lastProceduralQuest, npcUID);
 			proceduralQuests.add(quest);
@@ -135,17 +136,19 @@ public class QuestWorker {
 	}
 
 	public ProceduralQuest startProceduralQuest(long uid) {
-		ProceduralQuest quest = getProceduralQuest(uid);
+		var quest = getProceduralQuest(uid);
 		long waitTime = (long) ((ProceduralQuest.QUEST_TIMEOUT - quest.timeSinceCreated())
-				* MadSand.world().getRealtimeActionSeconds());
+			* MadSand.world().getRealtimeActionSeconds());
 
 		if (waitTime > 0 && quest.isComplete) {
-			new DialogChainGenerator("You want another task?" + Resources.LINEBREAK +
+			new DialogChainGenerator(
+				"You want another task?" + Resources.LINEBREAK +
 					"Well, you'll have to wait another "
-					+ Utils.timeString(waitTime) + " for me to come up with something for you.")
-							.generate(Gui.overlay)
-							.setTitle(quest.getNpc().stats.name)
-							.show();
+					+ Utils.timeString(waitTime) + " for me to come up with something for you."
+			)
+				.generate(Gui.overlay)
+				.setTitle(quest.getNpc().stats.name)
+				.show();
 			quest = ProceduralQuest.timeoutQuest;
 		} else
 			processQuest(quest.id());
@@ -203,7 +206,7 @@ public class QuestWorker {
 	public void processQuest(int id, long npcUID) {
 		Utils.dbg("Processing quest " + id);
 
-		Quest quest = questById(id);
+		var quest = questById(id);
 
 		if (completedQuests.contains(quest)) // if modified instance of raw quest exists, use it instead
 			quest = completedQuests.get(completedQuests.indexOf(quest));
@@ -228,7 +231,7 @@ public class QuestWorker {
 	}
 
 	public boolean processQuests(ArrayList<Integer> mobQuestList, AbstractNpc npc) {
-		ArrayList<Integer> availableQuests = getAvailableQuests(mobQuestList);
+		var availableQuests = getAvailableQuests(mobQuestList);
 
 		if (availableQuests.size() == 0)
 			return false;

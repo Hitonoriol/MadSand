@@ -23,13 +23,10 @@ public class Equipment {
 	}
 
 	public boolean equip(Item item) {
-		if (itemEquipped(item))
-			return false;
-		
-		if (AbstractEquipment.isCursed(previouslyEquipped(item)))
+		if (itemEquipped(item) || AbstractEquipment.isCursed(previouslyEquipped(item)))
 			return false;
 
-		EquipSlot slot = item.getEquipSlot();
+		var slot = item.getEquipSlot();
 		equipped.put(slot, item);
 		Gui.overlay.equipmentSidebar.equipItem(slot, item);
 		equipmentWeight += item.weight;
@@ -53,7 +50,7 @@ public class Equipment {
 		if (!equipped.containsKey(slot))
 			return false;
 
-		Item item = getItem(slot);
+		var item = getItem(slot);
 		item.as(CombatEquipment.class).ifPresent(equipment -> stats.removeBonus(equipment));
 		equipmentWeight -= item.weight;
 		Gui.overlay.equipmentSidebar.equipItem(slot, Item.nullItem);
@@ -86,7 +83,7 @@ public class Equipment {
 	}
 
 	public ArrayList<Integer> getIndexList(Inventory inventory) { //For serializer
-		ArrayList<Integer> list = new ArrayList<>();
+		var list = new ArrayList<Integer>();
 
 		for (EquipSlot slot : EquipSlot.values())
 			list.add(inventory.getItems().indexOf(getItem(slot)));

@@ -44,8 +44,8 @@ public class FarkleHand implements Container<Die> {
 	private static final int tripleScores[] = { 1000, 200, 300, 400, 500, 600 };
 
 	public static int evaluate(List<Die> dice) {
-		MutableInt score = new MutableInt(0);
-		Map<Integer, Integer> diceMap = createDiceMap(dice);
+		var score = new MutableInt(0);
+		var diceMap = createDiceMap(dice);
 
 		score.add(evaluateFullHandCombinations(diceMap));
 		if (score.getValue() > 0)
@@ -62,9 +62,7 @@ public class FarkleHand implements Container<Die> {
 					score.add(singleOneScore * dups);
 				else if (dieValue == 5)
 					score.add(singleFiveScore * dups);
-			}
-
-			else if (dups >= 3)
+			} else
 				score.add(tripleScores[dieValue - 1] * (dups - 2));
 		});
 
@@ -110,7 +108,7 @@ public class FarkleHand implements Container<Die> {
 	}
 
 	public boolean hasUnusedDice() {
-		Map<Integer, Integer> diceMap = createDiceMap(dice);
+		var diceMap = createDiceMap(dice);
 
 		if (evaluateFullHandCombinations(diceMap) > 0)
 			return false;

@@ -50,7 +50,7 @@ public class GameDialog extends Dialog {
 		setMovable(false);
 
 		// Set up title
-		Table titleTbl = getTitleTable();
+		var titleTbl = getTitleTable();
 		titleTbl.getCell(getTitleLabel());
 		titleTbl.padTop(TITLE_YPAD).padLeft(TITLE_XPAD);
 		row();
@@ -97,7 +97,7 @@ public class GameDialog extends Dialog {
 	}
 
 	public Cell<Label> skipLine() {
-		Cell<Label> cell = add("");
+		var cell = add("");
 		cell.row();
 		return cell;
 	}
@@ -199,19 +199,19 @@ public class GameDialog extends Dialog {
 	}
 
 	public void chainReply(String btnText, GameDialog nextDialog) {
-		TextButton nextBtn = Widgets.button(btnText);
+		var nextBtn = Widgets.button(btnText);
 		addButton(nextBtn);
 		chainReply(nextBtn, nextDialog);
 	}
 
 	public void addOkButton(String text) {
-		TextButton okBtn = Widgets.button(text);
-		Gui.setAction(okBtn, () -> hide());
+		var okBtn = Widgets.button(text);
+		Gui.setAction(okBtn, this::hide);
 		addButton(okBtn);
 	}
 
 	public void addLuaButton(String buttonText, String luaCode) {
-		TextButton button = Widgets.button(buttonText);
+		var button = Widgets.button(buttonText);
 		Gui.setAction(button, () -> Lua.execute(luaCode));
 		addButton(button);
 	}
@@ -220,7 +220,7 @@ public class GameDialog extends Dialog {
 		if (proceedButton == null)
 			proceedButton = button;
 
-		Cell<TextButton> cell = add(button)
+		var cell = add(button)
 			.width(Math.max(Gui.BTN_WIDTH, Gui.getTextWidth(button.getText()) + BTN_TEXT_XPAD))
 			.height(Gui.BTN_HEIGHT)
 			.padBottom(PADDING / 2);
@@ -234,7 +234,7 @@ public class GameDialog extends Dialog {
 	}
 
 	public Cell<TextButton> addButton(String text, Runnable action) {
-		Cell<TextButton> cell = addButton(Widgets.button(text));
+		var cell = addButton(Widgets.button(text));
 		Gui.setAction(cell.getActor(), action);
 		return cell;
 	}
@@ -251,8 +251,8 @@ public class GameDialog extends Dialog {
 	}
 
 	protected TextButton createCloseButton() {
-		TextButton closeButton = Widgets.button("Close");
-		Gui.setAction(closeButton, () -> hide());
+		var closeButton = Widgets.button("Close");
+		Gui.setAction(closeButton, this::hide);
 		return closeButton;
 	}
 
@@ -315,11 +315,11 @@ public class GameDialog extends Dialog {
 	public static GameDialog generateDialogChain(String text, Stage stage) {
 		return new DialogChainGenerator(text).generate(stage);
 	}
-	
+
 	public static float defaultWidth() {
 		return Gui.screenWidth(0.45f);
 	}
-	
+
 	public static float defaultHeight() {
 		return Gui.screenHeight(0.4f);
 	}

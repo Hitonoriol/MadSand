@@ -4,7 +4,6 @@ import static hitonoriol.madsand.resources.Resources.loader;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.fasterxml.jackson.core.JsonParser;
@@ -24,8 +23,8 @@ public class LootTable extends RollTable<LootTable.LootEntry> {
 	public boolean allowEmptyRoll = false;
 
 	public ArrayList<Item> rollItems() {
-		ArrayList<Item> items = new ArrayList<>();
-		ArrayList<LootEntry> protoItems = super.roll();
+		var items = new ArrayList<Item>();
+		var protoItems = super.roll();
 		for (LootEntry protoItem : protoItems)
 			items.add(protoItem.makeItem(allowEmptyRoll));
 		return items;
@@ -38,7 +37,7 @@ public class LootTable extends RollTable<LootTable.LootEntry> {
 	public static LootTable parse(String lootTblString) {
 		if (lootTblString.contains(LOAD_TABLE_TOKEN))
 			return Globals.values().lootTables.get(lootTblString.substring(1));
-		
+
 		if (!lootTblString.contains("|")) {
 			try {
 				return loader().readValue(lootTblString, LootTable.class);
@@ -48,8 +47,8 @@ public class LootTable extends RollTable<LootTable.LootEntry> {
 			}
 		}
 
-		LootTable table = new LootTable();
-		Matcher entryMatcher = tableEntryPattern.matcher(lootTblString);
+		var table = new LootTable();
+		var entryMatcher = tableEntryPattern.matcher(lootTblString);
 		String entryString;
 		String entryArr[]; // <probability>|id/maxQuantity:id/maxQuantity:...
 
@@ -66,7 +65,7 @@ public class LootTable extends RollTable<LootTable.LootEntry> {
 	}
 
 	private static RollTable.Entry<LootEntry> parseItemList(String listString) {
-		RollTable.Entry<LootEntry> tableEntry = new RollTable.Entry<>(new ArrayList<>());
+		var tableEntry = new RollTable.Entry<LootEntry>(new ArrayList<>());
 		Item.parseListString(listString, (id, quantity) -> tableEntry.items.add(new LootEntry(id, quantity)));
 		return tableEntry;
 	}
@@ -93,7 +92,7 @@ public class LootTable extends RollTable<LootTable.LootEntry> {
 	public static class Deserializer extends JsonDeserializer<LootTable> {
 		@Override
 		public LootTable deserialize(JsonParser p, DeserializationContext ctxt)
-				throws IOException, JsonProcessingException {
+			throws IOException, JsonProcessingException {
 			JsonNode node = p.readValueAsTree();
 			return parse(node.asText());
 		}

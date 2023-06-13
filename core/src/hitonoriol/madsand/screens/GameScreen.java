@@ -22,7 +22,7 @@ public class GameScreen extends AbstractScreen<Overlay> {
 		if (!Gui.isGameUnfocused())
 			stage.showTooltip();
 	}
-	
+
 	@Override
 	public void hide() {
 		getStage().getContextMenu().close();
@@ -39,7 +39,7 @@ public class GameScreen extends AbstractScreen<Overlay> {
 		}
 		super.render(delta);
 	}
-	
+
 	@Override
 	public void resize(int width, int height) {
 		gameWorld.updateViewport();

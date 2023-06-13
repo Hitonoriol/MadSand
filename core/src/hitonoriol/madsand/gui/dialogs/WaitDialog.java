@@ -21,21 +21,24 @@ public class WaitDialog extends SliderDialog {
 		super.setSliderTitle("How much time to skip:");
 		super.getBottomLabel().setAlignment(Align.center);
 
-		String timeSkipItem = Items.all().getName(Globals.values().timeSkipItem);
+		var timeSkipItem = Items.all().getName(Globals.values().timeSkipItem);
 		super.setSliderAction(
-				ticks -> {
-					timeSkipItemSpent = (int) Math.max((float) ticks / Player.TIMESKIP_COEF, 1);
-					worldSeconds = MadSand.world().toWorldTimeSeconds(ticks);
-					realtimeTicks = (int) (timeSkipItemSpent * Player.REALTIME_SKIP_COEF);
-					super.setSliderText("+" + Utils.timeString(worldSeconds) + " [[World time]"
-							+ Resources.LINEBREAK
+			ticks -> {
+				timeSkipItemSpent = (int) Math.max((float) ticks / Player.TIMESKIP_COEF, 1);
+				worldSeconds = MadSand.world().toWorldTimeSeconds(ticks);
+				realtimeTicks = (int) (timeSkipItemSpent * Player.REALTIME_SKIP_COEF);
+				super.setSliderText(
+					"+" + Utils.timeString(worldSeconds) + " [[World time]"
+						+ Resources.LINEBREAK
 
-							+ "+" + Utils.timeString((long) (realtimeTicks * MadSand.world().getRealtimeActionSeconds()))
-							+ " [[Realtime]"
-							+ Resources.LINEBREAK
+						+ "+" + Utils.timeString((long) (realtimeTicks * MadSand.world().getRealtimeActionSeconds()))
+						+ " [[Realtime]"
+						+ Resources.LINEBREAK
 
-							+ "-" + timeSkipItemSpent + " " + timeSkipItem);
-				});
+						+ "-" + timeSkipItemSpent + " " + timeSkipItem
+				);
+			}
+		);
 
 		super.setConfirmAction(ticks -> {
 			MadSand.player().inventory.delItem(Globals.values().timeSkipItem, timeSkipItemSpent);

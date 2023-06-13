@@ -46,7 +46,7 @@ public class NpcDescriptor implements Enumerable {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	@Override
 	public String name() {
 		return name;

@@ -17,8 +17,10 @@ import hitonoriol.madsand.util.Utils;
 
 public class ScriptedConsumable extends Item {
 	private static final String NAME_TOK = "%s";
-	private static ConditionalEffects<ScriptedConsumable> textureFx = ConditionalEffects.create(fx -> fx
-			.addEffect(item -> Effects.colorize(Utils.randomColor(fx.random()))));
+	private static ConditionalEffects<ScriptedConsumable> textureFx = ConditionalEffects.create(
+		fx -> fx
+			.addEffect(item -> Effects.colorize(Utils.randomColor(fx.random())))
+	);
 
 	private String nameTemplate; // String.format() template with exactly one %s token
 	private String scriptMapName;
@@ -28,7 +30,7 @@ public class ScriptedConsumable extends Item {
 		nameTemplate = protoItem.nameTemplate;
 		scriptMapName = protoItem.scriptMapName;
 
-		ScriptMap map = getScriptMap();
+		var map = getScriptMap();
 		if (!map.hasBaseItemId())
 			map.setBaseItemId(id);
 
@@ -113,15 +115,16 @@ public class ScriptedConsumable extends Item {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(48481, 29411)
-				.append(super.hashCode())
-				.append(name)
-				.toHashCode();
+			.append(super.hashCode())
+			.append(name)
+			.toHashCode();
 	}
 
 	public static ScriptedConsumable create(String mapName, String consumableName) {
 		return new ScriptedConsumable(
-				(ScriptedConsumable) Items.all().get(getScriptMap(mapName).getBaseItemId()),
-				consumableName);
+			(ScriptedConsumable) Items.all().get(getScriptMap(mapName).getBaseItemId()),
+			consumableName
+		);
 	}
 
 	public static class ScriptMap extends HashMap<String, String> {
@@ -139,5 +142,5 @@ public class ScriptedConsumable extends Item {
 		public boolean hasBaseItemId() {
 			return baseItemId != 0;
 		}
-	};
+	}
 }

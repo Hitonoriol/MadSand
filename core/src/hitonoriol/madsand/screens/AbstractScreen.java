@@ -51,7 +51,7 @@ public abstract class AbstractScreen<T extends Stage> implements Screen {
 	public void dispose() {
 		stage.dispose();
 	}
-	
+
 	public void onShow(Runnable task) {
 		onShowTasks.add(task);
 	}

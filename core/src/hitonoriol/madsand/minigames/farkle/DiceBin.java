@@ -11,14 +11,14 @@ public class DiceBin implements Container<Die> {
 	private List<Die> dice = new ArrayList<>();
 
 	public void shuffle() {
-		dice.forEach(die -> die.roll());
+		dice.forEach(Die::roll);
 	}
 
 	public void fill() {
 		if (!isEmpty())
 			clear();
 
-		Functional.repeat(MAX_DICE, () -> addDie());
+		Functional.repeat(MAX_DICE, this::addDie);
 	}
 
 	public List<Die> getDice() {

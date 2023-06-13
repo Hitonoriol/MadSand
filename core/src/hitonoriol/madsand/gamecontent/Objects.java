@@ -17,8 +17,9 @@ public class Objects extends ContentStorage<MapObject> {
 
 	private static final String ITEMFACTORY_FILE = "itemfactories.json";
 	private static final String BUILDRECIPE_FILE = "buildrecipes.json";
-	
+
 	private static class ItemProducerMap extends ContentMap<ItemProducer> {}
+
 	private static class RecipeMap extends ContentMap<String> {}
 
 	public Objects() {
@@ -55,7 +56,9 @@ public class Objects extends ContentStorage<MapObject> {
 				manager.loadAndThen(ITEMFACTORY_FILE, ItemProducerMap.class, Objects.all()::setItemProducers);
 				manager.loadAndThen(BUILDRECIPE_FILE, RecipeMap.class, recipes -> {
 					Objects.all().setBuildRecipes(recipes);
-					recipes.forEach((id, recipe) -> Items.all().buildRequirements().put(id, Item.parseCraftRequirements(recipe)));
+					recipes.forEach(
+						(id, recipe) -> Items.all().buildRequirements().put(id, Item.parseCraftRequirements(recipe))
+					);
 				});
 			}
 		});

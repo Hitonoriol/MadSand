@@ -44,14 +44,14 @@ public class CardGameUI extends GameDialog {
 			return;
 		}
 		new SliderDialog(MadSand.player().inventory.getItem(currency).quantity)
-				.setSliderTitle("Place your bet:")
-				.setOnUpdateText(currencyName + "s")
-				.setConfirmAction(bet -> {
-					setBetText(bet);
-					confirmAction.accept(bet);
-				})
-				.setTitle("Bet")
-				.show();
+			.setSliderTitle("Place your bet:")
+			.setOnUpdateText(currencyName + "s")
+			.setConfirmAction(bet -> {
+				setBetText(bet);
+				confirmAction.accept(bet);
+			})
+			.setTitle("Bet")
+			.show();
 	}
 
 	protected void noMoney() {
@@ -70,10 +70,11 @@ public class CardGameUI extends GameDialog {
 				object.takeFullDamage();
 				if (object.id() == MapObject.NULL_OBJECT_ID) {
 					remove();
-					Gui.drawOkDialog("Oops",
-							"As you were about to press one of the machine's buttons it exploded into pieces!");
+					Gui.drawOkDialog(
+						"Oops",
+						"As you were about to press one of the machine's buttons it exploded into pieces!"
+					);
 					Gui.overlay.refreshActionButton();
-					return;
 				}
 			});
 		});
@@ -86,7 +87,7 @@ public class CardGameUI extends GameDialog {
 
 	@Override
 	public Cell<TextButton> addCloseButton() {
-		Cell<TextButton> cell = super.addCloseButton(Gui.BTN_WIDTH, Gui.BTN_HEIGHT);
+		var cell = super.addCloseButton(Gui.BTN_WIDTH, Gui.BTN_HEIGHT);
 		closeButton = cell.getActor();
 		return cell;
 	}

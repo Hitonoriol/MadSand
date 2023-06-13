@@ -11,7 +11,7 @@ public class Npcs extends ContentStorage<NpcDescriptor> {
 	}
 
 	public AbstractNpc spawnNpc(int id, int x, int y) {
-		AbstractNpc npc = spawnNpc(id);
+		var npc = spawnNpc(id);
 		npc.teleport(x, y);
 		return npc;
 	}

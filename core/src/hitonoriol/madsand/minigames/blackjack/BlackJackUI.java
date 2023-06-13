@@ -25,7 +25,7 @@ public class BlackJackUI extends CardGameUI {
 	Table playerCards = Widgets.table(), dealerCards = Widgets.table();
 	Table buttonTable = Widgets.table();
 	TextButton hitButton = Widgets.button("Hit"), standButton = Widgets.button("Stand");
-	
+
 	private static float GAME_WIDTH = Card.WIDTH * 7, GAME_HEIGHT = Card.HEIGHT * 1.5f;
 
 	public BlackJackUI(MapObject object) {
@@ -56,7 +56,7 @@ public class BlackJackUI extends CardGameUI {
 		super.addCloseButton().row();
 		stopGame();
 
-		Gui.setAction(betButton, () -> startGame());
+		Gui.setAction(betButton, this::startGame);
 		Gui.setAction(hitButton, () -> play(PlayerAction.Hit));
 		Gui.setAction(standButton, () -> Timer.instance().scheduleTask(new Timer.Task() {
 			@Override
@@ -64,7 +64,7 @@ public class BlackJackUI extends CardGameUI {
 				play(PlayerAction.Stand);
 				buttonTable.setVisible(false);
 				if (blackjack.gameEnded())
-					this.cancel();
+					cancel();
 			}
 		}, 0, 0.85f));
 	}
@@ -80,12 +80,13 @@ public class BlackJackUI extends CardGameUI {
 			endGame();
 	}
 
+	@Override
 	protected void endGame() {
 		super.endGame();
 		MadSand.player().addItem(currency, blackjack.bank);
 		buttonTable.setVisible(false);
-		GameResult result = blackjack.gameResult;
-		String resultStr = "";
+		var result = blackjack.gameResult;
+		var resultStr = "";
 		if (result == GameResult.BlackJack || result == GameResult.Bust)
 			resultStr += result.name() + ": ";
 
@@ -108,6 +109,7 @@ public class BlackJackUI extends CardGameUI {
 		resultLabel.setText("");
 	}
 
+	@Override
 	protected void startGame() {
 		super.startGame();
 		stopGame();
@@ -123,7 +125,7 @@ public class BlackJackUI extends CardGameUI {
 			}
 		});
 	}
-	
+
 	@Override
 	protected void noMoney() {
 		super.noMoney();
@@ -140,7 +142,7 @@ public class BlackJackUI extends CardGameUI {
 			hand.cards.add(Card.nullCard);
 
 		table.clear();
-		Table cardTable = Widgets.table();
+		var cardTable = Widgets.table();
 		for (Card card : hand.cards)
 			cardTable.add(new Image(card.getTexture())).size(Card.WIDTH, Card.HEIGHT).pad(5);
 		table.add(cardTable).row();

@@ -9,7 +9,6 @@ import com.github.czyzby.noise4j.map.generator.room.dungeon.DungeonGenerator;
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.commons.reflection.Reflection;
 import hitonoriol.madsand.containers.Pair;
-import hitonoriol.madsand.containers.rolltable.LootTable;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.Location;
@@ -24,12 +23,11 @@ public class DungeonGen extends DungeonGenerator {
 	private List<Room> roomList;
 
 	public DungeonGen(Map map) {
-		super();
 		this.map = map;
 	}
 
 	public void generate(DungeonPreset dungeon, int depth) {
-		ArrayList<DungeonFloorContents> contents = dungeon.dungeonContents;
+		var contents = dungeon.dungeonContents;
 
 		int floorNumber = depth;
 		DungeonFloorContents floor;
@@ -39,16 +37,16 @@ public class DungeonGen extends DungeonGenerator {
 				floorNumber = i;
 		}
 
-		DungeonContents curDungeonFloor = contents.get(floorNumber).contents;
+		var curDungeonFloor = contents.get(floorNumber).contents;
 
-		ArrayList<Integer> mobs = curDungeonFloor.mobs;
-		LootTable loot = curDungeonFloor.loot;
+		var mobs = curDungeonFloor.mobs;
+		var loot = curDungeonFloor.loot;
 
 		map.rollSize(curDungeonFloor.minSize, curDungeonFloor.maxSize);
 		map.fillTile();
 		map.editable = false;
 		int w = map.getWidth(), h = map.getHeight();
-		final Grid grid = new Grid(w, h);
+		final var grid = new Grid(w, h);
 
 		super.setRoomGenerationAttempts(World.DEFAULT_MAPSIZE);
 		super.setMaxRoomSize(dungeon.maxRoomSize);
@@ -56,7 +54,7 @@ public class DungeonGen extends DungeonGenerator {
 		super.setMinRoomSize(dungeon.minRoomSize);
 		super.generate(grid);
 
-		ArrayList<Pair> doors = new ArrayList<>();
+		var doors = new ArrayList<Pair>();
 		int y = 0, x = 0;
 		int mobCount = 0;
 
@@ -66,8 +64,10 @@ public class DungeonGen extends DungeonGenerator {
 					map.delObject(x, y);
 					map.addTile(x, y, dungeon.corridorTile, true);
 
-					if (Utils.percentRoll(curDungeonFloor.mobCorridorProbability)
-							&& mobCount < curDungeonFloor.maxMobs) {
+					if (
+						Utils.percentRoll(curDungeonFloor.mobCorridorProbability)
+							&& mobCount < curDungeonFloor.maxMobs
+					) {
 
 						map.spawnNpc(Utils.randElement(mobs), x, y);
 						++mobCount;
@@ -117,8 +117,12 @@ public class DungeonGen extends DungeonGenerator {
 		placeSpecialMobs(curDungeonFloor);
 		placeDoors(curDungeonFloor.doorObject, doors);
 
-		if (depth >= Math.min(DungeonPreset.EXIT_FLOOR_BASE + MadSand.player().dungeonsCompleted(),
-				DungeonPreset.EXIT_FLOOR_MAX))
+		if (
+			depth >= Math.min(
+				DungeonPreset.EXIT_FLOOR_BASE + MadSand.player().dungeonsCompleted(),
+				DungeonPreset.EXIT_FLOOR_MAX
+			)
+		)
 			placeExit(dungeon);
 		else
 			placeObjectInRoom(dungeon.staircaseDownObject);
@@ -142,7 +146,7 @@ public class DungeonGen extends DungeonGenerator {
 
 	private void placeExit(DungeonPreset dungeon) {
 		MadSand.notice("You feel that exit to the surface is somewhere nearby...");
-		Pair coords = randomRoomPoint();
+		var coords = randomRoomPoint();
 		map.addObject(coords.x, coords.y, dungeon.exitObject);
 	}
 
@@ -170,8 +174,10 @@ public class DungeonGen extends DungeonGenerator {
 			specialTile = Utils.randElement(contents.specialRoomTiles);
 			specialWallObject = Utils.randElement(contents.specialRoomWalls);
 			map.fillTile(room.getX(), room.getY(), room.getWidth(), room.getHeight(), specialTile);
-			map.drawObjectRectangle(room.getX() - 1, room.getY() - 1, room.getWidth() + 1, room.getHeight() + 1,
-					specialWallObject);
+			map.drawObjectRectangle(
+				room.getX() - 1, room.getY() - 1, room.getWidth() + 1, room.getHeight() + 1,
+				specialWallObject
+			);
 
 			Utils.dbg("Spawned special mob (id: " + npcId + ") at " + coords);
 		}
@@ -179,7 +185,7 @@ public class DungeonGen extends DungeonGenerator {
 	}
 
 	private void placeObjectInRoom(int id) {
-		Pair roomCoords = randomRoomPoint();
+		var roomCoords = randomRoomPoint();
 		map.addObject(roomCoords.x, roomCoords.y, id);
 	}
 
@@ -220,9 +226,9 @@ public class DungeonGen extends DungeonGenerator {
 			right = grid.get(x + 1, y);
 
 		return (current == DUNGEON_CORRIDOR_LEVEL)
-				&& (up == DUNGEON_ROOM_LEVEL
-						|| down == DUNGEON_ROOM_LEVEL
-						|| left == DUNGEON_ROOM_LEVEL
-						|| right == DUNGEON_ROOM_LEVEL);
+			&& (up == DUNGEON_ROOM_LEVEL
+				|| down == DUNGEON_ROOM_LEVEL
+				|| left == DUNGEON_ROOM_LEVEL
+				|| right == DUNGEON_ROOM_LEVEL);
 	}
 }

@@ -46,7 +46,7 @@ public class ConfirmDialog extends GameDialog {
 			action.run();
 			remove();
 		});
-		Gui.setAction(cancelBtn, () -> remove());
+		Gui.setAction(cancelBtn, this::remove);
 	}
 
 	public ConfirmDialog(String msg, Runnable action) {

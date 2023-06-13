@@ -8,7 +8,6 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.enums.Direction;
-import hitonoriol.madsand.map.Map;
 
 public class Path extends DefaultGraphPath<Node> {
 	public Path(int capacity) {
@@ -16,7 +15,6 @@ public class Path extends DefaultGraphPath<Node> {
 	}
 
 	public Path() {
-		super();
 	}
 
 	public boolean isEmpty() {
@@ -35,7 +33,7 @@ public class Path extends DefaultGraphPath<Node> {
 		if (getCount() < 2)
 			return;
 
-		Node prevNode = nodes.get(0);
+		var prevNode = nodes.get(0);
 		for (Node node : nodes) {
 			if (node == prevNode)
 				continue;
@@ -46,10 +44,10 @@ public class Path extends DefaultGraphPath<Node> {
 	}
 
 	public static Path create(int x1, int y1, int x2, int y2) {
-		Map map = MadSand.world().getCurLoc();
-		Path path = new Path();
+		var map = MadSand.world().getCurLoc();
+		var path = new Path();
 		Line.forEachPoint(x1, y1, x2, y2, (x, y) -> {
-			Node node = map.getPathfindingEngine().getNode(x, y);
+			var node = map.getPathfindingEngine().getNode(x, y);
 			if (node == null)
 				node = new Node(x, y);
 			path.add(node);

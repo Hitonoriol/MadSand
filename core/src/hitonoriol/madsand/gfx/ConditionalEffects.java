@@ -27,7 +27,7 @@ public class ConditionalEffects<T extends Item> {
 				Utils.out("Woo! Applied fx to %s", item);
 			}
 		});
-		item.applyEffects(processor -> processor.applyEffects());
+		item.applyEffects(TextureProcessor::applyEffects);
 	}
 
 	public ConditionalEffects<T> addEffect(Predicate<T> predicate, Function<T, TextureEffect> effectEntry) {
@@ -44,7 +44,7 @@ public class ConditionalEffects<T extends Item> {
 	}
 
 	public static <T extends Item> ConditionalEffects<T> create(Consumer<ConditionalEffects<T>> initializer) {
-		ConditionalEffects<T> condFx = new ConditionalEffects<>();
+		var condFx = new ConditionalEffects<T>();
 		initializer.accept(condFx);
 		return condFx;
 	}

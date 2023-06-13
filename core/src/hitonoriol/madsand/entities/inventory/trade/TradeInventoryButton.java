@@ -31,13 +31,16 @@ public class TradeInventoryButton extends ItemButton {
 		super.setUpListeners();
 	}
 
+	@Override
 	protected String createButtonText() {
-		String btnText = buttonItem.quantity + Resources.Space + buttonItem.getFullName();
+		var btnText = buttonItem.quantity + Resources.Space + buttonItem.getFullName();
 		return btnText + ", " + buttonItem.getPrice() + " each";
 	}
 
+	@Override
 	protected ClickListener setButtonPressListener() {
 		return new ClickListener(Buttons.LEFT) {
+			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				if (buttonItem.getPrice() > 0 && trade.buyer.hasItem(trade.currency, buttonItem.getPrice()))
 					new TradeConfirmDialog(trade, buttonItem, action, refresher).show();

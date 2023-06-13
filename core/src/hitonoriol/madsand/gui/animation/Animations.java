@@ -9,10 +9,10 @@ public class Animations {
 	public static final float ACTION_ANIM_DURATION = 0.15f;
 
 	public static final TextureRegion[]
-			attack = loadAnimationStrip("anim/hit"),
-			objectHit = loadAnimationStrip("anim/obj_hit"),
-			heal = loadAnimationStrip("anim/heal"),
-			detect = loadAnimationStrip("anim/detect");
+		attack = loadAnimationStrip("anim/hit"),
+		objectHit = loadAnimationStrip("anim/obj_hit"),
+		heal = loadAnimationStrip("anim/heal"),
+		detect = loadAnimationStrip("anim/detect");
 
 	private static TextureRegion[] loadAnimationStrip(String file) {
 		return Animations.loadAnimationStrip(file, DEFAULT_FRAME_SIZE);

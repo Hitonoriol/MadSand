@@ -11,14 +11,14 @@ import hitonoriol.madsand.resources.loaders.JsonLoader;
 public class Tutorial implements Loadable {
 	public static final String GAME_START = "GameStart";
 
-	private Map<String, String> strings = new HashMap<String, String>();
+	private Map<String, String> strings = new HashMap<>();
 
 	private static Tutorial instance = new Tutorial();
 
 	public static void show(String name) {
 		if (!Prefs.values().skipTutorials)
 			GameDialog.generateDialogChain(instance.strings.get(name).replace(System.lineSeparator(), ""), Gui.overlay)
-					.show();
+				.show();
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class Tutorial implements Loadable {
 			}
 		});
 	}
-	
+
 	public static Tutorial get() {
 		return instance;
 	}

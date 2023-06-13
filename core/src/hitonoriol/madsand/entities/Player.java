@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
@@ -17,7 +18,6 @@ import java.util.stream.Collectors;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,7 +29,6 @@ import hitonoriol.madsand.MadSand.Screens;
 import hitonoriol.madsand.containers.Line;
 import hitonoriol.madsand.containers.Pair;
 import hitonoriol.madsand.dialog.DialogChainGenerator;
-import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.ability.Ability;
 import hitonoriol.madsand.entities.ability.ActiveAbility;
 import hitonoriol.madsand.entities.equipment.EquipSlot;
@@ -41,7 +40,6 @@ import hitonoriol.madsand.entities.inventory.item.FishingBait;
 import hitonoriol.madsand.entities.inventory.item.GrabBag;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.PlaceableItem;
-import hitonoriol.madsand.entities.inventory.item.Projectile;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.inventory.item.Weapon;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategories;
@@ -74,10 +72,8 @@ import hitonoriol.madsand.gui.widgets.overlay.ResourceProgressBar;
 import hitonoriol.madsand.input.Keyboard;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.map.FishingSpot;
-import hitonoriol.madsand.map.Loot;
 import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
-import hitonoriol.madsand.map.Tile;
 import hitonoriol.madsand.map.object.MapObject;
 import hitonoriol.madsand.map.object.ResourceObject;
 import hitonoriol.madsand.pathfinding.Path;
@@ -85,8 +81,6 @@ import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.TimeUtils;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.Location;
-import hitonoriol.madsand.world.WorkerType;
-import hitonoriol.madsand.world.World;
 
 public class Player extends Entity {
 	@JsonIgnore
@@ -140,7 +134,7 @@ public class Player extends Entity {
 		quests.setPlayer(this);
 		turn(stats.look);
 		stats.equipment.refreshUI();
-		abilityKeyBinds.forEach((key, abilityId) -> bindAbility(key, abilityId));
+		abilityKeyBinds.forEach(this::bindAbility);
 		inventory.refreshContents();
 		refreshAvailableRecipes();
 		setFov();
@@ -163,7 +157,9 @@ public class Player extends Entity {
 	private static void loadPlayerAnimation() {
 		walkAnim = new SimpleAnimation[Direction.BASE_DIRECTIONS];
 		standingSprites = new Sprite[Direction.BASE_DIRECTIONS];
-		TextureRegion[][] animSheet = Textures.getTexture("player/anim").split(ANIM_WIDTH, ANIM_HEIGHT);
+		TextureRegion[][] animSheet = Textures.getTexture(
+			"player/anim"
+		).split(ANIM_WIDTH, ANIM_HEIGHT);
 
 		Direction.forEachBase(direction -> {
 			int dirIdx = direction.baseOrdinal();
@@ -209,6 +205,7 @@ public class Player extends Entity {
 		return craftRecipes;
 	}
 
+	@Override
 	public PlayerStats stats() {
 		return (PlayerStats) super.stats();
 	}
@@ -222,7 +219,7 @@ public class Player extends Entity {
 	}
 
 	public boolean addAbility(int id) {
-		Ability ability = Ability.get(id);
+		var ability = Ability.get(id);
 		boolean firstTime = !abilities.contains(ability);
 
 		Utils.out("Adding ability %d, first time: %b", id, firstTime);
@@ -235,8 +232,10 @@ public class Player extends Entity {
 			if (ability.levelUp())
 				MadSand.notice("Your %s is now Level %d!", ability.name, ability.lvl);
 			else
-				MadSand.notice("Your %s (Level %d) gets a bit better [%d/%d]",
-						ability.name, ability.lvl, ability.exp, ability.getLevelUpRequirement());
+				MadSand.notice(
+					"Your %s (Level %d) gets a bit better [%d/%d]",
+					ability.name, ability.lvl, ability.exp, ability.getLevelUpRequirement()
+				);
 		}
 
 		return firstTime;
@@ -248,10 +247,10 @@ public class Player extends Entity {
 
 	public int getAbilityKey(int id) {
 		return abilityKeyBinds.entrySet().stream()
-				.filter(bind -> bind.getValue() == id)
-				.findFirst()
-				.map(bind -> bind.getKey())
-				.orElse(-1);
+			.filter(bind -> bind.getValue() == id)
+			.findFirst()
+			.map(Entry::getKey)
+			.orElse(-1);
 	}
 
 	public void bindAbility(int key, int abilityId) {
@@ -370,7 +369,6 @@ public class Player extends Entity {
 				stats.equipment.unEquip(EquipSlot.MainHand);
 			else if (stats.offHand().id() == id)
 				stats.equipment.unEquip(EquipSlot.Offhand);
-			return;
 		} else {
 			Gui.overlay.equipmentSidebar.refreshSlot(EquipSlot.MainHand);
 			Gui.overlay.equipmentSidebar.refreshSlot(EquipSlot.Offhand);
@@ -397,11 +395,8 @@ public class Player extends Entity {
 
 	/* Melee Attack method for Ability scripts */
 	private void performAttack(Pair coords, int dmg) {
-		Map map = MadSand.world().getCurLoc();
-		if (super.distanceTo(coords) > 1)
-			return;
-
-		if (map.isFreeTile(coords))
+		var map = MadSand.world().getCurLoc();
+		if ((super.distanceTo(coords) > 1) || map.isFreeTile(coords))
 			return;
 
 		attack(map.getMapEntity(coords), new Damage(dmg));
@@ -412,13 +407,13 @@ public class Player extends Entity {
 	}
 
 	public boolean canPerformRangedAttack() {
-		Optional<Projectile> projectile = stats.getEquippedProjectile();
-		Optional<Weapon> rangedWeapon = stats.getEquippedWeapon();
+		var projectile = stats.getEquippedProjectile();
+		var rangedWeapon = stats.getEquippedWeapon();
 		if (!projectile.isPresent())
 			return false;
 
 		return projectile.get().thrownByHand
-				|| (rangedWeapon.isPresent() && rangedWeapon.get().type == Weapon.Type.RangedWeapon);
+			|| (rangedWeapon.isPresent() && rangedWeapon.get().type == Weapon.Type.RangedWeapon);
 	}
 
 	private void performRangedAttack(Pair targetPos) {
@@ -445,8 +440,10 @@ public class Player extends Entity {
 	protected void meleeAttackAnimation(Direction dir, Runnable attackAction) {
 		MadSand.getRenderer().setCamFollowPlayer(false);
 		animateSprite(false);
-		move(Movement.meleeAttack(this, dir, attackAction)
-				.onAttackFinish(() -> finishMeleeAttack()));
+		move(
+			Movement.meleeAttack(this, dir, attackAction)
+				.onAttackFinish(this::finishMeleeAttack)
+		);
 	}
 
 	private void performMeleeAttack(Direction dir) {
@@ -454,8 +451,8 @@ public class Player extends Entity {
 			return;
 
 		turn(dir);
-		Map map = MadSand.world().getCurLoc();
-		AbstractNpc npc = map.getNpc(coords.set(x, y).addDirection(dir));
+		var map = MadSand.world().getCurLoc();
+		var npc = map.getNpc(coords.set(x, y).addDirection(dir));
 		if (!npc.isEmpty()) {
 			Utils.dbg("Delaying %s for: %f", npc.getName(), getMeleeAttackAnimationDuration());
 			npc.addActDelay(getMeleeAttackAnimationDuration());
@@ -465,7 +462,7 @@ public class Player extends Entity {
 			if (npc.isEmpty())
 				return;
 
-			Damage damage = new Damage(this).melee(npc.getDefense());
+			var damage = new Damage(this).melee(npc.getDefense());
 			attack(npc, damage);
 
 			if (!damage.missed())
@@ -478,7 +475,7 @@ public class Player extends Entity {
 		if (isMoving())
 			return;
 
-		AbstractNpc npc = MadSand.world().getCurLoc().getNpc(coords.set(x, y).addDirection(dir));
+		var npc = MadSand.world().getCurLoc().getNpc(coords.set(x, y).addDirection(dir));
 
 		if (!npc.isEmpty() && !npc.isMoving())
 			doAction(stats.meleeAttackCost, () -> performMeleeAttack(dir));
@@ -610,7 +607,7 @@ public class Player extends Entity {
 		else if (recipeList == buildRecipes)
 			totalRecipes = Items.all().buildRequirements().size();
 		return unlocked + "/" + totalRecipes + " (" + Utils.round(100 * ((float) unlocked / (float) totalRecipes))
-				+ "%)";
+			+ "%)";
 
 	}
 
@@ -662,10 +659,12 @@ public class Player extends Entity {
 	}
 
 	private void showItemUnlockNotification(List<Integer> unlockedItems) {
-		Table newItems = ItemUI.createItemList(unlockedItems.stream()
-				.map(id -> Items.all().get(id)).collect(Collectors.toList()));
+		var newItems = ItemUI.createItemList(
+			unlockedItems.stream()
+				.map(id -> Items.all().get(id)).collect(Collectors.toList())
+		);
 		Gui.drawOkDialog("You now know how to craft following items:")
-				.addContents(newItems);
+			.addContents(newItems);
 	}
 
 	public void refreshAvailableRecipes() {
@@ -689,8 +688,8 @@ public class Player extends Entity {
 			return false;
 
 		if (!item.name.isEmpty() && item.quantity > 0) {
-			String notifStr = String.format("You get %d %s", item.quantity, item.name);
-			Item stack = inventory.getItem(item);
+			var notifStr = String.format("You get %d %s", item.quantity, item.name);
+			var stack = inventory.getItem(item);
 			if (stack.quantity != item.quantity)
 				notifStr += String.format(" (%d in inventory)", stack.quantity);
 			MadSand.notice(notifStr);
@@ -778,23 +777,23 @@ public class Player extends Entity {
 
 	private void talkToNpc(AbstractNpc npc) {
 		int currency = Globals.values().currencyId;
-		Location location = MadSand.world().getLocation();
+		var location = MadSand.world().getLocation();
 		if (!npc.stats.faction.isHuman()) {
 			MadSand.print("Doesn't seem like " + npc.stats.name + " can talk");
 			return;
 		}
-		String dialogTitle = npc.stats.name;
+		var dialogTitle = npc.stats.name;
 		if (location.isSettlement()) {
-			WorkerType occupation = location.settlement.getOccupation(npc.uid());
+			var occupation = location.settlement.getOccupation(npc.uid());
 			dialogTitle += ((occupation != null) ? " (" + occupation.name() + ")" : "");
 		}
-		GameDialog npcDialog = new DialogChainGenerator(Utils.randElement(Globals.values().idleNpcText))
-				.setAllTitles(dialogTitle).generate(Gui.overlay);
+		var npcDialog = new DialogChainGenerator(Utils.randElement(Globals.values().idleNpcText))
+			.setAllTitles(dialogTitle).generate(Gui.overlay);
 
 		npcDialog.getProceedButton().setText("Goodbye");
 
 		if (npc.canGiveQuests) {
-			TextButton questButton = Widgets.button("Do you need any help?");
+			var questButton = Widgets.button("Do you need any help?");
 			npcDialog.addButton(questButton);
 			Gui.setAction(questButton, () -> {
 				npcDialog.remove();
@@ -804,22 +803,26 @@ public class Player extends Entity {
 
 		if (location.isPlayerOwnedSettlement()) {
 			int hireCost = location.settlement.getHireCost();
-			TextButton recruitButton = new TextButton("Will you work for me? " + Quest.OBJECTIVE_COLOR + "[[" + hireCost
-					+ " " + Items.all().getName(currency) + "s]" + Resources.COLOR_END, Gui.skin);
+			var recruitButton = new TextButton(
+				"Will you work for me? " + Quest.OBJECTIVE_COLOR + "[[" + hireCost
+					+ " " + Items.all().getName(currency) + "s]" + Resources.COLOR_END,
+				Gui.skin
+			);
 			if (!location.settlement.isOccupied(npc.uid()))
 				npcDialog.addButton(recruitButton);
 
 			Gui.setAction(recruitButton, () -> {
 				npcDialog.remove();
-				WorkerType worker = location.settlement.recruitWorker(npc.uid());
+				var worker = location.settlement.recruitWorker(npc.uid());
 				if (!canAfford(hireCost)) {
 					Gui.drawOkDialog("You don't have enough money to recruit this worker!");
 					return;
 				}
 				inventory.delItem(currency, hireCost);
 				new DialogChainGenerator(
-						"Sure. I'll be the best " + worker.name() + " of the " + location.name + " settlement!")
-								.setAllTitles(npc.stats.name).generate(Gui.overlay).show();
+					"Sure. I'll be the best " + worker.name() + " of the " + location.name + " settlement!"
+				)
+					.setAllTitles(npc.stats.name).generate(Gui.overlay).show();
 			});
 		}
 
@@ -838,10 +841,10 @@ public class Player extends Entity {
 	private void performInteraction(Direction direction) {
 		coords.set(x, y).addDirection(direction);
 
-		Map loc = MadSand.world().getCurLoc();
-		MapObject obj = loc.getObject(coords.x, coords.y);
-		AbstractNpc npc = loc.getNpc(coords.x, coords.y);
-		Tile tileInFront = loc.getTile(coords.x, coords.y);
+		var loc = MadSand.world().getCurLoc();
+		var obj = loc.getObject(coords.x, coords.y);
+		var npc = loc.getNpc(coords.x, coords.y);
+		var tileInFront = loc.getTile(coords.x, coords.y);
 
 		if (npc != Map.nullNpc) {
 			interact(npc);
@@ -869,7 +872,7 @@ public class Player extends Entity {
 	}
 
 	private void interact(Direction direction) {
-		MapEntity entity = mapEntityInFront();
+		var entity = mapEntityInFront();
 
 		if (!entity.as(AbstractNpc.class).map(npc -> npc.isNeutral() || entity.isEmpty()).orElse(true))
 			return;
@@ -901,8 +904,8 @@ public class Player extends Entity {
 
 	private int getObjectResource(MapObject object) {
 		return object.as(ResourceObject.class)
-				.map(resourceObj -> resourceObj.rollDrop(stats.getEquippedToolType()))
-				.orElse(-1);
+			.map(resourceObj -> resourceObj.rollDrop(stats.getEquippedToolType()))
+			.orElse(-1);
 	}
 
 	public void useItem() {
@@ -922,7 +925,7 @@ public class Player extends Entity {
 	}
 
 	public void useItem(GrabBag item) {
-		ArrayList<Item> items = item.contents().rollItems();
+		var items = item.contents().rollItems();
 		for (Item rolledItem : items)
 			addItem(rolledItem);
 
@@ -934,9 +937,9 @@ public class Player extends Entity {
 	}
 
 	public void useItem(PlaceableItem item) {
-		Map map = MadSand.world().getCurLoc();
+		var map = MadSand.world().getCurLoc();
 		if (item.getType() == PlaceableItem.Type.Object) {
-			MapObject object = map.addObject(x, y, stats.look, item.getAltObject());
+			var object = map.addObject(x, y, stats.look, item.getAltObject());
 			if (item.isDirectional())
 				object.setDirection(stats.look);
 		} else
@@ -946,7 +949,7 @@ public class Player extends Entity {
 	}
 
 	public void useItem(CropSeeds item) {
-		Pair coords = new Pair(x, y);
+		var coords = new Pair(x, y);
 		if (MadSand.world().getCurLoc().putCrop(coords.x, coords.y, item.id())) {
 			increaseSkill(Skill.Farming);
 			MadSand.print("You plant " + item.name);
@@ -966,7 +969,7 @@ public class Player extends Entity {
 	}
 
 	private boolean useScriptedTile() {
-		String tileAction = Tiles.all().getOnInteract(MadSand.world().getTileId(x, y));
+		var tileAction = Tiles.all().getOnInteract(MadSand.world().getTileId(x, y));
 		if (!tileAction.equals(Resources.emptyField)) {
 			Lua.execute(tileAction);
 			return true;
@@ -985,7 +988,7 @@ public class Player extends Entity {
 
 			if (altItem != -1) {
 				MadSand.world().getCurLoc().delTile(x, y);
-				Item gotItem = Item.create(altItem);
+				var gotItem = Item.create(altItem);
 
 				addItem(gotItem);
 
@@ -996,7 +999,7 @@ public class Player extends Entity {
 	}
 
 	public void freeHands(EquipSlot slot, boolean silent) {
-		Item item = stats.equipment.getItem(slot);
+		var item = stats.equipment.getItem(slot);
 		if (!stats.equipment.unEquip(item))
 			return;
 
@@ -1017,29 +1020,34 @@ public class Player extends Entity {
 	}
 
 	public void respawn() {
-		World world = MadSand.world();
+		var world = MadSand.world();
 		world.skipToNextHour();
 		Gui.overlay.refreshActionButton();
 		world.setLayer(Location.LAYER_OVERWORLD);
 		int wx = world.wx();
 		int wy = world.wy();
-		Map map = world.getCurLoc();
+		var map = world.getCurLoc();
 		stats.food = stats.maxFood;
 		stats.actionPts = stats.actionPtsMax;
 		stats.hp = stats.mhp;
 		stats.stamina = stats.maxstamina;
 		stats.dead = false;
 		freeHands();
-		Gui.drawOkDialog("Awakening",
-				"You wake up without any memories about the previous " + Utils.timeString(getSurvivedTime()) + ".")
-				.newLine(2)
-				.appendText(
-						"Seems like you got into some trouble, but were miraculously saved by an unknown creature... Or force.")
-				.newLine(2)
-				.appendText(
-						"Your wounds are almost completely healed, but all your possessions have disappeared from your backpack...")
-				.newLine(2)
-				.appendText("Perhaps they're still at the place where you passed out...");
+		Gui
+			.drawOkDialog(
+				"Awakening",
+				"You wake up without any memories about the previous " + Utils.timeString(getSurvivedTime()) + "."
+			)
+			.newLine(2)
+			.appendText(
+				"Seems like you got into some trouble, but were miraculously saved by an unknown creature... Or force."
+			)
+			.newLine(2)
+			.appendText(
+				"Your wounds are almost completely healed, but all your possessions have disappeared from your backpack..."
+			)
+			.newLine(2)
+			.appendText("Perhaps they're still at the place where you passed out...");
 		stats.spawnTime = MadSand.world().currentTick();
 
 		if (stats.hasRespawnPoint) {
@@ -1111,9 +1119,9 @@ public class Player extends Entity {
 	}
 
 	public boolean canTravel() {
-		World world = MadSand.world();
-		Map map = world.getCurLoc();
-		Direction direction = stats.look;
+		var world = MadSand.world();
+		var map = world.getCurLoc();
+		var direction = stats.look;
 		boolean canTravel;
 
 		canTravel = (x == map.getWidth() - 1 && direction == Direction.RIGHT);
@@ -1121,7 +1129,7 @@ public class Player extends Entity {
 		canTravel |= (x < 1 && direction == Direction.LEFT);
 		canTravel |= (y < 1 && direction == Direction.DOWN);
 
-		Pair newWorldPos = world.getCurWPos().copy().addDirection(direction);
+		var newWorldPos = world.getCurWPos().copy().addDirection(direction);
 		canTravel &= world.getWorldMap().validCoords(newWorldPos);
 
 		return canTravel && world.curLayer() == Location.LAYER_OVERWORLD;
@@ -1215,7 +1223,7 @@ public class Player extends Entity {
 		}
 
 		if (ticksToRest > 0)
-			skipTime(ticksToRest, () -> canRest());
+			skipTime(ticksToRest, this::canRest);
 		else
 			ticksToRest = skipTime(() -> canRest() && !stats.healthFull());
 
@@ -1226,10 +1234,11 @@ public class Player extends Entity {
 
 	public void skipTime() {
 		int timeSkipItemId = Globals.values().timeSkipItem;
-		Item timeSkipItem = inventory.getItem(timeSkipItemId);
+		var timeSkipItem = inventory.getItem(timeSkipItemId);
 		if (timeSkipItem.equals(Item.nullItem)) {
 			Gui.drawOkDialog(
-					"You need at least 1 " + Items.all().getName(timeSkipItemId) + " to be able to skip time.");
+				"You need at least 1 " + Items.all().getName(timeSkipItemId) + " to be able to skip time."
+			);
 			return;
 		}
 
@@ -1260,7 +1269,7 @@ public class Player extends Entity {
 	@Override
 	public int tileDmg() {
 		int tid = super.tileDmg();
-		final Tile tile = Tiles.all().get(tid);
+		final var tile = Tiles.all().get(tid);
 		if (tile.damage > 0)
 			MadSand.print("You took " + tile.damage + " damage from " + (tile.name));
 		return tid;
@@ -1322,7 +1331,7 @@ public class Player extends Entity {
 	}
 
 	public void attackHostile() {
-		AbstractNpc npc = MadSand.world().getCurLoc().getNpc(lookingAt());
+		var npc = MadSand.world().getCurLoc().getNpc(lookingAt());
 
 		if (npc.equals(Map.nullNpc))
 			return;
@@ -1339,7 +1348,7 @@ public class Player extends Entity {
 
 	@Override
 	public void acceptDamage(Damage damage) {
-		Entity dealer = damage.getDealer();
+		var dealer = damage.getDealer();
 		if (damage.missed()) {
 			MadSand.print(dealer.getName() + " misses!");
 			increaseSkill(Skill.Evasion);
@@ -1351,7 +1360,7 @@ public class Player extends Entity {
 			 * Shake duration: [0.4; 1] sec, depending on (1) */
 			double damageComponent = 10d * ((double) damage.getValue() / (double) stats().mhp);
 			double hpComponent = Math
-					.sqrt(1 / Math.max(0.01, ((double) stats().hp - (double) damage.getValue()) / stats().mhp));
+				.sqrt(1 / Math.max(0.01, ((double) stats().hp - (double) damage.getValue()) / stats().mhp));
 			double shakeIntensity = damageComponent + hpComponent;
 			double shakeDuration = Math.max(0.4, -0.002 * Math.pow(damageComponent, 2) + 0.08 * damageComponent + 0.4);
 			MadSand.getRenderer().shakeCamera((float) Math.min(shakeIntensity, 30), (float) shakeDuration);
@@ -1361,11 +1370,12 @@ public class Player extends Entity {
 
 	public void lootMsg() {
 		if (standingOnLoot()) {
-			Loot loot = MadSand.world().getCurLoc().getLoot(x, y);
+			var loot = MadSand.world().getCurLoc().getLoot(x, y);
 			MadSand.print("You see [" + loot.getInfo() + "] lying on the floor");
 		}
 	}
 
+	@Override
 	@JsonIgnore
 	public int getLvl() {
 		return stats.skills.getLvl();
@@ -1376,15 +1386,16 @@ public class Player extends Entity {
 
 	@JsonIgnore
 	public ArrayList<Item> getSettlementCreationReq() {
-		ArrayList<Item> items = new ArrayList<>();
+		var items = new ArrayList<Item>();
 		// Require coins
 		int creationCost = (settlementsEstablished + 1) * SETTLEMENT_COST;
 		items.add(Item.create(Globals.values().currencyId, creationCost));
 
 		// Not-so-random material of tier #<settlementsEstablished>
-		Item requiredResource = Item.create(
-				ItemCategories.get().getItemList(ItemCategory.Materials, settlementsEstablished)
-						.getRandomId(new Random(settlementsEstablished)));
+		var requiredResource = Item.create(
+			ItemCategories.get().getItemList(ItemCategory.Materials, settlementsEstablished)
+				.getRandomId(new Random(settlementsEstablished))
+		);
 		requiredResource.quantity = SETTLEMENT_RES_COST * (settlementsEstablished + 1);
 		items.add(requiredResource);
 
@@ -1392,7 +1403,7 @@ public class Player extends Entity {
 	}
 
 	public void objectInFront() {
-		MapEntity entity = mapEntityInFront();
+		var entity = mapEntityInFront();
 
 		if (!entity.isEmpty())
 			MadSand.print("You see: " + entity.getName());
@@ -1410,6 +1421,7 @@ public class Player extends Entity {
 		return animateSprite;
 	}
 
+	@Override
 	@JsonIgnore
 	public TextureRegion getSprite() {
 		if (!isMoving() || !isSpriteAnimated())

@@ -38,10 +38,12 @@ public abstract class Hand {
 	public abstract int evaluate();
 
 	public static String getCardListString(List<Card> cards) {
-		return String.format("{%s}",
-				cards.stream()
-						.map(card -> card.toString())
-						.collect(Collectors.joining(" ")));
+		return String.format(
+			"{%s}",
+			cards.stream()
+				.map(Card::toString)
+				.collect(Collectors.joining(" "))
+		);
 	}
 
 	@Override

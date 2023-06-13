@@ -78,8 +78,8 @@ public class TradeInventoryUI extends GameDialog {
 		add(tradeUITable).row();
 		add(exitBtn).align(Align.bottom).padBottom(5).row();
 
-		refresher = () -> refresh();
-		Gui.setAction(exitBtn, () -> remove());
+		refresher = this::refresh;
+		Gui.setAction(exitBtn, this::remove);
 	}
 
 	private void setPaneParams(ScrollPane pane) {
@@ -88,15 +88,16 @@ public class TradeInventoryUI extends GameDialog {
 		pane.setScrollingDisabled(true, false);
 	}
 
+	@Override
 	public void show() {
 		super.show();
 		refresh();
 	}
 
 	public void refreshCurrencyHeader(Inventory inventory, TradeAction action) {
-		Item currency = inventory.getItem(playerSell.currency);
+		var currency = inventory.getItem(playerSell.currency);
 		int quantity = 0;
-		String text = action.name() + Resources.LINEBREAK;
+		var text = action.name() + Resources.LINEBREAK;
 		text += action == TradeAction.Sell ? "Your " : "Trader's ";
 		text += Items.all().getName(playerSell.currency) + "s: ";
 		if (!currency.equals(Item.nullItem))
@@ -110,8 +111,8 @@ public class TradeInventoryUI extends GameDialog {
 	}
 
 	public void refresh() {
-		Inventory playerInventory = playerSell.getSeller();
-		Inventory traderInventory = playerSell.getBuyer();
+		var playerInventory = playerSell.getSeller();
+		var traderInventory = playerSell.getBuyer();
 
 		sellTable.clear();
 		buyTable.clear();

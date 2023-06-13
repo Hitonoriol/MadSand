@@ -6,8 +6,8 @@ import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.TextureAtlasData.Page;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import hitonoriol.madsand.resources.GameAssetManager;
 import hitonoriol.madsand.resources.GameAssetManager.Dependencies;
@@ -25,27 +25,27 @@ public class Textures extends TextureAtlas implements Loadable {
 	private final static Textures instance = new Textures();
 
 	private Textures() {}
-	
+
 	public TextureMap<String> textureMap() {
 		return textureMap;
 	}
-	
+
 	public TextureMap<Integer> tileMap() {
 		return tiles;
 	}
-	
+
 	public TextureMap<Integer> objectMap() {
 		return objects;
 	}
-	
+
 	public TextureMap<Integer> itemMap() {
 		return items;
 	}
-	
+
 	public TextureMap<Integer> npcMap() {
 		return npcs;
 	}
-	
+
 	public static TextureRegion getTile(int id) {
 		return instance.tiles.get(id);
 	}
@@ -65,7 +65,7 @@ public class Textures extends TextureAtlas implements Loadable {
 	public static TextureRegion getTexture(String name) {
 		return instance.textureMap.get(name);
 	}
-	
+
 	public static Textures get() {
 		return instance;
 	}
@@ -83,10 +83,12 @@ public class Textures extends TextureAtlas implements Loadable {
 		}
 
 		@Override
-		public Textures load(AssetManager assetManager, String fileName, FileHandle file,
-				Parameters<Textures> parameter) {
+		public Textures load(
+			AssetManager assetManager, String fileName, FileHandle file,
+			Parameters<Textures> parameter
+		) {
 			for (Page page : data.getPages()) {
-				Texture texture = assetManager.get(page.textureFile.path().replaceAll("\\\\", "/"), Texture.class);
+				var texture = assetManager.get(page.textureFile.path().replaceAll("\\\\", "/"), Texture.class);
 				page.texture = texture;
 			}
 
@@ -106,11 +108,11 @@ public class Textures extends TextureAtlas implements Loadable {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		public Dependencies getDependencies(String fileName, FileHandle atlasFile, Parameters<Textures> parameter) {
-			FileHandle imgDir = atlasFile.parent();
+			var imgDir = atlasFile.parent();
 			data = new TextureAtlasData(atlasFile, imgDir, false);
-			Dependencies dependencies = new Dependencies();
+			var dependencies = new Dependencies();
 			for (Page page : data.getPages()) {
-				TextureParameter params = new TextureParameter();
+				var params = new TextureParameter();
 				params.format = page.format;
 				params.genMipMaps = page.useMipMaps;
 				params.minFilter = page.minFilter;

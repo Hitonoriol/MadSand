@@ -20,12 +20,12 @@ public class TradeInventory {
 	}
 
 	public void setCurrency(int id) {
-		this.currency = id;
+		currency = id;
 	}
 
 	public boolean sell(Item item, int quantity) { //Sell from Seller to Buyer
 		int cost = item.getPrice() * quantity;
-		Item buyerMoney = buyer.getItem(currency);
+		var buyerMoney = buyer.getItem(currency);
 
 		if (buyerMoney.quantity < cost)
 			return false;

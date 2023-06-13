@@ -13,9 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -24,7 +22,6 @@ import com.badlogic.gdx.utils.Timer.Task;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
-import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.skill.Skill;
@@ -46,7 +43,8 @@ public class FishingUI extends GameDialog {
 	static TextureRegion fishTx = Textures.getTexture(resPath + "fish");
 	static TextureRegion bobberTx = Textures.getTexture(resPath + "bobber");
 	static NinePatchDrawable backgroundTx = Resources.loadNinePatch(resPath + "bg");
-	static ProgressBar.ProgressBarStyle barStyle = GuiSkin.createProgressBarStyle(BAR_WIDTH, BAR_HEIGHT, Color.LIME, true);
+	static ProgressBar.ProgressBarStyle barStyle = GuiSkin
+		.createProgressBarStyle(BAR_WIDTH, BAR_HEIGHT, Color.LIME, true);
 
 	int FISH_OFFSET_MAX = 200;
 	int FISH_OFFSET_MIN = 30;
@@ -83,14 +81,14 @@ public class FishingUI extends GameDialog {
 		resetCatchBar();
 		super.add(catchBar).size(BAR_WIDTH, BAR_HEIGHT).padTop(15).row();
 		bobber = new Image(bobberTx);
-		Table background = Widgets.table();
+		var background = Widgets.table();
 		background.setBackground(backgroundTx);
 		background.setFillParent(true);
 		gameContainer.addActor(background);
 		gameContainer.addActor(bobber);
 		bobber.setPosition((WIDTH / 2) + bobber.getImageWidth() / 2, HEIGHT / 2);
 
-		Label infoLabel = Widgets.label("[LMB] Catch");
+		var infoLabel = Widgets.label("[LMB] Catch");
 		infoLabel.setAlignment(Align.center);
 		super.add(gameContainer).size(WIDTH, HEIGHT).row();
 		super.add(infoLabel).pad(10).row();
@@ -109,6 +107,7 @@ public class FishingUI extends GameDialog {
 
 	private void initClickListener() {
 		super.addListener(new ClickListener(Buttons.LEFT) {
+			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				catchFish();
 			}
@@ -123,7 +122,7 @@ public class FishingUI extends GameDialog {
 			return;
 		}
 
-		Player player = MadSand.player();
+		var player = MadSand.player();
 		List<Item> caughtFish = spot.catchFish();
 		player.addItem(caughtFish);
 		applyFadeout(new Image(caughtFish.get(0).getTexture()));
@@ -146,7 +145,7 @@ public class FishingUI extends GameDialog {
 	}
 
 	private void damageFishingRod() {
-		Player player = MadSand.player();
+		var player = MadSand.player();
 		player.damageHeldEquipment();
 		if (!player.stats.isToolEquipped(Tool.Type.FishingRod)) {
 			MadSand.warn("Your fishing rod broke!", true);
@@ -157,18 +156,21 @@ public class FishingUI extends GameDialog {
 	private final static float FADEOUT_DUR = 2.25f;
 
 	private void animateLogText() {
-		Label textLbl = Widgets.label(Gui.overlay.getGameLog().getLastPrintedLine());
+		var textLbl = Widgets.label(Gui.overlay.getGameLog().getLastPrintedLine());
 		Gui.setFontSize(textLbl, Utils.rand(9, 17));
 		applyFadeout(textLbl);
 	}
 
 	private void applyFadeout(Actor actor) {
-		Actor origin = activeFish != null ? activeFish : bobber;
+		var origin = activeFish != null ? activeFish : bobber;
 		actor.setPosition(origin.getX() - actor.getWidth() * 0.5f, origin.getY());
 		gameContainer.addActor(actor);
-		actor.addAction(Actions.sequence(
+		actor.addAction(
+			Actions.sequence(
 				Actions.parallel(Actions.sizeBy(-25, -25, FADEOUT_DUR), Actions.fadeOut(FADEOUT_DUR)),
-				Actions.removeActor()));
+				Actions.removeActor()
+			)
+		);
 	}
 
 	private boolean spawnRoll() {
@@ -231,6 +233,7 @@ public class FishingUI extends GameDialog {
 		catchBar.setVisible(false);
 	}
 
+	@Override
 	public boolean remove() {
 		timer.clear();
 		timer.stop();
@@ -255,14 +258,16 @@ public class FishingUI extends GameDialog {
 			super.sizeBy(-Utils.rand(SIZE_DELTA));
 			super.addAction(Actions.color(Color.BLACK));
 			super.addAction(Actions.alpha(0));
-			super.setPosition(WIDTH / 2 + Utils.signRand(FISH_OFFSET_MIN, FISH_OFFSET_MAX),
-					HEIGHT / 2 + Utils.signRand(FISH_OFFSET_MIN, FISH_OFFSET_MAX));
+			super.setPosition(
+				WIDTH / 2 + Utils.signRand(FISH_OFFSET_MIN, FISH_OFFSET_MAX),
+				HEIGHT / 2 + Utils.signRand(FISH_OFFSET_MIN, FISH_OFFSET_MAX)
+			);
 			super.setOrigin(Align.center);
 
 			animDuration = JRand.flt().range(ANIM_MIN, ANIM_MAX).gen();
 			lifeTime = -animDuration;
 
-			float skillTimeBonus = (float) MadSand.player().stats.skills.getLvl(Skill.Fishing) / 25f;
+			float skillTimeBonus = MadSand.player().stats.skills.getLvl(Skill.Fishing) / 25f;
 			catchTime = JRand.flt().range(minCatchTime + skillTimeBonus, maxCatchTime + skillTimeBonus).gen();
 
 			super.addAction(Actions.fadeIn(FADE_DUR));
@@ -313,6 +318,7 @@ public class FishingUI extends GameDialog {
 			return catchTime;
 		}
 
+		@Override
 		public boolean remove() {
 			animation.cancel();
 			resetCatchBar();

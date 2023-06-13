@@ -101,8 +101,8 @@ public class Lua {
 
 	public static Varargs callChunk(LuaValue chunk, Object... args) {
 		LuaValue[] luaArgs = Stream.of(args)
-				.map(arg -> CoerceJavaToLua.coerce(arg))
-				.toArray(LuaValue[]::new);
+			.map(CoerceJavaToLua::coerce)
+			.toArray(LuaValue[]::new);
 		return chunk.invoke(LuaValue.varargsOf(luaArgs));
 	}
 

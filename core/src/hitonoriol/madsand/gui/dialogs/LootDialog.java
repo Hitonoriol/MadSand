@@ -12,7 +12,6 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.dialog.GameDialog;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.inventory.ItemUI;
-import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
@@ -35,11 +34,11 @@ public class LootDialog extends GameDialog {
 		super.setTitle("Items at (" + player.x + ", " + player.y + ")");
 		super.skipLine();
 		super.add(new AutoFocusScrollPane(lootTable))
-				.size((ItemUI.SIZE * ITEMS_PER_ROW) + PADDING, 2.1f * ItemUI.SIZE)
-				.padTop(TABLE_PADDING).row();
+			.size((ItemUI.SIZE * ITEMS_PER_ROW) + PADDING, 2.1f * ItemUI.SIZE)
+			.padTop(TABLE_PADDING).row();
 		super.skipLine();
 
-		Table buttonTable = Widgets.table();
+		var buttonTable = Widgets.table();
 		buttonTable.defaults().size(Gui.BTN_WIDTH, Gui.BTN_HEIGHT).pad(5);
 		buttonTable.add(pickUpAllBtn);
 		buttonTable.add(mergeBtn).row();
@@ -74,20 +73,20 @@ public class LootDialog extends GameDialog {
 			if (!((actor = cell.getActor()) instanceof ItemUI))
 				continue;
 
-			Item item = ((ItemUI) actor).getItem();
+			var item = ((ItemUI) actor).getItem();
 			Gui.setClickAction(actor, () -> {
-				Consumer<Integer> pickUpAction = (quantity) -> {
+				Consumer<Integer> pickUpAction = quantity -> {
 					player.pickUpLoot(loot, item, quantity);
 					refreshLootTable();
 				};
 
 				if (item.quantity > 1)
 					new SliderDialog(item.quantity)
-							.setTitle("Pick Up " + item.name)
-							.setSliderTitle("Quantity of " + item.name + " to pick up:")
-							.setOnUpdateText(item.name)
-							.setConfirmAction(pickUpAction)
-							.show();
+						.setTitle("Pick Up " + item.name)
+						.setSliderTitle("Quantity of " + item.name + " to pick up:")
+						.setOnUpdateText(item.name)
+						.setConfirmAction(pickUpAction)
+						.show();
 				else
 					pickUpAction.accept(item.quantity);
 			});

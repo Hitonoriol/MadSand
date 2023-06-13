@@ -1,5 +1,6 @@
 package hitonoriol.madsand.gui.dialogs;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -82,8 +83,8 @@ public class QuestJournal extends GameDialog {
 		questTable.add(npcLocationLabel).size(NPC_INFO_LABEL_WIDTH, ENTRY_HEIGHT).padBottom(HEADER_YPADDING).row();
 
 		List<Quest> allQuests = Stream.of(quests.questsInProgress, quests.completedQuests)
-				.flatMap(x -> x.stream())
-				.collect(Collectors.toList());
+			.flatMap(ArrayList::stream)
+			.collect(Collectors.toList());
 
 		if (allQuests.size() == 0) {
 			questTable.add(emptyJournalLabel).align(Align.center).colspan(4).padTop(questScroll.getHeight() / 2);
@@ -112,7 +113,7 @@ public class QuestJournal extends GameDialog {
 				questObjective.setText("[LIME]" + questObjective.getText());
 
 			questTable.add(getStatusLabel(quest.id())).size(STATUS_LABEL_WIDTH, ENTRY_HEIGHT).align(Align.topLeft)
-					.padBottom(PAD_BOTTOM);
+				.padBottom(PAD_BOTTOM);
 			questTable.add(questName).width(NAME_LABEL_WIDTH).align(Align.topLeft).padBottom(PAD_BOTTOM);
 			questTable.add(questObjective).width(OBJECTIVE_LABEL_WIDTH).padBottom(PAD_BOTTOM).align(Align.topLeft);
 			questTable.add(npcInfo).width(NPC_INFO_LABEL_WIDTH).padBottom(PAD_BOTTOM).align(Align.topLeft);
@@ -122,9 +123,9 @@ public class QuestJournal extends GameDialog {
 	}
 
 	private Label createProgressLabel(boolean inProgress) {
-		Label label = inProgress
-				? Widgets.label("[ORANGE]In Progress[]")
-				: Widgets.label("[LIME]Complete[]");
+		var label = inProgress
+			? Widgets.label("[ORANGE]In Progress[]")
+			: Widgets.label("[LIME]Complete[]");
 		label.setAlignment(Align.topLeft);
 		return label;
 	}
@@ -133,6 +134,7 @@ public class QuestJournal extends GameDialog {
 		return createProgressLabel(quests.isQuestInProgress(id));
 	}
 
+	@Override
 	public void show() {
 		refresh();
 		super.show();

@@ -103,9 +103,9 @@ public class CraftDialog extends GameDialog {
 
 	private void createItemList() {
 		craftStationItems = (isPlayerCraftMenu()
-				? player().getCraftRecipes()
-				: Items.all().craftStationRecipes().get(craftStationId))
-						.stream().map(Items.all()::get).collect(Collectors.toList());
+			? player().getCraftRecipes()
+			: Items.all().craftStationRecipes().get(craftStationId))
+				.stream().map(Items.all()::get).collect(Collectors.toList());
 
 		/* If this dialog is opened from the InventoryUI, search for crafting stations
 		 * on all tiles adjacent to player and append recipes from their recipe lists to
@@ -113,9 +113,9 @@ public class CraftDialog extends GameDialog {
 		if (isPlayerCraftMenu()) {
 			player().getAdjacentObjects(CraftingStation.class).forEach(station -> {
 				Items.all().craftStationRecipes().get(station.id())
-						.stream()
-						.map(Items.all()::get)
-						.forEach(craftStationItems::add);
+					.stream()
+					.map(Items.all()::get)
+					.forEach(craftStationItems::add);
 			});
 		}
 	}
@@ -144,7 +144,7 @@ public class CraftDialog extends GameDialog {
 	private Stream<Item> getCraftableItems() {
 		return searchPanel.search(getItemList()).distinct();
 	}
-	
+
 	private void refresh() {
 		Gui.seamlessRefresh(craftTable, this::refreshCraftMenu, FADE_DELAY);
 	}
@@ -162,8 +162,8 @@ public class CraftDialog extends GameDialog {
 		getCraftableItems().forEach(item -> {
 			boolean lastInRow = (entries + 1) % ENTRIES_PER_ROW == 0;
 			craftTable.add(createEntry(item))
-					.padRight(!lastInRow ? ENTRY_XPAD : 0)
-					.padBottom(ENTRY_YPAD);
+				.padRight(!lastInRow ? ENTRY_XPAD : 0)
+				.padBottom(ENTRY_YPAD);
 
 			if (lastInRow)
 				craftTable.row();
@@ -182,9 +182,9 @@ public class CraftDialog extends GameDialog {
 	private final static Drawable entryBg = GuiSkin.getColorDrawable(new Color(0.25f, 0.25f, 0.25f, 0.5f));
 
 	private Table createEntry(Item item) {
-		Table entry = Widgets.table();
-		CraftButton craftButton = new CraftButton(item, this::refresh);
-		Label recipeLabel = Widgets.label(Item.createReadableItemList(Items.all().getCraftRecipe(item.id())));
+		var entry = Widgets.table();
+		var craftButton = new CraftButton(item, this::refresh);
+		var recipeLabel = Widgets.label(Item.createReadableItemList(Items.all().getCraftRecipe(item.id())));
 		recipeLabel.setAlignment(Align.left);
 		recipeLabel.setWrap(true);
 		final float width = craftButton.getWidth();

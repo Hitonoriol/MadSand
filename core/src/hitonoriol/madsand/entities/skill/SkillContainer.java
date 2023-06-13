@@ -65,6 +65,7 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 		return check(skill, true);
 	}
 
+	@Override
 	public SkillValue put(Skill skill, SkillValue skillval) {
 		if (containsKey(skill))
 			remove(skill);
@@ -144,13 +145,13 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 		return Math.min(1, getSkillEffect(skill) / maxSkillEffect(skill));
 	}
 
-	// Skill effectiveness in range [0, MAX_SKILL_EFFECT], depends on level 
+	// Skill effectiveness in range [0, MAX_SKILL_EFFECT], depends on level
 	public double getSkillEffect(Skill skill) {
-		return skillLvlEffect((double) getLvl(skill)) + calcSkillBonusEffect(skill);
+		return skillLvlEffect(getLvl(skill)) + calcSkillBonusEffect(skill);
 	}
 
 	public double calcSkillBonusEffect(Skill skill) {
-		double bonusEffect = 0;
+		double bonusEffect = 0D;
 		if (skill == Skill.Survival)
 			bonusEffect = 7;
 
@@ -161,7 +162,7 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 		return bonusEffect;
 	}
 
-	// Currently used to determine amount of "skill-damage" done to objects on interaction 
+	// Currently used to determine amount of "skill-damage" done to objects on interaction
 	// Tools have "skill damage" too, this one and the ones of tools stack
 	// Min: 0
 	public int getBaseSkillDamage(Skill skill) {
@@ -187,12 +188,12 @@ public class SkillContainer extends HashMap<Skill, SkillValue> {
 	}
 
 	public String getExpString(Skill skill) {
-		SkillValue skillv = get(skill);
+		var skillv = get(skill);
 		return skillv.exp + "/" + skillv.requiredExp;
 	}
 
 	public String getLvlString(Skill skill) {
-		SkillValue skillv = get(skill);
+		var skillv = get(skill);
 		return skillv.lvl + " (" + getExpString(skill) + ")";
 	}
 }

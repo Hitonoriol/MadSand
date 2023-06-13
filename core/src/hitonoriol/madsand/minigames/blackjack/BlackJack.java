@@ -78,11 +78,11 @@ public class BlackJack {
 		return gameResult != GameResult.None;
 	}
 
-	public static enum PlayerAction {
+	public enum PlayerAction {
 		Hit, Stand
 	}
 
-	public static enum GameResult {
+	public enum GameResult {
 		None, Win, DealerWin, Bust, Push, BlackJack;
 
 		public boolean isWin() {

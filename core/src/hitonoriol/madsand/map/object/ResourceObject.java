@@ -6,7 +6,6 @@ import java.util.function.Supplier;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.Player;
-import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.inventory.item.Item;
 import hitonoriol.madsand.entities.inventory.item.Tool;
 import hitonoriol.madsand.entities.skill.Skill;
@@ -39,21 +38,23 @@ public class ResourceObject extends MapObject {
 
 	@Override
 	public void interact(Player player) {
-		Skill skill = getInteractionSkill();
+		var skill = getInteractionSkill();
 		int curLvl = player.stats.skills.getLvl(skill);
 
 		if (curLvl < lvl)
-			MadSand.notice("You are not experienced enough." + Resources.LINEBREAK
+			MadSand.notice(
+				"You are not experienced enough." + Resources.LINEBREAK
 					+ skill + " level required: " + lvl + Resources.LINEBREAK
-					+ "Your " + skill + ": " + curLvl);
+					+ "Your " + skill + ": " + curLvl
+			);
 		else
 			super.interact(player, () -> player.interact(this));
 	}
 
 	private void rollResources(Player player, int hpDelta) {
-		PlayerStats stats = player.stats();
-		Tool.Type heldTool = stats.getEquippedToolType();
-		Skill skill = heldTool.isSkillCompatible(this.skill) ? this.skill : Skill.Gathering;
+		var stats = player.stats();
+		var heldTool = stats.getEquippedToolType();
+		var skill = heldTool.isSkillCompatible(this.skill) ? this.skill : Skill.Gathering;
 		Item objLoot;
 		int rolls;
 
@@ -81,7 +82,7 @@ public class ResourceObject extends MapObject {
 
 	@Override
 	public int acceptHit(Player player, Supplier<Integer> dmg) {
-		PlayerStats stats = player.stats();
+		var stats = player.stats();
 		int preHitHp = hp;
 		int damage = super.acceptHit(player, dmg);
 

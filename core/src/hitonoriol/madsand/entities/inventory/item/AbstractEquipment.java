@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hitonoriol.madsand.MadSand;
-import hitonoriol.madsand.entities.BaseStats;
 import hitonoriol.madsand.entities.Player;
 import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.gfx.ConditionalEffects;
@@ -20,22 +19,30 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 	public long uid = 0;
 	private boolean cursed, identified;
 
-	public static ConditionalEffects<AbstractEquipment> textureFx = ConditionalEffects.create(fx -> fx
-			.addEffect(equipment -> Utils.percentRoll(fx.random(), 40),
-					item -> Effects.colorize(Utils.randomColor(fx.random())))
+	public static ConditionalEffects<AbstractEquipment> textureFx = ConditionalEffects.create(
+		fx -> fx
+			.addEffect(
+				equipment -> Utils.percentRoll(fx.random(), 40),
+				item -> Effects.colorize(Utils.randomColor(fx.random()))
+			)
 
-			.addEffect(equipment -> Utils.percentRoll(fx.random(), 5),
-					item -> Effects.colorInversion)
+			.addEffect(
+				equipment -> Utils.percentRoll(fx.random(), 5),
+				item -> Effects.colorInversion
+			)
 
-			.addEffect(equipment -> equipment.cursed,
-					item -> Effects.colorize(Color.RED)));
+			.addEffect(
+				equipment -> equipment.cursed,
+				item -> Effects.colorize(Color.RED)
+			)
+	);
 
 	public AbstractEquipment(AbstractEquipment protoItem) {
 		super(protoItem);
 		hp = protoItem.hp;
 		maxHp = hp;
 
-		BaseStats stats = MadSand.player().stats().baseStats;
+		var stats = MadSand.player().stats().baseStats;
 		if (protoItem.isProto()) {
 			uid = MadSand.world().nextItemUID();
 			cursed = Utils.percentRoll(5.5) || stats.rollInverse(Stat.Luck, 17.5);
@@ -110,10 +117,7 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof AbstractEquipment))
-			return false;
-
-		if (!super.equals(obj))
+		if (!(obj instanceof AbstractEquipment) || !super.equals(obj))
 			return false;
 
 		return uid == ((AbstractEquipment) obj).uid;
@@ -122,10 +126,10 @@ public abstract class AbstractEquipment extends LevelBoundItem {
 	@Override
 	public String getFullName() {
 		return (identified && cursed ? "[RED]Cursed[] " : "")
-				+ super.getFullName();
+			+ super.getFullName();
 	}
 
 	public static boolean isCursed(Item item) {
-		return Functional.test(item.as(AbstractEquipment.class), eq -> eq.cantBeDropped());
+		return Functional.test(item.as(AbstractEquipment.class), AbstractEquipment::cantBeDropped);
 	}
 }

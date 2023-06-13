@@ -14,7 +14,6 @@ import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 import hitonoriol.madsand.gamecontent.Textures;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.input.Keyboard;
-import hitonoriol.madsand.map.Map;
 import hitonoriol.madsand.map.MapEntity;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.util.TimeUtils;
@@ -33,7 +32,6 @@ public class Projectile extends LevelBoundItem {
 	}
 
 	public Projectile() {
-		super();
 	}
 
 	@Override
@@ -49,7 +47,7 @@ public class Projectile extends LevelBoundItem {
 	static FloatGenerator dmgRangeGen = JRand.flt().range(0.4f, 1.25f);
 
 	public int calcDamage() {
-		if (Utils.percentRoll((float) lvl / 45f))
+		if (Utils.percentRoll(lvl / 45f))
 			return dmg * 2;
 
 		return (int) Math.max(1, dmg * dmgRangeGen.gen());
@@ -59,12 +57,12 @@ public class Projectile extends LevelBoundItem {
 
 	public void launchProjectile(Pair from, Pair to, Consumer<MapEntity> impactAction) {
 		final int imgSize = (int) (Resources.TILESIZE * MadSand.getRenderer().getCamZoom());
-		Image projectileImg = new Image(Textures.getItem(id));
-		Vector3 screenCoords = new Vector3();
+		var projectileImg = new Image(Textures.getItem(id));
+		var screenCoords = new Vector3();
 		projectileImg.setOrigin(Align.center);
 		projectileImg.setSize(imgSize, imgSize);
 		projectileImg
-				.addAction(Actions.rotateTo((float) Math.toDegrees(Math.atan2(from.y - to.y, from.x - to.x)) + 90f));
+			.addAction(Actions.rotateTo((float) Math.toDegrees(Math.atan2(from.y - to.y, from.x - to.x)) + 90f));
 		Gui.overlay.addActor(projectileImg);
 
 		MadSand.getCamera().project(screenCoords.set(from.x, from.y, 0));
@@ -72,26 +70,28 @@ public class Projectile extends LevelBoundItem {
 		MadSand.getCamera().project(screenCoords.set(to.x, to.y, 0));
 
 		to.toWorld();
-		Map map = MadSand.world().getCurLoc();
+		var map = MadSand.world().getCurLoc();
 		Utils.dbg("Projectile " + name + " will land on " + to.toString());
 
 		if (MadSand.player().at(to)) {
 			Keyboard.ignoreInput();
-			TimeUtils.scheduleTask(() -> Keyboard.resumeInput(), ANIMATION_DURATION);
+			TimeUtils.scheduleTask(Keyboard::resumeInput, ANIMATION_DURATION);
 		}
-		
-		projectileImg.addAction(
-				Actions.sequence(
-						Actions.moveTo(screenCoords.x, screenCoords.y, ANIMATION_DURATION),
-						Actions.run(() -> {
-							MapEntity target = map.getAnyMapEntity(to);
 
-							if (!target.isEmpty()) {
-								impactAction.accept(target);
-							} else
-								map.putLoot(to.x, to.y, id, 1);
-						}),
-						Actions.run(() -> projectileImg.remove())));
+		projectileImg.addAction(
+			Actions.sequence(
+				Actions.moveTo(screenCoords.x, screenCoords.y, ANIMATION_DURATION),
+				Actions.run(() -> {
+					var target = map.getAnyMapEntity(to);
+
+					if (!target.isEmpty()) {
+						impactAction.accept(target);
+					} else
+						map.putLoot(to.x, to.y, id, 1);
+				}),
+				Actions.run(() -> projectileImg.remove())
+			)
+		);
 	}
 
 	@Override
