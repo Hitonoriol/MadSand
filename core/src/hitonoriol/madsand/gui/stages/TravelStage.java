@@ -1,7 +1,6 @@
 package hitonoriol.madsand.gui.stages;
 
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
@@ -14,7 +13,7 @@ import hitonoriol.madsand.gui.MouseoverListener;
 import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.TimedProgressBar;
 
-public class TravelStage extends Stage {
+public class TravelStage extends VFXStage {
 
 	static float WIDTH = 500;
 	static float ENTRY_HEIGHT = 50;

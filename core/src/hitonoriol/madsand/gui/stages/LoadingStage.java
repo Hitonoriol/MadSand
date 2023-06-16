@@ -8,7 +8,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
@@ -20,7 +19,7 @@ import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.resources.GameAssetManager;
 
-public class LoadingStage extends Stage {
+public class LoadingStage extends VFXStage {
 	private GameAssetManager manager;
 
 	private ProgressBar progressBar = new ProgressBar(0, 1, 0.005f, false, Gui.skin);

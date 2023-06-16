@@ -23,8 +23,11 @@ public class DeathScreen extends AbstractScreen<DeathStage> {
 
 	@Override
 	public void render(float delta) {
+		var manager = getStage().getShaderManager();
+		manager.beginEffects();
 		gameWorld.render(delta);
 		super.render(delta);
+		manager.endEffects();
 		Gdx.graphics.requestRendering();
 	}
 }

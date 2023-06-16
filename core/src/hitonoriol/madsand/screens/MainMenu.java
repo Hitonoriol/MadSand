@@ -63,8 +63,11 @@ public class MainMenu extends AbstractScreen<MainMenuStage> {
 
 	@Override
 	public void render(float delta) {
+		var manager = getStage().getShaderManager();
+		manager.beginEffects();
 		gameWorld.render(delta);
 		animateMenuBackground();
 		super.render(delta);
+		manager.endEffects();
 	}
 }

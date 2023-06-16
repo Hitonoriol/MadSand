@@ -1,6 +1,5 @@
 package hitonoriol.madsand.gui.stages;
 
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
@@ -10,7 +9,7 @@ import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.Widgets;
 
-public class DeathStage extends Stage {
+public class DeathStage extends VFXStage {
 	Label titleLabel, deathMsgLabel;
 	TextButton respawnButton;
 

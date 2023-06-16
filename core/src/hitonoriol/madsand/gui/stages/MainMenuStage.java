@@ -4,11 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
+import com.crashinvaders.vfx.effects.VignettingEffect;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.MadSand.Screens;
@@ -20,7 +20,7 @@ import hitonoriol.madsand.gui.dialogs.CreateWorldDialog;
 import hitonoriol.madsand.gui.dialogs.LoadWorldDialog;
 import hitonoriol.madsand.gui.dialogs.SettingsDialog;
 
-public class MainMenuStage extends Stage {
+public class MainMenuStage extends VFXStage {
 	private static final float BUTTON_WIDTH = 260, BUTTON_HEIGHT = 60;
 	private static float TITLE_PADBOTTOM = 50;
 
@@ -38,6 +38,7 @@ public class MainMenuStage extends Stage {
 
 	public MainMenuStage() {
 		super(Gui.viewport());
+		getShaderManager().addEffect(new VignettingEffect(false));
 		resumeTable.defaults().size(BUTTON_WIDTH / 2, BUTTON_HEIGHT);
 		resumeTable.add(resumeButton);
 		resumeTable.add(saveGameButton);

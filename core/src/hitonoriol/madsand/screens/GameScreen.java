@@ -31,6 +31,8 @@ public class GameScreen extends AbstractScreen<Overlay> {
 
 	@Override
 	public void render(float delta) {
+		var manager = getStage().getShaderManager();
+		manager.beginEffects();
 		gameWorld.render(delta);
 		Mouse.update();
 		if (!Gui.isGameUnfocused()) {
@@ -38,6 +40,7 @@ public class GameScreen extends AbstractScreen<Overlay> {
 			Keyboard.pollGameKeys();
 		}
 		super.render(delta);
+		manager.endEffects();
 	}
 
 	@Override

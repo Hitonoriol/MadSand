@@ -95,6 +95,9 @@ project(":core") {
 		api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
 		implementation 'com.github.czyzby:noise4j:0.1.0'
 		
+		implementation 'com.crashinvaders.vfx:gdx-vfx-core:0.5.1'
+		implementation 'com.crashinvaders.vfx:gdx-vfx-effects:0.5.1'
+		
 		implementation "com.fasterxml.jackson.core:jackson-core:$jacksonVersion"
 		implementation "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
 		implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"

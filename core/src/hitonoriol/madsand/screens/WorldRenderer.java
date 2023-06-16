@@ -17,6 +17,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
+import com.crashinvaders.vfx.effects.ChromaticAberrationEffect;
+import com.crashinvaders.vfx.effects.FilmGrainEffect;
+import com.crashinvaders.vfx.effects.RadialDistortionEffect;
 
 import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.containers.Line;
@@ -31,6 +34,8 @@ import hitonoriol.madsand.pathfinding.Path;
 import hitonoriol.madsand.resources.Resources;
 import hitonoriol.madsand.resources.TextureMap;
 import hitonoriol.madsand.util.CameraShaker;
+import hitonoriol.madsand.vfx.BlackAndWhiteEffect;
+import hitonoriol.madsand.vfx.ShaderManager;
 
 public class WorldRenderer {
 	public static final float TARGET_FRAME_DELTA = 1f / 60f;
@@ -49,6 +54,7 @@ public class WorldRenderer {
 	private static final float offsetFactor = 0.3f;
 	private boolean enableFloatingCamera = false;
 	private float frameDelta = 0;
+	private ShaderManager shaderManager = new ShaderManager(batch);
 
 	private LightMap light = new LightMap();
 	private List<WorldAnimation> animations = new ArrayList<>();
@@ -58,6 +64,15 @@ public class WorldRenderer {
 
 	public WorldRenderer() {
 		updateViewport();
+		var radialDistortion = new RadialDistortionEffect();
+		radialDistortion.setDistortion(0.25f);
+		radialDistortion.setZoom(0.85f);
+		shaderManager.addEffect(radialDistortion, true);
+		shaderManager.addEffect(new BlackAndWhiteEffect());
+		var chromaEffect = new ChromaticAberrationEffect(12);
+		chromaEffect.setMaxDistortion(0.09f);
+		shaderManager.addEffect(chromaEffect, true);
+		shaderManager.addEffect(new FilmGrainEffect());
 	}
 
 	private void renderObject(MapObject object, float x, float y) {
@@ -265,9 +280,9 @@ public class WorldRenderer {
 
 	public void render(float delta) {
 		frameDelta = delta;
-		batch.begin();
+		shaderManager.begin();
 		drawGame();
-		batch.end();
+		shaderManager.end();
 		updateCamPosition();
 	}
 
@@ -346,6 +361,10 @@ public class WorldRenderer {
 
 	public boolean isFloatingCameraEnbled() {
 		return enableFloatingCamera;
+	}
+	
+	public ShaderManager getShaderManager() {
+		return shaderManager;
 	}
 
 	private static class LightMap extends TextureMap<Integer> {

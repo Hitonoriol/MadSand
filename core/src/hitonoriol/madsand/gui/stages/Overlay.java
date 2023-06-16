@@ -9,7 +9,6 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
@@ -42,7 +41,7 @@ import hitonoriol.madsand.util.Utils;
  * Main in-game overlay (GameStage.GAME)
  */
 
-public class Overlay extends Stage {
+public class Overlay extends VFXStage {
 	static float SIDEBAR_XPADDING = 5;
 
 	private Table overlayTable = Widgets.table();

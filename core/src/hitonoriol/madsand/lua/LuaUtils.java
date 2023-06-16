@@ -7,8 +7,13 @@ import hitonoriol.madsand.entities.inventory.item.category.ItemCategories;
 import hitonoriol.madsand.entities.inventory.item.category.ItemCategory;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.util.Utils;
+import hitonoriol.madsand.vfx.ShaderManager;
 
 public class LuaUtils {
+	public static ShaderManager getWorldEffects() {
+		return MadSand.getRenderer().getShaderManager();
+	}
+	
 	public static Pair locateTile(int id) {
 		return MadSand.world().getCurLoc().locateTile(id);
 	}
