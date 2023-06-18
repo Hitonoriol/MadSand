@@ -108,6 +108,10 @@ public class Quest implements Enumerable {
 			return questArrow = new QuestArrow(this);
 	}
 
+	public boolean isInstant() {
+		return !hasItemObjective() && !hasKillRequirements();
+	}
+	
 	public boolean hasItemObjective() {
 		return !reqItems.equals(Item.EMPTY_ITEM);
 	}
@@ -305,6 +309,9 @@ public class Quest implements Enumerable {
 	}
 
 	private void showQuestDialog(String dialogText) {
+		if (dialogText.isEmpty())
+			return;
+		
 		setTextSubstitutionValues();
 		new DialogChainGenerator(dialogText)
 			.setAllTitles(getNpc().stats.name)
@@ -322,6 +329,10 @@ public class Quest implements Enumerable {
 
 	public void showQuestCompleteDialog() {
 		isComplete = true;
+		
+		if (endMsg.isEmpty())
+			return;
+		
 		createEndMsg();
 		showQuestDialog(endMsg);
 	}

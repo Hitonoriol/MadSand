@@ -19,7 +19,7 @@
 				
 				if (not tileCoords:isEmpty()) then
 					world:getCurLoc():addWaypoint(tileCoords):setDestinationName('Dungeon Entrance');
-					utils:showDialog('#Dungeon Search# You feel an immense amount of magical power guiding you towards ' .. coordString .. '...');
+					utils:showDialog('/Title(Dungeon Search) You feel an immense amount of magical power guiding you towards ' .. coordString .. '...');
 					utils:notice('Dungeon entrance found somewhere around ' .. coordString);
 				else
 					utils:showDialog('The scroll crumbles in your hands as you read it, leaving you in deafening silence.');

@@ -23,7 +23,7 @@ public class Strings {
 		return getMatch(pattern, haystack, true);
 	}
 
-	private static Optional<String> getMatch(Pattern pattern, String haystack, boolean last) {
+	public static Optional<String> getMatch(Pattern pattern, String haystack, boolean last) {
 		var matcher = pattern.matcher(haystack);
 		Optional<String> match = Optional.empty();
 		while (matcher.find()) {

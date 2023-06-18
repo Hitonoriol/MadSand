@@ -1,25 +1,45 @@
 {
 
 "0" : {
-		"@type" : "Quest",
-		"exp" : 25,
-		"name" : "Introduction",
-		"startMsg" : "
-			Oh, hello there...=>
-			Uhm... I haven't seen you here before, who are you?=>
-			Well, to be honest, it doesn't matter. Not in this place.=>
-			You seem lost... You know what? If you can prove you can be of any use, then we'll talk.=>
-			Can you please bring me some wood for the campfire? Here's an axe, it'll help you.=>
-			Return to me when you get {ITEM_OBJECTIVE}. I can even give you {ITEM_REWARD} if you get hungry after chopping all those trees.=>
-			## * You can gather wood by taking axe in your hands (open inventory with E key and left click the axe), approaching a tree and hitting enter or clicking it a few times.=>
-			## * You can also interact with trees with your bare hands, then you'll get another kind of resource.
-		",
+	"previousQuest" : 12,
+	"@type" : "Quest",
+	"exp" : 25,
+	"name" : "Introduction",
+	"startMsg" : "
+		Hello again. I'm glad you're all okay now.
+		/Button(Do you know anything about what's happening here?)
+		=>
+		
+		Woah woah, hold the horses, bud! What will I get for helping you? Hmmm... You know what? If you can prove you can be of any use, then we'll talk.
+		=>
+		
+		Can you please bring me some wood for the campfire? Here's an axe, it'll help you.
+		=>
+		
+		Return to me when you get {ITEM_OBJECTIVE}. I can even give you {ITEM_REWARD} if you get hungry after chopping all those trees.
+		=>
+		
+		/Title()
+		* You can gather wood by taking axe in your hands (open inventory with E key and left click the axe), approaching a tree and hitting enter or clicking it a few times.
+		=>
+		
+		/Title()
+		* You can also interact with trees with your bare hands, then you'll get another kind of resource.
+	",
 
 	"endMsg" : "
-		Thanks a lot, stranger.=>
-		I'd like to know your name now...=>
-		Nice to meet you, {PLAYER}!=>
-		Here, take these berries. You earned them. =>
+		Thanks a lot, stranger.
+		=>
+		
+		I'd like to know your name now...
+		=>
+		
+		Nice to meet you, {PLAYER}!
+		=>
+		
+		Here, take these berries. You earned them.
+		=>
+		
 		Hm... well, you can also take my axe as a reward. I didn't use it anyway. If you want some job or a good story, just ask!
 	",
 
@@ -32,24 +52,49 @@
 },
 
 "1" : {
+	"previousQuest" : 0,
 	"@type" : "Quest",
 	"exp" : 35,
 	"name" : "Crafting tutorial",
 	"startMsg" : "
-		So, {PLAYER}, you liked using that axe, huh? [Uhh...]=>
-		Guess what, I can show you how to make one yourself. You can even make other great tools that'll help you in this cruel world. [I'm interested]=>
-		Well, let me remember... Ah! Bring me some small rocks. {ITEM_OBJECTIVE}, to be more specific. You can find them near boulders. It won't be easy to gather them with your bare hands, but it's worth it, trust me!=>
-		## * To gather small rocks, approach a boulder and interact with it.
+		So, {PLAYER}, you liked using that axe, huh?
+		/Button(Uhh...)
+		=>
+		
+		Guess what, I can show you how to make one yourself. You can even make other great tools that'll help you in this cruel world.
+		/Button(I'm interested)
+		=>
+		
+		Well, let me remember... Ah! Bring me some small rocks. {ITEM_OBJECTIVE}, to be more specific. You can find them near boulders. It won't be easy to gather them with your bare hands, but it's worth it, trust me!
+		=>
+		
+		/Title()
+		* To gather small rocks, approach a boulder and interact with it.
 	",
 
 	"endMsg" : "
-		That's what I'm talking about!=>
-		So, to make a tool or really anything you can imagine you need to gather ingredients for it first.=>
-		Or you can just buy a recipe from crafts master, but it's more fullfilling to figure out the recipe yourself, isn't it?=>
-		Well, I did my part, you did yours. If you need something - just ask! Bye!=>
-		## * To figure out a recipe, you need to gather some resources and open \"craft\" menu from inventory. If you find new resources that can be used in some recipe, a new entry will appear on the craft screen as well as the notification in the game log.=>
-		## * For example, if you gather some sticks and small rocks, you'll unlock a couple of new recipes. Go try it out.=>
-		Oh... I didn't give you any reward? You can have my leftover {ITEM_REWARD}, it even still has candles in it! [Ugh... Cool... Thanks?]
+		That's what I'm talking about!
+		=>
+		
+		So, to make a tool or really anything you can imagine you need to gather ingredients for it first.
+		=>
+		
+		Or you can just buy a recipe from crafts master, but it's more fullfilling to figure out the recipe yourself, isn't it?
+		=>
+		
+		Well, I did my part, you did yours. If you need something - just ask! Bye!
+		=>
+		
+		/Title()
+		* To figure out a recipe, you need to gather some resources and open \"craft\" menu from inventory. If you find new resources that can be used in some recipe, a new entry will appear on the craft screen as well as the notification in the game log.
+		=>
+		
+		/Title()
+		* For example, if you gather some sticks and small rocks, you'll unlock a couple of new recipes. Go try it out.
+		=>
+		
+		Oh... I didn't give you any reward? You can have my leftover {ITEM_REWARD}, it even still has candles in it!
+		/Button(Ugh... Cool... Thanks?)
 	",
 
 	"reqMsg" : "Have you gathered those {ITEM_OBJECTIVE} I asked you for yet?",
@@ -58,29 +103,53 @@
 	"rewardItems" : "4/4",
 	"deleteRequiredItems" : false,
 	"removeOnCompletion" : "n",
-	"previousQuest" : 0,
 	"repeatable" : false
 },
 
 "2" : {
+	"previousQuest" : 1,
 	"@type" : "Quest",
 	"exp" : 40,
 	"name" : "New tableware",
 	"startMsg" : "
-		Oi, {PLAYER}! I need your help again. [What do you need this time?]=>
-		I need some clay to make myself new tableware because I broke every single dish when I was drunk yesterday... [I'm sorry for your... Uhm... Loss.]=>
-		Yeah, that sucks. You know how to dig things up don't you? [Of course! (I actually don't)]=>
-		## * To dig something up from the ground you need a tool. To be more specific - a shovel.=>
-		## * You can make one from sticks and small rocks. Just gather them, open your inventory, then craft menu and craft a stone shovel.=>
-		## * Then you need to find Flint and Clay somewhere.
+		Oi, {PLAYER}! I need your help again.
+		/Button(What do you need this time?)
+		=>
+		
+		I need some clay to make myself new tableware because I broke every single dish when I was drunk yesterday...
+		/Button(I'm sorry for your... Uhm... Loss.)
+		=>
+		
+		Yeah, that sucks. You know how to dig things up don't you?
+		/Button(Of course! (I actually don't))
+		=>
+		
+		/Title()
+		* To dig something up from the ground you need a tool. To be more specific - a shovel.
+		=>
+		
+		/Title()
+		* You can make one from sticks and small rocks. Just gather them, open your inventory, then craft menu and craft a stone shovel.
+		=>
+		
+		/Title()
+		* Then you need to find Flint and Clay somewhere.
 		When you find a thing to dig up, just take your shovel in your hand, stand on the tile that contains the item you want to dig up
-		and press the button that appears on the screen. Alternatively, you can use \"U\" button on the keyboard.=>
+		and press the button that appears on the screen. Alternatively, you can use \"U\" button on the keyboard.
+		=>
+		
 		Hmmm... I believe you. Okay, dig up {ITEM_OBJECTIVE} pieces and bring them to me. I'll pay you {ITEM_REWARD} for your work.
 	",
 
 	"endMsg" : "
-		Thanks, brother! I'm beginning to think that I might even invite you to our faction... [Your faction?]=>
-		Yeah, I'm a member of \"The Partisans of The Dead Lands\" faction. What a pretentious name, don't you think? [Meh]=>
+		Thanks, brother! I'm beginning to think that I might even invite you to our faction...
+		/Button(Your faction?)
+		=>
+		
+		Yeah, I'm a member of \"The Partisans of The Dead Lands\" faction. What a pretentious name, don't you think?
+		/Button(Meh)
+		=>
+		
 		So... Let's talk about this later. I need to contact our leader about you.
 	",
 
@@ -89,31 +158,65 @@
 	"giveItems" : "n",
 	"rewardItems" : "21/125",
 	"removeOnCompletion" : "n",
-	"previousQuest" : 1,
 	"repeatable" : false
 },
 
 "3" : {
+	"previousQuest" : 2,
 	"@type" : "Quest",
 	"exp" : 50,
 	"name" : "The Dungeon Key",
 	"startMsg" : "
-		Listen, {PLAYER}, yesterday I heard some loud noises from underground. I think it's the dungeon. Again. [Dungeon?]=>
-		Oh well, I forgot you didn't remember anything... I'll explain later. What's important now is the key's location. [A key? To the dungeon?]=>
-		Yeah, I kinda know about where to find one. But only a general location... [So... Where is it?]=>
-		It's somewhere one sector North from here... (5, 6), to be more accurate. You'll have to search the whole sector for it. [I guess I have no choice...]=>
-		You're right, {PLAYER}. You can't even imagine what would happen if monsters were to escape from the dungeon again.=>
-		## * To travel between unexplored sectors, you need a Travelling Kit.=>
-		Oh, yeah, here's my last travel kit. You won't make it to (5, 6) without it. [Thanks]=>
-		You need to find the key as soon as possible.[I'll do my best]=>
-		I believe in you. So head to the sector (5, 6) and find the dungeon key!=>
-		And... here - take these vegetables. You don't want to starve to death while searching for the key, do you? [Thanks]=>
-		## * To move to the next sector you need to approach the edge of the current one and press \"N\" when a prompt in the game log appears.
+		Listen, {PLAYER}, yesterday I heard some loud noises from underground. I think it's the dungeon. Again.
+		/Button(Dungeon?)
+		=>
+		
+		Oh well, I forgot you didn't remember anything... I'll explain later. What's important now is the key's location.
+		/Button(A key? To the dungeon?)
+		=>
+		
+		Yeah, I kinda know about where to find one. But only a general location...
+		/Button(So... Where is it?)
+		=>
+		
+		It's somewhere one sector North from here... (5, 6), to be more accurate. You'll have to search the whole sector for it.
+		/Button(I guess I have no choice...)
+		=>
+		
+		You're right, {PLAYER}. You can't even imagine what would happen if monsters were to escape from the dungeon again.
+		=>
+		
+		/Title()
+		* To travel between unexplored sectors, you need a Travelling Kit.
+		=>
+		
+		Oh, yeah, here's my last travel kit. You won't make it to (5, 6) without it.
+		/Button(Thanks)
+		=>
+		
+		You need to find the key as soon as possible.
+		/Button(I'll do my best)
+		=>
+		
+		I believe in you. So head to the sector (5, 6) and find the dungeon key!
+		=>
+		
+		And... here - take these vegetables. You don't want to starve to death while searching for the key, do you?
+		/Button(Thanks)
+		=>
+		
+		/Title()
+		* To move to the next sector you need to approach the edge of the current one and press \"N\" when a prompt in the game log appears.
 	",
 
 	"endMsg" : "
-		That's excellent news, {PLAYER}. Here's your reward: 80 coins. It's not much, but you might need them if you meet any traders in the dungeon.=>
-		Oh... You need some kind of weapon? Take this. [A toy sword? Duh.]=>
+		That's excellent news, {PLAYER}. Here's your reward: 80 coins. It's not much, but you might need them if you meet any traders in the dungeon.
+		=>
+		
+		Oh... You need some kind of weapon? Take this.
+		/Button(A toy sword? Duh.)
+		=>
+		
 		Talk to me again as soon as possible and I'll explain you how to enter the dungeon!
 		",
 
@@ -123,25 +226,53 @@
 	"giveItems" : "130/1:47/3:49/2",
 	"rewardItems" : "21/80:85/1",
 	"removeOnCompletion" : "n",
-	"previousQuest" : 2,
 	"repeatable" : false
 },
 
 "4" : {
+	"previousQuest" : 3,
 	"@type" : "Quest",
 	"exp" : 90,
 	"name" : "Entrance to the Dungeon",
 	"startMsg" : "
-		It's finally the time for you to go to the dungeon, {PLAYER}. [I'm kinda nervous]=>
-		Well, don't worry. By doing this you'll save us both![Both? What about your faction?]=>
-		Oh... Uhmm... It's a long story, but the thing is... I got lost. [What?!] =>
-		The last thing I remember was crossing the desert with my group. Then a bright flash and complete darkness afterwards. When I finally regained consciousness, I was here. My group was nowhere to be seen. All my equipment - gone. I was wandering desperately for a few weeks and then decided to set up a camp here. [So how long has it been?]=>
-		Since I'm here all alone? About half a year. I can't tell exactly. But hey, when you appeared here out of nowhere you definitely gave me some more hope! We will escape this place. But first, if the dungeon releases its beasts, we'll be dead in no time. So back to the dungeon stuff. [Okay]=>
-		So, you must find an entrance to the dungeon. It looks like a trapdoor, and, well, it is. It's locked, but now that you have the key - it's not a problem.=>
-		When you open the trapdoor, just carefully climb down to the dungeon. [Understood]=>
-		## * To go underground, you have to unlock dungeon trapdoor and then stand on a \"hole in the ground\" tile and press \"use\" button or the on-screen pop-up button. => 
-		Almost forgot, here you go - my last Dungeon Search scroll. Take it. Use it to find the Dungeon Entrance. Good luck, {PLAYER}! =>
-		## * To use a scroll, open your inventory, click on it with RMB and press \"Use\" button.=>
+		It's finally the time for you to go to the dungeon, {PLAYER}.
+		/Button(I'm kinda nervous)
+		=>
+		
+		Well, don't worry. By doing this you'll save us both!
+		/Button(Both? What about your faction?)
+		=>
+		
+		Oh... Uhmm... It's a long story, but the thing is... I got lost.
+		/Button(What?!)
+		=>
+		
+		The last thing I remember was crossing the desert with my group. Then a bright flash and complete darkness afterwards. When I finally regained consciousness, I was here. My group was nowhere to be seen. All my equipment - gone. I was wandering desperately for a few weeks and then decided to set up a camp here.
+		/Button(So how long has it been?)
+		=>
+		
+		Since I'm here all alone? About half a year. I can't tell exactly. But hey, when you appeared here out of nowhere you definitely gave me some more hope! We will escape this place. But first, if the dungeon releases its beasts, we'll be dead in no time. So back to the dungeon stuff.
+		/Button(Okay)
+		=>
+		
+		So, you must find an entrance to the dungeon. It looks like a trapdoor, and, well, it is. It's locked, but now that you have the key - it's not a problem.
+		=>
+		
+		When you open the trapdoor, just carefully climb down to the dungeon.
+		/Button(Understood)
+		=>
+		
+		/Title()
+		* To go underground, you have to unlock dungeon trapdoor and then stand on a \"hole in the ground\" tile and press \"use\" button or the on-screen pop-up button.
+		=> 
+		
+		Almost forgot, here you go - my last Dungeon Search scroll. Take it. Use it to find the Dungeon Entrance. Good luck, {PLAYER}!
+		=>
+		
+		/Title()
+		* To use a scroll, open your inventory, click on it with RMB and press \"Use\" button.
+		=>
+		
 		Kill {KILL_OBJECTIVE} and report back. I'll be waiting for you here. If you return alive, I'll even give you {ITEM_REWARD} as a reward. Good luck.
 	",
 
@@ -155,18 +286,26 @@
 	",
 	"rewardItems" : "21/200",
 	"removeOnCompletion" : "n",
-	"previousQuest" : 3,
 	"repeatable" : false
 },
 
 "5" : {
+	"previousQuest" : 1,
 	"@type" : "Quest",
 	"exp" : 15,
 	"name" : "Beer",
 	"startMsg" : "
-		Yo {PLAYER}! It's kinda hot in here. I'd reeeally love to have some beer right now. [What are you, alcoholic?]=>
-		Meh, say what you want about me, but bring me {ITEM_OBJECTIVE}. I'll pay you {ITEM_REWARD} for it. Deal?[Okay]=>
-		## * You can craft beer using sour and spicy leaves which can be gathered from bushes. [Cool]
+		Yo {PLAYER}! It's kinda hot in here. I'd reeeally love to have some beer right now.
+		/Button(What are you, alcoholic?)
+		=>
+		
+		Meh, say what you want about me, but bring me {ITEM_OBJECTIVE}. I'll pay you {ITEM_REWARD} for it. Deal?
+		/Button(Okay)
+		=>
+		
+		/Title()
+		* You can craft beer using sour and spicy leaves which can be gathered from bushes.
+		/Button(Cool)
 	",
 
 	"endMsg" : "Nice job, {PLAYER}. Here are your coins.",
@@ -176,8 +315,7 @@
 	"giveItems" : "n",
 	"rewardItems" : "21/75",
 	"removeOnCompletion" : "n",
-	"repeatable" : false,
-	"previousQuest" : 1
+	"repeatable" : false
 },
 
 "6" : {
@@ -185,12 +323,25 @@
 	"exp" : 50,
 	"name" : "Farming tutorial",
 	"startMsg" : "
-		Greetings, young man! What's your name? {PLAYER}? Hmmm... Tell me, {PLAYER}, do you want to know about farming crops? [Yes?]=>
+		Greetings, young man! What's your name? {PLAYER}? Hmmm... Tell me, {PLAYER}, do you want to know about farming crops?
+		/Button(Yes?)
+		=>
+		
 		Then I'll teach you everything you'll ever need to know to become the greatest farmer ever!
-			First of all, you need to plow a couple of tiles of soil. You can do it with a hoe while standing on a grass tile.[Please, continue]=>
-		After that, you need something to plant into the soil: some kind of seeds. I'll give you a handful of some seeds so that you can train on them. [Thanks]=>
-		And then you plant your seeds while standing on a plowed soil tile and wait until your crops fully grow. [And that's it?]=>
-		Yeah, it's that simple. Go try it out and bring me {ITEM_OBJECTIVE} once they grow. [Understood]
+		First of all, you need to plow a couple of tiles of soil. You can do it with a hoe while standing on a grass tile.
+		/Button(Please, continue)
+		=>
+		
+		After that, you need something to plant into the soil: some kind of seeds. I'll give you a handful of some seeds so that you can train on them.
+		/Button(Thanks)
+		=>
+		
+		And then you plant your seeds while standing on a plowed soil tile and wait until your crops fully grow.
+		/Button(And that's it?)
+		=>
+		
+		Yeah, it's that simple. Go try it out and bring me {ITEM_OBJECTIVE} once they grow.
+		/Button(Understood)
 	",
 
 	"endMsg" : "Well done! You are going to be a great farmer... someday! Take these potato seeds as a reward.",
@@ -204,14 +355,25 @@
 },
 
 "7" : {
+	"previousQuest" : 2,
 	"@type" : "Quest",
 	"exp" : 40,
 	"name" : "Toughening up",
 	"startMsg" : "
-		Hey, {PLAYER}! I don't think you are ready to go to the dungeon just yet. I need to show you something. [Huh?]=>
+		Hey, {PLAYER}! I don't think you are ready to go to the dungeon just yet. I need to show you something.
+		/Button(Huh?)
+		=>
+		
 		Here - you can build a sewing machine and make yourself some clothes from plant fiber. They'll protect you from monsters you'll meet in the dungeon.
-		About the resources you'll need... Hmm... Ah, yes! I think you'll need some sharp sticks, flint and small rocks. Not sure about the quantity.[Oh, ok]=>
-		## * To build a sewing machine, open Build Menu and click on the Sewing Machine button (the button will appear in the menu once you've collected at least 1 of every required resource) [Ok]=>
+		About the resources you'll need... Hmm... Ah, yes! I think you'll need some sharp sticks, flint and small rocks. Not sure about the quantity.
+		/Button(Oh, ok)
+		=>
+		
+		/Title()
+		* To build a sewing machine, open Build Menu and click on the Sewing Machine button (the button will appear in the menu once you've collected at least 1 of every required resource)
+		/Button(Ok)
+		=>
+		
 		Hmm... Then, craft at least {ITEM_OBJECTIVE} and talk to me again. See ya.
 	",
 
@@ -223,8 +385,7 @@
 	"giveItems" : "n",
 	"rewardItems" : "21/35",
 	"removeOnCompletion" : "n",
-	"repeatable" : false,
-	"previousQuest" : 2
+	"repeatable" : false
 },
 
 "8" : {
@@ -232,9 +393,17 @@
 	"exp" : 15,
 	"name" : "Farm animals tutorial",
 	"startMsg" : "
-		{PLAYER}, today I'll teach you about farm animals. =>
-		You must've seen some chickens and cows walking around here. So, you can feed them some hay and they will produce something for you: cows will produce milk, chikens will give you some eggs and so on.[Cool]=>
-		To get hay you must build a Wheelbarrow first, but if you don't have one already, I'll give you some hay to test things out. [Thanks]=>
+		{PLAYER}, today I'll teach you about farm animals.
+		=>
+		
+		You must've seen some chickens and cows walking around here. So, you can feed them some hay and they will produce something for you: cows will produce milk, chikens will give you some eggs and so on.
+		/Button(Cool)
+		=>
+		
+		To get hay you must build a Wheelbarrow first, but if you don't have one already, I'll give you some hay to test things out.
+		/Button(Thanks)
+		=>
+		
 		Well, go feed some cows and bring me {ITEM_OBJECTIVE}. The rest is yours.
 	",
 
@@ -254,11 +423,18 @@
 	"name" : "Fishing tutorial",
 	"startMsg" : "
 		Ahoy, {PLAYER}! Ye know, 'tis been a pretty long time since I... materialized here, 'n I really miss th' scent o' good ole fish!
-		So ye know wha'? Go catch {ITEM_OBJECTIVE} 'n brin' them t' me.[Okay...]=>
+		So ye know wha'? Go catch {ITEM_OBJECTIVE} 'n brin' them t' me.
+		/Button(Okay...)
+		=>
+		
 		Here's some worms that ye can use as bait.
 		As fer th' fishin' rod... Ye can craft it from sticks 'n plant threads.
-		I believe in ye, mate.=>
-		## * To fish in a body of water you need to equip a fishing rod and some kind of bait (for example, worms). Then you have to approach a water tile and click on it to start fishing. [Cool]
+		I believe in ye, mate.
+		=>
+		
+		/Title()
+		* To fish in a body of water you need to equip a fishing rod and some kind of bait (for example, worms). Then you have to approach a water tile and click on it to start fishing.
+		/Button(Cool)
 	",
 
 	"endMsg" : "Thank ye. Here's some gold fer ye.",
@@ -272,11 +448,15 @@
 },
 
 "10" : {
+	"previousQuest" : 6,
 	"@type" : "Quest",
 	"exp" : 95,
 	"name" : "Pickletastic",
 	"startMsg" : "
-		Good day to you, {PLAYER}. I've been craving some pickles lately... [And how can I help?] =>
+		Good day to you, {PLAYER}. I've been craving some pickles lately...
+		/Button(And how can I help?)
+		=>
+		
 		That's the right question! Grow me {ITEM_OBJECTIVE} and I'll reward you with riches you've never seen before...
 		Okay, maybe I'm exaggerating a little, but what do you think, will {ITEM_REWARD} be ok for you?
 	",
@@ -288,8 +468,7 @@
 	"giveItems" : "n",
 	"rewardItems" : "21/750",
 	"removeOnCompletion" : "n",
-	"repeatable" : false,
-	"previousQuest" : 6
+	"repeatable" : false
 },
 
 "11" : {
@@ -297,13 +476,25 @@
 	"exp" : 115,
 	"name" : "Iron ore",
 	"startMsg" : "
-		Hey, are you going into that mine? Hm... Then I have a little task for you. [I'm listening] =>
-		I managed to mine some coal, but didn't find any iron. So can you mine {ITEM_OBJECTIVE} for me? I'll smelt it into ingots (2 from each ore) and take only 10 for myself, so {ITEM_REWARD} are yours. Deal? [Sounds okay]=>
-		## Click on the mine entrance to descend to the mines.
+		Hey, are you going into that mine? Hm... Then I have a little task for you.
+		/Button(I'm listening)
+		=>
+		
+		I managed to mine some coal, but didn't find any iron. So can you mine {ITEM_OBJECTIVE} for me? I'll smelt it into ingots (2 from each ore) and take only 10 for myself, so {ITEM_REWARD} are yours. Deal?
+		/Button(Sounds okay)
+		=>
+		
+		/Title()
+		Click on the mine entrance to descend to the mines.{br}
 		* You'll need a pickaxe to mine iron ore.
 	",
 
-	"endMsg" : "Whoa, you're back. Let's get down to smelting...=>Phew, here you go, your 50 iron ingots. Thanks for the hard work!",
+	"endMsg" : "
+		Whoa, you're back. Let's get down to smelting...
+		=>
+		
+		Phew, here you go, your 50 iron ingots. Thanks for the hard work!
+	",
 
 	"reqMsg" : "Mine {ITEM_OBJECTIVE}.",
 	"reqItems" : "23/30",
@@ -311,6 +502,99 @@
 	"rewardItems" : "72/50",
 	"removeOnCompletion" : "n",
 	"repeatable" : false
-}
+},
 
+"12" : {
+	"@type" : "Quest",
+	"exp" : 25,
+	"name" : "Helpful stranger",
+	"startMsg" : "
+		Oh, hello there. Didn't notice you.
+		/Button(Hello... Sir, I need he...)
+		=>
+		
+		Uhm... I haven't seen you here before, who are you?
+		/Button(My... My name is...)
+		=>
+		
+		Well, to be honest, it doesn't matter. Not in this place.
+		{p}You seem lost... You know what? If you can...
+		/Button(I think I'm about to pass out, please help me)
+		=>
+		
+		Oh... You should've said earlier. Let's skip the introductions for now.
+		{p}There's a doctor nearby. He may be a weird fella, but he helped me before and didn't even take any money; he seems to just genuinely want to help people.
+		/Button(Well, where is he?)
+		=>
+		
+		Look, right there!
+		/Button(Well, I better hurry up while I can still walk. /OnClick: addDoctorWaypoint)
+		
+		/Lua/
+		addDoctorWaypoint = function()
+			local map = world:getCurLoc();
+			map:spawnMobs('56', 20, 50);
+			map:addWaypoint(map:locateNpc(56)):setDestinationName('Doctor');
+		end
+	",
+
+	"endMsg" : "",
+	"reqMsg" : "",
+	"reqItems" : "n",
+	"giveItems" : "n",
+	"rewardItems" : "n",
+	"removeOnCompletion" : "n",
+	"repeatable" : false
+},
+
+"13" : {
+	"@type" : "Quest",
+	"exp" : 10,
+	"name" : "Plague doctor",
+	"startMsg" : "
+		Greetings, weary wanderer. Reveal unto me the affliction that plagues thee this day, fear not the darkness that resides within.
+		/Button(Are you a plague doctor?)
+		=>
+		
+		Indeed, I comprehend thy perplexity, for I, akin to all others whom I have encountered, remain oblivious to the enigma that brought me hither. Perchance 'tis the handiwork of witches or even the vile grip of Satan himself, seeking to shatter my resolve. Yet, surrender is not within my nature.
+		{p}Therefore, dear patient, allow me to administer my healing touch upon thee.
+		/Button(Finally...)
+		=>
+		
+		/Title()
+		* The doctor retrieves a leech from his pocket, swiftly positioning it on your arm. With a voracious appetite, the leech begins to extract your blood.
+		{p}Next, he procures a vial containing an enigmatic liquid and instructs you to consume it. Trusting his judgment, you comply and consume the mysterious substance.
+		/Button(Hmmm... I feel much better now /OnClick: removeHeadacheEffect)
+		=>
+		
+		Lo and behold! As foretold, thou shalt find solace in my care! I am the epitome of a revered physician, unmatched by any who have trod this mortal realm!
+		{p}Pray, be advised, no material recompense is necessary. The sight of my patients reclaiming their well-being is beyond measure, exceeding the boundaries of mere currency.
+		/Button(Thanks, I guess...)
+		=>
+		
+		/Title()
+		* That stranger is still on your mind. Maybe he has some valuable information? You think you should return to him.
+		/Button(Proceed /OnClick: addTutorialWaypoint)
+		
+		/Lua/
+		local removeHeadacheEffect = function()
+			local fx = utils:getWorldEffects();
+			fx:disableEffect('BlackAndWhiteEffect');
+			fx:disableEffect('FilmGrainEffect');
+		end
+		
+		local addTutorialWaypoint = function()
+			local map = world:getCurLoc();
+			map:addWaypoint(map:locateNpc(5)):setDestinationName('Mysterious stranger');
+		end
+	",
+
+	"endMsg" : "",
+	"reqMsg" : "",
+	"reqItems" : "n",
+	"giveItems" : "n",
+	"rewardItems" : "n",
+	"removeOnCompletion" : "n",
+	"repeatable" : false
+}
 }

@@ -72,7 +72,7 @@
 		"faction" : "Partisans",
 		"type" : "QuestMaster",
 		"defaultState": "Still",
-		"questList" : [ 0, 1, 2, 3, 4, 5, 7 ],
+		"questList" : [ 12, 0, 1, 2, 3, 4, 5, 7 ],
 		"spawnOnce" : true,
 		"friendly" : true
 	},
@@ -751,5 +751,19 @@
 		"rewardExp" : 7,
 		"type" : "Npc",
 		"friendly" : false
+	},
+	"56" : {
+		"name" : "Plague doctor",
+		"hp" : 100,
+		"strength" : 10,
+		"accuracy" : 10,
+		"dexterity" : 5,
+		"rewardExp" : 0,
+		"faction" : "Partisans",
+		"type" : "QuestMaster",
+		"defaultState": "Still",
+		"questList" : [ 13 ],
+		"spawnOnce" : true,
+		"friendly" : true
 	}
 }

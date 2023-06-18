@@ -34,7 +34,6 @@ import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.gamecontent.Items;
 import hitonoriol.madsand.gamecontent.Npcs;
 import hitonoriol.madsand.gamecontent.Objects;
-import hitonoriol.madsand.gamecontent.Tiles;
 import hitonoriol.madsand.gamecontent.WorldGenPresets;
 import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.widgets.waypoint.StaticWaypointArrow;
@@ -48,6 +47,7 @@ import hitonoriol.madsand.util.Functional;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.world.Location;
 import hitonoriol.madsand.world.worldgen.RollList;
+import me.xdrop.fuzzywuzzy.FuzzySearch;
 
 public class Map {
 	public static final Map nullMap = new Map(0, 0);
@@ -843,7 +843,10 @@ public class Map {
 
 	public boolean putCrop(int x, int y, Crop crop) {
 		var coords = new Pair(x, y);
-		if (!validCoords(coords) || objectExists(x, y) || (getTile(x, y).id() != Items.all().getCropSoil(crop.getSeedsId())))
+		if (
+			!validCoords(coords) || objectExists(x, y)
+				|| (getTile(x, y).id() != Items.all().getCropSoil(crop.getSeedsId()))
+		)
 			return false;
 
 		return add(coords, crop);
@@ -1072,46 +1075,48 @@ public class Map {
 		return Pair.nullPair;
 	}
 
-	@SuppressWarnings("unchecked")
-	private <T> Pair locate(T thing, boolean exact) {
-		HashMap<Pair, T> mapThings;
-
-		if (thing instanceof Tile)
-			mapThings = (HashMap<Pair, T>) mapTiles;
-		else if (thing instanceof MapObject)
-			mapThings = (HashMap<Pair, T>) mapObjects;
-		else
-			return Pair.nullPair;
-
-		if (!mapThings.containsValue(thing))
-			return Pair.nullPair;
-
-		for (Entry<Pair, T> entry : mapThings.entrySet())
-			if (exact) {
-				if (entry.getValue() == thing)
-					return entry.getKey();
-			} else {
-				if (entry.getValue().equals(thing))
-					return entry.getKey();
-			}
+	private <T> Pair locate(HashMap<Pair, T> thingMap, Predicate<T> predicate) {
+		for (Entry<Pair, T> entry : thingMap.entrySet()) {
+			if (predicate.test(entry.getValue()))
+				return entry.getKey();
+		}
 
 		return Pair.nullPair;
 	}
+	
+	private Pair locateByName(HashMap<Pair, ? extends MapEntity> thingMap, String name) {
+		var match = FuzzySearch.extractOne(
+			name,
+			thingMap.entrySet(),
+			entry -> entry.getValue().getName()
+		).getReferent();
+		
+		return match != null ? match.getKey() : Pair.nullPair;
+	}
+	
 
 	public Pair locateTile(int id) {
-		return locate(Tiles.all().get(id), false);
-	}
-
-	public Pair locateObject(int id) {
-		return locate(Objects.all().get(id), false);
-	}
-
-	public Pair locateObject(MapObject object) {
-		return locate(object, true);
+		return locate(mapTiles, tile -> tile.id() == id);
 	}
 
 	public Pair locateTile(Tile tile) {
-		return locate(tile, true);
+		return locate(mapTiles, mapTile -> mapTile == tile);
+	}
+
+	public Pair locateObject(int id) {
+		return locate(mapObjects, object -> object.id() == id);
+	}
+
+	public Pair locateObject(MapObject object) {
+		return locate(mapObjects, mapObject -> mapObject == object);
+	}
+
+	public Pair locateNpc(int id) {
+		return locate(mapNpcs, npc -> npc.id == id);
+	}
+
+	public Pair locateNpc(String name) {
+		return locateByName(mapNpcs, name);
 	}
 
 	public Pair locateDiggableTile() {

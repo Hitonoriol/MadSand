@@ -431,7 +431,7 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 
 	// list string format: id1/quantity1:id2/quantity2:...
 	public static void parseListString(String listString, BiConsumer<Integer, Integer> listItemConsumer) {
-		if (listString.equals(EMPTY_ITEM))
+		if (listString.equals(EMPTY_ITEM) || listString.isEmpty())
 			return;
 
 		if (!listString.contains(BLOCK_DELIM))

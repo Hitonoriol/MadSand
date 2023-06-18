@@ -7,7 +7,7 @@ Available bindings:
 	* Print & Dialog utils:
 		* utils:print() -- print to in-game log
 		* utils:notice() -- print to in-game log with noticeColor
-		* utils:showDialog(query) -- generates dialog chain from string query ( #Title#Dialog text[button text]=>#Next title#next dialog text[btn]=>.... )
+		* utils:showDialog(query) -- generates dialog chain from string query ( /Title(Title)Dialog text[button text]=>/Title(Next title)next dialog text[btn]=>.... )
 
 	* Map editing:
 		local map = world:getCurLoc();

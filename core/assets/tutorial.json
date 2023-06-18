@@ -1,7 +1,7 @@
 {
 	"strings" : {
 		"GameStart" : "
-			%Welcome%
+			/DefaultTitle(Welcome)
 			{FASTER}
 			Welcome to MadSand, {PLAYER}!
 			{p}This game *someday will be* an open-world survival sandbox RPG.
@@ -9,9 +9,9 @@
 			{p}If I were you, I'd start by exploring and interacting with things.
 			{p}To interact with an object or NPC, approach it and click on it with LMB or click on it with RMB and choose the \"interact\" option, or, for keyboard lovers - turn your character to it using arrow keys and press enter.
 			{p}Via interaction with objects you can gather resources that can be crafted into something or sold to a trader. You'll have to gather all the needed components for a certain item to unlock a craft recipe for it.
-			{p}And if you decide to interact with an NPC, you can talk to them by left clicking. Some NPCs can give you various tasks and some can trade with you. [I didn't ask, but thanks!] =>
+			{p}And if you decide to interact with an NPC, you can talk to them by left clicking. Some NPCs can give you various tasks and some can trade with you. /Button(I didn't ask, but thanks!) =>
 
-			#Controls#
+			/Title(Controls)
 			{FASTER}
 			And almost forgot, here are the controls:
 			{p}
@@ -23,26 +23,26 @@
 			* LMB click on yourself or Space - rest for a turn{br}
 			* U or LMB click on the \"Hand\" equip slot - use currently held placeable block or placeable tile (or a special tool, for example, hoe){br}
 			* G or \"Save game\" button in ESC menu  - save current world{br}
-			[Woah, thanks!]
+			/Button(Woah, thanks!)
 		",
 		
 		"LowStamina" : "
-			%Low Stamina%
-			Easy there, {PLAYER}! You are about to deplete your stamina! [Oops. What's dat?] =>
+			/DefaultTitle(Low Stamina)
+			Easy there, {PLAYER}! You are about to deplete your stamina! /Button(Oops. What's dat?) =>
 			Stamina is used to gather resources, or use items. It regenerates once per time tick when your satiation level (food) is above certain percent. =>
-			#Resting# You can replenish your stamina by resting. To rest for 1 tick, press space or click on yourself with LMB. To rest until the stamina is fully restored, click on your character with RMB and choose the \"Rest fully\" option.=>
-			If you deplete your stamina, you won't be able to do any stamina-dependent activities until your stamina is at least partially replenished. [Oh. I see.] =>
+			/Title(Resting) You can replenish your stamina by resting. To rest for 1 tick, press space or click on yourself with LMB. To rest until the stamina is fully restored, click on your character with RMB and choose the \"Rest fully\" option.=>
+			If you deplete your stamina, you won't be able to do any stamina-dependent activities until your stamina is at least partially replenished. /Button(Oh. I see.) =>
 			You'll also start losing 1 hp per time tick while your stamina is 0.
 		",
 		
 		"Travel" : "
-			%Travelling Kits%
+			/DefaultTitle(Travelling Kits)
 			Travelling kits are used to travel to a previously unexplored area.{br}
-			You can buy one from a trader or craft it from leather. [Nice]
+			You can buy one from a trader or craft it from leather. /Button(Nice)
 		",
 		
 		"DungeonKey" : "
-			%Dungeon Keys%
+			/DefaultTitle(Dungeon Keys)
 			You've just found your first dungeon key!{br}
 			They're used to unlock entrances to challenge dungeons. =>
 			You can find dungeon keys laying on altar pedestals in Dead Lands biome.{br}

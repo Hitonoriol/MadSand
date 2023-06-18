@@ -178,10 +178,14 @@ public class QuestWorker {
 
 		quest.start(player, npcUID);
 		quest.showQuestStartDialog();
+		
+		if (quest.isInstant())
+			completeQuest(quest);
 	}
 
 	private void completeQuest(Quest quest) {
-		MadSand.notice("You completed a quest!");
+		if (!quest.isInstant())
+			MadSand.notice("You completed a quest!");
 
 		if (quest.deleteRequiredItems)
 			player.inventory.delItem(quest.reqItems);
