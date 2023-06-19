@@ -1,7 +1,7 @@
 {
 
 "0" : {
-	"previousQuest" : 12,
+	"previousQuest" : 13,
 	"@type" : "Quest",
 	"exp" : 25,
 	"name" : "Introduction",
@@ -533,7 +533,7 @@
 		/Lua/
 		addDoctorWaypoint = function()
 			local map = world:getCurLoc();
-			map:spawnMobs('56', 20, 50);
+			map:spawnMobs('56', 1, 20, 50);
 			map:addWaypoint(map:locateNpc(56)):setDestinationName('Doctor');
 		end
 	",
