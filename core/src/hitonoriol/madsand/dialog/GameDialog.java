@@ -221,9 +221,17 @@ public class GameDialog extends Dialog {
 			proceedButton = button;
 
 		var cell = add(button)
-			.width(Math.max(Gui.BTN_WIDTH, Gui.getTextWidth(button.getText()) + BTN_TEXT_XPAD))
+			.width(
+				Math.min(
+					defaultWidth(),
+					Math.max(
+						Gui.BTN_WIDTH, Gui.getTextWidth(button.getText()) + BTN_TEXT_XPAD
+					)
+				)
+			)
 			.height(Gui.BTN_HEIGHT)
 			.padBottom(PADDING / 2);
+		button.getLabel().setWrap(true);
 		if (breakRow)
 			cell.row();
 		return cell;
