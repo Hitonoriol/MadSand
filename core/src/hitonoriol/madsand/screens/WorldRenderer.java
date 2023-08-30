@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.crashinvaders.vfx.effects.ChromaticAberrationEffect;
 import com.crashinvaders.vfx.effects.FilmGrainEffect;
@@ -54,18 +55,20 @@ public class WorldRenderer {
 	private static final float offsetFactor = 0.3f;
 	private boolean enableFloatingCamera = false;
 	private float frameDelta = 0;
+	
 	private ShaderManager shaderManager = new ShaderManager(batch);
-
+	private RadialDistortionEffect radialDistortion = new RadialDistortionEffect();
+	
 	private LightMap light = new LightMap();
 	private List<WorldAnimation> animations = new ArrayList<>();
 	private ConcurrentHashMap<Path, PathDescriptor> paths = new ConcurrentHashMap<>();
-
+	
 	private TextureRegion mapCursor = Textures.getTexture("misc/map_cursor");
 
 	public WorldRenderer() {
 		updateViewport();
-		var radialDistortion = new RadialDistortionEffect();
-		radialDistortion.setDistortion(0.25f);
+		
+		radialDistortion.setDistortion(0.1f);
 		radialDistortion.setZoom(0.85f);
 		shaderManager.addEffect(radialDistortion, true);
 		shaderManager.addEffect(new BlackAndWhiteEffect());
@@ -205,9 +208,8 @@ public class WorldRenderer {
 	}
 
 	private void drawMapCursor() {
-		int x = Mouse.wx, y = Mouse.wy;
 		if (!Mouse.hasClickAction())
-			batch.draw(mapCursor, x * Resources.TILESIZE, y * Resources.TILESIZE);
+			batch.draw(mapCursor, Mouse.wx * Resources.TILESIZE, Mouse.wy * Resources.TILESIZE);
 		else
 			drawPath(Mouse.getPathToCursor());
 	}
@@ -435,5 +437,51 @@ public class WorldRenderer {
 			duration -= delta;
 			return duration;
 		}
+	}
+	
+	public Vector2 projectScreenToWorld(Vector3 screenCoordsInTmp, Vector2 worldCoordsOut) {
+		if (!radialDistortion.isDisabled()) {
+			RadialDistortion.apply(screenCoordsInTmp, radialDistortion.getDistortion(), radialDistortion.getZoom());
+		}
+		
+		camera.unproject(screenCoordsInTmp);
+		return worldCoordsOut.set(screenCoordsInTmp.x, screenCoordsInTmp.y);
+	}
+	
+	public Vector2 projectWorldToScreen(Vector3 worldCoordsInTmp, Vector2 screenCoordsOut) {
+		camera.project(worldCoordsInTmp);
+		screenCoordsOut.set(worldCoordsInTmp.x, worldCoordsInTmp.y);
+		
+		if (!radialDistortion.isDisabled()) {
+			RadialDistortion.apply(worldCoordsInTmp, radialDistortion.getDistortion(), radialDistortion.getZoom());
+		}
+		
+		return screenCoordsOut.set(worldCoordsInTmp.x, worldCoordsInTmp.y);
+	}
+	
+	// Apply the same logic from the RadialDistortionEffect shader to screen coordinates
+	private static class RadialDistortion {
+	    static void screenToUV(Vector3 screenCoords) {
+	        float uvX = screenCoords.x / Gui.screenWidth();
+	        float uvY = 1.0f - screenCoords.y / Gui.screenHeight();
+	        screenCoords.set(uvX, uvY, 0);
+	    }
+	    
+	    static void uvToScreen(Vector3 uv) {
+	    	float screenX = uv.x * Gui.screenWidth();
+	        float screenY = (1.0f - uv.y) * Gui.screenHeight();
+	        uv.set(screenX, screenY, 0);
+	    }
+
+	    static final Vector3 half = new Vector3(0.5f, 0.5f, 0f);
+	    static Vector3 apply(Vector3 screenCoordsInTmp, float distortion, float zoom) {
+	    	screenToUV(screenCoordsInTmp);
+	        var cc = screenCoordsInTmp.cpy().sub(half); 		 // vec2 cc = coord - 0.5;
+	        float dist = cc.dot(cc) * distortion; 				 // float dist = dot(cc, cc) * distortion;
+	        screenCoordsInTmp.add(cc.scl((1.0f + dist) * dist)); // return (coord + cc * (1.0 + dist) * dist);
+	        screenCoordsInTmp.sub(half).scl(zoom).add(half); 	 // uv = 0.5 + (uv-0.5)*(zoom);
+	        uvToScreen(screenCoordsInTmp);
+	        return screenCoordsInTmp;
+	    }
 	}
 }

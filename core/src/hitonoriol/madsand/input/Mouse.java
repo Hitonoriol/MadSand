@@ -7,6 +7,7 @@ import java.util.function.BiConsumer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -29,7 +30,8 @@ public class Mouse {
 	public static int wx = 0, wy = 0; // Coords of the cell of map that mouse is currently pointing at
 	private static Set<Integer> heldButtons = new HashSet<>();
 
-	private static Vector3 worldCoords = new Vector3(0.0F, 0.0F, 0.0F);
+	private static Vector3 tmpCoords = new Vector3(0.0F, 0.0F, 0.0F);
+	private static Vector2 worldPosition = new Vector2();
 
 	private static BiConsumer<Integer, Integer> clickAction = null;
 
@@ -141,10 +143,11 @@ public class Mouse {
 		updScreenCoords();
 		Gui.overlay.getTooltip().moveTo(x, y);
 
-		worldCoords.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-		MadSand.getRenderer().getCamera().unproject(worldCoords);
-		wx = (int) Math.floor(worldCoords.x / Resources.TILESIZE);
-		wy = (int) Math.floor(worldCoords.y / Resources.TILESIZE);
+		tmpCoords.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+		MadSand.getRenderer().projectScreenToWorld(tmpCoords, worldPosition);
+
+		wx = (int) Math.floor(worldPosition.x / Resources.TILESIZE);
+		wy = (int) Math.floor(worldPosition.y / Resources.TILESIZE);
 
 		if (Gui.isGameUnfocused() || prevCoords.equals(wx, wy))
 			return;
@@ -318,12 +321,16 @@ public class Mouse {
 		return y;
 	}
 
+	public static Vector2 world() {
+		return worldPosition;
+	}
+	
 	public static float worldX() {
-		return worldCoords.x;
+		return worldPosition.x;
 	}
 
 	public static float worldY() {
-		return worldCoords.y;
+		return worldPosition.y;
 	}
 
 	public static boolean isButtonPressed(int button) {
