@@ -506,7 +506,7 @@
 
 "12" : {
 	"@type" : "Quest",
-	"exp" : 25,
+	"exp" : 0,
 	"name" : "Helpful stranger",
 	"startMsg" : "
 		Oh, hello there. Didn't notice you.
@@ -549,7 +549,7 @@
 
 "13" : {
 	"@type" : "Quest",
-	"exp" : 10,
+	"exp" : 0,
 	"name" : "Plague doctor",
 	"startMsg" : "
 		Greetings, weary wanderer. Reveal unto me the affliction that plagues thee this day, fear not the darkness that resides within.
