@@ -183,6 +183,16 @@ public class QuestWorker {
 			completeQuest(quest);
 	}
 
+	public void completionNotice(Quest quest) {
+		if (quest.isInstant())
+			return;
+		
+		MadSand.notice(
+			"You've just completed all objectives for the \"" + quest.name + "\". "
+				+ "Return to " + quest.getNpc().stats.name + " to claim your reward."
+		);
+	}
+	
 	private void completeQuest(Quest quest) {
 		if (!quest.isInstant())
 			MadSand.notice("You completed a quest!");
@@ -197,7 +207,9 @@ public class QuestWorker {
 		player.inventory.putItem(quest.rewardItems);
 		player.addExp(quest.exp);
 		player.getReputation().change(quest.getNpc().stats.faction, Reputation.QUEST_REWARD);
-		MadSand.notice("You get " + quest.exp + " EXP!");
+		
+		if (quest.exp > 0)
+			MadSand.notice("You get " + quest.exp + " EXP!");
 
 		if (!quest.repeatable)
 			completedQuests.add(quest);

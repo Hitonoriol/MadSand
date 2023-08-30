@@ -263,13 +263,6 @@ public class Quest implements Enumerable {
 		return MadSand.world().getCurLoc().getNpc(npcUID);
 	}
 
-	public void completionNotice() {
-		MadSand.notice(
-			"You've just completed all objectives for the \"" + name + "\". "
-				+ "Return to " + getNpc().stats.name + " to claim your reward."
-		);
-	}
-
 	protected void createEndMsg() {
 		endMsg += Resources.LINEBREAK + Resources.LINEBREAK;
 		endMsg += "Rewards:" + Resources.LINEBREAK;

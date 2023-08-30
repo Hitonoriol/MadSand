@@ -239,7 +239,7 @@ public class Overlay extends VFXStage {
 		quests.questsInProgress.stream()
 			.filter(quest -> quest.isComplete() && !quest.hasQuestArrow())
 			.forEach(quest -> {
-				quest.completionNotice();
+				quests.completionNotice(quest);
 				addWaypointArrow(quest.questArrow());
 			});
 	}
