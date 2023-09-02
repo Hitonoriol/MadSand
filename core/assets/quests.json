@@ -533,7 +533,7 @@
 		/Lua/
 		addDoctorWaypoint = function()
 			local map = world:getCurLoc();
-			map:spawnMobs('56', 1, 20, 50);
+			map:spawnMobs('56', 1, 20, 30);
 			map:addWaypoint(map:locateNpc(56)):setDestinationName('Doctor');
 		end
 	",
