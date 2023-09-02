@@ -80,7 +80,7 @@ public class AnimatedWorldText extends Group {
 			offset.y += verticalSpeed;
 
 		coordUpdater.run();
-		getRenderer().getCamera().project(screenPosition);
+		getRenderer().projectWorldToScreen(screenPosition);
 		screenPosition.x = Gui.relativeCenterX(screenPosition.x, objectWidth, label.getWidth() * getScaleX());
 		screenPosition.add(offset);
 	}

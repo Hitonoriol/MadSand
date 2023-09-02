@@ -2,6 +2,7 @@ package hitonoriol.madsand.entities.inventory.item;
 
 import java.util.function.Consumer;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -58,16 +59,16 @@ public class Projectile extends LevelBoundItem {
 	public void launchProjectile(Pair from, Pair to, Consumer<MapEntity> impactAction) {
 		final int imgSize = (int) (Resources.TILESIZE * MadSand.getRenderer().getCamZoom());
 		var projectileImg = new Image(Textures.getItem(id));
-		var screenCoords = new Vector3();
 		projectileImg.setOrigin(Align.center);
 		projectileImg.setSize(imgSize, imgSize);
 		projectileImg
 			.addAction(Actions.rotateTo((float) Math.toDegrees(Math.atan2(from.y - to.y, from.x - to.x)) + 90f));
 		Gui.overlay.addActor(projectileImg);
 
-		MadSand.getCamera().project(screenCoords.set(from.x, from.y, 0));
+		var screenCoords = new Vector2();
+		MadSand.getRenderer().projectWorldToScreen(from.x, from.y, screenCoords);
 		projectileImg.setPosition(screenCoords.x, screenCoords.y);
-		MadSand.getCamera().project(screenCoords.set(to.x, to.y, 0));
+		MadSand.getRenderer().projectWorldToScreen(to.x, to.y, screenCoords);
 
 		to.toWorld();
 		var map = MadSand.world().getCurLoc();

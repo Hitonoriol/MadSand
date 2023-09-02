@@ -62,7 +62,7 @@ public class WaypointArrow extends Group {
 			arrow.setVisible(false);
 			descriptionLabel.setText(name);
 			var screen = new Vector3(destination.x * Resources.TILESIZE, destination.y * Resources.TILESIZE, 0);
-			MadSand.getRenderer().getCamera().project(screen);
+			MadSand.getRenderer().projectWorldToScreen(screen);
 			descriptionLabel.setX(0);
 			addAction(Actions.moveTo(screen.x - getTextOffset(name), screen.y - Resources.TILESIZE / 2, ANIM_TIME));
 			return;

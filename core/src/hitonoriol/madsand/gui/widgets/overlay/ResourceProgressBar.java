@@ -68,7 +68,7 @@ public class ResourceProgressBar extends Table {
 		var player = MadSand.player();
 		var coords = new Vector3(player.x * Resources.TILESIZE, player.y * Resources.TILESIZE, 0);
 		final float playerWidth = player.getSprite().getRegionWidth();
-		MadSand.getCamera().project(coords);
+		MadSand.getRenderer().projectWorldToScreen(coords);
 		setPosition(Gui.relativeCenterX(coords.x, playerWidth, getWidth()), coords.y - YPADDING);
 		Gui.unfocusGame();
 		startGatheringAnimation();

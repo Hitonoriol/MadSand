@@ -40,7 +40,7 @@ import hitonoriol.madsand.vfx.ShaderManager;
 
 public class WorldRenderer {
 	public static final float TARGET_FRAME_DELTA = 1f / 60f;
-	public static final float MIN_ZOOM = 0.5f, MAX_ZOOM = 4.0f, DEFAULT_ZOOM = 1.5F;
+	public static final float MIN_ZOOM = 0.5f, MAX_ZOOM = 4.0f, DEFAULT_ZOOM = 1.25F;
 	private static final int OBJECT_LOOT = 7;
 	private static final int CAM_OFFSET_X = 0, CAM_OFFSET_Y = 37;
 
@@ -68,7 +68,7 @@ public class WorldRenderer {
 	public WorldRenderer() {
 		updateViewport();
 		
-		radialDistortion.setDistortion(0.1f);
+		radialDistortion.setDistortion(0.125f);
 		radialDistortion.setZoom(0.85f);
 		shaderManager.addEffect(radialDistortion, true);
 		shaderManager.addEffect(new BlackAndWhiteEffect());
@@ -439,24 +439,41 @@ public class WorldRenderer {
 		}
 	}
 	
-	public Vector2 projectScreenToWorld(Vector3 screenCoordsInTmp, Vector2 worldCoordsOut) {
+	public Vector3 projectScreenToWorld(Vector3 screenCoordsInOut) {
 		if (!radialDistortion.isDisabled()) {
-			RadialDistortion.apply(screenCoordsInTmp, radialDistortion.getDistortion(), radialDistortion.getZoom());
+			RadialDistortion.apply(screenCoordsInOut, radialDistortion.getDistortion(), radialDistortion.getZoom());
 		}
 		
-		camera.unproject(screenCoordsInTmp);
+		camera.unproject(screenCoordsInOut);
+		return screenCoordsInOut;
+	}
+	
+	public Vector3 projectWorldToScreen(Vector3 worldCoordsInOut) {
+		camera.project(worldCoordsInOut);
+
+		if (!radialDistortion.isDisabled()) {
+			RadialDistortion.apply(worldCoordsInOut, radialDistortion.getDistortion(), radialDistortion.getZoom());
+		}
+
+		return worldCoordsInOut;
+	}
+	
+	public Vector2 projectScreenToWorld(Vector3 screenCoordsInTmp, Vector2 worldCoordsOut) {
+		projectScreenToWorld(screenCoordsInTmp);
 		return worldCoordsOut.set(screenCoordsInTmp.x, screenCoordsInTmp.y);
 	}
 	
 	public Vector2 projectWorldToScreen(Vector3 worldCoordsInTmp, Vector2 screenCoordsOut) {
-		camera.project(worldCoordsInTmp);
-		screenCoordsOut.set(worldCoordsInTmp.x, worldCoordsInTmp.y);
-		
-		if (!radialDistortion.isDisabled()) {
-			RadialDistortion.apply(worldCoordsInTmp, radialDistortion.getDistortion(), radialDistortion.getZoom());
-		}
-		
+		projectWorldToScreen(worldCoordsInTmp);		
 		return screenCoordsOut.set(worldCoordsInTmp.x, worldCoordsInTmp.y);
+	}
+	
+	public Vector2 projectWorldToScreen(float worldX, float worldY, Vector2 screenCoordsOut) {
+		return projectWorldToScreen(new Vector3(worldX, worldY, 0), screenCoordsOut);
+	}
+	
+	public Vector2 projectScreenToWorld(float screenX, float screenY, Vector2 worldCoordsOut) {
+		return projectScreenToWorld(new Vector3(screenX, screenY, 0), worldCoordsOut);
 	}
 	
 	// Apply the same logic from the RadialDistortionEffect shader to screen coordinates
