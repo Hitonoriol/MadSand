@@ -42,6 +42,11 @@ public class Utils {
 		numberFormatter.setRoundingMode(RoundingMode.HALF_UP);
 	}
 
+	public static String colorizeText(String text, Color color) {
+		var str = color.toString();
+		return "[#" + str.substring(0, str.length() - 2) + "]" + text + "[]";
+	}
+	
 	public static void enableTimestampOutput() {
 		printTimestamp = true;
 	}

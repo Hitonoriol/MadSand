@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -39,6 +40,7 @@ import hitonoriol.madsand.gamecontent.Textures;
 import hitonoriol.madsand.gfx.TextureProcessor;
 import hitonoriol.madsand.lua.Lua;
 import hitonoriol.madsand.resources.Resources;
+import hitonoriol.madsand.util.RomanNumber;
 import hitonoriol.madsand.util.Utils;
 import hitonoriol.madsand.util.cast.DynamicallyCastable;
 
@@ -52,6 +54,7 @@ import hitonoriol.madsand.util.cast.DynamicallyCastable;
 		@Type(ScriptedConsumable.class) }
 )
 public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumerable {
+	public static final int MAX_TIER = 10;
 	private final static char NON_UNLOCKABLE_CHAR = 'X';
 	public final static String ITEM_DELIM = "/", BLOCK_DELIM = ":";
 	public final static String EMPTY_ITEM = "n";
@@ -71,6 +74,8 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 	@JsonProperty
 	public float weight = DEFAULT_WEIGHT;
 	public int cost;
+	@JsonProperty
+	private int tier = 1;
 	@JsonIgnore
 	private boolean textureFxModified = true;
 	public String useAction;
@@ -187,10 +192,30 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 		return info;
 	}
 
+	public String getTierString() {
+		boolean special = isSpecialTier();
+		float h = special ? 290 : (50 + 310 * ((float)tier / MAX_TIER));
+		float s = special ? 0.7f : 1.0f;
+		float v = special ? 1.0f : 0.64f;
+		var color = new Color(Color.BLACK);
+		
+		String tierString;
+		if (special) {
+			tierString = Utils.colorizeText("Special", color.fromHsv(h, s, v));
+		} else {
+			tierString = Utils.colorizeText("Tier", color.fromHsv(h, 0.2f, v)) + " "
+				+ Utils.colorizeText(RomanNumber.toRoman(tier), color.fromHsv(h, s, v));
+		}
+		
+		return Utils.colorizeText("[[", color.fromHsv(h, 0.3f, 1.0f))
+			+ tierString
+			+ Utils.colorizeText("]", color.fromHsv(h, 0.3f, 1.0f)); 
+	}
+	
 	@JsonIgnore
 	public String getInfoString() {
 		String info;
-		info = getFullName()
+		info = getTierString() + " " + getFullName()
 			+ Resources.LINEBREAK + Resources.LINEBREAK;
 
 		info += getMiscInfo() + Resources.LINEBREAK;
@@ -242,7 +267,24 @@ public class Item implements DynamicallyCastable<Item>, HotbarAssignable, Enumer
 
 	}
 
+	public void setSpecialTier() {
+		this.tier = -1;
+	}
+	
+	public boolean isSpecialTier() {
+		return tier == -1;
+	}
+	
+	protected final void setTier(int tier) {
+		this.tier = Math.min(MAX_TIER, Math.max(1, tier));
+	}
+	
+	public int getTier() {
+		return tier;
+	}
+	
 	protected final void setCategory(ItemCategory category, int tier) {
+		setTier(tier);
 		ItemCategories.get().addItem(id, category, tier);
 	}
 

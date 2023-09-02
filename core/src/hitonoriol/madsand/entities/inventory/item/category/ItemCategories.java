@@ -16,7 +16,7 @@ import hitonoriol.madsand.util.Utils;
  */
 
 public class ItemCategories {
-	public static final int MAX_TIER = 10, MAX_ITEMS = 350;
+	public static final int MAX_ITEMS = 350;
 	private Map<ItemCategory, List<ItemCategoryList>> categories = new HashMap<>();
 
 	private static final ItemCategories instance = new ItemCategories();
@@ -55,7 +55,7 @@ public class ItemCategories {
 		}
 		var range = new Pair();
 		capItemQuantity(items, item -> {
-			range.x = (int) ((tierDistribution(MAX_TIER - rolledTier) / 100d) * MAX_ITEMS) / 10;
+			range.x = (int) ((tierDistribution(Item.MAX_TIER - rolledTier) / 100d) * MAX_ITEMS) / 10;
 			range.y = Utils.rand(MAX_ITEMS / 20, MAX_ITEMS);
 			/*Utils.dbg("Rerolling quantity [%s]", range);*/
 			return range;
@@ -142,7 +142,7 @@ public class ItemCategories {
 
 	static {
 		Utils.out("Item tier distribution [T0 if all rolls failed]:");
-		for (int i = 1; i <= MAX_TIER; ++i)
+		for (int i = 1; i <= Item.MAX_TIER; ++i)
 			Utils.out("T%d = %f%%", i, tierDistribution(i));
 	}
 
@@ -155,7 +155,7 @@ public class ItemCategories {
 
 	public static int rollTier() {
 		double tierChance, rollResult = Utils.randPercent();
-		for (float tier = MAX_TIER; tier >= 0; --tier) {
+		for (float tier = Item.MAX_TIER; tier >= 0; --tier) {
 			tierChance = tierDistribution(tier);
 			if (Utils.percentRoll(rollResult, tierChance))
 				return (int) tier;
@@ -164,7 +164,7 @@ public class ItemCategories {
 	}
 
 	public static int clampTier(int tier) {
-		return Math.max(0, Math.min(tier, MAX_TIER));
+		return Math.max(0, Math.min(tier, Item.MAX_TIER));
 	}
 
 	public static ItemCategories get() {
