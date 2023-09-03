@@ -1,7 +1,7 @@
 package hitonoriol.madsand.gui.widgets.waypoint;
 
 public class StaticWaypointArrow extends WaypointArrow {
-	private final static int REMOVE_DST = 2;
+	private final static int REMOVE_DST = 1;
 
 	public StaticWaypointArrow(int x, int y) {
 		super(x, y);

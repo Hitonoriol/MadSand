@@ -286,6 +286,7 @@ public class Mouse {
 		}
 
 		else if (adjacentTileClicked) {
+			Gui.overlay.cellClicked(wx, wy);
 			player.lookAtMouse(wx, wy, true);
 
 			if (!npc.isNeutral())

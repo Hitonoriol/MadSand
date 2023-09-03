@@ -209,6 +209,15 @@ public class Overlay extends VFXStage {
 		return gameTooltip;
 	}
 
+	public void cellClicked(int x, int y) {
+		var arrow = getWaypointArrow(x, y);
+		if (arrow == null) 
+			return;
+		
+		arrow.remove();
+		refreshWaypointArrows();
+	}
+	
 	public WaypointArrow getWaypointArrow(int destX, int destY) {
 		return waypointArrows.stream()
 			.filter(arrow -> arrow.getDestination().equals(destX, destY))
