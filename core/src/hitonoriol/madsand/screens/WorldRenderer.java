@@ -37,6 +37,7 @@ import hitonoriol.madsand.resources.TextureMap;
 import hitonoriol.madsand.util.CameraShaker;
 import hitonoriol.madsand.vfx.BlackAndWhiteEffect;
 import hitonoriol.madsand.vfx.ShaderManager;
+import space.earlygrey.shapedrawer.ShapeDrawer;
 
 public class WorldRenderer {
 	public static final float TARGET_FRAME_DELTA = 1f / 60f;
@@ -49,12 +50,16 @@ public class WorldRenderer {
 	private float zoom = DEFAULT_ZOOM;
 
 	private SpriteBatch batch = new SpriteBatch();
+	private ShapeDrawer shapeDrawer = new ShapeDrawer(batch, Textures.getTexture("misc/pixel"));
 	private OrthographicCamera camera = new OrthographicCamera();
 	private CameraShaker shaker = new CameraShaker(camera);
 	private static final float cameraRadius = 300;
 	private static final float offsetFactor = 0.3f;
 	private boolean enableFloatingCamera = false;
 	private float frameDelta = 0;
+	
+	private Vector2 shadowOffset = new Vector2(4f, -2.5f);
+	private Color shadowColor = new Color(0f, 0f, 0f, 0.25f);
 	
 	private ShaderManager shaderManager = new ShaderManager(batch);
 	private RadialDistortionEffect radialDistortion = new RadialDistortionEffect();
@@ -87,11 +92,13 @@ public class WorldRenderer {
 
 		var texture = object.getTexture();
 		float w = texture.getRegionWidth(), h = texture.getRegionHeight();
-		if ((object.id() != MapObject.NULL_OBJECT_ID) && (object.id() != MapObject.COLLISION_MASK_ID))
-			batch.draw(
-				texture, x, y, w / 2f, h / 2f, w, h, 1f, 1f,
-				object.getDirection().getRotation()
-			);
+		if ((object.id() != MapObject.NULL_OBJECT_ID) && (object.id() != MapObject.COLLISION_MASK_ID)) {
+			var rotation = object.getDirection().getRotation();
+			batch.setColor(shadowColor);
+			batch.draw(texture, x + shadowOffset.x, y + shadowOffset.y, w / 2f, h / 2f, w, h, 1f, 1f, rotation);
+			batch.setColor(Color.WHITE);
+			batch.draw(texture, x, y, w / 2f, h / 2f, w, h, 1f, 1f, rotation);
+		}
 	}
 
 	public void queueAnimation(WorldAnimation animation) {
@@ -176,7 +183,17 @@ public class WorldRenderer {
 		if (entity.isMoving())
 			entity.animateMovement();
 
-		batch.draw(entity.getSprite(), drawPos.x, drawPos.y);
+		// Render shadow
+		var sprite = entity.getSprite();
+		batch.setColor(shadowColor);
+		batch.draw(sprite, drawPos.x + shadowOffset.x, drawPos.y + shadowOffset.y);
+		batch.setColor(Color.WHITE);
+		
+		shapeDrawer.setColor(shadowColor);
+		var shadowRadius = sprite.getRegionWidth() / 2f;
+		shapeDrawer.filledEllipse(drawPos.x + shadowRadius, drawPos.y, shadowRadius, 5f);
+		
+		batch.draw(sprite, drawPos.x, drawPos.y);
 
 		if (followPlayer && entity instanceof Player) {
 			if (enableFloatingCamera && !Gui.isDialogActive()) {
