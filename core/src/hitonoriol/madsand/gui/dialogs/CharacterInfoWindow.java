@@ -16,6 +16,7 @@ import hitonoriol.madsand.gui.Gui;
 import hitonoriol.madsand.gui.GuiSkin;
 import hitonoriol.madsand.gui.Widgets;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
+import hitonoriol.madsand.gui.widgets.RowColorTable;
 import hitonoriol.madsand.gui.widgets.stats.StatLabels;
 import hitonoriol.madsand.gui.widgets.stats.StatProgressBar;
 
@@ -59,7 +60,7 @@ public class CharacterInfoWindow extends GameDialog {
 
 		// Dialog Title (Player's name & Level progressbar)
 		add(nameLbl).row();
-		setBackground(GuiSkin.darkBackground());
+
 		add().row();
 		statLabels.refreshStatLabels();
 		add(
@@ -73,42 +74,56 @@ public class CharacterInfoWindow extends GameDialog {
 
 		// Stat list
 		addTitle(scrollTable, "Stats:");
-		for (StatLabels.StatLabel label : statLabels.labels)
-			scrollTable.add(label).padBottom(LINE_PAD).row();
+		var statTable = new RowColorTable();
+		statTable.left();
+		for (StatLabels.StatLabel label : statLabels.getLabels()) {
+			label.setAlignment(Align.left);
+			statTable.add(label).width(Gui.DEFAULT_WIDTH).padBottom(LINE_PAD);
+			statTable.row();
+		}
+		scrollTable.add(statTable);
+		scrollTable.row();
 
 		addTitle(scrollTable, "Miscellaneous:");
-		scrollTable.add(createMiscInfoTable()).row();
+		scrollTable.add(createMiscInfoTable()).expandX();
+		scrollTable.row();
 
 		// Skill list
 		addTitle(scrollTable, "Skills:");
-		scrollTable.add(createSkillTable()).row();
+		scrollTable.add(createSkillTable());
+		scrollTable.row();
 
 		// Reputation list
 		addTitle(scrollTable, "Reputation:");
-		scrollTable.add(createRepTable()).row();
+		scrollTable.add(createRepTable());
+		scrollTable.row();
 
 		add(dialogScroll).width(GameDialog.defaultWidth()).height(400).row();
 		add(createCloseButton()).padTop(35).padBottom(LINE_PAD).row();
 	}
 
 	private Table createMiscInfoTable() {
-		var info = Widgets.table();
+		var info = new RowColorTable();
 		info.align(Align.left);
-		info.defaults().align(Align.left).padBottom(LINE_PAD);
+		info.defaults().align(Align.left);
 		var player = MadSand.player();
-		info.add("Creatures killed: " + player.getTotalKillCount()).row();
-		info.add("Settlements established: " + player.getEstablishedSettlements()).row();
+		info.add("Creatures killed: " + player.getTotalKillCount()).width(Gui.DEFAULT_WIDTH).padBottom(LINE_PAD);
+		info.row();
+		info.add("Settlements established: " + player.getEstablishedSettlements()).width(Gui.DEFAULT_WIDTH).padBottom(LINE_PAD);
+		info.row();
 		return info;
 	}
 
 	private void addTitle(Table table, String text) {
 		var label = Widgets.label(text);
 		label.setStyle(GuiSkin.getLabelStyle(Gui.FONT_M));
-		table.add(Widgets.label("")).row();
+		table.add(Widgets.label(""));
+		table.row();
 		table.add(label)
 			.width(Gui.DEFAULT_WIDTH)
 			.padLeft(headerLeftPadding)
-			.padBottom(headerBottomPadding).row();
+			.padBottom(headerBottomPadding);
+		table.row();
 	}
 
 	private Table createRepTable() {

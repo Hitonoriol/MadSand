@@ -15,8 +15,9 @@ import hitonoriol.madsand.entities.npc.AbstractNpc;
 import hitonoriol.madsand.entities.quest.Quest;
 import hitonoriol.madsand.entities.quest.QuestWorker;
 import hitonoriol.madsand.gui.Gui;
-import hitonoriol.madsand.gui.GuiSkin;
+import hitonoriol.madsand.gui.GuiColors;
 import hitonoriol.madsand.gui.Widgets;
+import hitonoriol.madsand.gui.widgets.RowColorTable;
 import hitonoriol.madsand.gui.widgets.AutoFocusScrollPane;
 import hitonoriol.madsand.map.Map;
 
@@ -40,7 +41,7 @@ public class QuestJournal extends GameDialog {
 	QuestWorker quests;
 
 	AutoFocusScrollPane questScroll;
-	Table questTable;
+	RowColorTable questTable;
 	Label statusLabel, nameLabel, reqLabel, npcLocationLabel;
 	Label emptyJournalLabel;
 
@@ -56,8 +57,7 @@ public class QuestJournal extends GameDialog {
 		npcLocationLabel = createTitle("Turn in to");
 		emptyJournalLabel = createTitle("Your journal is empty");
 
-		questTable = Widgets.table();
-		questTable.setBackground(GuiSkin.darkBackground());
+		questTable = new RowColorTable();
 		questTable.align(Align.top);
 
 		questScroll = new AutoFocusScrollPane(questTable);
@@ -77,10 +77,12 @@ public class QuestJournal extends GameDialog {
 		questTable.clear();
 		questTable.align(Align.topLeft);
 		questTable.setSkin(Gui.skin);
+		questTable.setRowBackground(GuiColors.TRANSPARENT);
 		questTable.add(statusLabel).size(STATUS_LABEL_WIDTH, ENTRY_HEIGHT).padBottom(HEADER_YPADDING);
 		questTable.add(nameLabel).size(NAME_LABEL_WIDTH, ENTRY_HEIGHT).padBottom(HEADER_YPADDING);
 		questTable.add(reqLabel).size(OBJECTIVE_LABEL_WIDTH, ENTRY_HEIGHT).padBottom(HEADER_YPADDING);
-		questTable.add(npcLocationLabel).size(NPC_INFO_LABEL_WIDTH, ENTRY_HEIGHT).padBottom(HEADER_YPADDING).row();
+		questTable.add(npcLocationLabel).size(NPC_INFO_LABEL_WIDTH, ENTRY_HEIGHT).padBottom(HEADER_YPADDING);
+		questTable.row();
 
 		List<Quest> allQuests = Stream.of(quests.questsInProgress, quests.completedQuests)
 			.flatMap(ArrayList::stream)
