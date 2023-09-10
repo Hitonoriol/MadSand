@@ -50,8 +50,10 @@ public abstract class AbstractNpc extends Entity {
 	public static int NULL_NPC = 0;
 	static double IDLE_MOVE_CHANCE = 15;
 	static float MAX_FOLLOW_FACTOR = 1.65f;
-	private final static int MELEE_DISTANCE = 2; // Must be < than this
+	private final static int MELEE_THRESHOLD = 2; // Must be < than this
 	private final static int MAX_LIFETIME = 20;
+	protected static final int DEFAULT_FOV = 12;
+	
 	private final static FloatGenerator lifetimeGen = JRand.flt().range(0.65f, 7.5f);
 
 	private static final float ACT_DURATION_DRIFT = 0.012575f;
@@ -89,6 +91,7 @@ public abstract class AbstractNpc extends Entity {
 	private int pathIdx = 0;
 
 	public AbstractNpc(NpcDescriptor protoNpc) {
+		this();
 		id = protoNpc.id();
 		setUid(MadSand.world().nextEntityUID());
 		stats.spawnTime = MadSand.world().currentTick();
@@ -101,6 +104,7 @@ public abstract class AbstractNpc extends Entity {
 
 	public AbstractNpc() {
 		id = NULL_NPC;
+		setFov(DEFAULT_FOV);
 	}
 
 	public void loadSprite() {
@@ -172,24 +176,27 @@ public abstract class AbstractNpc extends Entity {
 		pauseFlag = false;
 	}
 
-	private int MAX_LVL_GAP = 4;
+	private static int MAX_LVL_GAP = 5;
 
-	private float DEX_PER_LVL = 0.225f;
-	private float HP_PER_LVL = 4.25f;
-	private float STR_PER_LVL = 1.55f;
-	private float ACC_PER_LVL = 1.4f;
-	private float EXP_PER_LVL = 3.4f;
+	private static float DEX_PER_LVL = 0.225f;
+	private static float HP_PER_LVL = 4.25f;
+	private static float STR_PER_LVL = 2.5f;
+	private static float ACC_PER_LVL = 1.5f;
+	private static float EXP_PER_LVL = 3.5f;
 
 	// Action cost penalties
-	private float MELEE_SPD_PER_LVL = 0.05f, RANGED_SPD_PER_LVL = 0.5f;
-	private float MOVE_SPD_PER_LVL = 0.075f;
+	private static float MELEE_SPD_PER_LVL = 0.05f, RANGED_SPD_PER_LVL = 0.5f;
+	private static float MOVE_SPD_PER_LVL = 0.075f;
 
-	private String NAMED_NPC_STR = " the ";
-	private int CAN_GIVE_QUESTS_CHANCE = 15;
+	private static String NAMED_NPC_STR = " the ";
+	private static int CAN_GIVE_QUESTS_CHANCE = 15;
 
 	void loadProperties(NpcDescriptor properties) {
 		int maxLvl = MadSand.player().getLvl() + MAX_LVL_GAP;
 		int lvl = Utils.rand(properties.lvl, maxLvl);
+		if (!MadSand.player().stats().rollOr(Stat.Luck, 5)) {
+			lvl += Utils.rand(properties.lvl, maxLvl);
+		}
 
 		stats.randomize(lvl);
 		this.lvl = lvl;
@@ -537,7 +544,7 @@ public abstract class AbstractNpc extends Entity {
 		if (!enemySpotted())
 			return;
 
-		if (futureDistanceTo(enemy) >= MELEE_DISTANCE)
+		if (futureDistanceTo(enemy) >= MELEE_THRESHOLD)
 			getCloserTo(enemy);
 		else {
 			if (!canAct(stats.meleeAttackCost))
@@ -579,7 +586,7 @@ public abstract class AbstractNpc extends Entity {
 				getCloserTo(enemy);
 		}
 
-		else if (dst <= OPTIMAL_DST && dst >= MELEE_DISTANCE)
+		else if (dst <= OPTIMAL_DST && dst >= MELEE_THRESHOLD)
 			performRangedAttack(enemy, projectile);
 
 		else

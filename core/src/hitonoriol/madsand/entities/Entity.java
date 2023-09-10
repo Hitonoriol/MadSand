@@ -49,7 +49,6 @@ import hitonoriol.madsand.util.Utils;
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public abstract class Entity extends MapEntity {
 	public static final long PLAYER_UID = 0, NULL_UID = -1;
-	protected static final int DEFAULT_FOV = 15;
 
 	private long uid;
 	@JsonIgnore
@@ -64,7 +63,7 @@ public abstract class Entity extends MapEntity {
 	private float actDuration = 0; // Real time needed for this entity to finish all its actions
 	private float actDelay = 0; // Real time seconds by which this entities action start will be delayed
 
-	private int fov = DEFAULT_FOV;
+	private int fov = 0;
 
 	protected Pair coords = new Pair();
 
