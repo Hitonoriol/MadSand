@@ -10,11 +10,14 @@ public class GuiColors extends Color {
 	public static final Color NOTICE = new Color(0x16e1eaff);
 	public static final Color NOTICE_ALT = new Color(0x58ffb1ff);
 	public static final Color BUTTON_DISABLED = new Color(0x3f3f3fdc);
+	public static final Color TRANSPARENT = new Color(0);
+	public static final Color STAT = new Color(0x99ffaaff);
 
 	static {
 		Colors.put("WARNING", WARNING);
 		Colors.put("NOTICE", NOTICE);
 		Colors.put("NOTICE_ALT", NOTICE_ALT);
+		Colors.put("STAT", STAT);
 	}
 
 	public static String getTag(Color color) {

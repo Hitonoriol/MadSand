@@ -32,7 +32,7 @@ public class CharacterCreationDialog extends PlayerStatDialog {
 
 		var statRollBtn = Widgets.button("Reroll");
 		var createCharBtn = Widgets.button("Create");
-		defaults().size(DEFAULT_WIDTH, BTN_HEIGHT * 2);
+		defaults().size(DEFAULT_WIDTH, BTN_HEIGHT);
 		add(statRollBtn).row();
 		add(createCharBtn).row();
 

@@ -102,21 +102,11 @@ public class BaseStats extends HashMap<Stat, Integer> {
 		return maxStatSum - getSum();
 	}
 
-	/* Stat effectiveness rating in %: [0; 100] */
+	/* Stat effectiveness rating: [0; 1] */
 	private static double getEffectiveness(Stat stat, double lvl) {
 		switch (stat) {
-		case Luck:
-			return 0.034459925419825316 * Math.pow(lvl, 2)
-				+ 1.2751306598545928 * lvl
-				+ 0.6652992420539262;
-
-		case Accuracy:
-			return 0.057563520795230305 * Math.pow(lvl, 2)
-				+ 0.11036796858541652 * lvl
-				+ 25.60873585146606;
-
 		default:
-			return (lvl / MAX_LVL) * 100;
+			return lvl / MAX_LVL;
 		}
 	}
 
@@ -142,7 +132,7 @@ public class BaseStats extends HashMap<Stat, Integer> {
 		if (times < 2)
 			return roll(stat);
 
-		double combinedProb = Math.pow(getEffectiveness(stat) / 100, times) * 100;
+		double combinedProb = Math.pow(getEffectiveness(stat), times) * 100;
 		Utils.dbg("Rolling %s[%d] &&%d times = %.5f%%", stat, get(stat), times, combinedProb);
 		return Utils.percentRoll(combinedProb);
 	}
@@ -168,7 +158,7 @@ public class BaseStats extends HashMap<Stat, Integer> {
 	}
 
 	public boolean roll(Stat stat) {
-		return Utils.percentRoll(getEffectiveness(stat));
+		return Utils.percentRoll(getEffectiveness(stat) * 100);
 	}
 
 	public void randomize(int lvl, int minStatVal) {

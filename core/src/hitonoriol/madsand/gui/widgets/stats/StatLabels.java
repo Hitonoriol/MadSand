@@ -10,22 +10,23 @@ import hitonoriol.madsand.MadSand;
 import hitonoriol.madsand.entities.PlayerStats;
 import hitonoriol.madsand.entities.Stat;
 import hitonoriol.madsand.gui.Gui;
-import hitonoriol.madsand.util.Utils;
+import hitonoriol.madsand.gui.Widgets;
 
 public class StatLabels {
-	public List<StatLabel> labels = new ArrayList<>();
-	public Label statSumLbl;
-	public Label freeStatPointsLbl;
-	public Label hpStatLbl, staminaStatLbl;
+	private List<StatLabel> labels = new ArrayList<>();
+	private List<Label> effectDescriptionLabels = new ArrayList<>();
+	
+	private Label freeStatPointsLbl;
+	private Label hpStatLbl, staminaStatLbl;
 
 	private PlayerStats stats = MadSand.player().stats;
 
 	public StatLabels(Skin skin) {
-
-		for (Stat stat : Stat.values())
+		for (Stat stat : Stat.values()) {
 			labels.add(new StatLabel(stat));
+			effectDescriptionLabels.add(Widgets.label(stat.getEffectDescription(stats)));
+		}
 
-		statSumLbl = new Label("", skin);
 		hpStatLbl = new Label("", skin);
 		staminaStatLbl = new Label("", skin);
 		freeStatPointsLbl = new Label("", skin);
@@ -35,6 +36,26 @@ public class StatLabels {
 		this(Gui.skin);
 	}
 
+	public List<StatLabel> getLabels() {
+		return labels;
+	}
+	
+	public List<Label> getEffectDescriptionLabels() {
+		return effectDescriptionLabels;
+	}
+	
+	public Label getStatPointsLabel() {
+		return freeStatPointsLbl;
+	}
+	
+	public Label getHpLabel() {
+		return hpStatLbl;
+	}
+	
+	public Label getStaminaLabel() {
+		return staminaStatLbl;
+	}
+	
 	public StatLabel getLabel(Stat stat) {
 		for (StatLabel label : labels)
 			if (label.stat == stat)
@@ -46,21 +67,16 @@ public class StatLabels {
 		int statSum = stats.getSum();
 		stats.calcStats();
 
-		for (StatLabel label : labels)
-			label.refresh();
+		for (int i = 0; i < labels.size(); ++i) {
+			var statLabel = labels.get(i);
+			statLabel.refresh();
+			effectDescriptionLabels.get(i).setText(statLabel.stat.getEffectDescription(stats));
+		}
 
-		statSumLbl.setText("\nStat sum: " + statSum);
-		freeStatPointsLbl.setText("Free stat points: " + (stats.baseStats.getFreePoints()));
-
-		hpStatLbl.setText("HP: " + stats.hp + "/" + stats.mhp);
-		staminaStatLbl.setText("Stamina: " + stats.stamina + "/" + stats.maxstamina);
+		freeStatPointsLbl.setText(String.format("Free points: %d (%d spent)", stats.baseStats.getFreePoints(), statSum));
+		hpStatLbl.setText(String.format("HP: %d / %d", stats.hp, stats.mhp));
+		staminaStatLbl.setText(String.format("Stamina: %.1f / %.1f", stats.stamina, stats.maxstamina));
 		Gui.refreshOverlay();
-	}
-
-	public void refreshStatLabel(Stat stat) {
-		for (StatLabel label : labels)
-			if (label.stat == stat)
-				label.refresh();
 	}
 
 	//public void refreshStatLabel(IntContainer value) {}
@@ -75,14 +91,13 @@ public class StatLabels {
 
 		public StatLabel refresh() {
 			var text = stat.name() + ": " + applyColor(stats.get(stat));
-			if (stat == Stat.Dexterity)
-				text += " (speed: " + Utils.round(stats.actionPtsMax) + ")";
 			super.setText(text);
+			
 			return this;
 		}
 
 		private String applyColor(int stat) {
-			return "[#99ffaa]" + stat + "[]";
+			return "[STAT]" + stat + "[]";
 		}
 	}
 

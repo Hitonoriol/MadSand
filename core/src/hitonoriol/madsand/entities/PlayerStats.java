@@ -158,8 +158,8 @@ public class PlayerStats extends Stats {
 	float evasionSkillPercent = 0.3f;
 
 	@Override
-	public int getBaseAttack() {
-		return (int) (super.getBaseAttack() + skills.getLvl(Skill.Melee) * atkSkillPercent);
+	public int getBaseAttack(Stat attackStat) {
+		return (int) (super.getBaseAttack(attackStat) + skills.getLvl(Skill.Melee) * atkSkillPercent);
 	}
 
 	@Override

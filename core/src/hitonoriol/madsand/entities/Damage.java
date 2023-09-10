@@ -25,7 +25,7 @@ public class Damage {
 
 	private void calcBaseDamage() {
 		var stats = dmgDealer.stats();
-		value = stats.getBaseAttack();
+		value = stats.getBaseAttack(Stat.Strength);
 		critical = stats.critRoll();
 
 		if (critical)

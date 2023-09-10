@@ -301,7 +301,7 @@ public class Player extends Entity {
 	}
 
 	public double addExp(double amount) {
-		double coef = 1d + stats().baseStats.getEffectiveness(Stat.Intelligence) * 0.02;
+		double coef = 1d + stats().baseStats.getEffectiveness(Stat.Intelligence);
 		double actualExp = amount * coef;
 		stats().skills.increaseSkill(Skill.Level, actualExp);
 		Gui.refreshOverlay();

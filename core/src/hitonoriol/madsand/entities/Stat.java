@@ -23,4 +23,21 @@ public enum Stat {
 	public static int totalRollableStats() {
 		return rollableStats.size();
 	}
+	
+	public String getEffectDescription(Stats stats) {
+		switch (this) {
+		case Accuracy:
+			return String.format("Minimum damage: [STAT]%.2f%%[]", stats.baseStats.getEffectiveness(Stat.Accuracy) * 100.0f);
+		case Constitution:
+			return String.format("Health points: [STAT]%d[]", stats.mhp);
+		case Dexterity:
+			return String.format("Speed: [STAT]%.2f[]", stats.actionPtsMax);
+		case Strength:
+			return String.format("Damage: [STAT]%d - %d[]", stats.getMinDamage(Stat.Strength), stats.getMaxDamage(Stat.Strength));
+		case Luck:
+			return String.format("Luck chance: [STAT]%.2f%%[]", stats.baseStats.getEffectiveness(Stat.Luck) * 100.0f);
+		default:
+			return "";
+		}
+	}
 }

@@ -78,8 +78,12 @@ public class Stats {
 		baseStats.set(stat, value);
 	}
 
-	public boolean roll(Stat stat, int times) {
+	public boolean rollAnd(Stat stat, int times) {
 		return baseStats.rollAnd(stat, times);
+	}
+	
+	public boolean rollOr(Stat stat, int times) {
+		return baseStats.rollOr(stat, times);
 	}
 
 	public boolean roll(Stat stat) {
@@ -152,7 +156,7 @@ public class Stats {
 	}
 
 	public double calcAttackMissChance() {
-		return (100 - baseStats.getEffectiveness(Stat.Accuracy)) * 0.55;
+		return (1.0 - baseStats.getEffectiveness(Stat.Accuracy)) * 0.5;
 	}
 
 	public double calcRangedAttackMissChance(int distance) {
@@ -167,8 +171,20 @@ public class Stats {
 		return Utils.percentRoll(calcAttackMissChance());
 	}
 
-	public int getBaseAttack() {
-		return get(Stat.Strength);
+	public int getMinDamage(Stat attackStat) {
+		int atk = getBaseAttack(attackStat);
+		atk *= baseStats.getEffectiveness(Stat.Accuracy);
+		return Math.max(1, atk);
+	}
+	
+	public int getMaxDamage(Stat attackStat) {
+		int atk = getBaseAttack(attackStat);
+		atk *= 1.0 + baseStats.getEffectiveness(Stat.Accuracy);
+		return atk;
+	}
+	
+	public int getBaseAttack(Stat attackStat) {
+		return get(attackStat) * 3;
 	}
 
 	/* Impact of 100% encumbrance on Entity's speed */
