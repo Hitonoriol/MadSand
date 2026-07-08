@@ -14,7 +14,7 @@ ext {
 
 /* System properties */
 ext {
-	javaVersion = 18
+	javaVersion = 21
 	javaHome = System.getProperty('java.home')
 	javaBin = "${javaHome}/bin"
 	osName = System.getProperty('os.name').toLowerCase(Locale.ROOT).split(' ')[0]

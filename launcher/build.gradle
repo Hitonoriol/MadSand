@@ -1,11 +1,11 @@
 plugins {
 	id 'java'
 	id 'application'
-	id 'org.openjfx.javafxplugin' version '0.0.10'
+	id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
 application {
-    mainClassName = "hitonoriol.madsand.launcher.LauncherApp"
+    mainClass = "hitonoriol.madsand.launcher.LauncherApp"
 }
 
 sourceSets {
@@ -14,7 +14,7 @@ sourceSets {
 }
 
 javafx {
-    version = "18.0.2"
+    version = "21.0.2"
     modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.web' ]
 }
 
@@ -33,7 +33,7 @@ archivesBaseName = 'MadSandLauncher'
 ext {
 	appName = 'MadSandLauncher'
 	versionCode = '2.0'
-	mainClassName = application.mainClassName
+	mainClassName = application.mainClass.get()
 }
 
 version = versionCode

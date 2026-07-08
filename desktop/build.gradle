@@ -22,7 +22,7 @@ task texturePacker {
 }
 
 task run(type: JavaExec, dependsOn: [classes, texturePacker]) {
-	main = project.mainClassName
+	mainClass = project.mainClassName
 	classpath = sourceSets.main.runtimeClasspath
 	standardInput = System.in
 	workingDir = project.runDir
