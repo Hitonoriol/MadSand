@@ -45,7 +45,10 @@ public class Resources {
 			GuiSkin.get();
 			var backgrounds = loader.loadList("textures/loading/backgrounds.json", String.class);
 			var loadingScreen = assetManager.createLoadingScreen();
-			loadingScreen.getStage().setBackground(loadTexture(Utils.randElement(backgrounds)));
+			if (backgrounds != null && !backgrounds.isEmpty())
+				loadingScreen.getStage().setBackground(loadTexture(Utils.randElement(backgrounds)));
+			else
+				Utils.out("No loading screen backgrounds");
 			MadSand.switchScreen(loadingScreen);
 			Content.asList().forEach(Resources::load);
 			Utils.printMemoryInfo();
