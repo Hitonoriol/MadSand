@@ -1,0 +1,28 @@
+plugins {
+	id 'application'
+}
+
+application {
+	mainClass = 'hitonoriol.madsand.pxigen.PXIGen'
+}
+
+sourceSets {
+	main.java.srcDirs = [ "src/" ]
+	main.resources.srcDirs = []
+	test.java.srcDirs = []
+	test.resources.srcDirs = []
+}
+
+def defaultPxiRoot = rootProject.file('core/textures').absolutePath
+def defaultPaletteFile = rootProject.file('core/textures/palette.pxp').absolutePath
+
+tasks.register('generate', JavaExec) {
+	group = 'build'
+	dependsOn classes
+	mainClass = application.mainClass.get()
+	classpath = sourceSets.main.runtimeClasspath
+	args '--root', providers.gradleProperty('pxiRoot').orElse(defaultPxiRoot).get()
+	args '--palette', providers.gradleProperty('pxpPalette').orElse(defaultPaletteFile).get()
+}
+
+eclipse.project.name = appName + "-pxi-gen"

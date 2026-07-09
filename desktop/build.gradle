@@ -13,7 +13,7 @@ ext {
 
 import com.badlogic.gdx.tools.texturepacker.TexturePacker
 import static groovy.io.FileType.DIRECTORIES
-task texturePacker {
+task texturePacker(dependsOn: ':pxi-gen:generate') {
 	doLast {
 		TexturePacker.process("${rootDir}/core/textures", "${assetsDir}/textures", "textures")
 		TexturePacker.process("${assetsDir}/skin/raw", "${assetsDir}/skin", "skin")

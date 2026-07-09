@@ -1,1 +1,1 @@
-include 'desktop', 'core', 'launcher', 'test', 'commons'
+include 'desktop', 'core', 'launcher', 'test', 'commons', 'pxi-gen'
