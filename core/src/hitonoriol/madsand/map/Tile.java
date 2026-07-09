@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import hitonoriol.madsand.entities.inventory.ItemUI;
 import hitonoriol.madsand.entities.inventory.item.PlaceableItem;
 import hitonoriol.madsand.entities.inventory.item.Tool;
+import hitonoriol.madsand.enums.Direction;
 import hitonoriol.madsand.gamecontent.Textures;
 import hitonoriol.madsand.gamecontent.Tiles;
 import hitonoriol.madsand.gfx.TextureProcessor;
@@ -29,6 +30,7 @@ public class Tile implements Placeable {
 	public FishingSpot fishingSpot;
 
 	public boolean foreground = false;
+	public Direction direction = Direction.RIGHT;
 
 	@JsonIgnore
 	public boolean visited = false; // has tile been seen before

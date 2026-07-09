@@ -251,7 +251,7 @@ public class WorldRenderer {
 			if (!map.validCoords(x, y) && MadSand.world().isUnderGround()) // Don't render default tile while underground
 				return;
 
-			batch.draw(MadSand.world().getTileOrDefault(x, y), x * Resources.TILESIZE, y * Resources.TILESIZE);
+            batch.draw(MadSand.world().getTileOrDefault(x, y), x * Resources.TILESIZE, y * Resources.TILESIZE, Resources.TILESIZE / 2f, Resources.TILESIZE / 2f, Resources.TILESIZE, Resources.TILESIZE, 1f, 1f, tile.direction.getRotation());
 		});
 
 		player.forEachInFov((x, y) -> { // Render objects, loot, NPCs and player
