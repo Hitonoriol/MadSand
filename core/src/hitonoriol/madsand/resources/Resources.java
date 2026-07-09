@@ -26,7 +26,7 @@ import hitonoriol.madsand.util.Utils;
 public class Resources {
 	public static final String SCRIPT_DIR = "scripts/";
 	public static final String ENCOUNTER_DIR = "encounter/";
-	public static final int TILESIZE = 33;
+	public static final int TILESIZE = 32;
 
 	private static final GameAssetManager assetManager = new GameAssetManager();
 	private static final Serializer loader = new Serializer();
